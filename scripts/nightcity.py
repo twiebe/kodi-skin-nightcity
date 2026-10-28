@@ -990,6 +990,10 @@ HOME_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
     <keyboard>
       <homepage>ActivateWindow(1160)</homepage>
       <homepage mod="longpress">ActivateWindow(shutdownmenu)</homepage>
+      <browser_home>ActivateWindow(1160)</browser_home>
+      <browser_home mod="longpress">ActivateWindow(shutdownmenu)</browser_home>
+      <!-- home alone stays FirstPage in lists (Kodi's keyboard.xml); some IR remotes send it -->
+      <home mod="longpress">ActivateWindow(shutdownmenu)</home>
     </keyboard>
     <remote>
       <rootmenu>ActivateWindow(1160)</rootmenu>
