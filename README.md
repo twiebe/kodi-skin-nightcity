@@ -28,7 +28,7 @@ Video only: home with a spotlight and widget rows, video library, info page, pla
 
 ## Install
 
-1. Install TMDb Helper (6.17.9 or newer).
+1. Install jurialmunkey's repository (`https://jurialmunkey.github.io/repository.jurialmunkey/`), which carries TMDb Helper 6.17.9 or newer; the official Kodi repository only has an older one. Kodi installs TMDb Helper with the skin.
 2. Build the zip with `python tools/build.py` (writes `/dist/skin.nightcity-<version>.zip`) or take it from a release.
 3. Kodi: Settings > Add-ons > Install from zip file, then switch the skin under Settings > Interface > Skin.
 
