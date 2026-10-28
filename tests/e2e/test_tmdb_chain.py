@@ -263,6 +263,20 @@ def test_home_key_in_a_chain_ends_it_on_home(matrix):
     assert rpc('JSONRPC.Ping') == 'pong'  # Kodi survived both interpreters
 
 
+def test_quick_menu_link_in_a_chain_ends_it_first(matrix):
+    """A link of the quick menu goes through the Home key window (nc.go): the chain ends first,
+    then the link's window opens and no info page comes back over it."""
+    _info_and_person(matrix)
+    builtin('SetProperty(nc.go,settings,home)')
+    builtin('ActivateWindow(1160)')
+    wait_for(IDLE, timeout=20)
+    wait_for('Window.IsActive(settings) + !System.HasActiveModalDialog', timeout=10)
+    time.sleep(2)  # the manager must not bring a page back
+    assert _true('Window.IsActive(settings) + !Window.IsActive(movieinformation)')
+    assert not info('Window(Home).Property(nc.go)')['Window(Home).Property(nc.go)']
+    action('back', delay=1)
+
+
 def _plugin_starts():
     """Times (s) of the TMDb Helper plugin starts in this Kodi run, with their query."""
     import re

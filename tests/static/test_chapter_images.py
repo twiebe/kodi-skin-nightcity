@@ -55,3 +55,11 @@ def test_chapters_without_server_images_keep_kodis_card():
     groups = card.findall('control')
     assert len(groups) == 1 and groups[0].find('visible') is None
     assert not [p for p in card.iter('param') if p.get('name') == 'height' and p.get('value') == '112']
+
+
+def test_chapter_card_shows_the_time_once():
+    """The start time stands under the card, not again on the thumbnail."""
+    card = next(i for i in parse(ROOT / '1080i' / 'Includes_Player.xml').iter('include')
+                if i.get('name') == 'ChapterCard')
+    labels = [l.findtext('label') for l in card.iter('control') if l.get('type') == 'label']
+    assert labels.count('$INFO[ListItem.Label2]') == 1

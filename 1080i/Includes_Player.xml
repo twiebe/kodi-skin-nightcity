@@ -240,15 +240,6 @@
                     <param name="glowheight" value="228"/>
                     <param name="focused" value="$PARAM[focused]"/>
                     <param name="dim" value="$PARAM[dim]"/>
-                    <control type="label">
-                        <left>14</left>
-                        <top>14</top>
-                        <width>292</width>
-                        <height>40</height>
-                        <font>font_num</font>
-                        <textcolor>text_mute</textcolor>
-                        <label>$INFO[ListItem.Label2]</label>
-                    </control>
                 </include>
                 <control type="label">
                     <top>192</top>

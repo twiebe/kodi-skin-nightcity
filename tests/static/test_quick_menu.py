@@ -89,10 +89,10 @@ def test_links_to_settings_system_and_files():
     links = controls(parse(ROOT / '1080i' / WINDOW))['1230']
     items = links.findall('content/item')
     clicks = [[a for _, a in actions(i)] for i in items]
-    assert clicks[0][0] == 'Dialog.Close(1170,true)' and clicks[0][-1] == 'ActivateWindow(settings)'
-    assert clicks[1] == ['Dialog.Close(1170,true)', 'SetProperty(nc.page,system,home)', 'ActivateWindow(Home)',
-                         'SetFocus(9105)']
-    assert clicks[2] == ['Dialog.Close(1170,true)', 'ActivateWindow(FileManager)']
+    # through the Home key window: it closes an info page, the OSD or a TMDb chain first, the
+    # link alone would open its window under a dialog
+    assert clicks == [['Dialog.Close(1170,true)', 'SetProperty(nc.go,{},home)'.format(go), 'ActivateWindow(1160)']
+                      for go in ('settings', 'system', 'files')]
     assert (items[2].findtext('label'), items[2].findtext('icon')) == ('$LOCALIZE[744]', 'ui/qm_files.png')
     assert (ROOT / 'media' / 'ui' / 'qm_files.png').exists()
     # three links fill the row
