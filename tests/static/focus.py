@@ -35,8 +35,12 @@ class State:
     'stale'};
     props: Window(Home) properties; extra: any other infobool, by its exact text."""
 
-    def __init__(self, dbtype='', dbid=False, tmdb_type='', containers=None, props=None, extra=None):
+    def __init__(self, dbtype='', dbid=False, tmdb_type='', containers=None, props=None, extra=None,
+                 hidden=()):
         self.dbtype, self.dbid, self.tmdb_type = dbtype, dbid, tmdb_type
+        # controls the window hides from code (the keys of the keyboard without a character)
+        self.hidden = set(hidden)
+        self.focus = None
         self.containers = containers or {}
         self.props = props or {}
         self.extra = extra or {}
@@ -60,6 +64,7 @@ class State:
             (r'String\.IsEqual\(Window\(Home\)\.Property\(([^)]+)\),([^)]*)\)$',
              lambda m: self.props.get(m.group(1), '') == m.group(2)),
             (r'Control\.IsVisible\((\d+)\)$', lambda m: visible(m.group(1))),
+            (r'Control\.HasFocus\((\d+)\)$', lambda m: self.focus == m.group(1)),
             # $EXP[TmdbFresh<id>] (Includes_Tmdb.xml): the list shows items of this page
             (r'TmdbFresh(\d+)$', lambda m: self.containers.get(m.group(1), 'empty') == 'items'),
         )
@@ -105,6 +110,8 @@ class Page:
 
     def visible(self, c, state):
         c = self.controls[c] if isinstance(c, str) else c
+        if c.get('id') in state.hidden:
+            return False
         while c is not None:
             if not all(self.holds((v.text or '').strip(), state) for v in c.findall('visible')):
                 return False
@@ -169,6 +176,7 @@ class Page:
     def move(self, cid, direction, state):
         """Where the focus goes from `cid`: (control id or None, builtins that ran)."""
         ran, history, current = [], [], self.controls[cid]
+        state.focus = cid
         nxt = cid
         while True:
             history.append(nxt)
