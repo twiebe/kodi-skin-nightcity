@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- System information. Kodi ids: 2-13 text lines, 30 policy text, 94-101 section buttons, 102-104 groups. -->
+<window>
+    <defaultcontrol always="true">9000</defaultcontrol>
+    <controls>
+        <include>Background</include>
+        <include content="StatusBar">
+            <param name="title" value="$LOCALIZE[10007]"/>
+        </include>
+        <!-- the content fades in on open; background and status line stay -->
+        <control type="group">
+            <include>WindowFade</include>
+            <control type="grouplist" id="9000">
+                <left>120</left>
+                <top>100</top>
+                <width>400</width>
+                <height>700</height>
+                <orientation>vertical</orientation>
+                <itemgap>0</itemgap>
+                <onleft>Action(Back)</onleft>
+                <onright>noop</onright>
+                <include content="ListButton">
+                    <param name="id" value="95"/>
+                    <param name="label" value="$LOCALIZE[20154]"/>
+                    <param name="width" value="400"/>
+                </include>
+                <include content="ListButton">
+                    <param name="id" value="94"/>
+                    <param name="label" value="$LOCALIZE[20155]"/>
+                    <param name="width" value="400"/>
+                </include>
+                <include content="ListButton">
+                    <param name="id" value="96"/>
+                    <param name="label" value="$LOCALIZE[20158]"/>
+                    <param name="width" value="400"/>
+                </include>
+                <include content="ListButton">
+                    <param name="id" value="97"/>
+                    <param name="label" value="$LOCALIZE[20159]"/>
+                    <param name="width" value="400"/>
+                </include>
+                <include content="ListButton">
+                    <param name="id" value="98"/>
+                    <param name="label" value="$LOCALIZE[20160]"/>
+                    <param name="width" value="400"/>
+                </include>
+                <include content="ListButton">
+                    <param name="id" value="100"/>
+                    <param name="label" value="$LOCALIZE[12389]"/>
+                    <param name="width" value="400"/>
+                </include>
+            </control>
+            <control type="grouplist" id="9001">
+                <left>560</left>
+                <top>100</top>
+                <width>1240</width>
+                <height>760</height>
+                <orientation>vertical</orientation>
+                <itemgap>0</itemgap>
+                <control type="label" id="2">
+                    <left>0</left>
+                    <top>0</top>
+                    <width>1240</width>
+                    <height>52</height>
+                    <font>font_small</font>
+                    <textcolor>text</textcolor>
+                    <aligny>center</aligny>
+                    <label></label>
+                </control>
+                <control type="label" id="3">
+                    <left>0</left>
+                    <top>0</top>
+                    <width>1240</width>
+                    <height>52</height>
+                    <font>font_small</font>
+                    <textcolor>text</textcolor>
+                    <aligny>center</aligny>
+                    <label></label>
+                </control>
+                <control type="label" id="4">
+                    <left>0</left>
+                    <top>0</top>
+                    <width>1240</width>
+                    <height>52</height>
+                    <font>font_small</font>
+                    <textcolor>text</textcolor>
+                    <aligny>center</aligny>
+                    <label></label>
+                </control>
+                <control type="label" id="5">
+                    <left>0</left>
+                    <top>0</top>
+                    <width>1240</width>
+                    <height>52</height>
+                    <font>font_small</font>
+                    <textcolor>text</textcolor>
+                    <aligny>center</aligny>
+                    <label></label>
+                </control>
+                <control type="label" id="6">
+                    <left>0</left>
+                    <top>0</top>
+                    <width>1240</width>
+                    <height>52</height>
+                    <font>font_small</font>
+                    <textcolor>text</textcolor>
+                    <aligny>center</aligny>
+                    <label></label>
+                </control>
+                <control type="label" id="7">
+                    <left>0</left>
+                    <top>0</top>
+                    <width>1240</width>
+                    <height>52</height>
+                    <font>font_small</font>
+                    <textcolor>text</textcolor>
+                    <aligny>center</aligny>
+                    <label></label>
+                </control>
+                <control type="label" id="8">
+                    <left>0</left>
+                    <top>0</top>
+                    <width>1240</width>
+                    <height>52</height>
+                    <font>font_small</font>
+                    <textcolor>text</textcolor>
+                    <aligny>center</aligny>
+                    <label></label>
+                </control>
+                <control type="label" id="9">
+                    <left>0</left>
+                    <top>0</top>
+                    <width>1240</width>
+                    <height>52</height>
+                    <font>font_small</font>
+                    <textcolor>text</textcolor>
+                    <aligny>center</aligny>
+                    <label></label>
+                </control>
+                <control type="label" id="10">
+                    <left>0</left>
+                    <top>0</top>
+                    <width>1240</width>
+                    <height>52</height>
+                    <font>font_small</font>
+                    <textcolor>text</textcolor>
+                    <aligny>center</aligny>
+                    <label></label>
+                </control>
+                <control type="label" id="11">
+                    <left>0</left>
+                    <top>0</top>
+                    <width>1240</width>
+                    <height>52</height>
+                    <font>font_small</font>
+                    <textcolor>text</textcolor>
+                    <aligny>center</aligny>
+                    <label></label>
+                </control>
+                <control type="label" id="12">
+                    <left>0</left>
+                    <top>0</top>
+                    <width>1240</width>
+                    <height>52</height>
+                    <font>font_small</font>
+                    <textcolor>text</textcolor>
+                    <aligny>center</aligny>
+                    <label></label>
+                </control>
+                <control type="label" id="13">
+                    <left>0</left>
+                    <top>0</top>
+                    <width>1240</width>
+                    <height>52</height>
+                    <font>font_small</font>
+                    <textcolor>text</textcolor>
+                    <aligny>center</aligny>
+                    <label></label>
+                </control>
+            </control>
+            <control type="textbox" id="30">
+                <left>560</left>
+                <top>100</top>
+                <width>1240</width>
+                <height>800</height>
+                <font>font_small</font>
+                <textcolor>text</textcolor>
+            </control>
+            <control type="group" id="102">
+                <visible>false</visible>
+                <control type="button" id="101">
+                    <width>1</width>
+                    <height>1</height>
+                </control>
+                <control type="multiimage" id="103">
+                    <width>1</width>
+                    <height>1</height>
+                </control>
+            </control>
+            <control type="group" id="104">
+                <left>560</left>
+                <top>900</top>
+                <control type="label">
+                    <left>0</left>
+                    <top>0</top>
+                    <width>1240</width>
+                    <height>40</height>
+                    <font>font_small</font>
+                    <textcolor>accent2</textcolor>
+                    <aligny>center</aligny>
+                    <label>cpu $INFO[System.CpuUsage][COLOR text_mute] ▪ [/COLOR]mem $INFO[System.Memory(used.percent)][COLOR text_mute] ▪ [/COLOR]$INFO[System.Uptime]</label>
+                </control>
+            </control>
+            <include content="Button">
+                <param name="id" value="99"/>
+                <param name="label" value=""/>
+                <param name="width" value="1"/>
+                <param name="visible" value="false"/>
+            </include>
+        </control>
+    </controls>
+</window>

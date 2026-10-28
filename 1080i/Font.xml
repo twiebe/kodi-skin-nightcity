@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- RetroUI is Rajdhani plus symbols (tools/make_fonts.py); Wide is the letter-spaced cut for caps.
+     Share Tech Mono sets numbers, times and the clock. -->
+<fonts>
+    <fontset id="Default" unicode="true">
+        <font>
+            <name>font_tiny</name>
+            <filename>RetroUI-Medium.ttf</filename>
+            <size>24</size>
+        </font>
+        <font>
+            <name>font_small</name>
+            <filename>RetroUI-Medium.ttf</filename>
+            <size>26</size>
+        </font>
+        <font>
+            <name>font_body</name>
+            <filename>RetroUI-Medium.ttf</filename>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font_label</name>
+            <filename>RetroUI-SemiBold.ttf</filename>
+            <size>32</size>
+        </font>
+        <font>
+            <name>font_title</name>
+            <filename>RetroUI-Bold.ttf</filename>
+            <size>44</size>
+        </font>
+        <font>
+            <name>font_hero</name>
+            <filename>RetroUI-Bold.ttf</filename>
+            <size>76</size>
+        </font>
+        <!-- the NIGHTCITY wordmark on the Startup screen -->
+        <font>
+            <name>font_wordmark</name>
+            <filename>RetroUIWide-Bold.ttf</filename>
+            <size>128</size>
+        </font>
+        <font>
+            <name>font_caps</name>
+            <filename>RetroUIWide-SemiBold.ttf</filename>
+            <size>26</size>
+        </font>
+        <font>
+            <name>font_caps_small</name>
+            <filename>RetroUIWide-SemiBold.ttf</filename>
+            <size>24</size>
+        </font>
+        <font>
+            <name>font_num</name>
+            <filename>ShareTechMono-Regular.ttf</filename>
+            <size>28</size>
+        </font>
+        <font>
+            <name>font_num_small</name>
+            <filename>ShareTechMono-Regular.ttf</filename>
+            <size>24</size>
+        </font>
+        <!-- the clock of the quick menu, the temperature of its weather tile -->
+        <font>
+            <name>font_clock</name>
+            <filename>ShareTechMono-Regular.ttf</filename>
+            <size>64</size>
+        </font>
+        <!-- Estuary font names for add-on dialogs (jellyfin-kodi); Kodi only falls back to font13 -->
+        <font>
+            <name>font10</name>
+            <filename>RetroUI-Medium.ttf</filename>
+            <size>24</size>
+        </font>
+        <font>
+            <name>font12</name>
+            <filename>RetroUI-Medium.ttf</filename>
+            <size>26</size>
+        </font>
+        <font>
+            <name>font13</name>
+            <filename>RetroUI-Medium.ttf</filename>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font14</name>
+            <filename>RetroUI-SemiBold.ttf</filename>
+            <size>32</size>
+        </font>
+    </fontset>
+</fonts>

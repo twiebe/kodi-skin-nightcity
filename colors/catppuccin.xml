@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<colors>
+    <color name="bg">FF1E1E2E</color>
+    <color name="bg_alt">FF181825</color>
+    <color name="petrol">FF313244</color>
+    <color name="surface">E0313244</color>
+    <color name="surface_alt">F045475A</color>
+    <color name="border">FFCBA6F7</color>
+    <color name="border_dim">40CBA6F7</color>
+    <color name="text">FFCDD6F4</color>
+    <color name="text_dim">FFBAC2DE</color>
+    <color name="text_mute">FF9399B2</color>
+    <color name="accent">FFCBA6F7</color>
+    <color name="accent2">FFF38BA8</color>
+    <color name="accent3">FFFAB387</color>
+    <color name="focus">FFCBA6F7</color>
+    <color name="focus_text">FF1E1E2E</color>
+    <color name="glow">60CBA6F7</color>
+    <color name="glitch_a">88F38BA8</color>
+    <color name="glitch_b">8889DCEB</color>
+    <color name="fanart">24CDD6F4</color>
+    <color name="ok">FFA6E3A1</color>
+    <color name="warn">FFF9E2AF</color>
+    <color name="error">FFF38BA8</color>
+    <color name="scrim">E01E1E2E</color>
+</colors>

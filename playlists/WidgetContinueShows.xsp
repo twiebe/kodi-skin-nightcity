@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<smartplaylist type="tvshows">
+    <name>WidgetContinueShows.xsp</name>
+    <match>all</match>
+    <rule field="inprogress" operator="true"/>
+    <limit>25</limit>
+    <order direction="descending">lastplayed</order>
+</smartplaylist>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Base window of TMDb Helper's window manager (RunScript(plugin.video.themoviedb.helper,
+     add_tmdb=...,call_auto=1190)). The manager opens it under the first info page of a chain and
+     closes it when the chain ends; with TMDbHelper.DirectCallAuto it opens every info page
+     itself, so this window needs no list 9999 and shows only the backdrop. -->
+<window type="window" id="1190">
+    <!-- a chain over the playing video (from the OSD cast row) ends back on the player's chapter
+         row (VideoFullScreen.xml), not on the bare video, where one Up too many while walking
+         back would jump a chapter; a chain over Home ends there (Home.xml clears it) -->
+    <onload condition="Player.HasVideo">SetProperty(nc.chain.return,osd,home)</onload>
+    <controls>
+        <include>Background</include>
+    </controls>
+</window>

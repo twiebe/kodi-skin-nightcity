@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Add/edit media source. Kodi ids: 2 heading, 10 paths, 11 browse, 12 name, 13 add, 14 remove, 18 ok, 19 cancel, 20 content. -->
+<window>
+    <depth>DepthDialog</depth>
+    <defaultcontrol always="true">10</defaultcontrol>
+    <controls>
+        <control type="group">
+            <centerleft>50%</centerleft>
+            <centertop>50%</centertop>
+            <width>1300</width>
+            <height>760</height>
+            <include>DialogFrame</include>
+            <include content="DialogHeading">
+                <param name="id" value="2"/>
+                <param name="width" value="1220"/>
+            </include>
+            <include content="DialogList">
+                <param name="id" value="10"/>
+                <onright>9000</onright>
+                <ondown>12</ondown>
+                <param name="top" value="84"/>
+                <param name="width" value="860"/>
+                <param name="height" value="400"/>
+            </include>
+            <control type="grouplist" id="9000">
+                <onleft>10</onleft>
+                <ondown>12</ondown>
+                <left>940</left>
+                <top>84</top>
+                <width>320</width>
+                <height>400</height>
+                <orientation>vertical</orientation>
+                <itemgap>12</itemgap>
+                <include content="Button">
+                    <param name="id" value="11"/>
+                    <param name="label" value="$LOCALIZE[1024]"/>
+                    <param name="width" value="320"/>
+                </include>
+                <include content="Button">
+                    <param name="id" value="13"/>
+                    <param name="label" value="$LOCALIZE[15019]"/>
+                    <param name="width" value="320"/>
+                </include>
+                <include content="Button">
+                    <param name="id" value="14"/>
+                    <param name="label" value="$LOCALIZE[1210]"/>
+                    <param name="width" value="320"/>
+                </include>
+            </control>
+            <control type="edit" id="12">
+                <onup>10</onup>
+                <ondown>9001</ondown>
+                <left>40</left>
+                <top>520</top>
+                <width>1220</width>
+                <include>SettingsRowLook</include>
+                <font>font_small</font>
+                <label>$LOCALIZE[1022]</label>
+            </control>
+            <control type="grouplist" id="9001">
+                <onup>12</onup>
+                <left>40</left>
+                <top>676</top>
+                <width>1220</width>
+                <height>54</height>
+                <orientation>horizontal</orientation>
+                <itemgap>24</itemgap>
+                <align>right</align>
+                <include content="Button">
+                    <param name="id" value="20"/>
+                    <param name="label" value="$LOCALIZE[20333]"/>
+                    <param name="width" value="320"/>
+                </include>
+                <include content="Button">
+                    <param name="id" value="18"/>
+                    <param name="label" value="$LOCALIZE[186]"/>
+                    <param name="width" value="200"/>
+                </include>
+                <include content="Button">
+                    <param name="id" value="19"/>
+                    <param name="label" value="$LOCALIZE[222]"/>
+                    <param name="width" value="200"/>
+                </include>
+            </control>
+        </control>
+    </controls>
+</window>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Skin-wide control defaults. Kodi pulses the focus texture of a focused button on every
+     frame unless told otherwise, which keeps the whole screen redrawing. -->
+<includes>
+    <default type="button">
+        <pulseonselect>false</pulseonselect>
+    </default>
+    <default type="togglebutton">
+        <pulseonselect>false</pulseonselect>
+    </default>
+    <default type="radiobutton">
+        <pulseonselect>false</pulseonselect>
+    </default>
+    <default type="edit">
+        <pulseonselect>false</pulseonselect>
+    </default>
+    <default type="spincontrolex">
+        <pulseonselect>false</pulseonselect>
+    </default>
+    <default type="sliderex">
+        <pulseonselect>false</pulseonselect>
+    </default>
+    <default type="colorbutton">
+        <pulseonselect>false</pulseonselect>
+    </default>
+</includes>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Skin settings, laid out like Kodi's settings pages (SettingsCategory.xml): categories on the
+     left, the rows of the focused category on the right, its description at the bottom. Home,
+     Movies and Shows hold the spotlight and 8 slots of their page: OK on a slot picks a section
+     (script section_pick, Kodi's select dialog), right cycles the option, "move" in the dialog
+     grabs the slot (pink), up/down carry it, OK drops it. Slot rows come from
+     Includes_Sections.xml (tools/make_sections.py). Window properties: nc.hp.tab (category
+     shown), nc.hp.grab (grabbed slot as page.n). The console's home pages entry opens the Home
+     category (Window(Home).Property(nc.ss.open)). -->
+<window>
+    <defaultcontrol always="true">9000</defaultcontrol>
+    <onload>SetProperty(nc.hp.tab,effects)</onload>
+    <onload>ClearProperty(nc.hp.grab)</onload>
+    <onload condition="String.IsEqual(Window(Home).Property(nc.ss.open),home)">SetFocus(9002)</onload>
+    <onload>ClearProperty(nc.ss.open,home)</onload>
+    <include>HomePagesDefaults</include>
+    <controls>
+        <include>Background</include>
+        <include content="StatusBar">
+            <param name="title" value="$LOCALIZE[166]"/>
+        </include>
+        <!-- the content fades in on open; background and status line stay -->
+        <control type="group">
+            <include>WindowFade</include>
+            <control type="grouplist" id="9000">
+                <left>120</left>
+                <top>100</top>
+                <width>400</width>
+                <height>840</height>
+                <itemgap>0</itemgap>
+                <!-- Left leaves the page, back to the console -->
+                <onleft>Action(Back)</onleft>
+                <onright condition="String.IsEqual(Window.Property(nc.hp.tab),home)">200</onright>
+                <onright condition="String.IsEqual(Window.Property(nc.hp.tab),movies)">300</onright>
+                <onright condition="String.IsEqual(Window.Property(nc.hp.tab),shows)">400</onright>
+                <onright condition="String.IsEqual(Window.Property(nc.hp.tab),menu)">500</onright>
+                <onright>600</onright>
+                <onup>noop</onup>
+                <ondown>noop</ondown>
+                <include content="SkinSettingsCategory">
+                    <param name="id" value="9001"/>
+                    <param name="tab" value="effects"/>
+                    <param name="label" value="$LOCALIZE[31005]"/>
+                </include>
+                <include content="SkinSettingsCategory">
+                    <param name="id" value="9002"/>
+                    <param name="tab" value="home"/>
+                    <param name="label" value="$LOCALIZE[10000]"/>
+                </include>
+                <include content="SkinSettingsCategory">
+                    <param name="id" value="9003"/>
+                    <param name="tab" value="movies"/>
+                    <param name="label" value="$LOCALIZE[342]"/>
+                </include>
+                <include content="SkinSettingsCategory">
+                    <param name="id" value="9004"/>
+                    <param name="tab" value="shows"/>
+                    <param name="label" value="$LOCALIZE[20343]"/>
+                </include>
+                <include content="SkinSettingsCategory">
+                    <param name="id" value="9005"/>
+                    <param name="tab" value="menu"/>
+                    <param name="label" value="$LOCALIZE[31264]"/>
+                </include>
+            </control>
+            <include content="SkinSettingsArea">
+                <param name="id" value="600"/>
+                <param name="tab" value="effects"/>
+                <param name="category" value="9001"/>
+                <include content="SkinSettingsToggle">
+                    <param name="id" value="601"/>
+                    <param name="label" value="$LOCALIZE[31007]"/>
+                    <param name="setting" value="GlowOff"/>
+                </include>
+            </include>
+            <include content="SkinSettingsArea">
+                <param name="id" value="200"/>
+                <param name="tab" value="home"/>
+                <param name="category" value="9002"/>
+                <param name="height" value="156"/>
+                <param name="down" value="221"/>
+                <include content="SkinSettingsHeading">
+                    <param name="label" value="$LOCALIZE[31225]"/>
+                </include>
+                <include>HomePagesHeaderHome</include>
+            </include>
+            <include>HomePagesSlotsHome</include>
+            <include content="SkinSettingsArea">
+                <param name="id" value="300"/>
+                <param name="tab" value="movies"/>
+                <param name="category" value="9003"/>
+                <param name="height" value="156"/>
+                <param name="down" value="321"/>
+                <include content="SkinSettingsHeading">
+                    <param name="label" value="$LOCALIZE[31225]"/>
+                </include>
+                <include>HomePagesHeaderMovies</include>
+            </include>
+            <include>HomePagesSlotsMovies</include>
+            <include content="SkinSettingsArea">
+                <param name="id" value="400"/>
+                <param name="tab" value="shows"/>
+                <param name="category" value="9004"/>
+                <param name="height" value="156"/>
+                <param name="down" value="421"/>
+                <include content="SkinSettingsHeading">
+                    <param name="label" value="$LOCALIZE[31225]"/>
+                </include>
+                <include>HomePagesHeaderShows</include>
+            </include>
+            <include>HomePagesSlotsShows</include>
+            <!-- entries of the main menu that can go -->
+            <include content="SkinSettingsArea">
+                <param name="id" value="500"/>
+                <param name="tab" value="menu"/>
+                <param name="category" value="9005"/>
+                <include content="SkinSettingsToggle">
+                    <param name="id" value="511"/>
+                    <param name="label" value="$LOCALIZE[342]"/>
+                    <param name="setting" value="nc.menu.hide.movies"/>
+                </include>
+                <include content="SkinSettingsToggle">
+                    <param name="id" value="512"/>
+                    <param name="label" value="$LOCALIZE[20343]"/>
+                    <param name="setting" value="nc.menu.hide.shows"/>
+                </include>
+                <include content="SkinSettingsToggle">
+                    <param name="id" value="513"/>
+                    <param name="label" value="$LOCALIZE[137]"/>
+                    <param name="setting" value="nc.menu.hide.search"/>
+                </include>
+                <!-- the script forgets the remembered terms when the switch goes off -->
+                <include content="SkinSettingsToggle">
+                    <param name="id" value="514"/>
+                    <param name="label" value="$LOCALIZE[31336]"/>
+                    <param name="setting" value="nc.search.forget"/>
+                    <param name="onclick" value="NotifyAll(nightcity,search_forget)"/>
+                </include>
+                <control type="button" id="515">
+                    <width>1240</width>
+                    <include>SettingsRowLook</include>
+                    <label>$LOCALIZE[31338]</label>
+                    <visible>!String.IsEmpty(Window(Home).Property(nc.search.recent.1))</visible>
+                    <onclick>NotifyAll(nightcity,search_clear)</onclick>
+                </control>
+                <!-- the script writes or removes the Home key keymap right away -->
+                <include content="SkinSettingsToggle">
+                    <param name="id" value="521"/>
+                    <param name="label" value="$LOCALIZE[31310]"/>
+                    <param name="setting" value="nc.homekey.off"/>
+                    <param name="onclick" value="NotifyAll(nightcity,home_keymap)"/>
+                </include>
+            </include>
+            <!-- description of the focused entry, below it the keys of the page rows -->
+            <control type="label" id="6">
+                <left>560</left>
+                <top>920</top>
+                <width>1240</width>
+                <height>120</height>
+                <font>font_tiny</font>
+                <textcolor>text_dim</textcolor>
+                <aligny>center</aligny>
+                <wrapmultiline>true</wrapmultiline>
+                <label>$VAR[SkinSettingsDesc]$VAR[HomePagesHint,[CR],]</label>
+            </control>
+        </control>
+    </controls>
+</window>

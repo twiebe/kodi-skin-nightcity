@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Context menu. Kodi ids: 999 background, 996 grouplist, 1000 button template, entries start
+     at 1001. Kodi places the window itself (GUIDialogContextMenu.cpp): centred on the focused
+     control and kept on screen, measured by 999 from the window origin. So 999 starts at 0,0 and
+     holds the grouplist; Kodi stretches it to the entries (its height minus the grouplist height
+     plus the entries' height). Long menus scroll inside the grouplist. -->
+<window>
+    <depth>DepthDialog</depth>
+    <!-- not always: Kodi focuses the first entry (or the one the caller asks for), the grouplist
+         alone would return to the entry focused last time -->
+    <defaultcontrol>996</defaultcontrol>
+    <coordinates>
+        <left>0</left>
+        <top>0</top>
+    </coordinates>
+    <controls>
+        <control type="image" id="999">
+            <left>0</left>
+            <top>0</top>
+            <width>680</width>
+            <height>980</height>
+            <texture colordiffuse="bg_alt">ui/white.png</texture>
+        </control>
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <width>680</width>
+            <height>4</height>
+            <texture colordiffuse="accent">ui/white.png</texture>
+        </control>
+        <control type="grouplist" id="996">
+            <left>20</left>
+            <top>24</top>
+            <width>640</width>
+            <!-- 18 entries, then it scrolls -->
+            <height max="936">auto</height>
+            <itemgap>0</itemgap>
+            <include content="ListButton">
+                <param name="id" value="1000"/>
+                <param name="label" value=""/>
+                <param name="width" value="640"/>
+            </include>
+        </control>
+    </controls>
+</window>

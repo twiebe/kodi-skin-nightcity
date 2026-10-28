@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Home: menu and clock in the top line, a hero and one row at a time, one page per menu
+     entry (home, movies, shows, search, system). The fanart of the spotlight title, or of the
+     focused row card, lies faintly behind the page. The page follows the focused menu tab
+     (Window(Home).Property(nc.page)); hidden pages keep their containers idle. The power
+     commands are in the quick menu (Custom_1170_QuickMenu.xml).
+     Spotlight and rows of home, movies and shows come from the skin settings (SkinSettings.xml,
+     Includes_Sections.xml): Kodi builds the chosen ones and reloads Home after a change. -->
+<window>
+    <include content="DefaultControl" condition="!String.IsEqual(Skin.String(SpotlightSource),off)">
+        <param name="id" value="9010"/>
+    </include>
+    <include content="DefaultControl" condition="String.IsEqual(Skin.String(SpotlightSource),off)">
+        <param name="id" value="9101"/>
+    </include>
+    <menucontrol>9100</menucontrol>
+    <!-- Also here: switching skins opens Home without Startup -->
+    <onload condition="!Skin.HasSetting(TMDbHelper.Service)">Skin.SetBool(TMDbHelper.Service)</onload>
+    <onload condition="!Skin.HasSetting(TMDbHelper.DirectCallAuto)">Skin.SetBool(TMDbHelper.DirectCallAuto)</onload>
+    <onload>SetProperty(TMDbHelper.WidgetContainer,9000,home)</onload>
+    <onload>ClearProperty(nc.chain.return,home)</onload>
+    <!-- a page whose menu entry was hidden in the settings -->
+    <onload condition="String.IsEqual(Window(Home).Property(nc.page),movies) + Skin.HasSetting(nc.menu.hide.movies)">SetProperty(nc.page,home,home)</onload>
+    <onload condition="String.IsEqual(Window(Home).Property(nc.page),shows) + Skin.HasSetting(nc.menu.hide.shows)">SetProperty(nc.page,home,home)</onload>
+    <onload condition="String.IsEqual(Window(Home).Property(nc.page),search) + Skin.HasSetting(nc.menu.hide.search)">SetProperty(nc.page,home,home)</onload>
+    <!-- one script for genre tabs and search history: two interpreters starting at once can
+         crash Kodi -->
+    <!-- the skin service (scripts/nightcity.py service) starts with the Startup screen; after a
+         switch from another skin Home starts it, with Home's command -->
+    <onload condition="String.IsEmpty(Window(Home).Property(nc.service)) + String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">RunScript(special://skin/scripts/nightcity.py,service,home)</onload>
+    <onload condition="!String.IsEmpty(Window(Home).Property(nc.service))">NotifyAll(nightcity,home)</onload>
+    <controls>
+        <include>Background</include>
+        <!-- the backdrops fade over to each other (BackdropFade) -->
+        <control type="group">
+            <visible>!ControlGroup(9210).HasFocus() + !ControlGroup(9410).HasFocus() + !ControlGroup(9510).HasFocus() + !ControlGroup(9710).HasFocus()</visible>
+            <include>BackdropFade</include>
+            <control type="group">
+                <visible>Control.IsVisible(9300)</visible>
+                <include>BackdropFade</include>
+                <include content="FanartBackdrop">
+                    <param name="art" value="Container(9000).ListItem.Art(fanart)"/>
+                </include>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(Window(Home).Property(nc.page),shows) + !String.IsEqual(Skin.String(nc.shows.spotlight),off)</visible>
+                <include>BackdropFade</include>
+                <include content="FanartBackdrop">
+                    <param name="art" value="Container(9001).ListItem.Art(fanart)"/>
+                </include>
+            </control>
+        </control>
+        <control type="group">
+            <visible>ControlGroup(9210).HasFocus() | ControlGroup(9410).HasFocus() | ControlGroup(9510).HasFocus() | ControlGroup(9710).HasFocus()</visible>
+            <include>BackdropFade</include>
+            <include content="FanartBackdrop">
+                <param name="art" value="ListItem.Art(fanart)"/>
+            </include>
+        </control>
+        <include content="SpotlightList" condition="!String.IsEqual(Skin.String(SpotlightSource),off) | !String.IsEqual(Skin.String(nc.movies.spotlight),off)"/>
+        <include content="SpotlightList" condition="!String.IsEqual(Skin.String(nc.shows.spotlight),off)">
+            <param name="id" value="9001"/>
+            <param name="content" value="$VAR[SpotlightShowsPath]"/>
+            <param name="back" value="9551"/>
+            <param name="interval" value="nc.shows.interval"/>
+            <param name="follow" value="String.IsEmpty(Skin.String(nc.shows.interval))"/>
+        </include>
+        <include>HomeSlotLoaders</include>
+        <include>MoviesSlotLoaders</include>
+        <include>ShowsSlotLoaders</include>
+        <include>SearchWidgetLoaders</include>
+        <include condition="!String.IsEqual(Skin.String(SpotlightSource),off) | !String.IsEqual(Skin.String(nc.movies.spotlight),off)">MovieHero</include>
+        <include condition="!String.IsEqual(Skin.String(nc.shows.spotlight),off)">ShowHero</include>
+        <include>SystemHero</include>
+        <include>SearchHero</include>
+        <include content="PageRows" condition="!String.IsEqual(Skin.String(SpotlightSource),off)">
+            <param name="id" value="9210"/>
+            <param name="page" value="String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)"/>
+            <param name="up" value="9050"/>
+            <include content="HomeSlots">
+                <param name="up" value="9050"/>
+            </include>
+        </include>
+        <include content="PageRows" condition="String.IsEqual(Skin.String(SpotlightSource),off)">
+            <param name="id" value="9210"/>
+            <param name="page" value="String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)"/>
+            <param name="up" value="9100"/>
+            <param name="top" value="116"/>
+            <param name="height" value="936"/>
+            <param name="delay" value="0"/>
+            <include content="HomeSlots">
+                <param name="up" value="9100"/>
+            </include>
+        </include>
+        <include content="PageRows" condition="!String.IsEqual(Skin.String(nc.movies.spotlight),off)">
+            <param name="id" value="9410"/>
+            <param name="page" value="String.IsEqual(Window(Home).Property(nc.page),movies)"/>
+            <param name="up" value="9050"/>
+            <include content="MoviesSlots">
+                <param name="up" value="9050"/>
+            </include>
+        </include>
+        <include content="PageRows" condition="String.IsEqual(Skin.String(nc.movies.spotlight),off)">
+            <param name="id" value="9410"/>
+            <param name="page" value="String.IsEqual(Window(Home).Property(nc.page),movies)"/>
+            <param name="up" value="9100"/>
+            <param name="top" value="116"/>
+            <param name="height" value="936"/>
+            <param name="delay" value="0"/>
+            <include content="MoviesSlots">
+                <param name="up" value="9100"/>
+            </include>
+        </include>
+        <include content="PageRows" condition="!String.IsEqual(Skin.String(nc.shows.spotlight),off)">
+            <param name="id" value="9510"/>
+            <param name="page" value="String.IsEqual(Window(Home).Property(nc.page),shows)"/>
+            <param name="up" value="9550"/>
+            <include content="ShowsSlots">
+                <param name="up" value="9550"/>
+            </include>
+        </include>
+        <include content="PageRows" condition="String.IsEqual(Skin.String(nc.shows.spotlight),off)">
+            <param name="id" value="9510"/>
+            <param name="page" value="String.IsEqual(Window(Home).Property(nc.page),shows)"/>
+            <param name="up" value="9100"/>
+            <param name="top" value="116"/>
+            <param name="height" value="936"/>
+            <param name="delay" value="0"/>
+            <include content="ShowsSlots">
+                <param name="up" value="9100"/>
+            </include>
+        </include>
+        <include content="PageRows">
+            <param name="id" value="9610"/>
+            <param name="delay" value="FadeStep2"/>
+            <param name="page" value="String.IsEqual(Window(Home).Property(nc.page),system)"/>
+            <param name="up" value="9100"/>
+            <include>SystemWidgets</include>
+        </include>
+        <include content="PageRows">
+            <param name="id" value="9710"/>
+            <param name="delay" value="FadeStep2"/>
+            <param name="page" value="String.IsEqual(Window(Home).Property(nc.page),search)"/>
+            <param name="up" value="9750"/>
+            <include>SearchWidgets</include>
+        </include>
+        <include>HomeTop</include>
+        <!-- while the script follows an episode's playback and reopens its info page: only the
+             backdrop once no video plays, so Home does not show in between -->
+        <control type="group">
+            <include>Background</include>
+            <include content="FanartBackdrop">
+                <param name="art" value="Window(Home).Property(nc.returning.fanart)"/>
+            </include>
+            <visible>!String.IsEmpty(Window(Home).Property(nc.returning)) + !Player.HasVideo</visible>
+        </control>
+    </controls>
+</window>

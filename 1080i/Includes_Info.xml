@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Building blocks of the info page (DialogVideoInfo.xml) -->
+<includes>
+    <!-- One line of the details column on the right: key in muted caps, value beside it.
+         Inside a vertical grouplist, so missing facts leave no gap. -->
+    <include name="InfoDetail">
+        <param name="key"/>
+        <param name="value"/>
+        <definition>
+            <control type="group">
+                <width>456</width>
+                <height>40</height>
+                <visible>!String.IsEmpty($PARAM[value])</visible>
+                <control type="label">
+                    <width>150</width>
+                    <height>40</height>
+                    <font>font_caps_small</font>
+                    <textcolor>text_mute</textcolor>
+                    <label>[UPPERCASE]$PARAM[key][/UPPERCASE]</label>
+                </control>
+                <control type="label">
+                    <left>150</left>
+                    <width>306</width>
+                    <height>40</height>
+                    <font>font_small</font>
+                    <textcolor>text</textcolor>
+                    <label>$INFO[$PARAM[value]]</label>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- One season in the tab line: like a menu entry, the shown season with a pink ◢ -->
+    <include name="SeasonTab">
+        <param name="color"/>
+        <param name="active" default="false"/>
+        <definition>
+            <control type="label">
+                <width>240</width>
+                <height>44</height>
+                <aligny>center</aligny>
+                <font>font_caps</font>
+                <textcolor>$PARAM[color]</textcolor>
+                <label>[UPPERCASE]$VAR[SeasonTabLabel][/UPPERCASE]</label>
+                <visible>!$PARAM[active]</visible>
+            </control>
+            <control type="label">
+                <width>240</width>
+                <height>44</height>
+                <aligny>center</aligny>
+                <font>font_caps</font>
+                <textcolor>accent</textcolor>
+                <label>[COLOR accent2]◢[/COLOR] [UPPERCASE]$VAR[SeasonTabLabel][/UPPERCASE]</label>
+                <visible>$PARAM[active]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Episode in the bottom list: 16:9 still with cut corners, number on it, the unwatched dog-ear from CutCard, title
+         below, a progress line for started episodes -->
+    <include name="EpisodeCard">
+        <param name="focused" default="false"/>
+        <param name="selected" default="false"/>
+        <param name="dim" default="false"/>
+        <definition>
+            <control type="group">
+                <left>24</left>
+                <top>30</top>
+                <include content="CutCard">
+                    <param name="width" value="320"/>
+                    <param name="height" value="180"/>
+                    <param name="image" value="$INFO[ListItem.Art(thumb)]"/>
+                    <param name="mask" value="ui/mask_320x180.png"/>
+                    <param name="glowwidth" value="368"/>
+                    <param name="glowheight" value="228"/>
+                    <param name="focused" value="$PARAM[focused]"/>
+                    <param name="dim" value="$PARAM[dim]"/>
+                    <control type="label">
+                        <left>14</left>
+                        <top>136</top>
+                        <width>120</width>
+                        <height>34</height>
+                        <font>font_num_small</font>
+                        <textcolor>text</textcolor>
+                        <shadowcolor>bg</shadowcolor>
+                        <label>E0$INFO[ListItem.Episode]</label>
+                        <visible>Integer.IsLess(ListItem.Episode,10)</visible>
+                    </control>
+                    <control type="label">
+                        <left>14</left>
+                        <top>136</top>
+                        <width>120</width>
+                        <height>34</height>
+                        <font>font_num_small</font>
+                        <textcolor>text</textcolor>
+                        <shadowcolor>bg</shadowcolor>
+                        <label>$INFO[ListItem.Episode,E,]</label>
+                        <visible>!Integer.IsLess(ListItem.Episode,10)</visible>
+                    </control>
+                </include>
+                <control type="label">
+                    <top>192</top>
+                    <width>320</width>
+                    <height>36</height>
+                    <font>font_label</font>
+                    <textcolor>text</textcolor>
+                    <label>$INFO[ListItem.Title]</label>
+                    <visible>!$PARAM[selected]</visible>
+                </control>
+                <control type="label">
+                    <top>192</top>
+                    <width>320</width>
+                    <height>36</height>
+                    <font>font_label</font>
+                    <textcolor>accent</textcolor>
+                    <scroll>true</scroll>
+                    <label>$INFO[ListItem.Title]</label>
+                    <visible>$PARAM[selected]</visible>
+                </control>
+                <include content="ProgressLine">
+                    <param name="top" value="234"/>
+                    <param name="width" value="320"/>
+                    <param name="info" value="ListItem.PercentPlayed"/>
+                    <param name="visible" value="Integer.IsGreater(ListItem.PercentPlayed,0)"/>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Actor in the cast row: photo with cut corners, name and role below -->
+    <include name="CastCard">
+        <param name="focused" default="false"/>
+        <param name="dim" default="false"/>
+        <definition>
+            <control type="group">
+                <left>24</left>
+                <top>34</top>
+                <include content="CutCard">
+                    <param name="width" value="160"/>
+                    <param name="height" value="220"/>
+                    <param name="mask" value="ui/mask_160x220.png"/>
+                    <param name="image" value="$INFO[ListItem.Art(thumb)]"/>
+                    <param name="glowwidth" value="208"/>
+                    <param name="glowheight" value="268"/>
+                    <param name="focused" value="$PARAM[focused]"/>
+                    <param name="dim" value="$PARAM[dim]"/>
+                    <control type="textbox">
+                        <left>14</left>
+                        <top>14</top>
+                        <width>132</width>
+                        <height>190</height>
+                        <font>font_label</font>
+                        <textcolor>text_mute</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>String.IsEmpty(ListItem.Art(thumb))</visible>
+                    </control>
+                </include>
+                <control type="label">
+                    <top>232</top>
+                    <width>160</width>
+                    <height>32</height>
+                    <font>font_small</font>
+                    <textcolor>text</textcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                </control>
+                <control type="label">
+                    <top>262</top>
+                    <width>160</width>
+                    <height>30</height>
+                    <font>font_tiny</font>
+                    <textcolor>text_mute</textcolor>
+                    <label>$INFO[ListItem.Label2]</label>
+                </control>
+            </control>
+        </definition>
+    </include>
+</includes>

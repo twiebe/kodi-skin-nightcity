@@ -1,0 +1,898 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: en_gb\n"
+
+msgctxt "#31002"
+msgid "Spotlight source"
+msgstr ""
+
+msgctxt "#31003"
+msgid "All movies"
+msgstr ""
+
+msgctxt "#31004"
+msgid "Unwatched movies"
+msgstr ""
+
+msgctxt "#31005"
+msgid "Effects"
+msgstr ""
+
+msgctxt "#31006"
+msgid "home"
+msgstr ""
+
+msgctxt "#31007"
+msgid "Glow"
+msgstr ""
+
+msgctxt "#31010"
+msgid "play"
+msgstr ""
+
+msgctxt "#31011"
+msgid "info"
+msgstr ""
+
+msgctxt "#31012"
+msgid "min"
+msgstr ""
+
+msgctxt "#31020"
+msgid "on deck"
+msgstr ""
+
+msgctxt "#31021"
+msgid "new movies"
+msgstr ""
+
+msgctxt "#31022"
+msgid "new episodes"
+msgstr ""
+
+msgctxt "#31023"
+msgid "continue watching"
+msgstr ""
+
+msgctxt "#31030"
+msgid "movies"
+msgstr ""
+
+msgctxt "#31031"
+msgid "shows"
+msgstr ""
+
+msgctxt "#31032"
+msgid "search"
+msgstr ""
+
+msgctxt "#31033"
+msgid "System"
+msgstr ""
+
+msgctxt "#31041"
+msgid "trailer"
+msgstr ""
+
+msgctxt "#31042"
+msgid "posters"
+msgstr ""
+
+msgctxt "#31043"
+msgid "resume"
+msgstr ""
+
+msgctxt "#31050"
+msgid "ends"
+msgstr ""
+
+msgctxt "#31051"
+msgid "pause"
+msgstr ""
+
+msgctxt "#31052"
+msgid "stop"
+msgstr ""
+
+msgctxt "#31053"
+msgid "subtitles"
+msgstr ""
+
+msgctxt "#31054"
+msgid "audio"
+msgstr ""
+
+msgctxt "#31055"
+msgid "video"
+msgstr ""
+
+msgctxt "#31056"
+msgid "bookmarks"
+msgstr ""
+
+msgctxt "#31057"
+msgid "buffering"
+msgstr ""
+
+msgctxt "#31058"
+msgid "video already has subtitles"
+msgstr ""
+
+msgctxt "#31080"
+msgid "quit kodi"
+msgstr ""
+
+msgctxt "#31081"
+msgid "power off"
+msgstr ""
+
+msgctxt "#31082"
+msgid "reboot"
+msgstr ""
+
+msgctxt "#31083"
+msgid "suspend"
+msgstr ""
+
+msgctxt "#31084"
+msgid "hibernate"
+msgstr ""
+
+msgctxt "#31085"
+msgid "shutdown timer"
+msgstr ""
+
+msgctxt "#31086"
+msgid "cancel shutdown timer"
+msgstr ""
+
+msgctxt "#31087"
+msgid "log off"
+msgstr ""
+
+msgctxt "#31088"
+msgid "reload skin"
+msgstr ""
+
+msgctxt "#31089"
+msgid "power"
+msgstr ""
+
+msgctxt "#31090"
+msgid "Hide foreign"
+msgstr ""
+
+msgctxt "#31091"
+msgid "Hide broken"
+msgstr ""
+
+msgctxt "#31094"
+msgid "thumbs"
+msgstr ""
+
+msgctxt "#31095"
+msgid "mute"
+msgstr ""
+
+msgctxt "#31096"
+msgid "descending"
+msgstr ""
+
+msgctxt "#31100"
+msgid "spotlight"
+msgstr ""
+
+msgctxt "#31101"
+msgid "all movies"
+msgstr ""
+
+msgctxt "#31102"
+msgid "all shows"
+msgstr ""
+
+msgctxt "#31103"
+msgid "in progress"
+msgstr ""
+
+msgctxt "#31104"
+msgid "unwatched"
+msgstr ""
+
+msgctxt "#31105"
+msgid "genres"
+msgstr ""
+
+msgctxt "#31106"
+msgid "episodes"
+msgstr ""
+
+msgctxt "#31116"
+msgid "sort"
+msgstr ""
+
+msgctxt "#31117"
+msgid "descending"
+msgstr ""
+
+msgctxt "#31118"
+msgid "title"
+msgstr ""
+
+msgctxt "#31119"
+msgid "year"
+msgstr ""
+
+msgctxt "#31120"
+msgid "added"
+msgstr ""
+
+msgctxt "#31121"
+msgid "rating"
+msgstr ""
+
+msgctxt "#31122"
+msgid "ascending"
+msgstr ""
+
+msgctxt "#31123"
+msgid "from start"
+msgstr ""
+
+msgctxt "#31124"
+msgid "cast"
+msgstr ""
+
+msgctxt "#31125"
+msgid "details"
+msgstr ""
+
+msgctxt "#31126"
+msgid "director"
+msgstr ""
+
+msgctxt "#31127"
+msgid "writer"
+msgstr ""
+
+msgctxt "#31128"
+msgid "studio"
+msgstr ""
+
+msgctxt "#31129"
+msgid "country"
+msgstr ""
+
+msgctxt "#31130"
+msgid "similar"
+msgstr ""
+
+msgctxt "#31131"
+msgid "season"
+msgstr ""
+
+msgctxt "#31132"
+msgid "episode"
+msgstr ""
+
+msgctxt "#31133"
+msgid "all"
+msgstr ""
+
+msgctxt "#31134"
+msgid "specials"
+msgstr ""
+
+msgctxt "#31135"
+msgid "select"
+msgstr ""
+
+msgctxt "#31136"
+msgid "age rating"
+msgstr ""
+
+msgctxt "#31059"
+msgid "ends at"
+msgstr ""
+
+msgctxt "#31137"
+msgid "next episode"
+msgstr ""
+
+msgctxt "#31138"
+msgid "off"
+msgstr ""
+
+msgctxt "#31139"
+msgid "all settings"
+msgstr ""
+
+msgctxt "#31140"
+msgid "chapters"
+msgstr ""
+
+msgctxt "#31141"
+msgid "search for a title"
+msgstr ""
+
+msgctxt "#31142"
+msgid "actions"
+msgstr ""
+
+msgctxt "#31143"
+msgid "power off"
+msgstr ""
+
+msgctxt "#31144"
+msgid "reboot"
+msgstr ""
+
+msgctxt "#31145"
+msgid "suspend"
+msgstr ""
+
+msgctxt "#31146"
+msgid "exit kodi"
+msgstr ""
+
+msgctxt "#31147"
+msgid "restart kodi"
+msgstr ""
+
+msgctxt "#31148"
+msgid "movies (library)"
+msgstr ""
+
+msgctxt "#31149"
+msgid "shows (library)"
+msgstr ""
+
+msgctxt "#31150"
+msgid "episodes (library)"
+msgstr ""
+
+msgctxt "#31151"
+msgid "online: movies (tmdb)"
+msgstr ""
+
+msgctxt "#31152"
+msgid "online: shows (tmdb)"
+msgstr ""
+
+msgctxt "#31153"
+msgid "recent"
+msgstr ""
+
+msgctxt "#31154"
+msgid "not available on this device"
+msgstr ""
+
+msgctxt "#31155"
+msgid "stats"
+msgstr ""
+
+msgctxt "#31156"
+msgid "Nightcity"
+msgstr ""
+
+msgctxt "#31157"
+msgid "booting"
+msgstr ""
+
+msgctxt "#31158"
+msgid "online"
+msgstr ""
+
+msgctxt "#31159"
+msgid "Playback & media"
+msgstr ""
+
+msgctxt "#31160"
+msgid "Look & profiles"
+msgstr ""
+
+msgctxt "#31161"
+msgid "Add-ons & content"
+msgstr ""
+
+msgctxt "#31162"
+msgid "System & network"
+msgstr ""
+
+msgctxt "#31163"
+msgid "Tools"
+msgstr ""
+
+msgctxt "#31164"
+msgid "How videos, music and pictures play: decoding, refresh rate, discs, audio and subtitle language, subtitles."
+msgstr ""
+
+msgctxt "#31165"
+msgid "How the library collects and shows your media: scanning, file lists, videos, music, pictures."
+msgstr ""
+
+msgctxt "#31166"
+msgid "Live TV and recordings from your PVR client: channels, guide, recording, reminders."
+msgstr ""
+
+msgctxt "#31167"
+msgid "How Kodi looks and starts: skin, language and region, screensaver, master lock, startup."
+msgstr ""
+
+msgctxt "#31168"
+msgid "The options of this skin: focus glow and the home pages."
+msgstr ""
+
+msgctxt "#31169"
+msgid "Users with their own library, settings and add-ons, and the login screen."
+msgstr ""
+
+msgctxt "#31170"
+msgid "Installed add-ons, repositories, install from a zip file, search and updates."
+msgstr ""
+
+msgctxt "#31171"
+msgid "Browse sources and folders, copy, move and delete files."
+msgstr ""
+
+msgctxt "#31172"
+msgid "The device: display, audio output, input, internet access, power saving, add-on rules, logging."
+msgstr ""
+
+msgctxt "#31173"
+msgid "What Kodi offers on the network and uses from it: remote control, UPnP, AirPlay, SMB, NFS, caching, weather."
+msgstr ""
+
+msgctxt "#31174"
+msgid "Facts about this device: Kodi version, storage, network, video, hardware."
+msgstr ""
+
+msgctxt "#31175"
+msgid "What happened lately: add-on installs and updates, library scans, errors."
+msgstr ""
+
+msgctxt "#31176"
+msgid "Categories"
+msgstr ""
+
+msgctxt "#31178"
+msgid "[COLOR accent]OK[/COLOR] open   [COLOR accent]Back[/COLOR] close"
+msgstr ""
+
+msgctxt "#31181"
+msgid "refresh rate, decoding, resume"
+msgstr ""
+
+msgctxt "#31182"
+msgid "crossfade, visualisation, volume adjustment"
+msgstr ""
+
+msgctxt "#31183"
+msgid "DVD, Blu-ray, audio CD"
+msgstr ""
+
+msgctxt "#31184"
+msgid "slideshow, transitions"
+msgstr ""
+
+msgctxt "#31185"
+msgid "audio, subtitles and menus"
+msgstr ""
+
+msgctxt "#31186"
+msgid "font, size, download services"
+msgstr ""
+
+msgctxt "#31187"
+msgid "scan on startup, update, clean up"
+msgstr ""
+
+msgctxt "#31188"
+msgid "file extensions, hidden files, sorting"
+msgstr ""
+
+msgctxt "#31189"
+msgid "select action, plots, thumbnails"
+msgstr ""
+
+msgctxt "#31190"
+msgid "artists, album covers, tags"
+msgstr ""
+
+msgctxt "#31191"
+msgid "thumbnails, EXIF"
+msgstr ""
+
+msgctxt "#31192"
+msgid "channel groups, channel icons"
+msgstr ""
+
+msgctxt "#31193"
+msgid "channel info, switching"
+msgstr ""
+
+msgctxt "#31194"
+msgid "days shown, updates"
+msgstr ""
+
+msgctxt "#31195"
+msgid "start, channel switch delay"
+msgstr ""
+
+msgctxt "#31196"
+msgid "margins, folders"
+msgstr ""
+
+msgctxt "#31197"
+msgid "reminder before a show"
+msgstr ""
+
+msgctxt "#31198"
+msgid "wake up for recordings"
+msgstr ""
+
+msgctxt "#31199"
+msgid "lock by age, PIN"
+msgstr ""
+
+msgctxt "#31200"
+msgid "PVR client add-ons"
+msgstr ""
+
+msgctxt "#31201"
+msgid "skin, theme, colours, fonts"
+msgstr ""
+
+msgctxt "#31202"
+msgid "language, region, time, keyboard"
+msgstr ""
+
+msgctxt "#31203"
+msgid "mode, wait time"
+msgstr ""
+
+msgctxt "#31204"
+msgid "lock code, protected areas"
+msgstr ""
+
+msgctxt "#31205"
+msgid "start window, splash screen"
+msgstr ""
+
+msgctxt "#31206"
+msgid "resolution, refresh rate, calibration"
+msgstr ""
+
+msgctxt "#31207"
+msgid "output device, channels, passthrough"
+msgstr ""
+
+msgctxt "#31208"
+msgid "devices, mouse, remote"
+msgstr ""
+
+msgctxt "#31209"
+msgid "proxy"
+msgstr ""
+
+msgctxt "#31210"
+msgid "shutdown, display off"
+msgstr ""
+
+msgctxt "#31211"
+msgid "updates, unknown sources"
+msgstr ""
+
+msgctxt "#31212"
+msgid "debug log, components"
+msgstr ""
+
+msgctxt "#31213"
+msgid "device name, Zeroconf"
+msgstr ""
+
+msgctxt "#31214"
+msgid "web server, remote apps"
+msgstr ""
+
+msgctxt "#31215"
+msgid "share library, renderer"
+msgstr ""
+
+msgctxt "#31216"
+msgid "receive AirPlay"
+msgstr ""
+
+msgctxt "#31217"
+msgid "Windows shares, WINS"
+msgstr ""
+
+msgctxt "#31218"
+msgid "NFS shares"
+msgstr ""
+
+msgctxt "#31219"
+msgid "buffer, read rate"
+msgstr ""
+
+msgctxt "#31220"
+msgid "weather service"
+msgstr ""
+
+msgctxt "#31221"
+msgid "Spotlight change"
+msgstr ""
+
+msgctxt "#31222"
+msgid "Home pages"
+msgstr ""
+
+msgctxt "#31224"
+msgid "Rows"
+msgstr ""
+
+msgctxt "#31225"
+msgid "Spotlight"
+msgstr ""
+
+msgctxt "#31226"
+msgid "Still"
+msgstr ""
+
+msgctxt "#31227"
+msgid "All shows"
+msgstr ""
+
+msgctxt "#31228"
+msgid "Unwatched shows"
+msgstr ""
+
+msgctxt "#31229"
+msgid "Slot"
+msgstr ""
+
+msgctxt "#31231"
+msgid "Section for slot"
+msgstr ""
+
+msgctxt "#31232"
+msgid "menu"
+msgstr ""
+
+msgctxt "#31233"
+msgid "Continue watching"
+msgstr ""
+
+msgctxt "#31234"
+msgid "Next up"
+msgstr ""
+
+msgctxt "#31235"
+msgid "New movies"
+msgstr ""
+
+msgctxt "#31236"
+msgid "New episodes"
+msgstr ""
+
+msgctxt "#31237"
+msgid "Random movies"
+msgstr ""
+
+msgctxt "#31238"
+msgid "Top rated"
+msgstr ""
+
+msgctxt "#31239"
+msgid "TMDb trending"
+msgstr ""
+
+msgctxt "#31240"
+msgid "Recently watched"
+msgstr ""
+
+msgctxt "#31241"
+msgid "Started movies and episodes, the last watched first."
+msgstr ""
+
+msgctxt "#31242"
+msgid "The shows you are watching. OK opens the next episode."
+msgstr ""
+
+msgctxt "#31243"
+msgid "The movies added to the library last."
+msgstr ""
+
+msgctxt "#31244"
+msgid "The shows with the episodes added last."
+msgstr ""
+
+msgctxt "#31245"
+msgid "Tabs for the three biggest genres and a picker for all others."
+msgstr ""
+
+msgctxt "#31246"
+msgid "A new choice from the whole library every time Home opens."
+msgstr ""
+
+msgctxt "#31247"
+msgid "What never played, newest first."
+msgstr ""
+
+msgctxt "#31248"
+msgid "Sorted by rating, from 7.0 up."
+msgstr ""
+
+msgctxt "#31249"
+msgid "Kodi's favourites, as you set them."
+msgstr ""
+
+msgctxt "#31250"
+msgid "What is trending on TMDb this week."
+msgstr ""
+
+msgctxt "#31251"
+msgid "What played last, also what you watched to the end."
+msgstr ""
+
+msgctxt "#31252"
+msgid "The movie sets of your library. OK opens a set."
+msgstr ""
+
+msgctxt "#31253"
+msgid "Episodes you started and did not finish."
+msgstr ""
+
+msgctxt "#31254"
+msgid "Free slot. OK picks a section from the catalogue."
+msgstr ""
+
+msgctxt "#31255"
+msgid "Large artwork with title and plot, in random order. OK or Right picks the source."
+msgstr ""
+
+msgctxt "#31256"
+msgid "No spotlight: the page starts with the first row."
+msgstr ""
+
+msgctxt "#31257"
+msgid "How often the spotlight moves on by itself. OK or Right: 10, 15, 30, 60 s or still (then only by hand)."
+msgstr ""
+
+msgctxt "#31258"
+msgid "Home and movies show the same spotlight, so they share this setting."
+msgstr ""
+
+msgctxt "#31259"
+msgid "Show or hide entries of the main menu. Home, system and power always stay."
+msgstr ""
+
+msgctxt "#31260"
+msgid "[COLOR accent]OK[/COLOR] choose   [COLOR accent]Right[/COLOR] option   [COLOR accent]Left[/COLOR] back"
+msgstr ""
+
+msgctxt "#31261"
+msgid "[COLOR accent2]Up/Down[/COLOR] move   [COLOR accent2]OK[/COLOR] drop"
+msgstr ""
+
+msgctxt "#31262"
+msgid "Spotlight, rows and main menu of the home, movies and shows pages."
+msgstr ""
+
+msgctxt "#31263"
+msgid "swap"
+msgstr ""
+
+msgctxt "#31264"
+msgid "Main menu"
+msgstr ""
+
+msgctxt "#31265"
+msgid "Spotlight and rows of the home page."
+msgstr ""
+
+msgctxt "#31266"
+msgid "Spotlight and rows of the movies page."
+msgstr ""
+
+msgctxt "#31267"
+msgid "Spotlight and rows of the shows page."
+msgstr ""
+
+msgctxt "#31268"
+msgid "How the skin draws the focus."
+msgstr ""
+
+msgctxt "#31269"
+msgid "A soft glow around the focused entry."
+msgstr ""
+
+msgctxt "#31230"
+msgid "frame rate"
+msgstr ""
+
+# TMDb navigation
+
+msgctxt "#31330"
+msgid "back to video"
+msgstr ""
+
+msgctxt "#31331"
+msgid "back to home"
+msgstr ""
+
+msgctxt "#31332"
+msgid "back to movies"
+msgstr ""
+
+msgctxt "#31333"
+msgid "back to shows"
+msgstr ""
+
+msgctxt "#31334"
+msgid "back to search"
+msgstr ""
+
+msgctxt "#31335"
+msgid "back to library"
+msgstr ""
+
+msgctxt "#31310"
+msgid "Home key opens the home page"
+msgstr ""
+
+msgctxt "#31311"
+msgid "The Home key of the remote always leads to the home page, held down it opens the quick menu. The skin sets up the keymap 0_skin.nightcity.xml in the profile for it; your own keymaps still win."
+msgstr ""
+
+msgctxt "#31300"
+msgid "crew"
+msgstr ""
+
+msgctxt "#31301"
+msgid "back to start"
+msgstr ""
+
+msgctxt "#31302"
+msgid "person"
+msgstr ""
+
+msgctxt "#31303"
+msgid "born"
+msgstr ""
+
+msgctxt "#31304"
+msgid "died"
+msgstr ""
+
+msgctxt "#31320"
+msgid "quick menu"
+msgstr ""
+
+msgctxt "#31321"
+msgid "set up weather"
+msgstr ""
+
+msgctxt "#31322"
+msgid "more"
+msgstr ""
+
+msgctxt "#31323"
+msgid "timer"
+msgstr ""
+
+msgctxt "#31336"
+msgid "Remember search terms"
+msgstr ""
+
+msgctxt "#31337"
+msgid "The search page lists the last five search terms. Switched off, the skin keeps no terms and forgets the ones it has."
+msgstr ""
+
+msgctxt "#31338"
+msgid "Clear search history"
+msgstr ""
+
+msgctxt "#31339"
+msgid "Forgets the remembered search terms."
+msgstr ""

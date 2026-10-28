@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- File manager: two panes. Kodi ids: 20/21 lists, 101/102 current folders, 12/13 item counts. -->
+<window>
+    <defaultcontrol always="true">20</defaultcontrol>
+    <controls>
+        <include>Background</include>
+        <include content="StatusBar">
+            <param name="title" value="$LOCALIZE[10003]"/>
+        </include>
+        <!-- the content fades in on open; background and status line stay -->
+        <control type="group">
+            <include>WindowFade</include>
+            <control type="label" id="101">
+                <left>120</left>
+                <top>84</top>
+                <width>820</width>
+                <height>40</height>
+                <font>font_small</font>
+                <textcolor>accent3</textcolor>
+                <aligny>center</aligny>
+                <label></label>
+            </control>
+            <control type="label" id="102">
+                <left>980</left>
+                <top>84</top>
+                <width>820</width>
+                <height>40</height>
+                <font>font_small</font>
+                <textcolor>accent3</textcolor>
+                <aligny>center</aligny>
+                <label></label>
+            </control>
+            <include content="DialogList">
+                <param name="id" value="20"/>
+                <onleft>Action(Back)</onleft>
+                <onright>21</onright>
+                <param name="left" value="120"/>
+                <param name="top" value="140"/>
+                <param name="width" value="820"/>
+                <param name="height" value="780"/>
+                <param name="label2" value="$INFO[ListItem.Label2]"/>
+            </include>
+            <include content="DialogList">
+                <param name="id" value="21"/>
+                <onleft>20</onleft>
+                <param name="left" value="980"/>
+                <param name="top" value="140"/>
+                <param name="width" value="820"/>
+                <param name="height" value="780"/>
+                <param name="label2" value="$INFO[ListItem.Label2]"/>
+            </include>
+            <control type="label" id="12">
+                <left>120</left>
+                <top>940</top>
+                <width>820</width>
+                <height>40</height>
+                <font>font_tiny</font>
+                <textcolor>text_mute</textcolor>
+                <aligny>center</aligny>
+                <label></label>
+            </control>
+            <control type="label" id="13">
+                <left>980</left>
+                <top>940</top>
+                <width>820</width>
+                <height>40</height>
+                <font>font_tiny</font>
+                <textcolor>text_mute</textcolor>
+                <aligny>center</aligny>
+                <label></label>
+            </control>
+        </control>
+    </controls>
+</window>

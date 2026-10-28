@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Smart playlist rule. Kodi ids: 15 field, 16 operator, 17 value, 20 browse, 18 ok, 19 cancel. -->
+<window>
+    <depth>DepthDialog</depth>
+    <defaultcontrol always="true">9001</defaultcontrol>
+    <controls>
+        <control type="group">
+            <centerleft>50%</centerleft>
+            <centertop>50%</centertop>
+            <width>1000</width>
+            <height>460</height>
+            <include>DialogFrame</include>
+            <include content="DialogHeading">
+                <param name="label" value="$LOCALIZE[21420]"/>
+            </include>
+            <control type="grouplist" id="9001">
+                <ondown>9000</ondown>
+                <left>40</left>
+                <top>84</top>
+                <width>920</width>
+                <height>200</height>
+                <orientation>vertical</orientation>
+                <itemgap>0</itemgap>
+                <control type="button" id="15">
+                    <width>920</width>
+                    <include>SettingsRowLook</include>
+                    <font>font_small</font>
+                    <label>$LOCALIZE[21424]</label>
+                </control>
+                <control type="button" id="16">
+                    <width>920</width>
+                    <include>SettingsRowLook</include>
+                    <font>font_small</font>
+                    <label></label>
+                </control>
+                <control type="edit" id="17">
+                    <width>920</width>
+                    <include>SettingsRowLook</include>
+                    <font>font_small</font>
+                    <label></label>
+                </control>
+            </control>
+            <control type="grouplist" id="9000">
+                <onup>9001</onup>
+                <left>40</left>
+                <top>360</top>
+                <width>920</width>
+                <height>54</height>
+                <orientation>horizontal</orientation>
+                <itemgap>24</itemgap>
+                <align>right</align>
+                <include content="Button">
+                    <param name="id" value="20"/>
+                    <param name="label" value="$LOCALIZE[1024]"/>
+                    <param name="width" value="220"/>
+                </include>
+                <include content="Button">
+                    <param name="id" value="18"/>
+                    <param name="label" value="$LOCALIZE[186]"/>
+                    <param name="width" value="200"/>
+                </include>
+                <include content="Button">
+                    <param name="id" value="19"/>
+                    <param name="label" value="$LOCALIZE[222]"/>
+                    <param name="width" value="200"/>
+                </include>
+            </control>
+        </control>
+    </controls>
+</window>

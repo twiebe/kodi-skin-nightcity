@@ -1,0 +1,613 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Netrunner building blocks: dark petrol page, cyan for focus and progress, pink for small
+     accents, cut corners instead of rounded boxes, no labels in frame lines. -->
+<includes>
+    <!-- Startup.xml: online once the startup script is done, but not before a second ahead of
+         the hand-over to Home (nc_startup in Timers.xml, 4 s minimum) -->
+    <expression name="StartupOnline">!String.IsEmpty(Window(Home).Property(nc.startup.ready)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_startup),3)</expression>
+    <!-- Full screen page: base colour and the petrol glow top right. Never a hole, with or
+         without fanart (FanartBackdrop goes on top of this). -->
+    <include name="Background">
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>1080</height>
+            <texture colordiffuse="bg">ui/white.png</texture>
+        </control>
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>1080</height>
+            <texture colordiffuse="petrol">ui/petrol_glow.png</texture>
+        </control>
+    </include>
+
+    <!-- Fanart of the focused title behind the page: faint, tinted, fading out to the left.
+         `art` is an infolabel such as ListItem.Art(fanart). -->
+    <include name="FanartBackdrop">
+        <param name="art"/>
+        <definition>
+            <control type="image">
+                <description>fanart backdrop</description>
+                <left>0</left>
+                <top>0</top>
+                <width>1920</width>
+                <height>1080</height>
+                <aspectratio>scale</aspectratio>
+                <fadetime>200</fadetime>
+                <texture colordiffuse="fanart" diffuse="ui/fade_r.png" background="true">$INFO[$PARAM[art]]</texture>
+                <visible>!String.IsEmpty($PARAM[art])</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Page build-up, the one place to tune it (ms): each block of a Home page fades in FadeTime
+         long, FadeStep1..3 after its page came up; settings windows fade their content in
+         WindowFadeTime long. Fades and a small slide only: cheap on small boxes. -->
+    <constant name="FadeTime">180</constant>
+    <constant name="FadeStep1">50</constant>
+    <constant name="FadeStep2">100</constant>
+    <constant name="FadeStep3">150</constant>
+    <constant name="WindowFadeTime">150</constant>
+
+    <!-- A block of a Home page fades in and rises a few pixels `delay` ms after its page comes up
+         or Home opens. The block needs the page condition itself: Kodi does not update the
+         children of a hidden group, so their Visible animations would not run. The first effect
+         starts at once: while an animation waits for its delay Kodi keeps the control
+         unfocusable. Not while a video plays under Home. -->
+    <include name="PageFade">
+        <param name="delay" default="0"/>
+        <definition>
+            <animation type="Visible" condition="!Player.HasVideo">
+                <effect type="fade" start="100" end="100" time="FadeTime"/>
+                <effect type="fade" start="0" end="100" time="FadeTime" delay="$PARAM[delay]"/>
+                <effect type="slide" start="0,10" end="0,0" time="FadeTime" delay="$PARAM[delay]" tween="cubic" easing="out"/>
+            </animation>
+            <animation type="WindowOpen" condition="!Player.HasVideo">
+                <effect type="fade" start="100" end="100" time="FadeTime"/>
+                <effect type="fade" start="0" end="100" time="FadeTime" delay="$PARAM[delay]"/>
+                <effect type="slide" start="0,10" end="0,0" time="FadeTime" delay="$PARAM[delay]" tween="cubic" easing="out"/>
+            </animation>
+        </definition>
+    </include>
+
+    <!-- The fanart behind Home fades over to the next one (page change, hero and rows) -->
+    <include name="BackdropFade">
+        <animation effect="fade" start="0" end="100" time="FadeTime" condition="!Player.HasVideo">Visible</animation>
+        <animation effect="fade" start="100" end="0" time="FadeTime" condition="!Player.HasVideo">Hidden</animation>
+    </include>
+
+    <!-- The content of a settings window fades in when it opens; background and status line
+         stay, so going from one settings page to the next does not flash. No close animation:
+         it holds the next window back. -->
+    <include name="WindowFade">
+        <animation effect="fade" start="0" end="100" time="WindowFadeTime" condition="!Player.HasVideo">WindowOpen</animation>
+    </include>
+
+    <!-- Top line of a page: "FILME ◢ METROPOLIS" on the left, a counter or the clock right -->
+    <include name="PathLine">
+        <param name="id" default="0"/>
+        <param name="path"/>
+        <param name="counter" default="$INFO[System.Time]"/>
+        <param name="counterid" default="0"/>
+        <param name="counterfont" default="font_num"/>
+        <param name="left" default="48"/>
+        <param name="top" default="28"/>
+        <param name="width" default="1824"/>
+        <definition>
+            <control type="label" id="$PARAM[id]">
+                <left>$PARAM[left]</left>
+                <top>$PARAM[top]</top>
+                <width>1400</width>
+                <height>36</height>
+                <font>font_caps_small</font>
+                <textcolor>text_mute</textcolor>
+                <label>[UPPERCASE]$PARAM[path][/UPPERCASE]</label>
+            </control>
+            <control type="label" id="$PARAM[counterid]">
+                <left>$PARAM[left]</left>
+                <top>$PARAM[top]</top>
+                <width>$PARAM[width]</width>
+                <height>36</height>
+                <align>right</align>
+                <font>$PARAM[counterfont]</font>
+                <textcolor>accent2</textcolor>
+                <label>$PARAM[counter]</label>
+            </control>
+        </definition>
+    </include>
+
+
+    <!-- Small pink line above a title: genre, or show and episode -->
+    <include name="Kicker">
+        <param name="id" default="0"/>
+        <param name="label"/>
+        <param name="left" default="0"/>
+        <param name="top" default="0"/>
+        <param name="width" default="1200"/>
+        <param name="visible" default="true"/>
+        <definition>
+            <control type="label" id="$PARAM[id]">
+                <left>$PARAM[left]</left>
+                <top>$PARAM[top]</top>
+                <width>$PARAM[width]</width>
+                <height>34</height>
+                <font>font_caps_small</font>
+                <textcolor>accent2</textcolor>
+                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                <visible>$PARAM[visible]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Page title with a slight static glitch: pink and cyan copies 2px to either side. All
+         three labels share size, font and scrolling so the copies never drift apart. -->
+    <include name="GlitchTitle">
+        <param name="id" default="0"/>
+        <param name="label"/>
+        <param name="left" default="0"/>
+        <param name="top" default="0"/>
+        <param name="width" default="1200"/>
+        <param name="height" default="90"/>
+        <param name="font" default="font_hero"/>
+        <param name="align" default="left"/>
+        <param name="visible" default="true"/>
+        <definition>
+            <control type="group">
+                <left>$PARAM[left]</left>
+                <top>$PARAM[top]</top>
+                <visible>$PARAM[visible]</visible>
+                <control type="label">
+                    <left>-2</left>
+                    <width>$PARAM[width]</width>
+                    <height>$PARAM[height]</height>
+                    <font>$PARAM[font]</font>
+                    <align>$PARAM[align]</align>
+                    <scroll>false</scroll>
+                    <wrapmultiline>false</wrapmultiline>
+                    <textcolor>glitch_a</textcolor>
+                    <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                </control>
+                <control type="label">
+                    <left>2</left>
+                    <width>$PARAM[width]</width>
+                    <height>$PARAM[height]</height>
+                    <font>$PARAM[font]</font>
+                    <align>$PARAM[align]</align>
+                    <scroll>false</scroll>
+                    <wrapmultiline>false</wrapmultiline>
+                    <textcolor>glitch_b</textcolor>
+                    <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                </control>
+                <control type="label" id="$PARAM[id]">
+                    <left>0</left>
+                    <width>$PARAM[width]</width>
+                    <height>$PARAM[height]</height>
+                    <font>$PARAM[font]</font>
+                    <align>$PARAM[align]</align>
+                    <scroll>false</scroll>
+                    <wrapmultiline>false</wrapmultiline>
+                    <textcolor>text</textcolor>
+                    <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Thin outlined tag for one technical fact (4K, HDR, 5.1), for a horizontal grouplist.
+         Pass a `visible` condition so empty facts disappear. -->
+    <include name="Tag">
+        <param name="label"/>
+        <param name="color" default="text_dim"/>
+        <param name="visible" default="true"/>
+        <definition>
+            <control type="button">
+                <width>auto</width>
+                <height>36</height>
+                <enable>false</enable>
+                <font>font_caps_small</font>
+                <textoffsetx>10</textoffsetx>
+                <aligny>center</aligny>
+                <textcolor>$PARAM[color]</textcolor>
+                <disabledcolor>$PARAM[color]</disabledcolor>
+                <texturenofocus border="12" colordiffuse="border_dim">ui/cut_btn.png</texturenofocus>
+                <texturefocus border="12" colordiffuse="border_dim">ui/cut_btn.png</texturefocus>
+                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                <visible>$PARAM[visible]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Button with a cut top-right corner. Only the focused button is filled; a primary button
+         passes color=accent and textcolor=accent so it stands out without fill. -->
+    <include name="PillButton">
+        <param name="id"/>
+        <param name="label"/>
+        <param name="width" default="auto"/>
+        <param name="onclick" default="noop"/>
+        <param name="onclick2" default="noop"/>
+        <param name="onfocus" default="noop"/>
+        <param name="visible" default="true"/>
+        <!-- a disabled pill looks the same, it only takes no focus -->
+        <param name="enable" default="true"/>
+        <param name="color" default="border_dim"/>
+        <param name="textcolor" default="text_dim"/>
+        <param name="textoffsetx" default="24"/>
+        <definition>
+            <control type="button" id="$PARAM[id]">
+                <visible>$PARAM[visible]</visible>
+                <enable>$PARAM[enable]</enable>
+                <width>$PARAM[width]</width>
+                <height>54</height>
+                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                <font>font_caps</font>
+                <textoffsetx>$PARAM[textoffsetx]</textoffsetx>
+                <align>center</align>
+                <aligny>center</aligny>
+                <textcolor>$PARAM[textcolor]</textcolor>
+                <focusedcolor>focus_text</focusedcolor>
+                <disabledcolor>$PARAM[textcolor]</disabledcolor>
+                <texturefocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</texturefocus>
+                <texturenofocus border="12" colordiffuse="$PARAM[color]">ui/cut_btn.png</texturenofocus>
+                <onclick>$PARAM[onclick]</onclick>
+                <onclick>$PARAM[onclick2]</onclick>
+                <onfocus>$PARAM[onfocus]</onfocus>
+                <!-- extra actions, e.g. conditional onclicks -->
+                <nested/>
+            </control>
+        </definition>
+    </include>
+
+    <!-- The pill of … on the info page, drawn by its one-item list (DialogVideoInfo.xml 9003) -->
+    <include name="MorePill">
+        <param name="texture"/>
+        <param name="color"/>
+        <param name="textcolor"/>
+        <param name="visible" default="true"/>
+        <definition>
+            <control type="group">
+                <visible>$PARAM[visible]</visible>
+                <control type="image">
+                    <width>96</width>
+                    <height>54</height>
+                    <texture border="12" colordiffuse="$PARAM[color]">$PARAM[texture]</texture>
+                </control>
+                <control type="label">
+                    <width>96</width>
+                    <height>54</height>
+                    <font>font_caps</font>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <textcolor>$PARAM[textcolor]</textcolor>
+                    <label>…</label>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Button: kept for older windows, now a PillButton -->
+    <include name="Button">
+        <param name="id"/>
+        <param name="label"/>
+        <param name="width" default="220"/>
+        <param name="onclick" default="noop"/>
+        <param name="onclick2" default="noop"/>
+        <param name="onfocus" default="noop"/>
+        <param name="visible" default="true"/>
+        <param name="textoffsetx" default="24"/>
+        <definition>
+            <include content="PillButton">
+                <param name="id" value="$PARAM[id]"/>
+                <param name="label" value="$PARAM[label]"/>
+                <param name="width" value="$PARAM[width]"/>
+                <param name="onclick" value="$PARAM[onclick]"/>
+                <param name="onclick2" value="$PARAM[onclick2]"/>
+                <param name="onfocus" value="$PARAM[onfocus]"/>
+                <param name="visible" value="$PARAM[visible]"/>
+                <param name="textoffsetx" value="$PARAM[textoffsetx]"/>
+            </include>
+        </definition>
+    </include>
+
+    <!-- Thin progress line: track in border_dim, fill in `color` -->
+    <include name="ProgressLine">
+        <param name="id" default="0"/>
+        <param name="left" default="0"/>
+        <param name="top" default="0"/>
+        <param name="width" default="480"/>
+        <param name="height" default="4"/>
+        <param name="info"/>
+        <param name="color" default="accent"/>
+        <param name="visible" default="true"/>
+        <definition>
+            <control type="progress" id="$PARAM[id]">
+                <left>$PARAM[left]</left>
+                <top>$PARAM[top]</top>
+                <width>$PARAM[width]</width>
+                <height>$PARAM[height]</height>
+                <texturebg colordiffuse="border_dim">ui/white.png</texturebg>
+                <midtexture colordiffuse="$PARAM[color]">ui/white.png</midtexture>
+                <info>$PARAM[info]</info>
+                <visible>$PARAM[visible]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Small letter-spaced heading above a row -->
+    <include name="RowHeader">
+        <param name="label"/>
+        <param name="left" default="0"/>
+        <param name="top" default="0"/>
+        <param name="width" default="1200"/>
+        <param name="visible" default="true"/>
+        <definition>
+            <control type="label">
+                <left>$PARAM[left]</left>
+                <top>$PARAM[top]</top>
+                <width>$PARAM[width]</width>
+                <height>34</height>
+                <font>font_caps_small</font>
+                <textcolor>text_mute</textcolor>
+                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                <visible>$PARAM[visible]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Poster or thumb with cut corners. When `focused` holds it gets a cyan outline and glow
+         and grows a little; `dim` darkens it (unfocused cards of a focused row). -->
+    <include name="CutCard">
+        <param name="width" default="200"/>
+        <param name="height" default="300"/>
+        <param name="image"/>
+        <param name="mask" default="ui/mask_200x300.png"/>
+        <param name="glowwidth" default="248"/>
+        <param name="glowheight" default="348"/>
+        <param name="focused" default="false"/>
+        <param name="dim" default="false"/>
+        <definition>
+            <control type="group">
+                <animation effect="zoom" end="106" center="auto" time="150" condition="$PARAM[focused]">Conditional</animation>
+                <animation effect="fade" start="100" end="75" time="150" condition="$PARAM[dim]">Conditional</animation>
+                <control type="image">
+                    <left>-24</left>
+                    <top>-24</top>
+                    <width>$PARAM[glowwidth]</width>
+                    <height>$PARAM[glowheight]</height>
+                    <texture border="40" colordiffuse="glow">ui/cut_glow.png</texture>
+                    <visible>$PARAM[focused] + !Skin.HasSetting(GlowOff)</visible>
+                </control>
+                <!-- unfocused a plain rectangle, focused cut like the frame; scalediffuse="false" keeps
+                     the mask on the card when scale crops artwork of another ratio -->
+                <control type="image">
+                    <width>$PARAM[width]</width>
+                    <height>$PARAM[height]</height>
+                    <texture colordiffuse="surface">ui/white.png</texture>
+                    <visible>!$PARAM[focused]</visible>
+                </control>
+                <control type="image">
+                    <width>$PARAM[width]</width>
+                    <height>$PARAM[height]</height>
+                    <texture colordiffuse="surface" diffuse="$PARAM[mask]">ui/white.png</texture>
+                    <visible>$PARAM[focused]</visible>
+                </control>
+                <control type="image">
+                    <width>$PARAM[width]</width>
+                    <height>$PARAM[height]</height>
+                    <aspectratio>scale</aspectratio>
+                    <texture background="true">$PARAM[image]</texture>
+                    <visible>!$PARAM[focused]</visible>
+                </control>
+                <control type="image">
+                    <width>$PARAM[width]</width>
+                    <height>$PARAM[height]</height>
+                    <aspectratio scalediffuse="false">scale</aspectratio>
+                    <texture diffuse="$PARAM[mask]" background="true">$PARAM[image]</texture>
+                    <visible>$PARAM[focused]</visible>
+                </control>
+                <!-- extra layers on the artwork, e.g. a title fallback or a progress line. Kodi only
+                     resolves <nested/> as a child of the include's top control. -->
+                <nested/>
+                <control type="image">
+                    <width>$PARAM[width]</width>
+                    <height>$PARAM[height]</height>
+                    <texture border="16" colordiffuse="focus">ui/cut.png</texture>
+                    <visible>$PARAM[focused]</visible>
+                </control>
+            </control>
+            <!-- beside the card, not inside it: the card's dimming must not reach the dog-ear -->
+            <control type="group">
+                <animation effect="zoom" end="106" center="auto" time="150" condition="$PARAM[focused]">Conditional</animation>
+                <!-- unwatched, never started: an accent dog-ear in the bottom right corner (no cut
+                     there), as big as the frame's cut -->
+                <control type="group">
+                    <width>$PARAM[width]</width>
+                    <height>$PARAM[height]</height>
+                    <control type="image">
+                        <right>0</right>
+                        <bottom>0</bottom>
+                        <width>14</width>
+                        <height>14</height>
+                        <texture colordiffuse="accent">ui/dogear.png</texture>
+                        <visible>[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,episode)] + !String.IsEmpty(ListItem.DBID) + Integer.IsEqual(ListItem.PlayCount,0) + !ListItem.IsResumable</visible>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- One fact line (system page, player info): key in a fixed column, value beside
+         it. Inside a vertical grouplist, so a hidden fact leaves no gap. -->
+    <include name="FactLine">
+        <param name="key"/>
+        <param name="value"/>
+        <param name="visible" default="true"/>
+        <param name="width" default="1200"/>
+        <param name="keywidth" default="180"/>
+        <param name="height" default="40"/>
+        <param name="font" default="font_body"/>
+        <param name="keycolor" default="text_mute"/>
+        <param name="color" default="text_dim"/>
+        <definition>
+            <control type="group">
+                <width>$PARAM[width]</width>
+                <height>$PARAM[height]</height>
+                <visible>$PARAM[visible]</visible>
+                <control type="label">
+                    <width>$PARAM[keywidth]</width>
+                    <height>$PARAM[height]</height>
+                    <font>$PARAM[font]</font>
+                    <textcolor>$PARAM[keycolor]</textcolor>
+                    <label>$PARAM[key]</label>
+                </control>
+                <control type="label">
+                    <left>$PARAM[keywidth]</left>
+                    <width>$PARAM[width]</width>
+                    <height>$PARAM[height]</height>
+                    <font>$PARAM[font]</font>
+                    <textcolor>$PARAM[color]</textcolor>
+                    <label>$PARAM[value]</label>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Dialog panel: cut-corner surface with a thin outline, sized by the parent group -->
+    <include name="DialogFrame">
+        <!-- opaque base: surface alone lets the window behind show through -->
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <texture border="16" colordiffuse="bg">ui/cut_fill.png</texture>
+        </control>
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <texture border="16" colordiffuse="surface">ui/cut_fill.png</texture>
+        </control>
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <texture border="16" colordiffuse="border_dim">ui/cut.png</texture>
+        </control>
+    </include>
+
+    <!-- Top of a full window outside Home: the window title as path line (id 9026), a counter
+         such as 12/240 on the right (id 9028; the clock unless given) -->
+    <include name="StatusBar">
+        <param name="title"/>
+        <param name="counter" default="$INFO[System.Time]"/>
+        <definition>
+            <include content="PathLine">
+                <param name="id" value="9026"/>
+                <param name="path" value="$PARAM[title]"/>
+                <param name="counter" value="$PARAM[counter]"/>
+                <param name="counterid" value="9028"/>
+                <param name="counterfont" value="font_num_small"/>
+                <param name="left" value="64"/>
+                <param name="top" value="30"/>
+                <param name="width" value="1792"/>
+            </include>
+        </definition>
+    </include>
+
+    <!-- A menu or tab entry: letter-spaced caps, no frame. Focused it turns cyan with a cyan line
+         below; while `active` holds (the page or season shown) a pink ◢ sits in front. Width
+         follows the label. -->
+    <include name="TabButton">
+        <param name="id"/>
+        <param name="label"/>
+        <param name="active" default="false"/>
+        <param name="onfocus" default="noop"/>
+        <param name="onclick" default="noop"/>
+        <param name="visible" default="true"/>
+        <definition>
+            <control type="togglebutton" id="$PARAM[id]">
+                <width>auto</width>
+                <height>44</height>
+                <font>font_caps</font>
+                <textoffsetx>10</textoffsetx>
+                <aligny>center</aligny>
+                <textcolor>text_mute</textcolor>
+                <focusedcolor>accent</focusedcolor>
+                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                <altlabel>[COLOR accent2]◢[/COLOR] [UPPERCASE]$PARAM[label][/UPPERCASE]</altlabel>
+                <texturefocus colordiffuse="accent">ui/tab_line.png</texturefocus>
+                <texturenofocus/>
+                <alttexturefocus colordiffuse="accent">ui/tab_line.png</alttexturefocus>
+                <alttexturenofocus/>
+                <usealttexture>$PARAM[active]</usealttexture>
+                <onfocus>$PARAM[onfocus]</onfocus>
+                <onclick>$PARAM[onclick]</onclick>
+                <altclick>$PARAM[onclick]</altclick>
+                <visible>$PARAM[visible]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Entry of the top menu: the focused one a filled accent button with dark text, the shown
+         page an accent outline -->
+    <include name="MenuButton">
+        <param name="id"/>
+        <param name="label"/>
+        <param name="active" default="false"/>
+        <param name="onfocus" default="noop"/>
+        <param name="onclick" default="noop"/>
+        <param name="visible" default="true"/>
+        <definition>
+            <control type="togglebutton" id="$PARAM[id]">
+                <width>auto</width>
+                <height>44</height>
+                <font>font_caps</font>
+                <textoffsetx>16</textoffsetx>
+                <aligny>center</aligny>
+                <textcolor>text_mute</textcolor>
+                <focusedcolor>focus_text</focusedcolor>
+                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                <altlabel>[UPPERCASE]$PARAM[label][/UPPERCASE]</altlabel>
+                <texturefocus border="12" colordiffuse="accent">ui/cut_btn_fill.png</texturefocus>
+                <texturenofocus/>
+                <alttexturefocus border="12" colordiffuse="accent">ui/cut_btn_fill.png</alttexturefocus>
+                <alttexturenofocus border="12" colordiffuse="accent">ui/cut_btn.png</alttexturenofocus>
+                <usealttexture>$PARAM[active]</usealttexture>
+                <onfocus>$PARAM[onfocus]</onfocus>
+                <onclick>$PARAM[onclick]</onclick>
+                <altclick>$PARAM[onclick]</altclick>
+                <visible>$PARAM[visible]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Space between tabs. Inside a grouplist it keeps an id: Kodi moves over it by id, id 0
+         stops the move. -->
+    <include name="TabGap">
+        <param name="id" default=""/>
+        <param name="label" default=""/>
+        <param name="color" default="border_dim"/>
+        <param name="bg" default="bg"/>
+        <param name="visible" default="true"/>
+        <definition>
+            <control type="button" id="$PARAM[id]">
+                <width>24</width>
+                <height>44</height>
+                <enable>false</enable>
+                <font>font_caps</font>
+                <textcolor>$PARAM[color]</textcolor>
+                <disabledcolor>$PARAM[color]</disabledcolor>
+                <texturenofocus/>
+                <texturefocus/>
+                <label/>
+                <visible>$PARAM[visible]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Click on an item: a library show opens the info page of its next episode, everything
+         else (also a TMDb show without DBID) its own info page, never straight into playback -->
+    <include name="ClickRouting">
+        <onclick condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[ListItem.DBID])</onclick>
+        <onclick condition="!String.IsEqual(ListItem.DBType,tvshow) | String.IsEmpty(ListItem.DBID)">Action(Info)</onclick>
+    </include>
+</includes>

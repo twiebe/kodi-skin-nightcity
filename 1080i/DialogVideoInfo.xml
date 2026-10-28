@@ -1,0 +1,730 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Info page. Every click on a library item lands here instead of starting playback.
+     Episode: the head follows the episode list 5100 below; season tabs 5200 switch the list;
+     scripts/nightcity.py info_select preselects the opened episode. Cast on the right.
+     Movie and show: poster, details on the right, cast with photos (Kodi fills list 50) and,
+     for movies, similar movies from TMDb Helper (5300, hidden while empty).
+     TMDb navigation (Includes_Tmdb.xml): movies and shows list their cast or crew from TMDb
+     (5500, tabs 5520), a person page (TMDb Helper item with tmdb_type person) shows photo,
+     biography and the person's films, shows or crew jobs (5510). A click on any of them opens
+     that page in TMDb Helper's chain; "close all" (9004) ends the chain. Kodi's own cast list 50
+     only shows when TMDb has no cast.
+     There is no control 5, so Kodi leaves the visibility of 4 and 50 to the skin. -->
+<window>
+    <!-- the button row: its first visible button (a person page has no play button) -->
+    <defaultcontrol always="true">9000</defaultcontrol>
+    <!-- cleared first, so play cannot read a stale signal from the previous info page -->
+    <onload>ClearProperty(nc.returning,home)</onload>
+    <onload>ClearProperty(nc.info.opening,home)</onload>
+    <onload>ClearProperty(nc.info.ready,home)</onload>
+    <!-- the tab of the credits row starts on cast (films for a person) on every page -->
+    <onload>ClearProperty(nc.info.tab,home)</onload>
+    <!-- a move that waits for its list (nc_info_enter, Timers.xml) belongs to the page before -->
+    <onload>ClearProperty(nc.info.enter,home)</onload>
+    <!-- the episode the credits row loaded for (nc_info_ep, Timers.xml) belongs to the last page -->
+    <onload>ClearProperty(nc.info.ep.query,home)</onload>
+    <onload>ClearProperty(nc.info.ep.id,home)</onload>
+    <onload>ClearProperty(nc.info.ep.pending,home)</onload>
+    <!-- play shows up once the library copy of a TMDb title is found: nc_info_twin (Timers.xml)
+         moves the focus there -->
+    <onload>SetProperty(nc.info.twinfocus,1,home)</onload>
+    <onload>ClearProperty(nc.info.more,home)</onload>
+    <onload>ClearProperty(nc.info.more.load,home)</onload>
+    <!-- in a chain Back waits for the first second of the page (ChainBackGuard, Includes_Tmdb.xml) -->
+    <onload>ClearProperty(nc.chain.back,home)</onload>
+    <onload condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">SetProperty(nc.chain.guard,1,home)</onload>
+    <!-- where a chain started from this page ends (ChainBackLabel): Home or the library under
+         the first info page; a chain's pages lie over neither -->
+    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + Window.IsActive(home)">SetProperty(nc.chain.from,home,home)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + Window.IsActive(1110)">SetProperty(nc.chain.from,library,home)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + !Window.IsActive(home) + !Window.IsActive(1110)">ClearProperty(nc.chain.from,home)</onload>
+    <!-- this page, for a chain started from it: in the onclick of a list ListItem is the
+         clicked item, not the page -->
+    <onload>SetProperty(nc.chain.origin.type,$VAR[ChainOriginType],home)</onload>
+    <onload>SetProperty(nc.chain.origin.id,$INFO[ListItem.Property(tmdb_id)],home)</onload>
+    <onload>SetProperty(nc.chain.origin.dbid,$INFO[ListItem.DBID],home)</onload>
+    <!-- the tab chosen on this page counts from now until it closes (Variables.xml,
+         InfoPeoplePath) -->
+    <onload>SetProperty(nc.info.live,1,home)</onload>
+    <onunload>ClearProperty(nc.info.live,home)</onunload>
+    <onload condition="String.IsEqual(ListItem.DBType,episode)">NotifyAll(nightcity,info_select)</onload>
+    <controls>
+        <include>Background</include>
+        <control type="group">
+            <visible>String.IsEqual(ListItem.DBType,episode)</visible>
+            <include content="FanartBackdrop">
+                <param name="art" value="Container(5100).ListItem.Art(fanart)"/>
+            </include>
+        </control>
+        <control type="group">
+            <visible>!String.IsEqual(ListItem.DBType,episode)</visible>
+            <include content="FanartBackdrop">
+                <param name="art" value="ListItem.Art(fanart)"/>
+            </include>
+        </control>
+        <include content="PathLine">
+            <param name="id" value="9026"/>
+            <param name="path" value="$VAR[InfoPath]"/>
+            <param name="left" value="64"/>
+            <param name="top" value="30"/>
+            <param name="width" value="1792"/>
+        </include>
+
+        <!-- head: episode (follows the episode list), cast on the right -->
+        <control type="group">
+            <visible>String.IsEqual(ListItem.DBType,episode)</visible>
+            <include content="HeroBody">
+                <param name="item" value="Container(5100).ListItem"/>
+                <param name="kicker" value="$INFO[ListItem.TVShowTitle] · $LOCALIZE[31131] $INFO[Container(5100).ListItem.Season] · $LOCALIZE[31132] $INFO[Container(5100).ListItem.Episode]"/>
+                <param name="tmdbrating" value="Window(Home).Property(nc.none)"/>
+                <param name="titleid" value="9020"/>
+                <param name="kickerid" value="9025"/>
+                <param name="poster" value="false"/>
+                <param name="shift" value="-320"/>
+                <param name="titlewidth" value="1250"/>
+                <param name="plotwidth" value="1200"/>
+            </include>
+            <include content="ProgressLine">
+                <param name="left" value="64"/>
+                <param name="top" value="562"/>
+                <param name="width" value="420"/>
+                <param name="info" value="Container(5100).ListItem.PercentPlayed"/>
+                <param name="visible" value="Container(5100).ListItem.IsResumable"/>
+            </include>
+            <control type="group">
+                <left>1400</left>
+                <top>116</top>
+                <visible>!String.IsEmpty(Container(5100).ListItem.CastAndRole)</visible>
+                <include content="RowHeader">
+                    <param name="label" value="$LOCALIZE[31124]"/>
+                    <param name="width" value="456"/>
+                </include>
+                <control type="textbox">
+                    <top>44</top>
+                    <width>456</width>
+                    <height>420</height>
+                    <font>font_small</font>
+                    <textcolor>text</textcolor>
+                    <label>$INFO[Container(5100).ListItem.CastAndRole]</label>
+                </control>
+            </control>
+        </control>
+
+        <!-- head: movie or show, details on the right -->
+        <control type="group">
+            <visible>!String.IsEqual(ListItem.DBType,episode) + !String.IsEqual(ListItem.Property(tmdb_type),person)</visible>
+            <include content="HeroBody">
+                <param name="item" value="ListItem"/>
+                <param name="kicker" value="$INFO[ListItem.Genre]"/>
+                <param name="tmdbrating" value="Window(Home).Property(nc.none)"/>
+                <param name="titleid" value="9030"/>
+                <param name="kickerid" value="9027"/>
+                <param name="titlewidth" value="960"/>
+                <param name="titlefont" value="font_title"/>
+                <param name="plotwidth" value="960"/>
+            </include>
+            <include content="ProgressLine">
+                <param name="left" value="384"/>
+                <param name="top" value="562"/>
+                <param name="width" value="420"/>
+                <param name="info" value="ListItem.PercentPlayed"/>
+                <param name="visible" value="ListItem.IsResumable"/>
+            </include>
+            <control type="grouplist">
+                <left>1400</left>
+                <top>116</top>
+                <width>456</width>
+                <height>440</height>
+                <orientation>vertical</orientation>
+                <itemgap>4</itemgap>
+                <include content="InfoDetail">
+                    <param name="key" value="$LOCALIZE[31126]"/>
+                    <param name="value" value="ListItem.Director"/>
+                </include>
+                <include content="InfoDetail">
+                    <param name="key" value="$LOCALIZE[31127]"/>
+                    <param name="value" value="ListItem.Writer"/>
+                </include>
+                <include content="InfoDetail">
+                    <param name="key" value="$LOCALIZE[31128]"/>
+                    <param name="value" value="ListItem.Studio"/>
+                </include>
+                <include content="InfoDetail">
+                    <param name="key" value="$LOCALIZE[31129]"/>
+                    <param name="value" value="ListItem.Country"/>
+                </include>
+                <include content="InfoDetail">
+                    <param name="key" value="$LOCALIZE[31136]"/>
+                    <param name="value" value="ListItem.Mpaa"/>
+                </include>
+            </control>
+        </control>
+
+        <!-- head: person (TMDb), photo, birth, number of credits, biography -->
+        <control type="group">
+            <visible>String.IsEqual(ListItem.Property(tmdb_type),person)</visible>
+            <control type="group">
+                <left>64</left>
+                <top>116</top>
+                <include content="CutCard">
+                    <param name="width" value="280"/>
+                    <param name="height" value="420"/>
+                    <param name="mask" value="ui/mask_280x420.png"/>
+                    <param name="image" value="$INFO[ListItem.Art(thumb)]"/>
+                </include>
+            </control>
+            <include content="Kicker">
+                <param name="label" value="$INFO[ListItem.Property(birthday),$LOCALIZE[31303] ,]$INFO[ListItem.Property(born),  ·  ,]$INFO[ListItem.Property(deathday),  ·  $LOCALIZE[31304] ,]"/>
+                <param name="left" value="384"/>
+                <param name="top" value="116"/>
+                <param name="width" value="1472"/>
+            </include>
+            <include content="GlitchTitle">
+                <param name="id" value="9031"/>
+                <param name="label" value="$INFO[ListItem.Label]"/>
+                <param name="left" value="384"/>
+                <param name="top" value="160"/>
+                <param name="width" value="1472"/>
+            </include>
+            <control type="grouplist">
+                <left>384</left>
+                <top>272</top>
+                <width>1400</width>
+                <height>36</height>
+                <orientation>horizontal</orientation>
+                <itemgap>10</itemgap>
+                <include content="Tag">
+                    <param name="label" value="$INFO[ListItem.Property(numitems.tmdb.movies.cast)] $LOCALIZE[31030]"/>
+                    <param name="visible" value="Integer.IsGreater(ListItem.Property(numitems.tmdb.movies.cast),0)"/>
+                </include>
+                <include content="Tag">
+                    <param name="label" value="$INFO[ListItem.Property(numitems.tmdb.tvshows.cast)] $LOCALIZE[31031]"/>
+                    <param name="visible" value="Integer.IsGreater(ListItem.Property(numitems.tmdb.tvshows.cast),0)"/>
+                </include>
+            </control>
+            <control type="textbox">
+                <left>384</left>
+                <top>318</top>
+                <width>1472</width>
+                <height>160</height>
+                <font>font_body</font>
+                <textcolor>text_dim</textcolor>
+                <autoscroll delay="8000" time="3000" repeat="8000">true</autoscroll>
+                <label>$INFO[ListItem.Plot]</label>
+            </control>
+        </control>
+
+        <control type="grouplist" id="9000">
+            <left>384</left>
+            <top>490</top>
+            <width>1000</width>
+            <height>54</height>
+            <orientation>horizontal</orientation>
+            <itemgap>16</itemgap>
+            <onleft>noop</onleft>
+            <onright>noop</onright>
+            <!-- the top of the page: Up leaves it one level up, to the row it was opened from or
+                 one page back in a TMDb chain -->
+            <onup>Action(Back)</onup>
+            <ondown condition="String.IsEqual(ListItem.DBType,episode)">5200</ondown>
+            <!-- the tabs when the chosen tab has nothing (a crew member with no films still has
+                 the crew tab); a person page first: its hidden cast list 5500 keeps the items of
+                 the page before -->
+            <ondown condition="String.IsEqual(ListItem.Property(tmdb_type),person) + $EXP[TmdbFresh5510] + !Container(5510).IsUpdating + Integer.IsGreater(Container(5510).NumItems,0)">5510</ondown>
+            <ondown condition="String.IsEqual(ListItem.Property(tmdb_type),person)">5520</ondown>
+            <ondown condition="$EXP[TmdbFresh5500] + !Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0)">5500</ondown>
+            <!-- the tabs while their list loads, still shows the page before or when the chosen
+                 tab has nothing -->
+            <ondown condition="Control.IsVisible(5403)">5520</ondown>
+            <ondown>50</ondown>
+            <!-- an episode has no poster: the buttons sit under its text at the left margin -->
+            <animation effect="slide" end="-320,0" time="0" condition="String.IsEqual(ListItem.DBType,episode)">Conditional</animation>
+            <!-- inside a chain: back all the way, to where the chain started (ChainBackLabel names
+                 it). At the left end, the way back: Left from the first button reaches it, but
+                 it takes the focus only from within the row, never when the page opens; a
+                 person page has no other button. -->
+            <include content="PillButton">
+                <param name="id" value="9004"/>
+                <param name="label" value="‹ $VAR[ChainBackLabel]"/>
+                <param name="visible" value="!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))"/>
+                <param name="enable" value="ControlGroup(9000).HasFocus() | String.IsEqual(ListItem.Property(tmdb_type),person)"/>
+                <param name="onclick" value="SetProperty(TMDbHelper.Command,exit,home)"/>
+                <include>ChainBackGuard</include>
+            </include>
+            <include content="PillButton">
+                <param name="id" value="9001"/>
+                <param name="label" value="$VAR[InfoPlayLabel]"/>
+                <param name="color" value="accent"/>
+                <param name="textcolor" value="accent"/>
+                <!-- a TMDb page (person or title) has no file of its own; titles in the library
+                     play their library copy -->
+                <param name="visible" value="String.IsEmpty(ListItem.Property(tmdb_type)) | !String.IsEmpty(ListItem.DBID) | Integer.IsGreater(Container(5901).NumItems,0)"/>
+                <onclick condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.DBID)">NotifyAll(nightcity,play:episode:$VAR[InfoEpisodeDBID]:resume)</onclick>
+                <onclick condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[ListItem.DBID]:resume)</onclick>
+                <onclick condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[ListItem.DBID])</onclick>
+                <!-- a TMDb title: its library copy (list 5901) -->
+                <onclick condition="String.IsEmpty(ListItem.DBID) + !String.IsEmpty(ListItem.Property(tmdb_type)) + String.IsEqual(ListItem.DBType,movie) + Integer.IsGreater(Container(5901).NumItems,0)">NotifyAll(nightcity,play:movie:$INFO[Container(5901).ListItem.DBID]:resume)</onclick>
+                <onclick condition="String.IsEmpty(ListItem.DBID) + !String.IsEmpty(ListItem.Property(tmdb_type)) + String.IsEqual(ListItem.DBType,tvshow) + Integer.IsGreater(Container(5901).NumItems,0)">NotifyAll(nightcity,next_episode:$INFO[Container(5901).ListItem.DBID])</onclick>
+                <!-- anything else (no database id, music video, set): play the file itself -->
+                <onclick condition="[String.IsEmpty(ListItem.DBID) | ![String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow)]] + String.IsEmpty(ListItem.Property(tmdb_type))">Dialog.Close(movieinformation)</onclick>
+                <onclick condition="[String.IsEmpty(ListItem.DBID) | ![String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow)]] + String.IsEmpty(ListItem.Property(tmdb_type))">PlayMedia($ESCINFO[ListItem.FileNameAndPath])</onclick>
+                <include>ChainBackGuard</include>
+            </include>
+            <include content="PillButton">
+                <param name="id" value="9002"/>
+                <param name="label" value="« $LOCALIZE[31123]"/>
+                <param name="visible" value="[String.IsEqual(ListItem.DBType,episode) + Container(5100).ListItem.IsResumable] | [!String.IsEqual(ListItem.DBType,episode) + ListItem.IsResumable] | [String.IsEmpty(ListItem.DBID) + !String.IsEmpty(ListItem.Property(tmdb_type)) + String.IsEqual(ListItem.DBType,movie) + Container(5901).ListItem.IsResumable]"/>
+                <onclick condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.DBID)">NotifyAll(nightcity,play:episode:$VAR[InfoEpisodeDBID]:noresume)</onclick>
+                <onclick condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[ListItem.DBID]:noresume)</onclick>
+                <onclick condition="String.IsEmpty(ListItem.DBID) + !String.IsEmpty(ListItem.Property(tmdb_type)) + String.IsEqual(ListItem.DBType,movie)">NotifyAll(nightcity,play:movie:$INFO[Container(5901).ListItem.DBID]:noresume)</onclick>
+                <include>ChainBackGuard</include>
+            </include>
+            <!-- …: Kodi's context menu of the title, with what add-ons add to it. A one-item
+                 list of the title (InfoItemPath), since a button has no list item; it draws its
+                 own pill. OK opens the menu too. -->
+            <control type="list" id="9003">
+                <width>96</width>
+                <height>54</height>
+                <orientation>horizontal</orientation>
+                <visible>!String.IsEqual(ListItem.Property(tmdb_type),person) + [!String.IsEmpty(ListItem.DBID) | Integer.IsGreater(Container(5901).NumItems,0)]</visible>
+                <onclick>Action(ContextMenu)</onclick>
+                <include>ChainBackGuard</include>
+                <itemlayout width="96" height="54">
+                    <include content="MorePill">
+                        <param name="texture" value="ui/cut_btn.png"/>
+                        <param name="color" value="border_dim"/>
+                        <param name="textcolor" value="text_dim"/>
+                    </include>
+                </itemlayout>
+                <focusedlayout width="96" height="54">
+                    <include content="MorePill">
+                        <param name="texture" value="ui/cut_btn_fill.png"/>
+                        <param name="color" value="focus"/>
+                        <param name="textcolor" value="focus_text"/>
+                        <param name="visible" value="Control.HasFocus(9003)"/>
+                    </include>
+                    <include content="MorePill">
+                        <param name="texture" value="ui/cut_btn.png"/>
+                        <param name="color" value="border_dim"/>
+                        <param name="textcolor" value="text_dim"/>
+                        <param name="visible" value="!Control.HasFocus(9003)"/>
+                    </include>
+                </focusedlayout>
+                <content target="videos">$VAR[InfoItemPath]</content>
+            </control>
+            <!-- a TMDb title without library copy: Kodi's context menu of the title as TMDb Helper
+                 lists it (list 9006, loaded on OK, Timers.xml nc_info_more) -->
+            <include content="PillButton">
+                <param name="id" value="9005"/>
+                <param name="label" value="…"/>
+                <param name="onclick" value="SetProperty(nc.info.more,1,home)"/>
+                <param name="visible" value="!String.IsEmpty(ListItem.Property(tmdb_type)) + !String.IsEqual(ListItem.Property(tmdb_type),person) + String.IsEmpty(ListItem.DBID) + !Integer.IsGreater(Container(5901).NumItems,0)"/>
+                <include>ChainBackGuard</include>
+            </include>
+        </control>
+
+        <!-- the title for … (9005) of a TMDb title without library copy, as TMDb Helper lists it:
+             its context menu has TMDb Helper's entries. No path until OK, since its list starts a
+             plugin (nc_info_more waits for the page's lists). It draws nothing and lies on the
+             button row, where Kodi opens the menu; every key goes back to the pill,
+             nc_info_more_back too once the menu closed. -->
+        <control type="list" id="9006">
+            <left>384</left>
+            <top>490</top>
+            <width>96</width>
+            <height>54</height>
+            <visible>!String.IsEmpty(Window(Home).Property(nc.info.more.load))</visible>
+            <onup>9005</onup>
+            <ondown>9005</ondown>
+            <onleft>9005</onleft>
+            <onright>9005</onright>
+            <include>ChainBackGuard</include>
+            <itemlayout width="96" height="54"/>
+            <focusedlayout width="96" height="54"/>
+            <content target="videos">$VAR[InfoMorePath]</content>
+        </control>
+
+        <!-- bottom: episodes, TMDb credits, cast and similar movies, one row at a time -->
+        <control type="grouplist" id="5400">
+            <left>0</left>
+            <top>612</top>
+            <width>1920</width>
+            <height>468</height>
+            <orientation>vertical</orientation>
+            <itemgap>0</itemgap>
+            <scrolltime tween="quadratic">200</scrolltime>
+            <!-- season tabs and episodes, the cast and crew of the selected episode below -->
+            <control type="group">
+                <height>468</height>
+                <visible>String.IsEqual(ListItem.DBType,episode)</visible>
+                <control type="label">
+                    <left>64</left>
+                    <top>0</top>
+                    <width>1792</width>
+                    <height>44</height>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font_num</font>
+                    <textcolor>accent2</textcolor>
+                    <label>$INFO[Container(5100).CurrentItem]/$INFO[Container(5100).NumItems]</label>
+                </control>
+                <control type="list" id="5200">
+                    <include>ChainBackGuard</include>
+                    <left>64</left>
+                    <top>0</top>
+                    <width>1500</width>
+                    <height>48</height>
+                    <orientation>horizontal</orientation>
+                    <scrolltime tween="quadratic">200</scrolltime>
+                    <onup>9000</onup>
+                    <ondown>5100</ondown>
+                    <onleft>noop</onleft>
+                    <onright>noop</onright>
+                    <!-- OK on a season goes down to its episodes; without an onclick Kodi would open
+                         the season folder, which it refuses under the info page -->
+                    <onclick>SetFocus(5100)</onclick>
+                    <itemlayout width="240" height="48">
+                        <include content="SeasonTab">
+                            <param name="color" value="text_mute"/>
+                        </include>
+                    </itemlayout>
+                    <focusedlayout width="240" height="48">
+                        <include content="SeasonTab">
+                            <param name="color" value="accent"/>
+                            <param name="active" value="true"/>
+                        </include>
+                        <control type="image">
+                            <top>44</top>
+                            <width>180</width>
+                            <height>2</height>
+                            <texture colordiffuse="focus">ui/white.png</texture>
+                            <visible>Control.HasFocus(5200)</visible>
+                        </control>
+                    </focusedlayout>
+                    <content target="videos">videodb://tvshows/titles/$INFO[ListItem.TvShowDBID]/</content>
+                </control>
+                <control type="list" id="5100">
+                    <include>ChainBackGuard</include>
+                    <preloaditems>2</preloaditems>
+                    <left>40</left>
+                    <top>52</top>
+                    <width>1880</width>
+                    <height>300</height>
+                    <orientation>horizontal</orientation>
+                    <scrolltime tween="quadratic">200</scrolltime>
+                    <onup>5200</onup>
+                    <ondown condition="$EXP[TmdbFresh5500] + !Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0)">5500</ondown>
+                    <ondown condition="Control.IsVisible(5403)">5520</ondown>
+                    <ondown condition="Control.IsVisible(50)">50</ondown>
+                    <ondown>noop</ondown>
+                    <onclick>SetFocus(9001)</onclick>
+                    <itemlayout width="352" height="300">
+                        <include content="EpisodeCard">
+                            <param name="dim" value="Control.HasFocus(5100)"/>
+                        </include>
+                    </itemlayout>
+                    <focusedlayout width="352" height="300">
+                        <include content="EpisodeCard">
+                            <param name="focused" value="Control.HasFocus(5100)"/>
+                            <param name="selected" value="true"/>
+                        </include>
+                    </focusedlayout>
+                    <content target="videos">videodb://tvshows/titles/$INFO[ListItem.TvShowDBID]/$INFO[Container(5200).ListItem.Season]/</content>
+                </control>
+                <control type="label">
+                    <left>64</left>
+                    <top>394</top>
+                    <width>1400</width>
+                    <height>34</height>
+                    <font>font_caps_small</font>
+                    <textcolor>text_mute</textcolor>
+                    <label>[UPPERCASE]←→ $LOCALIZE[31132]   ↑ $LOCALIZE[31131]   ↓ $LOCALIZE[31124]   ⏎ $LOCALIZE[31135][/UPPERCASE]</label>
+                </control>
+            </control>
+            <!-- TMDb credits with tabs: cast or crew of a title or of the selected episode (5500), a
+                 person's films, shows or crew jobs (5510). One plugin list per page. -->
+            <control type="group" id="5403">
+                <height>468</height>
+                <visible>String.IsEqual(ListItem.Property(tmdb_type),person) | Integer.IsGreater(Container(5500).NumItems,0) | Container(5500).IsUpdating | !String.IsEmpty(Window(Home).Property(nc.info.tab)) | [String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(Window(Home).Property(nc.info.ep.query))]</visible>
+                <control type="grouplist" id="5520">
+                    <left>54</left>
+                    <top>0</top>
+                    <width>1200</width>
+                    <height>44</height>
+                    <orientation>horizontal</orientation>
+                    <itemgap>8</itemgap>
+                    <onup condition="String.IsEqual(ListItem.DBType,episode)">5100</onup>
+                    <onup>9000</onup>
+                    <!-- a list that is not ready yet (loading, the page before, empty) takes the
+                         focus once it is in (nc_info_enter, Timers.xml): no second Down -->
+                    <ondown condition="String.IsEqual(ListItem.Property(tmdb_type),person) + $EXP[TmdbFresh5510] + !Container(5510).IsUpdating + Integer.IsGreater(Container(5510).NumItems,0)">5510</ondown>
+                    <ondown condition="String.IsEqual(ListItem.Property(tmdb_type),person) + ![$EXP[TmdbFresh5510] + !Container(5510).IsUpdating + Integer.IsGreater(Container(5510).NumItems,0)]">SetProperty(nc.info.enter,5510,home)</ondown>
+                    <ondown condition="String.IsEqual(ListItem.Property(tmdb_type),person) + ![$EXP[TmdbFresh5510] + !Container(5510).IsUpdating + Integer.IsGreater(Container(5510).NumItems,0)]">SetProperty(nc.info.enter.from,$INFO[System.CurrentControlId],home)</ondown>
+                    <!-- the chosen tab has nothing: Kodi's own cast below, if any -->
+                    <ondown condition="!String.IsEqual(ListItem.Property(tmdb_type),person) + !Integer.IsGreater(Container(5500).NumItems,0) + !Container(5500).IsUpdating + Control.IsVisible(50)">50</ondown>
+                    <ondown condition="!String.IsEqual(ListItem.Property(tmdb_type),person) + $EXP[TmdbFresh5500] + !Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0)">5500</ondown>
+                    <ondown condition="!String.IsEqual(ListItem.Property(tmdb_type),person) + ![!Integer.IsGreater(Container(5500).NumItems,0) + !Container(5500).IsUpdating + Control.IsVisible(50)] + ![$EXP[TmdbFresh5500] + !Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0)]">SetProperty(nc.info.enter,5500,home)</ondown>
+                    <ondown condition="!String.IsEqual(ListItem.Property(tmdb_type),person) + ![!Integer.IsGreater(Container(5500).NumItems,0) + !Container(5500).IsUpdating + Control.IsVisible(50)] + ![$EXP[TmdbFresh5500] + !Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0)]">SetProperty(nc.info.enter.from,$INFO[System.CurrentControlId],home)</ondown>
+                    <include content="CreditsTab">
+                        <param name="id" value="5521"/>
+                        <param name="label" value="$LOCALIZE[31124]"/>
+                        <param name="property" value="nc.info.tab"/>
+                        <param name="value" value="cast"/>
+                        <param name="active" value="String.IsEmpty(Window(Home).Property(nc.info.tab)) | String.IsEqual(Window(Home).Property(nc.info.tab),cast)"/>
+                        <param name="list" value="5500"/>
+                        <param name="visible" value="!String.IsEqual(ListItem.Property(tmdb_type),person)"/>
+                    </include>
+                    <include content="CreditsTab">
+                        <param name="id" value="5522"/>
+                        <param name="label" value="$LOCALIZE[31300]"/>
+                        <param name="property" value="nc.info.tab"/>
+                        <param name="value" value="crew"/>
+                        <param name="active" value="String.IsEqual(Window(Home).Property(nc.info.tab),crew)"/>
+                        <param name="list" value="5500"/>
+                        <param name="visible" value="!String.IsEqual(ListItem.Property(tmdb_type),person)"/>
+                    </include>
+                    <include content="CreditsTab">
+                        <param name="id" value="5523"/>
+                        <param name="label" value="$LOCALIZE[31030]"/>
+                        <param name="property" value="nc.info.tab"/>
+                        <param name="value" value="movies"/>
+                        <param name="active" value="String.IsEmpty(Window(Home).Property(nc.info.tab)) | String.IsEqual(Window(Home).Property(nc.info.tab),movies)"/>
+                        <param name="list" value="5510"/>
+                        <param name="visible" value="String.IsEqual(ListItem.Property(tmdb_type),person)"/>
+                    </include>
+                    <include content="CreditsTab">
+                        <param name="id" value="5524"/>
+                        <param name="label" value="$LOCALIZE[31031]"/>
+                        <param name="property" value="nc.info.tab"/>
+                        <param name="value" value="tv"/>
+                        <param name="active" value="String.IsEqual(Window(Home).Property(nc.info.tab),tv)"/>
+                        <param name="list" value="5510"/>
+                        <param name="visible" value="String.IsEqual(ListItem.Property(tmdb_type),person)"/>
+                    </include>
+                    <include content="CreditsTab">
+                        <param name="id" value="5525"/>
+                        <param name="label" value="$LOCALIZE[31300]"/>
+                        <param name="property" value="nc.info.tab"/>
+                        <param name="value" value="crew"/>
+                        <param name="active" value="String.IsEqual(Window(Home).Property(nc.info.tab),crew)"/>
+                        <param name="list" value="5510"/>
+                        <param name="visible" value="String.IsEqual(ListItem.Property(tmdb_type),person)"/>
+                    </include>
+                </control>
+                <!-- name and role, or title and year, of the focused card -->
+                <control type="label">
+                    <left>600</left>
+                    <top>6</top>
+                    <width>1256</width>
+                    <height>34</height>
+                    <align>right</align>
+                    <font>font_caps_small</font>
+                    <textcolor>text_dim</textcolor>
+                    <label>[UPPERCASE]$INFO[Container(5510).ListItem.Label]$INFO[Container(5510).ListItem.Year,  ·  ,][/UPPERCASE]</label>
+                    <visible>Control.HasFocus(5510)</visible>
+                </control>
+                <control type="label">
+                    <left>1100</left>
+                    <top>6</top>
+                    <width>756</width>
+                    <height>34</height>
+                    <align>right</align>
+                    <font>font_caps_small</font>
+                    <textcolor>accent2</textcolor>
+                    <label>$INFO[Container(5500).CurrentItem]/$INFO[Container(5500).NumItems]</label>
+                    <visible>Control.HasFocus(5500)</visible>
+                </control>
+                <control type="list" id="5500">
+                    <include content="TmdbStaleFade">
+                        <param name="list" value="5500"/>
+                    </include>
+                    <include>ChainBackGuard</include>
+                    <preloaditems>2</preloaditems>
+                    <left>40</left>
+                    <top>44</top>
+                    <width>1880</width>
+                    <height>424</height>
+                    <orientation>horizontal</orientation>
+                    <scrolltime tween="quadratic">200</scrolltime>
+                    <visible>!String.IsEqual(ListItem.Property(tmdb_type),person)</visible>
+                    <!-- up to the tab it shows: the tab row would focus the one focused last -->
+                    <onup condition="String.IsEqual(Window(Home).Property(nc.info.tab),crew)">5522</onup>
+                    <onup>5521</onup>
+                    <ondown condition="$EXP[TmdbFresh5300] + !Container(5300).IsUpdating + Integer.IsGreater(Container(5300).NumItems,0)">5300</ondown>
+                    <ondown condition="![$EXP[TmdbFresh5300] + !Container(5300).IsUpdating + Integer.IsGreater(Container(5300).NumItems,0)]">SetProperty(nc.info.enter,5300,home)</ondown>
+                    <ondown condition="![$EXP[TmdbFresh5300] + !Container(5300).IsUpdating + Integer.IsGreater(Container(5300).NumItems,0)]">SetProperty(nc.info.enter.from,$INFO[System.CurrentControlId],home)</ondown>
+                    <include content="ChainClick">
+                        <param name="condition" value="!Container(5500).IsUpdating"/>
+                        <param name="type" value="person"/>
+                        <param name="id" value="$INFO[ListItem.Property(tmdb_id)]"/>
+                        <param name="origin" value=",origin_tmdb_type=$INFO[Window(Home).Property(nc.chain.origin.type)],origin_tmdb_id=$INFO[Window(Home).Property(nc.chain.origin.id)],origin_dbid=$VAR[ChainOriginDBID]"/>
+                    </include>
+                    <onclick>noop</onclick>
+                    <itemlayout width="188" height="424">
+                        <include content="CastCard">
+                            <param name="dim" value="Control.HasFocus(5500)"/>
+                        </include>
+                    </itemlayout>
+                    <focusedlayout width="188" height="424">
+                        <include content="CastCard">
+                            <param name="focused" value="Control.HasFocus(5500)"/>
+                        </include>
+                    </focusedlayout>
+                    <content target="videos">$VAR[InfoPeoplePath]</content>
+                </control>
+                <control type="list" id="5510">
+                    <include content="TmdbStaleFade">
+                        <param name="list" value="5510"/>
+                    </include>
+                    <include>ChainBackGuard</include>
+                    <preloaditems>2</preloaditems>
+                    <left>40</left>
+                    <top>44</top>
+                    <width>1880</width>
+                    <height>424</height>
+                    <orientation>horizontal</orientation>
+                    <scrolltime tween="quadratic">200</scrolltime>
+                    <visible>String.IsEqual(ListItem.Property(tmdb_type),person)</visible>
+                    <onup condition="String.IsEqual(Window(Home).Property(nc.info.tab),tv)">5524</onup>
+                    <onup condition="String.IsEqual(Window(Home).Property(nc.info.tab),crew)">5525</onup>
+                    <onup>5523</onup>
+                    <ondown>noop</ondown>
+                    <include content="ChainClick">
+                        <param name="condition" value="!Container(5510).IsUpdating"/>
+                        <param name="type" value="$INFO[ListItem.Property(tmdb_type)]"/>
+                        <param name="id" value="$INFO[ListItem.Property(tmdb_id)]"/>
+                        <param name="origin" value=",origin_tmdb_type=$INFO[Window(Home).Property(nc.chain.origin.type)],origin_tmdb_id=$INFO[Window(Home).Property(nc.chain.origin.id)],origin_dbid=$VAR[ChainOriginDBID]"/>
+                    </include>
+                    <onclick>noop</onclick>
+                    <itemlayout width="228" height="424">
+                        <control type="group">
+                            <left>24</left>
+                            <top>34</top>
+                            <include content="CutCard">
+                                <param name="image" value="$VAR[CardArt]"/>
+                                <param name="dim" value="Control.HasFocus(5510)"/>
+                                <include>CardExtras</include>
+                            </include>
+                        </control>
+                    </itemlayout>
+                    <focusedlayout width="228" height="424">
+                        <control type="group">
+                            <left>24</left>
+                            <top>34</top>
+                            <include content="CutCard">
+                                <param name="image" value="$VAR[CardArt]"/>
+                                <param name="focused" value="Control.HasFocus(5510)"/>
+                                <include>CardExtras</include>
+                            </include>
+                        </control>
+                    </focusedlayout>
+                    <content target="videos">$VAR[InfoPersonCreditsPath]</content>
+                </control>
+            </control>
+            <!-- Kodi's own cast, when TMDb has none (offline, unknown title). Kodi fills it for the
+                 episode the page opened with, so on an episode page only while that one is
+                 selected and TMDb had nothing for it. -->
+            <control type="group" id="5401">
+                <height>468</height>
+                <visible>!String.IsEqual(ListItem.Property(tmdb_type),person) + Integer.IsGreater(Container(50).NumItems,0) + !Integer.IsGreater(Container(5500).NumItems,0) + !Container(5500).IsUpdating + String.IsEmpty(Window(Home).Property(nc.info.tab)) + [!String.IsEqual(ListItem.DBType,episode) | [String.IsEqual(Container(5100).ListItem.DBID,ListItem.DBID) + String.IsEqual(Window(Home).Property(nc.info.ep.id),Container(5100).ListItem.DBID)]]</visible>
+                <include content="RowHeader">
+                    <param name="label" value="$LOCALIZE[31124]"/>
+                    <param name="left" value="64"/>
+                    <param name="top" value="6"/>
+                </include>
+                <control type="list" id="50">
+                    <include>ChainBackGuard</include>
+                    <preloaditems>2</preloaditems>
+                    <left>40</left>
+                    <top>44</top>
+                    <width>1880</width>
+                    <height>424</height>
+                    <orientation>horizontal</orientation>
+                    <scrolltime tween="quadratic">200</scrolltime>
+                    <onup condition="Control.IsVisible(5403)">5520</onup>
+                    <onup condition="String.IsEqual(ListItem.DBType,episode)">5100</onup>
+                    <onup>9000</onup>
+                    <ondown condition="$EXP[TmdbFresh5300] + !Container(5300).IsUpdating + Integer.IsGreater(Container(5300).NumItems,0)">5300</ondown>
+<ondown condition="![$EXP[TmdbFresh5300] + !Container(5300).IsUpdating + Integer.IsGreater(Container(5300).NumItems,0)]">SetProperty(nc.info.enter,5300,home)</ondown>
+                    <ondown condition="![$EXP[TmdbFresh5300] + !Container(5300).IsUpdating + Integer.IsGreater(Container(5300).NumItems,0)]">SetProperty(nc.info.enter.from,$INFO[System.CurrentControlId],home)</ondown>
+                    <itemlayout width="188" height="424">
+                        <include content="CastCard">
+                            <param name="dim" value="Control.HasFocus(50)"/>
+                        </include>
+                    </itemlayout>
+                    <focusedlayout width="188" height="424">
+                        <include content="CastCard">
+                            <param name="focused" value="Control.HasFocus(50)"/>
+                        </include>
+                    </focusedlayout>
+                </control>
+            </control>
+            <control type="group" id="5402">
+                <height>468</height>
+                <!-- kept visible once the cast is in, so the list sees its path appear and loads
+                     (a hidden list does not update); empty, it stays below the screen -->
+                <visible>String.IsEqual(ListItem.DBType,movie) + !String.IsEqual(ListItem.Property(tmdb_type),person) + [Integer.IsGreater(Container(5300).NumItems,0) | Integer.IsGreater(Container(5500).NumItems,0)]</visible>
+                <include content="RowHeader">
+                    <param name="label" value="$LOCALIZE[31130]"/>
+                    <param name="left" value="64"/>
+                    <param name="top" value="6"/>
+                </include>
+                <control type="list" id="5300">
+                    <include content="TmdbStaleFade">
+                        <param name="list" value="5300"/>
+                    </include>
+                    <include>ChainBackGuard</include>
+                    <preloaditems>2</preloaditems>
+                    <left>40</left>
+                    <top>44</top>
+                    <width>1880</width>
+                    <height>424</height>
+                    <orientation>horizontal</orientation>
+                    <scrolltime tween="quadratic">200</scrolltime>
+                    <onup condition="$EXP[TmdbFresh5500] + !Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0)">5500</onup>
+                    <onup condition="Control.IsVisible(50)">50</onup>
+                    <onup condition="Control.IsVisible(5403)">5520</onup>
+                    <onup>50</onup>
+                    <ondown>noop</ondown>
+                    <!-- its info page in the chain, like every TMDb card; a list that loads still
+                         shows the items of the page before, so a click waits until it is loaded -->
+                    <include content="ChainClick">
+                        <param name="condition" value="!Container(5500).IsUpdating + !Container(5300).IsUpdating"/>
+                        <param name="type" value="movie"/>
+                        <param name="id" value="$INFO[ListItem.Property(tmdb_id)]"/>
+                        <param name="origin" value=",origin_tmdb_type=$INFO[Window(Home).Property(nc.chain.origin.type)],origin_tmdb_id=$INFO[Window(Home).Property(nc.chain.origin.id)],origin_dbid=$VAR[ChainOriginDBID]"/>
+                    </include>
+                    <onclick>noop</onclick>
+                    <itemlayout width="228" height="424">
+                        <control type="group">
+                            <left>24</left>
+                            <top>34</top>
+                            <include content="CutCard">
+                                <param name="image" value="$VAR[CardArt]"/>
+                                <param name="dim" value="Control.HasFocus(5300)"/>
+                                <include>CardExtras</include>
+                            </include>
+                        </control>
+                    </itemlayout>
+                    <focusedlayout width="228" height="424">
+                        <control type="group">
+                            <left>24</left>
+                            <top>34</top>
+                            <include content="CutCard">
+                                <param name="image" value="$VAR[CardArt]"/>
+                                <param name="focused" value="Control.HasFocus(5300)"/>
+                                <include>CardExtras</include>
+                            </include>
+                        </control>
+                    </focusedlayout>
+                    <content target="videos">$VAR[InfoSimilarPath]</content>
+                </control>
+            </control>
+        </control>
+        <!-- the library copy of a TMDb title, for play and resume -->
+        <include content="WidgetLoader">
+            <param name="id" value="5901"/>
+            <param name="content1" value="$VAR[InfoTwinPath]"/>
+        </include>
+    </controls>
+</window>

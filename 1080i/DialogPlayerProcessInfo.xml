@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Technical player information (decoder, resolution, audio, cache, cpu). -->
+<window>
+    <depth>DepthOSD</depth>
+    <controls>
+        <control type="group">
+            <left>80</left>
+            <top>440</top>
+            <control type="image">
+                <left>-24</left>
+                <top>-24</top>
+                <width>1000</width>
+                <height>380</height>
+                <texture colordiffuse="bg_alt">ui/white.png</texture>
+            </control>
+            <control type="grouplist">
+                <width>952</width>
+                <height>340</height>
+                <orientation>vertical</orientation>
+                <itemgap>0</itemgap>
+                <include content="FactLine">
+                    <param name="key" value="video"/>
+                    <param name="value" value="$INFO[Player.Process(videodecoder)]$INFO[Player.Process(videohwdecoder), (hw:,)]$INFO[Player.Process(videowidth),  ,x]$INFO[Player.Process(videoheight)]$INFO[Player.Process(videoscantype)]$INFO[Player.Process(videofps),  , fps]"/>
+                    <param name="width" value="952"/>
+                    <param name="keywidth" value="120"/>
+                    <param name="height" value="52"/>
+                    <param name="font" value="font_small"/>
+                    <param name="keycolor" value="accent3"/>
+                    <param name="color" value="text"/>
+                </include>
+                <include content="FactLine">
+                    <param name="key" value="pixel"/>
+                    <param name="value" value="$INFO[Player.Process(pixformat)]$INFO[Player.Process(deintmethod),  ,]"/>
+                    <param name="width" value="952"/>
+                    <param name="keywidth" value="120"/>
+                    <param name="height" value="52"/>
+                    <param name="font" value="font_small"/>
+                    <param name="keycolor" value="accent3"/>
+                    <param name="color" value="text"/>
+                </include>
+                <include content="FactLine">
+                    <param name="key" value="audio"/>
+                    <param name="value" value="$INFO[Player.Process(audiodecoder)]$INFO[Player.Process(audiochannels),  ,]$INFO[Player.Process(audiosamplerate),  , Hz]$INFO[Player.Process(audiobitspersample),  , bit]"/>
+                    <param name="width" value="952"/>
+                    <param name="keywidth" value="120"/>
+                    <param name="height" value="52"/>
+                    <param name="font" value="font_small"/>
+                    <param name="keycolor" value="accent3"/>
+                    <param name="color" value="text"/>
+                </include>
+                <include content="FactLine">
+                    <param name="key" value="cache"/>
+                    <param name="value" value="$INFO[Player.CacheLevel,,%]$INFO[Player.Process(videodar),  dar ,]"/>
+                    <param name="width" value="952"/>
+                    <param name="keywidth" value="120"/>
+                    <param name="height" value="52"/>
+                    <param name="font" value="font_small"/>
+                    <param name="keycolor" value="accent3"/>
+                    <param name="color" value="text"/>
+                </include>
+                <include content="FactLine">
+                    <param name="key" value="cpu"/>
+                    <param name="value" value="$INFO[System.CpuUsage]"/>
+                    <param name="width" value="952"/>
+                    <param name="keywidth" value="120"/>
+                    <param name="height" value="52"/>
+                    <param name="font" value="font_small"/>
+                    <param name="keycolor" value="accent3"/>
+                    <param name="color" value="text"/>
+                </include>
+                <include content="FactLine">
+                    <param name="key" value="speed"/>
+                    <param name="value" value="$INFO[Player.PlaySpeed]"/>
+                    <param name="width" value="952"/>
+                    <param name="keywidth" value="120"/>
+                    <param name="height" value="52"/>
+                    <param name="font" value="font_small"/>
+                    <param name="keycolor" value="accent3"/>
+                    <param name="color" value="text"/>
+                </include>
+            </control>
+        </control>
+    </controls>
+</window>

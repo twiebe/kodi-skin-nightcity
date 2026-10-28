@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Add-on information. Kodi ids: 6 install/uninstall, 7 enable, 8 update, 9 configure, 10 dependencies,
+     12 open, 13 auto-update, 14 versions, 50 screenshots. -->
+<window>
+    <depth>DepthDialog</depth>
+    <defaultcontrol always="true">9000</defaultcontrol>
+    <controls>
+        <control type="group">
+            <centerleft>50%</centerleft>
+            <centertop>50%</centertop>
+            <width>1600</width>
+            <height>860</height>
+            <include>DialogFrame</include>
+            <control type="image">
+                <left>40</left>
+                <top>40</top>
+                <width>240</width>
+                <height>240</height>
+                <aspectratio>keep</aspectratio>
+                <texture>$INFO[ListItem.Icon]</texture>
+            </control>
+            <control type="label">
+                <left>320</left>
+                <top>40</top>
+                <width>1240</width>
+                <height>56</height>
+                <font>font_title</font>
+                <textcolor>text</textcolor>
+                <aligny>center</aligny>
+                <label>$INFO[ListItem.AddonName]</label>
+            </control>
+            <control type="label">
+                <left>320</left>
+                <top>100</top>
+                <width>1240</width>
+                <height>40</height>
+                <font>font_small</font>
+                <textcolor>accent2</textcolor>
+                <aligny>center</aligny>
+                <label>$INFO[ListItem.AddonVersion]$INFO[ListItem.AddonCreator,[COLOR text_mute] ▪ [/COLOR],]$INFO[ListItem.AddonType,[COLOR text_mute] ▪ [/COLOR],]</label>
+            </control>
+            <control type="label">
+                <left>320</left>
+                <top>140</top>
+                <width>1240</width>
+                <height>40</height>
+                <font>font_small</font>
+                <textcolor>text_dim</textcolor>
+                <aligny>center</aligny>
+                <label>$INFO[ListItem.AddonSummary]</label>
+            </control>
+            <control type="textbox">
+                <left>320</left>
+                <top>200</top>
+                <width>1240</width>
+                <height>420</height>
+                <font>font_small</font>
+                <textcolor>text</textcolor>
+                <label>$INFO[ListItem.AddonDescription]$INFO[ListItem.AddonNews,[CR][CR][COLOR accent3]news[/COLOR][CR],]</label>
+            </control>
+            <control type="panel" id="50">
+                <left>-4000</left>
+                <width>10</width>
+                <height>10</height>
+                <itemlayout width="10" height="10"/>
+                <focusedlayout width="10" height="10"/>
+            </control>
+            <control type="grouplist" id="9000">
+                <onup>13</onup>
+                <left>40</left>
+                <top>760</top>
+                <width>1520</width>
+                <height>54</height>
+                <orientation>horizontal</orientation>
+                <itemgap>16</itemgap>
+                <include content="Button">
+                    <param name="id" value="12"/>
+                    <param name="label" value="$LOCALIZE[518]"/>
+                    <param name="width" value="180"/>
+                </include>
+                <include content="Button">
+                    <param name="id" value="9"/>
+                    <param name="label" value="$LOCALIZE[24020]"/>
+                    <param name="width" value="220"/>
+                </include>
+                <include content="Button">
+                    <param name="id" value="6"/>
+                    <param name="label" value=""/>
+                    <param name="width" value="220"/>
+                </include>
+                <include content="Button">
+                    <param name="id" value="7"/>
+                    <param name="label" value=""/>
+                    <param name="width" value="200"/>
+                </include>
+                <include content="Button">
+                    <param name="id" value="8"/>
+                    <param name="label" value="$LOCALIZE[24138]"/>
+                    <param name="width" value="180"/>
+                </include>
+                <include content="Button">
+                    <param name="id" value="10"/>
+                    <param name="label" value="$LOCALIZE[39024]"/>
+                    <param name="width" value="240"/>
+                </include>
+                <include content="Button">
+                    <param name="id" value="14"/>
+                    <param name="label" value="$LOCALIZE[24069]"/>
+                    <param name="width" value="200"/>
+                </include>
+            </control>
+            <control type="radiobutton" id="13">
+                <left>40</left>
+                <top>680</top>
+                <width>600</width>
+                <height>52</height>
+                <font>font_small</font>
+                <textoffsetx>20</textoffsetx>
+                <textcolor>text_dim</textcolor>
+                <focusedcolor>focus_text</focusedcolor>
+                <texturefocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</texturefocus>
+                <texturenofocus/>
+                <radiowidth>32</radiowidth>
+                <radioheight>32</radioheight>
+                <textureradioonfocus colordiffuse="focus_text">ui/check_on.png</textureradioonfocus>
+                <textureradioonnofocus colordiffuse="accent">ui/check_on.png</textureradioonnofocus>
+                <textureradiooffnofocus colordiffuse="text_mute">ui/check_off.png</textureradiooffnofocus>
+                <textureradioofffocus colordiffuse="focus_text">ui/check_off.png</textureradioofffocus>
+                <ondown>9000</ondown>
+                <onup>9000</onup>
+            </control>
+        </control>
+    </controls>
+</window>

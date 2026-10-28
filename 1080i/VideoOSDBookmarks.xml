@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Chapter row during playback: Down from the OSD bar (or its chapters button) opens it, Down
+     again the cast and crew row (Custom_1141_OSDCast.xml), Up the bookmark buttons, Up again or
+     Back returns to the bar. Kodi lists the file's chapters and bookmarks in list 11, chapters
+     with a thumbnail (Kodi's setting myvideos.extractchapterthumbs, switched on once by the
+     startup script), and preselects the playing chapter. Kodi ids: 11 bookmark list, 2 add,
+     3 clear, 4 add episode bookmark. The row hides while the cast row is up. -->
+<window>
+    <depth>DepthOSD</depth>
+    <!-- Kodi fills list 11 right after it set the focus, so the focus goes to a stand-in: its
+         focus actions wait in Kodi's queue, a second hop (93, then 94) sees the filled list and
+         picks it or, without chapters or bookmarks, add bookmark. Skin timers would take up to a
+         second. -->
+    <defaultcontrol always="true">93</defaultcontrol>
+    <animation effect="fade" time="150">WindowOpen</animation>
+    <animation effect="fade" time="150">WindowClose</animation>
+    <controls>
+        <control type="group">
+            <visible>!Window.IsActive(1141)</visible>
+            <animation effect="fade" time="150">VisibleChange</animation>
+            <include content="RowHeader">
+                <param name="label" value="$LOCALIZE[31140]"/>
+                <param name="left" value="64"/>
+                <param name="top" value="500"/>
+                <param name="width" value="600"/>
+            </include>
+            <control type="label">
+                <left>264</left>
+                <top>500</top>
+                <width>400</width>
+                <height>34</height>
+                <font>font_num</font>
+                <textcolor>accent2</textcolor>
+                <label>$INFO[Container(11).CurrentItem]/$INFO[Container(11).NumItems]</label>
+                <visible>Integer.IsGreater(Container(11).NumItems,0)</visible>
+            </control>
+            <control type="grouplist" id="9000">
+                <left>856</left>
+                <top>486</top>
+                <width>1000</width>
+                <height>54</height>
+                <orientation>horizontal</orientation>
+                <align>right</align>
+                <itemgap>12</itemgap>
+                <onup>Dialog.Close(videobookmarks)</onup>
+                <ondown condition="Integer.IsGreater(Container(11).NumItems,0)">11</ondown>
+                <ondown condition="!Integer.IsGreater(Container(11).NumItems,0) + [VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)]">ActivateWindow(1141)</ondown>
+                <onleft>noop</onleft>
+                <onright>noop</onright>
+                <include content="Button">
+                    <param name="id" value="2"/>
+                    <param name="label" value="$LOCALIZE[294]"/>
+                    <param name="width" value="auto"/>
+                    <param name="onclick" value="noop"/>
+                </include>
+                <include content="Button">
+                    <param name="id" value="4"/>
+                    <param name="label" value="$LOCALIZE[20406]"/>
+                    <param name="width" value="auto"/>
+                    <param name="onclick" value="noop"/>
+                    <param name="visible" value="Control.IsEnabled(4)"/>
+                </include>
+                <include content="Button">
+                    <param name="id" value="3"/>
+                    <param name="label" value="$LOCALIZE[296]"/>
+                    <param name="width" value="auto"/>
+                    <param name="onclick" value="noop"/>
+                </include>
+            </control>
+            <!-- focus hops: see defaultcontrol -->
+            <control type="button" id="93">
+                <left>-100</left>
+                <top>-100</top>
+                <width>1</width>
+                <height>1</height>
+                <texturefocus/>
+                <texturenofocus/>
+                <onfocus>SetFocus(94)</onfocus>
+            </control>
+            <control type="button" id="94">
+                <left>-100</left>
+                <top>-100</top>
+                <width>1</width>
+                <height>1</height>
+                <texturefocus/>
+                <texturenofocus/>
+                <onfocus condition="Integer.IsGreater(Container(11).NumItems,0)">SetFocus(11)</onfocus>
+                <onfocus condition="!Integer.IsGreater(Container(11).NumItems,0)">SetFocus(2)</onfocus>
+            </control>
+            <control type="list" id="11">
+                <left>40</left>
+                <top>540</top>
+                <width>1880</width>
+                <height>300</height>
+                <orientation>horizontal</orientation>
+                <scrolltime tween="quadratic">200</scrolltime>
+                <preloaditems>2</preloaditems>
+                <onup>9000</onup>
+                <ondown condition="VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)">ActivateWindow(1141)</ondown>
+                <onleft>noop</onleft>
+                <onright>noop</onright>
+                <itemlayout width="352" height="300">
+                    <include content="ChapterCard">
+                        <param name="dim" value="Control.HasFocus(11)"/>
+                    </include>
+                </itemlayout>
+                <focusedlayout width="352" height="300">
+                    <include content="ChapterCard">
+                        <param name="focused" value="Control.HasFocus(11)"/>
+                    </include>
+                </focusedlayout>
+            </control>
+        </control>
+        <!-- Down: the cast row of a library title; Up: back to the bar -->
+        <include content="LevelHint">
+            <param name="id" value="91"/>
+            <param name="label" value="$LOCALIZE[31124]"/>
+            <param name="visible" value="!Window.IsActive(1141) + [VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)]"/>
+        </include>
+        <include content="LevelHint">
+            <param name="id" value="92"/>
+            <param name="key" value="↑"/>
+            <param name="label" value="$LOCALIZE[31232]"/>
+            <param name="top" value="140"/>
+            <param name="visible" value="!Window.IsActive(1141)"/>
+        </include>
+    </controls>
+</window>

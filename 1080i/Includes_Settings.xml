@@ -1,0 +1,689 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Settings console (Settings.xml): a rail of all entries under five group headings on the left,
+     the focused entry on the right with its description and, where Kodi has them, its categories
+     as deep links. One include per group for the rail and one for its previews, so the rail can
+     also show a single group. -->
+<includes>
+    <!-- Group heading in the rail: pink number, caps label. Inside the grouplist it keeps an id:
+         Kodi moves over it by id, id 0 stops the move. -->
+    <include name="SettingsRailHeading">
+        <param name="id"/>
+        <param name="num"/>
+        <param name="label"/>
+        <definition>
+            <control type="label" id="$PARAM[id]">
+                <width>520</width>
+                <height>60</height>
+                <textoffsetx>20</textoffsetx>
+                <aligny>center</aligny>
+                <font>font_caps_small</font>
+                <textcolor>text_mute</textcolor>
+                <label>[COLOR accent2]$PARAM[num][/COLOR]  [UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Right half for one rail entry, shown while the entry or its list has the focus: group as
+         kicker, the entry as glitch title, a description, then the list (nested) under a heading.
+         An entry without a list passes its own id as list and no heading. -->
+    <include name="SettingsPreview">
+        <param name="rail"/>
+        <param name="list"/>
+        <param name="num"/>
+        <param name="group"/>
+        <param name="title"/>
+        <param name="desc"/>
+        <param name="heading" default=""/>
+        <definition>
+            <control type="group">
+                <left>700</left>
+                <top>104</top>
+                <visible>Control.HasFocus($PARAM[rail]) | Control.HasFocus($PARAM[list])</visible>
+                <include content="Kicker">
+                    <param name="label" value="$PARAM[num]  $PARAM[group]"/>
+                    <param name="width" value="1150"/>
+                </include>
+                <include content="GlitchTitle">
+                    <param name="label" value="$PARAM[title]"/>
+                    <param name="top" value="36"/>
+                    <param name="width" value="1150"/>
+                </include>
+                <control type="textbox">
+                    <top>142</top>
+                    <width>1100</width>
+                    <height>120</height>
+                    <font>font_body</font>
+                    <textcolor>text_dim</textcolor>
+                    <label>$PARAM[desc]</label>
+                </control>
+                <include content="RowHeader">
+                    <param name="label" value="$PARAM[heading]"/>
+                    <param name="top" value="262"/>
+                </include>
+                <nested/>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Group 01: heading and entries in the rail; right moves into the entry's list -->
+    <include name="SettingsRailGroup1">
+        <include content="SettingsRailHeading">
+            <param name="id" value="9201"/>
+            <param name="num" value="01"/>
+            <param name="label" value="$LOCALIZE[31159]"/>
+        </include>
+        <include content="ListButton">
+            <param name="id" value="9211"/>
+            <param name="label" value="$LOCALIZE[14200]"/>
+            <param name="width" value="520"/>
+            <param name="onclick" value="ActivateWindow(PlayerSettings)"/>
+        </include>
+        <include content="ListButton">
+            <param name="id" value="9212"/>
+            <param name="label" value="$LOCALIZE[14211]"/>
+            <param name="width" value="520"/>
+            <param name="onclick" value="ActivateWindow(MediaSettings)"/>
+        </include>
+        <include content="ListButton">
+            <param name="id" value="9213"/>
+            <param name="label" value="$LOCALIZE[14204]"/>
+            <param name="width" value="520"/>
+            <param name="onclick" value="ActivateWindow(PVRSettings)"/>
+            <param name="visible" value="System.HasPVRAddon"/>
+        </include>
+    </include>
+    <include name="SettingsPreviewGroup1">
+        <include content="SettingsPreview">
+            <param name="rail" value="9211"/>
+            <param name="list" value="9311"/>
+            <param name="num" value="01"/>
+            <param name="group" value="$LOCALIZE[31159]"/>
+            <param name="title" value="$LOCALIZE[14200]"/>
+            <param name="desc" value="$LOCALIZE[31164]"/>
+            <param name="heading" value="$LOCALIZE[31176]"/>
+            <include content="DialogList">
+                <param name="id" value="9311"/>
+                <param name="left" value="0"/>
+                <param name="top" value="300"/>
+                <param name="width" value="1000"/>
+                <param name="height" value="312"/>
+                <param name="font" value="font_label"/>
+                <enable>false</enable>
+                <content>
+                    <item>
+                        <label>$LOCALIZE[14215]</label>
+                        <label2>$LOCALIZE[31181]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[14216]</label>
+                        <label2>$LOCALIZE[31182]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[14087]</label>
+                        <label2>$LOCALIZE[31183]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[14217]</label>
+                        <label2>$LOCALIZE[31184]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[14218]</label>
+                        <label2>$LOCALIZE[31185]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[287]</label>
+                        <label2>$LOCALIZE[31186]</label2>
+                    </item>
+                </content>
+            </include>
+        </include>
+        <include content="SettingsPreview">
+            <param name="rail" value="9212"/>
+            <param name="list" value="9312"/>
+            <param name="num" value="01"/>
+            <param name="group" value="$LOCALIZE[31159]"/>
+            <param name="title" value="$LOCALIZE[14211]"/>
+            <param name="desc" value="$LOCALIZE[31165]"/>
+            <param name="heading" value="$LOCALIZE[31176]"/>
+            <include content="DialogList">
+                <param name="id" value="9312"/>
+                <param name="left" value="0"/>
+                <param name="top" value="300"/>
+                <param name="width" value="1000"/>
+                <param name="height" value="260"/>
+                <param name="font" value="font_label"/>
+                <enable>false</enable>
+                <content>
+                    <item>
+                        <label>$LOCALIZE[14202]</label>
+                        <label2>$LOCALIZE[31187]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[16000]</label>
+                        <label2>$LOCALIZE[31188]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[14215]</label>
+                        <label2>$LOCALIZE[31189]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[14216]</label>
+                        <label2>$LOCALIZE[31190]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[14217]</label>
+                        <label2>$LOCALIZE[31191]</label2>
+                    </item>
+                </content>
+            </include>
+        </include>
+        <include content="SettingsPreview">
+            <param name="rail" value="9213"/>
+            <param name="list" value="9313"/>
+            <param name="num" value="01"/>
+            <param name="group" value="$LOCALIZE[31159]"/>
+            <param name="title" value="$LOCALIZE[14204]"/>
+            <param name="desc" value="$LOCALIZE[31166]"/>
+            <param name="heading" value="$LOCALIZE[31176]"/>
+            <include content="DialogList">
+                <param name="id" value="9313"/>
+                <param name="left" value="0"/>
+                <param name="top" value="300"/>
+                <param name="width" value="1000"/>
+                <param name="height" value="468"/>
+                <param name="font" value="font_label"/>
+                <enable>false</enable>
+                <content>
+                    <item>
+                        <label>$LOCALIZE[128]</label>
+                        <label2>$LOCALIZE[31192]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[14301]</label>
+                        <label2>$LOCALIZE[31193]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[22020]</label>
+                        <label2>$LOCALIZE[31194]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[19177]</label>
+                        <label2>$LOCALIZE[31195]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[19043]</label>
+                        <label2>$LOCALIZE[31196]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[19215]</label>
+                        <label2>$LOCALIZE[31197]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[14095]</label>
+                        <label2>$LOCALIZE[31198]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[19259]</label>
+                        <label2>$LOCALIZE[31199]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[19279]</label>
+                        <label2>$LOCALIZE[31200]</label2>
+                    </item>
+                </content>
+            </include>
+        </include>
+    </include>
+
+    <!-- Group 02: heading and entries in the rail; right moves into the entry's list -->
+    <include name="SettingsRailGroup2">
+        <include content="SettingsRailHeading">
+            <param name="id" value="9202"/>
+            <param name="num" value="02"/>
+            <param name="label" value="$LOCALIZE[31160]"/>
+        </include>
+        <include content="ListButton">
+            <param name="id" value="9221"/>
+            <param name="label" value="$LOCALIZE[14206]"/>
+            <param name="width" value="520"/>
+            <param name="onclick" value="ActivateWindow(InterfaceSettings)"/>
+        </include>
+        <include content="ListButton">
+            <param name="id" value="9222"/>
+            <param name="label" value="$LOCALIZE[166]"/>
+            <param name="width" value="520"/>
+            <param name="onclick" value="ActivateWindow(SkinSettings)"/>
+        </include>
+        <include content="ListButton">
+            <param name="id" value="9224"/>
+            <param name="label" value="$LOCALIZE[31222]"/>
+            <param name="width" value="520"/>
+            <param name="onclick" value="SetProperty(nc.ss.open,home,home)"/>
+            <param name="onclick2" value="ActivateWindow(SkinSettings)"/>
+        </include>
+        <include content="ListButton">
+            <param name="id" value="9223"/>
+            <param name="label" value="$LOCALIZE[13200]"/>
+            <param name="width" value="520"/>
+            <param name="onclick" value="ActivateWindow(Profiles)"/>
+        </include>
+    </include>
+    <include name="SettingsPreviewGroup2">
+        <include content="SettingsPreview">
+            <param name="rail" value="9221"/>
+            <param name="list" value="9321"/>
+            <param name="num" value="02"/>
+            <param name="group" value="$LOCALIZE[31160]"/>
+            <param name="title" value="$LOCALIZE[14206]"/>
+            <param name="desc" value="$LOCALIZE[31167]"/>
+            <param name="heading" value="$LOCALIZE[31176]"/>
+            <include content="DialogList">
+                <param name="id" value="9321"/>
+                <param name="left" value="0"/>
+                <param name="top" value="300"/>
+                <param name="width" value="1000"/>
+                <param name="height" value="260"/>
+                <param name="font" value="font_label"/>
+                <enable>false</enable>
+                <content>
+                    <item>
+                        <label>$LOCALIZE[166]</label>
+                        <label2>$LOCALIZE[31201]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[14222]</label>
+                        <label2>$LOCALIZE[31202]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[360]</label>
+                        <label2>$LOCALIZE[31203]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[12360]</label>
+                        <label2>$LOCALIZE[31204]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[14224]</label>
+                        <label2>$LOCALIZE[31205]</label2>
+                    </item>
+                </content>
+            </include>
+        </include>
+        <include content="SettingsPreview">
+            <param name="rail" value="9222"/>
+            <param name="list" value="9322"/>
+            <param name="num" value="02"/>
+            <param name="group" value="$LOCALIZE[31160]"/>
+            <param name="title" value="$LOCALIZE[166]"/>
+            <param name="desc" value="$LOCALIZE[31168]"/>
+            <param name="heading" value="$LOCALIZE[5]"/>
+            <include content="DialogList">
+                <param name="id" value="9322"/>
+                <param name="left" value="0"/>
+                <param name="top" value="300"/>
+                <param name="width" value="1000"/>
+                <param name="height" value="104"/>
+                <param name="font" value="font_label"/>
+                <enable>false</enable>
+                <content>
+                    <item>
+                        <label>$LOCALIZE[31007]</label>
+                        <label2>$VAR[GlowStateLabel]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[31222]</label>
+                        <label2>$LOCALIZE[31225], $LOCALIZE[31224], $LOCALIZE[31232]</label2>
+                    </item>
+                </content>
+            </include>
+        </include>
+        <include content="SettingsPreview">
+            <param name="rail" value="9224"/>
+            <param name="list" value="9224"/>
+            <param name="num" value="02"/>
+            <param name="group" value="$LOCALIZE[31160]"/>
+            <param name="title" value="$LOCALIZE[31222]"/>
+            <param name="desc" value="$LOCALIZE[31262]"/>
+        </include>
+        <include content="SettingsPreview">
+            <param name="rail" value="9223"/>
+            <param name="list" value="9223"/>
+            <param name="num" value="02"/>
+            <param name="group" value="$LOCALIZE[31160]"/>
+            <param name="title" value="$LOCALIZE[13200]"/>
+            <param name="desc" value="$LOCALIZE[31169]"/>
+        </include>
+    </include>
+
+    <!-- Group 03: heading and entries in the rail; right moves into the entry's list -->
+    <include name="SettingsRailGroup3">
+        <include content="SettingsRailHeading">
+            <param name="id" value="9203"/>
+            <param name="num" value="03"/>
+            <param name="label" value="$LOCALIZE[31161]"/>
+        </include>
+        <include content="ListButton">
+            <param name="id" value="9231"/>
+            <param name="label" value="$LOCALIZE[24001]"/>
+            <param name="width" value="520"/>
+            <param name="onclick" value="ActivateWindow(AddonBrowser)"/>
+        </include>
+        <include content="ListButton">
+            <param name="id" value="9232"/>
+            <param name="label" value="$LOCALIZE[10003]"/>
+            <param name="width" value="520"/>
+            <param name="onclick" value="ActivateWindow(FileManager)"/>
+        </include>
+    </include>
+    <include name="SettingsPreviewGroup3">
+        <include content="SettingsPreview">
+            <param name="rail" value="9231"/>
+            <param name="list" value="9331"/>
+            <param name="num" value="03"/>
+            <param name="group" value="$LOCALIZE[31161]"/>
+            <param name="title" value="$LOCALIZE[24001]"/>
+            <param name="desc" value="$LOCALIZE[31170]"/>
+            <param name="heading" value="$LOCALIZE[24001]"/>
+            <include content="DialogList">
+                <param name="id" value="9331"/>
+                <param name="left" value="0"/>
+                <param name="top" value="300"/>
+                <param name="width" value="1000"/>
+                <param name="height" value="260"/>
+                <param name="font" value="font_label"/>
+                <enable>false</enable>
+                <content>
+                    <item>
+                        <label>$LOCALIZE[24998]</label>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[24033]</label>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[24041]</label>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[137]</label>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[24034]</label>
+                    </item>
+                </content>
+            </include>
+        </include>
+        <include content="SettingsPreview">
+            <param name="rail" value="9232"/>
+            <param name="list" value="9232"/>
+            <param name="num" value="03"/>
+            <param name="group" value="$LOCALIZE[31161]"/>
+            <param name="title" value="$LOCALIZE[10003]"/>
+            <param name="desc" value="$LOCALIZE[31171]"/>
+        </include>
+    </include>
+
+    <!-- Group 04: heading and entries in the rail; right moves into the entry's list -->
+    <include name="SettingsRailGroup4">
+        <include content="SettingsRailHeading">
+            <param name="id" value="9204"/>
+            <param name="num" value="04"/>
+            <param name="label" value="$LOCALIZE[31162]"/>
+        </include>
+        <include content="ListButton">
+            <param name="id" value="9241"/>
+            <param name="label" value="$LOCALIZE[13000]"/>
+            <param name="width" value="520"/>
+            <param name="onclick" value="ActivateWindow(SystemSettings)"/>
+        </include>
+        <include content="ListButton">
+            <param name="id" value="9242"/>
+            <param name="label" value="$LOCALIZE[14036]"/>
+            <param name="width" value="520"/>
+            <param name="onclick" value="ActivateWindow(ServiceSettings)"/>
+        </include>
+    </include>
+    <include name="SettingsPreviewGroup4">
+        <include content="SettingsPreview">
+            <param name="rail" value="9241"/>
+            <param name="list" value="9341"/>
+            <param name="num" value="04"/>
+            <param name="group" value="$LOCALIZE[31162]"/>
+            <param name="title" value="$LOCALIZE[13000]"/>
+            <param name="desc" value="$LOCALIZE[31172]"/>
+            <param name="heading" value="$LOCALIZE[31176]"/>
+            <include content="DialogList">
+                <param name="id" value="9341"/>
+                <param name="left" value="0"/>
+                <param name="top" value="300"/>
+                <param name="width" value="1000"/>
+                <param name="height" value="364"/>
+                <param name="font" value="font_label"/>
+                <enable>false</enable>
+                <content>
+                    <item>
+                        <label>$LOCALIZE[14220]</label>
+                        <label2>$LOCALIZE[31206]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[14221]</label>
+                        <label2>$LOCALIZE[31207]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[14125]</label>
+                        <label2>$LOCALIZE[31208]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[798]</label>
+                        <label2>$LOCALIZE[31209]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[14095]</label>
+                        <label2>$LOCALIZE[31210]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[24001]</label>
+                        <label2>$LOCALIZE[31211]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[14092]</label>
+                        <label2>$LOCALIZE[31212]</label2>
+                    </item>
+                </content>
+            </include>
+        </include>
+        <include content="SettingsPreview">
+            <param name="rail" value="9242"/>
+            <param name="list" value="9342"/>
+            <param name="num" value="04"/>
+            <param name="group" value="$LOCALIZE[31162]"/>
+            <param name="title" value="$LOCALIZE[14036]"/>
+            <param name="desc" value="$LOCALIZE[31173]"/>
+            <param name="heading" value="$LOCALIZE[31176]"/>
+            <include content="DialogList">
+                <param name="id" value="9342"/>
+                <param name="left" value="0"/>
+                <param name="top" value="300"/>
+                <param name="width" value="1000"/>
+                <param name="height" value="416"/>
+                <param name="font" value="font_label"/>
+                <enable>false</enable>
+                <content>
+                    <item>
+                        <label>$LOCALIZE[16000]</label>
+                        <label2>$LOCALIZE[31213]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[14223]</label>
+                        <label2>$LOCALIZE[31214]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[20187]</label>
+                        <label2>$LOCALIZE[31215]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[1273]</label>
+                        <label2>$LOCALIZE[31216]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[1200]</label>
+                        <label2>$LOCALIZE[31217]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[1201]</label>
+                        <label2>$LOCALIZE[31218]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[37101]</label>
+                        <label2>$LOCALIZE[31219]</label2>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[8]</label>
+                        <label2>$LOCALIZE[31220]</label2>
+                    </item>
+                </content>
+            </include>
+        </include>
+    </include>
+
+    <!-- Group 05: heading and entries in the rail; right moves into the entry's list -->
+    <include name="SettingsRailGroup5">
+        <include content="SettingsRailHeading">
+            <param name="id" value="9205"/>
+            <param name="num" value="05"/>
+            <param name="label" value="$LOCALIZE[31163]"/>
+        </include>
+        <include content="ListButton">
+            <param name="id" value="9251"/>
+            <param name="label" value="$LOCALIZE[10007]"/>
+            <param name="width" value="520"/>
+            <param name="onclick" value="ActivateWindow(SystemInfo)"/>
+        </include>
+        <include content="ListButton">
+            <param name="id" value="9252"/>
+            <param name="label" value="$LOCALIZE[14111]"/>
+            <param name="width" value="520"/>
+            <param name="onclick" value="ActivateWindow(EventLog)"/>
+        </include>
+    </include>
+    <include name="SettingsPreviewGroup5">
+        <include content="SettingsPreview">
+            <param name="rail" value="9251"/>
+            <param name="list" value="9251"/>
+            <param name="num" value="05"/>
+            <param name="group" value="$LOCALIZE[31163]"/>
+            <param name="title" value="$LOCALIZE[10007]"/>
+            <param name="desc" value="$LOCALIZE[31174]"/>
+        </include>
+        <include content="SettingsPreview">
+            <param name="rail" value="9252"/>
+            <param name="list" value="9252"/>
+            <param name="num" value="05"/>
+            <param name="group" value="$LOCALIZE[31163]"/>
+            <param name="title" value="$LOCALIZE[14111]"/>
+            <param name="desc" value="$LOCALIZE[31175]"/>
+        </include>
+    </include>
+
+    <!-- Skin settings (SkinSettings.xml), laid out like Kodi's settings pages -->
+    <!-- A category on the left: focused it shows its rows on the right (nc.hp.tab) -->
+    <include name="SkinSettingsCategory">
+        <param name="id"/>
+        <param name="tab"/>
+        <param name="label"/>
+        <definition>
+            <control type="togglebutton" id="$PARAM[id]">
+                <include>SettingsCategoryLook</include>
+                <label>$PARAM[label]</label>
+                <usealttexture>String.IsEqual(Window.Property(nc.hp.tab),$PARAM[tab])</usealttexture>
+                <onfocus>SetProperty(nc.hp.tab,$PARAM[tab])</onfocus>
+            </control>
+        </definition>
+    </include>
+
+    <!-- The rows of a category on the right; left goes back to its category -->
+    <include name="SkinSettingsArea">
+        <param name="id"/>
+        <param name="tab"/>
+        <param name="category"/>
+        <param name="height" default="800"/>
+        <param name="down" default="noop"/>
+        <definition>
+            <control type="grouplist" id="$PARAM[id]">
+                <left>560</left>
+                <top>100</top>
+                <width>1240</width>
+                <height>$PARAM[height]</height>
+                <orientation>vertical</orientation>
+                <itemgap>0</itemgap>
+                <onup>noop</onup>
+                <ondown>$PARAM[down]</ondown>
+                <onleft>$PARAM[category]</onleft>
+                <onright>noop</onright>
+                <visible>String.IsEqual(Window.Property(nc.hp.tab),$PARAM[tab])</visible>
+                <nested/>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Group heading in the rows, as Kodi's (settings template 14) -->
+    <include name="SkinSettingsHeading">
+        <param name="label"/>
+        <param name="top" default="0"/>
+        <definition>
+            <control type="label">
+                <top>$PARAM[top]</top>
+                <width>1240</width>
+                <height>52</height>
+                <textoffsetx>20</textoffsetx>
+                <aligny>center</aligny>
+                <font>font_caps_small</font>
+                <textcolor>accent2</textcolor>
+                <label>$PARAM[label]</label>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Top of the slot rows of a page category: a separator line, then the rows heading -->
+    <include name="HomePagesRowsHeading">
+        <control type="image">
+            <width>1240</width>
+            <height>1</height>
+            <texture colordiffuse="border_dim">ui/white.png</texture>
+        </control>
+        <include content="SkinSettingsHeading">
+            <param name="label" value="$LOCALIZE[31224]"/>
+            <param name="top" value="1"/>
+        </include>
+    </include>
+
+    <!-- A setting row: label left, value right, the focused row a cut fill (pink while grabbed) -->
+    <include name="HomePagesRow">
+        <width>1240</width>
+        <height>52</height>
+        <font>font_label</font>
+        <textoffsetx>20</textoffsetx>
+        <aligny>center</aligny>
+        <textcolor>text</textcolor>
+        <focusedcolor>focus_text</focusedcolor>
+        <disabledcolor>text_mute</disabledcolor>
+        <texturefocus border="12" colordiffuse="$VAR[HomePagesFocusColor]">ui/cut_btn_fill.png</texturefocus>
+        <texturenofocus/>
+    </include>
+
+    <!-- A check box row: on while the skin setting is not set (e.g. GlowOff, nc.menu.hide.x) -->
+    <include name="SkinSettingsToggle">
+        <param name="id"/>
+        <param name="label"/>
+        <param name="setting"/>
+        <param name="onclick" default="noop"/>
+        <definition>
+            <control type="radiobutton" id="$PARAM[id]">
+                <width>1240</width>
+                <include>SettingsToggleLook</include>
+                <label>$PARAM[label]</label>
+                <selected>!Skin.HasSetting($PARAM[setting])</selected>
+                <onclick>Skin.ToggleSetting($PARAM[setting])</onclick>
+                <onclick>$PARAM[onclick]</onclick>
+            </control>
+        </definition>
+    </include>
+</includes>

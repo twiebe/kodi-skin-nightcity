@@ -1,0 +1,764 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <!-- Where the player's next level lies, quiet like the key hint under the episodes of an info
+         page: one line of muted small caps, centred on the bottom edge (top=1030, the key that
+         leads down) or the top edge (top=140, Up). A shadow keeps it readable over bright video.
+         It fades with its window and its condition. -->
+    <include name="LevelHint">
+        <param name="id"/>
+        <param name="key" default="↓"/>
+        <param name="label"/>
+        <param name="top" default="1030"/>
+        <param name="visible" default="true"/>
+        <definition>
+            <control type="group" id="$PARAM[id]">
+                <left>0</left>
+                <top>$PARAM[top]</top>
+                <visible>$PARAM[visible]</visible>
+                <animation effect="fade" time="150">VisibleChange</animation>
+                <control type="label">
+                    <width>1920</width>
+                    <height>36</height>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <font>font_caps_small</font>
+                    <textcolor>text_mute</textcolor>
+                    <shadowcolor>bg</shadowcolor>
+                    <label>[UPPERCASE]$PARAM[key] $PARAM[label][/UPPERCASE]</label>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- The seek line: track, buffer, position with a bright head, chapter marks. 1792 wide,
+         placed by the caller. The position id is a param because the seek bar dialog needs
+         Kodi's 401 there; Player.SeekBar follows the seek preview as well as playback. -->
+    <include name="PlayerBar">
+        <param name="progressid" default="0"/>
+        <definition>
+            <control type="progress">
+                <width>1792</width>
+                <height>4</height>
+                <texturebg colordiffuse="border_dim">ui/white.png</texturebg>
+                <midtexture colordiffuse="glow">ui/white.png</midtexture>
+                <info>Player.ProgressCache</info>
+            </control>
+            <control type="progress" id="$PARAM[progressid]">
+                <width>1792</width>
+                <height>4</height>
+                <texturebg/>
+                <midtexture colordiffuse="accent">ui/white.png</midtexture>
+                <info>Player.SeekBar</info>
+            </control>
+            <control type="ranges">
+                <top>-4</top>
+                <width>1792</width>
+                <height>12</height>
+                <texturebg/>
+                <!-- Kodi hands the chapters over as ranges from one chapter start to the
+                     next, so a chapter starts where a range ends -->
+                <lefttexture/>
+                <midtexture/>
+                <righttexture colordiffuse="accent">ui/tick.png</righttexture>
+                <info>Player.Chapters</info>
+            </control>
+            <!-- the head at the end of an invisible fill -->
+            <control type="progress">
+                <top>-6</top>
+                <width>1792</width>
+                <height>16</height>
+                <texturebg>ui/seek_track.png</texturebg>
+                <midtexture>ui/seek_track.png</midtexture>
+                <righttexture colordiffuse="text">ui/seek_head.png</righttexture>
+                <info>Player.SeekBar</info>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Time bubble over the head while seeking: jump and target time. Kodi cannot place a
+         control by a value, so SeekBubbles holds one copy per 4 % of the line. -->
+    <include name="SeekBubble">
+        <param name="left"/>
+        <param name="visible"/>
+        <definition>
+            <control type="group">
+                <left>$PARAM[left]</left>
+                <top>-70</top>
+                <visible>$PARAM[visible]</visible>
+                <control type="image">
+                    <width>260</width>
+                    <height>50</height>
+                    <texture border="12" colordiffuse="surface">ui/cut_btn_fill.png</texture>
+                </control>
+                <control type="image">
+                    <width>260</width>
+                    <height>50</height>
+                    <texture border="12" colordiffuse="focus">ui/cut_btn.png</texture>
+                </control>
+                <control type="label">
+                    <width>260</width>
+                    <height>50</height>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <font>font_num</font>
+                    <textcolor>text</textcolor>
+                    <label>$VAR[SeekDelta,[COLOR accent2],[/COLOR]  ]$VAR[PlayerTime]</label>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="SeekBubbles">
+        <control type="group">
+            <visible>Player.Seeking | Player.HasPerformedSeek(3) | !String.IsEmpty(Player.SeekNumeric)</visible>
+        <include content="SeekBubble">
+            <param name="left" value="-48"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,0) + Integer.IsLess(Player.SeekBar,4)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="-22"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,4) + Integer.IsLess(Player.SeekBar,8)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="49"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,8) + Integer.IsLess(Player.SeekBar,12)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="121"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,12) + Integer.IsLess(Player.SeekBar,16)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="193"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,16) + Integer.IsLess(Player.SeekBar,20)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="264"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,20) + Integer.IsLess(Player.SeekBar,24)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="336"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,24) + Integer.IsLess(Player.SeekBar,28)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="408"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,28) + Integer.IsLess(Player.SeekBar,32)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="479"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,32) + Integer.IsLess(Player.SeekBar,36)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="551"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,36) + Integer.IsLess(Player.SeekBar,40)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="623"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,40) + Integer.IsLess(Player.SeekBar,44)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="694"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,44) + Integer.IsLess(Player.SeekBar,48)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="766"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,48) + Integer.IsLess(Player.SeekBar,52)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="838"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,52) + Integer.IsLess(Player.SeekBar,56)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="909"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,56) + Integer.IsLess(Player.SeekBar,60)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="981"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,60) + Integer.IsLess(Player.SeekBar,64)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="1053"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,64) + Integer.IsLess(Player.SeekBar,68)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="1124"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,68) + Integer.IsLess(Player.SeekBar,72)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="1196"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,72) + Integer.IsLess(Player.SeekBar,76)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="1268"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,76) + Integer.IsLess(Player.SeekBar,80)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="1339"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,80) + Integer.IsLess(Player.SeekBar,84)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="1411"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,84) + Integer.IsLess(Player.SeekBar,88)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="1483"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,88) + Integer.IsLess(Player.SeekBar,92)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="1554"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,92) + Integer.IsLess(Player.SeekBar,96)"/>
+        </include>
+        <include content="SeekBubble">
+            <param name="left" value="1580"/>
+            <param name="visible" value="Integer.IsGreaterOrEqual(Player.SeekBar,96) + Integer.IsLess(Player.SeekBar,101)"/>
+        </include>
+        </control>
+    </include>
+
+    <!-- Track panel of the OSD (subtitles or audio) above the right buttons: one row per track
+         from the script's nc.<prefix>.* properties (Home), the playing one marked with ◢, "off"
+         first for subtitles, and a last row that opens Kodi's full settings (`settings`). The panel grows upwards
+         with the number of rows (nc.<prefix>.rows, at most 8). Left and right focus the
+         neighbouring buttons of the row (`left`, `right`). -->
+    <!-- What plays, above the seek line: poster, kicker, title, badges and a short plot. The text
+         column ends left of the OSD track panels. -->
+    <!-- Card of the chapter row (VideoOSDBookmarks.xml): the chapter's thumbnail, its name and
+         start time; a bookmark shows its own thumbnail. Kodi cuts chapter thumbnails from
+         local files and LAN shares only: for Jellyfin streams the server's chapter images
+         (ChapterThumb), chapters of streams without them show as a compact card with start
+         time and name. -->
+    <include name="ChapterCard">
+        <param name="focused" default="false"/>
+        <param name="dim" default="false"/>
+        <definition>
+            <control type="group">
+                <left>24</left>
+                <top>34</top>
+                <visible>![!String.IsEmpty(Window(Home).Property(nc.chapters.remote)) + String.IsEmpty(Window(Home).Property(nc.chapter.1)) + String.IsEqual(ListItem.Property(ischapter),true)]</visible>
+                <include content="CutCard">
+                    <param name="width" value="320"/>
+                    <param name="height" value="180"/>
+                    <param name="mask" value="ui/mask_320x180.png"/>
+                    <param name="image" value="$VAR[ChapterThumb]"/>
+                    <param name="glowwidth" value="368"/>
+                    <param name="glowheight" value="228"/>
+                    <param name="focused" value="$PARAM[focused]"/>
+                    <param name="dim" value="$PARAM[dim]"/>
+                    <control type="label">
+                        <left>14</left>
+                        <top>14</top>
+                        <width>292</width>
+                        <height>40</height>
+                        <font>font_num</font>
+                        <textcolor>text_mute</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                    </control>
+                </include>
+                <control type="label">
+                    <top>192</top>
+                    <width>320</width>
+                    <height>32</height>
+                    <font>font_small</font>
+                    <textcolor>text</textcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                </control>
+                <control type="label">
+                    <top>222</top>
+                    <width>320</width>
+                    <height>30</height>
+                    <font>font_num</font>
+                    <textcolor>text_mute</textcolor>
+                    <label>$INFO[ListItem.Label2]</label>
+                </control>
+            </control>
+            <control type="group">
+                <left>24</left>
+                <top>34</top>
+                <visible>!String.IsEmpty(Window(Home).Property(nc.chapters.remote)) + String.IsEmpty(Window(Home).Property(nc.chapter.1)) + String.IsEqual(ListItem.Property(ischapter),true)</visible>
+                <include content="CutCard">
+                    <param name="width" value="320"/>
+                    <param name="height" value="112"/>
+                    <param name="mask" value="ui/mask_320x112.png"/>
+                    <param name="glowwidth" value="368"/>
+                    <param name="glowheight" value="160"/>
+                    <param name="focused" value="$PARAM[focused]"/>
+                    <param name="dim" value="$PARAM[dim]"/>
+                    <control type="label">
+                        <left>16</left>
+                        <top>14</top>
+                        <width>288</width>
+                        <height>34</height>
+                        <font>font_num</font>
+                        <textcolor>text_mute</textcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                    </control>
+                    <control type="label">
+                        <left>16</left>
+                        <top>56</top>
+                        <width>288</width>
+                        <height>40</height>
+                        <font>font_small</font>
+                        <textcolor>text</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="PlayerDetails">
+        <definition>
+            <control type="group">
+                <left>64</left>
+                <top>620</top>
+                <!-- the chapter and cast rows of the OSD take this space -->
+                <visible>!Window.IsActive(videobookmarks) + !Window.IsActive(1141)</visible>
+                <animation effect="slide" end="0,-130" time="150" condition="Window.IsActive(videoosd)">Conditional</animation>
+                <include content="CutCard">
+                    <param name="image" value="$VAR[PlayerPoster]"/>
+                </include>
+                <include content="Kicker">
+                    <param name="label" value="$VAR[PlayerKicker]"/>
+                    <param name="left" value="232"/>
+                    <param name="width" value="900"/>
+                </include>
+                <include content="GlitchTitle">
+                    <param name="label" value="$INFO[VideoPlayer.Title]"/>
+                    <param name="left" value="232"/>
+                    <param name="top" value="32"/>
+                    <param name="width" value="900"/>
+                    <param name="height" value="60"/>
+                    <param name="font" value="font_title"/>
+                </include>
+                <control type="grouplist">
+                    <left>232</left>
+                    <top>104</top>
+                    <width>900</width>
+                    <height>36</height>
+                    <orientation>horizontal</orientation>
+                    <itemgap>8</itemgap>
+                    <include content="Tag">
+                        <param name="label" value="$VAR[PlayerResolution]"/>
+                        <param name="visible" value="!String.IsEmpty(VideoPlayer.VideoResolution)"/>
+                    </include>
+                    <include content="Tag">
+                        <param name="label" value="$VAR[PlayerHdr]"/>
+                        <param name="visible" value="!String.IsEmpty(VideoPlayer.VideoResolution)"/>
+                    </include>
+                    <include content="Tag">
+                        <param name="label" value="$VAR[PlayerAudio]"/>
+                        <param name="visible" value="!String.IsEmpty(VideoPlayer.AudioCodec)"/>
+                    </include>
+                </control>
+                <control type="textbox">
+                    <left>232</left>
+                    <top>156</top>
+                    <width>900</width>
+                    <!-- three whole lines of font_body (38 px each): a taller box shows
+                         the top of a fourth line; longer plots scroll -->
+                    <height>116</height>
+                    <font>font_body</font>
+                    <textcolor>text_dim</textcolor>
+                    <autoscroll delay="6000" time="2000" repeat="8000">true</autoscroll>
+                    <label>$VAR[PlayerPlot]</label>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <include name="TrackPanel">
+        <param name="id"/>
+        <param name="button"/>
+        <param name="prefix"/>
+        <param name="heading"/>
+        <param name="settings"/>
+        <param name="left"/>
+        <param name="right"/>
+        <definition>
+            <control type="group">
+                <left>1256</left>
+                <top>442</top>
+                <width>600</width>
+                <height>488</height>
+                <visible>Control.HasFocus($PARAM[button]) | Control.HasFocus($PARAM[id])</visible>
+                <visible>!String.IsEmpty(Window(Home).Property(nc.$PARAM[prefix].rows))</visible>
+                <animation effect="fade" time="120">VisibleChange</animation>
+                <animation effect="slide" start="0,0" end="0,364" time="0" condition="String.IsEqual(Window(Home).Property(nc.$PARAM[prefix].rows),1)">Conditional</animation>
+                <animation effect="slide" start="0,0" end="0,312" time="0" condition="String.IsEqual(Window(Home).Property(nc.$PARAM[prefix].rows),2)">Conditional</animation>
+                <animation effect="slide" start="0,0" end="0,260" time="0" condition="String.IsEqual(Window(Home).Property(nc.$PARAM[prefix].rows),3)">Conditional</animation>
+                <animation effect="slide" start="0,0" end="0,208" time="0" condition="String.IsEqual(Window(Home).Property(nc.$PARAM[prefix].rows),4)">Conditional</animation>
+                <animation effect="slide" start="0,0" end="0,156" time="0" condition="String.IsEqual(Window(Home).Property(nc.$PARAM[prefix].rows),5)">Conditional</animation>
+                <animation effect="slide" start="0,0" end="0,104" time="0" condition="String.IsEqual(Window(Home).Property(nc.$PARAM[prefix].rows),6)">Conditional</animation>
+                <animation effect="slide" start="0,0" end="0,52" time="0" condition="String.IsEqual(Window(Home).Property(nc.$PARAM[prefix].rows),7)">Conditional</animation>
+                <control type="group">
+                    <height>124</height>
+                    <visible>String.IsEqual(Window(Home).Property(nc.$PARAM[prefix].rows),1)</visible>
+                    <include>DialogFrame</include>
+                </control>
+                <control type="group">
+                    <height>176</height>
+                    <visible>String.IsEqual(Window(Home).Property(nc.$PARAM[prefix].rows),2)</visible>
+                    <include>DialogFrame</include>
+                </control>
+                <control type="group">
+                    <height>228</height>
+                    <visible>String.IsEqual(Window(Home).Property(nc.$PARAM[prefix].rows),3)</visible>
+                    <include>DialogFrame</include>
+                </control>
+                <control type="group">
+                    <height>280</height>
+                    <visible>String.IsEqual(Window(Home).Property(nc.$PARAM[prefix].rows),4)</visible>
+                    <include>DialogFrame</include>
+                </control>
+                <control type="group">
+                    <height>332</height>
+                    <visible>String.IsEqual(Window(Home).Property(nc.$PARAM[prefix].rows),5)</visible>
+                    <include>DialogFrame</include>
+                </control>
+                <control type="group">
+                    <height>384</height>
+                    <visible>String.IsEqual(Window(Home).Property(nc.$PARAM[prefix].rows),6)</visible>
+                    <include>DialogFrame</include>
+                </control>
+                <control type="group">
+                    <height>436</height>
+                    <visible>String.IsEqual(Window(Home).Property(nc.$PARAM[prefix].rows),7)</visible>
+                    <include>DialogFrame</include>
+                </control>
+                <control type="group">
+                    <height>488</height>
+                    <visible>String.IsEqual(Window(Home).Property(nc.$PARAM[prefix].rows),8)</visible>
+                    <include>DialogFrame</include>
+                </control>
+                <include content="Kicker">
+                    <param name="label" value="$PARAM[heading]"/>
+                    <param name="left" value="24"/>
+                    <param name="top" value="18"/>
+                    <param name="width" value="552"/>
+                </include>
+                <control type="list" id="$PARAM[id]">
+                    <left>0</left>
+                    <top>56</top>
+                    <width>600</width>
+                    <height>416</height>
+                    <onup>noop</onup>
+                    <ondown>$PARAM[button]</ondown>
+                    <onleft>SetFocus($PARAM[left])</onleft>
+                    <onright>SetFocus($PARAM[right])</onright>
+                    <scrolltime>120</scrolltime>
+                    <itemlayout width="600" height="52">
+                <control type="label">
+                    <left>24</left>
+                    <width>440</width>
+                    <height>52</height>
+                    <aligny>center</aligny>
+                    <font>font_small</font>
+                    <textcolor>text_dim</textcolor>
+                    <selectedcolor>text_dim</selectedcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                    <visible>!String.IsEqual(ListItem.Property(current),1)</visible>
+                </control>
+                <control type="label">
+                    <left>24</left>
+                    <width>440</width>
+                    <height>52</height>
+                    <aligny>center</aligny>
+                    <font>font_small</font>
+                    <textcolor>accent</textcolor>
+                    <selectedcolor>accent</selectedcolor>
+                    <label>◢ $INFO[ListItem.Label]</label>
+                    <visible>String.IsEqual(ListItem.Property(current),1)</visible>
+                </control>
+                <control type="label">
+                    <left>456</left>
+                    <width>120</width>
+                    <height>52</height>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font_small</font>
+                    <textcolor>text_mute</textcolor>
+                    <selectedcolor>text_mute</selectedcolor>
+                    <label>$INFO[ListItem.Property(tag)]</label>
+                    <visible>true</visible>
+                </control>
+                    </itemlayout>
+                    <focusedlayout width="600" height="52">
+                <control type="image">
+                    <left>12</left>
+                    <width>576</width>
+                    <height>52</height>
+                    <texture border="12" colordiffuse="focus">ui/cut_btn_fill.png</texture>
+                    <visible>Control.HasFocus($PARAM[id])</visible>
+                </control>
+                <control type="label">
+                    <left>24</left>
+                    <width>440</width>
+                    <height>52</height>
+                    <aligny>center</aligny>
+                    <font>font_small</font>
+                    <textcolor>focus_text</textcolor>
+                    <selectedcolor>focus_text</selectedcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                    <visible>!String.IsEqual(ListItem.Property(current),1) + Control.HasFocus($PARAM[id])</visible>
+                </control>
+                <control type="label">
+                    <left>24</left>
+                    <width>440</width>
+                    <height>52</height>
+                    <aligny>center</aligny>
+                    <font>font_small</font>
+                    <textcolor>text_dim</textcolor>
+                    <selectedcolor>text_dim</selectedcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                    <visible>!String.IsEqual(ListItem.Property(current),1) + !Control.HasFocus($PARAM[id])</visible>
+                </control>
+                <control type="label">
+                    <left>24</left>
+                    <width>440</width>
+                    <height>52</height>
+                    <aligny>center</aligny>
+                    <font>font_small</font>
+                    <textcolor>focus_text</textcolor>
+                    <selectedcolor>focus_text</selectedcolor>
+                    <label>◢ $INFO[ListItem.Label]</label>
+                    <visible>String.IsEqual(ListItem.Property(current),1) + Control.HasFocus($PARAM[id])</visible>
+                </control>
+                <control type="label">
+                    <left>24</left>
+                    <width>440</width>
+                    <height>52</height>
+                    <aligny>center</aligny>
+                    <font>font_small</font>
+                    <textcolor>accent</textcolor>
+                    <selectedcolor>accent</selectedcolor>
+                    <label>◢ $INFO[ListItem.Label]</label>
+                    <visible>String.IsEqual(ListItem.Property(current),1) + !Control.HasFocus($PARAM[id])</visible>
+                </control>
+                <control type="label">
+                    <left>456</left>
+                    <width>120</width>
+                    <height>52</height>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font_small</font>
+                    <textcolor>focus_text</textcolor>
+                    <selectedcolor>focus_text</selectedcolor>
+                    <label>$INFO[ListItem.Property(tag)]</label>
+                    <visible>Control.HasFocus($PARAM[id])</visible>
+                </control>
+                <control type="label">
+                    <left>456</left>
+                    <width>120</width>
+                    <height>52</height>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font_small</font>
+                    <textcolor>text_mute</textcolor>
+                    <selectedcolor>text_mute</selectedcolor>
+                    <label>$INFO[ListItem.Property(tag)]</label>
+                    <visible>!Control.HasFocus($PARAM[id])</visible>
+                </control>
+                    </focusedlayout>
+                    <!-- rows come from the script, so no hidden row sits before a shown one (Kodi
+                         clicks a static list by position) -->
+                    <content>
+                        <include content="TrackItem">
+                            <param name="prefix" value="$PARAM[prefix]"/>
+                            <param name="n" value="1"/>
+                        </include>
+                        <include content="TrackItem">
+                            <param name="prefix" value="$PARAM[prefix]"/>
+                            <param name="n" value="2"/>
+                        </include>
+                        <include content="TrackItem">
+                            <param name="prefix" value="$PARAM[prefix]"/>
+                            <param name="n" value="3"/>
+                        </include>
+                        <include content="TrackItem">
+                            <param name="prefix" value="$PARAM[prefix]"/>
+                            <param name="n" value="4"/>
+                        </include>
+                        <include content="TrackItem">
+                            <param name="prefix" value="$PARAM[prefix]"/>
+                            <param name="n" value="5"/>
+                        </include>
+                        <include content="TrackItem">
+                            <param name="prefix" value="$PARAM[prefix]"/>
+                            <param name="n" value="6"/>
+                        </include>
+                        <include content="TrackItem">
+                            <param name="prefix" value="$PARAM[prefix]"/>
+                            <param name="n" value="7"/>
+                        </include>
+                        <include content="TrackItem">
+                            <param name="prefix" value="$PARAM[prefix]"/>
+                            <param name="n" value="8"/>
+                        </include>
+                        <include content="TrackItem">
+                            <param name="prefix" value="$PARAM[prefix]"/>
+                            <param name="n" value="9"/>
+                        </include>
+                        <include content="TrackItem">
+                            <param name="prefix" value="$PARAM[prefix]"/>
+                            <param name="n" value="10"/>
+                        </include>
+                        <include content="TrackItem">
+                            <param name="prefix" value="$PARAM[prefix]"/>
+                            <param name="n" value="11"/>
+                        </include>
+                        <include content="TrackItem">
+                            <param name="prefix" value="$PARAM[prefix]"/>
+                            <param name="n" value="12"/>
+                        </include>
+                        <include content="TrackItem">
+                            <param name="prefix" value="$PARAM[prefix]"/>
+                            <param name="n" value="13"/>
+                        </include>
+                        <include content="TrackItem">
+                            <param name="prefix" value="$PARAM[prefix]"/>
+                            <param name="n" value="14"/>
+                        </include>
+                    </content>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Row n of a track panel -->
+    <include name="TrackItem">
+        <param name="prefix"/>
+        <param name="n"/>
+        <definition>
+            <item>
+                <label>$INFO[Window(Home).Property(nc.$PARAM[prefix].$PARAM[n].label)]</label>
+                <property name="tag">$INFO[Window(Home).Property(nc.$PARAM[prefix].$PARAM[n].tag)]</property>
+                <property name="current">$INFO[Window(Home).Property(nc.$PARAM[prefix].$PARAM[n].current)]</property>
+                <onclick>NotifyAll(nightcity,row:$PARAM[prefix]:$PARAM[n])</onclick>
+                <visible>Integer.IsGreaterOrEqual(Window(Home).Property(nc.$PARAM[prefix].count),$PARAM[n])</visible>
+            </item>
+        </definition>
+    </include>
+
+    <!-- Video panel of the OSD, beside the track panels and in their look: what the video is
+         (codec, resolution, SDR/HDR, frame rate, aspect, bitrate when Kodi knows it) and a last
+         row that opens Kodi's video settings. Left and right focus the neighbouring buttons. -->
+    <include name="VideoPanel">
+        <param name="id"/>
+        <param name="button"/>
+        <param name="left"/>
+        <param name="right"/>
+        <definition>
+            <control type="group">
+                <left>1256</left>
+                <top>494</top>
+                <width>600</width>
+                <height>436</height>
+                <visible>Control.HasFocus($PARAM[button]) | Control.HasFocus($PARAM[id])</visible>
+                <animation effect="fade" time="120">VisibleChange</animation>
+                <!-- without a bitrate one row less, the panel keeps its bottom edge -->
+                <animation effect="slide" start="0,0" end="0,52" time="0" condition="String.IsEmpty(VideoPlayer.VideoBitrate)">Conditional</animation>
+                <control type="group">
+                    <height>436</height>
+                    <visible>!String.IsEmpty(VideoPlayer.VideoBitrate)</visible>
+                    <include>DialogFrame</include>
+                </control>
+                <control type="group">
+                    <height>384</height>
+                    <visible>String.IsEmpty(VideoPlayer.VideoBitrate)</visible>
+                    <include>DialogFrame</include>
+                </control>
+                <include content="Kicker">
+                    <param name="label" value="$LOCALIZE[31055]"/>
+                    <param name="left" value="24"/>
+                    <param name="top" value="18"/>
+                    <param name="width" value="552"/>
+                </include>
+                <!-- a grouplist ignores the left of its rows, so it is inset by the row margin; it
+                     also replaces the up and down of its rows with its own, and without an id of
+                     its own it takes a builtin (navigation 0) for wrapping around: a plain id -->
+                <control type="grouplist">
+                    <left>12</left>
+                    <top>56</top>
+                    <width>576</width>
+                    <height>364</height>
+                    <orientation>vertical</orientation>
+                    <itemgap>0</itemgap>
+                    <onup>noop</onup>
+                    <ondown>$PARAM[button]</ondown>
+                    <include content="VideoFact">
+                        <param name="key" value="$LOCALIZE[21445]"/>
+                        <param name="value" value="[UPPERCASE]$INFO[VideoPlayer.VideoCodec][/UPPERCASE]"/>
+                    </include>
+                    <include content="VideoFact">
+                        <param name="key" value="$LOCALIZE[169]"/>
+                        <param name="value" value="$VAR[PlayerResolution]$INFO[Player.Process(videowidth), · ,x]$INFO[Player.Process(videoheight)]"/>
+                    </include>
+                    <include content="VideoFact">
+                        <param name="key" value="$LOCALIZE[20474]"/>
+                        <param name="value" value="$VAR[PlayerHdr]"/>
+                    </include>
+                    <include content="VideoFact">
+                        <param name="key" value="$LOCALIZE[31230]"/>
+                        <param name="value" value="$INFO[Player.Process(videofps),, fps]"/>
+                    </include>
+                    <include content="VideoFact">
+                        <param name="key" value="$LOCALIZE[21374]"/>
+                        <param name="value" value="$INFO[VideoPlayer.VideoAspect]"/>
+                    </include>
+                    <include content="VideoFact">
+                        <param name="key" value="$LOCALIZE[623]"/>
+                        <param name="value" value="$INFO[VideoPlayer.VideoBitrate,, kbit/s]"/>
+                        <param name="visible" value="!String.IsEmpty(VideoPlayer.VideoBitrate)"/>
+                    </include>
+                    <control type="button" id="$PARAM[id]">
+                        <width>576</width>
+                        <height>52</height>
+                        <label>… $LOCALIZE[31139]</label>
+                        <font>font_small</font>
+                        <textoffsetx>12</textoffsetx>
+                        <aligny>center</aligny>
+                        <textcolor>text_dim</textcolor>
+                        <focusedcolor>focus_text</focusedcolor>
+                        <texturefocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</texturefocus>
+                        <texturenofocus/>
+                        <onclick>ActivateWindow(osdvideosettings)</onclick>
+                        <onleft>SetFocus($PARAM[left])</onleft>
+                        <onright>SetFocus($PARAM[right])</onright>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- One fact row of the video panel: key left, value right, track row size -->
+    <include name="VideoFact">
+        <param name="key"/>
+        <param name="value"/>
+        <param name="visible" default="true"/>
+        <definition>
+            <control type="group">
+                <width>576</width>
+                <height>52</height>
+                <visible>$PARAM[visible]</visible>
+                <control type="label">
+                    <left>12</left>
+                    <width>240</width>
+                    <height>52</height>
+                    <aligny>center</aligny>
+                    <font>font_small</font>
+                    <textcolor>text_mute</textcolor>
+                    <label>[LOWERCASE]$PARAM[key][/LOWERCASE]</label>
+                </control>
+                <control type="label">
+                    <left>252</left>
+                    <width>312</width>
+                    <height>52</height>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font_small</font>
+                    <textcolor>text</textcolor>
+                    <label>$PARAM[value]</label>
+                </control>
+            </control>
+        </definition>
+    </include>
+</includes>
