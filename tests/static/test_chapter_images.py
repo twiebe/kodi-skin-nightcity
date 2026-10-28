@@ -1,6 +1,6 @@
-"""Chapter row thumbnails: Kodi cuts them from local files and LAN shares only. For Jellyfin
-streams the OSD script puts the server's chapter images into nc.chapter.N (Home), N = Kodi's
-chapter number; chapters of other streams show as compact cards without an image."""
+"""Chapter row thumbnails: for Jellyfin streams the OSD script puts the server's chapter images
+into nc.chapter.N (Home), N = Kodi's chapter number. Without them the card shows Kodi's own
+thumbnail: Kodi cuts some from http streams too (seen on CoreELEC with Arctic Fuse 3)."""
 import sys
 
 from conftest import ROOT, parse
@@ -10,8 +10,7 @@ import nightcity  # noqa: E402
 
 SKIN = ROOT / '1080i'
 REMOTE = '!String.IsEmpty(Window(Home).Property(nc.chapters.remote))'
-COMPACT = (REMOTE + ' + String.IsEmpty(Window(Home).Property(nc.chapter.1))'
-           ' + String.IsEqual(ListItem.Property(ischapter),true)')
+SERVER = REMOTE + ' + !String.IsEmpty(Window(Home).Property(nc.chapter.1))'
 
 
 def _variable(name):
@@ -30,7 +29,7 @@ def _include(name):
 
 
 def test_streams_take_the_servers_images():
-    assert _variable('ChapterThumb') == [(REMOTE, '$VAR[ChapterServerThumb]'),
+    assert _variable('ChapterThumb') == [(SERVER, '$VAR[ChapterServerThumb]'),
                                          (None, '$INFO[ListItem.Art(thumb)]')]
 
 
@@ -49,17 +48,10 @@ def test_chapter_card_shows_the_chapter_thumb():
     assert images == ['$VAR[ChapterThumb]']
 
 
-def test_chapters_without_images_are_compact():
-    """A stream without server images: a short card with time and name instead of an empty
-    image frame. Bookmarks keep their card, Kodi takes their thumbnail from the picture."""
+def test_chapters_without_server_images_keep_kodis_card():
+    """No compact cards: a stream without server images keeps the 16:9 card with Kodi's own
+    thumbnail, which Kodi can cut from http streams too."""
     card = _include('ChapterCard').find('definition')
     groups = card.findall('control')
-    assert [g.findtext('visible') for g in groups] == ['!' + '[' + COMPACT + ']', COMPACT]
-    compact = groups[1]
-    cut = compact.find('include')
-    params = {p.get('name'): p.get('value') for p in cut.findall('param')}
-    assert cut.get('content') == 'CutCard'
-    assert (params['width'], params['height']) == ('320', '112')
-    assert 'image' not in params
-    labels = [c.findtext('label') for c in compact.iter('control') if c.get('type') == 'label']
-    assert labels == ['$INFO[ListItem.Label2]', '$INFO[ListItem.Label]']
+    assert len(groups) == 1 and groups[0].find('visible') is None
+    assert not [p for p in card.iter('param') if p.get('name') == 'height' and p.get('value') == '112']

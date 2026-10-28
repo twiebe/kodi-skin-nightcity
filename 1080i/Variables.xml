@@ -171,11 +171,11 @@
         <value condition="!String.IsEmpty(Player.Art(poster))">$INFO[Player.Art(poster)]</value>
         <value>$INFO[Player.Art(thumb)]</value>
     </variable>
-    <!-- chapter row (VideoOSDBookmarks.xml): Kodi cuts thumbnails from local files and LAN
-         shares only, for streams the OSD script puts the server's chapter images into
-         nc.chapter.N (nightcity.py set_chapter_thumbs) -->
+    <!-- chapter row (VideoOSDBookmarks.xml): for Jellyfin streams the OSD script puts the
+         server's chapter images into nc.chapter.N (nightcity.py set_chapter_thumbs); without them
+         Kodi's own thumbnail, which it cuts from some http streams too -->
     <variable name="ChapterThumb">
-        <value condition="!String.IsEmpty(Window(Home).Property(nc.chapters.remote))">$VAR[ChapterServerThumb]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(nc.chapters.remote)) + !String.IsEmpty(Window(Home).Property(nc.chapter.1))">$VAR[ChapterServerThumb]</value>
         <value>$INFO[ListItem.Art(thumb)]</value>
     </variable>
     <!-- Kodi cannot nest labels (nc.chapter.$INFO[...]): one value per chapter number, as many

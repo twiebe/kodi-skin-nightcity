@@ -1,5 +1,5 @@
 """Chapter row of http streams (VideoOSDBookmarks.xml): Kodi cuts no thumbnails from them. A
-Jellyfin stream shows the server's chapter images, another stream compact cards.
+Jellyfin stream shows the server's chapter images, another stream Kodi's own thumbnails.
 
 Puts the chapter clip of the track tests (tools/make_tracks_clip.py) into kodi-dev's Jellyfin
 movie library and switches its chapter image extraction on."""
@@ -114,15 +114,16 @@ def test_jellyfin_for_kodi_stream_shows_the_servers_chapter_images(home, chapter
         _stop()
 
 
-def test_stream_without_server_images_shows_compact_cards(home, chapter_clip):
+def test_stream_without_server_images_keeps_kodis_cards(home, chapter_clip):
     """The same clip from a path the script does not know (lower case, Jellyfin does not mind):
-    no images, compact cards."""
+    no server images, the 16:9 cards with Kodi's own thumbnail (Kodi cuts some from http
+    streams, seen on CoreELEC)."""
     key = seed()['admin']['api_key']
     try:
         _play('http://jellyfin:8096/videos/{0}/stream.mkv?static=true&api_key={1}'.format(chapter_clip, key))
         wait_for(REMOTE + ' + String.IsEmpty(Window(Home).Property(nc.chapter.1))')
         _chapter_row()
-        screenshot('chapters-compact')
+        screenshot('chapters-kodi-thumbs')
     finally:
         action('back', delay=1)
         _stop()
