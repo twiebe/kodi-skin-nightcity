@@ -43,13 +43,15 @@ def quick(home):
     closed()
 
 
-def test_home_held_opens_and_closes(quick):
-    press(hold=1500)
+@pytest.mark.parametrize('button', ['homepage', 'browser_home', 'home'])
+def test_home_held_opens_and_closes(quick, button):
+    """Home keys go by several names: IR remotes on CoreELEC are keyboards, some send home."""
+    press(button, hold=1500)
     wait_for(OPEN)
     wait_for('Control.HasFocus(1220)')
     time.sleep(0.5)
     screenshot('quick-menu')
-    press(hold=1500)
+    press(button, hold=1500)
     closed()
 
 

@@ -610,9 +610,11 @@ def test_home_keymap_long_press_opens_the_quick_menu():
     import xml.etree.ElementTree as ET
     root = ET.fromstring(nightcity.HOME_KEYMAP)
     held = [k for k in root.find('global/keyboard') if k.get('mod') == 'longpress']
-    assert [(k.tag, k.text) for k in held] == [('homepage', 'ActivateWindow(shutdownmenu)')]
+    assert [(k.tag, k.text) for k in held] == [(key, 'ActivateWindow(shutdownmenu)')
+                                               for key in ('homepage', 'browser_home', 'home')]
     short = [k for k in root.find('global/keyboard') if k.get('mod') is None]
-    assert [(k.tag, k.text) for k in short] == [('homepage', 'ActivateWindow(1160)')]
+    assert [(k.tag, k.text) for k in short] == [('homepage', 'ActivateWindow(1160)'),
+                                                ('browser_home', 'ActivateWindow(1160)')]
 
 
 def test_home_keymap_loads_before_the_users_own():
