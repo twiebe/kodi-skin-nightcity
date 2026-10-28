@@ -7,7 +7,9 @@
      the info page looks like Back to it when it looks before the chain window is gone, and it
      opened the page before again, over Home. The exit command it reads first. A chain over
      video then ends on the video, not on the OSD with its script, and nc_home_key (Timers.xml)
-     opens this dialog again a second after the manager ended. -->
+     opens this dialog again a second after the manager ended.
+     The links of the quick menu come through here too: they set nc.go to their target, which
+     opens after the dialogs are closed instead of the home tab. -->
 <window type="dialog" id="1160">
     <onload condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">SetProperty(nc.home.key,1,home)</onload>
     <onload condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">ClearProperty(nc.chain.return,home)</onload>
@@ -15,6 +17,12 @@
     <onload condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">Dialog.Close(1160,true)</onload>
     <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">Dialog.Close(all,true)</onload>
     <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">ActivateWindow(Home)</onload>
-    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">SetFocus(9101)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEmpty(Window(Home).Property(nc.go))">SetFocus(9101)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEqual(Window(Home).Property(nc.go),settings)">ClearProperty(nc.settings.group,home)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEqual(Window(Home).Property(nc.go),settings)">ActivateWindow(settings)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEqual(Window(Home).Property(nc.go),system)">SetProperty(nc.page,system,home)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEqual(Window(Home).Property(nc.go),system)">SetFocus(9105)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEqual(Window(Home).Property(nc.go),files)">ActivateWindow(FileManager)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">ClearProperty(nc.go,home)</onload>
     <controls/>
 </window>

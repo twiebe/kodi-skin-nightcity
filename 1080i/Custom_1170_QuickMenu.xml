@@ -226,23 +226,23 @@
                         <label>$LOCALIZE[5]</label>
                         <icon>ui/qm_settings.png</icon>
                         <onclick>Dialog.Close(1170,true)</onclick>
-                        <onclick>ClearProperty(nc.settings.group,home)</onclick>
-                        <onclick>ActivateWindow(settings)</onclick>
+                        <onclick>SetProperty(nc.go,settings,home)</onclick>
+                        <onclick>ActivateWindow(1160)</onclick>
                     </item>
                     <item>
                         <label>$LOCALIZE[31033]</label>
                         <icon>ui/qm_system.png</icon>
                         <onclick>Dialog.Close(1170,true)</onclick>
-                        <onclick>SetProperty(nc.page,system,home)</onclick>
-                        <onclick>ActivateWindow(Home)</onclick>
-                        <onclick>SetFocus(9105)</onclick>
+                        <onclick>SetProperty(nc.go,system,home)</onclick>
+                        <onclick>ActivateWindow(1160)</onclick>
                     </item>
                     <item>
                         <!-- Files, the file manager: its own name does not fit the tile -->
                         <label>$LOCALIZE[744]</label>
                         <icon>ui/qm_files.png</icon>
                         <onclick>Dialog.Close(1170,true)</onclick>
-                        <onclick>ActivateWindow(FileManager)</onclick>
+                        <onclick>SetProperty(nc.go,files,home)</onclick>
+                        <onclick>ActivateWindow(1160)</onclick>
                     </item>
                 </content>
             </control>

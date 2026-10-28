@@ -177,6 +177,33 @@ def test_settings_link(quick):
     action('back', delay=1)
 
 
+def _over_the_info_page():
+    builtin('ActivateWindow(movieinformation,videodb://movies/titles/{}/,return)'.format(MOVIE_ID))
+    wait_for('Window.IsActive(movieinformation)')
+    time.sleep(0.5)
+    press(hold=1500)
+    wait_for(OPEN)
+    wait_for('Control.HasFocus(1220)')
+    time.sleep(0.3)
+
+
+@pytest.mark.parametrize('item, target', [
+    (0, 'Window.IsActive(settings)'),
+    (1, 'Window.IsActive(home) + String.IsEqual(Window(Home).Property(nc.page),system) + Control.HasFocus(9105)'),
+    (2, 'Window.IsActive(filemanager)')])
+def test_links_over_the_info_page(quick, item, target):
+    """The info page is a modal dialog: the link closes it, the target window opens in front."""
+    _over_the_info_page()
+    builtin('SetFocus(1230,{},absolute)'.format(item))
+    wait_for('Integer.IsEqual(Container(1230).CurrentItem,{})'.format(item + 1))
+    action('select')
+    closed()
+    wait_for(target + ' + !Window.IsActive(movieinformation)', timeout=5)
+    assert not info('Window(Home).Property(nc.go)')['Window(Home).Property(nc.go)']
+    if item != 1:
+        action('back', delay=1)
+
+
 def test_over_the_player(quick):
     rpc('Player.Open', {'item': {'movieid': MOVIE_ID}})
     try:
