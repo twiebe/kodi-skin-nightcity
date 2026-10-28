@@ -59,10 +59,26 @@ def on_page(control, page):
     return 'Property(nc.page),{})'.format(page) in visible(control)
 
 
+def names_page(condition, page):
+    return 'Property(nc.page),{})'.format(page) in (condition or '')
+
+
+def page_fade(control, page):
+    """The fade-in that runs when `page` comes up: the Visible animation, or for a block that two
+    pages share (it stays visible between them) the Conditional animation of that page."""
+    for anim in animations(control, 'Conditional'):
+        if names_page(anim.get('condition'), page) and not [
+                p for p in PAGES if p != page and names_page(anim.get('condition'), p)]:
+            for kind_, start, end, delay, time in effects(anim):
+                if kind_ == 'fade' and start == '0':
+                    return delay, time
+    return fade_in(control, 'Visible')
+
+
 def page_blocks(page, skin=None):
     home = load('Home.xml', skin)
     return [(c, anc) for c, anc in walk(home.find('controls'))
-            if on_page(c, page) and fade_in(c, 'Visible')]
+            if on_page(c, page) and page_fade(c, page)]
 
 
 def test_fade_timings_in_one_place():
@@ -82,12 +98,12 @@ def test_home_page_builds_up_block_by_block(page):
     """Each page fades in in at least three steps (hero head, hero rest, rows); the rows come
     last."""
     blocks = page_blocks(page)
-    delays = {fade_in(c, 'Visible')[0] for c, _ in blocks}
+    delays = {page_fade(c, page)[0] for c, _ in blocks}
     assert len(delays) >= 3, (page, delays)
     rows = next(c for c, _ in blocks if c.get('id') == ROWS[page])
-    assert fade_in(rows, 'Visible')[0] == max(delays)
+    assert page_fade(rows, page)[0] == max(delays)
     for c, _ in blocks:
-        delay, time = fade_in(c, 'Visible')
+        delay, time = page_fade(c, page)
         assert delay + time <= 350, (page, c.get('id'), delay, time)
 
 
@@ -95,7 +111,7 @@ def test_home_page_builds_up_block_by_block(page):
 def test_rows_without_spotlight_come_first(page):
     """Without a spotlight the rows are the page: they start at once."""
     rows = next(c for c, _ in page_blocks(page, SPOTLIGHT_OFF) if c.get('id') == ROWS[page])
-    assert fade_in(rows, 'Visible')[0] == 0
+    assert page_fade(rows, page)[0] == 0
 
 
 @pytest.mark.parametrize('page', PAGES)
@@ -113,6 +129,37 @@ def home_and_settings_animations():
             for kind in ('Visible', 'Hidden', 'WindowOpen', 'WindowClose'):
                 for anim in animations(c, kind):
                     yield name, c, ancestors, kind, anim
+            # the page fades of shared blocks; other Conditional animations are not page fades
+            for anim in animations(c, 'Conditional'):
+                if 'nc.page' in (anim.get('condition') or ''):
+                    yield name, c, ancestors, 'Conditional', anim
+
+
+@pytest.mark.parametrize('page', PAGES)
+def test_shared_blocks_fade_in_on_every_page_change(page):
+    """A block on two pages (the movie hero of home and movies) stays visible when the menu
+    switches between them, so Kodi would not run its Visible animation and the hero would just
+    stand, even with the same title on both pages. It fades in on a Conditional animation per
+    page instead, which starts whenever that page comes up, and has no Visible fade on top (the
+    two would multiply)."""
+    for c, _ in walk(load('Home.xml').find('controls')):
+        pages = [p for p in PAGES if on_page(c, p)]
+        if page not in pages or len(pages) < 2 or not page_fade(c, page):
+            continue
+        conditional = [a for a in animations(c, 'Conditional') if names_page(a.get('condition'), page)
+                       and not [p for p in pages if p != page and names_page(a.get('condition'), p)]]
+        assert conditional, (page, c.get('id'), 'no fade of its own for this page')
+        assert all(a.get('reversible') == 'false' for a in conditional), (page, c.get('id'))
+        assert not fade_in(c, 'Visible'), (page, c.get('id'))
+
+
+def test_movie_hero_fades_on_both_of_its_pages():
+    """The movie hero (poster, text, buttons) is the shared block of home and movies."""
+    home = load('Home.xml')
+    shared = [c for c, _ in walk(home.find('controls')) if on_page(c, 'home') and on_page(c, 'movies')
+              and animations(c, 'Conditional')]
+    assert len(shared) >= 3, [c.get('id') for c in shared]
+    assert '9300' in [c.get('id') for c in shared]
 
 
 def test_page_fades_do_not_hold_focus():
@@ -163,7 +210,7 @@ def test_page_fades_on_home_open():
         for c, _ in page_blocks(page):
             if is_backdrop(c):
                 continue
-            assert fade_in(c, 'WindowOpen') == fade_in(c, 'Visible'), (page, c.get('id'))
+            assert fade_in(c, 'WindowOpen') == page_fade(c, page), (page, c.get('id'))
 
 
 @pytest.mark.parametrize('name', SETTINGS_WINDOWS)

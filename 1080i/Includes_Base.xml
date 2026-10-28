@@ -73,6 +73,35 @@
         </definition>
     </include>
 
+    <!-- PageFade for a block that two pages share (the movie hero of home and movies): it stays
+         visible when the menu switches between them, so Kodi would not run a Visible animation
+         and the block would just stand, even with the same title on both pages. A Conditional
+         animation per page (page1, page2) starts whenever that page comes up instead; not
+         reversible, so leaving a page does not fade the block out. No Visible animation on
+         top: coming from a third page both would run and multiply. -->
+    <include name="SharedPageFade">
+        <param name="delay" default="0"/>
+        <param name="page1"/>
+        <param name="page2"/>
+        <definition>
+            <animation type="Conditional" condition="[$PARAM[page1]] + !Player.HasVideo" reversible="false">
+                <effect type="fade" start="100" end="100" time="FadeTime"/>
+                <effect type="fade" start="0" end="100" time="FadeTime" delay="$PARAM[delay]"/>
+                <effect type="slide" start="0,10" end="0,0" time="FadeTime" delay="$PARAM[delay]" tween="cubic" easing="out"/>
+            </animation>
+            <animation type="Conditional" condition="[$PARAM[page2]] + !Player.HasVideo" reversible="false">
+                <effect type="fade" start="100" end="100" time="FadeTime"/>
+                <effect type="fade" start="0" end="100" time="FadeTime" delay="$PARAM[delay]"/>
+                <effect type="slide" start="0,10" end="0,0" time="FadeTime" delay="$PARAM[delay]" tween="cubic" easing="out"/>
+            </animation>
+            <animation type="WindowOpen" condition="!Player.HasVideo">
+                <effect type="fade" start="100" end="100" time="FadeTime"/>
+                <effect type="fade" start="0" end="100" time="FadeTime" delay="$PARAM[delay]"/>
+                <effect type="slide" start="0,10" end="0,0" time="FadeTime" delay="$PARAM[delay]" tween="cubic" easing="out"/>
+            </animation>
+        </definition>
+    </include>
+
     <!-- The fanart behind Home fades over to the next one (page change, hero and rows) -->
     <include name="BackdropFade">
         <animation effect="fade" start="0" end="100" time="FadeTime" condition="!Player.HasVideo">Visible</animation>
