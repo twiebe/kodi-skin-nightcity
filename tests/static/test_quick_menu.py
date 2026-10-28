@@ -114,11 +114,11 @@ def test_icon_next_to_the_clock_opens_it():
     home = controls(load('Home.xml'))
     anchor = home['9109']
     assert actions(anchor) == [('', 'ActivateWindow(1170)')]
-    assert anchor.findtext('onleft') == '9100'
+    assert anchor.findtext('onleft') == '9105'
     assert home['9100'].findtext('onright') == '9109'
     row = home['9190']
     assert row.get('type') == 'grouplist' and row.findtext('align') == 'right'
-    assert [c.get('id') for c in row.findall('control')][0] == '9109'
+    assert row.findall('control')[0].find('control').get('id') == '9109'
 
 
 def test_power_page_is_gone():
@@ -134,10 +134,23 @@ def test_weather_beside_the_clock():
     row = controls(load('Home.xml'))['9190']
     parts = row.findall('control')
     assert [(c.get('type'), c.findtext('visible')) for c in parts] == [
-        ('radiobutton', None), ('image', 'Weather.IsFetched'), ('label', 'Weather.IsFetched'), ('label', None)]
+        ('group', None), ('image', 'Weather.IsFetched'), ('label', 'Weather.IsFetched'), ('label', None)]
     icon, temperature, clock = parts[1:]
     assert icon.find('texture').text == 'ui/qm_weather.png'
     assert icon.find('texture').get('colordiffuse') == clock.findtext('textcolor')
     assert temperature.findtext('label') == '$INFO[Weather.Temperature]'
     assert temperature.findtext('font') == clock.findtext('font') == 'font_num'
     assert clock.findtext('label') == '$INFO[System.Time]'
+
+
+def test_top_menu_wraps_around():
+    """Left on home reaches the icon next to the clock, right on the icon home again; left on the
+    icon goes to system, the entry beside it, not to the page that had the focus last."""
+    from focus import Page, State
+    page = Page('Home.xml')
+    hidden = {'Skin.HasSetting(nc.menu.hide.{})'.format(n): False for n in ('movies', 'shows', 'search')}
+    state = State(extra=hidden)
+    assert page.move('9101', 'onleft', state)[0] == '9109'
+    assert page.move('9109', 'onright', state)[0] == '9101'
+    assert page.move('9109', 'onleft', state)[0] == '9105'
+    assert page.move('9105', 'onright', state)[0] == '9109'
