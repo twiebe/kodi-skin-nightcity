@@ -107,26 +107,34 @@
             <!-- a grouplist hands its own left and right to its first and last entry -->
             <onleft>9100</onleft>
             <onright>noop</onright>
-            <!-- the icon is the radio texture: a button has no room for an icon -->
-            <control type="radiobutton" id="9109">
+            <!-- in a group of its own: the grouplist sets left and right of its entries to their
+                 neighbours, here the weather and the clock, which cannot take the focus -->
+            <control type="group">
                 <width>56</width>
                 <height>44</height>
-                <label/>
-                <texturefocus border="12" colordiffuse="accent">ui/cut_btn_fill.png</texturefocus>
-                <texturenofocus/>
-                <radioposx>12</radioposx>
-                <radioposy>6</radioposy>
-                <radiowidth>32</radiowidth>
-                <radioheight>32</radioheight>
-                <textureradioonfocus colordiffuse="focus_text">ui/qm_anchor.png</textureradioonfocus>
-                <textureradioonnofocus colordiffuse="text_mute">ui/qm_anchor.png</textureradioonnofocus>
-                <textureradioofffocus colordiffuse="focus_text">ui/qm_anchor.png</textureradioofffocus>
-                <textureradiooffnofocus colordiffuse="text_mute">ui/qm_anchor.png</textureradiooffnofocus>
-                <onclick>ActivateWindow(1170)</onclick>
-                <onleft>9100</onleft>
-                <onright>noop</onright>
-                <onup>noop</onup>
-                <ondown>9100</ondown>
+                <!-- the icon is the radio texture: a button has no room for an icon -->
+                <control type="radiobutton" id="9109">
+                    <width>56</width>
+                    <height>44</height>
+                    <label/>
+                    <texturefocus border="12" colordiffuse="accent">ui/cut_btn_fill.png</texturefocus>
+                    <texturenofocus/>
+                    <radioposx>12</radioposx>
+                    <radioposy>6</radioposy>
+                    <radiowidth>32</radiowidth>
+                    <radioheight>32</radioheight>
+                    <textureradioonfocus colordiffuse="focus_text">ui/qm_anchor.png</textureradioonfocus>
+                    <textureradioonnofocus colordiffuse="text_mute">ui/qm_anchor.png</textureradioonnofocus>
+                    <textureradioofffocus colordiffuse="focus_text">ui/qm_anchor.png</textureradioofffocus>
+                    <textureradiooffnofocus colordiffuse="text_mute">ui/qm_anchor.png</textureradiooffnofocus>
+                    <onclick>ActivateWindow(1170)</onclick>
+                    <!-- system beside it, not the menu entry that had the focus last; right wraps
+                         around to home -->
+                    <onleft>9105</onleft>
+                    <onright>9101</onright>
+                    <onup>noop</onup>
+                    <ondown>9100</ondown>
+                </control>
             </control>
             <!-- the weather of the quick menu, when a weather service is set up -->
             <control type="image">
@@ -800,7 +808,8 @@
             <height>44</height>
             <orientation>horizontal</orientation>
             <itemgap>0</itemgap>
-            <onleft>noop</onleft>
+            <!-- the menu wraps around over the icon next to the clock -->
+            <onleft>9109</onleft>
             <onright>9109</onright>
             <onup>noop</onup>
             <!-- a page without spotlight starts with its rows -->
