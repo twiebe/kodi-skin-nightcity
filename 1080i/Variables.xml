@@ -421,6 +421,11 @@
         <value condition="Integer.IsLess(Container(5100).ListItem.Episode,10)">E0$INFO[Container(5100).ListItem.Episode]</value>
         <value>E$INFO[Container(5100).ListItem.Episode]</value>
     </variable>
+    <!-- E05 before the title of an episode card -->
+    <variable name="EpisodeCardNum">
+        <value condition="Integer.IsLess(ListItem.Episode,10)">E0$INFO[ListItem.Episode]</value>
+        <value>E$INFO[ListItem.Episode]</value>
+    </variable>
     <variable name="SeasonTabLabel">
         <value condition="Integer.IsLess(ListItem.Season,0)">$LOCALIZE[31133]</value>
         <value condition="Integer.IsEqual(ListItem.Season,0)">$LOCALIZE[31134]</value>
