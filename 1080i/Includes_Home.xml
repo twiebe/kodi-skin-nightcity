@@ -188,12 +188,19 @@
         <param name="plotwidth" default="980"/>
         <param name="page" default="true"/>
         <param name="fade" default="false"/>
+        <param name="shared" default="false"/>
+        <param name="page1" default=""/>
+        <param name="page2" default=""/>
         <definition>
             <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <visible>[$PARAM[page]] + [$PARAM[poster]]</visible>
-                <include content="PageFade" condition="$PARAM[fade]"/>
+                <include content="PageFade" condition="$PARAM[fade] + !$PARAM[shared]"/>
+                <include content="SharedPageFade" condition="$PARAM[fade] + $PARAM[shared]">
+                    <param name="page1" value="$PARAM[page1]"/>
+                    <param name="page2" value="$PARAM[page2]"/>
+                </include>
                 <include content="CutCard">
                     <param name="width" value="280"/>
                     <param name="height" value="420"/>
@@ -215,8 +222,13 @@
             <control type="group">
                 <left>$PARAM[shift]</left>
                 <visible>$PARAM[page]</visible>
-                <include content="PageFade" condition="$PARAM[fade]">
+                <include content="PageFade" condition="$PARAM[fade] + !$PARAM[shared]">
                     <param name="delay" value="FadeStep1"/>
+                </include>
+                <include content="SharedPageFade" condition="$PARAM[fade] + $PARAM[shared]">
+                    <param name="delay" value="FadeStep1"/>
+                    <param name="page1" value="$PARAM[page1]"/>
+                    <param name="page2" value="$PARAM[page2]"/>
                 </include>
                 <include content="Kicker">
                     <param name="id" value="$PARAM[kickerid]"/>
@@ -395,7 +407,8 @@
 
     <!-- Hero of the home and movies pages: the movie spotlight, each page can switch it off -->
     <!-- Hero blocks stand side by side at window level, each with the page condition, and fade
-         in one after the other (PageFade): poster, text, then the buttons -->
+         in one after the other: poster, text, then the buttons. They stay visible between home
+         and movies, so they fade on each of the two pages (SharedPageFade). -->
     <include name="MovieHero">
         <include content="HeroBody">
             <param name="item" value="Container(9000).ListItem"/>
@@ -408,12 +421,17 @@
             <param name="tech" value="true"/>
             <param name="page" value="[[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + !String.IsEqual(Skin.String(SpotlightSource),off)] | [String.IsEqual(Window(Home).Property(nc.page),movies) + !String.IsEqual(Skin.String(nc.movies.spotlight),off)]"/>
             <param name="fade" value="true"/>
+            <param name="shared" value="true"/>
+            <param name="page1" value="[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)]"/>
+            <param name="page2" value="String.IsEqual(Window(Home).Property(nc.page),movies)"/>
         </include>
         <!-- 9300: the movie hero is on screen -->
         <control type="group" id="9300">
             <visible>[[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + !String.IsEqual(Skin.String(SpotlightSource),off)] | [String.IsEqual(Window(Home).Property(nc.page),movies) + !String.IsEqual(Skin.String(nc.movies.spotlight),off)]</visible>
-            <include content="PageFade">
+            <include content="SharedPageFade">
                 <param name="delay" value="FadeStep2"/>
+                <param name="page1" value="[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)]"/>
+                <param name="page2" value="String.IsEqual(Window(Home).Property(nc.page),movies)"/>
             </include>
             <!-- the buttons as Kodi sees them (SpotlightButton): one-item lists of the title -->
             <control type="group" id="9050">
