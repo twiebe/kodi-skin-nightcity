@@ -222,10 +222,8 @@
     <!-- What plays, above the seek line: poster, kicker, title, badges and a short plot. The text
          column ends left of the OSD track panels. -->
     <!-- Card of the chapter row (VideoOSDBookmarks.xml): the chapter's thumbnail, its name and
-         start time; a bookmark shows its own thumbnail. Kodi cuts chapter thumbnails from
-         local files and LAN shares only: for Jellyfin streams the server's chapter images
-         (ChapterThumb), chapters of streams without them show as a compact card with start
-         time and name. -->
+         start time; a bookmark shows its own thumbnail. For Jellyfin streams the server's
+         chapter images, else Kodi's own (ChapterThumb). -->
     <include name="ChapterCard">
         <param name="focused" default="false"/>
         <param name="dim" default="false"/>
@@ -233,7 +231,6 @@
             <control type="group">
                 <left>24</left>
                 <top>34</top>
-                <visible>![!String.IsEmpty(Window(Home).Property(nc.chapters.remote)) + String.IsEmpty(Window(Home).Property(nc.chapter.1)) + String.IsEqual(ListItem.Property(ischapter),true)]</visible>
                 <include content="CutCard">
                     <param name="width" value="320"/>
                     <param name="height" value="180"/>
@@ -269,38 +266,6 @@
                     <textcolor>text_mute</textcolor>
                     <label>$INFO[ListItem.Label2]</label>
                 </control>
-            </control>
-            <control type="group">
-                <left>24</left>
-                <top>34</top>
-                <visible>!String.IsEmpty(Window(Home).Property(nc.chapters.remote)) + String.IsEmpty(Window(Home).Property(nc.chapter.1)) + String.IsEqual(ListItem.Property(ischapter),true)</visible>
-                <include content="CutCard">
-                    <param name="width" value="320"/>
-                    <param name="height" value="112"/>
-                    <param name="mask" value="ui/mask_320x112.png"/>
-                    <param name="glowwidth" value="368"/>
-                    <param name="glowheight" value="160"/>
-                    <param name="focused" value="$PARAM[focused]"/>
-                    <param name="dim" value="$PARAM[dim]"/>
-                    <control type="label">
-                        <left>16</left>
-                        <top>14</top>
-                        <width>288</width>
-                        <height>34</height>
-                        <font>font_num</font>
-                        <textcolor>text_mute</textcolor>
-                        <label>$INFO[ListItem.Label2]</label>
-                    </control>
-                    <control type="label">
-                        <left>16</left>
-                        <top>56</top>
-                        <width>288</width>
-                        <height>40</height>
-                        <font>font_small</font>
-                        <textcolor>text</textcolor>
-                        <label>$INFO[ListItem.Label]</label>
-                    </control>
-                </include>
             </control>
         </definition>
     </include>
