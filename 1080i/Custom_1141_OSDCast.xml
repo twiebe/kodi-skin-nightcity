@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Cast and crew row during playback: Down from the chapter row (VideoOSDBookmarks.xml) opens
+     it, Up from the tabs or Back returns to the chapter row. Tabs cast | crew switch on OK. The
+     focused person's name, role and short biography sit above the row; the biography loads in
+     the hidden list 6599 once the focus rested (nc_osd_bio, Timers.xml). OK on a person closes
+     the OSD and opens the person's page in TMDb Helper's window manager over the running video;
+     "close all" or Back past the first page returns to the video. Playback keeps running. -->
+<window type="dialog" id="1141">
+    <depth>DepthOSD</depth>
+    <defaultcontrol always="true">6501</defaultcontrol>
+    <onload>ClearProperty(nc.osd.credits,home)</onload>
+    <onload>ClearProperty(nc.osd.bio.id,home)</onload>
+    <onload>ClearProperty(nc.osd.bio.pending,home)</onload>
+    <onload>ClearProperty(nc.osd.click,home)</onload>
+    <animation effect="fade" time="150">WindowOpen</animation>
+    <animation effect="fade" time="150">WindowClose</animation>
+    <controls>
+        <control type="image">
+            <left>0</left>
+            <top>200</top>
+            <width>1920</width>
+            <height>880</height>
+            <texture colordiffuse="scrim">ui/fade_b.png</texture>
+        </control>
+
+        <!-- the focused person -->
+        <control type="group">
+            <visible>Integer.IsGreater(Container(6501).NumItems,0)</visible>
+            <include content="Kicker">
+                <param name="label" value="$INFO[Container(6501).ListItem.Label2]"/>
+                <param name="left" value="64"/>
+                <param name="top" value="210"/>
+                <param name="width" value="1792"/>
+            </include>
+            <control type="label">
+                <left>64</left>
+                <top>246</top>
+                <width>1792</width>
+                <height>60</height>
+                <font>font_title</font>
+                <textcolor>text</textcolor>
+                <label>$INFO[Container(6501).ListItem.Label]</label>
+            </control>
+            <control type="textbox">
+                <left>64</left>
+                <top>316</top>
+                <width>1500</width>
+                <height>120</height>
+                <font>font_body</font>
+                <textcolor>text_dim</textcolor>
+                <autoscroll delay="6000" time="3000" repeat="6000">true</autoscroll>
+                <label>$INFO[Container(6599).ListItem.Plot]</label>
+                <visible>String.IsEqual(Container(6599).ListItem.Property(tmdb_id),Container(6501).ListItem.Property(tmdb_id))</visible>
+            </control>
+        </control>
+
+        <control type="grouplist" id="6520">
+            <left>54</left>
+            <top>456</top>
+            <width>1200</width>
+            <height>44</height>
+            <orientation>horizontal</orientation>
+            <itemgap>8</itemgap>
+            <onup>Dialog.Close(1141)</onup>
+            <ondown>6501</ondown>
+            <include content="CreditsTab">
+                <param name="id" value="6521"/>
+                <param name="label" value="$LOCALIZE[31124]"/>
+                <param name="property" value="nc.osd.credits"/>
+                <param name="value" value="cast"/>
+                <param name="active" value="String.IsEmpty(Window(Home).Property(nc.osd.credits)) | String.IsEqual(Window(Home).Property(nc.osd.credits),cast)"/>
+                <param name="list" value="6501"/>
+            </include>
+            <include content="CreditsTab">
+                <param name="id" value="6522"/>
+                <param name="label" value="$LOCALIZE[31300]"/>
+                <param name="property" value="nc.osd.credits"/>
+                <param name="value" value="crew"/>
+                <param name="active" value="String.IsEqual(Window(Home).Property(nc.osd.credits),crew)"/>
+                <param name="list" value="6501"/>
+            </include>
+        </control>
+        <control type="label">
+            <left>1456</left>
+            <top>460</top>
+            <width>400</width>
+            <align>right</align>
+            <height>34</height>
+            <font>font_num</font>
+            <textcolor>accent2</textcolor>
+            <label>$INFO[Container(6501).CurrentItem]/$INFO[Container(6501).NumItems]</label>
+            <visible>Integer.IsGreater(Container(6501).NumItems,0)</visible>
+        </control>
+
+        <control type="list" id="6501">
+            <include content="TmdbStaleFade">
+                <param name="list" value="6501"/>
+            </include>
+            <left>40</left>
+            <top>500</top>
+            <width>1880</width>
+            <height>340</height>
+            <orientation>horizontal</orientation>
+            <scrolltime tween="quadratic">200</scrolltime>
+            <preloaditems>2</preloaditems>
+            <onup>6520</onup>
+            <ondown>noop</ondown>
+            <onleft>noop</onleft>
+            <onright>noop</onright>
+            <!-- the chain starts first, then the OSD closes; never while a list loads (never two
+                 interpreters starting at once) -->
+            <include content="ChainClick">
+                <param name="type" value="person"/>
+                <param name="id" value="$INFO[ListItem.Property(tmdb_id)]"/>
+                <param name="condition" value="!Container(6501).IsUpdating + !Container(6599).IsUpdating"/>
+            </include>
+            <onclick condition="!Container(6501).IsUpdating + !Container(6599).IsUpdating + [!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) | String.IsEmpty(Window(Home).Property(nc.chain.claim))]">Dialog.Close(1141)</onclick>
+            <onclick condition="!Container(6501).IsUpdating + !Container(6599).IsUpdating + [!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) | String.IsEmpty(Window(Home).Property(nc.chain.claim))]">Dialog.Close(videobookmarks)</onclick>
+            <onclick condition="!Container(6501).IsUpdating + !Container(6599).IsUpdating + [!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) | String.IsEmpty(Window(Home).Property(nc.chain.claim))]">Dialog.Close(videoosd)</onclick>
+            <!-- a click while the biography loads waits for it (nc_osd_click, Timers.xml), as does
+                 one while the row itself reloads: it does, a second or so after playback started,
+                 when the library takes the playing title's new state -->
+            <onclick condition="Container(6501).IsUpdating | Container(6599).IsUpdating">SetProperty(nc.osd.click,$INFO[ListItem.Property(tmdb_id)],home)</onclick>
+            <onclick>noop</onclick>
+            <itemlayout width="188" height="340">
+                <include content="CastCard">
+                    <param name="dim" value="Control.HasFocus(6501)"/>
+                </include>
+            </itemlayout>
+            <focusedlayout width="188" height="340">
+                <include content="CastCard">
+                    <param name="focused" value="Control.HasFocus(6501)"/>
+                </include>
+            </focusedlayout>
+            <content target="videos">$VAR[OSDCreditsPath]</content>
+        </control>
+
+        <!-- Up from the tabs: back to the chapter row -->
+        <include content="LevelHint">
+            <param name="id" value="6590"/>
+            <param name="key" value="↑"/>
+            <param name="label" value="$VAR[PlayerChaptersLevel]"/>
+            <param name="top" value="140"/>
+        </include>
+
+        <!-- biography source: off screen but visible, a hidden list never loads -->
+        <control type="list" id="6599">
+            <left>-4000</left>
+            <top>0</top>
+            <width>10</width>
+            <height>10</height>
+            <itemlayout width="10" height="10"/>
+            <focusedlayout width="10" height="10"/>
+            <content target="videos">$VAR[OSDBioPath]</content>
+        </control>
+    </controls>
+</window>

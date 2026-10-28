@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<timers>
+    <!-- Runs for a second after the spotlight was moved by hand. Its autoscroll condition is
+         false meanwhile, which resets Kodi's autoscroll delay. -->
+    <timer>
+        <name>nc_spot_hold</name>
+        <description>Hold the spotlight autoscroll after a manual move</description>
+        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_spot_hold),1)</stop>
+    </timer>
+    <!-- Runs while the search page is open: its TMDb tv row loads two seconds after the movie row,
+         two TMDb Helper searches starting at once crash Kodi -->
+    <timer>
+        <name>nc_search_page</name>
+        <description>Stagger the TMDb search rows</description>
+        <start reset="true">String.IsEqual(Window(Home).Property(nc.page),search)</start>
+        <stop>!String.IsEqual(Window(Home).Property(nc.page),search)</stop>
+    </timer>
+    <!-- Run while a home page is shown: its TMDb rows load 2 s after it came up
+         (Includes_Sections.xml TmdbTrending*), never next to Home's script or another page's -->
+    <timer>
+        <name>nc_home_page</name>
+        <description>Delay the TMDb rows of the home page</description>
+        <start reset="true">Window.IsActive(home) + [String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)]</start>
+        <stop>!Window.IsActive(home) | ![String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)]</stop>
+    </timer>
+    <timer>
+        <name>nc_movies_page</name>
+        <description>Delay the TMDb rows of the movies page</description>
+        <start reset="true">Window.IsActive(home) + String.IsEqual(Window(Home).Property(nc.page),movies)</start>
+        <stop>!Window.IsActive(home) | !String.IsEqual(Window(Home).Property(nc.page),movies)</stop>
+    </timer>
+    <timer>
+        <name>nc_shows_page</name>
+        <description>Delay the TMDb rows of the shows page</description>
+        <start reset="true">Window.IsActive(home) + String.IsEqual(Window(Home).Property(nc.page),shows)</start>
+        <stop>!Window.IsActive(home) | !String.IsEqual(Window(Home).Property(nc.page),shows)</stop>
+    </timer>
+    <!-- Starts the startup script a second after the Startup screen came up: Kodi starts the
+         service add-ons together with that window, and interpreters starting at the same moment
+         crash Kodi -->
+    <timer>
+        <name>nc_startup_script</name>
+        <description>Run the startup script once the services are under way</description>
+        <start reset="true">Window.IsActive(startup) + String.IsEmpty(Window(Home).Property(nc.service))</start>
+        <stop>!Window.IsActive(startup) | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_startup_script),1)</stop>
+        <onstop condition="Window.IsActive(startup) + String.IsEmpty(Window(Home).Property(nc.service))">RunScript(special://skin/scripts/nightcity.py,service,startup)</onstop>
+    </timer>
+    <!-- Runs while the Startup screen is up. Hands over to Home once the startup script is done
+         (nc.startup.ready) and the screen was up for 4 s, after 10 s in any case. Waiting for the
+         script also keeps its interpreter from starting next to Home's. -->
+    <timer>
+        <name>nc_startup</name>
+        <description>Hand over from the Startup screen to Home</description>
+        <start reset="true">Window.IsActive(startup)</start>
+        <stop>!Window.IsActive(startup) | [!String.IsEmpty(Window(Home).Property(nc.startup.ready)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_startup),4)] | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_startup),10)</stop>
+        <onstop condition="Window.IsActive(startup)">ReplaceWindow(Home)</onstop>
+    </timer>
+    <!-- The Home key in a TMDb chain (Custom_1160_HomeKey.xml): Home, whose rows start plugins,
+         a second after the manager ended -->
+    <timer>
+        <name>nc_home_key</name>
+        <description>Go Home once the TMDb chain the Home key ended is gone</description>
+        <start reset="true">!String.IsEmpty(Window(Home).Property(nc.home.key)) + String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))</start>
+        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_home_key),1)</stop>
+        <onstop>ClearProperty(nc.home.key,home)</onstop>
+        <onstop>ActivateWindow(1160)</onstop>
+    </timer>
+    <!-- Back from a chain (VideoFullScreen.xml): nc.osd.chain keeps the cast row's plugin back
+         until a second after TMDb Helper's window manager is gone -->
+    <timer>
+        <name>nc_osd_chain</name>
+        <description>Clear nc.osd.chain once TMDb Helper's window manager has ended</description>
+        <start reset="true">!String.IsEmpty(Window(Home).Property(nc.osd.chain)) + String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))</start>
+        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_chain),1)</stop>
+        <onstop>ClearProperty(nc.osd.chain,home)</onstop>
+    </timer>
+    <!-- Clears nc.chain.claim (Includes_Tmdb.xml, ChainClick) once TMDb Helper's window manager
+         runs, or a few seconds after a click when it failed to start; kept for the seconds, a
+         chain left quickly ignored the next click -->
+    <timer>
+        <name>nc_chain_claim</name>
+        <description>Let a click start the TMDb Helper window manager again</description>
+        <start reset="true">!String.IsEmpty(Window(Home).Property(nc.chain.claim))</start>
+        <stop>!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_chain_claim),5)</stop>
+        <onstop>ClearProperty(nc.chain.claim,home)</onstop>
+    </timer>
+    <!-- Back held in the first second of an info page in a chain (ChainBackGuard,
+         Includes_Tmdb.xml): the second over, the guard goes and the held Back is done -->
+    <timer>
+        <name>nc_chain_guard</name>
+        <description>Hold Back until TMDb Helper's window manager saw the new info page</description>
+        <start reset="true">!String.IsEmpty(Window(Home).Property(nc.chain.guard))</start>
+        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_chain_guard),1)</stop>
+        <onstop>ClearProperty(nc.chain.guard,home)</onstop>
+        <onstop condition="!String.IsEmpty(Window(Home).Property(nc.chain.back)) + Window.IsActive(movieinformation)">Action(Back)</onstop>
+        <onstop>ClearProperty(nc.chain.back,home)</onstop>
+    </timer>
+    <!-- The play button of a TMDb page appears once the library copy is found (DialogVideoInfo
+         list 5901), after the page has put the focus on the next button: move it to play, once
+         per page (nc.info.twinfocus, set on load) and only while the focus is still on the
+         buttons -->
+    <timer>
+        <name>nc_info_twin</name>
+        <description>Focus play once the library copy of a TMDb title is found</description>
+        <start reset="true">Window.IsActive(movieinformation) + !String.IsEmpty(Window(Home).Property(nc.info.twinfocus)) + Integer.IsGreater(Container(5901).NumItems,0)</start>
+        <onstart>ClearProperty(nc.info.twinfocus,home)</onstart>
+        <onstart condition="ControlGroup(9000).HasFocus()">SetFocus(9001)</onstart>
+        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_info_twin),0)</stop>
+    </timer>
+    <!-- … of a TMDb title without library copy (DialogVideoInfo 9005): OK asks for the title's
+         menu (nc.info.more). Its list 9006 starts a plugin, so it loads once the page's own
+         plugin lists are idle (nc.info.more.load), then the menu opens on it. Not the person
+         credits (5510): never on this page, and without a path it can keep IsUpdating from the
+         page before. -->
+    <timer>
+        <name>nc_info_more</name>
+        <description>Open the context menu of a TMDb title once its list is loaded</description>
+        <start reset="true">Window.IsActive(movieinformation) + !String.IsEmpty(Window(Home).Property(nc.info.more)) + !Container(5500).IsUpdating + !Container(5300).IsUpdating</start>
+        <onstart>SetProperty(nc.info.more.load,1,home)</onstart>
+        <stop>!Window.IsActive(movieinformation) | Integer.IsGreater(Container(9006).NumItems,0) | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_info_more),10)</stop>
+        <onstop condition="Window.IsActive(movieinformation) + Integer.IsGreater(Container(9006).NumItems,0)">SetFocus(9006)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + Integer.IsGreater(Container(9006).NumItems,0)">Action(ContextMenu)</onstop>
+        <onstop>ClearProperty(nc.info.more,home)</onstop>
+    </timer>
+    <!-- Kodi runs queued actions inside the menu's own loop: a SetFocus right behind
+         Action(ContextMenu) would reach the menu. The focus goes back to … once it closed. -->
+    <timer>
+        <name>nc_info_more_back</name>
+        <description>Return the focus to … after the context menu of a TMDb title</description>
+        <start reset="true">Window.IsActive(movieinformation) + Control.HasFocus(9006) + !Window.IsVisible(contextmenu)</start>
+        <onstart>SetFocus(9005)</onstart>
+        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_info_more_back),0)</stop>
+    </timer>
+    <!-- Episode info page: the cast and crew row (DialogVideoInfo list 5500) follows the selected
+         episode once it stayed selected a second, info_select is done (nc.info.ready) and the row
+         does not load, so moving along the episodes starts no plugin and never two at once.
+         nc.info.ep.pending holds which episode the wait is for, nc.info.ep.query its season and
+         episode for the path, nc.info.ep.id the episode it was loaded for. -->
+    <timer>
+        <name>nc_info_ep</name>
+        <description>Debounce the cast and crew row of an episode info page</description>
+        <start reset="true">Window.IsActive(movieinformation) + String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(Window(Home).Property(nc.info.ready)) + !String.IsEmpty(Container(5100).ListItem.DBID) + !String.IsEqual(Window(Home).Property(nc.info.ep.id),Container(5100).ListItem.DBID)</start>
+        <onstart>SetProperty(nc.info.ep.pending,$INFO[Container(5100).ListItem.DBID],home)</onstart>
+        <stop>!Window.IsActive(movieinformation) | !String.IsEqual(Window(Home).Property(nc.info.ep.pending),Container(5100).ListItem.DBID) | [Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_info_ep),1) + !Container(5500).IsUpdating]</stop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Window(Home).Property(nc.info.ep.pending),Container(5100).ListItem.DBID)">SetProperty(nc.info.ep.query,season=$INFO[Container(5100).ListItem.Season]&amp;episode=$INFO[Container(5100).ListItem.Episode],home)</onstop>
+        <onstop condition="Window.IsActive(movieinformation) + String.IsEqual(Window(Home).Property(nc.info.ep.pending),Container(5100).ListItem.DBID)">SetProperty(nc.info.ep.id,$INFO[Window(Home).Property(nc.info.ep.pending)],home)</onstop>
+    </timer>
+    <!-- OSD cast row: load the focused person's biography once the focus rested a second and
+         neither list loads, so moving along the row starts no plugin and never two at once.
+         nc.osd.bio.pending holds whom the wait is for; a focus move stops the wait and the next
+         start waits for the new person. nc.osd.bio.id feeds the hidden list 6599. -->
+    <timer>
+        <name>nc_osd_bio</name>
+        <description>Debounce the biography lookup of the OSD cast row</description>
+        <start reset="true">Window.IsActive(1141) + !String.IsEmpty(Container(6501).ListItem.Property(tmdb_id)) + !String.IsEqual(Window(Home).Property(nc.osd.bio.id),Container(6501).ListItem.Property(tmdb_id))</start>
+        <onstart>SetProperty(nc.osd.bio.pending,$INFO[Container(6501).ListItem.Property(tmdb_id)],home)</onstart>
+        <stop>!Window.IsActive(1141) | !String.IsEqual(Window(Home).Property(nc.osd.bio.pending),Container(6501).ListItem.Property(tmdb_id)) | [Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_bio),1) + !Container(6501).IsUpdating + !Container(6599).IsUpdating]</stop>
+        <onstop condition="Window.IsActive(1141) + String.IsEqual(Window(Home).Property(nc.osd.bio.pending),Container(6501).ListItem.Property(tmdb_id))">SetProperty(nc.osd.bio.id,$INFO[Window(Home).Property(nc.osd.bio.pending)],home)</onstop>
+    </timer>
+    <!-- OSD cast row: OK on a person while the biography list loads (Custom_1141_OSDCast.xml)
+         waits here until both lists are idle, then opens the person like ChainClick does and
+         closes the OSD. nc.osd.click holds the person's TMDb id. -->
+    <timer>
+        <name>nc_osd_click</name>
+        <description>Open the person clicked in the OSD cast row once its lists are idle</description>
+        <start reset="true">!String.IsEmpty(Window(Home).Property(nc.osd.click))</start>
+        <stop>!Window.IsActive(1141) | [!Container(6501).IsUpdating + !Container(6599).IsUpdating] | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_click),10)</stop>
+        <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating + !String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">SetProperty(TMDbHelper.Path.To.Add,plugin://plugin.video.themoviedb.helper/?info=details&amp;tmdb_type=person&amp;tmdb_id=$INFO[Window(Home).Property(nc.osd.click)],home)</onstop>
+        <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating + String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEmpty(Window(Home).Property(nc.chain.claim))">RunScript(plugin.video.themoviedb.helper,add_tmdb=$INFO[Window(Home).Property(nc.osd.click)],tmdb_type=person,call_auto=1190)</onstop>
+        <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating + String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEmpty(Window(Home).Property(nc.chain.claim))">SetProperty(nc.chain.claim,1,home)</onstop>
+        <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating">Dialog.Close(1141)</onstop>
+        <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating">Dialog.Close(videobookmarks)</onstop>
+        <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating">Dialog.Close(videoosd)</onstop>
+        <onstop>ClearProperty(nc.osd.click,home)</onstop>
+    </timer>
+    <!-- A move or a tab's OK on the info page towards a TMDb list that is not ready yet (still
+         loading, still the page before, empty) waits here (nc.info.enter: the list,
+         nc.info.enter.from: where the focus was) and moves the focus in once the list is in.
+         The focus moved on meanwhile, the page closed, the list came empty or 15 s passed: it
+         forgets the move. Kodi reads timer conditions as they are, without expressions: the
+         TmdbFresh<list> expressions of Includes_Tmdb.xml are written out (test_rows_focus.py). -->
+    <timer>
+        <name>nc_info_enter</name>
+        <description>Enter a TMDb list of the info page once it is in</description>
+        <start reset="true">!String.IsEmpty(Window(Home).Property(nc.info.enter))</start>
+        <stop>String.IsEmpty(Window(Home).Property(nc.info.enter)) | !Window.IsActive(movieinformation) | !String.IsEqual(System.CurrentControlId,Window(Home).Property(nc.info.enter.from)) | [String.IsEqual(Window(Home).Property(nc.info.enter),5500) + [[[String.IsEqual(Window(Home).Property(nc.info.tab),crew) + !String.IsEmpty(Window(Home).Property(nc.info.live)) + String.IsEqual(Container(5500).ListItem(0).Property(param.info),crew)] | [![String.IsEqual(Window(Home).Property(nc.info.tab),crew) + !String.IsEmpty(Window(Home).Property(nc.info.live))] + String.IsEqual(Container(5500).ListItem(0).Property(param.info),cast)]] + [[!String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEqual(Container(5500).ListItem(0).Property(param.tmdb_id),ListItem.Property(tmdb_id))] | [String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEqual(ListItem.DBType,episode) + String.IsEqual(Container(5500).ListItem(0).Property(param.query),ListItem.TVShowTitle) + String.IsEqual(Container(5500).ListItem(0).Property(param.season),Container(5100).ListItem.Season) + String.IsEqual(Container(5500).ListItem(0).Property(param.episode),Container(5100).ListItem.Episode)] | [String.IsEmpty(ListItem.Property(tmdb_id)) + !String.IsEqual(ListItem.DBType,episode) + [[!String.IsEmpty(ListItem.IMDBNumber) + String.IsEqual(Container(5500).ListItem(0).Property(param.imdb_id),ListItem.IMDBNumber)] | [!String.IsEmpty(ListItem.Title) + String.IsEqual(Container(5500).ListItem(0).Property(param.query),ListItem.Title)]]]]] + !Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0)] | [String.IsEqual(Window(Home).Property(nc.info.enter),5510) + [!String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEqual(Container(5510).ListItem(0).Property(param.tmdb_id),ListItem.Property(tmdb_id)) + [[String.IsEqual(Window(Home).Property(nc.info.tab),tv) + !String.IsEmpty(Window(Home).Property(nc.info.live)) + String.IsEqual(Container(5510).ListItem(0).Property(param.info),stars_in_tvshows)] | [String.IsEqual(Window(Home).Property(nc.info.tab),crew) + !String.IsEmpty(Window(Home).Property(nc.info.live)) + String.IsEqual(Container(5510).ListItem(0).Property(param.info),crew_in_both)] | [![String.IsEqual(Window(Home).Property(nc.info.tab),tv) + !String.IsEmpty(Window(Home).Property(nc.info.live))] + ![String.IsEqual(Window(Home).Property(nc.info.tab),crew) + !String.IsEmpty(Window(Home).Property(nc.info.live))] + String.IsEqual(Container(5510).ListItem(0).Property(param.info),stars_in_movies)]]] + !Container(5510).IsUpdating + Integer.IsGreater(Container(5510).NumItems,0)] | [String.IsEqual(Window(Home).Property(nc.info.enter),5300) + [String.IsEqual(Container(5300).ListItem(0).Property(param.info),recommendations) + [[!String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEqual(Container(5300).ListItem(0).Property(param.tmdb_id),ListItem.Property(tmdb_id))] | [String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEqual(ListItem.DBType,episode) + String.IsEqual(Container(5300).ListItem(0).Property(param.query),ListItem.TVShowTitle) + String.IsEqual(Container(5300).ListItem(0).Property(param.season),Container(5100).ListItem.Season) + String.IsEqual(Container(5300).ListItem(0).Property(param.episode),Container(5100).ListItem.Episode)] | [String.IsEmpty(ListItem.Property(tmdb_id)) + !String.IsEqual(ListItem.DBType,episode) + [[!String.IsEmpty(ListItem.IMDBNumber) + String.IsEqual(Container(5300).ListItem(0).Property(param.imdb_id),ListItem.IMDBNumber)] | [!String.IsEmpty(ListItem.Title) + String.IsEqual(Container(5300).ListItem(0).Property(param.query),ListItem.Title)]]]]] + !Container(5300).IsUpdating + Integer.IsGreater(Container(5300).NumItems,0)] | [String.IsEqual(Window(Home).Property(nc.info.enter),5500) + !Container(5500).IsUpdating + !Integer.IsGreater(Container(5500).NumItems,0) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_info_enter),2)] | [String.IsEqual(Window(Home).Property(nc.info.enter),5510) + !Container(5510).IsUpdating + !Integer.IsGreater(Container(5510).NumItems,0) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_info_enter),2)] | [String.IsEqual(Window(Home).Property(nc.info.enter),5300) + !Container(5300).IsUpdating + !Integer.IsGreater(Container(5300).NumItems,0) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_info_enter),2)] | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_info_enter),15)</stop>
+        <onstop condition="String.IsEqual(Window(Home).Property(nc.info.enter),5500) + [[[String.IsEqual(Window(Home).Property(nc.info.tab),crew) + !String.IsEmpty(Window(Home).Property(nc.info.live)) + String.IsEqual(Container(5500).ListItem(0).Property(param.info),crew)] | [![String.IsEqual(Window(Home).Property(nc.info.tab),crew) + !String.IsEmpty(Window(Home).Property(nc.info.live))] + String.IsEqual(Container(5500).ListItem(0).Property(param.info),cast)]] + [[!String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEqual(Container(5500).ListItem(0).Property(param.tmdb_id),ListItem.Property(tmdb_id))] | [String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEqual(ListItem.DBType,episode) + String.IsEqual(Container(5500).ListItem(0).Property(param.query),ListItem.TVShowTitle) + String.IsEqual(Container(5500).ListItem(0).Property(param.season),Container(5100).ListItem.Season) + String.IsEqual(Container(5500).ListItem(0).Property(param.episode),Container(5100).ListItem.Episode)] | [String.IsEmpty(ListItem.Property(tmdb_id)) + !String.IsEqual(ListItem.DBType,episode) + [[!String.IsEmpty(ListItem.IMDBNumber) + String.IsEqual(Container(5500).ListItem(0).Property(param.imdb_id),ListItem.IMDBNumber)] | [!String.IsEmpty(ListItem.Title) + String.IsEqual(Container(5500).ListItem(0).Property(param.query),ListItem.Title)]]]]] + !Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0) + String.IsEqual(System.CurrentControlId,Window(Home).Property(nc.info.enter.from))">SetFocus(5500)</onstop>
+        <onstop condition="String.IsEqual(Window(Home).Property(nc.info.enter),5510) + [!String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEqual(Container(5510).ListItem(0).Property(param.tmdb_id),ListItem.Property(tmdb_id)) + [[String.IsEqual(Window(Home).Property(nc.info.tab),tv) + !String.IsEmpty(Window(Home).Property(nc.info.live)) + String.IsEqual(Container(5510).ListItem(0).Property(param.info),stars_in_tvshows)] | [String.IsEqual(Window(Home).Property(nc.info.tab),crew) + !String.IsEmpty(Window(Home).Property(nc.info.live)) + String.IsEqual(Container(5510).ListItem(0).Property(param.info),crew_in_both)] | [![String.IsEqual(Window(Home).Property(nc.info.tab),tv) + !String.IsEmpty(Window(Home).Property(nc.info.live))] + ![String.IsEqual(Window(Home).Property(nc.info.tab),crew) + !String.IsEmpty(Window(Home).Property(nc.info.live))] + String.IsEqual(Container(5510).ListItem(0).Property(param.info),stars_in_movies)]]] + !Container(5510).IsUpdating + Integer.IsGreater(Container(5510).NumItems,0) + String.IsEqual(System.CurrentControlId,Window(Home).Property(nc.info.enter.from))">SetFocus(5510)</onstop>
+        <onstop condition="String.IsEqual(Window(Home).Property(nc.info.enter),5300) + [String.IsEqual(Container(5300).ListItem(0).Property(param.info),recommendations) + [[!String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEqual(Container(5300).ListItem(0).Property(param.tmdb_id),ListItem.Property(tmdb_id))] | [String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEqual(ListItem.DBType,episode) + String.IsEqual(Container(5300).ListItem(0).Property(param.query),ListItem.TVShowTitle) + String.IsEqual(Container(5300).ListItem(0).Property(param.season),Container(5100).ListItem.Season) + String.IsEqual(Container(5300).ListItem(0).Property(param.episode),Container(5100).ListItem.Episode)] | [String.IsEmpty(ListItem.Property(tmdb_id)) + !String.IsEqual(ListItem.DBType,episode) + [[!String.IsEmpty(ListItem.IMDBNumber) + String.IsEqual(Container(5300).ListItem(0).Property(param.imdb_id),ListItem.IMDBNumber)] | [!String.IsEmpty(ListItem.Title) + String.IsEqual(Container(5300).ListItem(0).Property(param.query),ListItem.Title)]]]]] + !Container(5300).IsUpdating + Integer.IsGreater(Container(5300).NumItems,0) + String.IsEqual(System.CurrentControlId,Window(Home).Property(nc.info.enter.from))">SetFocus(5300)</onstop>
+        <onstop>ClearProperty(nc.info.enter,home)</onstop>
+        <onstop>ClearProperty(nc.info.enter.from,home)</onstop>
+    </timer>
+</timers>

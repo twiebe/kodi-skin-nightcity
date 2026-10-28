@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Endless TMDb navigation: info pages of people and titles chained through TMDb Helper's
+     window manager. Every click on a person or a title opens its full info page on top of the
+     chain; Back goes one page back, "close all" (SetProperty(TMDbHelper.Command,exit,home))
+     closes every page and returns to where the chain started: Home, a library page or the
+     playing video. -->
+<includes>
+    <!-- Click on an item with a TMDb id: open its info page in the chain. A running chain takes
+         the page through its mailbox property (no Python starts); otherwise the click starts the
+         manager, which pushes `origin` (the page the click came from) first so Back returns to
+         it. nc.chain.claim stops a second click from starting a second interpreter before the
+         first one has set TMDbHelper.Instance (two interpreters starting at once crash Kodi);
+         the nc_chain_claim timer clears it. -->
+    <include name="ChainClick">
+        <param name="type"/>
+        <param name="id"/>
+        <param name="origin" default=""/>
+        <param name="condition" default="true"/>
+        <definition>
+            <onclick condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + $PARAM[condition]">SetProperty(TMDbHelper.Path.To.Add,plugin://plugin.video.themoviedb.helper/?info=details&amp;tmdb_type=$PARAM[type]&amp;tmdb_id=$PARAM[id],home)</onclick>
+            <onclick condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEmpty(Window(Home).Property(nc.chain.claim)) + $PARAM[condition]">RunScript(plugin.video.themoviedb.helper,add_tmdb=$PARAM[id],tmdb_type=$PARAM[type],call_auto=1190$PARAM[origin])</onclick>
+            <onclick condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEmpty(Window(Home).Property(nc.chain.claim)) + $PARAM[condition]">SetProperty(nc.chain.claim,1,home)</onclick>
+        </definition>
+    </include>
+
+    <!-- A TMDb list shows the page it was loaded for (test_stale_lists.py): the info page stays
+         in memory between pages, so its lists keep the items of the page before when it opens
+         for the next one, until their new content is in; IsUpdating misses the time before a
+         list starts and its last frame. Every TMDb item carries the request it came from
+         (param.*): TmdbFresh<list> holds while the first item's request matches the page, by
+         TMDb id, else IMDb number or title (show title, season and episode for an episode),
+         and the chosen tab. The list fades out otherwise (TmdbStaleFade) and keeps loading. -->
+    <expression name="TmdbFresh5500">[[String.IsEqual(Window(Home).Property(nc.info.tab),crew) + !String.IsEmpty(Window(Home).Property(nc.info.live)) + String.IsEqual(Container(5500).ListItem(0).Property(param.info),crew)] | [![String.IsEqual(Window(Home).Property(nc.info.tab),crew) + !String.IsEmpty(Window(Home).Property(nc.info.live))] + String.IsEqual(Container(5500).ListItem(0).Property(param.info),cast)]] + [[!String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEqual(Container(5500).ListItem(0).Property(param.tmdb_id),ListItem.Property(tmdb_id))] | [String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEqual(ListItem.DBType,episode) + String.IsEqual(Container(5500).ListItem(0).Property(param.query),ListItem.TVShowTitle) + String.IsEqual(Container(5500).ListItem(0).Property(param.season),Container(5100).ListItem.Season) + String.IsEqual(Container(5500).ListItem(0).Property(param.episode),Container(5100).ListItem.Episode)] | [String.IsEmpty(ListItem.Property(tmdb_id)) + !String.IsEqual(ListItem.DBType,episode) + [[!String.IsEmpty(ListItem.IMDBNumber) + String.IsEqual(Container(5500).ListItem(0).Property(param.imdb_id),ListItem.IMDBNumber)] | [!String.IsEmpty(ListItem.Title) + String.IsEqual(Container(5500).ListItem(0).Property(param.query),ListItem.Title)]]]]</expression>
+    <expression name="TmdbFresh5300">String.IsEqual(Container(5300).ListItem(0).Property(param.info),recommendations) + [[!String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEqual(Container(5300).ListItem(0).Property(param.tmdb_id),ListItem.Property(tmdb_id))] | [String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEqual(ListItem.DBType,episode) + String.IsEqual(Container(5300).ListItem(0).Property(param.query),ListItem.TVShowTitle) + String.IsEqual(Container(5300).ListItem(0).Property(param.season),Container(5100).ListItem.Season) + String.IsEqual(Container(5300).ListItem(0).Property(param.episode),Container(5100).ListItem.Episode)] | [String.IsEmpty(ListItem.Property(tmdb_id)) + !String.IsEqual(ListItem.DBType,episode) + [[!String.IsEmpty(ListItem.IMDBNumber) + String.IsEqual(Container(5300).ListItem(0).Property(param.imdb_id),ListItem.IMDBNumber)] | [!String.IsEmpty(ListItem.Title) + String.IsEqual(Container(5300).ListItem(0).Property(param.query),ListItem.Title)]]]]</expression>
+    <expression name="TmdbFresh5510">!String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEqual(Container(5510).ListItem(0).Property(param.tmdb_id),ListItem.Property(tmdb_id)) + [[String.IsEqual(Window(Home).Property(nc.info.tab),tv) + !String.IsEmpty(Window(Home).Property(nc.info.live)) + String.IsEqual(Container(5510).ListItem(0).Property(param.info),stars_in_tvshows)] | [String.IsEqual(Window(Home).Property(nc.info.tab),crew) + !String.IsEmpty(Window(Home).Property(nc.info.live)) + String.IsEqual(Container(5510).ListItem(0).Property(param.info),crew_in_both)] | [![String.IsEqual(Window(Home).Property(nc.info.tab),tv) + !String.IsEmpty(Window(Home).Property(nc.info.live))] + ![String.IsEqual(Window(Home).Property(nc.info.tab),crew) + !String.IsEmpty(Window(Home).Property(nc.info.live))] + String.IsEqual(Container(5510).ListItem(0).Property(param.info),stars_in_movies)]]</expression>
+    <!-- the OSD cast row: the video that plays, by tab -->
+    <expression name="TmdbFresh6501">[[String.IsEqual(Window(Home).Property(nc.osd.credits),crew) + String.IsEqual(Container(6501).ListItem(0).Property(param.info),crew)] | [!String.IsEqual(Window(Home).Property(nc.osd.credits),crew) + String.IsEqual(Container(6501).ListItem(0).Property(param.info),cast)]] + [[!String.IsEmpty(VideoPlayer.TVShowTitle) + [[!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.tvshow.tmdb_id)) + String.IsEqual(Container(6501).ListItem(0).Property(param.tmdb_id),Window(Home).Property(TMDbHelper.Player.tvshow.tmdb_id))] | String.IsEqual(Container(6501).ListItem(0).Property(param.query),VideoPlayer.TVShowTitle)] + String.IsEqual(Container(6501).ListItem(0).Property(param.season),VideoPlayer.Season) + String.IsEqual(Container(6501).ListItem(0).Property(param.episode),VideoPlayer.Episode)] | [String.IsEmpty(VideoPlayer.TVShowTitle) + [[!String.IsEmpty(Window(Home).Property(TMDbHelper.Player.TMDb_ID)) + String.IsEqual(Container(6501).ListItem(0).Property(param.tmdb_id),Window(Home).Property(TMDbHelper.Player.TMDb_ID))] | [!String.IsEmpty(VideoPlayer.IMDBNumber) + String.IsEqual(Container(6501).ListItem(0).Property(param.imdb_id),VideoPlayer.IMDBNumber)] | [!String.IsEmpty(VideoPlayer.Title) + String.IsEqual(Container(6501).ListItem(0).Property(param.query),VideoPlayer.Title)]]]]</expression>
+    <include name="TmdbStaleFade">
+        <param name="list"/>
+        <definition>
+            <animation effect="fade" start="100" end="0" time="0" condition="!$EXP[TmdbFresh$PARAM[list]]">Conditional</animation>
+        </definition>
+    </include>
+
+    <!-- Back on an info page in a chain waits for the first second of the page (nc.chain.guard,
+         set on load): TMDb Helper's manager polls every 0.5 s for the page it opened, and a page
+         closed before it looked leaves the chain on an empty backdrop for 30 s, then ends it.
+         nc_chain_guard (Timers.xml) does the held Back once the second is over. Kodi runs onback
+         like a move (CGUIWindow::OnMove) and closes the page anyway unless it moves the focus:
+         to the button row, which keeps its focused button. Every control of the info page that
+         takes the focus carries it. -->
+    <include name="ChainBackGuard">
+        <onback condition="!String.IsEmpty(Window(Home).Property(nc.chain.guard))">SetProperty(nc.chain.back,1,home)</onback>
+        <onback condition="!String.IsEmpty(Window(Home).Property(nc.chain.guard))">9000</onback>
+    </include>
+
+    <!-- Tab above a TMDb credits list (cast / crew, films / shows / crew). OK chooses it: the
+         list's content follows `property` (Home), so moving over the tabs starts no plugin, and a
+         tab never changes while its list still loads. `active` holds for the chosen tab. The
+         focus goes down to the list only when it has items: Kodi takes the focus from the tab
+         first, so an empty list would leave the page without focus. A list that is not in yet
+         takes the focus once it is (nc.info.enter, nc_info_enter in Timers.xml), unless the
+         focus moved on. -->
+    <include name="CreditsTab">
+        <param name="id"/>
+        <param name="label"/>
+        <param name="property"/>
+        <param name="value"/>
+        <param name="active"/>
+        <param name="list"/>
+        <param name="visible" default="true"/>
+        <definition>
+            <control type="togglebutton" id="$PARAM[id]">
+                <width>auto</width>
+                <height>44</height>
+                <font>font_caps</font>
+                <textoffsetx>10</textoffsetx>
+                <aligny>center</aligny>
+                <textcolor>text_mute</textcolor>
+                <focusedcolor>accent</focusedcolor>
+                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                <altlabel>[COLOR accent2]◢[/COLOR] [UPPERCASE]$PARAM[label][/UPPERCASE]</altlabel>
+                <texturefocus colordiffuse="accent">ui/tab_line.png</texturefocus>
+                <texturenofocus/>
+                <alttexturefocus colordiffuse="accent">ui/tab_line.png</alttexturefocus>
+                <alttexturenofocus/>
+                <usealttexture>$PARAM[active]</usealttexture>
+                <onclick condition="!Container($PARAM[list]).IsUpdating">SetProperty($PARAM[property],$PARAM[value],home)</onclick>
+                <onclick condition="[$PARAM[active]] + $EXP[TmdbFresh$PARAM[list]] + !Container($PARAM[list]).IsUpdating + Integer.IsGreater(Container($PARAM[list]).NumItems,0)">SetFocus($PARAM[list])</onclick>
+                <onclick condition="!Container($PARAM[list]).IsUpdating + ![[$PARAM[active]] + $EXP[TmdbFresh$PARAM[list]] + !Container($PARAM[list]).IsUpdating + Integer.IsGreater(Container($PARAM[list]).NumItems,0)]">SetProperty(nc.info.enter,$PARAM[list],home)</onclick>
+                <onclick condition="!Container($PARAM[list]).IsUpdating + ![[$PARAM[active]] + $EXP[TmdbFresh$PARAM[list]] + !Container($PARAM[list]).IsUpdating + Integer.IsGreater(Container($PARAM[list]).NumItems,0)]">SetProperty(nc.info.enter.from,$PARAM[id],home)</onclick>
+                <altclick condition="[$PARAM[active]] + $EXP[TmdbFresh$PARAM[list]] + !Container($PARAM[list]).IsUpdating + Integer.IsGreater(Container($PARAM[list]).NumItems,0)">SetFocus($PARAM[list])</altclick>
+                <altclick condition="!Container($PARAM[list]).IsUpdating + ![[$PARAM[active]] + $EXP[TmdbFresh$PARAM[list]] + !Container($PARAM[list]).IsUpdating + Integer.IsGreater(Container($PARAM[list]).NumItems,0)]">SetProperty(nc.info.enter,$PARAM[list],home)</altclick>
+                <altclick condition="!Container($PARAM[list]).IsUpdating + ![[$PARAM[active]] + $EXP[TmdbFresh$PARAM[list]] + !Container($PARAM[list]).IsUpdating + Integer.IsGreater(Container($PARAM[list]).NumItems,0)]">SetProperty(nc.info.enter.from,$PARAM[id],home)</altclick>
+                <include>ChainBackGuard</include>
+                <visible>$PARAM[visible]</visible>
+            </control>
+        </definition>
+    </include>
+</includes>

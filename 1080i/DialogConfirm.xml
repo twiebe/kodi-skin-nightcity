@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Yes/No, OK and progress dialogs. Kodi fills heading (1), text (9), progress (20) and
+     button labels (11 yes, 10 no, 12 custom). The buttons size to their labels and hide
+     without one: a visible condition overrides Kodi hiding the custom button. -->
+<window>
+    <depth>DepthDialog+</depth>
+    <defaultcontrol always="true">9000</defaultcontrol>
+    <controls>
+        <control type="group">
+            <centerleft>50%</centerleft>
+            <centertop>50%</centertop>
+            <width>1000</width>
+            <height>420</height>
+            <include>DialogFrame</include>
+            <include content="DialogHeading">
+                <param name="id" value="1"/>
+            </include>
+            <control type="textbox" id="9">
+                <left>40</left>
+                <top>84</top>
+                <width>920</width>
+                <height>190</height>
+                <font>font_body</font>
+                <textcolor>text</textcolor>
+                <autoscroll time="3000" delay="4000" repeat="5000">true</autoscroll>
+            </control>
+            <control type="progress" id="20">
+                <left>40</left>
+                <top>284</top>
+                <width>920</width>
+                <height>20</height>
+                <texturebg colordiffuse="border_dim">ui/white.png</texturebg>
+                <midtexture colordiffuse="accent">ui/white.png</midtexture>
+                <info>System.Progressbar</info>
+            </control>
+            <control type="grouplist" id="9000">
+                <left>40</left>
+                <top>336</top>
+                <width>920</width>
+                <height>54</height>
+                <orientation>horizontal</orientation>
+                <align>center</align>
+                <itemgap>24</itemgap>
+                <include content="Button">
+                    <param name="id" value="11"/>
+                    <param name="label" value=""/>
+                    <param name="width" value="auto"/>
+                    <param name="visible" value="!String.IsEmpty(Control.GetLabel(11))"/>
+                </include>
+                <include content="Button">
+                    <param name="id" value="10"/>
+                    <param name="label" value=""/>
+                    <param name="width" value="auto"/>
+                    <param name="visible" value="!String.IsEmpty(Control.GetLabel(10))"/>
+                </include>
+                <include content="Button">
+                    <param name="id" value="12"/>
+                    <param name="label" value=""/>
+                    <param name="width" value="auto"/>
+                    <param name="visible" value="!String.IsEmpty(Control.GetLabel(12))"/>
+                </include>
+            </control>
+        </control>
+    </controls>
+</window>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Settings pages. Kodi ids: 3 categories, 5 settings, 6 description, 20 level button, 7-15 templates. -->
+<window>
+    <!-- the cursor starts in the categories, on the first one or the one a link named -->
+    <defaultcontrol always="true">3</defaultcontrol>
+    <controls>
+        <include>Background</include>
+        <include content="StatusBar">
+            <param name="title" value="$INFO[Window.Property(SettingsSection)]$INFO[Control.GetLabel(2)]"/>
+        </include>
+        <!-- the content fades in on open; background and status line stay -->
+        <control type="group">
+            <include>WindowFade</include>
+            <control type="label" id="2">
+                <left>120</left>
+                <top>84</top>
+                <width>1</width>
+                <height>1</height>
+                <font>font_tiny</font>
+                <textcolor>text_mute</textcolor>
+                <aligny>center</aligny>
+                <visible>false</visible>
+                <label></label>
+            </control>
+            <control type="grouplist" id="3">
+                <left>120</left>
+                <top>100</top>
+                <width>400</width>
+                <height>840</height>
+                <itemgap>0</itemgap>
+                <!-- Left leaves the page, back to the console -->
+                <onleft>Action(Back)</onleft>
+                <onright>5</onright>
+                <ondown>20</ondown>
+            </control>
+            <control type="grouplist" id="5">
+                <left>560</left>
+                <top>100</top>
+                <width>1240</width>
+                <height>800</height>
+                <itemgap>0</itemgap>
+                <onleft>3</onleft>
+            </control>
+            <control type="label" id="6">
+                <left>560</left>
+                <top>920</top>
+                <width>1240</width>
+                <height>120</height>
+                <font>font_tiny</font>
+                <textcolor>text_dim</textcolor>
+                <aligny>center</aligny>
+                <wrapmultiline>true</wrapmultiline>
+                <label></label>
+            </control>
+            <control type="grouplist" id="9003">
+                <left>120</left>
+                <top>960</top>
+                <width>400</width>
+                <height>52</height>
+                <onup>3</onup>
+                <onleft>Action(Back)</onleft>
+                <onright>5</onright>
+                <include content="ListButton">
+                    <param name="id" value="20"/>
+                    <param name="label" value=""/>
+                    <param name="width" value="400"/>
+                    <!-- Kodi cycles the level only on this action, not on a click -->
+                    <param name="onclick" value="SettingsLevelChange"/>
+                </include>
+            </control>
+            <control type="group">
+                <left>-4000</left>
+                <include content="SettingsTemplates">
+                    <param name="width" value="1240"/>
+                </include>
+                <include>SettingsCategoryTemplate</include>
+            </control>
+        </control>
+    </controls>
+</window>

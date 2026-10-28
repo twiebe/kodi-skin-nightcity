@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Select dialog. Kodi ids: 1 heading, 2 item count, 3 simple list, 6 detailed list, 5/8 extra buttons, 7 cancel. -->
+<window>
+    <depth>DepthDialog</depth>
+    <defaultcontrol always="true">3</defaultcontrol>
+    <controls>
+        <control type="group">
+            <centerleft>50%</centerleft>
+            <centertop>50%</centertop>
+            <width>1100</width>
+            <height>820</height>
+            <include>DialogFrame</include>
+            <include content="DialogHeading">
+                <param name="id" value="1"/>
+                <param name="width" value="760"/>
+            </include>
+            <control type="label" id="2">
+                <left>800</left>
+                <top>16</top>
+                <width>260</width>
+                <height>48</height>
+                <font>font_small</font>
+                <textcolor>text_mute</textcolor>
+                <aligny>center</aligny>
+                <align>right</align>
+                <label></label>
+            </control>
+            <include content="DialogList">
+                <param name="id" value="3"/>
+                <onright>9001</onright>
+                <param name="width" value="1020"/>
+                <param name="height" value="624"/>
+            </include>
+            <include content="DialogList">
+                <param name="id" value="6"/>
+                <onright>9001</onright>
+                <param name="width" value="1020"/>
+                <param name="height" value="624"/>
+                <param name="label2" value="$INFO[ListItem.Label2]"/>
+            </include>
+            <control type="grouplist" id="9001">
+                <onleft condition="Control.IsVisible(6)">6</onleft>
+                <onleft>3</onleft>
+                <onup>noop</onup>
+                <left>40</left>
+                <top>740</top>
+                <width>1020</width>
+                <height>54</height>
+                <orientation>horizontal</orientation>
+                <itemgap>24</itemgap>
+                <align>right</align>
+                <include content="Button">
+                    <param name="id" value="5"/>
+                    <param name="label" value=""/>
+                    <param name="width" value="240"/>
+                </include>
+                <include content="Button">
+                    <param name="id" value="8"/>
+                    <param name="label" value=""/>
+                    <param name="width" value="240"/>
+                </include>
+                <include content="Button">
+                    <param name="id" value="7"/>
+                    <param name="label" value="$LOCALIZE[222]"/>
+                    <param name="width" value="240"/>
+                </include>
+            </control>
+        </control>
+    </controls>
+</window>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Text viewer (changelogs, add-on text). Kodi ids: 1 heading, 5 text.
+     The scrollbar takes focus so up/down pages through long text. -->
+<window>
+    <depth>DepthDialog</depth>
+    <defaultcontrol always="true">60</defaultcontrol>
+    <controls>
+        <control type="group">
+            <centerleft>50%</centerleft>
+            <centertop>50%</centertop>
+            <width>1400</width>
+            <height>860</height>
+            <include>DialogFrame</include>
+            <include content="DialogHeading">
+                <param name="id" value="1"/>
+                <param name="width" value="1320"/>
+            </include>
+            <control type="textbox" id="5">
+                <left>40</left>
+                <top>84</top>
+                <width>1290</width>
+                <height>740</height>
+                <font>font_small</font>
+                <textcolor>text</textcolor>
+                <pagecontrol>60</pagecontrol>
+            </control>
+            <control type="scrollbar" id="60">
+                <left>1350</left>
+                <top>84</top>
+                <width>10</width>
+                <height>740</height>
+                <orientation>vertical</orientation>
+                <showonepage>false</showonepage>
+                <texturesliderbackground colordiffuse="surface_alt">ui/white.png</texturesliderbackground>
+                <texturesliderbar colordiffuse="accent">ui/white.png</texturesliderbar>
+                <texturesliderbarfocus colordiffuse="focus">ui/white.png</texturesliderbarfocus>
+                <onleft>noop</onleft>
+                <onright>noop</onright>
+            </control>
+        </control>
+    </controls>
+</window>

@@ -1,0 +1,1439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <!-- Off-screen list holding the spotlight items; autoscroll rotates the selection. The focused
+         item sits at the left with the next three in view: their artwork loads before they come up. -->
+    <include name="SpotlightList">
+        <param name="id" default="9000"/>
+        <param name="content" default="$VAR[SpotlightPath]"/>
+        <param name="back" default="9010"/>
+        <!-- interval: the skin string with the change interval; follow: true while that string
+             is empty and the list takes the interval of the home spotlight -->
+        <param name="interval" default="SpotlightInterval"/>
+        <param name="follow" default="false"/>
+        <definition>
+            <control type="wraplist" id="$PARAM[id]">
+                <left>-3000</left>
+                <top>0</top>
+                <width>40</width>
+                <height>10</height>
+                <orientation>horizontal</orientation>
+                <focusposition>0</focusposition>
+                <preloaditems>2</preloaditems>
+                <scrolltime>0</scrolltime>
+                <!-- the interval from the skin settings: Kodi reads the autoscroll time once and
+                     reloads Home when one of these conditions changes -->
+                <include content="SpotlightAutoscroll" condition="String.IsEqual(Skin.String($PARAM[interval]),10) | [$PARAM[follow] + String.IsEqual(Skin.String(SpotlightInterval),10)]">
+                    <param name="time" value="10000"/>
+                </include>
+                <include content="SpotlightAutoscroll" condition="String.IsEqual(Skin.String($PARAM[interval]),30) | [$PARAM[follow] + String.IsEqual(Skin.String(SpotlightInterval),30)]">
+                    <param name="time" value="30000"/>
+                </include>
+                <include content="SpotlightAutoscroll" condition="String.IsEqual(Skin.String($PARAM[interval]),60) | [$PARAM[follow] + String.IsEqual(Skin.String(SpotlightInterval),60)]">
+                    <param name="time" value="60000"/>
+                </include>
+                <!-- 15 s: anything else but off ("still") -->
+                <include content="SpotlightAutoscroll" condition="![String.IsEqual(Skin.String($PARAM[interval]),10) | String.IsEqual(Skin.String($PARAM[interval]),30) | String.IsEqual(Skin.String($PARAM[interval]),60) | String.IsEqual(Skin.String($PARAM[interval]),off) | [$PARAM[follow] + [String.IsEqual(Skin.String(SpotlightInterval),10) | String.IsEqual(Skin.String(SpotlightInterval),30) | String.IsEqual(Skin.String(SpotlightInterval),60) | String.IsEqual(Skin.String(SpotlightInterval),off)]]]">
+                    <param name="time" value="15000"/>
+                </include>
+                <onleft>$PARAM[back]</onleft>
+                <onright>$PARAM[back]</onright>
+                <onup>$PARAM[back]</onup>
+                <ondown>$PARAM[back]</ondown>
+                <itemlayout width="10" height="10">
+                    <control type="image">
+                        <width>10</width>
+                        <height>10</height>
+                        <texture background="true">$INFO[ListItem.Art(fanart)]</texture>
+                    </control>
+                    <control type="image">
+                        <width>10</width>
+                        <height>10</height>
+                        <texture background="true">$INFO[ListItem.Art(poster)]</texture>
+                    </control>
+                    <control type="image">
+                        <width>10</width>
+                        <height>10</height>
+                        <texture background="true">$INFO[ListItem.Art(clearlogo)]</texture>
+                    </control>
+                </itemlayout>
+                <focusedlayout width="10" height="10">
+                    <control type="image">
+                        <width>10</width>
+                        <height>10</height>
+                        <texture background="true">$INFO[ListItem.Art(fanart)]</texture>
+                    </control>
+                    <control type="image">
+                        <width>10</width>
+                        <height>10</height>
+                        <texture background="true">$INFO[ListItem.Art(poster)]</texture>
+                    </control>
+                    <control type="image">
+                        <width>10</width>
+                        <height>10</height>
+                        <texture background="true">$INFO[ListItem.Art(clearlogo)]</texture>
+                    </control>
+                </focusedlayout>
+                <content target="videos">$PARAM[content]</content>
+            </control>
+        </definition>
+    </include>
+    <include name="SpotlightAutoscroll">
+        <param name="time"/>
+        <definition>
+            <autoscroll time="$PARAM[time]">!Skin.TimerIsRunning(nc_spot_hold) + !Window.IsActive(fullscreenvideo) + !Window.IsActive(movieinformation) + !System.HasActiveModalDialog</autoscroll>
+        </definition>
+    </include>
+
+    <!-- The window's default control, from a conditional include (Home without spotlight) -->
+    <include name="DefaultControl">
+        <param name="id"/>
+        <definition>
+            <defaultcontrol>$PARAM[id]</defaultcontrol>
+        </definition>
+    </include>
+
+    <!-- Top line of Home: the menu on the left, the clock on the right. Right of the menu, left
+         of the clock, an icon opens the quick menu (Custom_1170_QuickMenu.xml). -->
+    <include name="HomeTop">
+        <control type="grouplist" id="9190">
+            <left>64</left>
+            <top>22</top>
+            <width>1792</width>
+            <height>44</height>
+            <orientation>horizontal</orientation>
+            <align>right</align>
+            <itemgap>16</itemgap>
+            <usecontrolcoords>true</usecontrolcoords>
+            <!-- a grouplist hands its own left and right to its first and last entry -->
+            <onleft>9100</onleft>
+            <onright>noop</onright>
+            <!-- the icon is the radio texture: a button has no room for an icon -->
+            <control type="radiobutton" id="9109">
+                <width>56</width>
+                <height>44</height>
+                <label/>
+                <texturefocus border="12" colordiffuse="accent">ui/cut_btn_fill.png</texturefocus>
+                <texturenofocus/>
+                <radioposx>12</radioposx>
+                <radioposy>6</radioposy>
+                <radiowidth>32</radiowidth>
+                <radioheight>32</radioheight>
+                <textureradioonfocus colordiffuse="focus_text">ui/qm_anchor.png</textureradioonfocus>
+                <textureradioonnofocus colordiffuse="text_mute">ui/qm_anchor.png</textureradioonnofocus>
+                <textureradioofffocus colordiffuse="focus_text">ui/qm_anchor.png</textureradioofffocus>
+                <textureradiooffnofocus colordiffuse="text_mute">ui/qm_anchor.png</textureradiooffnofocus>
+                <onclick>ActivateWindow(1170)</onclick>
+                <onleft>9100</onleft>
+                <onright>noop</onright>
+                <onup>noop</onup>
+                <ondown>9100</ondown>
+            </control>
+            <!-- the weather of the quick menu, when a weather service is set up -->
+            <control type="image">
+                <top>8</top>
+                <width>28</width>
+                <height>28</height>
+                <texture colordiffuse="accent2">ui/qm_weather.png</texture>
+                <visible>Weather.IsFetched</visible>
+            </control>
+            <control type="label">
+                <width>auto</width>
+                <height>44</height>
+                <aligny>center</aligny>
+                <font>font_num</font>
+                <textcolor>accent2</textcolor>
+                <label>$INFO[Weather.Temperature]</label>
+                <visible>Weather.IsFetched</visible>
+            </control>
+            <control type="label">
+                <width>auto</width>
+                <height>44</height>
+                <aligny>center</aligny>
+                <font>font_num</font>
+                <textcolor>accent2</textcolor>
+                <label>$INFO[System.Time]</label>
+            </control>
+        </control>
+        <include>MainMenu</include>
+    </include>
+
+    <!-- Poster, kicker, title or logo, tags, rating and plot of one item (item = info prefix,
+         e.g. Container(9000).ListItem); kicker is the pink line above the title.
+         The fanart of the item lies behind the whole page (FanartBackdrop in Home.xml).
+         page: the condition of the Home page it stands on; fade: poster and text fade in one
+         after the other when that page comes up (PageFade). -->
+    <include name="HeroBody">
+        <param name="item"/>
+        <param name="kicker"/>
+        <param name="tmdbrating" default="Window(Home).Property(TMDbHelper.ListItem.tmdb_rating)"/>
+        <param name="titleid" default="0"/>
+        <param name="logoid" default="0"/>
+        <param name="metaid" default="0"/>
+        <param name="ratingid" default="0"/>
+        <param name="plotid" default="0"/>
+        <param name="tech" default="false"/>
+        <param name="kickerid" default="0"/>
+        <param name="poster" default="true"/>
+        <param name="shift" default="0"/>
+        <param name="titlewidth" default="1440"/>
+        <param name="titlefont" default="font_hero"/>
+        <param name="plotwidth" default="980"/>
+        <param name="page" default="true"/>
+        <param name="fade" default="false"/>
+        <definition>
+            <control type="group">
+                <left>64</left>
+                <top>116</top>
+                <visible>[$PARAM[page]] + [$PARAM[poster]]</visible>
+                <include content="PageFade" condition="$PARAM[fade]"/>
+                <include content="CutCard">
+                    <param name="width" value="280"/>
+                    <param name="height" value="420"/>
+                    <param name="mask" value="ui/mask_280x420.png"/>
+                    <param name="image" value="$INFO[$PARAM[item].Art(poster)]"/>
+                    <control type="textbox">
+                        <left>20</left>
+                        <top>20</top>
+                        <width>240</width>
+                        <height>380</height>
+                        <font>font_label</font>
+                        <textcolor>text_mute</textcolor>
+                        <label>$INFO[$PARAM[item].Title]</label>
+                        <visible>String.IsEmpty($PARAM[item].Art(poster))</visible>
+                    </control>
+                </include>
+            </control>
+            <!-- text column right of the poster; shift moves it left when there is none -->
+            <control type="group">
+                <left>$PARAM[shift]</left>
+                <visible>$PARAM[page]</visible>
+                <include content="PageFade" condition="$PARAM[fade]">
+                    <param name="delay" value="FadeStep1"/>
+                </include>
+                <include content="Kicker">
+                    <param name="id" value="$PARAM[kickerid]"/>
+                    <param name="label" value="$PARAM[kicker]"/>
+                    <param name="left" value="384"/>
+                    <param name="top" value="116"/>
+                </include>
+                <control type="image" id="$PARAM[logoid]">
+                    <left>384</left>
+                    <top>154</top>
+                    <width>760</width>
+                    <height>110</height>
+                    <aspectratio aligny="bottom" align="left">keep</aspectratio>
+                    <fadetime>400</fadetime>
+                    <texture background="true">$INFO[$PARAM[item].Art(clearlogo)]</texture>
+                    <visible>!String.IsEmpty($PARAM[item].Art(clearlogo))</visible>
+                </control>
+                <include content="GlitchTitle">
+                    <param name="id" value="$PARAM[titleid]"/>
+                    <param name="label" value="$INFO[$PARAM[item].Title]"/>
+                    <param name="left" value="384"/>
+                    <param name="top" value="160"/>
+                    <param name="width" value="$PARAM[titlewidth]"/>
+                    <param name="font" value="$PARAM[titlefont]"/>
+                    <param name="visible" value="String.IsEmpty($PARAM[item].Art(clearlogo))"/>
+                </include>
+                <control type="grouplist" id="$PARAM[metaid]">
+                    <left>384</left>
+                    <top>272</top>
+                    <width>1400</width>
+                    <height>36</height>
+                    <orientation>horizontal</orientation>
+                    <itemgap>10</itemgap>
+                    <include content="Tag">
+                        <param name="label" value="$INFO[$PARAM[item].Year]"/>
+                        <param name="visible" value="!String.IsEmpty($PARAM[item].Year)"/>
+                    </include>
+                    <include content="Tag">
+                        <param name="label" value="$INFO[$PARAM[item].Duration(mins)] $LOCALIZE[31012]"/>
+                        <param name="visible" value="!String.IsEmpty($PARAM[item].Duration(mins))"/>
+                    </include>
+                    <include content="Tag">
+                        <param name="label" value="$INFO[$PARAM[item].Genre]"/>
+                        <param name="visible" value="!$PARAM[tech] + !String.IsEmpty($PARAM[item].Genre)"/>
+                    </include>
+                    <include content="Tag">
+                        <param name="label" value="$VAR[SpotlightResolution]$VAR[SpotlightHdr, ,]"/>
+                        <param name="color" value="accent"/>
+                        <param name="visible" value="$PARAM[tech] + !String.IsEmpty($PARAM[item].VideoResolution)"/>
+                    </include>
+                    <include content="Tag">
+                        <param name="label" value="$INFO[$PARAM[item].AudioCodec]$INFO[$PARAM[item].AudioChannels, ,ch]"/>
+                        <param name="color" value="accent"/>
+                        <param name="visible" value="$PARAM[tech] + !String.IsEmpty($PARAM[item].AudioCodec)"/>
+                    </include>
+                </control>
+                <control type="group" id="$PARAM[ratingid]">
+                    <left>384</left>
+                    <top>318</top>
+                    <visible>!String.IsEmpty($PARAM[item].Title) + [!String.IsEmpty($PARAM[tmdbrating]) | [!String.IsEmpty($PARAM[item].Rating) + !String.IsEqual($PARAM[item].Rating,0.0)]]</visible>
+                    <control type="label">
+                        <width>600</width>
+                        <height>34</height>
+                        <font>font_caps_small</font>
+                        <textcolor>text_mute</textcolor>
+                        <selectedcolor>text_mute</selectedcolor>
+                        <label>[COLOR accent3]★[/COLOR] [COLOR text]$INFO[$PARAM[tmdbrating]][/COLOR]  TMDB</label>
+                        <visible>!String.IsEmpty($PARAM[tmdbrating])</visible>
+                    </control>
+                    <control type="label">
+                        <width>600</width>
+                        <height>34</height>
+                        <font>font_caps_small</font>
+                        <textcolor>text_mute</textcolor>
+                        <selectedcolor>text_mute</selectedcolor>
+                        <label>[COLOR accent3]★[/COLOR] [COLOR text]$INFO[$PARAM[item].Rating][/COLOR]</label>
+                        <visible>String.IsEmpty($PARAM[tmdbrating])</visible>
+                    </control>
+                </control>
+                <control type="textbox" id="$PARAM[plotid]">
+                    <left>384</left>
+                    <top>360</top>
+                    <width>$PARAM[plotwidth]</width>
+                    <height>116</height>
+                    <font>font_body</font>
+                    <textcolor>text_dim</textcolor>
+                    <label>$INFO[$PARAM[item].Plot]</label>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Up and down from the movie spotlight buttons -->
+    <include name="MovieSpotlightUpDown">
+        <onup>9100</onup>
+        <ondown condition="String.IsEqual(Window(Home).Property(nc.page),movies)">9410</ondown>
+        <ondown>9210</ondown>
+    </include>
+
+    <!-- A spotlight button as Kodi sees it: a one-item list holding the spotlight title, so the
+         context menu and info keys act on the title like on a card (a button has no list item).
+         It draws nothing and takes no mouse; SpotlightPill draws it. Its onclick replaces the
+         title's own click. -->
+    <include name="SpotlightButton">
+        <param name="id"/>
+        <param name="content"/>
+        <param name="onclick" default="noop"/>
+        <param name="onclick2" default="noop"/>
+        <param name="onfocus" default="noop"/>
+        <param name="visible" default="true"/>
+        <definition>
+            <control type="list" id="$PARAM[id]">
+                <width>200</width>
+                <height>54</height>
+                <hitrect x="0" y="0" w="0" h="0"/>
+                <orientation>horizontal</orientation>
+                <visible>$PARAM[visible]</visible>
+                <onclick>$PARAM[onclick]</onclick>
+                <onclick>$PARAM[onclick2]</onclick>
+                <onfocus>$PARAM[onfocus]</onfocus>
+                <nested/>
+                <itemlayout width="200" height="54"/>
+                <focusedlayout width="200" height="54"/>
+                <content target="videos">$PARAM[content]</content>
+            </control>
+        </definition>
+    </include>
+
+    <!-- The pill of a spotlight button (PillButton without id), filled while that button has
+         focus. A mouse click focuses the button and selects it. -->
+    <include name="SpotlightPill">
+        <param name="button"/>
+        <param name="label"/>
+        <param name="color" default="border_dim"/>
+        <param name="textcolor" default="text_dim"/>
+        <param name="visible" default="true"/>
+        <definition>
+            <control type="button">
+                <visible>$PARAM[visible] + !Control.HasFocus($PARAM[button])</visible>
+                <include content="SpotlightPillLook">
+                    <param name="label" value="$PARAM[label]"/>
+                    <param name="textcolor" value="$PARAM[textcolor]"/>
+                </include>
+                <texturenofocus border="12" colordiffuse="$PARAM[color]">ui/cut_btn.png</texturenofocus>
+                <onclick>SetFocus($PARAM[button])</onclick>
+                <onclick>Action(Select)</onclick>
+            </control>
+            <control type="button">
+                <visible>$PARAM[visible] + Control.HasFocus($PARAM[button])</visible>
+                <include content="SpotlightPillLook">
+                    <param name="label" value="$PARAM[label]"/>
+                    <param name="textcolor" value="focus_text"/>
+                </include>
+                <texturenofocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</texturenofocus>
+                <onclick>SetFocus($PARAM[button])</onclick>
+                <onclick>Action(Select)</onclick>
+            </control>
+        </definition>
+    </include>
+    <include name="SpotlightPillLook">
+        <param name="label"/>
+        <param name="textcolor"/>
+        <definition>
+            <width>auto</width>
+            <height>54</height>
+            <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+            <font>font_caps</font>
+            <textoffsetx>24</textoffsetx>
+            <align>center</align>
+            <aligny>center</aligny>
+            <textcolor>$PARAM[textcolor]</textcolor>
+            <focusedcolor>focus_text</focusedcolor>
+            <texturefocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</texturefocus>
+        </definition>
+    </include>
+
+    <!-- Hero of the home and movies pages: the movie spotlight, each page can switch it off -->
+    <!-- Hero blocks stand side by side at window level, each with the page condition, and fade
+         in one after the other (PageFade): poster, text, then the buttons -->
+    <include name="MovieHero">
+        <include content="HeroBody">
+            <param name="item" value="Container(9000).ListItem"/>
+            <param name="kicker" value="$INFO[Container(9000).ListItem.Genre,,  ]‹ ›"/>
+            <param name="titleid" value="9020"/>
+            <param name="logoid" value="9021"/>
+            <param name="metaid" value="9040"/>
+            <param name="ratingid" value="9030"/>
+            <param name="plotid" value="9022"/>
+            <param name="tech" value="true"/>
+            <param name="page" value="[[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + !String.IsEqual(Skin.String(SpotlightSource),off)] | [String.IsEqual(Window(Home).Property(nc.page),movies) + !String.IsEqual(Skin.String(nc.movies.spotlight),off)]"/>
+            <param name="fade" value="true"/>
+        </include>
+        <!-- 9300: the movie hero is on screen -->
+        <control type="group" id="9300">
+            <visible>[[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + !String.IsEqual(Skin.String(SpotlightSource),off)] | [String.IsEqual(Window(Home).Property(nc.page),movies) + !String.IsEqual(Skin.String(nc.movies.spotlight),off)]</visible>
+            <include content="PageFade">
+                <param name="delay" value="FadeStep2"/>
+            </include>
+            <!-- the buttons as Kodi sees them (SpotlightButton): one-item lists of the title -->
+            <control type="group" id="9050">
+                <left>384</left>
+                <top>490</top>
+                <defaultcontrol>9010</defaultcontrol>
+                <include content="SpotlightButton">
+                    <param name="id" value="9010"/>
+                    <param name="content" value="$VAR[SpotlightItemPath]"/>
+                    <param name="onclick" value="NotifyAll(nightcity,play:movie:$INFO[Container(9000).ListItem.DBID]:resume)"/>
+                    <param name="onfocus" value="SetProperty(TMDbHelper.WidgetContainer,9000,home)"/>
+                    <onleft>Skin.TimerStart(nc_spot_hold)</onleft>
+                    <onleft>Control.Move(9000,-1)</onleft>
+                    <onright>9011</onright>
+                    <include>MovieSpotlightUpDown</include>
+                </include>
+                <include content="SpotlightButton">
+                    <param name="id" value="9011"/>
+                    <param name="content" value="$VAR[SpotlightItemPath]"/>
+                    <param name="onclick" value="SetFocus(9000)"/>
+                    <param name="onclick2" value="Action(Info)"/>
+                    <param name="onfocus" value="SetProperty(TMDbHelper.WidgetContainer,9000,home)"/>
+                    <onleft>9010</onleft>
+                    <onright condition="String.IsEqual(Window(Home).Property(nc.page),movies)">9012</onright>
+                    <onright condition="!String.IsEqual(Window(Home).Property(nc.page),movies)">Skin.TimerStart(nc_spot_hold)</onright>
+                    <onright condition="!String.IsEqual(Window(Home).Property(nc.page),movies)">Control.Move(9000,1)</onright>
+                    <include>MovieSpotlightUpDown</include>
+                </include>
+                <include content="SpotlightButton">
+                    <param name="id" value="9012"/>
+                    <param name="content" value="$VAR[SpotlightItemPath]"/>
+                    <param name="onclick" value="SetProperty(nc.library,movies,home)"/>
+                    <param name="onclick2" value="ActivateWindow(1110)"/>
+                    <param name="visible" value="String.IsEqual(Window(Home).Property(nc.page),movies)"/>
+                    <onleft>9011</onleft>
+                    <onright>Skin.TimerStart(nc_spot_hold)</onright>
+                    <onright>Control.Move(9000,1)</onright>
+                    <include>MovieSpotlightUpDown</include>
+                </include>
+            </control>
+            <control type="grouplist">
+                <left>384</left>
+                <top>490</top>
+                <width>1400</width>
+                <height>54</height>
+                <orientation>horizontal</orientation>
+                <itemgap>16</itemgap>
+                <include content="SpotlightPill">
+                    <param name="button" value="9010"/>
+                    <param name="label" value="$VAR[SpotlightPlayLabel]"/>
+                    <param name="color" value="accent"/>
+                    <param name="textcolor" value="accent"/>
+                </include>
+                <include content="SpotlightPill">
+                    <param name="button" value="9011"/>
+                    <param name="label" value="$LOCALIZE[31011]"/>
+                </include>
+                <include content="SpotlightPill">
+                    <param name="button" value="9012"/>
+                    <param name="label" value="$LOCALIZE[31101] »"/>
+                    <param name="visible" value="String.IsEqual(Window(Home).Property(nc.page),movies)"/>
+                </include>
+            </control>
+            <include content="ProgressLine">
+                <param name="left" value="384"/>
+                <param name="top" value="562"/>
+                <param name="width" value="420"/>
+                <param name="info" value="Container(9000).ListItem.PercentPlayed"/>
+                <param name="visible" value="Container(9000).ListItem.IsResumable"/>
+            </include>
+        </control>
+    </include>
+
+    <!-- Hero of the shows page: the show spotlight -->
+    <include name="ShowHero">
+        <include content="HeroBody">
+            <param name="item" value="Container(9001).ListItem"/>
+            <param name="kicker" value="$LOCALIZE[31100]  ‹ ›"/>
+            <param name="titleid" value="9560"/>
+            <param name="page" value="String.IsEqual(Window(Home).Property(nc.page),shows)"/>
+            <param name="fade" value="true"/>
+        </include>
+        <control type="group">
+            <visible>String.IsEqual(Window(Home).Property(nc.page),shows)</visible>
+            <include content="PageFade">
+                <param name="delay" value="FadeStep2"/>
+            </include>
+            <control type="group" id="9550">
+                <left>384</left>
+                <top>490</top>
+                <defaultcontrol>9551</defaultcontrol>
+                <include content="SpotlightButton">
+                    <param name="id" value="9551"/>
+                    <param name="content" value="$VAR[SpotlightShowItemPath]"/>
+                    <param name="onclick" value="NotifyAll(nightcity,next_episode:$INFO[Container(9001).ListItem.DBID])"/>
+                    <param name="onfocus" value="SetProperty(TMDbHelper.WidgetContainer,9001,home)"/>
+                    <onleft>Skin.TimerStart(nc_spot_hold)</onleft>
+                    <onleft>Control.Move(9001,-1)</onleft>
+                    <onright>9552</onright>
+                    <onup>9100</onup>
+                    <ondown>9510</ondown>
+                </include>
+                <include content="SpotlightButton">
+                    <param name="id" value="9552"/>
+                    <param name="content" value="$VAR[SpotlightShowItemPath]"/>
+                    <param name="onclick" value="SetFocus(9001)"/>
+                    <param name="onclick2" value="Action(Info)"/>
+                    <param name="onfocus" value="SetProperty(TMDbHelper.WidgetContainer,9001,home)"/>
+                    <onleft>9551</onleft>
+                    <onright>9553</onright>
+                    <onup>9100</onup>
+                    <ondown>9510</ondown>
+                </include>
+                <include content="SpotlightButton">
+                    <param name="id" value="9553"/>
+                    <param name="content" value="$VAR[SpotlightShowItemPath]"/>
+                    <param name="onclick" value="SetProperty(nc.library,tvshows,home)"/>
+                    <param name="onclick2" value="ActivateWindow(1110)"/>
+                    <onleft>9552</onleft>
+                    <onright>Skin.TimerStart(nc_spot_hold)</onright>
+                    <onright>Control.Move(9001,1)</onright>
+                    <onup>9100</onup>
+                    <ondown>9510</ondown>
+                </include>
+            </control>
+            <control type="grouplist">
+                <left>384</left>
+                <top>490</top>
+                <width>1400</width>
+                <height>54</height>
+                <orientation>horizontal</orientation>
+                <itemgap>16</itemgap>
+                <include content="SpotlightPill">
+                    <param name="button" value="9551"/>
+                    <param name="label" value="▶ $LOCALIZE[31106]"/>
+                    <param name="color" value="accent"/>
+                    <param name="textcolor" value="accent"/>
+                </include>
+                <include content="SpotlightPill">
+                    <param name="button" value="9552"/>
+                    <param name="label" value="$LOCALIZE[31011]"/>
+                </include>
+                <include content="SpotlightPill">
+                    <param name="button" value="9553"/>
+                    <param name="label" value="$LOCALIZE[31102] »"/>
+                </include>
+            </control>
+        </control>
+    </include>
+
+    <!-- Hero of the system page: versions and machine facts (temperature where Kodi knows it) -->
+    <include name="SystemHero">
+        <control type="group">
+            <visible>String.IsEqual(Window(Home).Property(nc.page),system)</visible>
+            <include content="PageFade"/>
+            <include content="Kicker">
+                <param name="label" value="nightcity $INFO[System.AddonVersion(skin.nightcity)]"/>
+                <param name="left" value="64"/>
+                <param name="top" value="116"/>
+            </include>
+            <include content="GlitchTitle">
+                <param name="id" value="9660"/>
+                <param name="label" value="$LOCALIZE[31033]"/>
+                <param name="left" value="64"/>
+                <param name="top" value="160"/>
+                <param name="width" value="1600"/>
+            </include>
+        </control>
+        <control type="group">
+            <visible>String.IsEqual(Window(Home).Property(nc.page),system)</visible>
+            <include content="PageFade">
+                <param name="delay" value="FadeStep1"/>
+            </include>
+            <control type="grouplist">
+                <left>64</left>
+                <top>280</top>
+                <width>1200</width>
+                <height>300</height>
+                <orientation>vertical</orientation>
+                <itemgap>0</itemgap>
+                <include content="FactLine">
+                    <param name="key" value="kodi"/>
+                    <param name="value" value="$INFO[System.BuildVersion]"/>
+                </include>
+                <include content="FactLine">
+                    <param name="key" value="ip"/>
+                    <param name="value" value="$INFO[Network.IPAddress]"/>
+                </include>
+                <include content="FactLine">
+                    <param name="key" value="memory"/>
+                    <param name="value" value="$INFO[System.Memory(used.percent)]"/>
+                </include>
+                <include content="FactLine">
+                    <param name="key" value="uptime"/>
+                    <param name="value" value="$INFO[System.Uptime]"/>
+                </include>
+                <include content="FactLine">
+                    <param name="key" value="temp"/>
+                    <param name="value" value="$INFO[System.CPUTemperature]"/>
+                    <param name="visible" value="String.Contains(System.CPUTemperature,°)"/>
+                </include>
+            </control>
+        </control>
+    </include>
+
+    <!-- Search page: the term as title, a field that opens the keyboard (script search), the
+         last five terms as tabs, rows of library and TMDb results below -->
+    <include name="SearchHero">
+        <control type="group">
+            <visible>String.IsEqual(Window(Home).Property(nc.page),search)</visible>
+            <include content="PageFade"/>
+            <include content="Kicker">
+                <param name="label" value="$LOCALIZE[31032]"/>
+                <param name="left" value="64"/>
+                <param name="top" value="116"/>
+            </include>
+            <include content="GlitchTitle">
+                <param name="id" value="9760"/>
+                <param name="label" value="$VAR[SearchTitle]"/>
+                <param name="left" value="64"/>
+                <param name="top" value="160"/>
+                <param name="width" value="1600"/>
+            </include>
+        </control>
+        <control type="group">
+            <visible>String.IsEqual(Window(Home).Property(nc.page),search)</visible>
+            <include content="PageFade">
+                <param name="delay" value="FadeStep1"/>
+            </include>
+            <control type="button" id="9750">
+                <left>64</left>
+                <top>290</top>
+                <width>960</width>
+                <height>64</height>
+                <font>font_label</font>
+                <textoffsetx>24</textoffsetx>
+                <aligny>center</aligny>
+                <label>$VAR[SearchFieldLabel]</label>
+                <textcolor>text</textcolor>
+                <focusedcolor>focus_text</focusedcolor>
+                <texturefocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</texturefocus>
+                <texturenofocus border="12" colordiffuse="accent">ui/cut_btn.png</texturenofocus>
+                <onclick>NotifyAll(nightcity,search)</onclick>
+                <onup>9100</onup>
+                <ondown condition="!String.IsEmpty(Window(Home).Property(nc.search.recent.1))">9770</ondown>
+                <ondown>9710</ondown>
+                <onleft>noop</onleft>
+                <onright>noop</onright>
+            </control>
+            <include content="RowHeader">
+                <param name="label" value="$LOCALIZE[31153]"/>
+                <param name="left" value="64"/>
+                <param name="top" value="390"/>
+                <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.search.recent.1))"/>
+            </include>
+            <control type="grouplist" id="9770">
+                <left>54</left>
+                <top>424</top>
+                <width>1800</width>
+                <height>44</height>
+                <orientation>horizontal</orientation>
+                <itemgap>24</itemgap>
+                <onup>9750</onup>
+                <ondown>9710</ondown>
+                <onleft>noop</onleft>
+                <onright>noop</onright>
+                <include content="TabButton">
+                    <param name="id" value="9771"/>
+                    <param name="label" value="$INFO[Window(Home).Property(nc.search.recent.1)]"/>
+                    <param name="active" value="String.IsEqual(Window(Home).Property(nc.search),Window(Home).Property(nc.search.recent.1))"/>
+                    <param name="onclick" value="NotifyAll(nightcity,search_recent:1)"/>
+                    <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.search.recent.1))"/>
+                </include>
+                <include content="TabButton">
+                    <param name="id" value="9772"/>
+                    <param name="label" value="$INFO[Window(Home).Property(nc.search.recent.2)]"/>
+                    <param name="active" value="String.IsEqual(Window(Home).Property(nc.search),Window(Home).Property(nc.search.recent.2))"/>
+                    <param name="onclick" value="NotifyAll(nightcity,search_recent:2)"/>
+                    <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.search.recent.2))"/>
+                </include>
+                <include content="TabButton">
+                    <param name="id" value="9773"/>
+                    <param name="label" value="$INFO[Window(Home).Property(nc.search.recent.3)]"/>
+                    <param name="active" value="String.IsEqual(Window(Home).Property(nc.search),Window(Home).Property(nc.search.recent.3))"/>
+                    <param name="onclick" value="NotifyAll(nightcity,search_recent:3)"/>
+                    <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.search.recent.3))"/>
+                </include>
+                <include content="TabButton">
+                    <param name="id" value="9774"/>
+                    <param name="label" value="$INFO[Window(Home).Property(nc.search.recent.4)]"/>
+                    <param name="active" value="String.IsEqual(Window(Home).Property(nc.search),Window(Home).Property(nc.search.recent.4))"/>
+                    <param name="onclick" value="NotifyAll(nightcity,search_recent:4)"/>
+                    <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.search.recent.4))"/>
+                </include>
+                <include content="TabButton">
+                    <param name="id" value="9775"/>
+                    <param name="label" value="$INFO[Window(Home).Property(nc.search.recent.5)]"/>
+                    <param name="active" value="String.IsEqual(Window(Home).Property(nc.search),Window(Home).Property(nc.search.recent.5))"/>
+                    <param name="onclick" value="NotifyAll(nightcity,search_recent:5)"/>
+                    <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.search.recent.5))"/>
+                </include>
+            </control>
+        </control>
+    </include>
+
+    <include name="SearchWidgetLoaders">
+        <include content="WidgetLoader">
+            <param name="id" value="9721"/>
+            <param name="content1" value="$VAR[SearchPath_movies]"/>
+        </include>
+        <include content="WidgetLoader">
+            <param name="id" value="9722"/>
+            <param name="content1" value="$VAR[SearchPath_tvshows]"/>
+        </include>
+        <include content="WidgetLoader">
+            <param name="id" value="9723"/>
+            <param name="content1" value="$VAR[SearchPath_episodes]"/>
+        </include>
+        <include content="WidgetLoader">
+            <param name="id" value="9724"/>
+            <param name="content1" value="$VAR[SearchPath_tmdb_movies]"/>
+        </include>
+        <include content="WidgetLoader">
+            <param name="id" value="9725"/>
+            <param name="content1" value="$VAR[SearchPath_tmdb_tvshows]"/>
+        </include>
+    </include>
+
+    <include name="SearchWidgets">
+        <include content="RowBox">
+            <param name="id" value="9701"/>
+            <param name="group" value="9711"/>
+            <param name="up" value="9770"/>
+            <param name="down" value="9712"/>
+            <param name="label" value="$LOCALIZE[31148]"/>
+            <param name="content1" value="$VAR[SearchPath_movies]"/>
+            <param name="loader" value="9721"/>
+            <param name="wait" value="true"/>
+        </include>
+        <include content="RowBox">
+            <param name="id" value="9702"/>
+            <param name="group" value="9712"/>
+            <param name="up" value="9711"/>
+            <param name="down" value="9713"/>
+            <param name="label" value="$LOCALIZE[31149]"/>
+            <param name="content1" value="$VAR[SearchPath_tvshows]"/>
+            <param name="loader" value="9722"/>
+            <param name="wait" value="true"/>
+        </include>
+        <include content="RowBox">
+            <param name="id" value="9703"/>
+            <param name="group" value="9713"/>
+            <param name="up" value="9712"/>
+            <param name="down" value="9714"/>
+            <param name="label" value="$LOCALIZE[31150]"/>
+            <param name="content1" value="$VAR[SearchPath_episodes]"/>
+            <param name="loader" value="9723"/>
+            <param name="wait" value="true"/>
+        </include>
+        <include content="RowBox">
+            <param name="id" value="9704"/>
+            <param name="group" value="9714"/>
+            <param name="up" value="9713"/>
+            <param name="down" value="9715"/>
+            <param name="label" value="$LOCALIZE[31151]"/>
+            <param name="content1" value="$VAR[SearchPath_tmdb_movies]"/>
+            <param name="loader" value="9724"/>
+            <param name="wait" value="true"/>
+            <param name="fresh" value="String.IsEqual(Container(9724).ListItem(0).Property(param.query),Window(Home).Property(nc.search))"/>
+            <param name="freshrow" value="String.IsEqual(Container(9704).ListItem(0).Property(param.query),Window(Home).Property(nc.search))"/>
+        </include>
+        <include content="RowBox">
+            <param name="id" value="9705"/>
+            <param name="group" value="9715"/>
+            <param name="up" value="9714"/>
+            <param name="label" value="$LOCALIZE[31152]"/>
+            <param name="content1" value="$VAR[SearchPath_tmdb_tvshows]"/>
+            <param name="loader" value="9725"/>
+            <param name="wait" value="true"/>
+            <param name="fresh" value="String.IsEqual(Container(9725).ListItem(0).Property(param.query),Window(Home).Property(nc.search))"/>
+            <param name="freshrow" value="String.IsEqual(Container(9705).ListItem(0).Property(param.query),Window(Home).Property(nc.search))"/>
+        </include>
+    </include>
+
+    <!-- The menu in the top line: the focused entry a filled accent button, the shown page an
+         accent outline. Focus switches the page. -->
+    <include name="MainMenu">
+        <control type="grouplist" id="9100">
+            <left>-18</left>
+            <top>22</top>
+            <width>1500</width>
+            <height>44</height>
+            <orientation>horizontal</orientation>
+            <itemgap>0</itemgap>
+            <onleft>noop</onleft>
+            <onright>9109</onright>
+            <onup>noop</onup>
+            <!-- a page without spotlight starts with its rows -->
+            <ondown condition="String.IsEqual(Window(Home).Property(nc.page),shows) + String.IsEqual(Skin.String(nc.shows.spotlight),off)">9510</ondown>
+            <ondown condition="String.IsEqual(Window(Home).Property(nc.page),shows)">9550</ondown>
+            <ondown condition="String.IsEqual(Window(Home).Property(nc.page),system)">9610</ondown>
+            <ondown condition="String.IsEqual(Window(Home).Property(nc.page),search)">9750</ondown>
+            <ondown condition="String.IsEqual(Window(Home).Property(nc.page),movies) + String.IsEqual(Skin.String(nc.movies.spotlight),off)">9410</ondown>
+            <ondown condition="[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + String.IsEqual(Skin.String(SpotlightSource),off)">9210</ondown>
+            <ondown>9050</ondown>
+            <include content="TabGap">
+                <param name="id" value="9111"/>
+            </include>
+            <include content="TabGap">
+                <param name="id" value="9112"/>
+            </include>
+            <include content="TabGap">
+                <param name="id" value="9113"/>
+            </include>
+            <include content="MenuButton">
+                <param name="id" value="9101"/>
+                <param name="label" value="$LOCALIZE[31006]"/>
+                <param name="active" value="String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)"/>
+                <param name="onfocus" value="SetProperty(nc.page,home,home)"/>
+                <param name="onclick" value="Action(Down)"/>
+            </include>
+            <include content="TabGap">
+                <param name="id" value="9115"/>
+                <param name="visible" value="!Skin.HasSetting(nc.menu.hide.movies)"/>
+            </include>
+            <include content="MenuButton">
+                <param name="id" value="9102"/>
+                <param name="label" value="$LOCALIZE[31030]"/>
+                <param name="active" value="String.IsEqual(Window(Home).Property(nc.page),movies)"/>
+                <param name="onfocus" value="SetProperty(nc.page,movies,home)"/>
+                <param name="onclick" value="Action(Down)"/>
+                <param name="visible" value="!Skin.HasSetting(nc.menu.hide.movies)"/>
+            </include>
+            <include content="TabGap">
+                <param name="id" value="9116"/>
+                <param name="visible" value="!Skin.HasSetting(nc.menu.hide.shows)"/>
+            </include>
+            <include content="MenuButton">
+                <param name="id" value="9103"/>
+                <param name="label" value="$LOCALIZE[31031]"/>
+                <param name="active" value="String.IsEqual(Window(Home).Property(nc.page),shows)"/>
+                <param name="onfocus" value="SetProperty(nc.page,shows,home)"/>
+                <param name="onclick" value="Action(Down)"/>
+                <param name="visible" value="!Skin.HasSetting(nc.menu.hide.shows)"/>
+            </include>
+            <include content="TabGap">
+                <param name="id" value="9117"/>
+                <param name="visible" value="!Skin.HasSetting(nc.menu.hide.search)"/>
+            </include>
+            <include content="MenuButton">
+                <param name="id" value="9104"/>
+                <param name="label" value="$LOCALIZE[31032]"/>
+                <param name="active" value="String.IsEqual(Window(Home).Property(nc.page),search)"/>
+                <param name="onfocus" value="SetProperty(nc.page,search,home)"/>
+                <param name="onclick" value="SetFocus(9750)"/>
+                <param name="visible" value="!Skin.HasSetting(nc.menu.hide.search)"/>
+            </include>
+            <include content="TabGap">
+                <param name="id" value="9118"/>
+            </include>
+            <include content="MenuButton">
+                <param name="id" value="9105"/>
+                <param name="label" value="$LOCALIZE[31033]"/>
+                <param name="active" value="String.IsEqual(Window(Home).Property(nc.page),system)"/>
+                <param name="onfocus" value="SetProperty(nc.page,system,home)"/>
+                <param name="onclick" value="SetFocus(9610)"/>
+            </include>
+            <include content="TabGap">
+                <param name="id" value="9114"/>
+            </include>
+        </control>
+    </include>
+
+    <!-- Layers on a row card: the title while there is no poster, a progress line for started
+         items -->
+    <include name="CardExtras">
+        <control type="textbox">
+            <left>16</left>
+            <top>16</top>
+            <width>168</width>
+            <height>250</height>
+            <font>font_small</font>
+            <textcolor>text_mute</textcolor>
+            <label>$INFO[ListItem.TVShowTitle,,[CR]]$INFO[ListItem.Title]</label>
+            <visible>String.IsEmpty(ListItem.Art(poster)) + String.IsEmpty(ListItem.Art(tvshow.poster))</visible>
+        </control>
+        <include content="ProgressLine">
+            <param name="left" value="12"/>
+            <param name="top" value="284"/>
+            <param name="width" value="176"/>
+            <param name="info" value="ListItem.PercentPlayed"/>
+            <param name="visible" value="Integer.IsGreater(ListItem.PercentPlayed,0)"/>
+        </include>
+    </include>
+
+    <!-- One row: a letter-spaced heading, the focused title and a counter on the right, a
+         horizontal list of cut-corner posters. Unfocused cards of the focused row are dimmed.
+         Exactly one row fits the page viewport. Hidden while empty. -->
+    <include name="RowBox">
+        <param name="id"/>
+        <param name="group"/>
+        <param name="label"/>
+        <param name="content1"/>
+        <param name="content2" default=""/>
+        <param name="loader"/>
+        <param name="wait" default="false"/>
+        <param name="up"/>
+        <param name="down" default="noop"/>
+        <param name="sortby" default=""/>
+        <param name="sortorder" default=""/>
+        <param name="limit" default=""/>
+        <param name="titlevisible" default="true"/>
+        <!-- the loader holds this row's own items, not those of a search before (TMDb rows keep
+             them without IsUpdating until the new ones are in) -->
+        <param name="fresh" default="true"/>
+        <!-- the row's own list holds its items: else faded out until it loaded them -->
+        <param name="freshrow" default="true"/>
+        <!-- click: the include with the click actions (ProviderClick: Kodi runs the item, for
+             favourites and sets); art: the card image -->
+        <param name="click" default="ClickRouting"/>
+        <param name="art" default="$VAR[CardArt]"/>
+        <definition>
+            <control type="group" id="$PARAM[group]">
+                <height>468</height>
+                <visible>[Integer.IsGreater(Container($PARAM[loader]).NumItems,0) + [$PARAM[fresh]]] | [Container($PARAM[loader]).IsUpdating + !Integer.IsGreater(Container($PARAM[loader]).NumItems,0)]</visible>
+                <include content="RowHeader">
+                    <param name="label" value="$PARAM[label]"/>
+                    <param name="left" value="64"/>
+                    <param name="top" value="6"/>
+                    <param name="visible" value="$PARAM[titlevisible]"/>
+                </include>
+                <control type="label">
+                    <left>600</left>
+                    <top>6</top>
+                    <width>1150</width>
+                    <height>34</height>
+                    <align>right</align>
+                    <font>font_caps_small</font>
+                    <textcolor>text_dim</textcolor>
+                    <selectedcolor>text_dim</selectedcolor>
+                    <label>[UPPERCASE]$INFO[Container($PARAM[id]).ListItem.Label][/UPPERCASE]</label>
+                    <visible>Control.HasFocus($PARAM[id])</visible>
+                </control>
+                <control type="label">
+                    <left>64</left>
+                    <top>6</top>
+                    <width>1792</width>
+                    <height>34</height>
+                    <align>right</align>
+                    <font>font_num</font>
+                    <textcolor>accent2</textcolor>
+                    <selectedcolor>accent2</selectedcolor>
+                    <label>$INFO[Container($PARAM[id]).CurrentItem]/$INFO[Container($PARAM[id]).NumItems]</label>
+                </control>
+                <control type="list" id="$PARAM[id]">
+                    <left>40</left>
+                    <top>44</top>
+                    <width>1880</width>
+                    <height>424</height>
+                    <orientation>horizontal</orientation>
+                    <scrolltime tween="quadratic">200</scrolltime>
+                    <!-- images of the next and previous page load in the background -->
+                    <preloaditems>2</preloaditems>
+                    <!-- loads once the loader has items, never together with it: two plugin loads
+                         at once start two Python interpreters at once, which crashes Kodi; wait=true
+                         for every row with a loader of its own -->
+                    <visible>!$PARAM[wait] | [Integer.IsGreater(Container($PARAM[loader]).NumItems,0) + [$PARAM[fresh]]]</visible>
+                    <animation effect="fade" start="100" end="0" time="0" condition="![$PARAM[freshrow]]">Conditional</animation>
+                    <!-- a grouplist only wires its direct children, so the list moves to the
+                         neighbouring row group itself; a hidden group passes the move on -->
+                    <onup>$PARAM[up]</onup>
+                    <ondown>$PARAM[down]</ondown>
+                    <onfocus>ClearProperty(TMDbHelper.WidgetContainer,home)</onfocus>
+                    <include content="$PARAM[click]"/>
+                    <itemlayout width="228" height="424">
+                        <control type="group">
+                            <left>24</left>
+                            <top>34</top>
+                            <include content="CutCard">
+                                <param name="image" value="$PARAM[art]"/>
+                                <param name="dim" value="Control.HasFocus($PARAM[id])"/>
+                                <include>CardExtras</include>
+                            </include>
+                        </control>
+                    </itemlayout>
+                    <focusedlayout width="228" height="424">
+                        <control type="group">
+                            <left>24</left>
+                            <top>34</top>
+                            <include content="CutCard">
+                                <param name="image" value="$PARAM[art]"/>
+                                <param name="focused" value="Control.HasFocus($PARAM[id])"/>
+                                <include>CardExtras</include>
+                            </include>
+                        </control>
+                    </focusedlayout>
+                    <content target="videos" sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]" limit="$PARAM[limit]">$PARAM[content1]</content>
+                    <content target="videos">$PARAM[content2]</content>
+                </control>
+                <!-- extra controls, e.g. tabs in the top line instead of the title -->
+                <nested/>
+            </control>
+        </definition>
+    </include>
+
+    <!-- The scrolling area under the hero of one page; shows one RowBox at a time, two when the
+         page has no spotlight (top 116). It fades in delay ms after its page comes up, after the
+         hero (PageFade). -->
+    <include name="PageRows">
+        <param name="id"/>
+        <param name="page"/>
+        <param name="up"/>
+        <param name="top" default="612"/>
+        <param name="height" default="468"/>
+        <param name="delay" default="FadeStep3"/>
+        <definition>
+            <control type="grouplist" id="$PARAM[id]">
+                <left>0</left>
+                <top>$PARAM[top]</top>
+                <width>1920</width>
+                <height>$PARAM[height]</height>
+                <orientation>vertical</orientation>
+                <itemgap>0</itemgap>
+                <scrolltime tween="quadratic">200</scrolltime>
+                <onup>$PARAM[up]</onup>
+                <ondown>noop</ondown>
+                <visible>$PARAM[page]</visible>
+                <include content="PageFade">
+                    <param name="delay" value="$PARAM[delay]"/>
+                </include>
+                <nested/>
+            </control>
+        </definition>
+    </include>
+
+    <!-- A hidden container stops refreshing, so a row that can become empty and fill up again
+         (on deck, continue watching) takes its visibility from an off-screen loader list -->
+    <include name="WidgetLoader">
+        <param name="id"/>
+        <param name="content1"/>
+        <param name="content2" default=""/>
+        <definition>
+            <control type="list" id="$PARAM[id]">
+                <left>-3000</left>
+                <top>0</top>
+                <width>10</width>
+                <height>10</height>
+                <itemlayout width="1" height="1"/>
+                <focusedlayout width="1" height="1"/>
+                <content target="videos">$PARAM[content1]</content>
+                <content target="videos">$PARAM[content2]</content>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Tabs in the top line of a genre row: the three biggest genres switch the row on focus,
+         the last tab offers all genres on click (scripts/nightcity.py genres/genre_pick). base:
+         id base of the page (grouplist base30, tabs base31-34, gaps base41-45); prop: the
+         Window(Home) properties of the genres (genre for movies, tvgenre for shows). -->
+    <include name="GenreTabs">
+        <param name="base"/>
+        <param name="list"/>
+        <param name="up"/>
+        <param name="prop"/>
+        <param name="picklabel"/>
+        <param name="pick"/>
+        <definition>
+            <control type="grouplist" id="$PARAM[base]30">
+                <left>30</left>
+                <top>0</top>
+                <width>1500</width>
+                <height>44</height>
+                <orientation>horizontal</orientation>
+                <itemgap>0</itemgap>
+                <onleft>noop</onleft>
+                <onright>noop</onright>
+                <onup>$PARAM[up]</onup>
+                <ondown>$PARAM[list]</ondown>
+                <include content="TabGap">
+                    <param name="id" value="$PARAM[base]41"/>
+                </include>
+                <include content="GenreTab">
+                    <param name="id" value="$PARAM[base]31"/>
+                    <param name="n" value="1"/>
+                    <param name="prop" value="$PARAM[prop]"/>
+                </include>
+                <include content="TabGap">
+                    <param name="id" value="$PARAM[base]42"/>
+                    <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.$PARAM[prop].2.label))"/>
+                </include>
+                <include content="GenreTab">
+                    <param name="id" value="$PARAM[base]32"/>
+                    <param name="n" value="2"/>
+                    <param name="prop" value="$PARAM[prop]"/>
+                </include>
+                <include content="TabGap">
+                    <param name="id" value="$PARAM[base]43"/>
+                    <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.$PARAM[prop].3.label))"/>
+                </include>
+                <include content="GenreTab">
+                    <param name="id" value="$PARAM[base]33"/>
+                    <param name="n" value="3"/>
+                    <param name="prop" value="$PARAM[prop]"/>
+                </include>
+                <include content="TabGap">
+                    <param name="id" value="$PARAM[base]44"/>
+                </include>
+                <include content="TabButton">
+                    <param name="id" value="$PARAM[base]34"/>
+                    <param name="label" value="$PARAM[picklabel]"/>
+                    <param name="active" value="!String.IsEmpty(Window(Home).Property(nc.$PARAM[prop].id)) + !String.IsEqual(Window(Home).Property(nc.$PARAM[prop].id),Window(Home).Property(nc.$PARAM[prop].1.id)) + !String.IsEqual(Window(Home).Property(nc.$PARAM[prop].id),Window(Home).Property(nc.$PARAM[prop].2.id)) + !String.IsEqual(Window(Home).Property(nc.$PARAM[prop].id),Window(Home).Property(nc.$PARAM[prop].3.id))"/>
+                    <param name="onclick" value="NotifyAll(nightcity,$PARAM[pick])"/>
+                </include>
+                <include content="TabGap">
+                    <param name="id" value="$PARAM[base]45"/>
+                </include>
+            </control>
+        </definition>
+    </include>
+
+    <include name="GenreTab">
+        <param name="id"/>
+        <param name="n"/>
+        <param name="prop"/>
+        <definition>
+            <include content="TabButton">
+                <param name="id" value="$PARAM[id]"/>
+                <param name="label" value="$INFO[Window(Home).Property(nc.$PARAM[prop].$PARAM[n].label)]"/>
+                <param name="active" value="!String.IsEmpty(Window(Home).Property(nc.$PARAM[prop].$PARAM[n].id)) + String.IsEqual(Window(Home).Property(nc.$PARAM[prop].id),Window(Home).Property(nc.$PARAM[prop].$PARAM[n].id))"/>
+                <param name="onfocus" value="SetProperty(nc.$PARAM[prop].id,$INFO[Window(Home).Property(nc.$PARAM[prop].$PARAM[n].id)],home)"/>
+                <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.$PARAM[prop].$PARAM[n].label))"/>
+            </include>
+        </definition>
+    </include>
+
+    <!-- Click on an item a list cannot route (favourites, sets): no actions, Kodi runs or opens
+         the item itself -->
+    <include name="ProviderClick">
+        <definition/>
+    </include>
+
+    <!-- System page: one cut-corner tile per settings group (all five fit). OK opens
+         the settings console at the group's first entry (Settings.xml reads nc.settings.group). -->
+    <include name="SystemWidgets">
+        <control type="group" id="9621">
+            <height>468</height>
+            <include content="RowHeader">
+                <param name="label" value="$LOCALIZE[5]"/>
+                <param name="left" value="64"/>
+                <param name="top" value="6"/>
+            </include>
+            <control type="list" id="9601">
+                <onup>9100</onup>
+                <ondown>noop</ondown>
+                <left>40</left>
+                <top>44</top>
+                <width>1880</width>
+                <height>240</height>
+                <orientation>horizontal</orientation>
+                <scrolltime tween="quadratic">200</scrolltime>
+                <itemlayout width="360" height="210">
+                    <control type="image">
+                        <left>24</left>
+                        <top>20</top>
+                        <width>336</width>
+                        <height>170</height>
+                        <texture border="16" colordiffuse="border_dim">ui/cut.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>46</left>
+                        <top>34</top>
+                        <width>290</width>
+                        <height>32</height>
+                        <font>font_num</font>
+                        <textcolor>accent2</textcolor>
+                        <selectedcolor>accent2</selectedcolor>
+                        <label>0$INFO[ListItem.CurrentItem]</label>
+                    </control>
+                    <control type="label">
+                        <left>46</left>
+                        <top>68</top>
+                        <width>290</width>
+                        <height>72</height>
+                        <font>font_caps</font>
+                        <wrapmultiline>true</wrapmultiline>
+                        <textcolor>text_dim</textcolor>
+                        <selectedcolor>text_dim</selectedcolor>
+                        <label>[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</label>
+                    </control>
+                    <control type="label">
+                        <left>46</left>
+                        <top>144</top>
+                        <width>296</width>
+                        <height>32</height>
+                        <font>font_tiny</font>
+                        <textcolor>text_mute</textcolor>
+                        <selectedcolor>text_mute</selectedcolor>
+                        <label>$INFO[ListItem.Label2]</label>
+                    </control>
+                </itemlayout>
+                <focusedlayout width="360" height="210">
+                    <control type="image">
+                        <left>24</left>
+                        <top>20</top>
+                        <width>336</width>
+                        <height>170</height>
+                        <texture border="16" colordiffuse="border_dim">ui/cut.png</texture>
+                        <visible>!Control.HasFocus(9601)</visible>
+                    </control>
+                    <control type="image">
+                        <left>24</left>
+                        <top>20</top>
+                        <width>336</width>
+                        <height>170</height>
+                        <texture border="16" colordiffuse="focus">ui/cut_fill.png</texture>
+                        <visible>Control.HasFocus(9601)</visible>
+                    </control>
+                    <control type="label">
+                        <left>46</left>
+                        <top>34</top>
+                        <width>290</width>
+                        <height>32</height>
+                        <font>font_num</font>
+                        <textcolor>$VAR[SystemTileNumColor]</textcolor>
+                        <selectedcolor>$VAR[SystemTileNumColor]</selectedcolor>
+                        <label>0$INFO[ListItem.CurrentItem]</label>
+                    </control>
+                    <control type="label">
+                        <left>46</left>
+                        <top>68</top>
+                        <width>290</width>
+                        <height>72</height>
+                        <font>font_caps</font>
+                        <wrapmultiline>true</wrapmultiline>
+                        <textcolor>$VAR[SystemTileColor]</textcolor>
+                        <selectedcolor>$VAR[SystemTileColor]</selectedcolor>
+                        <label>[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</label>
+                    </control>
+                    <control type="label">
+                        <left>46</left>
+                        <top>144</top>
+                        <width>296</width>
+                        <height>32</height>
+                        <font>font_tiny</font>
+                        <textcolor>$VAR[SystemTileSubColor]</textcolor>
+                        <selectedcolor>$VAR[SystemTileSubColor]</selectedcolor>
+                        <scroll>Control.HasFocus(9601)</scroll>
+                        <label>$INFO[ListItem.Label2]</label>
+                    </control>
+                </focusedlayout>
+                <!-- no visible conditions: Kodi clicks a static list by position -->
+                <content>
+                    <item>
+                        <label>$LOCALIZE[31159]</label>
+                        <label2>$LOCALIZE[14200], $LOCALIZE[14211]$VAR[SystemTilePvr]</label2>
+                        <onclick>SetProperty(nc.settings.group,1,home)</onclick>
+                        <onclick>ActivateWindow(settings)</onclick>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[31160]</label>
+                        <label2>$LOCALIZE[14206], $LOCALIZE[166], $LOCALIZE[13200]</label2>
+                        <onclick>SetProperty(nc.settings.group,2,home)</onclick>
+                        <onclick>ActivateWindow(settings)</onclick>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[31161]</label>
+                        <label2>$LOCALIZE[24001], $LOCALIZE[10003]</label2>
+                        <onclick>SetProperty(nc.settings.group,3,home)</onclick>
+                        <onclick>ActivateWindow(settings)</onclick>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[31162]</label>
+                        <label2>$LOCALIZE[13000], $LOCALIZE[14036]</label2>
+                        <onclick>SetProperty(nc.settings.group,4,home)</onclick>
+                        <onclick>ActivateWindow(settings)</onclick>
+                    </item>
+                    <item>
+                        <label>$LOCALIZE[31163]</label>
+                        <label2>$LOCALIZE[10007], $LOCALIZE[14111]</label2>
+                        <onclick>SetProperty(nc.settings.group,5,home)</onclick>
+                        <onclick>ActivateWindow(settings)</onclick>
+                    </item>
+                </content>
+            </control>
+        </control>
+    </include>
+
+    <!-- Quick menu (Custom_1170_QuickMenu.xml): a power tile, icon above the name (two lines at
+         most); dimmed when the device cannot do it (property can empty). label2: what a running
+         timer has left. focused: false in the item layout, so only the focused tile of the
+         focused list fills. -->
+    <include name="QuickTile">
+        <param name="list"/>
+        <param name="focused" default="true"/>
+        <definition>
+            <control type="image">
+                <width>178</width>
+                <height>132</height>
+                <texture border="16" colordiffuse="border_dim">ui/cut.png</texture>
+                <visible>![$PARAM[focused] + Control.HasFocus($PARAM[list])]</visible>
+            </control>
+            <control type="image">
+                <width>178</width>
+                <height>132</height>
+                <texture border="16" colordiffuse="focus">ui/cut_fill.png</texture>
+                <visible>$PARAM[focused] + Control.HasFocus($PARAM[list])</visible>
+            </control>
+            <control type="group">
+                <animation effect="fade" start="100" end="40" time="0" condition="String.IsEmpty(ListItem.Property(can))">Conditional</animation>
+                <control type="image">
+                    <left>18</left>
+                    <top>18</top>
+                    <width>40</width>
+                    <height>40</height>
+                    <texture colordiffuse="text_dim">$INFO[ListItem.Icon]</texture>
+                    <visible>![$PARAM[focused] + Control.HasFocus($PARAM[list])]</visible>
+                </control>
+                <control type="image">
+                    <left>18</left>
+                    <top>18</top>
+                    <width>40</width>
+                    <height>40</height>
+                    <texture colordiffuse="focus_text">$INFO[ListItem.Icon]</texture>
+                    <visible>$PARAM[focused] + Control.HasFocus($PARAM[list])</visible>
+                </control>
+                <control type="label">
+                    <left>64</left>
+                    <top>18</top>
+                    <width>96</width>
+                    <height>40</height>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font_num_small</font>
+                    <textcolor>accent2</textcolor>
+                    <label>$INFO[ListItem.Label2]</label>
+                    <visible>![$PARAM[focused] + Control.HasFocus($PARAM[list])]</visible>
+                </control>
+                <control type="label">
+                    <left>64</left>
+                    <top>18</top>
+                    <width>96</width>
+                    <height>40</height>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font_num_small</font>
+                    <textcolor>focus_text</textcolor>
+                    <label>$INFO[ListItem.Label2]</label>
+                    <visible>$PARAM[focused] + Control.HasFocus($PARAM[list])</visible>
+                </control>
+                <control type="textbox">
+                    <left>16</left>
+                    <top>64</top>
+                    <width>156</width>
+                    <height>60</height>
+                    <font>font_tiny</font>
+                    <textcolor>text</textcolor>
+                    <label>[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</label>
+                    <visible>![$PARAM[focused] + Control.HasFocus($PARAM[list])]</visible>
+                </control>
+                <control type="textbox">
+                    <left>16</left>
+                    <top>64</top>
+                    <width>156</width>
+                    <height>60</height>
+                    <font>font_tiny</font>
+                    <textcolor>focus_text</textcolor>
+                    <label>[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</label>
+                    <visible>$PARAM[focused] + Control.HasFocus($PARAM[list])</visible>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Quick menu: a link, icon left of the name -->
+    <include name="QuickLink">
+        <param name="list" default="1230"/>
+        <param name="focused" default="true"/>
+        <definition>
+            <control type="image">
+                <width>178</width>
+                <height>72</height>
+                <texture border="16" colordiffuse="border_dim">ui/cut.png</texture>
+                <visible>![$PARAM[focused] + Control.HasFocus($PARAM[list])]</visible>
+            </control>
+            <control type="image">
+                <width>178</width>
+                <height>72</height>
+                <texture border="16" colordiffuse="focus">ui/cut_fill.png</texture>
+                <visible>$PARAM[focused] + Control.HasFocus($PARAM[list])</visible>
+            </control>
+            <control type="image">
+                <left>16</left>
+                <top>22</top>
+                <width>28</width>
+                <height>28</height>
+                <texture colordiffuse="text_dim">$INFO[ListItem.Icon]</texture>
+                <visible>![$PARAM[focused] + Control.HasFocus($PARAM[list])]</visible>
+            </control>
+            <control type="image">
+                <left>16</left>
+                <top>22</top>
+                <width>28</width>
+                <height>28</height>
+                <texture colordiffuse="focus_text">$INFO[ListItem.Icon]</texture>
+                <visible>$PARAM[focused] + Control.HasFocus($PARAM[list])</visible>
+            </control>
+            <control type="label">
+                <left>54</left>
+                <width>116</width>
+                <height>72</height>
+                <aligny>center</aligny>
+                <font>font_tiny</font>
+                <textcolor>text</textcolor>
+                <selectedcolor>text</selectedcolor>
+                <label>[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</label>
+                <visible>![$PARAM[focused] + Control.HasFocus($PARAM[list])]</visible>
+            </control>
+            <control type="label">
+                <left>54</left>
+                <width>116</width>
+                <height>72</height>
+                <aligny>center</aligny>
+                <font>font_tiny</font>
+                <textcolor>focus_text</textcolor>
+                <selectedcolor>focus_text</selectedcolor>
+                <label>[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</label>
+                <visible>$PARAM[focused] + Control.HasFocus($PARAM[list])</visible>
+            </control>
+        </definition>
+    </include>
+</includes>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- OSD: path, clock and state on top; what plays and the seek line come from the seek bar
+     dialog. "ends at" beside its times, playback buttons and stop left, track buttons right.
+     Subtitles and audio show a track panel, video a panel with what the video is; left and
+     right in a panel step along the buttons. "…" swaps subtitles, audio and video for stats.
+     The chapter row is Down from the bar. -->
+<window>
+    <depth>DepthOSD</depth>
+    <defaultcontrol always="true">602</defaultcontrol>
+    <onload>ClearProperty(nc.osd.more,home)</onload>
+    <!-- one script keeps the track panels current while the OSD is open; closing it clears the
+         rows so the next file never shows the last file's tracks -->
+    <onload>NotifyAll(nightcity,streams_watch)</onload>
+    <!-- back from a chain (VideoFullScreen.xml): the chapter row comes up (stand-in 699) -->
+    <onload condition="!String.IsEmpty(Window(Home).Property(nc.osd.chain))">SetProperty(nc.osd.rows,1,home)</onload>
+    <onload condition="!String.IsEmpty(Window(Home).Property(nc.osd.chain))">SetFocus(699)</onload>
+    <onunload>ClearProperty(nc.audio.rows,home)</onunload>
+    <onunload>ClearProperty(nc.sub.rows,home)</onunload>
+    <!-- an OSD the pause opened (Custom_1150_PauseOSD.xml) and that is closed by hand stays closed -->
+    <onunload>ClearProperty(nc.osd.auto,home)</onunload>
+    <animation effect="fade" time="150">WindowOpen</animation>
+    <animation effect="fade" time="150">WindowClose</animation>
+    <controls>
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>220</height>
+            <texture colordiffuse="scrim">ui/fade_t.png</texture>
+        </control>
+        <include content="PathLine">
+            <param name="id" value="9026"/>
+            <param name="path" value="$VAR[PlayerPath]"/>
+            <param name="left" value="64"/>
+            <param name="top" value="30"/>
+            <param name="width" value="1792"/>
+        </include>
+        <control type="label">
+            <left>64</left>
+            <top>74</top>
+            <width>800</width>
+            <height>36</height>
+            <font>font_caps_small</font>
+            <textcolor>text</textcolor>
+            <label>[UPPERCASE]$VAR[PlayerState][/UPPERCASE]</label>
+        </control>
+        <control type="label" id="650">
+            <left>64</left>
+            <top>886</top>
+            <width>1792</width>
+            <height>40</height>
+            <align>right</align>
+            <font>font_caps_small</font>
+            <textcolor>text_dim</textcolor>
+            <label>[UPPERCASE]$LOCALIZE[31059][/UPPERCASE] [COLOR text]$INFO[Player.FinishTime][/COLOR]</label>
+            <visible>!Window.IsActive(1141) + !Window.IsActive(videobookmarks)</visible>
+        </control>
+        <control type="grouplist" id="600">
+            <left>64</left>
+            <top>952</top>
+            <width>760</width>
+            <height>54</height>
+            <orientation>horizontal</orientation>
+            <itemgap>12</itemgap>
+            <onup>noop</onup>
+            <!-- Down: the chapter row, Down again the cast and crew row -->
+            <ondown>ActivateWindow(videobookmarks)</ondown>
+            <visible>!Window.IsActive(1141) + !Window.IsActive(videobookmarks)</visible>
+            <onleft>noop</onleft>
+            <onright>620</onright>
+            <include content="PillButton">
+                <param name="id" value="601"/>
+                <param name="label" value="⏮"/>
+                <param name="onclick" value="PlayerControl(Previous)"/>
+            </include>
+            <include content="PillButton">
+                <param name="id" value="602"/>
+                <param name="label" value="$VAR[PlayPauseLabel]"/>
+                <param name="color" value="accent"/>
+                <param name="textcolor" value="accent"/>
+                <param name="onclick" value="PlayerControl(Play)"/>
+            </include>
+            <include content="PillButton">
+                <param name="id" value="603"/>
+                <param name="label" value="⏭ $LOCALIZE[31137]"/>
+                <param name="onclick" value="PlayerControl(Next)"/>
+                <param name="visible" value="Playlist.HasNext"/>
+            </include>
+            <include content="PillButton">
+                <param name="id" value="604"/>
+                <param name="label" value="■ $LOCALIZE[31052]"/>
+                <param name="onclick" value="PlayerControl(Stop)"/>
+            </include>
+            <!-- mirrors ⏮ at the other end: the next chapter, or the next item -->
+            <include content="PillButton">
+                <param name="id" value="611"/>
+                <param name="label" value="⏭"/>
+                <param name="onclick" value="PlayerControl(Next)"/>
+            </include>
+        </control>
+        <control type="grouplist" id="620">
+            <left>856</left>
+            <top>952</top>
+            <width>1000</width>
+            <height>54</height>
+            <orientation>horizontal</orientation>
+            <align>right</align>
+            <itemgap>12</itemgap>
+            <onup>noop</onup>
+            <!-- Down: the chapter row, Down again the cast and crew row -->
+            <ondown>ActivateWindow(videobookmarks)</ondown>
+            <visible>!Window.IsActive(1141) + !Window.IsActive(videobookmarks)</visible>
+            <onleft>600</onleft>
+            <onright>noop</onright>
+            <include content="PillButton">
+                <param name="id" value="605"/>
+                <param name="label" value="$LOCALIZE[31053]"/>
+                <param name="visible" value="String.IsEmpty(Window(Home).Property(nc.osd.more))"/>
+                <param name="onclick" value="SetFocus(651,$INFO[Window(Home).Property(nc.sub.pos)],absolute)"/>
+                <onup>SetFocus(651,$INFO[Window(Home).Property(nc.sub.pos)],absolute)</onup>
+            </include>
+            <include content="PillButton">
+                <param name="id" value="606"/>
+                <param name="label" value="$LOCALIZE[31054]"/>
+                <param name="visible" value="String.IsEmpty(Window(Home).Property(nc.osd.more))"/>
+                <param name="onclick" value="SetFocus(652,$INFO[Window(Home).Property(nc.audio.pos)],absolute)"/>
+                <onup>SetFocus(652,$INFO[Window(Home).Property(nc.audio.pos)],absolute)</onup>
+            </include>
+            <include content="PillButton">
+                <param name="id" value="607"/>
+                <param name="label" value="$LOCALIZE[31055]"/>
+                <param name="visible" value="String.IsEmpty(Window(Home).Property(nc.osd.more))"/>
+                <param name="onclick" value="SetFocus(653)"/>
+                <onup>SetFocus(653)</onup>
+            </include>
+            <include content="PillButton">
+                <param name="id" value="609"/>
+                <param name="label" value="$LOCALIZE[31155]"/>
+                <param name="onclick" value="ActivateWindow(playerprocessinfo)"/>
+                <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.osd.more))"/>
+            </include>
+            <include content="PillButton">
+                <param name="id" value="610"/>
+                <param name="label" value="…"/>
+                <!-- both conditions are checked before either action runs -->
+                <onclick condition="String.IsEmpty(Window(Home).Property(nc.osd.more))">SetProperty(nc.osd.more,1,home)</onclick>
+                <onclick condition="!String.IsEmpty(Window(Home).Property(nc.osd.more))">ClearProperty(nc.osd.more,home)</onclick>
+            </include>
+        </control>
+        <!-- panels above the right buttons, shown while their button or panel has focus; left and
+             right move on to the neighbouring button -->
+        <include content="TrackPanel">
+            <param name="id" value="651"/>
+            <param name="button" value="605"/>
+            <param name="prefix" value="sub"/>
+            <param name="heading" value="$LOCALIZE[31053]"/>
+            <param name="settings" value="osdsubtitlesettings"/>
+            <param name="left" value="611"/>
+            <param name="right" value="606"/>
+        </include>
+        <include content="TrackPanel">
+            <param name="id" value="652"/>
+            <param name="button" value="606"/>
+            <param name="prefix" value="audio"/>
+            <param name="heading" value="$LOCALIZE[31054]"/>
+            <param name="settings" value="osdaudiosettings"/>
+            <param name="left" value="605"/>
+            <param name="right" value="607"/>
+        </include>
+        <include content="VideoPanel">
+            <param name="id" value="653"/>
+            <param name="button" value="607"/>
+            <param name="left" value="606"/>
+            <param name="right" value="610"/>
+        </include>
+        <!-- back from a chain: its focus actions wait until the OSD is up, then the chapter row
+             opens (onload above, once: nc.osd.rows). When the row closes the focus comes back
+             here and moves on to the bar. -->
+        <control type="button" id="699">
+            <left>-100</left>
+            <top>-100</top>
+            <width>1</width>
+            <height>1</height>
+            <texturefocus/>
+            <texturenofocus/>
+            <onfocus condition="!String.IsEmpty(Window(Home).Property(nc.osd.rows))">ClearProperty(nc.osd.rows,home)</onfocus>
+            <onfocus condition="!String.IsEmpty(Window(Home).Property(nc.osd.rows))">ActivateWindow(videobookmarks)</onfocus>
+            <onfocus condition="String.IsEmpty(Window(Home).Property(nc.osd.rows))">SetFocus(602)</onfocus>
+            <onup>602</onup>
+            <ondown>602</ondown>
+            <onleft>602</onleft>
+            <onright>602</onright>
+        </control>
+        <!-- Down from the bar: the chapter row; not while a panel has the focus (Down goes back
+             to its button there) -->
+        <include content="LevelHint">
+            <param name="id" value="690"/>
+            <param name="label" value="$VAR[PlayerChaptersLevel]"/>
+            <param name="visible" value="!Window.IsActive(videobookmarks) + !Window.IsActive(1141) + !Control.HasFocus(651) + !Control.HasFocus(652) + !Control.HasFocus(653)"/>
+        </include>
+    </controls>
+</window>

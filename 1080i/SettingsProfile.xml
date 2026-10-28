@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Profiles. Kodi ids: 2 profile list, 4 login screen, 5 auto login. -->
+<window>
+    <defaultcontrol always="true">2</defaultcontrol>
+    <controls>
+        <include>Background</include>
+        <include content="StatusBar">
+            <param name="title" value="$LOCALIZE[13200]"/>
+        </include>
+        <!-- the content fades in on open; background and status line stay -->
+        <control type="group">
+            <include>WindowFade</include>
+            <include content="DialogList">
+                <param name="id" value="2"/>
+                <onleft>Action(Back)</onleft>
+                <onright>9000</onright>
+                <param name="left" value="120"/>
+                <param name="top" value="100"/>
+                <param name="width" value="1000"/>
+                <param name="height" value="800"/>
+            </include>
+            <control type="grouplist" id="9000">
+                <left>1200</left>
+                <top>100</top>
+                <width>600</width>
+                <height>200</height>
+                <orientation>vertical</orientation>
+                <itemgap>0</itemgap>
+                <onleft>2</onleft>
+                <control type="radiobutton" id="4">
+                    <width>600</width>
+                    <include>SettingsRowLook</include>
+                    <font>font_small</font>
+                    <label>$LOCALIZE[20096]</label>
+                </control>
+                <control type="button" id="5">
+                    <width>600</width>
+                    <include>SettingsRowLook</include>
+                    <font>font_small</font>
+                    <label>$LOCALIZE[20457]</label>
+                </control>
+            </control>
+        </control>
+    </controls>
+</window>

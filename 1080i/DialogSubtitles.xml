@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Subtitle search. Kodi ids: 100 name, 110 service logo, 120 results, 130 "has subtitles" note,
+     140 status, 150 services, 160 manual search. -->
+<window>
+    <depth>DepthOSD</depth>
+    <defaultcontrol always="true">120</defaultcontrol>
+    <controls>
+        <control type="group">
+            <centerleft>50%</centerleft>
+            <centertop>50%</centertop>
+            <width>1600</width>
+            <height>800</height>
+            <include>DialogFrame</include>
+            <control type="label" id="100">
+                <left>40</left>
+                <top>16</top>
+                <width>1100</width>
+                <height>48</height>
+                <font>font_label</font>
+                <textcolor>accent3</textcolor>
+            </control>
+            <control type="label" id="140">
+                <left>1140</left>
+                <top>16</top>
+                <width>420</width>
+                <height>48</height>
+                <align>right</align>
+                <font>font_small</font>
+                <textcolor>text_dim</textcolor>
+            </control>
+            <control type="image" id="110">
+                <left>-200</left>
+                <width>1</width>
+                <height>1</height>
+                <visible>false</visible>
+            </control>
+            <control type="list" id="150">
+                <left>40</left>
+                <top>84</top>
+                <width>420</width>
+                <height>600</height>
+                <scrolltime>200</scrolltime>
+                <onright>120</onright>
+                <ondown>160</ondown>
+                <itemlayout width="420" height="52">
+                    <control type="label">
+                        <left>16</left>
+                        <width>388</width>
+                        <height>52</height>
+                        <aligny>center</aligny>
+                        <font>font_small</font>
+                        <textcolor>text_dim</textcolor>
+                        <selectedcolor>text_dim</selectedcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                </itemlayout>
+                <focusedlayout width="420" height="52">
+                    <control type="image">
+                        <width>420</width>
+                        <height>52</height>
+                        <texture border="12" colordiffuse="focus">ui/cut_btn_fill.png</texture>
+                        <visible>Control.HasFocus(150)</visible>
+                    </control>
+                    <control type="label">
+                        <left>16</left>
+                        <width>388</width>
+                        <height>52</height>
+                        <aligny>center</aligny>
+                        <font>font_small</font>
+                        <textcolor>text</textcolor>
+                        <selectedcolor>text</selectedcolor>
+                        <focusedcolor>focus_text</focusedcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                </focusedlayout>
+            </control>
+            <control type="list" id="120">
+                <left>500</left>
+                <top>84</top>
+                <width>1060</width>
+                <height>680</height>
+                <scrolltime>200</scrolltime>
+                <onleft>150</onleft>
+                <itemlayout width="1060" height="52">
+                    <control type="label">
+                        <left>16</left>
+                        <width>1028</width>
+                        <height>52</height>
+                        <aligny>center</aligny>
+                        <font>font_small</font>
+                        <textcolor>text_dim</textcolor>
+                        <selectedcolor>text_dim</selectedcolor>
+                        <label>[COLOR accent2]$INFO[ListItem.Label][/COLOR]  $INFO[ListItem.Label2]$INFO[ListItem.Property(sync), [COLOR text_mute]sync ,[/COLOR]]</label>
+                    </control>
+                </itemlayout>
+                <focusedlayout width="1060" height="52">
+                    <control type="image">
+                        <width>1060</width>
+                        <height>52</height>
+                        <texture border="12" colordiffuse="focus">ui/cut_btn_fill.png</texture>
+                        <visible>Control.HasFocus(120)</visible>
+                    </control>
+                    <control type="label">
+                        <left>16</left>
+                        <width>1028</width>
+                        <height>52</height>
+                        <aligny>center</aligny>
+                        <font>font_small</font>
+                        <textcolor>text</textcolor>
+                        <selectedcolor>text</selectedcolor>
+                        <focusedcolor>focus_text</focusedcolor>
+                        <label>[COLOR accent2]$INFO[ListItem.Label][/COLOR]  $INFO[ListItem.Label2]$INFO[ListItem.Property(sync), [COLOR text_mute]sync ,[/COLOR]]</label>
+                    </control>
+                </focusedlayout>
+            </control>
+            <control type="label" id="130">
+                <left>500</left>
+                <top>712</top>
+                <width>1060</width>
+                <height>52</height>
+                <font>font_small</font>
+                <textcolor>text_mute</textcolor>
+                <label>$LOCALIZE[31058]</label>
+            </control>
+            <control type="grouplist" id="9003">
+                <left>40</left>
+                <top>712</top>
+                <width>420</width>
+                <height>52</height>
+                <onup>150</onup>
+                <onright>120</onright>
+                <include content="Button">
+                    <param name="id" value="160"/>
+                    <param name="label" value="$LOCALIZE[24121]"/>
+                    <param name="width" value="420"/>
+                    <param name="onclick" value="noop"/>
+                </include>
+            </control>
+        </control>
+    </controls>
+</window>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generic slider (volume offset, audio delay ...). Kodi ids: 10 heading, 11 slider, 12 value. -->
+<window>
+    <depth>DepthOSD</depth>
+    <defaultcontrol always="true">11</defaultcontrol>
+    <controls>
+        <control type="group">
+            <centerleft>50%</centerleft>
+            <top>760</top>
+            <width>1000</width>
+            <height>150</height>
+            <include>DialogFrame</include>
+            <control type="label" id="10">
+                <left>40</left>
+                <top>16</top>
+                <width>600</width>
+                <height>40</height>
+                <font>font_label</font>
+                <textcolor>accent3</textcolor>
+            </control>
+            <control type="label" id="12">
+                <left>640</left>
+                <top>16</top>
+                <width>320</width>
+                <height>40</height>
+                <align>right</align>
+                <font>font_label</font>
+                <textcolor>accent2</textcolor>
+            </control>
+            <control type="slider" id="11">
+                <left>40</left>
+                <top>84</top>
+                <width>920</width>
+                <height>24</height>
+                <texturesliderbar colordiffuse="surface_alt">ui/white.png</texturesliderbar>
+                <textureslidernib colordiffuse="accent">ui/white.png</textureslidernib>
+                <textureslidernibfocus colordiffuse="focus">ui/white.png</textureslidernibfocus>
+            </control>
+        </control>
+    </controls>
+</window>

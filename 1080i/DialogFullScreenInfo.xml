@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Info key during playback: a slim line above the seek line with episode, title and tags,
+     "ends at" beside the times. The seek bar dialog draws the line and the gradient. -->
+<window>
+    <depth>DepthOSD</depth>
+    <animation effect="fade" time="150">WindowOpen</animation>
+    <animation effect="fade" time="150">WindowClose</animation>
+    <controls>
+        <control type="grouplist">
+            <left>64</left>
+            <top>932</top>
+            <width>1200</width>
+            <height>48</height>
+            <orientation>horizontal</orientation>
+            <itemgap>16</itemgap>
+            <control type="label">
+                <width>auto</width>
+                <height>48</height>
+                <aligny>center</aligny>
+                <font>font_caps_small</font>
+                <textcolor>accent2</textcolor>
+                <label>[UPPERCASE]$VAR[PlayerEpisodeTag][/UPPERCASE]</label>
+            </control>
+            <control type="label">
+                <width>auto</width>
+                <height>48</height>
+                <aligny>center</aligny>
+                <font>font_caps</font>
+                <textcolor>text</textcolor>
+                <label>[UPPERCASE]$INFO[VideoPlayer.Title][/UPPERCASE]</label>
+            </control>
+        </control>
+        <control type="grouplist">
+            <left>1056</left>
+            <top>938</top>
+            <width>800</width>
+            <height>36</height>
+            <orientation>horizontal</orientation>
+            <align>right</align>
+            <itemgap>8</itemgap>
+            <include content="Tag">
+                <param name="label" value="$VAR[PlayerResolution]"/>
+                <param name="visible" value="!String.IsEmpty(VideoPlayer.VideoResolution)"/>
+            </include>
+            <include content="Tag">
+                <param name="label" value="$INFO[VideoPlayer.HdrType]"/>
+                <param name="visible" value="!String.IsEmpty(VideoPlayer.HdrType)"/>
+            </include>
+            <include content="Tag">
+                <param name="label" value="$INFO[VideoPlayer.AudioLanguage,, ]$INFO[VideoPlayer.AudioChannels,,ch]"/>
+                <param name="visible" value="!String.IsEmpty(VideoPlayer.AudioChannels)"/>
+            </include>
+        </control>
+        <control type="label">
+            <left>64</left>
+            <top>1016</top>
+            <width>1792</width>
+            <height>40</height>
+            <align>right</align>
+            <font>font_caps_small</font>
+            <textcolor>text_dim</textcolor>
+            <label>[UPPERCASE]$LOCALIZE[31059][/UPPERCASE] [COLOR text]$INFO[Player.FinishTime][/COLOR]</label>
+        </control>
+    </controls>
+</window>

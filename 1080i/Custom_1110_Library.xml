@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Full library grid ("all movies", "all shows"): every title as a poster card, sortable.
+     It is a custom window, not MyVideoNav, because only here can a click on a show open the info
+     page of its next episode (MyVideoNav always opens the show's folder). -->
+<window type="window" id="1110">
+    <defaultcontrol always="true">5000</defaultcontrol>
+    <controls>
+        <include>Background</include>
+        <include content="FanartBackdrop">
+            <param name="art" value="Container(5000).ListItem.Art(fanart)"/>
+        </include>
+        <include content="StatusBar">
+            <param name="title" value="$VAR[LibraryTitle]"/>
+            <param name="counter" value="$INFO[Container(5000).CurrentItem]/$INFO[Container(5000).NumItems]"/>
+        </include>
+        <control type="panel" id="5000">
+            <preloaditems>2</preloaditems>
+            <left>40</left>
+            <top>84</top>
+            <width>1368</width>
+            <height>996</height>
+            <orientation>vertical</orientation>
+            <scrolltime tween="quadratic">200</scrolltime>
+            <onright>5101</onright>
+            <onup>noop</onup>
+            <ondown>noop</ondown>
+            <include>ClickRouting</include>
+            <itemlayout width="228" height="340">
+                <control type="group">
+                    <left>24</left>
+                    <top>24</top>
+                    <include content="CutCard">
+                        <param name="image" value="$VAR[CardArt]"/>
+                        <param name="dim" value="Control.HasFocus(5000)"/>
+                        <include>CardExtras</include>
+                    </include>
+                </control>
+            </itemlayout>
+            <focusedlayout width="228" height="340">
+                <control type="group">
+                    <left>24</left>
+                    <top>24</top>
+                    <include content="CutCard">
+                        <param name="image" value="$VAR[CardArt]"/>
+                        <param name="focused" value="Control.HasFocus(5000)"/>
+                        <include>CardExtras</include>
+                    </include>
+                </control>
+            </focusedlayout>
+            <content target="videos" sortby="$VAR[LibrarySortMethod]" sortorder="$VAR[LibrarySortDirection]">$VAR[LibraryPath]</content>
+        </control>
+        <control type="grouplist" id="5100">
+            <left>1480</left>
+            <top>108</top>
+            <width>380</width>
+            <height>200</height>
+            <orientation>vertical</orientation>
+            <itemgap>16</itemgap>
+            <onleft>5000</onleft>
+            <onright>noop</onright>
+            <onup>noop</onup>
+            <ondown>noop</ondown>
+            <include content="PillButton">
+                <param name="id" value="5101"/>
+                <param name="width" value="380"/>
+                <param name="label" value="$LOCALIZE[31116]: $VAR[LibrarySortLabel]"/>
+                
+                <!-- title, year, added, rating, title... (conditions are all checked before any runs) -->
+                <onclick condition="String.IsEmpty(Skin.String(nc.sort)) | String.IsEqual(Skin.String(nc.sort),sorttitle)">Skin.SetString(nc.sort,year)</onclick>
+                <onclick condition="String.IsEqual(Skin.String(nc.sort),year)">Skin.SetString(nc.sort,dateadded)</onclick>
+                <onclick condition="String.IsEqual(Skin.String(nc.sort),dateadded)">Skin.SetString(nc.sort,rating)</onclick>
+                <onclick condition="String.IsEqual(Skin.String(nc.sort),rating)">Skin.SetString(nc.sort,sorttitle)</onclick>
+            </include>
+            <include content="PillButton">
+                <param name="id" value="5102"/>
+                <param name="width" value="380"/>
+                <param name="label" value="$VAR[LibraryDirectionLabel]"/>
+                <param name="onclick" value="Skin.ToggleSetting(nc.sortdesc)"/>
+                
+            </include>
+        </control>
+        <!-- the focused title, large on the right -->
+        <include content="Kicker">
+            <param name="label" value="$INFO[Container(5000).ListItem.Year]$INFO[Container(5000).ListItem.Genre, · ,]"/>
+            <param name="left" value="1480"/>
+            <param name="top" value="260"/>
+            <param name="width" value="380"/>
+        </include>
+        <control type="textbox">
+            <left>1480</left>
+            <top>300</top>
+            <width>380</width>
+            <height>180</height>
+            <font>font_title</font>
+            <textcolor>text</textcolor>
+            <label>[UPPERCASE]$INFO[Container(5000).ListItem.Label][/UPPERCASE]</label>
+        </control>
+        <control type="textbox">
+            <left>1480</left>
+            <top>490</top>
+            <width>380</width>
+            <height>420</height>
+            <font>font_small</font>
+            <textcolor>text_dim</textcolor>
+            <label>$INFO[Container(5000).ListItem.Plot]</label>
+        </control>
+    </controls>
+</window>

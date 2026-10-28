@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <!-- Left-aligned menu row: plain text, the focused row a cyan cut fill. For context and button
+         menus. -->
+    <include name="ListButton">
+        <param name="id"/>
+        <param name="label" default=""/>
+        <param name="width" default="600"/>
+        <param name="onclick" default="noop"/>
+        <param name="onclick2" default="noop"/>
+        <param name="visible" default="true"/>
+        <definition>
+            <control type="button" id="$PARAM[id]">
+                <width>$PARAM[width]</width>
+                <height>52</height>
+                <label>$PARAM[label]</label>
+                <font>font_label</font>
+                <textoffsetx>20</textoffsetx>
+                <aligny>center</aligny>
+                <textcolor>text_dim</textcolor>
+                <focusedcolor>focus_text</focusedcolor>
+                <!-- e.g. clear in an empty event log -->
+                <disabledcolor>text_mute</disabledcolor>
+                <texturefocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</texturefocus>
+                <texturenofocus/>
+                <onclick>$PARAM[onclick]</onclick>
+                <onclick>$PARAM[onclick2]</onclick>
+                <visible>$PARAM[visible]</visible>
+                <!-- extra actions, e.g. onright into a preview -->
+                <nested/>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Dialog heading inside the frame, above the content: an optional pink kicker and the title.
+         The title keeps the id Kodi sets the heading through. Content starts at top 84. -->
+    <include name="DialogHeading">
+        <param name="id" default="0"/>
+        <param name="label" default=""/>
+        <param name="kicker" default=""/>
+        <param name="width" default="920"/>
+        <definition>
+            <control type="group">
+                <left>40</left>
+                <top>8</top>
+                <include content="Kicker">
+                    <param name="label" value="$PARAM[kicker]"/>
+                    <param name="width" value="$PARAM[width]"/>
+                </include>
+                <control type="label" id="$PARAM[id]">
+                    <top>22</top>
+                    <width>$PARAM[width]</width>
+                    <height>52</height>
+                    <aligny>center</aligny>
+                    <font>font_title</font>
+                    <textcolor>text</textcolor>
+                    <label>$PARAM[label]</label>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Vertical list with label and right-aligned label2, focused row a cyan cut fill, the current
+         value (ListItem.IsSelected) in accent with a ◢.
+         Children of the include (static <content>, navigation) go into the list. -->
+    <include name="DialogList">
+        <param name="id"/>
+        <param name="left" default="40"/>
+        <param name="top" default="84"/>
+        <param name="width" default="920"/>
+        <param name="height" default="520"/>
+        <param name="label" default="$INFO[ListItem.Label]"/>
+        <param name="label2" default="$INFO[ListItem.Label2]"/>
+        <param name="font" default="font_small"/>
+        <definition>
+            <control type="list" id="$PARAM[id]">
+                <left>$PARAM[left]</left>
+                <top>$PARAM[top]</top>
+                <width>$PARAM[width]</width>
+                <height>$PARAM[height]</height>
+                <scrolltime>200</scrolltime>
+                <nested/>
+                <itemlayout width="$PARAM[width]" height="52">
+                    <control type="label">
+                        <left>20</left>
+                        <width>$PARAM[width]</width>
+                        <height>52</height>
+                        <aligny>center</aligny>
+                        <font>$PARAM[font]</font>
+                        <textcolor>text_dim</textcolor>
+                        <selectedcolor>text_dim</selectedcolor>
+                        <label>$PARAM[label]</label>
+                        <visible>!ListItem.IsSelected</visible>
+                    </control>
+                    <!-- the current value: accent, with a ◢ in front -->
+                    <control type="label">
+                        <left>20</left>
+                        <width>$PARAM[width]</width>
+                        <height>52</height>
+                        <aligny>center</aligny>
+                        <font>$PARAM[font]</font>
+                        <textcolor>accent</textcolor>
+                        <selectedcolor>accent</selectedcolor>
+                        <label>◢ $PARAM[label]</label>
+                        <visible>ListItem.IsSelected</visible>
+                    </control>
+                    <control type="label">
+                        <right>20</right>
+                        <width>$PARAM[width]</width>
+                        <height>52</height>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <font>$PARAM[font]</font>
+                        <textcolor>text_mute</textcolor>
+                        <selectedcolor>text_mute</selectedcolor>
+                        <label>$PARAM[label2]</label>
+                    </control>
+                </itemlayout>
+                <focusedlayout width="$PARAM[width]" height="52">
+                    <control type="image">
+                        <width>$PARAM[width]</width>
+                        <height>52</height>
+                        <texture border="12" colordiffuse="focus">ui/cut_btn_fill.png</texture>
+                        <visible>Control.HasFocus($PARAM[id])</visible>
+                    </control>
+                    <!-- labels in a list ignore focusedcolor: one label per focus state -->
+                    <control type="label">
+                        <left>20</left>
+                        <width>$PARAM[width]</width>
+                        <height>52</height>
+                        <aligny>center</aligny>
+                        <font>$PARAM[font]</font>
+                        <textcolor>focus_text</textcolor>
+                        <selectedcolor>focus_text</selectedcolor>
+                        <scroll>Control.HasFocus($PARAM[id])</scroll>
+                        <label>$PARAM[label]</label>
+                        <visible>!ListItem.IsSelected + Control.HasFocus($PARAM[id])</visible>
+                    </control>
+                    <control type="label">
+                        <left>20</left>
+                        <width>$PARAM[width]</width>
+                        <height>52</height>
+                        <aligny>center</aligny>
+                        <font>$PARAM[font]</font>
+                        <textcolor>text</textcolor>
+                        <selectedcolor>text</selectedcolor>
+                        <scroll>Control.HasFocus($PARAM[id])</scroll>
+                        <label>$PARAM[label]</label>
+                        <visible>!ListItem.IsSelected + !Control.HasFocus($PARAM[id])</visible>
+                    </control>
+                    <control type="label">
+                        <left>20</left>
+                        <width>$PARAM[width]</width>
+                        <height>52</height>
+                        <aligny>center</aligny>
+                        <font>$PARAM[font]</font>
+                        <textcolor>focus_text</textcolor>
+                        <selectedcolor>focus_text</selectedcolor>
+                        <scroll>Control.HasFocus($PARAM[id])</scroll>
+                        <label>◢ $PARAM[label]</label>
+                        <visible>ListItem.IsSelected + Control.HasFocus($PARAM[id])</visible>
+                    </control>
+                    <control type="label">
+                        <left>20</left>
+                        <width>$PARAM[width]</width>
+                        <height>52</height>
+                        <aligny>center</aligny>
+                        <font>$PARAM[font]</font>
+                        <textcolor>accent</textcolor>
+                        <selectedcolor>accent</selectedcolor>
+                        <scroll>Control.HasFocus($PARAM[id])</scroll>
+                        <label>◢ $PARAM[label]</label>
+                        <visible>ListItem.IsSelected + !Control.HasFocus($PARAM[id])</visible>
+                    </control>
+                    <control type="label">
+                        <right>20</right>
+                        <width>$PARAM[width]</width>
+                        <height>52</height>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <font>$PARAM[font]</font>
+                        <textcolor>focus_text</textcolor>
+                        <selectedcolor>focus_text</selectedcolor>
+                        <label>$PARAM[label2]</label>
+                        <visible>Control.HasFocus($PARAM[id])</visible>
+                    </control>
+                    <control type="label">
+                        <right>20</right>
+                        <width>$PARAM[width]</width>
+                        <height>52</height>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <font>$PARAM[font]</font>
+                        <textcolor>text_dim</textcolor>
+                        <selectedcolor>text_dim</selectedcolor>
+                        <label>$PARAM[label2]</label>
+                        <visible>!Control.HasFocus($PARAM[id])</visible>
+                    </control>
+                </focusedlayout>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Default controls Kodi clones for every setting (ids 7-15). Hidden templates. -->
+    <include name="SettingsTemplates">
+        <param name="width" default="1200"/>
+        <definition>
+            <control type="button" id="7">
+                <width>$PARAM[width]</width>
+                <include>SettingsRowLook</include>
+                <label2/>
+            </control>
+            <control type="radiobutton" id="8">
+                <width>$PARAM[width]</width>
+                <include>SettingsToggleLook</include>
+            </control>
+            <control type="spincontrolex" id="9">
+                <width>$PARAM[width]</width>
+                <include>SettingsRowLook</include>
+                <spinposx>12</spinposx>
+                <spinwidth>28</spinwidth>
+                <spinheight>28</spinheight>
+                <texturefocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</texturefocus>
+                <texturenofocus/>
+                <texturedown colordiffuse="accent">ui/spin_minus.png</texturedown>
+                <texturedownfocus colordiffuse="accent2">ui/spin_minus_focus.png</texturedownfocus>
+                <texturedowndisabled colordiffuse="text_mute">ui/spin_minus.png</texturedowndisabled>
+                <textureup colordiffuse="accent">ui/spin_plus.png</textureup>
+                <textureupfocus colordiffuse="accent2">ui/spin_plus_focus.png</textureupfocus>
+                <textureupdisabled colordiffuse="text_mute">ui/spin_plus.png</textureupdisabled>
+            </control>
+            <control type="image" id="11">
+                <width>$PARAM[width]</width>
+                <height>1</height>
+                <texture colordiffuse="border_dim">ui/white.png</texture>
+            </control>
+            <control type="edit" id="12">
+                <width>$PARAM[width]</width>
+                <include>SettingsRowLook</include>
+            </control>
+            <control type="sliderex" id="13">
+                <width>$PARAM[width]</width>
+                <include>SettingsRowLook</include>
+                <sliderwidth>300</sliderwidth>
+                <sliderheight>12</sliderheight>
+                <texturesliderbar colordiffuse="surface_alt">ui/white.png</texturesliderbar>
+                <textureslidernib colordiffuse="accent">ui/white.png</textureslidernib>
+                <textureslidernibfocus colordiffuse="accent2">ui/white.png</textureslidernibfocus>
+            </control>
+            <control type="label" id="14">
+                <width>$PARAM[width]</width>
+                <height>52</height>
+                <font>font_caps_small</font>
+                <textcolor>accent2</textcolor>
+                <aligny>center</aligny>
+                <textoffsetx>20</textoffsetx>
+            </control>
+            <control type="colorbutton" id="15">
+                <width>$PARAM[width]</width>
+                <include>SettingsRowLook</include>
+                <colorwidth>48</colorwidth>
+                <colorheight>24</colorheight>
+                <colorposx>-80</colorposx>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Template of the category buttons (id 10). Only for windows with a category list (id 3):
+         with this template and no list 3, Kodi builds no settings at all. -->
+    <include name="SettingsCategoryTemplate">
+        <control type="button" id="10">
+            <include>SettingsCategoryLook</include>
+        </control>
+    </include>
+
+    <!-- A category button: the focused one a cyan cut fill, the shown one (alt texture) grey -->
+    <include name="SettingsCategoryLook">
+        <width>400</width>
+        <height>52</height>
+        <font>font_label</font>
+        <textoffsetx>20</textoffsetx>
+        <aligny>center</aligny>
+        <textcolor>text_dim</textcolor>
+        <focusedcolor>focus_text</focusedcolor>
+        <texturefocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</texturefocus>
+        <texturenofocus/>
+        <alttexturefocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</alttexturefocus>
+        <alttexturenofocus border="12" colordiffuse="surface_alt">ui/cut_btn_fill.png</alttexturenofocus>
+    </include>
+
+    <include name="SettingsRowLook">
+        <height>52</height>
+        <font>font_label</font>
+        <textoffsetx>20</textoffsetx>
+        <aligny>center</aligny>
+        <textcolor>text</textcolor>
+        <focusedcolor>focus_text</focusedcolor>
+        <disabledcolor>text_mute</disabledcolor>
+        <texturefocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</texturefocus>
+        <texturenofocus/>
+    </include>
+
+    <!-- A settings row with a check box on the right -->
+    <include name="SettingsToggleLook">
+        <include>SettingsRowLook</include>
+        <radiowidth>32</radiowidth>
+        <radioheight>32</radioheight>
+        <textureradioonfocus colordiffuse="focus_text">ui/check_on.png</textureradioonfocus>
+        <textureradioonnofocus colordiffuse="accent">ui/check_on.png</textureradioonnofocus>
+        <textureradiooffnofocus colordiffuse="text_mute">ui/check_off.png</textureradiooffnofocus>
+        <textureradioofffocus colordiffuse="focus_text">ui/check_off.png</textureradioofffocus>
+    </include>
+</includes>

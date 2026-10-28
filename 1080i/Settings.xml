@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Settings console: a rail of all entries under five group headings, the focused entry on the
+     right (Includes_Settings.xml). A group tile on the system page sets nc.settings.group, which
+     focuses that group's first entry; without it (keymaps, add-ons, Back from a page) the rail
+     keeps its last focus. -->
+<window>
+    <defaultcontrol>9211</defaultcontrol>
+    <onload condition="String.IsEqual(Window(Home).Property(nc.settings.group),1)">SetFocus(9211)</onload>
+    <onload condition="String.IsEqual(Window(Home).Property(nc.settings.group),2)">SetFocus(9221)</onload>
+    <onload condition="String.IsEqual(Window(Home).Property(nc.settings.group),3)">SetFocus(9231)</onload>
+    <onload condition="String.IsEqual(Window(Home).Property(nc.settings.group),4)">SetFocus(9241)</onload>
+    <onload condition="String.IsEqual(Window(Home).Property(nc.settings.group),5)">SetFocus(9251)</onload>
+    <onload>ClearProperty(nc.settings.group,home)</onload>
+    <controls>
+        <include>Background</include>
+        <include content="StatusBar">
+            <param name="title" value="$LOCALIZE[5]"/>
+        </include>
+        <!-- the content fades in on open; background and status line stay -->
+        <control type="group">
+            <include>WindowFade</include>
+            <!-- headings are labels: up/down only stop on entries -->
+            <control type="grouplist" id="9200">
+                <left>64</left>
+                <top>90</top>
+                <width>520</width>
+                <height>900</height>
+                <orientation>vertical</orientation>
+                <itemgap>0</itemgap>
+                <onup>noop</onup>
+                <ondown>noop</ondown>
+                <!-- Left goes back to the system page, Right opens the entry like OK -->
+                <onleft>Action(Back)</onleft>
+                <onright>Action(Select)</onright>
+                <include>SettingsRailGroup1</include>
+                <include>SettingsRailGroup2</include>
+                <include>SettingsRailGroup3</include>
+                <include>SettingsRailGroup4</include>
+                <include>SettingsRailGroup5</include>
+            </control>
+            <control type="image">
+                <left>640</left>
+                <top>100</top>
+                <width>2</width>
+                <height>880</height>
+                <texture colordiffuse="border_dim">ui/white.png</texture>
+            </control>
+            <include>SettingsPreviewGroup1</include>
+            <include>SettingsPreviewGroup2</include>
+            <include>SettingsPreviewGroup3</include>
+            <include>SettingsPreviewGroup4</include>
+            <include>SettingsPreviewGroup5</include>
+            <!-- key hint for the focused side -->
+            <control type="image">
+                <left>700</left>
+                <top>960</top>
+                <width>1156</width>
+                <height>2</height>
+                <texture colordiffuse="border_dim">ui/white.png</texture>
+            </control>
+            <control type="label">
+                <left>700</left>
+                <top>976</top>
+                <width>1156</width>
+                <height>36</height>
+                <font>font_caps_small</font>
+                <textcolor>text_mute</textcolor>
+                <label>[UPPERCASE]$LOCALIZE[31178][/UPPERCASE]</label>
+            </control>
+        </control>
+    </controls>
+</window>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The Home key (keymap written by the script, see HOME_KEYMAP) opens this empty dialog. Kodi
+     refuses ActivateWindow(Home) while a modal dialog like the info page is open and does
+     nothing when Home is in front already; a dialog opens anyway. It closes every dialog,
+     itself too, opens Home and focuses the home tab, which shows the home page.
+     In a TMDb chain it asks TMDb Helper's manager to exit instead: closed under the manager,
+     the info page looks like Back to it when it looks before the chain window is gone, and it
+     opened the page before again, over Home. The exit command it reads first. A chain over
+     video then ends on the video, not on the OSD with its script, and nc_home_key (Timers.xml)
+     opens this dialog again a second after the manager ended. -->
+<window type="dialog" id="1160">
+    <onload condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">SetProperty(nc.home.key,1,home)</onload>
+    <onload condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">ClearProperty(nc.chain.return,home)</onload>
+    <onload condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">SetProperty(TMDbHelper.Command,exit,home)</onload>
+    <onload condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">Dialog.Close(1160,true)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">Dialog.Close(all,true)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">ActivateWindow(Home)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">SetFocus(9101)</onload>
+    <controls/>
+</window>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Startup: the first screen after boot (CoreELEC shows no Kodi splash). The NIGHTCITY wordmark
+     with a glitch now and then, a ticker on a thin track and a status line, until the nc_startup
+     timer (Timers.xml) hands over to Home: once the startup script set nc.startup.ready and the
+     screen was up for a moment, or after a timeout. The script applies the one-off settings; the
+     nc_startup_script timer starts it a second after the service add-ons, which Kodi starts
+     together with this window. TMDbHelper.Service switches on TMDb Helper's poller (it idles
+     without it), TMDbHelper.DirectCallAuto lets its window manager open the info pages of a
+     chain itself (Custom_1190_TMDbHelper.xml). -->
+<window>
+    <onload>Skin.SetBool(TMDbHelper.Service)</onload>
+    <onload>Skin.SetBool(TMDbHelper.DirectCallAuto)</onload>
+    <onload>ClearProperty(nc.startup.ready,home)</onload>
+    <controls>
+        <include>Background</include>
+        <control type="group">
+            <animation effect="fade" start="0" end="100" time="400" delay="100">WindowOpen</animation>
+            <animation effect="fade" start="100" end="0" time="250">WindowClose</animation>
+            <!-- wordmark: the static glitch of every title, plus a short burst of offset copies
+                 every few seconds -->
+            <control type="group">
+                <top>384</top>
+                <animation effect="slide" start="0,16" end="0,0" time="500" delay="100" tween="cubic" easing="out">WindowOpen</animation>
+                <control type="group">
+                    <animation type="Conditional" condition="true" loop="true" reversible="false">
+                        <effect type="fade" start="0" end="100" time="40" delay="900"/>
+                        <effect type="slide" start="0,0" end="-8,0" time="40" delay="900"/>
+                        <effect type="slide" start="0,0" end="12,0" time="40" delay="1000"/>
+                        <effect type="fade" start="100" end="0" time="140" delay="1060"/>
+                        <effect type="fade" start="100" end="100" time="1" delay="3600"/>
+                    </animation>
+                    <control type="label">
+                        <left>0</left>
+                        <width>1920</width>
+                        <height>180</height>
+                        <font>font_wordmark</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>glitch_a</textcolor>
+                        <label>[UPPERCASE]$LOCALIZE[31156][/UPPERCASE]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <animation type="Conditional" condition="true" loop="true" reversible="false">
+                        <effect type="fade" start="0" end="100" time="40" delay="940"/>
+                        <effect type="slide" start="0,0" end="6,0" time="40" delay="940"/>
+                        <effect type="slide" start="0,0" end="-10,0" time="40" delay="1040"/>
+                        <effect type="fade" start="100" end="0" time="140" delay="1100"/>
+                        <effect type="fade" start="100" end="100" time="1" delay="3600"/>
+                    </animation>
+                    <control type="label">
+                        <left>0</left>
+                        <width>1920</width>
+                        <height>180</height>
+                        <font>font_wordmark</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>glitch_b</textcolor>
+                        <label>[UPPERCASE]$LOCALIZE[31156][/UPPERCASE]</label>
+                    </control>
+                </control>
+                <include content="GlitchTitle">
+                    <param name="label" value="$LOCALIZE[31156]"/>
+                    <param name="width" value="1920"/>
+                    <param name="height" value="180"/>
+                    <param name="font" value="font_wordmark"/>
+                    <param name="align" value="center"/>
+                </include>
+            </control>
+            <!-- loading track: a ticker runs to and fro until the script is done, then the track
+                 fills; held back to a second before Home comes (StartupOnline), so the screen
+                 does not stand there online for seconds -->
+            <control type="group">
+                <left>640</left>
+                <top>600</top>
+                <control type="image">
+                    <width>640</width>
+                    <height>4</height>
+                    <texture colordiffuse="border_dim">ui/white.png</texture>
+                </control>
+                <control type="image">
+                    <width>128</width>
+                    <height>4</height>
+                    <texture colordiffuse="accent">ui/white.png</texture>
+                    <animation effect="slide" start="0,0" end="512,0" time="1100" tween="sine" easing="inout" pulse="true" condition="true">Conditional</animation>
+                    <visible>!$EXP[StartupOnline]</visible>
+                </control>
+                <control type="image">
+                    <width>640</width>
+                    <height>4</height>
+                    <texture colordiffuse="accent">ui/white.png</texture>
+                    <animation effect="zoom" start="20,100" end="100,100" center="0,2" time="300" tween="cubic" easing="out">Visible</animation>
+                    <visible>$EXP[StartupOnline]</visible>
+                </control>
+                <!-- status: what the screen waits for and a blinking cursor, the clock right -->
+                <control type="grouplist">
+                    <top>22</top>
+                    <width>480</width>
+                    <height>32</height>
+                    <orientation>horizontal</orientation>
+                    <itemgap>0</itemgap>
+                    <usecontrolcoords>true</usecontrolcoords>
+                    <control type="label">
+                        <width>auto</width>
+                        <height>32</height>
+                        <font>font_num_small</font>
+                        <textcolor>text_mute</textcolor>
+                        <label>[UPPERCASE]$LOCALIZE[31157][/UPPERCASE]</label>
+                        <visible>!$EXP[StartupOnline]</visible>
+                    </control>
+                    <control type="label">
+                        <width>auto</width>
+                        <height>32</height>
+                        <font>font_num_small</font>
+                        <textcolor>accent</textcolor>
+                        <label>[UPPERCASE]$LOCALIZE[31158][/UPPERCASE]</label>
+                        <visible>$EXP[StartupOnline]</visible>
+                    </control>
+                    <control type="label">
+                        <width>auto</width>
+                        <height>32</height>
+                        <font>font_num_small</font>
+                        <textcolor>accent</textcolor>
+                        <label>_</label>
+                        <animation effect="fade" start="100" end="0" time="450" pulse="true" condition="true">Conditional</animation>
+                    </control>
+                </control>
+                <control type="label">
+                    <top>22</top>
+                    <width>640</width>
+                    <height>32</height>
+                    <align>right</align>
+                    <font>font_num_small</font>
+                    <textcolor>accent2</textcolor>
+                    <label>$INFO[System.Time]</label>
+                </control>
+            </control>
+        </control>
+    </controls>
+</window>

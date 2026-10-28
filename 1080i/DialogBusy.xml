@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+    <depth>DepthMax</depth>
+    <controls>
+        <control type="label">
+            <right>60</right>
+            <bottom>40</bottom>
+            <width>400</width>
+            <height>40</height>
+            <align>right</align>
+            <font>font_label</font>
+            <textcolor>accent</textcolor>
+            <label>[COLOR text_mute]░▒▓[/COLOR] loading_</label>
+        </control>
+    </controls>
+</window>

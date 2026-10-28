@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Volume overlay, top right. -->
+<window>
+    <depth>DepthDialog</depth>
+    <visible>Window.IsActive(volumebar)</visible>
+    <controls>
+        <control type="group">
+            <left>1340</left>
+            <top>80</top>
+            <width>540</width>
+            <height>80</height>
+            <include>DialogFrame</include>
+            <control type="label">
+                <left>20</left>
+                <width>200</width>
+                <height>80</height>
+                <font>font_small</font>
+                <textcolor>accent3</textcolor>
+                <aligny>center</aligny>
+                <label>$VAR[VolumeLabel]</label>
+            </control>
+            <control type="progress">
+                <left>220</left>
+                <top>32</top>
+                <width>290</width>
+                <height>16</height>
+                <texturebg colordiffuse="surface_alt">ui/white.png</texturebg>
+                <midtexture colordiffuse="accent">ui/white.png</midtexture>
+                <info>Player.Volume</info>
+                <visible>!Player.Muted</visible>
+            </control>
+        </control>
+    </controls>
+</window>

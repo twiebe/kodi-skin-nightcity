@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Fullscreen video. Only a buffering note; the seek bar dialog shows the seek line. -->
+<window>
+    <!-- back from a chain over the video (Custom_1190_TMDbHelper.xml): the OSD on its chapters
+         button, which pops the chapter row up, the level the cast row was entered from
+         (nc.osd.chain, VideoOSD.xml); the cast row itself would start a plugin while TMDb
+         Helper's manager still ends -->
+    <onload condition="String.IsEqual(Window(Home).Property(nc.chain.return),osd)">ClearProperty(nc.chain.return,home)</onload>
+    <onload condition="String.IsEqual(Window(Home).Property(nc.chain.return),osd)">SetProperty(nc.osd.chain,1,home)</onload>
+    <onload condition="String.IsEqual(Window(Home).Property(nc.chain.return),osd)">ActivateWindow(videoosd)</onload>
+    <controls>
+        <control type="group">
+            <left>64</left>
+            <top>40</top>
+            <visible>Player.Caching</visible>
+            <include content="Kicker">
+                <param name="label" value="$LOCALIZE[31057] $INFO[Player.CacheLevel,,%]"/>
+                <param name="width" value="600"/>
+            </include>
+            <include content="ProgressLine">
+                <param name="top" value="40"/>
+                <param name="width" value="300"/>
+                <param name="info" value="Player.CacheLevel"/>
+            </include>
+        </control>
+    </controls>
+</window>

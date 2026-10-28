@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Pause brings up the whole OSD, not only the seek line. Kodi opens this empty modeless dialog
+     by its visible condition: once when playback pauses over the video, and once when it plays
+     again. nc.osd.paused remembers the pause, so the OSD closed while paused stays closed;
+     nc.osd.auto remembers that the pause opened the OSD, so playing on closes it again. The
+     dialog closes itself in the next frame, as its condition is then false. -->
+<window type="dialog" id="1150">
+    <visible>[Player.Paused + !Player.Caching + Window.IsActive(fullscreenvideo) + String.IsEmpty(Window(Home).Property(nc.osd.paused))] | [!Player.Paused + !String.IsEmpty(Window(Home).Property(nc.osd.paused))]</visible>
+    <!-- Kodi checks every condition before it runs the first action -->
+    <onload condition="Player.Paused">SetProperty(nc.osd.paused,1,home)</onload>
+    <onload condition="Player.Paused + !Window.IsActive(videoosd) + !System.HasActiveModalDialog">SetProperty(nc.osd.auto,1,home)</onload>
+    <onload condition="Player.Paused + !Window.IsActive(videoosd) + !System.HasActiveModalDialog">ActivateWindow(videoosd)</onload>
+    <onload condition="!Player.Paused + !String.IsEmpty(Window(Home).Property(nc.osd.auto))">Dialog.Close(videoosd)</onload>
+    <onload condition="!Player.Paused">ClearProperty(nc.osd.paused,home)</onload>
+    <onload condition="!Player.Paused">ClearProperty(nc.osd.auto,home)</onload>
+    <controls/>
+</window>

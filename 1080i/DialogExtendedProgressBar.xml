@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Background progress (library scans, downloads). Kodi ids: 30 header, 31 title, 32 progress. -->
+<window>
+    <depth>DepthDialog</depth>
+    <controls>
+        <control type="group">
+            <left>1240</left>
+            <top>940</top>
+            <width>640</width>
+            <height>110</height>
+            <include>DialogFrame</include>
+            <control type="label" id="30">
+                <left>20</left>
+                <top>8</top>
+                <width>600</width>
+                <height>36</height>
+                <font>font_small</font>
+                <textcolor>accent3</textcolor>
+            </control>
+            <control type="label" id="31">
+                <left>20</left>
+                <top>40</top>
+                <width>600</width>
+                <height>36</height>
+                <font>font_tiny</font>
+                <textcolor>text_dim</textcolor>
+            </control>
+            <control type="progress" id="32">
+                <left>20</left>
+                <top>82</top>
+                <width>600</width>
+                <height>10</height>
+                <texturebg colordiffuse="surface_alt">ui/white.png</texturebg>
+                <midtexture colordiffuse="accent">ui/white.png</midtexture>
+            </control>
+        </control>
+    </controls>
+</window>
