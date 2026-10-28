@@ -84,7 +84,7 @@ def test_weather_or_how_to_get_it():
         assert label in text
 
 
-def test_links_to_settings_and_system():
+def test_links_to_settings_system_and_files():
     """Static items, so more links (later the user's own) are one item more."""
     links = controls(parse(ROOT / '1080i' / WINDOW))['1230']
     items = links.findall('content/item')
@@ -92,6 +92,11 @@ def test_links_to_settings_and_system():
     assert clicks[0][0] == 'Dialog.Close(1170,true)' and clicks[0][-1] == 'ActivateWindow(settings)'
     assert clicks[1] == ['Dialog.Close(1170,true)', 'SetProperty(nc.page,system,home)', 'ActivateWindow(Home)',
                          'SetFocus(9105)']
+    assert clicks[2] == ['Dialog.Close(1170,true)', 'ActivateWindow(FileManager)']
+    assert (items[2].findtext('label'), items[2].findtext('icon')) == ('$LOCALIZE[744]', 'ui/qm_files.png')
+    assert (ROOT / 'media' / 'ui' / 'qm_files.png').exists()
+    # three links fill the row
+    assert int(links.findtext('width')) == 192 * len(items)
 
 
 def test_rows_lead_into_each_other():

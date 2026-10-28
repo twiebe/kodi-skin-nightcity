@@ -237,6 +237,13 @@
                         <onclick>ActivateWindow(Home)</onclick>
                         <onclick>SetFocus(9105)</onclick>
                     </item>
+                    <item>
+                        <!-- Files, the file manager: its own name does not fit the tile -->
+                        <label>$LOCALIZE[744]</label>
+                        <icon>ui/qm_files.png</icon>
+                        <onclick>Dialog.Close(1170,true)</onclick>
+                        <onclick>ActivateWindow(FileManager)</onclick>
+                    </item>
                 </content>
             </control>
         </control>
