@@ -56,3 +56,20 @@ def test_similar_movie_opens_in_the_chain():
 def test_spotlight_play_resumes_through_script():
     value, _ = include_param('Includes_Home.xml', 9010, 'onclick')
     assert 'NotifyAll(nightcity,play:movie:$INFO[Container(9000).ListItem.DBID]:resume)' in value
+
+
+def test_episode_number_stands_beside_the_title():
+    """On the still the number got lost on bright pictures: it stands before the title, in the
+    accent colour, and the still stays free."""
+    card = next(i for i in parse(SKIN / 'Includes_Info.xml').iter('include')
+                if i.get('name') == 'EpisodeCard')
+    assert not [c for c in card.iter('control') if c.findtext('font') == 'font_num_small']
+    titles = [c for c in card.iter('control') if c.findtext('top') == '192']
+    assert [c.findtext('label') for c in titles] == [
+        '[COLOR accent]$VAR[EpisodeCardNum][/COLOR]  $INFO[ListItem.Title]',
+        '$VAR[EpisodeCardNum]  $INFO[ListItem.Title]']
+    var = next(v for v in parse(SKIN / 'Variables.xml').iter('variable')
+               if v.get('name') == 'EpisodeCardNum')
+    assert [(v.get('condition'), v.text) for v in var.findall('value')] == [
+        ('Integer.IsLess(ListItem.Episode,10)', 'E0$INFO[ListItem.Episode]'),
+        (None, 'E$INFO[ListItem.Episode]')]
