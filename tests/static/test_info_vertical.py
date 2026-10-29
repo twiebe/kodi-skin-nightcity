@@ -157,3 +157,9 @@ def test_episode_person_click_returns_to_the_selected_episode():
 def test_episode_hint_names_the_cast_row():
     hint = next(c for c in _root().iter('control') if '$LOCALIZE[31135]' in (c.findtext('label') or ''))
     assert '↓ $LOCALIZE[31124]' in hint.findtext('label')
+
+
+def test_down_from_the_buttons_skips_the_season_tabs():
+    """Like the cast and crew tabs: down lands on the episodes, the season tabs above them are
+    reached with up from there."""
+    assert _nav(9000, 'ondown')[0] == ('String.IsEqual(ListItem.DBType,episode)', '5100')
