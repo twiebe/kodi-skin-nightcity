@@ -265,3 +265,47 @@ def test_osd_controls_fade_with_their_window():
     for name in ('VideoOSD.xml', 'DialogSeekBar.xml'):
         [anim] = animations(parse(ROOT / '1080i' / name), 'WindowOpen')
         assert effects(anim) == [('fade', None, None, 0, 150)], name
+
+
+def fade_out(control, kind):
+    """The fade-out effect of the control's `kind` animation: (delay, time), else None."""
+    for anim in animations(control, kind):
+        for kind_, start, end, delay, time in effects(anim):
+            if kind_ == 'fade' and start == '100' and end == '0':
+                return delay, time
+    return None
+
+
+@pytest.mark.parametrize('kind', ['WindowClose', 'Hidden'])
+def test_player_details_fade_out_first(kind):
+    """Closing is the opening backwards: what plays fades out and drops the few pixels it rose,
+    at once, also when the chapter and cast rows take its space (Hidden)."""
+    details = details_block()
+    assert fade_out(details, kind) == (0, ms('FadeTime'))
+    slides = [e for a in animations(details, kind) for e in effects(a) if e[0] == 'slide']
+    assert slides == [('slide', '0,0', '0,10', 0, ms('FadeTime'))]
+
+
+def test_osd_controls_fade_out_a_step_later():
+    """Controls and seek line fade out PlayerFadeStep after the details started, within 300 ms in
+    all: Kodi drops keys while a modal dialog runs its close animation."""
+    for name in ('VideoOSD.xml', 'DialogSeekBar.xml'):
+        root = parse(ROOT / '1080i' / name)
+        delay, time = fade_out(root, 'WindowClose')
+        assert delay == ms('PlayerFadeStep') and time == ms('WindowFadeTime'), name
+        assert delay + time <= 300
+    assert ms('FadeTime') <= ms('PlayerFadeStep') + ms('WindowFadeTime')
+
+
+def test_seek_line_keeps_its_osd_place_while_the_osd_fades_out():
+    """Window.IsActive(videoosd) turns false as the OSD starts closing: the seek line would drop
+    into the still visible buttons. Its place and labels follow Window.IsVisible(videoosd), true
+    until the close animation ended; the dialog itself still closes with IsActive, together with
+    the OSD."""
+    seekbar = (ROOT / '1080i' / 'DialogSeekBar.xml').read_text()
+    details = next(i for i in parse(ROOT / '1080i' / 'Includes_Player.xml').iter('include')
+                   if i.get('name') == 'PlayerDetails')
+    slides = [a for a in details.iter('animation') if a.get('effect') == 'slide']
+    assert [a.get('condition') for a in slides] == ['Window.IsVisible(videoosd)']
+    assert seekbar.count('Window.IsVisible(videoosd)') == 3
+    assert seekbar.count('Window.IsActive(videoosd)') == 1
