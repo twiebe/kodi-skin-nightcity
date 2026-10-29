@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Music library: like the video library (MyVideoNav.xml), view 50 is a list with a detail pane,
+     view 51 a wall of square cards. Kodi runs the clicks: a folder opens, a song plays, Info
+     opens the album or artist page. -->
+<window>
+    <defaultcontrol always="true">50</defaultcontrol>
+    <views>50,51</views>
+    <controls>
+        <include>Background</include>
+        <include content="FanartBackdrop">
+            <param name="art" value="ListItem.Art(fanart)"/>
+        </include>
+        <control type="group">
+            <visible>String.IsEmpty(ListItem.Art(fanart))</visible>
+            <include content="FanartBackdrop">
+                <param name="art" value="ListItem.Art(artist.fanart)"/>
+            </include>
+        </control>
+        <include content="StatusBar">
+            <param name="title" value="$INFO[Container.FolderName]"/>
+            <param name="counter" value="$INFO[Container.CurrentItem]/$INFO[Container.NumItems]"/>
+        </include>
+        <control type="list" id="50">
+            <left>120</left>
+            <top>128</top>
+            <width>1240</width>
+            <height>896</height>
+            <viewtype label="535">list</viewtype>
+            <scrolltime tween="quadratic">200</scrolltime>
+            <onright>9060</onright>
+            <itemlayout width="1240" height="56">
+                <control type="label">
+                    <left>20</left>
+                    <width>40</width>
+                    <height>56</height>
+                    <aligny>center</aligny>
+                    <font>font_label</font>
+                    <textcolor>accent2</textcolor>
+                    <selectedcolor>accent2</selectedcolor>
+                    <label>$VAR[MusicNavMark]</label>
+                </control>
+                <control type="label">
+                    <left>76</left>
+                    <width>868</width>
+                    <height>56</height>
+                    <aligny>center</aligny>
+                    <font>font_label</font>
+                    <textcolor>text_dim</textcolor>
+                    <selectedcolor>text_dim</selectedcolor>
+                    <label>$VAR[MusicTrackTitle]</label>
+                </control>
+                <control type="label">
+                    <left>960</left>
+                    <width>260</width>
+                    <height>56</height>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font_small</font>
+                    <textcolor>text_mute</textcolor>
+                    <selectedcolor>text_mute</selectedcolor>
+                    <label>$VAR[MusicNavRight]</label>
+                </control>
+            </itemlayout>
+            <focusedlayout width="1240" height="56">
+                <control type="image">
+                    <width>1240</width>
+                    <height>56</height>
+                    <texture border="12" colordiffuse="focus">ui/cut_btn_fill.png</texture>
+                    <visible>Control.HasFocus(50)</visible>
+                </control>
+                <control type="label">
+                    <left>20</left>
+                    <width>40</width>
+                    <height>56</height>
+                    <aligny>center</aligny>
+                    <font>font_label</font>
+                    <textcolor>$VAR[MusicRowFocusAccent]</textcolor>
+                    <selectedcolor>$VAR[MusicRowFocusAccent]</selectedcolor>
+                    <label>$VAR[MusicNavMark]</label>
+                </control>
+                <control type="label">
+                    <left>76</left>
+                    <width>868</width>
+                    <height>56</height>
+                    <aligny>center</aligny>
+                    <font>font_label</font>
+                    <textcolor>$VAR[LibraryFocusColor]</textcolor>
+                    <selectedcolor>$VAR[LibraryFocusColor]</selectedcolor>
+                    <scroll>Control.HasFocus(50)</scroll>
+                    <label>$VAR[MusicTrackTitle]</label>
+                </control>
+                <control type="label">
+                    <left>960</left>
+                    <width>260</width>
+                    <height>56</height>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font_small</font>
+                    <textcolor>$VAR[LibraryFocusColor]</textcolor>
+                    <selectedcolor>$VAR[LibraryFocusColor]</selectedcolor>
+                    <label>$VAR[MusicNavRight]</label>
+                </control>
+            </focusedlayout>
+        </control>
+        <!-- Detail pane next to the list: cover, artist and year, description -->
+        <control type="group">
+            <left>1440</left>
+            <top>128</top>
+            <visible>Control.IsVisible(50) + !ListItem.IsParentFolder</visible>
+            <include content="CutCard">
+                <param name="width" value="360"/>
+                <param name="height" value="360"/>
+                <param name="mask" value="ui/mask_360x360.png"/>
+                <param name="glowheight" value="408"/>
+                <param name="glowwidth" value="408"/>
+                <param name="image" value="$INFO[ListItem.Art(thumb)]"/>
+            </include>
+            <control type="label">
+                <top>376</top>
+                <width>360</width>
+                <height>36</height>
+                <font>font_small</font>
+                <textcolor>accent2</textcolor>
+                <label>$VAR[MusicNavMeta]</label>
+            </control>
+            <control type="textbox">
+                <top>420</top>
+                <width>360</width>
+                <height>300</height>
+                <font>font_tiny</font>
+                <textcolor>text_dim</textcolor>
+                <label>$INFO[ListItem.Property(Album_Description)]$INFO[ListItem.Property(Artist_Description)]</label>
+            </control>
+        </control>
+        <control type="panel" id="51">
+            <left>40</left>
+            <top>84</top>
+            <width>1368</width>
+            <height>996</height>
+            <viewtype label="31042">icon</viewtype>
+            <onright>9060</onright>
+            <scrolltime tween="quadratic">200</scrolltime>
+            <orientation>vertical</orientation>
+            <preloaditems>2</preloaditems>
+            <itemlayout width="228" height="300">
+                <control type="group">
+                    <left>14</left>
+                    <top>24</top>
+                    <include content="MusicCard">
+                        <param name="dim" value="Control.HasFocus(51)"/>
+                    </include>
+                </control>
+            </itemlayout>
+            <focusedlayout width="228" height="300">
+                <control type="group">
+                    <left>14</left>
+                    <top>24</top>
+                    <include content="MusicCard">
+                        <param name="focused" value="Control.HasFocus(51)"/>
+                    </include>
+                </control>
+            </focusedlayout>
+        </control>
+        <!-- View and sort: Kodi ids 2 view (Kodi labels it), 3 sort by (Kodi labels it), 4 descending -->
+        <control type="grouplist" id="9060">
+            <left>1440</left>
+            <top>880</top>
+            <width>400</width>
+            <height>176</height>
+            <itemgap>0</itemgap>
+            <onleft condition="Control.IsVisible(51)">51</onleft>
+            <onleft>50</onleft>
+            <include content="ListButton">
+                <param name="id" value="2"/>
+                <param name="width" value="400"/>
+            </include>
+            <include content="ListButton">
+                <param name="id" value="3"/>
+                <param name="width" value="400"/>
+            </include>
+            <control type="radiobutton" id="4">
+                <width>400</width>
+                <include>SettingsRowLook</include>
+                <font>font_label</font>
+                <label>$LOCALIZE[31096]</label>
+                <radiowidth>32</radiowidth>
+                <radioheight>32</radioheight>
+                <textureradioonfocus colordiffuse="focus_text">ui/check_on.png</textureradioonfocus>
+                <textureradioonnofocus colordiffuse="accent">ui/check_on.png</textureradioonnofocus>
+                <textureradiooffnofocus colordiffuse="text_mute">ui/check_off.png</textureradiooffnofocus>
+                <textureradioofffocus colordiffuse="focus_text">ui/check_off.png</textureradioofffocus>
+            </control>
+        </control>
+    </controls>
+</window>

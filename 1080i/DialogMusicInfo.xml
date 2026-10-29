@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Album, artist and song page (Kodi opens musicinformation and songinformation with this
+     file). Walks top down like the video info page: the head (cover or photo, kicker, title,
+     tags, rating, description, details on the right), the buttons, then one row at a time:
+     the tracks of an album (5050, from the library: Kodi's list 50 runs no onclick, so the page
+     leaves it out), then the other albums of its artist (5301); for an artist its albums (5301).
+     Kodi ids: 8 plays the album (the song on a song page), 12 opens the artist of an album (the
+     album of a song); Kodi labels both itself, so they stay hidden and the pills 9001 and 9002
+     click them. A click in 5050 plays the album from that track (scripts/nightcity.py
+     music_play). A click on a card of 5301 opens that album's page (music_info). -->
+<window>
+    <defaultcontrol always="true">9000</defaultcontrol>
+    <!-- the album a track click plays (5050's onclick) -->
+    <onload condition="String.IsEqual(ListItem.DBType,album)">SetProperty(nc.music.album,$INFO[ListItem.DBID],home)</onload>
+    <onload condition="!String.IsEqual(ListItem.DBType,album)">ClearProperty(nc.music.album,home)</onload>
+    <controls>
+        <include>Background</include>
+        <include content="FanartBackdrop">
+            <param name="art" value="ListItem.Art(fanart)"/>
+        </include>
+        <control type="group">
+            <visible>String.IsEmpty(ListItem.Art(fanart))</visible>
+            <include content="FanartBackdrop">
+                <param name="art" value="ListItem.Art(artist.fanart)"/>
+            </include>
+        </control>
+        <include content="PathLine">
+            <param name="id" value="9026"/>
+            <param name="path" value="$VAR[MusicInfoPath]"/>
+            <param name="left" value="64"/>
+            <param name="top" value="30"/>
+            <param name="width" value="1792"/>
+        </include>
+
+        <!-- head: cover (artist: photo), the text right of it, details on the right -->
+        <control type="group">
+            <left>64</left>
+            <top>116</top>
+            <include content="CutCard">
+                <param name="width" value="280"/>
+                <param name="height" value="280"/>
+                <param name="mask" value="ui/mask_280x280.png"/>
+                <param name="glowheight" value="328"/>
+                <param name="glowwidth" value="328"/>
+                <param name="image" value="$INFO[ListItem.Art(thumb)]"/>
+                <control type="textbox">
+                    <left>20</left>
+                    <top>20</top>
+                    <width>240</width>
+                    <height>240</height>
+                    <font>font_label</font>
+                    <textcolor>text_mute</textcolor>
+                    <label>$VAR[MusicInfoTitle]</label>
+                    <visible>String.IsEmpty(ListItem.Art(thumb))</visible>
+                </control>
+            </include>
+        </control>
+        <include content="Kicker">
+            <param name="id" value="9027"/>
+            <param name="label" value="$VAR[MusicInfoKicker]"/>
+            <param name="left" value="384"/>
+            <param name="top" value="116"/>
+            <param name="width" value="960"/>
+        </include>
+        <include content="GlitchTitle">
+            <param name="id" value="9030"/>
+            <param name="label" value="$VAR[MusicInfoTitle]"/>
+            <param name="left" value="384"/>
+            <param name="top" value="160"/>
+            <param name="width" value="960"/>
+            <param name="font" value="font_title"/>
+        </include>
+        <control type="grouplist" id="9040">
+            <left>384</left>
+            <top>272</top>
+            <width>960</width>
+            <height>36</height>
+            <orientation>horizontal</orientation>
+            <itemgap>10</itemgap>
+            <include content="Tag">
+                <param name="label" value="$INFO[ListItem.Year]"/>
+                <param name="visible" value="!String.IsEmpty(ListItem.Year)"/>
+            </include>
+            <include content="Tag">
+                <param name="label" value="$INFO[ListItem.Genre]"/>
+                <param name="visible" value="!String.IsEmpty(ListItem.Genre)"/>
+            </include>
+            <include content="Tag">
+                <param name="label" value="$INFO[ListItem.Duration]"/>
+                <param name="visible" value="!String.IsEmpty(ListItem.Duration)"/>
+            </include>
+        </control>
+        <control type="label">
+            <left>384</left>
+            <top>318</top>
+            <width>600</width>
+            <height>34</height>
+            <font>font_caps_small</font>
+            <textcolor>text_mute</textcolor>
+            <label>[COLOR accent3]★[/COLOR] [COLOR text]$INFO[ListItem.Rating][/COLOR]</label>
+            <visible>!String.IsEmpty(ListItem.Rating) + !String.IsEqual(ListItem.Rating,0.0)</visible>
+        </control>
+        <control type="textbox" id="9022">
+            <left>384</left>
+            <top>360</top>
+            <width>960</width>
+            <height>116</height>
+            <font>font_body</font>
+            <textcolor>text_dim</textcolor>
+            <label>$INFO[ListItem.Property(Album_Description)]$INFO[ListItem.Property(Artist_Description)]$INFO[ListItem.Comment]</label>
+        </control>
+        <control type="grouplist">
+            <left>1400</left>
+            <top>116</top>
+            <width>456</width>
+            <height>440</height>
+            <orientation>vertical</orientation>
+            <itemgap>4</itemgap>
+            <include content="InfoDetail">
+                <param name="key" value="$LOCALIZE[21899]"/>
+                <param name="value" value="ListItem.Property(Album_Label)"/>
+            </include>
+            <include content="InfoDetail">
+                <param name="key" value="$LOCALIZE[564]"/>
+                <param name="value" value="ListItem.Property(Album_Type)"/>
+            </include>
+            <include content="InfoDetail">
+                <param name="key" value="$LOCALIZE[21893]"/>
+                <param name="value" value="ListItem.Property(Artist_Born)"/>
+            </include>
+            <include content="InfoDetail">
+                <param name="key" value="$LOCALIZE[21894]"/>
+                <param name="value" value="ListItem.Property(Artist_Formed)"/>
+            </include>
+            <include content="InfoDetail">
+                <param name="key" value="$LOCALIZE[21897]"/>
+                <param name="value" value="ListItem.Property(Artist_Died)"/>
+            </include>
+            <include content="InfoDetail">
+                <param name="key" value="$LOCALIZE[21896]"/>
+                <param name="value" value="ListItem.Property(Artist_Disbanded)"/>
+            </include>
+            <include content="InfoDetail">
+                <param name="key" value="$LOCALIZE[176]"/>
+                <param name="value" value="ListItem.Property(Album_Style)"/>
+            </include>
+            <include content="InfoDetail">
+                <param name="key" value="$LOCALIZE[176]"/>
+                <param name="value" value="ListItem.Property(Artist_Style)"/>
+            </include>
+            <include content="InfoDetail">
+                <param name="key" value="$LOCALIZE[175]"/>
+                <param name="value" value="ListItem.Property(Album_Mood)"/>
+            </include>
+            <include content="InfoDetail">
+                <param name="key" value="$LOCALIZE[175]"/>
+                <param name="value" value="ListItem.Property(Artist_Mood)"/>
+            </include>
+            <include content="InfoDetail">
+                <param name="key" value="$LOCALIZE[21892]"/>
+                <param name="value" value="ListItem.Property(Artist_Instrument)"/>
+            </include>
+        </control>
+
+        <!-- the buttons: play and the artist (song: the album). Up leaves the page, Down goes to
+             the tracks (artist: the albums) -->
+        <control type="grouplist" id="9000">
+            <left>384</left>
+            <top>490</top>
+            <width>1000</width>
+            <height>54</height>
+            <orientation>horizontal</orientation>
+            <itemgap>16</itemgap>
+            <onleft>noop</onleft>
+            <onright>noop</onright>
+            <onup>Action(Back)</onup>
+            <ondown condition="Control.IsVisible(5410)">5050</ondown>
+            <ondown condition="!Control.IsVisible(5410)">5301</ondown>
+            <!-- Kodi labels its own buttons 8 and 12: the pills click them (SendClick). An
+                 artist plays all of its songs, album by album. -->
+            <include content="PillButton">
+                <param name="id" value="9001"/>
+                <param name="label" value="▶ $LOCALIZE[31010]"/>
+                <param name="color" value="accent"/>
+                <param name="textcolor" value="accent"/>
+                <onclick condition="!String.IsEqual(ListItem.DBType,artist)">SendClick(8)</onclick>
+                <onclick condition="String.IsEqual(ListItem.DBType,artist)">NotifyAll(nightcity,music_play:artist:$INFO[ListItem.DBID]:1)</onclick>
+            </include>
+            <include content="PillButton">
+                <param name="id" value="9002"/>
+                <param name="label" value="$VAR[MusicInfoLinkLabel] »"/>
+                <param name="visible" value="!String.IsEqual(ListItem.DBType,artist)"/>
+                <param name="onclick" value="SendClick(12)"/>
+            </include>
+        </control>
+        <!-- Kodi's buttons, never shown: play (8) and the artist or album (12) -->
+        <control type="button" id="8">
+            <visible>false</visible>
+            <enable>false</enable>
+        </control>
+        <control type="button" id="12">
+            <visible>false</visible>
+            <enable>false</enable>
+        </control>
+
+        <!-- below: the tracks (artist: the albums), then more by the artist, one row at a time -->
+        <control type="grouplist" id="5400">
+            <left>0</left>
+            <top>600</top>
+            <width>1920</width>
+            <height>480</height>
+            <orientation>vertical</orientation>
+            <itemgap>0</itemgap>
+            <scrolltime tween="quadratic">200</scrolltime>
+            <onup>9000</onup>
+            <ondown>noop</ondown>
+            <!-- the tracks of an album; an artist's albums show as cards in 5301 instead. Not
+                 hidden while 5050 is empty: Kodi fills no hidden list, so it would stay empty -->
+            <control type="group" id="5410">
+                <height>480</height>
+                <visible>String.IsEqual(ListItem.DBType,album)</visible>
+                <include content="RowHeader">
+                    <param name="label" value="$LOCALIZE[31409]"/>
+                    <param name="left" value="64"/>
+                    <param name="top" value="6"/>
+                </include>
+                <control type="label">
+                    <left>64</left>
+                    <top>6</top>
+                    <width>1792</width>
+                    <height>34</height>
+                    <align>right</align>
+                    <font>font_num</font>
+                    <textcolor>accent2</textcolor>
+                    <label>$INFO[Container(5050).CurrentItem]/$INFO[Container(5050).NumItems]</label>
+                </control>
+                <control type="panel" id="5050">
+                    <left>40</left>
+                    <top>48</top>
+                    <width>1840</width>
+                    <height>420</height>
+                    <orientation>vertical</orientation>
+                    <scrolltime tween="quadratic">200</scrolltime>
+                    <onup>9000</onup>
+                    <ondown condition="Control.IsVisible(5310)">5301</ondown>
+                    <ondown condition="!Control.IsVisible(5310)">noop</ondown>
+                    <onleft>noop</onleft>
+                    <onright>noop</onright>
+                    <!-- the album's songs from the library: Kodi's own list 50 takes the clicks
+                         itself and never runs an onclick -->
+                    <content target="music" sortby="track" sortorder="ascending">$VAR[MusicInfoTracksPath]</content>
+                    <!-- play the album from this track (ListItem is the page's album here) -->
+                    <onclick condition="String.IsEqual(Container(5050).ListItem.DBType,song) + !String.IsEmpty(Window(Home).Property(nc.music.album))">NotifyAll(nightcity,music_play:album:$INFO[Window(Home).Property(nc.music.album)]:$INFO[Container(5050).CurrentItem])</onclick>
+                    <itemlayout width="920" height="60">
+                        <include content="MusicTrackRow"/>
+                    </itemlayout>
+                    <focusedlayout width="920" height="60">
+                        <include content="MusicTrackRow">
+                            <param name="focused" value="Control.HasFocus(5050)"/>
+                            <param name="accent" value="$VAR[MusicRowFocusAccent]"/>
+                            <param name="text" value="$VAR[MusicRowFocusText]"/>
+                            <param name="mute" value="$VAR[MusicRowFocusMute]"/>
+                        </include>
+                    </focusedlayout>
+                </control>
+            </control>
+            <include content="MusicRowBox">
+                <param name="id" value="5301"/>
+                <param name="group" value="5310"/>
+                <param name="loader" value="5301"/>
+                <param name="up" value="5050"/>
+                <param name="label" value="$VAR[MusicInfoMoreLabel]"/>
+                <param name="content" value="$VAR[MusicInfoMorePath]"/>
+                <param name="click" value="MusicInfoClick"/>
+            </include>
+        </control>
+    </controls>
+</window>

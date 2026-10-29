@@ -26,9 +26,12 @@ def test_required_windows_exist():
     assert not missing
 
 
-def test_no_music_pvr_windows():
+def test_no_pvr_windows():
+    """Music has its library (MyMusicNav.xml, docs/music-design.md); no PVR, pictures, games or
+    music playlist windows."""
     names = [p.name for p in (ROOT / '1080i').glob('*.xml')]
-    bad = [n for n in names if n.startswith(('MyMusic', 'MyPVR', 'DialogPVR')) or n in ('MyPics.xml', 'MyGames.xml')]
+    bad = [n for n in names if n.startswith(('MyMusic', 'MyPVR', 'DialogPVR')) and n != 'MyMusicNav.xml'
+           or n in ('MyPics.xml', 'MyGames.xml')]
     assert not bad
 
 

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Music OSD over the player screen (MusicVisualisation.xml moves what plays up while it is
+     open): playback buttons left (previous, play/pause, next, stop), shuffle and repeat right.
+     Down: up next, the play queue as a row of cards; it opens on the next track and OK plays
+     the chosen one (scripts/nightcity.py music_goto). Up from the buttons: nothing, as in the
+     video OSD; Back closes it. It hides by itself like the video OSD (Timers.xml
+     nc_musicosd_hide). Kodi's ids 500 (visualisation picker) and 501 (lock) are left out. -->
+<window>
+    <depth>DepthOSD</depth>
+    <defaultcontrol always="true">602</defaultcontrol>
+    <animation effect="fade" time="150">WindowOpen</animation>
+    <animation effect="fade" time="150">WindowClose</animation>
+    <controls>
+        <control type="grouplist" id="600">
+            <left>64</left>
+            <top>590</top>
+            <width>1000</width>
+            <height>54</height>
+            <orientation>horizontal</orientation>
+            <itemgap>12</itemgap>
+            <onup>noop</onup>
+            <onleft>noop</onleft>
+            <onright>620</onright>
+            <ondown condition="Control.IsVisible(710)">SetFocus(700,$INFO[MusicPlayer.PlaylistPosition],absolute)</ondown>
+            <ondown condition="!Control.IsVisible(710)">noop</ondown>
+            <include content="PillButton">
+                <param name="id" value="601"/>
+                <param name="label" value="⏮"/>
+                <param name="onclick" value="PlayerControl(Previous)"/>
+            </include>
+            <include content="PillButton">
+                <param name="id" value="602"/>
+                <param name="label" value="$VAR[PlayPauseLabel]"/>
+                <param name="color" value="accent"/>
+                <param name="textcolor" value="accent"/>
+                <param name="onclick" value="PlayerControl(Play)"/>
+            </include>
+            <include content="PillButton">
+                <param name="id" value="603"/>
+                <param name="label" value="⏭"/>
+                <param name="onclick" value="PlayerControl(Next)"/>
+            </include>
+            <include content="PillButton">
+                <param name="id" value="604"/>
+                <param name="label" value="■ $LOCALIZE[31052]"/>
+                <param name="onclick" value="PlayerControl(Stop)"/>
+            </include>
+        </control>
+        <control type="grouplist" id="620">
+            <left>1056</left>
+            <top>590</top>
+            <width>800</width>
+            <height>54</height>
+            <orientation>horizontal</orientation>
+            <align>right</align>
+            <itemgap>12</itemgap>
+            <onup>noop</onup>
+            <onleft>600</onleft>
+            <onright>noop</onright>
+            <ondown condition="Control.IsVisible(710)">SetFocus(700,$INFO[MusicPlayer.PlaylistPosition],absolute)</ondown>
+            <ondown condition="!Control.IsVisible(710)">noop</ondown>
+            <include content="PillButton">
+                <param name="id" value="621"/>
+                <param name="label" value="$VAR[MusicShuffleLabel]"/>
+                <param name="onclick" value="PlayerControl(Random)"/>
+            </include>
+            <include content="PillButton">
+                <param name="id" value="622"/>
+                <param name="label" value="$VAR[MusicRepeatLabel]"/>
+                <param name="onclick" value="PlayerControl(Repeat)"/>
+            </include>
+        </control>
+
+        <!-- up next: the play queue, from the next track on; the playing card carries ▶ -->
+        <control type="group" id="710">
+            <top>664</top>
+            <visible>Integer.IsGreater(Playlist.Length(music),1)</visible>
+            <include content="RowHeader">
+                <param name="label" value="$LOCALIZE[31410]"/>
+                <param name="left" value="64"/>
+                <param name="top" value="0"/>
+            </include>
+            <control type="label">
+                <left>64</left>
+                <top>0</top>
+                <width>1792</width>
+                <height>34</height>
+                <align>right</align>
+                <font>font_num</font>
+                <textcolor>accent2</textcolor>
+                <label>$INFO[Container(700).CurrentItem]/$INFO[Container(700).NumItems]</label>
+                <visible>Control.HasFocus(700)</visible>
+            </control>
+            <control type="list" id="700">
+                <left>50</left>
+                <top>36</top>
+                <width>1820</width>
+                <height>300</height>
+                <orientation>horizontal</orientation>
+                <preloaditems>2</preloaditems>
+                <scrolltime tween="quadratic">200</scrolltime>
+                <onup>600</onup>
+                <ondown>noop</ondown>
+                <onleft>noop</onleft>
+                <onright>noop</onright>
+                <onclick>NotifyAll(nightcity,music_goto:$INFO[Container(700).CurrentItem])</onclick>
+                <content>playlistmusic://</content>
+                <itemlayout width="228" height="300">
+                    <control type="group">
+                        <left>14</left>
+                        <top>24</top>
+                        <include content="MusicCard">
+                            <param name="dim" value="Control.HasFocus(700)"/>
+                        </include>
+                    </control>
+                </itemlayout>
+                <focusedlayout width="228" height="300">
+                    <control type="group">
+                        <left>14</left>
+                        <top>24</top>
+                        <include content="MusicCard">
+                            <param name="focused" value="Control.HasFocus(700)"/>
+                        </include>
+                    </control>
+                </focusedlayout>
+            </control>
+        </control>
+    </controls>
+</window>
