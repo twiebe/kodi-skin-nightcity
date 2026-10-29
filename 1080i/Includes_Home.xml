@@ -428,7 +428,7 @@
     <include name="MovieHero">
         <include content="HeroBody">
             <param name="item" value="Container(9000).ListItem"/>
-            <param name="kicker" value="$INFO[Container(9000).ListItem.Genre,,  ]‹ ›"/>
+            <param name="kicker" value="$INFO[Container(9000).ListItem.Genre]"/>
             <param name="titleid" value="9020"/>
             <param name="logoid" value="9021"/>
             <param name="metaid" value="9040"/>
@@ -525,7 +525,7 @@
     <include name="ShowHero">
         <include content="HeroBody">
             <param name="item" value="Container(9001).ListItem"/>
-            <param name="kicker" value="$LOCALIZE[31100]  ‹ ›"/>
+            <param name="kicker" value="$LOCALIZE[31100]"/>
             <param name="titleid" value="9560"/>
             <param name="page" value="String.IsEqual(Window(Home).Property(nc.page),shows)"/>
             <param name="fade" value="true"/>

@@ -2,11 +2,15 @@
 pages never show the same title right after a switch (home and movies share the movie spotlight,
 list 9000). The rotation starts over with it (nc_spot_hold), so the new title gets its full
 interval. Only the menu tabs switch pages: Home coming back from another window keeps its title."""
+import os
 import re
+import xml.etree.ElementTree as ET
 
 import pytest
 
 from navigation import evaluate, load
+
+SKIN = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # menu tab, page, spotlight list, skin string that switches the page's spotlight off
 TABS = (('9101', 'home', '9000', 'SpotlightSource'),
@@ -114,3 +118,13 @@ def test_movie_backdrop_fades_in_on_home_and_movies():
         assert not [e for e in a.findall('effect') if e.get('type') == 'slide'], page  # a full screen picture
     assert not [a for a in anims if (a.get('type') or a.text or '').strip().lower() == 'visible']
     assert [a for a in anims if (a.get('type') or a.text or '').strip().lower() == 'hidden']
+
+
+def test_hero_kicker_has_no_arrows():
+    """The ‹ › after the kicker are left from the old x / y counter: the hero shows only the genre
+    (movies) or the page name (shows)."""
+    root = ET.parse(os.path.join(SKIN, '1080i', 'Includes_Home.xml')).getroot()
+    kickers = [p.get('value') for p in root.iter('param') if p.get('name') == 'kicker' and p.get('value')]
+    assert kickers
+    for value in kickers:
+        assert '‹' not in value and '›' not in value, value
