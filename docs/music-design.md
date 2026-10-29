@@ -57,21 +57,28 @@ Walks top down like the video info page:
   genre, label, length), rating, description.
 - Buttons (9000): Play (Kodi 8), the artist (Kodi 12, album only). Up from the buttons leaves the
   page (Back), as on the video info page.
-- Down: the tracks (list 50, a vertical list with number, title, length). OK plays the album from
-  that track.
-- Artist page: Down from the buttons, the albums (Kodi's list 50 as cover cards); OK opens the
-  album page (Kodi switches the dialog over).
-- Album page: Down from the tracks, **More by the artist** (5300, the artist's other albums); OK
-  opens that album's page (script: closes this one and opens the next).
+- Down: the tracks (5050, two columns of number, title, length). OK plays the album from that
+  track and opens the player screen (script `music_play`). Built in the prototype: Kodi's own
+  list 50 runs no skin onclick on this page, so the tracks come from the library
+  (`musicdb://albums/<id>/`) instead and list 50 is left out. Their group is never hidden by
+  its own item count: Kodi fills no hidden list, it would stay empty.
+- Artist page: Down from the buttons, the albums as cover cards (5301,
+  `musicdb://albums/?artistid=<id>`; Kodi's discography in list 50 has no years or art). OK
+  opens that album's page. Play on an artist queues all of its songs.
+- Album page: Down from the tracks, **More by the artist** (5301, the artist's other albums); OK
+  opens that album's page (script `music_info`: closes this one and opens the next, with the
+  art from the library; such a page has no label, so the title comes from the album tag).
 
 ### Now playing (MusicVisualisation + MusicOSD)
 
 - The player screen: the artist's fanart behind, Kodi's visualisation if one is set, the cover,
-  artist, title, album and year, the next track, a progress line with times.
-- OK opens the OSD (Kodi's keymap): playback buttons left (previous, play/pause, next, stop),
-  shuffle and repeat right. Down: **Up next**, the play queue as a row of cards with the playing
-  track selected; OK plays that track. Up from the row: the buttons. Up from the buttons: nothing
-  (as in the video OSD); Back closes the OSD.
+  artist, title, album and year, the next track, a progress line with times, the place in the
+  queue. Kodi's keymap: OK opens the OSD, Up and Down skip tracks, Left and Right step.
+- The OSD: playback buttons left (previous, play/pause, next, stop), shuffle and repeat right
+  (a dot marks the mode that is on). While it is open, what plays moves up to make room.
+  Down: **Up next**, the play queue as a row of cards, the cursor on the next track and the
+  playing one marked ▶; OK plays the chosen track (script `music_goto`). Up from the row: the
+  buttons. Up from the buttons: nothing (as in the video OSD); Back closes the OSD.
 - Auto-hide: the same switch and delay as the video OSD (`nc.osd.autohide.off`,
   `nc.osd.hide.wait`), own timer `nc_musicosd_hide`.
 

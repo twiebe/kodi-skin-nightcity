@@ -2,16 +2,15 @@
 <!-- Album, artist and song page (Kodi opens musicinformation and songinformation with this
      file). Walks top down like the video info page: the head (cover or photo, kicker, title,
      tags, rating, description, details on the right), the buttons, then one row at a time:
-     the tracks of an album (Kodi fills list 50), then the other albums of its artist (5301);
-     for an artist its albums (5301).
+     the tracks of an album (5050, from the library: Kodi's list 50 runs no onclick, so the page
+     leaves it out), then the other albums of its artist (5301); for an artist its albums (5301).
      Kodi ids: 8 plays the album (the song on a song page), 12 opens the artist of an album (the
      album of a song); Kodi labels both itself, so they stay hidden and the pills 9001 and 9002
-     click them. A click in list 50 plays the album from that track (scripts/nightcity.py
-     music_play). A click on a
-     card of 5301 opens that album's page (music_info). -->
+     click them. A click in 5050 plays the album from that track (scripts/nightcity.py
+     music_play). A click on a card of 5301 opens that album's page (music_info). -->
 <window>
     <defaultcontrol always="true">9000</defaultcontrol>
-    <!-- the album a track click plays: in the onclick of list 50 ListItem is the track -->
+    <!-- the album a track click plays (5050's onclick) -->
     <onload condition="String.IsEqual(ListItem.DBType,album)">SetProperty(nc.music.album,$INFO[ListItem.DBID],home)</onload>
     <onload condition="!String.IsEqual(ListItem.DBType,album)">ClearProperty(nc.music.album,home)</onload>
     <controls>
@@ -175,7 +174,7 @@
             <onleft>noop</onleft>
             <onright>noop</onright>
             <onup>Action(Back)</onup>
-            <ondown condition="Control.IsVisible(5410)">50</ondown>
+            <ondown condition="Control.IsVisible(5410)">5050</ondown>
             <ondown condition="!Control.IsVisible(5410)">5301</ondown>
             <!-- Kodi labels its own buttons 8 and 12: the pills click them (SendClick). An
                  artist plays all of its songs, album by album. -->
@@ -215,11 +214,11 @@
             <scrolltime tween="quadratic">200</scrolltime>
             <onup>9000</onup>
             <ondown>noop</ondown>
-            <!-- the tracks; an artist's albums (Kodi's discography in 50 has no years) show as
-                 cards in 5301 instead -->
+            <!-- the tracks of an album; an artist's albums show as cards in 5301 instead. Not
+                 hidden while 5050 is empty: Kodi fills no hidden list, so it would stay empty -->
             <control type="group" id="5410">
                 <height>480</height>
-                <visible>Integer.IsGreater(Container(50).NumItems,0) + !String.IsEqual(ListItem.DBType,artist)</visible>
+                <visible>String.IsEqual(ListItem.DBType,album)</visible>
                 <include content="RowHeader">
                     <param name="label" value="$LOCALIZE[31409]"/>
                     <param name="left" value="64"/>
@@ -233,9 +232,9 @@
                     <align>right</align>
                     <font>font_num</font>
                     <textcolor>accent2</textcolor>
-                    <label>$INFO[Container(50).CurrentItem]/$INFO[Container(50).NumItems]</label>
+                    <label>$INFO[Container(5050).CurrentItem]/$INFO[Container(5050).NumItems]</label>
                 </control>
-                <control type="panel" id="50">
+                <control type="panel" id="5050">
                     <left>40</left>
                     <top>48</top>
                     <width>1840</width>
@@ -247,14 +246,17 @@
                     <ondown condition="!Control.IsVisible(5310)">noop</ondown>
                     <onleft>noop</onleft>
                     <onright>noop</onright>
-                    <!-- play the album from this track -->
-                    <onclick condition="String.IsEqual(ListItem.DBType,song) + !String.IsEmpty(Window(Home).Property(nc.music.album))">NotifyAll(nightcity,music_play:album:$INFO[Window(Home).Property(nc.music.album)]:$INFO[Container(50).CurrentItem])</onclick>
+                    <!-- the album's songs from the library: Kodi's own list 50 takes the clicks
+                         itself and never runs an onclick -->
+                    <content target="music" sortby="track" sortorder="ascending">$VAR[MusicInfoTracksPath]</content>
+                    <!-- play the album from this track (ListItem is the page's album here) -->
+                    <onclick condition="String.IsEqual(Container(5050).ListItem.DBType,song) + !String.IsEmpty(Window(Home).Property(nc.music.album))">NotifyAll(nightcity,music_play:album:$INFO[Window(Home).Property(nc.music.album)]:$INFO[Container(5050).CurrentItem])</onclick>
                     <itemlayout width="920" height="60">
                         <include content="MusicTrackRow"/>
                     </itemlayout>
                     <focusedlayout width="920" height="60">
                         <include content="MusicTrackRow">
-                            <param name="focused" value="Control.HasFocus(50)"/>
+                            <param name="focused" value="Control.HasFocus(5050)"/>
                             <param name="accent" value="$VAR[MusicRowFocusAccent]"/>
                             <param name="text" value="$VAR[MusicRowFocusText]"/>
                             <param name="mute" value="$VAR[MusicRowFocusMute]"/>
@@ -266,7 +268,7 @@
                 <param name="id" value="5301"/>
                 <param name="group" value="5310"/>
                 <param name="loader" value="5301"/>
-                <param name="up" value="50"/>
+                <param name="up" value="5050"/>
                 <param name="label" value="$VAR[MusicInfoMoreLabel]"/>
                 <param name="content" value="$VAR[MusicInfoMorePath]"/>
                 <param name="click" value="MusicInfoClick"/>
