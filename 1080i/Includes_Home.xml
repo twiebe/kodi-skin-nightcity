@@ -254,7 +254,9 @@
                     <width>760</width>
                     <height>110</height>
                     <aspectratio aligny="bottom" align="left">keep</aspectratio>
-                    <fadetime>400</fadetime>
+                    <!-- no crossfade: the logo changes with title and poster (SpotlightList keeps
+                         the next logos loaded); after a page switch a crossfade let the old logo
+                         shine through past the page fade -->
                     <texture background="true">$INFO[$PARAM[item].Art(clearlogo)]</texture>
                     <visible>!String.IsEmpty($PARAM[item].Art(clearlogo))</visible>
                 </control>
