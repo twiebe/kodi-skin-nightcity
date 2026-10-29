@@ -972,3 +972,23 @@ msgstr ""
 msgctxt "#31409"
 msgid "tracks"
 msgstr ""
+
+msgctxt "#31410"
+msgid "up next"
+msgstr ""
+
+msgctxt "#31411"
+msgid "shuffle"
+msgstr ""
+
+msgctxt "#31412"
+msgid "repeat"
+msgstr ""
+
+msgctxt "#31413"
+msgid "repeat all"
+msgstr ""
+
+msgctxt "#31414"
+msgid "repeat one"
+msgstr ""

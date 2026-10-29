@@ -2,6 +2,7 @@
 the player screen and its OSD. Navigation and dead ends of the new windows are covered by
 test_navigation.py like every window; here the music specific rules."""
 import re
+import xml.etree.ElementTree as ET
 
 from conftest import ROOT, parse
 from focus import Page, State
@@ -160,16 +161,20 @@ def test_music_info_buttons_click_kodis_hidden_ones():
 def test_music_info_up_leaves_down_goes_to_the_rows():
     c = controls(load('DialogMusicInfo.xml'))
     assert actions(c['9000'], 'onup') == [('', 'Action(Back)')]
-    assert actions(c['9000'], 'ondown') == [('Control.IsVisible(5410)', '50'), ('!Control.IsVisible(5410)', '5301')]
-    assert '!' + ARTIST in c['5410'].findtext('visible')  # an artist shows albums, no tracks
+    assert actions(c['9000'], 'ondown') == [('Control.IsVisible(5410)', '5050'), ('!Control.IsVisible(5410)', '5301')]
+    # only an album has tracks; never hidden by its own list: Kodi fills no hidden list
+    assert c['5410'].findtext('visible') == 'String.IsEqual(ListItem.DBType,album)'
 
 
 def test_music_info_track_plays_the_album_from_there():
+    """The tracks come from the library (5050): Kodi's own list 50 runs no onclick."""
     c = controls(load('DialogMusicInfo.xml'))
-    [(condition, click)] = actions(c['50'])
-    assert 'String.IsEqual(ListItem.DBType,song)' in condition
+    assert '50' not in c
+    assert c['5050'].find('content').text == '$VAR[MusicInfoTracksPath]'
+    [(condition, click)] = actions(c['5050'])
+    assert 'String.IsEqual(Container(5050).ListItem.DBType,song)' in condition
     assert click == ('NotifyAll(nightcity,music_play:album:$INFO[Window(Home).Property(nc.music.album)]'
-                     ':$INFO[Container(50).CurrentItem])')
+                     ':$INFO[Container(5050).CurrentItem])')
 
 
 def test_music_info_cards_open_their_page():
@@ -192,6 +197,56 @@ def test_music_info_more_path():
 
 def test_music_info_without_dead_ends():
     assert dead_ends('DialogMusicInfo.xml', {}) == []
+
+
+# --- library, player screen and OSD ----------------------------------------------------------
+
+def test_music_library_views():
+    window = parse(ROOT / '1080i' / 'MyMusicNav.xml')
+    assert window.findtext('views') == '50,51'
+    c = controls(load('MyMusicNav.xml'))
+    assert 'ui/mask_200x200.png' in ET.tostring(c['51']).decode()  # square music cards
+    assert {'2', '3', '4'} <= set(c)  # view, sort by, descending
+
+
+def test_player_screen_makes_room_for_the_osd():
+    """What plays moves down while the OSD is closed; the next track and the OK hint go with it."""
+    c = controls(load('MusicVisualisation.xml'))
+    slide = c['9100'].find('animation')
+    assert slide.get('condition') == '!Window.IsActive(musicosd)' and slide.get('end') == '0,240'
+    assert c['2'].get('type') == 'visualisation' and c['2'].findtext('visible') == 'Visualisation.Enabled'
+
+
+def test_music_osd_buttons_and_queue():
+    c = controls(load('MusicOSD.xml'))
+    assert parse(ROOT / '1080i' / 'MusicOSD.xml').findtext('defaultcontrol') == '602'
+    assert [k.get('id') for k in c['600'].findall('control')] == ['601', '602', '603', '604']
+    assert [k.get('id') for k in c['620'].findall('control')] == ['621', '622']
+    assert ('', 'PlayerControl(Random)') in actions(c['621'])
+    assert ('', 'PlayerControl(Repeat)') in actions(c['622'])
+    # Down: the queue on the next track (the playlist counts from 1, the list from 0)
+    for group in ('600', '620'):
+        assert ('Control.IsVisible(710)', 'SetFocus(700,$INFO[MusicPlayer.PlaylistPosition],absolute)') in \
+            actions(c[group], 'ondown')
+        assert actions(c[group], 'onup') == [('', 'noop')]
+    assert c['700'].findtext('content') == 'playlistmusic://'
+    assert actions(c['700']) == [('', 'NotifyAll(nightcity,music_goto:$INFO[Container(700).CurrentItem])')]
+    assert actions(c['700'], 'onup') == [('', '600')]
+
+
+def test_music_osd_hides_like_the_video_osd():
+    timers = {t.findtext('name'): t for t in parse(ROOT / '1080i' / 'Timers.xml').iter('timer')}
+    timer = timers['nc_musicosd_hide']
+    for part in ('!Skin.HasSetting(nc.osd.autohide.off)', 'Player.HasAudio', 'Window.IsModalDialogTopmost(musicosd)'):
+        assert part in timer.findtext('start')
+    assert timer.findtext('reset') == timers['nc_osd_hide'].findtext('reset')
+    assert 'Skin.String(nc.osd.hide.wait)' in timer.findtext('stop')
+    assert [o.text for o in timer.findall('onstop')] == ['Dialog.Close(musicosd)']
+
+
+def test_music_windows_without_dead_ends():
+    for name in ('MyMusicNav.xml', 'MusicOSD.xml'):
+        assert dead_ends(name, {}) == []
 
 
 def test_music_strings_without_long_dashes():

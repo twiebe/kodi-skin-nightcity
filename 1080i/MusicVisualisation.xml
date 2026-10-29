@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The music player screen: the artist's fanart behind (Kodi's visualisation over it when one
+     is set), the cover, artist, title, album and year, the seek line with times and the next
+     track. OK opens the OSD (MusicOSD.xml, Kodi's keymap); while it is open the block moves up
+     to make room for its buttons and the queue row. -->
+<window>
+    <animation effect="fade" time="200">WindowOpen</animation>
+    <animation effect="fade" time="200">WindowClose</animation>
+    <controls>
+        <include>Background</include>
+        <include content="FanartBackdrop">
+            <param name="art" value="Player.Art(fanart)"/>
+        </include>
+        <control type="group">
+            <visible>String.IsEmpty(Player.Art(fanart))</visible>
+            <include content="FanartBackdrop">
+                <param name="art" value="Player.Art(artist.fanart)"/>
+            </include>
+        </control>
+        <control type="visualisation" id="2">
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>1080</height>
+            <visible>Visualisation.Enabled</visible>
+        </control>
+        <control type="image">
+            <left>0</left>
+            <top>440</top>
+            <width>1920</width>
+            <height>640</height>
+            <texture colordiffuse="scrim">ui/fade_b.png</texture>
+        </control>
+        <include content="PathLine">
+            <param name="id" value="9026"/>
+            <param name="path" value="$LOCALIZE[31405] [COLOR accent2]◢[/COLOR] $LOCALIZE[31406]"/>
+            <param name="left" value="64"/>
+            <param name="top" value="30"/>
+            <param name="width" value="1792"/>
+        </include>
+
+        <!-- what plays; drawn for the open OSD, moved down while it is closed -->
+        <control type="group" id="9100">
+            <left>64</left>
+            <top>130</top>
+            <animation effect="slide" end="0,240" time="200" tween="quadratic" condition="!Window.IsActive(musicosd)">Conditional</animation>
+            <include content="CutCard">
+                <param name="width" value="280"/>
+                <param name="height" value="280"/>
+                <param name="mask" value="ui/mask_280x280.png"/>
+                <param name="glowheight" value="328"/>
+                <param name="glowwidth" value="328"/>
+                <param name="image" value="$INFO[Player.Art(thumb)]"/>
+            </include>
+            <include content="Kicker">
+                <param name="id" value="9027"/>
+                <param name="label" value="$INFO[MusicPlayer.Artist]"/>
+                <param name="left" value="320"/>
+                <param name="top" value="0"/>
+                <param name="width" value="1400"/>
+            </include>
+            <include content="GlitchTitle">
+                <param name="id" value="9030"/>
+                <param name="label" value="$INFO[MusicPlayer.Title]"/>
+                <param name="left" value="320"/>
+                <param name="top" value="44"/>
+                <param name="width" value="1400"/>
+                <param name="font" value="font_title"/>
+            </include>
+            <control type="label">
+                <left>320</left>
+                <top>160</top>
+                <width>1400</width>
+                <height>40</height>
+                <font>font_label</font>
+                <textcolor>text_dim</textcolor>
+                <label>$VAR[MusicPlayerLine]</label>
+            </control>
+            <control type="label">
+                <left>320</left>
+                <top>210</top>
+                <width>800</width>
+                <height>36</height>
+                <font>font_caps_small</font>
+                <textcolor>text</textcolor>
+                <label>[UPPERCASE]$VAR[PlayerState][/UPPERCASE]</label>
+            </control>
+            <control type="group">
+                <top>340</top>
+                <include content="PlayerBar"/>
+                <control type="label">
+                    <top>16</top>
+                    <width>900</width>
+                    <height>40</height>
+                    <font>font_num</font>
+                    <textcolor>text_dim</textcolor>
+                    <label>[COLOR accent]$INFO[MusicPlayer.Time][/COLOR] / $INFO[MusicPlayer.Duration]</label>
+                </control>
+                <control type="label">
+                    <left>892</left>
+                    <top>16</top>
+                    <width>900</width>
+                    <height>40</height>
+                    <align>right</align>
+                    <font>font_num</font>
+                    <textcolor>text_dim</textcolor>
+                    <label>$INFO[MusicPlayer.PlaylistPosition]/$INFO[MusicPlayer.PlaylistLength]</label>
+                </control>
+            </control>
+            <control type="label">
+                <top>416</top>
+                <width>1792</width>
+                <height>40</height>
+                <font>font_label</font>
+                <textcolor>text_dim</textcolor>
+                <label>$VAR[MusicNextLine]</label>
+                <visible>!Window.IsActive(musicosd)</visible>
+                <animation effect="fade" time="150">VisibleChange</animation>
+            </control>
+        </control>
+        <!-- OK opens the OSD (Kodi's keymap) -->
+        <include content="LevelHint">
+            <param name="id" value="9090"/>
+            <param name="key" value="⏎"/>
+            <param name="label" value="$LOCALIZE[31232]"/>
+            <param name="visible" value="!Window.IsActive(musicosd)"/>
+        </include>
+    </controls>
+</window>
