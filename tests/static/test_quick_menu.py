@@ -3,6 +3,8 @@ whatever is on screen, with the clock, the weather, the power commands and links
 and the system page. Kodi's power menu (shutdownmenu: the S key, power and sleep keys) leads
 there, so does a long press on Home (the skin's keymap) and the icon next to the clock in the
 top line of Home. It replaces the power page of Home."""
+import xml.etree.ElementTree as ET
+
 from conftest import ROOT, parse
 from navigation import load
 
@@ -47,7 +49,7 @@ def test_slides_in_from_the_top_right():
 def test_power_tiles_act_at_once_or_say_why_not():
     """No "are you sure" and no script: each tile runs its builtin where the device can do it,
     else Kodi notes that it cannot. Tiles the device cannot do are dimmed (property can)."""
-    items = list(controls(parse(ROOT / '1080i' / WINDOW))['1220'].iter('item'))
+    items = list(controls(load(WINDOW))['1220'].iter('item'))
     by_command = {}
     for item in items:
         for condition, action in actions(item):
@@ -65,7 +67,7 @@ def test_power_tiles_act_at_once_or_say_why_not():
 
 
 def test_shutdown_timer_tile_sets_and_cancels():
-    items = list(controls(parse(ROOT / '1080i' / WINDOW))['1220'].iter('item'))
+    items = list(controls(load(WINDOW))['1220'].iter('item'))
     timer = next(i for i in items if any('AlarmClock' in a for _, a in actions(i)))
     assert actions(timer) == [('!System.HasAlarm(shutdowntimer)', 'AlarmClock(shutdowntimer,Shutdown())'),
                               ('System.HasAlarm(shutdowntimer)', 'CancelAlarm(shutdowntimer)')]
@@ -75,11 +77,13 @@ def test_shutdown_timer_tile_sets_and_cancels():
 def test_weather_or_how_to_get_it():
     """With a weather add-on: temperature, conditions and place, OK opens Kodi's weather. Without
     one the tile says so and OK opens the weather settings."""
-    weather = controls(parse(ROOT / '1080i' / WINDOW))['1210']
+    weather = controls(load(WINDOW))['1210']
     # Kodi opens no window while a modal dialog is open
-    assert actions(weather) == [('', 'Dialog.Close(1170,true)'), ('Weather.IsFetched', 'ActivateWindow(weather)'),
+    # on Home the focus goes to the icon first: Back from the weather lands there, menu shown
+    assert actions(weather) == [('', 'Dialog.Close(1170,true)'), ('!Window.IsActive(1170)', 'SetFocus(9109)'),
+                                ('Weather.IsFetched', 'ActivateWindow(weather)'),
                                 ('!Weather.IsFetched', 'ActivateWindow(servicesettings,weather)')]
-    text = (ROOT / '1080i' / WINDOW).read_text(encoding='utf-8')
+    text = ET.tostring(load(WINDOW), encoding='unicode')
     for label in ('Weather.Temperature', 'Weather.Conditions', 'Weather.Location', '$LOCALIZE[31321]'):
         assert label in text
 
@@ -88,7 +92,7 @@ def test_links_to_settings_and_files():
     """Static items, so more links (later the user's own) are one item more. One settings link:
     the settings page of Home (nc.page system), which holds the machine facts and Kodi's settings
     groups; Kodi's own settings window and a system page beside it were one too many."""
-    links = controls(parse(ROOT / '1080i' / WINDOW))['1230']
+    links = controls(load(WINDOW))['1230']
     items = links.findall('content/item')
     clicks = [[a for _, a in actions(i)] for i in items]
     # through the Home key window: it closes an info page, the OSD or a TMDb chain first, the
@@ -109,6 +113,13 @@ def test_rows_lead_into_each_other():
     assert c['1230'].findtext('onup') == '1220'
 
 
+def test_up_from_the_top_goes_to_the_hamburger():
+    """Up on the top row leaves the menu (DESIGN.md), onto the icon it opens from when Home is
+    behind it; over another window it just closes."""
+    weather = controls(load(WINDOW))['1210']
+    assert actions(weather, 'onup') == [('', 'Dialog.Close(1170,true)'), ('Window.IsActive(home)', 'SetFocus(9109)')]
+
+
 def test_kodis_power_menu_leads_here():
     """Like Arctic Fuse: the power menu closes at once and opens the quick menu, or closes it when
     it is open, so the same key opens and closes it."""
@@ -118,14 +129,54 @@ def test_kodis_power_menu_leads_here():
     assert not list(root.iter('control'))
 
 
-def test_icon_next_to_the_clock_opens_it():
+def test_icon_next_to_the_clock_shows_it():
+    """Focus applies, OK goes (DESIGN.md): with the cursor on the icon the menu shows on Home,
+    Down or OK go into it, Left and Right leave it. A panel of Home, not the dialog: a modal
+    dialog would take the focus from the icon."""
     home = controls(load('Home.xml'))
     anchor = home['9109']
-    assert actions(anchor) == [('', 'ActivateWindow(1170)')]
+    assert actions(anchor) == [('', 'SetFocus(1210)')]
+    assert anchor.findtext('ondown') == '1210'
     assert home['9100'].findtext('onright') == '9109'
     row = home['9190']
     assert row.get('type') == 'grouplist' and row.findtext('align') == 'right'
     assert row.findall('control')[0].find('control').get('id') == '9109'
+    panel = home['9180']
+    assert panel.findtext('visible') == 'Control.HasFocus(9109) | ControlGroup(9180).HasFocus'
+    # inside the menu the icon stays marked in the accent colour: Up and Back lead there
+    assert anchor.findtext('selected') == 'ControlGroup(9180).HasFocus'
+    assert anchor.find('textureradioonnofocus').get('colordiffuse') == 'accent'
+
+
+def test_same_menu_on_home_and_as_dialog():
+    """One body (QuickMenuBody) for both: the panel of Home and the dialog that the held Home
+    key, the S key and the power menu open over any window."""
+    def body(group):
+        return [(c.tag, c.get('type'), c.get('id'), c.findtext('label')) for c in group.iter()
+                if c.tag == 'control']
+    dialog = controls(load(WINDOW))['1200']
+    panel = controls(load('Home.xml'))['9180']
+    assert body(dialog)[1:] == body(panel)[1:]
+    for el in (dialog, panel):
+        assert [el.findtext(k) for k in ('left', 'top', 'width', 'height')] == ['1232', '96', '640', '788']
+
+
+def test_menu_on_home_over_the_page():
+    """Drawn after the top line and the rows: over everything of Home but the backdrop that hides
+    Home while an episode's info page comes back."""
+    root = load('Home.xml').find('controls')
+    ids = [c.get('id') for c in root.findall('control')]
+    assert ids.index('9180') == len(ids) - 2
+    assert ids.index('9190') < ids.index('9180')
+
+
+def test_back_in_the_menu_on_home_goes_to_the_icon():
+    """Back inside the panel of Home: the icon, menu still shown. In the dialog Back closes it as
+    always (the condition does not hold there, so Kodi's own Back runs)."""
+    for window in ('Home.xml', WINDOW):
+        c = controls(load(window))
+        for cid in ('1210', '1220', '1230'):
+            assert actions(c[cid], 'onback') == [('!Window.IsActive(1170)', '9109')], (window, cid)
 
 
 def test_power_page_is_gone():

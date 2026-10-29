@@ -86,18 +86,69 @@ def test_back_closes(quick):
     assert cond('Window.IsActive(home)')['Window.IsActive(home)']
 
 
+PANEL = 'Control.IsVisible(9180)'
+
+
 def test_icon_next_to_the_clock(quick):
+    """The cursor on the icon shows the menu on Home (no dialog), Left and Right off it hide it,
+    OK goes in."""
     builtin('SetFocus(9104)')
-    wait_for('Control.HasFocus(9104)')
+    wait_for('Control.HasFocus(9104) + !' + PANEL)
     action('right')
-    wait_for('Control.HasFocus(9109)')
+    wait_for('Control.HasFocus(9109) + ' + PANEL)
+    assert not is_open()
+    time.sleep(0.5)
     screenshot('quick-anchor')
     action('left')
-    wait_for('Control.HasFocus(9104)')
+    wait_for('Control.HasFocus(9104) + !' + PANEL)
     action('right')
+    wait_for('Control.HasFocus(9109) + ' + PANEL)
+    action('right')
+    wait_for('Control.HasFocus(9101) + !' + PANEL)
+    action('left')
     wait_for('Control.HasFocus(9109)')
     action('select')
-    wait_for(OPEN)
+    wait_for('Control.HasFocus(1210) + ' + PANEL)
+    assert not is_open()
+
+
+def test_menu_on_home_by_focus(quick):
+    """Down goes into the menu, Up from its top and Back come out onto the icon, the menu still
+    shown; the rows lead into each other as in the dialog."""
+    builtin('SetFocus(9109)')
+    wait_for('Control.HasFocus(9109) + ' + PANEL)
+    action('down')
+    wait_for('Control.HasFocus(1210)')
+    action('down')
+    wait_for('Control.HasFocus(1220) + ' + PANEL)
+    time.sleep(0.5)
+    screenshot('quick-panel-inside')
+    action('down', 'down')  # two rows of tiles
+    wait_for('Control.HasFocus(1230)')
+    action('back')
+    wait_for('Control.HasFocus(9109) + ' + PANEL)
+    action('down', 'down')
+    wait_for('Control.HasFocus(1220)')
+    builtin('SetFocus(1220,0,absolute)')
+    action('up')
+    wait_for('Control.HasFocus(1210)')
+    action('up')
+    wait_for('Control.HasFocus(9109) + ' + PANEL)
+    assert not is_open()
+
+
+def test_weather_tile_on_home_comes_back_to_the_icon(quick):
+    """OK on the weather tile of the panel opens the weather (or its settings); Back lands on the
+    icon with the menu shown."""
+    builtin('SetFocus(9109)')
+    wait_for('Control.HasFocus(9109)')
+    action('down')
+    wait_for('Control.HasFocus(1210)')
+    action('select')
+    wait_for('Window.IsActive(weather) | Window.IsActive(servicesettings)')
+    time.sleep(0.5)
+    action('back', delay=1)
+    wait_for('Window.IsActive(home) + Control.HasFocus(9109) + ' + PANEL)
 
 
 def test_tiles_and_rows(quick):
@@ -156,6 +207,22 @@ def test_weather_without_addon_opens_its_settings(quick):
     time.sleep(1)
     screenshot('quick-weather-settings')
     action('back', delay=1)
+
+
+def test_up_from_the_top_to_the_icon(quick):
+    """Up from the weather tile leaves the menu onto the icon next to the clock, also when the
+    held Home key opened it from a row."""
+    builtin('SetFocus(9101)')
+    wait_for('Control.HasFocus(9101)')
+    press(hold=1500)
+    wait_for(OPEN)
+    wait_for('Control.HasFocus(1220)')
+    time.sleep(0.3)
+    action('up')
+    wait_for('Control.HasFocus(1210)')
+    action('up')
+    closed()
+    wait_for('Window.IsActive(home) + Control.HasFocus(9109)')
 
 
 def test_settings_link(quick):

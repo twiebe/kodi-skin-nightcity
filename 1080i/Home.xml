@@ -146,6 +146,7 @@
             <include>SearchWidgets</include>
         </include>
         <include>HomeTop</include>
+        <include>QuickMenuPanel</include>
         <!-- while the script follows an episode's playback and reopens its info page: only the
              backdrop once no video plays, so Home does not show in between -->
         <control type="group">

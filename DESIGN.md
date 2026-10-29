@@ -36,6 +36,11 @@ Example: on an episode, Play, Down: the episodes. Up: the season tabs. Up: Play.
 Rule of thumb: if the screen around the focus stays and only its content changes, focus applies
 it. If the screen changes, OK does.
 
+The quick menu on Home follows it too: the cursor on the icon next to the clock shows the menu,
+Down or OK go into it, Up from its top and Back come out onto the icon with the menu still
+shown, Left or Right off the icon hide it. Over other windows (held Home key, S key, power
+menu) it is a dialog as before.
+
 A choice that loads a TMDb list waits while another TMDb list loads (`TmdbBusy`,
 `nc_credits_tab`): two plugin lists at once crash Kodi. The cursor still decides, the list
 follows a moment later.
