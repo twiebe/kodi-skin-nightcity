@@ -531,7 +531,7 @@
          (nc.info.more.load, Timers.xml nc_info_more): a list loads its path when the page opens,
          hidden or not, and this one starts a plugin. -->
     <variable name="InfoMorePath">
-        <value condition="!String.IsEmpty(Window(Home).Property(nc.info.more.load))">plugin://plugin.video.themoviedb.helper/?info=details&amp;tmdb_type=$INFO[ListItem.Property(tmdb_type)]&amp;tmdb_id=$INFO[ListItem.Property(tmdb_id)]</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(nc.info.more.load)) + !String.IsEmpty(ListItem.Property(tmdb_id))">plugin://plugin.video.themoviedb.helper/?info=details&amp;tmdb_type=$INFO[ListItem.Property(tmdb_type)]&amp;tmdb_id=$INFO[ListItem.Property(tmdb_id)]</value>
     </variable>
     <!-- the library copy of a TMDb title (DialogVideoInfo list 5901), by title and year -->
     <variable name="InfoTwinPath">
