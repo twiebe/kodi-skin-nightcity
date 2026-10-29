@@ -228,16 +228,20 @@
             <onup>Action(Back)</onup>
             <!-- past the season tabs onto the episodes, like past the cast and crew tabs -->
             <ondown condition="String.IsEqual(ListItem.DBType,episode)">5100</ondown>
-            <!-- the tabs when the chosen tab has nothing (a crew member with no films still has
-                 the crew tab); a person page first: its hidden cast list 5500 keeps the items of
-                 the page before -->
+            <!-- past the cast and crew tabs into their list (DESIGN.md: a selector is skipped from
+                 above); while the list loads or still shows the page before, nc_info_enter
+                 (Timers.xml) moves the focus in once it is there. The tabs only when the chosen
+                 tab has nothing (a crew member with no films still has the crew tab); a person
+                 page first: its hidden cast list 5500 keeps the items of the page before -->
             <ondown condition="String.IsEqual(ListItem.Property(tmdb_type),person) + $EXP[TmdbFresh5510] + !Container(5510).IsUpdating + Integer.IsGreater(Container(5510).NumItems,0)">5510</ondown>
+            <ondown condition="String.IsEqual(ListItem.Property(tmdb_type),person) + [Container(5510).IsUpdating | Integer.IsGreater(Container(5510).NumItems,0)]">SetProperty(nc.info.enter,5510,home)</ondown>
+            <ondown condition="String.IsEqual(ListItem.Property(tmdb_type),person) + [Container(5510).IsUpdating | Integer.IsGreater(Container(5510).NumItems,0)]">SetProperty(nc.info.enter.from,$INFO[System.CurrentControlId],home)</ondown>
             <ondown condition="String.IsEqual(ListItem.Property(tmdb_type),person)">5520</ondown>
-            <ondown condition="$EXP[TmdbFresh5500] + !Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0)">5500</ondown>
-            <!-- the tabs while their list loads, still shows the page before or when the chosen
-                 tab has nothing -->
-            <ondown condition="Control.IsVisible(5403)">5520</ondown>
-            <ondown>50</ondown>
+            <ondown condition="!String.IsEqual(ListItem.Property(tmdb_type),person) + $EXP[TmdbFresh5500] + !Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0)">5500</ondown>
+            <ondown condition="!String.IsEqual(ListItem.Property(tmdb_type),person) + Control.IsVisible(5403) + [Container(5500).IsUpdating | Integer.IsGreater(Container(5500).NumItems,0)]">SetProperty(nc.info.enter,5500,home)</ondown>
+            <ondown condition="!String.IsEqual(ListItem.Property(tmdb_type),person) + Control.IsVisible(5403) + [Container(5500).IsUpdating | Integer.IsGreater(Container(5500).NumItems,0)]">SetProperty(nc.info.enter.from,$INFO[System.CurrentControlId],home)</ondown>
+            <ondown condition="!String.IsEqual(ListItem.Property(tmdb_type),person) + Control.IsVisible(5403)">5520</ondown>
+            <ondown condition="!String.IsEqual(ListItem.Property(tmdb_type),person) + !Control.IsVisible(5403)">50</ondown>
             <!-- an episode has no poster: the buttons sit under its text at the left margin -->
             <animation effect="slide" end="-320,0" time="0" condition="String.IsEqual(ListItem.DBType,episode)">Conditional</animation>
             <!-- inside a chain: back all the way, to where the chain started (ChainBackLabel names
@@ -415,8 +419,10 @@
                     <scrolltime tween="quadratic">200</scrolltime>
                     <onup>5200</onup>
                     <ondown condition="$EXP[TmdbFresh5500] + !Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0)">5500</ondown>
+                    <ondown condition="Control.IsVisible(5403) + [Container(5500).IsUpdating | Integer.IsGreater(Container(5500).NumItems,0)]">SetProperty(nc.info.enter,5500,home)</ondown>
+                    <ondown condition="Control.IsVisible(5403) + [Container(5500).IsUpdating | Integer.IsGreater(Container(5500).NumItems,0)]">SetProperty(nc.info.enter.from,5100,home)</ondown>
                     <ondown condition="Control.IsVisible(5403)">5520</ondown>
-                    <ondown condition="Control.IsVisible(50)">50</ondown>
+                    <ondown condition="!Control.IsVisible(5403) + Control.IsVisible(50)">50</ondown>
                     <ondown>noop</ondown>
                     <onclick>SetFocus(9001)</onclick>
                     <itemlayout width="352" height="300">

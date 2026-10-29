@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Cast and crew row during playback: Down from the chapter row (VideoOSDBookmarks.xml) opens
-     it, Up from the tabs or Back returns to the chapter row. Tabs cast | crew switch on OK. The
+     it, Up from the tabs or Back returns to the chapter row. Tabs cast | crew switch on focus (CreditsTab). The
      focused person's name, role and short biography sit above the row; the biography loads in
      the hidden list 6599 once the focus rested (nc_osd_bio, Timers.xml). OK on a person closes
      the OSD and opens the person's page in TMDb Helper's window manager over the running video;

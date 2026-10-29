@@ -117,7 +117,7 @@
                 <param name="sortby" value="dateadded"/>
                 <param name="sortorder" value="descending"/>
                 <param name="limit" value="25"/>
-                <defaultcontrol always="true">9230</defaultcontrol>
+                <defaultcontrol always="true">920$PARAM[n]</defaultcontrol>
                 <include content="GenreTabs">
                     <param name="base" value="92"/>
                     <param name="list" value="920$PARAM[n]"/>
@@ -139,7 +139,7 @@
                 <param name="sortby" value="dateadded"/>
                 <param name="sortorder" value="descending"/>
                 <param name="limit" value="25"/>
-                <defaultcontrol always="true">9230</defaultcontrol>
+                <defaultcontrol always="true">920$PARAM[n]</defaultcontrol>
                 <include content="GenreTabs">
                     <param name="base" value="92"/>
                     <param name="list" value="920$PARAM[n]"/>
@@ -504,7 +504,7 @@
                 <param name="sortby" value="dateadded"/>
                 <param name="sortorder" value="descending"/>
                 <param name="limit" value="25"/>
-                <defaultcontrol always="true">9430</defaultcontrol>
+                <defaultcontrol always="true">940$PARAM[n]</defaultcontrol>
                 <include content="GenreTabs">
                     <param name="base" value="94"/>
                     <param name="list" value="940$PARAM[n]"/>
@@ -711,7 +711,7 @@
                 <param name="sortby" value="dateadded"/>
                 <param name="sortorder" value="descending"/>
                 <param name="limit" value="25"/>
-                <defaultcontrol always="true">9530</defaultcontrol>
+                <defaultcontrol always="true">950$PARAM[n]</defaultcontrol>
                 <include content="GenreTabs">
                     <param name="base" value="95"/>
                     <param name="list" value="950$PARAM[n]"/>

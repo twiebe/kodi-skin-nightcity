@@ -147,7 +147,8 @@ def slot_include(page):
             db, prop, label, pick = GENRES[row['genres']]
             params += [param('titlevisible', 'false'), param('sortby', 'dateadded'),
                        param('sortorder', 'descending'), param('limit', '25')]
-            nested = ['<defaultcontrol always="true">{}30</defaultcontrol>'.format(base),
+            # the list, not the tabs: a selector is skipped from above (DESIGN.md)
+            nested = ['<defaultcontrol always="true">{}0$PARAM[n]</defaultcontrol>'.format(base),
                       '<include content="GenreTabs">',
                       '    ' + param('base', base), '    ' + param('list', base + '0$PARAM[n]'),
                       '    ' + param('up', '$PARAM[up]'), '    ' + param('prop', prop),

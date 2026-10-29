@@ -56,15 +56,36 @@ def test_episode_rows_scroll_with_the_credits():
         assert first.find('.//control[@id="{}"]'.format(cid)) is not None, cid
 
 
+PERSON = 'String.IsEqual(ListItem.Property(tmdb_type),person)'
+
+
+def _credits(cid, after, person=''):
+    """Down into the credits list `cid` (5500 or 5510) from `after`: the list when it is in, the
+    wait for it while it loads or still shows the page before (nc_info_enter), the tabs only when
+    the chosen tab has nothing. DESIGN.md: the tabs are a selector, skipped from above."""
+    shown = '' if cid == '5510' else 'Control.IsVisible(5403) + '
+    ready = '$EXP[TmdbFresh{0}] + !Container({0}).IsUpdating + Integer.IsGreater(Container({0}).NumItems,0)'.format(cid)
+    loading = shown + '[Container({0}).IsUpdating | Integer.IsGreater(Container({0}).NumItems,0)]'.format(cid)
+    return [(person + ready, cid),
+            (person + loading, 'SetProperty(nc.info.enter,{},home)'.format(cid)),
+            (person + loading, 'SetProperty(nc.info.enter.from,{},home)'.format(after)),
+            ((person + shown).rstrip(' +'), '5520')]
+
+
 def test_down_from_the_episodes_opens_their_credits():
-    assert _nav(5100, 'ondown') == [
-        # only into credits of this episode (test_rows_focus.py)
-        ('$EXP[TmdbFresh5500] + !Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0)', '5500'),
-        # the tabs while the list loads, shows the episode before or the chosen tab has nothing
-        ('Control.IsVisible(5403)', '5520'),
-        ('Control.IsVisible(50)', '50'),
+    # only into credits of this episode (test_rows_focus.py)
+    assert _nav(5100, 'ondown') == _credits('5500', '5100') + [
+        ('!Control.IsVisible(5403) + Control.IsVisible(50)', '50'),
         ('', 'noop'),
     ]
+
+
+def test_down_from_the_buttons_skips_the_credits_tabs():
+    nav = _nav(9000, 'ondown')
+    assert nav[0] == ('String.IsEqual(ListItem.DBType,episode)', '5100')
+    assert nav[1:] == _credits('5510', '$INFO[System.CurrentControlId]', PERSON + ' + ') + \
+        _credits('5500', '$INFO[System.CurrentControlId]', '!' + PERSON + ' + ') + [
+        ('!' + PERSON + ' + !Control.IsVisible(5403)', '50')]
 
 
 def test_up_from_the_credits_returns_to_the_episodes():
