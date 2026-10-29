@@ -4,7 +4,6 @@ JetBrains Mono (arrows and box drawing, which Noto Sans Symbols 2 lacks; Greek, 
 Vietnamese letters, which Rajdhani lacks).
 
 RetroUI-<weight>.ttf      Rajdhani with the symbols it lacks (◢ ▶ ❚ ⏮ ⏭ ✓ ★ ⏻, box drawing, ...)
-                          and a round bullet (•) in place of its narrow one
 RetroUIWide-<weight>.ttf  the same, every glyph 0.1 em wider (Kodi labels have no letter spacing)
 
 All sources are OFL; the results are renamed, as the OFL asks for modified versions.
@@ -21,10 +20,6 @@ SYMBOLS = ['NotoSansSymbols2-Regular.ttf', 'JetBrainsMono-Regular.ttf']  # first
 # codepoints taken from the symbol font when Rajdhani has none
 RANGES = [(0x0180, 0x024F), (0x0300, 0x036F), (0x0370, 0x03FF), (0x0400, 0x04FF), (0x1E00, 0x1EFF),  # Latin Ext-B, accents, Greek, Cyrillic, Vietnamese
           (0x2190, 0x21FF), (0x2300, 0x23FF), (0x2500, 0x25FF), (0x2600, 0x26FF), (0x2700, 0x27BF)]
-# codepoints taken from the symbol font although Rajdhani has them: Rajdhani's bullet is a narrow
-# sliver hardly bigger than the middle dot; the round one of Noto Sans Symbols 2 marks the current
-# value of a list (DialogList, TrackPanel), moved onto the middle of the capitals like Rajdhani's
-REPLACE = [0x2022]
 TRACKING = 100  # font units, UPM 1000
 
 
@@ -59,22 +54,10 @@ def add_symbols(font, sources):
             for cp in range(lo, hi + 1):
                 if cp not in cmap and cp not in added and cp in sym_cmap:
                     added[cp] = copy_glyph(symbols, font, sym_cmap[cp], done)
-        for cp in REPLACE:
-            if cp not in added and cp in sym_cmap:
-                added[cp] = copy_glyph(symbols, font, sym_cmap[cp], done)
-                centre(font, added[cp], cmap[ord('H')])
     for table in font['cmap'].tables:
         if table.isUnicode():
             table.cmap.update({cp: g for cp, g in added.items() if table.format != 4 or cp <= 0xFFFF})
     font['maxp'].numGlyphs = len(font.getGlyphOrder())
-
-
-def centre(font, name, cap):
-    """Move glyph `name` up or down onto the middle of the capital `cap`."""
-    glyf = font['glyf']
-    glyph, height = glyf[name], glyf[cap].yMax
-    glyph.coordinates.translate((0, height // 2 - (glyph.yMin + glyph.yMax) // 2))
-    glyph.recalcBounds(glyf)
 
 
 def track(font, units):
