@@ -896,3 +896,7 @@ msgstr ""
 msgctxt "#31339"
 msgid "Forgets the remembered search terms."
 msgstr ""
+
+msgctxt "#31340"
+msgid "The colour scheme of the skin, the same choice as under Interface."
+msgstr ""
