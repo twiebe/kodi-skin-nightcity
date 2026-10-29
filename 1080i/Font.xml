@@ -65,6 +65,12 @@
             <filename>ShareTechMono-Regular.ttf</filename>
             <size>64</size>
         </font>
+        <!-- the temperature of the weather page: the title font, large and tight -->
+        <font>
+            <name>font_temp</name>
+            <filename>RetroUI-Bold.ttf</filename>
+            <size>140</size>
+        </font>
         <!-- Estuary font names for add-on dialogs (jellyfin-kodi); Kodi only falls back to font13 -->
         <font>
             <name>font10</name>

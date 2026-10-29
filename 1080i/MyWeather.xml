@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Weather (Kodi's window "weather", 12600), opened by the weather tile of the quick menu.
+     Current conditions large on top: place, conditions, glyph and temperature (510), the facts
+     beside them. Below the next days as a row of cards, Day0 (today) to Day6, as far as the
+     weather add-on gave them. Kodi converts the add-on's values to the user's units and sets
+     them as properties of this window (temperatures without unit, wind as a sentence).
+     The row is the only control: Up leaves the page, Back too. OK does nothing.
+     Glyphs: media/ui/weather/<code>.png per weather code (tools/make_weather_icons.py).
+     Ids 2, 3, 10, 11, 21-95 and 223-228 are Kodi's (its old layout), none of them here. -->
+<window>
+    <defaultcontrol always="true">500</defaultcontrol>
+    <!-- Kodi keeps this window in memory: open on today, not on the day focused last time -->
+    <onload>SetFocus(500,0,absolute)</onload>
+    <controls>
+        <include>Background</include>
+        <include content="StatusBar">
+            <param name="title" value="$LOCALIZE[8]"/>
+        </include>
+        <control type="group">
+            <include>WindowFade</include>
+            <control type="group">
+                <visible>Weather.IsFetched</visible>
+                <include content="Kicker">
+                    <param name="label" value="$INFO[Weather.Location]"/>
+                    <param name="left" value="64"/>
+                    <param name="top" value="116"/>
+                    <param name="width" value="940"/>
+                </include>
+                <include content="GlitchTitle">
+                    <param name="label" value="$INFO[Weather.Conditions]"/>
+                    <param name="left" value="64"/>
+                    <param name="top" value="160"/>
+                    <param name="width" value="940"/>
+                </include>
+                <control type="image">
+                    <left>64</left>
+                    <top>282</top>
+                    <width>160</width>
+                    <height>160</height>
+                    <texture fallback="ui/weather/na.png" colordiffuse="accent2">ui/weather/$INFO[Window(Weather).Property(Current.FanartCode)].png</texture>
+                </control>
+                <!-- the temperature as one word: the font's degree sign stands wide apart, so
+                     number, degree sign and unit letter come as labels pulled together -->
+                <control type="grouplist" id="510">
+                    <left>256</left>
+                    <top>282</top>
+                    <width>748</width>
+                    <height>160</height>
+                    <orientation>horizontal</orientation>
+                    <itemgap>-14</itemgap>
+                    <control type="label">
+                        <width>auto</width>
+                        <height>160</height>
+                        <aligny>center</aligny>
+                        <font>font_temp</font>
+                        <textcolor>text</textcolor>
+                        <label>$INFO[Window(Weather).Property(Current.Temperature)]</label>
+                    </control>
+                    <control type="label">
+                        <width>auto</width>
+                        <height>160</height>
+                        <aligny>center</aligny>
+                        <font>font_temp</font>
+                        <textcolor>text</textcolor>
+                        <label>°</label>
+                        <visible>[String.IsEqual(System.TemperatureUnits,°C) | String.IsEqual(System.TemperatureUnits,°F)]</visible>
+                    </control>
+                    <control type="label">
+                        <width>auto</width>
+                        <height>160</height>
+                        <aligny>center</aligny>
+                        <font>font_temp</font>
+                        <textcolor>text</textcolor>
+                        <label>$VAR[WeatherUnit]</label>
+                    </control>
+                </control>
+                <!-- the facts beside, all of them always: Kodi replaces the add-on's values
+                     with formatted ones (a missing temperature 0 degrees, a missing wind
+                     "From  at 0 km/h"), so a missing value cannot always be told apart -->
+                <control type="grouplist">
+                    <left>1064</left>
+                    <top>170</top>
+                    <width>792</width>
+                    <height>280</height>
+                    <orientation>vertical</orientation>
+                    <itemgap>0</itemgap>
+                    <include content="FactLine">
+                        <param name="key" value="[LOWERCASE]$LOCALIZE[402][/LOWERCASE]"/>
+                        <param name="value" value="$INFO[Window(Weather).Property(Current.FeelsLike)]$INFO[System.TemperatureUnits]"/>
+                        <param name="width" value="792"/>
+                        <param name="keywidth" value="260"/>
+                        <param name="height" value="46"/>
+                    </include>
+                    <include content="FactLine">
+                        <param name="key" value="[LOWERCASE]$LOCALIZE[406][/LOWERCASE]"/>
+                        <param name="value" value="$INFO[Window(Weather).Property(Current.Humidity)]"/>
+                        <param name="width" value="792"/>
+                        <param name="keywidth" value="260"/>
+                        <param name="height" value="46"/>
+                    </include>
+                    <include content="FactLine">
+                        <param name="key" value="[LOWERCASE]$LOCALIZE[404][/LOWERCASE]"/>
+                        <param name="value" value="$INFO[Window(Weather).Property(Current.Wind)]"/>
+                        <param name="width" value="792"/>
+                        <param name="keywidth" value="260"/>
+                        <param name="height" value="46"/>
+                    </include>
+                    <include content="FactLine">
+                        <param name="key" value="[LOWERCASE]$LOCALIZE[403][/LOWERCASE]"/>
+                        <param name="value" value="$INFO[Window(Weather).Property(Current.UVIndex)]"/>
+                        <param name="width" value="792"/>
+                        <param name="keywidth" value="260"/>
+                        <param name="height" value="46"/>
+                    </include>
+                    <include content="FactLine">
+                        <param name="key" value="[LOWERCASE]$LOCALIZE[405][/LOWERCASE]"/>
+                        <param name="value" value="$INFO[Window(Weather).Property(Current.DewPoint)]$INFO[System.TemperatureUnits]"/>
+                        <param name="width" value="792"/>
+                        <param name="keywidth" value="260"/>
+                        <param name="height" value="46"/>
+                    </include>
+                    <include content="FactLine">
+                        <param name="key" value="[LOWERCASE]$LOCALIZE[12014][/LOWERCASE]"/>
+                        <param name="value" value="$INFO[Window(Weather).Property(Updated)]"/>
+                        <param name="width" value="792"/>
+                        <param name="keywidth" value="260"/>
+                        <param name="height" value="46"/>
+                        <param name="color" value="text_mute"/>
+                    </include>
+                </control>
+                <include content="RowHeader">
+                    <param name="label" value="$LOCALIZE[31341]"/>
+                    <param name="left" value="64"/>
+                    <param name="top" value="560"/>
+                </include>
+            </control>
+            <!-- the next days: a card each, the focused one outlined -->
+            <control type="list" id="500">
+                <left>64</left>
+                <top>604</top>
+                <width>1792</width>
+                <height>400</height>
+                <orientation>horizontal</orientation>
+                <scrolltime>200</scrolltime>
+                <onup>Action(Back)</onup>
+                <ondown>noop</ondown>
+                <onleft>noop</onleft>
+                <onright>noop</onright>
+                <itemlayout width="256" height="400">
+                    <include content="WeatherDay">
+                        <param name="focused" value="false"/>
+                    </include>
+                </itemlayout>
+                <focusedlayout width="256" height="400">
+                    <include content="WeatherDay">
+                        <param name="focused" value="Control.HasFocus(500)"/>
+                    </include>
+                </focusedlayout>
+                <content>
+                    <item>
+                        <label>$INFO[Window(Weather).Property(Day0.Title)]</label>
+                        <property name="high">$INFO[Window(Weather).Property(Day0.HighTemp)]</property>
+                        <property name="low">$INFO[Window(Weather).Property(Day0.LowTemp)]</property>
+                        <property name="outlook">$INFO[Window(Weather).Property(Day0.Outlook)]</property>
+                        <property name="code">$INFO[Window(Weather).Property(Day0.FanartCode)]</property>
+                        <onclick>noop</onclick>
+                        <visible>!String.IsEmpty(Window(Weather).Property(Day0.Title))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Weather).Property(Day1.Title)]</label>
+                        <property name="high">$INFO[Window(Weather).Property(Day1.HighTemp)]</property>
+                        <property name="low">$INFO[Window(Weather).Property(Day1.LowTemp)]</property>
+                        <property name="outlook">$INFO[Window(Weather).Property(Day1.Outlook)]</property>
+                        <property name="code">$INFO[Window(Weather).Property(Day1.FanartCode)]</property>
+                        <onclick>noop</onclick>
+                        <visible>!String.IsEmpty(Window(Weather).Property(Day1.Title))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Weather).Property(Day2.Title)]</label>
+                        <property name="high">$INFO[Window(Weather).Property(Day2.HighTemp)]</property>
+                        <property name="low">$INFO[Window(Weather).Property(Day2.LowTemp)]</property>
+                        <property name="outlook">$INFO[Window(Weather).Property(Day2.Outlook)]</property>
+                        <property name="code">$INFO[Window(Weather).Property(Day2.FanartCode)]</property>
+                        <onclick>noop</onclick>
+                        <visible>!String.IsEmpty(Window(Weather).Property(Day2.Title))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Weather).Property(Day3.Title)]</label>
+                        <property name="high">$INFO[Window(Weather).Property(Day3.HighTemp)]</property>
+                        <property name="low">$INFO[Window(Weather).Property(Day3.LowTemp)]</property>
+                        <property name="outlook">$INFO[Window(Weather).Property(Day3.Outlook)]</property>
+                        <property name="code">$INFO[Window(Weather).Property(Day3.FanartCode)]</property>
+                        <onclick>noop</onclick>
+                        <visible>!String.IsEmpty(Window(Weather).Property(Day3.Title))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Weather).Property(Day4.Title)]</label>
+                        <property name="high">$INFO[Window(Weather).Property(Day4.HighTemp)]</property>
+                        <property name="low">$INFO[Window(Weather).Property(Day4.LowTemp)]</property>
+                        <property name="outlook">$INFO[Window(Weather).Property(Day4.Outlook)]</property>
+                        <property name="code">$INFO[Window(Weather).Property(Day4.FanartCode)]</property>
+                        <onclick>noop</onclick>
+                        <visible>!String.IsEmpty(Window(Weather).Property(Day4.Title))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Weather).Property(Day5.Title)]</label>
+                        <property name="high">$INFO[Window(Weather).Property(Day5.HighTemp)]</property>
+                        <property name="low">$INFO[Window(Weather).Property(Day5.LowTemp)]</property>
+                        <property name="outlook">$INFO[Window(Weather).Property(Day5.Outlook)]</property>
+                        <property name="code">$INFO[Window(Weather).Property(Day5.FanartCode)]</property>
+                        <onclick>noop</onclick>
+                        <visible>!String.IsEmpty(Window(Weather).Property(Day5.Title))</visible>
+                    </item>
+                    <item>
+                        <label>$INFO[Window(Weather).Property(Day6.Title)]</label>
+                        <property name="high">$INFO[Window(Weather).Property(Day6.HighTemp)]</property>
+                        <property name="low">$INFO[Window(Weather).Property(Day6.LowTemp)]</property>
+                        <property name="outlook">$INFO[Window(Weather).Property(Day6.Outlook)]</property>
+                        <property name="code">$INFO[Window(Weather).Property(Day6.FanartCode)]</property>
+                        <onclick>noop</onclick>
+                        <visible>!String.IsEmpty(Window(Weather).Property(Day6.Title))</visible>
+                    </item>
+                </content>
+            </control>
+            <!-- opened without a weather add-on (the quick menu leads to its settings then) -->
+            <control type="label">
+                <left>64</left>
+                <top>160</top>
+                <width>1792</width>
+                <height>90</height>
+                <font>font_caps</font>
+                <textcolor>text_dim</textcolor>
+                <label>[UPPERCASE]$LOCALIZE[31321][/UPPERCASE]</label>
+                <visible>!Weather.IsFetched</visible>
+            </control>
+        </control>
+    </controls>
+</window>
