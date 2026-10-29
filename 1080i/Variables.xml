@@ -488,6 +488,11 @@
         <value condition="String.IsEqual(Window(Home).Property(nc.osd.credits),crew)">crew</value>
         <value>cast</value>
     </variable>
+    <!-- right after a chain the row opens at once, its list waits until TMDb Helper's manager
+         is gone (nc.osd.chain): two interpreters starting at once crash Kodi -->
+    <variable name="OSDCreditsRow">
+        <value condition="String.IsEmpty(Window(Home).Property(nc.osd.chain))">$VAR[OSDCreditsPath]</value>
+    </variable>
     <variable name="OSDCreditsPath">
         <value condition="VideoPlayer.Content(episodes) + !String.IsEmpty(Window(Home).Property(TMDbHelper.Player.tvshow.tmdb_id))">plugin://plugin.video.themoviedb.helper/?info=$VAR[OSDCreditsInfo]&amp;tmdb_type=tv&amp;tmdb_id=$INFO[Window(Home).Property(TMDbHelper.Player.tvshow.tmdb_id)]&amp;season=$INFO[VideoPlayer.Season]&amp;episode=$INFO[VideoPlayer.Episode]&amp;nextpage=false&amp;cacheonly=true</value>
         <value condition="VideoPlayer.Content(episodes)">plugin://plugin.video.themoviedb.helper/?info=$VAR[OSDCreditsInfo]&amp;tmdb_type=tv&amp;query=$INFO[VideoPlayer.TVShowTitle]&amp;season=$INFO[VideoPlayer.Season]&amp;episode=$INFO[VideoPlayer.Episode]&amp;nextpage=false&amp;cacheonly=true</value>

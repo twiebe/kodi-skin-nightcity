@@ -13,7 +13,7 @@ EXPECTED = {
     'SettingsSystemInfo.xml': {'99', '101'},  # PVR and donate, hidden
     'DialogAddonInfo.xml': {'50'},  # screenshots, not shown
     'FileBrowser.xml': {'451'},  # thumbs view, not used
-    'DialogVideoInfo.xml': {'5901', '9006'},  # off-screen library copy and invisible TMDb menu list of a TMDb title (Timers.xml focuses 9006)
+    'DialogVideoInfo.xml': {'5901', '9006', '9098'},  # off-screen library copy, invisible TMDb menu list of a TMDb title (Timers.xml focuses 9006), stand-in on the way back in a chain
     'Custom_1141_OSDCast.xml': {'6599'},  # off-screen biography of the focused person
     'VideoOSD.xml': {'699'},  # off-screen stand-in that opens the chapter row after a chain
 }

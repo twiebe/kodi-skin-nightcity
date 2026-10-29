@@ -359,7 +359,7 @@ def test_cast_row_tabs_and_photos():
     assert lst.findtext('orientation') == 'horizontal'
     assert lst.findtext('onup') == '6520'
     assert [c.get('content') for c in lst.iter('include') if c.get('content') == 'CastCard'] == ['CastCard', 'CastCard']
-    assert lst.findtext('content') == '$VAR[OSDCreditsPath]'
+    assert lst.findtext('content') == '$VAR[OSDCreditsRow]'
     assert 'ClearProperty(nc.osd.credits,home)' in _onloads(CAST_DIALOG)
 
 
@@ -402,7 +402,7 @@ def test_cast_row_bio_is_debounced():
     assert 'ClearProperty(nc.osd.bio.id,home)' in _onloads(CAST_DIALOG)
     timer = _timer('nc_osd_bio')
     focused = 'Container(6501).ListItem.Property(tmdb_id)'
-    assert timer.findtext('start') == f'Window.IsActive(1141) + !String.IsEmpty({focused}) + !String.IsEqual(Window(Home).Property(nc.osd.bio.id),{focused})'
+    assert timer.findtext('start') == f'Window.IsActive(1141) + String.IsEmpty(Window(Home).Property(nc.osd.chain)) + !String.IsEmpty({focused}) + !String.IsEqual(Window(Home).Property(nc.osd.bio.id),{focused})'
     assert timer.find('start').get('reset') == 'true'
     stop = timer.findtext('stop')
     assert f'!String.IsEqual(Window(Home).Property(nc.osd.bio.pending),{focused})' in stop
@@ -583,8 +583,10 @@ def test_osd_chain_ends_back_on_the_person_left():
     assert all(k in clicks for k in keep)
     late = [o.text for o in _timer('nc_osd_click').iter('onstop')]
     assert all(k in late for k in keep)
-    reopen = [(o.get('condition'), o.text) for o in _timer('nc_osd_chain').iter('onstop')]
-    assert ('!String.IsEmpty(Window(Home).Property(nc.osd.ret)) + Window.IsActive(videobookmarks)', 'ActivateWindow(1141)') in reopen
+    # at once over the chapter row, which hides meanwhile; the row's lists wait for the manager
+    reopen = [(o.get('condition'), o.text) for o in parse(SKIN / 'VideoOSDBookmarks.xml').iter('onload')]
+    assert ('!String.IsEmpty(Window(Home).Property(nc.osd.ret)) + !String.IsEmpty(Window(Home).Property(nc.osd.chain))', 'ActivateWindow(1141)') in reopen
+    assert all(o.text != 'ActivateWindow(1141)' for o in _timer('nc_osd_chain').iter('onstop'))
     onloads = [(o.get('condition'), o.text) for o in parse(SKIN / 'Custom_1141_OSDCast.xml').iter('onload')]
     back = '!String.IsEmpty(Window(Home).Property(nc.osd.ret))'
     assert ('String.IsEmpty(Window(Home).Property(nc.osd.ret))', 'ClearProperty(nc.osd.credits,home)') in onloads
@@ -592,3 +594,28 @@ def test_osd_chain_ends_back_on_the_person_left():
     assert (back, 'NotifyAll(nightcity,osd_back:$INFO[Window(Home).Property(nc.osd.ret)]:$INFO[Window(Home).Property(nc.osd.ret.tab)])') in onloads
     assert onloads[-1] == (None, 'ClearProperty(nc.osd.ret,home)')
     assert 'ClearProperty(nc.osd.ret,home)' in _onloads('Home.xml')
+
+
+def test_osd_cast_row_loads_nothing_while_a_chain_ends():
+    """The cast row opens at once after a chain; its plugin lists wait until TMDb Helper's
+    manager is gone (nc.osd.chain): two interpreters starting at once crash Kodi."""
+    assert _control('Custom_1141_OSDCast.xml', '6501').findtext('content') == '$VAR[OSDCreditsRow]'
+    var = next(v for v in parse(SKIN / 'Variables.xml').iter('variable') if v.get('name') == 'OSDCreditsRow')
+    assert [(v.get('condition'), v.text) for v in var] == [
+        ('String.IsEmpty(Window(Home).Property(nc.osd.chain))', '$VAR[OSDCreditsPath]')]
+    assert 'String.IsEmpty(Window(Home).Property(nc.osd.chain))' in _timer('nc_osd_bio').findtext('start')
+    row = parse(SKIN / 'VideoOSDBookmarks.xml').find('controls/control')
+    assert row.findtext('visible') == '!Window.IsActive(1141) + String.IsEmpty(Window(Home).Property(nc.osd.ret))'
+
+
+def test_a_page_on_its_way_back_parks_the_focus_out_of_sight():
+    """Until the list it was left from is in, the reopened page shows no focus (stand-in 9098)
+    instead of a second on its buttons; a key moves on to the buttons."""
+    stand_in = _control('DialogVideoInfo.xml', '9098')
+    assert stand_in.get('type') == 'button'
+    assert all(stand_in.findtext(k) == '9000' for k in ('onup', 'ondown', 'onleft', 'onright'))
+    assert stand_in.find('texturefocus') is not None and not (stand_in.findtext('texturefocus') or '').strip()
+
+    parks = [(o.get('condition'), o.text) for o in parse(SKIN / 'DialogVideoInfo.xml').iter('onload')]
+    assert (RUNNING + ' + String.IsEqual(Window(Home).Property(TMDbHelper.Position),Window(Home).Property(nc.ret.top))',
+            'SetFocus(9098)') in parks

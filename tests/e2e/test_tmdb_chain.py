@@ -451,9 +451,17 @@ def test_back_in_the_chain_returns_to_the_person_left(matrix):
     person = info('Container(5500).ListItem.Label')['Container(5500).ListItem.Label']
     action('select')
     _page(2)
-    action('back')
-    _page(1)
-    wait_for('Control.HasFocus(5500) + Integer.IsEqual(Container(5500).CurrentItem,3)', timeout=30)
+    action('back', delay=0)
+    # until the list is in the focus waits out of sight (9098), never on the buttons
+    seen, end = set(), time.time() + 30
+    while time.time() < end:
+        now = info('ListItem.DBID', 'System.CurrentControlId', 'Container(5500).CurrentItem')
+        if now['ListItem.DBID'] == str(matrix):
+            seen.add(now['System.CurrentControlId'])
+            if now['System.CurrentControlId'] == '5500' and now['Container(5500).CurrentItem'] == '3':
+                break
+    assert seen <= {'9098', '5500'}, seen
+    assert '5500' in seen
     assert info('Container(5500).ListItem.Label')['Container(5500).ListItem.Label'] == person
 
 

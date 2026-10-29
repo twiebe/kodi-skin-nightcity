@@ -509,7 +509,11 @@ def _select_episode():
         index = find_index(_labels(5100, 'Episode'), episode)
         if index is not None:
             _focus('SetFocus(5100,{},absolute)'.format(index))
-    _focus('SetFocus(9001)')
+    # on the way back in a chain the focus waits out of sight for the list (info_back)
+    if xbmc.getCondVisibility('!String.IsEmpty(Window(Home).Property(nc.info.back))'):
+        _focus('SetFocus({})'.format(INFO_STAND_IN))
+    else:
+        _focus('SetFocus(9001)')
 
 
 # --- the way back into a page of a TMDb chain ------------------------------------------------
@@ -519,6 +523,7 @@ def _select_episode():
 # page reopens on the episode whose cast was clicked (ChainOriginDBID in Variables.xml).
 
 RETURN_FIELDS = ('list', 'index', 'tab', 'tmdb_id', 'dbid')
+INFO_STAND_IN = '9098'  # DialogVideoInfo.xml: the focus out of sight
 # the TMDb lists of a page have stopped loading: a tab may change what one of them shows (two
 # plugin lists at once crash Kodi; TmdbBusy in Includes_Tmdb.xml)
 INFO_LISTS_REST = {'5500': '!Container(5500).IsUpdating + !Container(5300).IsUpdating',
@@ -557,22 +562,49 @@ def return_matches(point, tmdb_id, dbid):
 def info_leave(list_id, item, tab, position, tmdb_id, dbid):
     point = return_point(list_id, item, tab, tmdb_id, dbid)
     if point:
-        _home().setProperty(return_key(position), point)
+        home = _home()
+        home.setProperty(return_key(position), point)
+        # the page parks its focus at once when it opens again (DialogVideoInfo.xml onload)
+        home.setProperty('nc.ret.top', return_key(position)[len('nc.ret.'):])
 
 
 def info_back():
-    """On a page reopened in a chain: back to the tab and item it was left from. The
-    list may still load: nc_info_enter (Timers.xml) enters it once it is in, then the item."""
+    """On a page reopened in a chain: back to the tab and item it was left from. The list may
+    still load: nc_info_enter (Timers.xml) enters it once it is in, then the item. Meanwhile the
+    focus waits out of sight (stand-in 9098), not on the buttons; nc.info.back tells
+    info_select. Without the list it ends on the buttons."""
     import xbmc
     home = _home()
-    key = return_key(xbmc.getInfoLabel('Window(Home).Property(TMDbHelper.Position)'))
+    position = return_key(xbmc.getInfoLabel('Window(Home).Property(TMDbHelper.Position)'))[len('nc.ret.'):]
+    key = return_key(position)
     point = parse_return(home.getProperty(key))
+    # the page before parks at once next, if it has a way back
+    before = str(int(position) - 1) if position.isdigit() else ''
+    if before and home.getProperty(return_key(before)):
+        home.setProperty('nc.ret.top', before)
+    else:
+        home.clearProperty('nc.ret.top')
     if not point or not return_matches(point, xbmc.getInfoLabel('ListItem.Property(tmdb_id)'),
                                        xbmc.getInfoLabel('ListItem.DBID')):
+        # parked by the onload for a way back that belongs to another page
+        if xbmc.getCondVisibility('Control.HasFocus({})'.format(INFO_STAND_IN)):
+            _focus('SetFocus(9000)')
         return
     home.clearProperty(key)
+    home.setProperty('nc.info.back', '1')
+    try:
+        _focus('SetFocus({})'.format(INFO_STAND_IN))
+        _info_back(home, point)
+    finally:
+        home.clearProperty('nc.info.back')
+        if xbmc.getCondVisibility('Control.HasFocus({})'.format(INFO_STAND_IN)):
+            _focus('SetFocus(9000)')
+
+
+def _info_back(home, point):
+    import xbmc
     if xbmc.getCondVisibility('String.IsEqual(ListItem.DBType,episode)'):
-        # info_select picks the episode first and ends on the play button
+        # info_select picks the episode first
         if not _wait('!String.IsEmpty(Window(Home).Property(nc.info.ready))', 10.0):
             return
     if point['tab']:
@@ -581,7 +613,7 @@ def info_back():
         home.setProperty('nc.info.tab', point['tab'])
     if not xbmc.getCondVisibility('Window.IsActive(movieinformation)'):
         return
-    home.setProperty('nc.info.enter.from', xbmc.getInfoLabel('System.CurrentControlId'))
+    home.setProperty('nc.info.enter.from', INFO_STAND_IN)
     home.setProperty('nc.info.enter', point['list'])
     if _wait('Control.HasFocus({})'.format(point['list']), 20.0):
         _focus('SetFocus({},{},absolute)'.format(point['list'], point['index']))

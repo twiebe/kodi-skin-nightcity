@@ -141,7 +141,7 @@
                     <param name="focused" value="Control.HasFocus(6501)"/>
                 </include>
             </focusedlayout>
-            <content target="videos">$VAR[OSDCreditsPath]</content>
+            <content target="videos">$VAR[OSDCreditsRow]</content>
         </control>
 
         <!-- Up from the tabs: back to the chapter row -->
