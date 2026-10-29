@@ -215,7 +215,7 @@
     </include>
 
     <!-- Track panel of the OSD (subtitles or audio) above the right buttons: one row per track
-         from the script's nc.<prefix>.* properties (Home), the playing one marked with ◢, "off"
+         from the script's nc.<prefix>.* properties (Home), the playing one marked with a pink dot (dark on the cursor), "off"
          first for subtitles, and a last row that opens Kodi's full settings (`settings`). The panel grows upwards
          with the number of rows (nc.<prefix>.rows, at most 8). Left and right focus the
          neighbouring buttons of the row (`left`, `right`). -->
@@ -428,7 +428,7 @@
                     <font>font_small</font>
                     <textcolor>accent</textcolor>
                     <selectedcolor>accent</selectedcolor>
-                    <label>◢ $INFO[ListItem.Label]</label>
+                    <label>[COLOR accent2]·[/COLOR] $INFO[ListItem.Label]</label>
                     <visible>String.IsEqual(ListItem.Property(current),1)</visible>
                 </control>
                 <control type="label">
@@ -482,7 +482,7 @@
                     <font>font_small</font>
                     <textcolor>focus_text</textcolor>
                     <selectedcolor>focus_text</selectedcolor>
-                    <label>◢ $INFO[ListItem.Label]</label>
+                    <label>· $INFO[ListItem.Label]</label>
                     <visible>String.IsEqual(ListItem.Property(current),1) + Control.HasFocus($PARAM[id])</visible>
                 </control>
                 <control type="label">
@@ -493,7 +493,7 @@
                     <font>font_small</font>
                     <textcolor>accent</textcolor>
                     <selectedcolor>accent</selectedcolor>
-                    <label>◢ $INFO[ListItem.Label]</label>
+                    <label>[COLOR accent2]·[/COLOR] $INFO[ListItem.Label]</label>
                     <visible>String.IsEqual(ListItem.Property(current),1) + !Control.HasFocus($PARAM[id])</visible>
                 </control>
                 <control type="label">

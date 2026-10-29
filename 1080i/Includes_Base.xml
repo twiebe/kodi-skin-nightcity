@@ -604,8 +604,8 @@
     </include>
 
     <!-- A menu or tab entry: letter-spaced caps, no frame. Focused it turns cyan with a cyan line
-         below; while `active` holds (the page or season shown) a pink ◢ sits in front. Width
-         follows the label. -->
+         below; while `active` holds (the page or season shown) the same line is pink without the
+         focus, in the same place, so the label does not move. Width follows the label. -->
     <include name="TabButton">
         <param name="id"/>
         <param name="label"/>
@@ -623,11 +623,11 @@
                 <textcolor>text_mute</textcolor>
                 <focusedcolor>accent</focusedcolor>
                 <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
-                <altlabel>[COLOR accent2]◢[/COLOR] [UPPERCASE]$PARAM[label][/UPPERCASE]</altlabel>
+                <altlabel>[UPPERCASE]$PARAM[label][/UPPERCASE]</altlabel>
                 <texturefocus colordiffuse="accent">ui/tab_line.png</texturefocus>
                 <texturenofocus/>
                 <alttexturefocus colordiffuse="accent">ui/tab_line.png</alttexturefocus>
-                <alttexturenofocus/>
+                <alttexturenofocus colordiffuse="accent2">ui/tab_line.png</alttexturenofocus>
                 <usealttexture>$PARAM[active]</usealttexture>
                 <onfocus>$PARAM[onfocus]</onfocus>
                 <onclick>$PARAM[onclick]</onclick>
