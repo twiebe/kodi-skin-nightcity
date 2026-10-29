@@ -551,8 +551,10 @@
     <variable name="InfoSeasonsPath">
         <value condition="!String.IsEmpty(ListItem.TvShowDBID) | !String.IsEmpty(Window(Home).Property(nc.info.show))">videodb://tvshows/titles/$VAR[InfoShowDBID]/</value>
     </variable>
+    <!-- no path before the season tabs chose a season: videodb://tvshows/titles/<show>// lists
+         the season folder, a card in the episode row that info_select took for the episodes -->
     <variable name="InfoEpisodesPath">
-        <value condition="!String.IsEmpty(ListItem.TvShowDBID) | !String.IsEmpty(Window(Home).Property(nc.info.show))">videodb://tvshows/titles/$VAR[InfoShowDBID]/$INFO[Container(5200).ListItem.Season]/</value>
+        <value condition="[!String.IsEmpty(ListItem.TvShowDBID) | !String.IsEmpty(Window(Home).Property(nc.info.show))] + !String.IsEmpty(Container(5200).ListItem.Season)">videodb://tvshows/titles/$VAR[InfoShowDBID]/$INFO[Container(5200).ListItem.Season]/</value>
     </variable>
     <variable name="InfoItemPath">
         <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(Window(Home).Property(nc.info.ready))">videodb://tvshows/titles/$VAR[InfoShowDBID]/$INFO[Container(5100).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(5100).ListItem.Episode]"]}]},"type":"episodes"}</value>
