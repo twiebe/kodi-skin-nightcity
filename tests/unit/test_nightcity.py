@@ -113,8 +113,7 @@ class FakeXbmc:
 
 
 def test_select_episode_leaves_focus_alone_after_close(monkeypatch):
-    fake = FakeXbmc({'Integer.IsGreater(Container(5200).NumItems,0)',
-                     'String.IsEqual(Container(5100).ListItemAbsolute(0).Season,1)'},
+    fake = FakeXbmc({'Integer.IsGreater(Container(5200).NumItems,0)', nightcity.EPISODES_IN.format(1)},
                     {'ListItem.Season': '1', 'ListItem.Episode': '2', 'Container(5200).NumItems': '1',
                      'Container(5200).ListItemAbsolute(0).Season': '1', 'Container(5100).NumItems': '2',
                      'Container(5100).ListItemAbsolute(0).Episode': '1',
@@ -122,6 +121,42 @@ def test_select_episode_leaves_focus_alone_after_close(monkeypatch):
     monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
     nightcity._select_episode()
     assert not any(b.startswith('SetFocus') for b in fake.builtins), fake.builtins
+
+
+def test_select_episode_waits_for_the_episodes_not_the_season_folder(monkeypatch):
+    """The episode row lists the season folder first (its path before the season tabs chose a
+    season): Season matches, Episode is the season's episode count. The episode stayed unselected
+    when the lists loaded slowly, right after Kodi started."""
+    folder = {'Container(5100).NumItems': '1', 'Container(5100).ListItemAbsolute(0).DBType': 'season',
+              'Container(5100).ListItemAbsolute(0).Season': '1', 'Container(5100).ListItemAbsolute(0).Episode': '3'}
+    episodes = {'Container(5100).NumItems': '3', 'Container(5100).ListItemAbsolute(0).DBType': 'episode',
+                'Container(5100).ListItemAbsolute(0).Season': '1', 'Container(5100).ListItemAbsolute(0).Episode': '1',
+                'Container(5100).ListItemAbsolute(1).Episode': '2', 'Container(5100).ListItemAbsolute(2).Episode': '3'}
+
+    class Rows(FakeXbmc):
+        """The row holds the folder for the first polls, then the episodes."""
+        polls = 0
+
+        def getCondVisibility(self, condition):
+            if condition == nightcity.EPISODES_IN.format(1):
+                Rows.polls += 1
+                if Rows.polls == 3:
+                    self.labels.update(episodes)
+                return self.labels['Container(5100).ListItemAbsolute(0).DBType'] == 'episode'
+            if condition == 'String.IsEqual(Container(5100).ListItemAbsolute(0).Season,1)':
+                return True  # the folder's Season matches too
+            return super().getCondVisibility(condition)
+
+        class Monitor:
+            def waitForAbort(self, timeout):
+                return False
+
+    fake = Rows({'Window.IsActive(movieinformation)', 'Integer.IsGreater(Container(5200).NumItems,0)'},
+                dict(folder, **{'ListItem.Season': '1', 'ListItem.Episode': '2', 'Container(5200).NumItems': '1',
+                                'Container(5200).ListItemAbsolute(0).Season': '1'}))
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    nightcity._select_episode()
+    assert 'SetFocus(5100,1,absolute)' in fake.builtins, fake.builtins
 
 
 def test_player_open_params_without_dbid():
@@ -1199,8 +1234,7 @@ def test_info_back_gives_up_on_the_buttons(monkeypatch):
 
 def test_select_episode_parks_the_focus_on_a_page_on_its_way_back(monkeypatch):
     fake = FakeXbmc({'Window.IsActive(movieinformation)', 'Integer.IsGreater(Container(5200).NumItems,0)',
-                     'String.IsEqual(Container(5100).ListItemAbsolute(0).Season,1)',
-                     '!String.IsEmpty(Window(Home).Property(nc.info.back))'},
+                     nightcity.EPISODES_IN.format(1), '!String.IsEmpty(Window(Home).Property(nc.info.back))'},
                     {'ListItem.Season': '1', 'ListItem.Episode': '1', 'Container(5200).NumItems': '1',
                      'Container(5200).ListItemAbsolute(0).Season': '1', 'Container(5100).NumItems': '1',
                      'Container(5100).ListItemAbsolute(0).Episode': '1'})

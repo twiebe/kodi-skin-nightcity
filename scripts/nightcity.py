@@ -496,6 +496,14 @@ def _info_show():
     _home().setProperty('nc.info.show', str(details['episodedetails']['tvshowid']))
 
 
+# the episode row (5100) lists the episodes of the season (format: its number). Its first path
+# lacks the season, before the season tabs (5200) chose one: it then lists the season folder,
+# whose Season matches and whose Episode is the count of its episodes. Right after Kodi started the
+# lists load slowly enough to catch it there, and the episode stayed unselected.
+EPISODES_IN = ('String.IsEqual(Container(5100).ListItemAbsolute(0).DBType,episode) + '
+               'String.IsEqual(Container(5100).ListItemAbsolute(0).Season,{})')
+
+
 def _select_episode():
     import xbmc
     season = xbmc.getInfoLabel('ListItem.Season')
@@ -505,7 +513,7 @@ def _select_episode():
     index = find_index(_labels(5200, 'Season'), season)
     if index is not None:
         _focus('SetFocus(5200,{},absolute)'.format(index))
-    if _wait('String.IsEqual(Container(5100).ListItemAbsolute(0).Season,{})'.format(season)):
+    if _wait(EPISODES_IN.format(season)):
         index = find_index(_labels(5100, 'Episode'), episode)
         if index is not None:
             _focus('SetFocus(5100,{},absolute)'.format(index))
