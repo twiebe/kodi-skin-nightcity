@@ -139,3 +139,26 @@ def test_delay_slider(home):
     finally:
         for name in ('secs', 'wait', 'from', 'to'):
             builtin('Skin.Reset(nc.osd.hide.{})'.format(name))
+
+
+@pytest.mark.parametrize('button, panel', [(605, 651), (606, 652), (607, 653)])
+def test_osd_stays_while_in_a_track_panel(autohide, tracks, button, panel):
+    """Subtitles, audio, video: in the panel the OSD stays past the delay; back on the button the
+    delay counts again."""
+    builtin('SetFocus({})'.format(button))
+    wait_for('Control.HasFocus({})'.format(button))
+    wait_for('Control.IsVisible({})'.format(panel))
+    action('up')
+    wait_for('Control.HasFocus({})'.format(panel))
+    time.sleep(5)
+    assert osd_up()
+    assert cond('Control.HasFocus({})'.format(panel))['Control.HasFocus({})'.format(panel)]
+    # down along the panel's rows, past the last one back to the button
+    for _ in range(10):
+        start = time.time()
+        action('down')
+        if cond('Control.HasFocus({})'.format(button))['Control.HasFocus({})'.format(button)]:
+            break
+    wait_for('Control.HasFocus({})'.format(button))
+    wait_for('!Window.IsActive(videoosd)', timeout=8)
+    assert 2.5 <= time.time() - start <= 5.5

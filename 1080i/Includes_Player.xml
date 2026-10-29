@@ -269,6 +269,8 @@
                 <!-- the chapter and cast rows of the OSD take this space -->
                 <visible>!Window.IsActive(videobookmarks) + !Window.IsActive(1141)</visible>
                 <animation effect="slide" end="0,-130" time="150" condition="Window.IsActive(videoosd)">Conditional</animation>
+                <!-- second step, after the controls and the seek line -->
+                <include content="PlayerFade"/>
                 <include content="CutCard">
                     <param name="image" value="$VAR[PlayerPoster]"/>
                 </include>
