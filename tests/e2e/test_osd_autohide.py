@@ -197,17 +197,29 @@ def test_osd_stays_in_the_cast_row(autohide, playing):
 PANEL = (1256, 442, 1256 + 600, 442 + 488)
 
 
-def chapter_row_from(button, into_panel):
+def chapter_row_from(button, into_panel, fast=False):
     """Paused (a still picture), the chapter row opened Down from BUTTON, coming from inside its
-    panel when INTO_PANEL; the screenshot of it."""
+    panel when INTO_PANEL; with FAST the last two Downs (panel to button, button to the row) come
+    back to back. The screenshot of it."""
     builtin('SetFocus({})'.format(button))
     wait_for('Control.HasFocus({})'.format(button))
     if into_panel:
         action('up', delay=0.5)
-    for _ in range(10):
+    if fast:
+        # down to the panel's last row, then out of it and into the chapter row at once
+        panel = info('System.CurrentControlId')['System.CurrentControlId']
+        for _ in range(10):
+            action('down', delay=0.5)
+            if not cond('Control.HasFocus({})'.format(panel))['Control.HasFocus({})'.format(panel)]:
+                break
+        action('up', delay=0.5)
+        wait_for('Control.HasFocus({})'.format(panel))
+        action('down', delay=0.08)
         action('down', delay=0.5)
+    for _ in range(10):
         if cond('Window.IsActive(videobookmarks)')['Window.IsActive(videobookmarks)']:
             break
+        action('down', delay=0.5)
     wait_for('Window.IsActive(videobookmarks)')
     time.sleep(1)
     path = screenshot('rows-from-{}-{}'.format(button, into_panel))
@@ -216,12 +228,13 @@ def chapter_row_from(button, into_panel):
     return path
 
 
+@pytest.mark.parametrize('fast', [False, True])
 @pytest.mark.parametrize('button, panel', [(605, 651), (606, 652), (607, 653)])
-def test_panel_hides_when_the_rows_open(tracks, button, panel):
+def test_panel_hides_when_the_rows_open(tracks, button, panel, fast):
     """Down out of a track panel to the chapter row: the row replaces the controls, the panel
     goes with them (the OSD keeps its focus on the button under the row)."""
     action('pause')
     wait_for('Player.Paused')
     plain = chapter_row_from(602, False)
-    from_panel = chapter_row_from(button, True)
+    from_panel = chapter_row_from(button, True, fast)
     assert changed_pixels(plain, from_panel, PANEL) < 200
