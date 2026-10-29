@@ -162,6 +162,21 @@
         <value condition="!String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
         <value>$INFO[ListItem.Label]</value>
     </variable>
+    <!-- Music library list (MyMusicNav.xml): track number or played mark, the length of a song,
+         the year of an album; under the cover the artist and year -->
+    <variable name="MusicNavMark">
+        <value condition="ListItem.IsParentFolder">..</value>
+        <value condition="String.IsEqual(ListItem.DBType,song) + Integer.IsGreater(ListItem.TrackNumber,0)">$INFO[ListItem.TrackNumber]</value>
+        <value condition="Integer.IsGreater(ListItem.PlayCount,0)">▪</value>
+    </variable>
+    <variable name="MusicNavRight">
+        <value condition="String.IsEqual(ListItem.DBType,song)">$INFO[ListItem.Duration]</value>
+        <value condition="String.IsEqual(ListItem.DBType,album)">$INFO[ListItem.Artist]$INFO[ListItem.Year,  ·  ]</value>
+    </variable>
+    <variable name="MusicNavMeta">
+        <value condition="String.IsEqual(ListItem.DBType,artist) | String.IsEqual(ListItem.DBType,genre)">$INFO[ListItem.Genre]</value>
+        <value>$INFO[ListItem.Artist]$INFO[ListItem.Year,  ·  ]</value>
+    </variable>
     <!-- Focused row of list 50: dark text on the focus fill while the list has the focus -->
     <variable name="MusicRowFocusAccent">
         <value condition="Control.HasFocus(50)">focus_text</value>
