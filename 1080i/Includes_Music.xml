@@ -61,6 +61,62 @@
         <onclick condition="String.IsEqual(ListItem.DBType,genre)">ActivateWindow(Music,$INFO[ListItem.FolderPath],return)</onclick>
     </include>
 
+    <!-- Click on an album card of the info page: Action(Info) would close the page, so the
+         script closes it and opens the album's own -->
+    <include name="MusicInfoClick">
+        <onclick>NotifyAll(nightcity,music_info:$INFO[ListItem.DBType]:$INFO[ListItem.DBID])</onclick>
+    </include>
+
+    <!-- One line of list 50 on the info page: track number, title and length -->
+    <include name="MusicTrackRow">
+        <param name="focused" default="false"/>
+        <!-- colours: plain in the item layout, the focus text colour on the focused row -->
+        <param name="accent" default="accent2"/>
+        <param name="text" default="text_dim"/>
+        <param name="mute" default="text_mute"/>
+        <definition>
+            <control type="image">
+                <left>24</left>
+                <width>896</width>
+                <height>56</height>
+                <texture border="12" colordiffuse="focus">ui/cut_btn_fill.png</texture>
+                <visible>$PARAM[focused]</visible>
+            </control>
+            <control type="label">
+                <left>44</left>
+                <width>80</width>
+                <height>56</height>
+                <aligny>center</aligny>
+                <font>font_num</font>
+                <textcolor>$PARAM[accent]</textcolor>
+                <selectedcolor>$PARAM[accent]</selectedcolor>
+                <label>$INFO[ListItem.TrackNumber]</label>
+            </control>
+            <control type="label">
+                <left>130</left>
+                <width>640</width>
+                <height>56</height>
+                <aligny>center</aligny>
+                <font>font_label</font>
+                <textcolor>$PARAM[text]</textcolor>
+                <selectedcolor>$PARAM[text]</selectedcolor>
+                <scroll>$PARAM[focused]</scroll>
+                <label>$VAR[MusicTrackTitle]</label>
+            </control>
+            <control type="label">
+                <left>780</left>
+                <width>120</width>
+                <height>56</height>
+                <align>right</align>
+                <aligny>center</aligny>
+                <font>font_num</font>
+                <textcolor>$PARAM[mute]</textcolor>
+                <selectedcolor>$PARAM[mute]</selectedcolor>
+                <label>$INFO[ListItem.Duration]</label>
+            </control>
+        </definition>
+    </include>
+
     <!-- One row of the Music page: heading, the focused title and a counter on the right, a
          horizontal list of square cards. Hidden while empty; loader: the list whose items
          decide that (the row's own list, or an off-screen one for a row that can fill up). -->
@@ -75,6 +131,8 @@
         <param name="sortby" default=""/>
         <param name="sortorder" default=""/>
         <param name="limit" default="25"/>
+        <!-- the include with the click actions: MusicClick on Home, MusicInfoClick on the info page -->
+        <param name="click" default="MusicClick"/>
         <definition>
             <control type="group" id="$PARAM[group]">
                 <height>468</height>
@@ -117,7 +175,7 @@
                     <preloaditems>2</preloaditems>
                     <onup>$PARAM[up]</onup>
                     <ondown>$PARAM[down]</ondown>
-                    <include>MusicClick</include>
+                    <include content="$PARAM[click]"/>
                     <itemlayout width="228" height="424">
                         <control type="group">
                             <left>24</left>

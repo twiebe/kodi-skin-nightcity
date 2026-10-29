@@ -1317,13 +1317,94 @@ def startup():
         _home().setProperty('nc.startup.ready', '1')
 
 
+# --- music ------------------------------------------------------------------------------------
+
+MUSIC_ITEMS = {'album': 'albumid', 'artist': 'artistid', 'song': 'songid'}
+MUSIC_INFO_PATHS = {'album': 'musicdb://albums/{}/', 'artist': 'musicdb://artists/{}/'}
+
+
+def _music_id(dbid):
+    try:
+        number = int(dbid)
+    except (TypeError, ValueError):
+        return None
+    return number if number > 0 else None
+
+
+def music_queue_item(kind, dbid):
+    """The Playlist.Add item of a library album, artist (all its songs) or song, else None."""
+    number = _music_id(dbid)
+    return {MUSIC_ITEMS[kind]: number} if kind in MUSIC_ITEMS and number else None
+
+
+def music_start_position(position):
+    """Playlist position (from 0) of the list position the skin sends (Container.CurrentItem,
+    from 1); the first track when it is missing."""
+    try:
+        return max(int(position) - 1, 0)
+    except ValueError:
+        return 0
+
+
+def music_info_path(kind, dbid):
+    """The musicdb path Kodi's music info dialog takes the album or artist from, else None."""
+    number = _music_id(dbid)
+    return MUSIC_INFO_PATHS[kind].format(number) if kind in MUSIC_INFO_PATHS and number else None
+
+
+def music_play(kind, dbid, position='1'):
+    """Play an album (an artist: all its songs) from the track at POSITION of the info page's
+    list and show the player screen. Kodi's play button (8) only plays from the first track."""
+    import xbmc
+    item = music_queue_item(kind, dbid)
+    if item is None:
+        return
+    xbmc.executebuiltin('Dialog.Close(musicinformation,true)')
+    _rpc('Playlist.Clear', playlistid=0)
+    _rpc('Playlist.Add', playlistid=0, item=item)
+    _rpc('Player.Open', item={'playlistid': 0, 'position': music_start_position(position)})
+    xbmc.executebuiltin('ActivateWindow(visualisation)')
+
+
+def music_goto(position):
+    """Jump to the track at POSITION (from 1) of the playing queue (the OSD's up next row)."""
+    _rpc('Player.GoTo', playerid=0, to=music_start_position(position))
+
+
+MUSIC_DETAILS = {'album': ('AudioLibrary.GetAlbumDetails', 'albumid'),
+                 'artist': ('AudioLibrary.GetArtistDetails', 'artistid')}
+
+
+def music_info(kind, dbid):
+    """Replace the open music info page with the one of a library album or artist: Action(Info)
+    on the info page closes it instead. Kodi takes the item from the musicdb path."""
+    import xbmc
+    import xbmcgui
+    path = music_info_path(kind, dbid)
+    if path is None:
+        return
+    item = xbmcgui.ListItem(path=path)
+    item.setIsFolder(True)
+    item.getMusicInfoTag()
+    # Kodi loads the tags from the path but not the art (the backdrop: the artist's fanart)
+    method, key = MUSIC_DETAILS[kind]
+    try:
+        item.setArt(_rpc(method, properties=['art'], **{key: int(dbid)})[kind + 'details'].get('art', {}))
+    except (RuntimeError, KeyError):
+        pass
+    xbmc.executebuiltin('Dialog.Close(musicinformation,true)')
+    _wait('!Window.IsActive(musicinformation)', 2.0)
+    xbmcgui.Dialog().info(item)
+
+
 COMMANDS = {'next_episode': next_episode, 'startup': startup, 'genres': genres, 'genre_pick': genre_pick,
             'info_select': info_select, 'info_leave': info_leave, 'info_back': info_back,
             'osd_back': osd_back, 'play': play, 'info': info,
             'streams': streams, 'row': row, 'search': search, 'search_recent': search_recent,
             'search_init': search_init, 'search_clear': search_clear, 'search_forget': search_forget, 'colours': colours,
             'streams_watch': streams_watch, 'section_pick': section_pick,
-            'home': home, 'home_keymap': home_keymap, 'osd_hide': osd_hide}
+            'home': home, 'home_keymap': home_keymap, 'osd_hide': osd_hide,
+            'music_play': music_play, 'music_goto': music_goto, 'music_info': music_info}
 
 
 # --- the skin service -------------------------------------------------------------------------
