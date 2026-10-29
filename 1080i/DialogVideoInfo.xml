@@ -25,6 +25,8 @@
     <onload>ClearProperty(nc.info.ep.query,home)</onload>
     <onload>ClearProperty(nc.info.ep.id,home)</onload>
     <onload>ClearProperty(nc.info.ep.pending,home)</onload>
+    <!-- the show of an episode Kodi opened without one (InfoShowDBID, Variables.xml) -->
+    <onload>ClearProperty(nc.info.show,home)</onload>
     <!-- play shows up once the library copy of a TMDb title is found: nc_info_twin (Timers.xml)
          moves the focus there -->
     <onload>SetProperty(nc.info.twinfocus,1,home)</onload>
@@ -48,6 +50,8 @@
     <onload>SetProperty(nc.info.live,1,home)</onload>
     <onunload>ClearProperty(nc.info.live,home)</onunload>
     <onload condition="String.IsEqual(ListItem.DBType,episode)">NotifyAll(nightcity,info_select)</onload>
+    <!-- reopened on the way back in a chain: the tab and the item it was left from -->
+    <onload condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">NotifyAll(nightcity,info_back)</onload>
     <controls>
         <include>Background</include>
         <control type="group">
@@ -408,7 +412,7 @@
                             <visible>Control.HasFocus(5200)</visible>
                         </control>
                     </focusedlayout>
-                    <content target="videos">videodb://tvshows/titles/$INFO[ListItem.TvShowDBID]/</content>
+                    <content target="videos">$VAR[InfoSeasonsPath]</content>
                 </control>
                 <control type="list" id="5100">
                     <include>ChainBackGuard</include>
@@ -438,7 +442,7 @@
                             <param name="selected" value="true"/>
                         </include>
                     </focusedlayout>
-                    <content target="videos">videodb://tvshows/titles/$INFO[ListItem.TvShowDBID]/$INFO[Container(5200).ListItem.Season]/</content>
+                    <content target="videos">$VAR[InfoEpisodesPath]</content>
                 </control>
                 <control type="label">
                     <left>64</left>
@@ -562,6 +566,9 @@
                     <ondown condition="$EXP[TmdbFresh5300] + !Container(5300).IsUpdating + Integer.IsGreater(Container(5300).NumItems,0)">5300</ondown>
                     <ondown condition="![$EXP[TmdbFresh5300] + !Container(5300).IsUpdating + Integer.IsGreater(Container(5300).NumItems,0)]">SetProperty(nc.info.enter,5300,home)</ondown>
                     <ondown condition="![$EXP[TmdbFresh5300] + !Container(5300).IsUpdating + Integer.IsGreater(Container(5300).NumItems,0)]">SetProperty(nc.info.enter.from,$INFO[System.CurrentControlId],home)</ondown>
+                    <!-- the way back into this page: Back in the chain reopens it (scripts/nightcity.py
+                         info_leave, info_back) -->
+                    <onclick>NotifyAll(nightcity,info_leave:5500:$INFO[Container(5500).CurrentItem]:$INFO[Window(Home).Property(nc.info.tab)]:$INFO[Window(Home).Property(TMDbHelper.Position)]:$INFO[Window(Home).Property(nc.chain.origin.id)]:$VAR[ChainOriginDBID])</onclick>
                     <include content="ChainClick">
                         <param name="condition" value="!Container(5500).IsUpdating"/>
                         <param name="type" value="person"/>
@@ -598,6 +605,7 @@
                     <onup condition="String.IsEqual(Window(Home).Property(nc.info.tab),crew)">5525</onup>
                     <onup>5523</onup>
                     <ondown>noop</ondown>
+                    <onclick>NotifyAll(nightcity,info_leave:5510:$INFO[Container(5510).CurrentItem]:$INFO[Window(Home).Property(nc.info.tab)]:$INFO[Window(Home).Property(TMDbHelper.Position)]:$INFO[Window(Home).Property(nc.chain.origin.id)]:$VAR[ChainOriginDBID])</onclick>
                     <include content="ChainClick">
                         <param name="condition" value="!Container(5510).IsUpdating"/>
                         <param name="type" value="$INFO[ListItem.Property(tmdb_type)]"/>
@@ -697,6 +705,7 @@
                     <ondown>noop</ondown>
                     <!-- its info page in the chain, like every TMDb card; a list that loads still
                          shows the items of the page before, so a click waits until it is loaded -->
+                    <onclick>NotifyAll(nightcity,info_leave:5300:$INFO[Container(5300).CurrentItem]:$INFO[Window(Home).Property(nc.info.tab)]:$INFO[Window(Home).Property(TMDbHelper.Position)]:$INFO[Window(Home).Property(nc.chain.origin.id)]:$VAR[ChainOriginDBID])</onclick>
                     <include content="ChainClick">
                         <param name="condition" value="!Container(5500).IsUpdating + !Container(5300).IsUpdating"/>
                         <param name="type" value="movie"/>

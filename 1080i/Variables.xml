@@ -518,9 +518,22 @@
     <!-- the title of the info page alone, for … (list 9003): Kodi's context menu of the title.
          An episode page walks its season: the episode on screen. A TMDb title: its library
          copy (InfoTwinPath), none without one. -->
+    <!-- the show of the episode on the info page: TMDb Helper reopens a library episode of a
+         chain without it, the service looks it up (nc.info.show, scripts/nightcity.py
+         _info_show). Without one the season tabs stay empty, never every show. -->
+    <variable name="InfoShowDBID">
+        <value condition="!String.IsEmpty(ListItem.TvShowDBID)">$INFO[ListItem.TvShowDBID]</value>
+        <value>$INFO[Window(Home).Property(nc.info.show)]</value>
+    </variable>
+    <variable name="InfoSeasonsPath">
+        <value condition="!String.IsEmpty(ListItem.TvShowDBID) | !String.IsEmpty(Window(Home).Property(nc.info.show))">videodb://tvshows/titles/$VAR[InfoShowDBID]/</value>
+    </variable>
+    <variable name="InfoEpisodesPath">
+        <value condition="!String.IsEmpty(ListItem.TvShowDBID) | !String.IsEmpty(Window(Home).Property(nc.info.show))">videodb://tvshows/titles/$VAR[InfoShowDBID]/$INFO[Container(5200).ListItem.Season]/</value>
+    </variable>
     <variable name="InfoItemPath">
-        <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(Window(Home).Property(nc.info.ready))">videodb://tvshows/titles/$INFO[ListItem.TvShowDBID]/$INFO[Container(5100).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(5100).ListItem.Episode]"]}]},"type":"episodes"}</value>
-        <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.DBID)">videodb://tvshows/titles/$INFO[ListItem.TvShowDBID]/$INFO[ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(Window(Home).Property(nc.info.ready))">videodb://tvshows/titles/$VAR[InfoShowDBID]/$INFO[Container(5100).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(5100).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.DBID)">videodb://tvshows/titles/$VAR[InfoShowDBID]/$INFO[ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[ListItem.Episode]"]}]},"type":"episodes"}</value>
         <value condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[ListItem.DBID]</value>
         <!-- shows have no id filter: the show's folder is unique -->
         <value condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[ListItem.Path]"]}]},"type":"tvshows"}</value>

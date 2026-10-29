@@ -533,6 +533,62 @@ def test_osd_sends_its_command_at_once():
     onloads = [(o.get('condition') or '', o.text) for o in root.findall('onload')]
     assert ('', 'NotifyAll(nightcity,streams_watch)') in onloads
     timer = _timer('nc_osd_chain')
-    assert [(o.get('condition') or '', o.text) for o in timer.findall('onstop')] == [
-        ('', 'ClearProperty(nc.osd.chain,home)')]
+    assert [(o.get('condition') or '', o.text) for o in timer.findall('onstop')][0] == ('', 'ClearProperty(nc.osd.chain,home)')
 
+
+
+def _control(name, cid):
+    return next(c for c in parse(SKIN / name).iter('control') if c.get('id') == cid)
+
+
+LEAVE = ('NotifyAll(nightcity,info_leave:{0}:$INFO[Container({0}).CurrentItem]:$INFO[Window(Home).Property(nc.info.tab)]:'
+         '$INFO[Window(Home).Property(TMDbHelper.Position)]:$INFO[Window(Home).Property(nc.chain.origin.id)]:$VAR[ChainOriginDBID])')
+
+
+def test_a_click_into_the_chain_keeps_the_way_back():
+    """Back in a chain reopens the page before as a new page: the click keeps its list, item and
+    tab first (scripts/nightcity.py info_leave), so the page goes back there."""
+    for cid in ('5500', '5510', '5300'):
+        children = list(_control('DialogVideoInfo.xml', cid))
+        leave = [i for i, c in enumerate(children) if c.tag == 'onclick' and c.text == LEAVE.format(cid)]
+        chain = [i for i, c in enumerate(children) if c.tag == 'include' and c.get('content') == 'ChainClick']
+        assert leave and chain and leave[0] < chain[0], cid
+
+
+def test_a_reopened_chain_page_goes_back_where_it_was_left():
+    onloads = [(o.get('condition'), o.text) for o in parse(SKIN / 'DialogVideoInfo.xml').iter('onload')]
+    assert (RUNNING, 'NotifyAll(nightcity,info_back)') in onloads
+
+
+def test_season_tabs_list_the_show_of_a_reopened_episode():
+    """TMDb Helper reopens a library episode without its show id: the tabs listed every show and
+    the episodes those of another show. The service fills it in (nc.info.show)."""
+    variables = {v.get('name'): v for v in parse(SKIN / 'Variables.xml').iter('variable')}
+    for cid, name in (('5200', 'InfoSeasonsPath'), ('5100', 'InfoEpisodesPath')):
+        assert _control('DialogVideoInfo.xml', cid).findtext('content') == '$VAR[{}]'.format(name)
+        # no show id yet: no path, never videodb://tvshows/titles// (every show)
+        values = list(variables[name])
+        assert len(values) == 1 and values[0].get('condition') and '/$VAR[InfoShowDBID]/' in values[0].text, name
+    assert [v.text for v in variables['InfoShowDBID']] == ['$INFO[ListItem.TvShowDBID]', '$INFO[Window(Home).Property(nc.info.show)]']
+    assert not [v for v in variables.values() for x in v if 'titles/$INFO[ListItem.TvShowDBID]' in (x.text or '')]
+    assert 'ClearProperty(nc.info.show,home)' in _onloads('DialogVideoInfo.xml')
+
+
+def test_osd_chain_ends_back_on_the_person_left():
+    """A chain from the OSD cast row ends on that row, on the person it was left from: Up at the
+    top of the person page used to end on the chapter row."""
+    clicks = [o.text for o in _control('Custom_1141_OSDCast.xml', '6501').iter('onclick')]
+    keep = ['SetProperty(nc.osd.ret,$INFO[Container(6501).CurrentItem],home)',
+            'SetProperty(nc.osd.ret.tab,$INFO[Window(Home).Property(nc.osd.credits)],home)']
+    assert all(k in clicks for k in keep)
+    late = [o.text for o in _timer('nc_osd_click').iter('onstop')]
+    assert all(k in late for k in keep)
+    reopen = [(o.get('condition'), o.text) for o in _timer('nc_osd_chain').iter('onstop')]
+    assert ('!String.IsEmpty(Window(Home).Property(nc.osd.ret)) + Window.IsActive(videobookmarks)', 'ActivateWindow(1141)') in reopen
+    onloads = [(o.get('condition'), o.text) for o in parse(SKIN / 'Custom_1141_OSDCast.xml').iter('onload')]
+    back = '!String.IsEmpty(Window(Home).Property(nc.osd.ret))'
+    assert ('String.IsEmpty(Window(Home).Property(nc.osd.ret))', 'ClearProperty(nc.osd.credits,home)') in onloads
+    assert (back, 'SetProperty(nc.osd.credits,$INFO[Window(Home).Property(nc.osd.ret.tab)],home)') in onloads
+    assert (back, 'NotifyAll(nightcity,osd_back:$INFO[Window(Home).Property(nc.osd.ret)]:$INFO[Window(Home).Property(nc.osd.ret.tab)])') in onloads
+    assert onloads[-1] == (None, 'ClearProperty(nc.osd.ret,home)')
+    assert 'ClearProperty(nc.osd.ret,home)' in _onloads('Home.xml')

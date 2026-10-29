@@ -9,6 +9,10 @@ The remote moves through levels, not through confirmations.
 - **Up and Left go one level up, Down and Right one level down.** Up on the top row of a page
   leaves it (Back). Left on a settings page goes back to its categories, Right enters them.
 - **No dead ends.** Every control a remote can reach has a way back to where the window started.
+- **Back returns where you left.** Back (or Up at the top) from a page opened by OK lands on the
+  element that opened it: the same item, the same tab. A TMDb chain reopens the page before as a
+  new page, so the click keeps the way back (`info_leave`, `info_back`, `osd_back` in
+  `scripts/nightcity.py`); a chain from the player's cast row ends on that row, on that person.
 
 ### Selectors are skipped from above
 
