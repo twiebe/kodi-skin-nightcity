@@ -112,13 +112,60 @@ def test_key_on_the_icon_reached_by_hand_goes_to_the_page(quick):
     wait_for('Control.HasFocus(9103) + !' + PANEL)
 
 
-def test_back_goes_to_the_icon(quick):
+def closed_on(cid):
+    """Back closed the menu: back where it was opened from, the panel hidden."""
+    return 'Control.HasFocus({}) + !{} + !{}'.format(cid, PANEL, OPEN)
+
+
+def test_back_goes_back_where_the_key_came_from(quick):
     press(hold=1500)
     wait_for(on_panel(9109))
     action('down', 'down')
     wait_for(on_panel(1220))
     action('back')
+    wait_for(closed_on(START))
+    assert info('Window(Home).Property(nc.page)')['Window(Home).Property(nc.page)'] == 'home'
+
+
+def _settings_page():
+    open_menu()
+    action('down', 'down', delay=0.3)
+    wait_for('Integer.IsEqual(Container(1230).CurrentItem,1)')
+    action('select')
+    closed()
+    wait_for('Window.IsActive(home) + String.IsEqual(Window(Home).Property(nc.page),system) + '
+             'Control.HasFocus(9601)')
+    time.sleep(0.5)
+
+
+@pytest.mark.parametrize('inside', [True, False], ids=['in-the-menu', 'on-the-icon'])
+def test_back_on_the_settings_page(quick, inside):
+    """Up from a settings row to the icon (and Down into the menu): Back lands on that row, the
+    settings page still shown."""
+    _settings_page()
+    action('up')
     wait_for(on_panel(9109))
+    if inside:
+        action('down')
+        wait_for(on_panel(1210))
+    action('back')
+    wait_for(closed_on(9601))
+    assert info('Window(Home).Property(nc.page)')['Window(Home).Property(nc.page)'] == 'system'
+
+
+@pytest.mark.parametrize('entry, way, inside', [(9101, 'left', True), (9104, 'right', False)])
+def test_back_to_the_top_menu(quick, entry, way, inside):
+    """Left off the first entry of the top menu, Right off the last: Back returns to it."""
+    builtin('SetFocus({})'.format(entry))
+    wait_for('Control.HasFocus({})'.format(entry))
+    time.sleep(0.5)
+    action(way)
+    wait_for(on_panel(9109))
+    if inside:
+        action('down')
+        wait_for(on_panel(1210))
+    action('back')
+    wait_for(closed_on(entry))
 
 
 
@@ -147,8 +194,8 @@ def test_icon_next_to_the_clock(quick):
 
 
 def test_menu_on_home_by_focus(quick):
-    """Down goes into the menu, Up from its top and Back come out onto the icon, the menu still
-    shown; the rows lead into each other as in the dialog."""
+    """Down goes into the menu, Up from its top comes out onto the icon, the menu still shown,
+    Back closes it; the rows lead into each other as in the dialog."""
     builtin('SetFocus(9109)')
     wait_for('Control.HasFocus(9109) + ' + PANEL)
     action('down')
@@ -159,7 +206,9 @@ def test_menu_on_home_by_focus(quick):
     screenshot('quick-panel-inside')
     action('down', 'down')  # two rows of tiles
     wait_for('Control.HasFocus(1230)')
-    action('back')
+    action('back')  # reached by no way that remembers: the shown page's own entry
+    wait_for(closed_on(9101))
+    builtin('SetFocus(9109)')
     wait_for('Control.HasFocus(9109) + ' + PANEL)
     action('down', 'down')
     wait_for('Control.HasFocus(1220)')
@@ -173,8 +222,11 @@ def test_menu_on_home_by_focus(quick):
 
 def test_weather_tile_on_home_comes_back_to_the_icon(quick):
     """OK on the weather tile of the panel opens the weather (or its settings); Back lands on the
-    icon with the menu shown."""
-    builtin('SetFocus(9109)')
+    icon with the menu shown, Back again where the menu was opened from."""
+    builtin('SetFocus(9101)')
+    wait_for('Control.HasFocus(9101)')
+    time.sleep(0.5)
+    action('left')
     wait_for('Control.HasFocus(9109)')
     action('down')
     wait_for('Control.HasFocus(1210)')
@@ -183,6 +235,8 @@ def test_weather_tile_on_home_comes_back_to_the_icon(quick):
     time.sleep(0.5)
     action('back', delay=1)
     wait_for('Window.IsActive(home) + Control.HasFocus(9109) + ' + PANEL)
+    action('back')  # where the menu was opened from before
+    wait_for(closed_on(9101))
 
 
 def test_tiles_and_rows(quick):
