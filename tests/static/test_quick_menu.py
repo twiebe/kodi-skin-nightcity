@@ -109,6 +109,13 @@ def test_rows_lead_into_each_other():
     assert c['1230'].findtext('onup') == '1220'
 
 
+def test_up_from_the_top_goes_to_the_hamburger():
+    """Up on the top row leaves the menu (DESIGN.md), onto the icon it opens from when Home is
+    behind it; over another window it just closes."""
+    weather = controls(parse(ROOT / '1080i' / WINDOW))['1210']
+    assert actions(weather, 'onup') == [('', 'Dialog.Close(1170,true)'), ('Window.IsActive(home)', 'SetFocus(9109)')]
+
+
 def test_kodis_power_menu_leads_here():
     """Like Arctic Fuse: the power menu closes at once and opens the quick menu, or closes it when
     it is open, so the same key opens and closes it."""

@@ -3,7 +3,8 @@
      a page, the video). Clock and date, the weather, the power commands and links to the
      settings page (the only way there) and the file manager. Kodi's power menu leads here (DialogButtonMenu.xml: the S key,
      power and sleep keys, Home held through the skin's keymap), so does the icon next to the
-     clock on Home (9109). Back or the same key again closes it.
+     clock on Home (9109). Back or the same key again closes it, Up from the top too (onto
+     that icon when Home is behind).
      No script at all: two Python interpreters starting at once can crash Kodi. Power tiles run
      their builtin where the device can do it and say so where it cannot (no "are you sure").
      Ids: 1210 weather, 1220 power tiles, 1230 links (static items: more links are one item
@@ -66,7 +67,9 @@
                 <onclick condition="Weather.IsFetched">ActivateWindow(weather)</onclick>
                 <onclick condition="!Weather.IsFetched">ActivateWindow(servicesettings,weather)</onclick>
                 <ondown>1220</ondown>
-                <onup>noop</onup>
+                <!-- up leaves the menu, onto the icon next to the clock when Home is behind -->
+                <onup>Dialog.Close(1170,true)</onup>
+                <onup condition="Window.IsActive(home)">SetFocus(9109)</onup>
                 <onleft>noop</onleft>
                 <onright>noop</onright>
             </control>
