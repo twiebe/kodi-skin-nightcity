@@ -688,3 +688,16 @@ def test_spotlight_preloads_next_three():
     for layout in (item, lst.find('focusedlayout')):
         art = [c.findtext('texture') for c in layout.iter('control') if c.get('type') == 'image']
         assert art == ['$INFO[ListItem.Art(fanart)]', '$INFO[ListItem.Art(poster)]', '$INFO[ListItem.Art(clearlogo)]']
+
+
+def test_search_field_skips_the_recent_terms_from_above():
+    """DESIGN.md: a selector is skipped from above. Down from the search field lands on the
+    result rows once they show; the recent terms above them are reached with Up from there.
+    Before a search (no rows) Down reaches the terms."""
+    field = next(c for c in parse(ROOT / '1080i' / 'Includes_Home.xml').iter('control') if c.get('id') == '9750')
+    rows = ' | '.join('Control.IsVisible({})'.format(g) for g in range(9711, 9716))
+    assert [(d.get('condition'), d.text) for d in field.findall('ondown')] == [
+        ('[{}]'.format(rows), '9710'),
+        ('!String.IsEmpty(Window(Home).Property(nc.search.recent.1))', '9770'),
+        (None, '9710'),
+    ]

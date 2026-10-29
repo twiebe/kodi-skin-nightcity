@@ -30,6 +30,8 @@
          (param.*): TmdbFresh<list> holds while the first item's request matches the page, by
          TMDb id, else IMDb number or title (show title, season and episode for an episode),
          and the chosen tab. The list fades out otherwise (TmdbStaleFade) and keeps loading. -->
+    <!-- a TMDb list loads: a second plugin list at the same time crashed Kodi -->
+    <expression name="TmdbBusy">Container(5500).IsUpdating | Container(5510).IsUpdating | Container(5300).IsUpdating | Container(6501).IsUpdating | Container(6599).IsUpdating</expression>
     <expression name="TmdbFresh5500">[[String.IsEqual(Window(Home).Property(nc.info.tab),crew) + !String.IsEmpty(Window(Home).Property(nc.info.live)) + String.IsEqual(Container(5500).ListItem(0).Property(param.info),crew)] | [![String.IsEqual(Window(Home).Property(nc.info.tab),crew) + !String.IsEmpty(Window(Home).Property(nc.info.live))] + String.IsEqual(Container(5500).ListItem(0).Property(param.info),cast)]] + [[!String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEqual(Container(5500).ListItem(0).Property(param.tmdb_id),ListItem.Property(tmdb_id))] | [String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEqual(ListItem.DBType,episode) + String.IsEqual(Container(5500).ListItem(0).Property(param.query),ListItem.TVShowTitle) + String.IsEqual(Container(5500).ListItem(0).Property(param.season),Container(5100).ListItem.Season) + String.IsEqual(Container(5500).ListItem(0).Property(param.episode),Container(5100).ListItem.Episode)] | [String.IsEmpty(ListItem.Property(tmdb_id)) + !String.IsEqual(ListItem.DBType,episode) + [[!String.IsEmpty(ListItem.IMDBNumber) + String.IsEqual(Container(5500).ListItem(0).Property(param.imdb_id),ListItem.IMDBNumber)] | [!String.IsEmpty(ListItem.Title) + String.IsEqual(Container(5500).ListItem(0).Property(param.query),ListItem.Title)]]]]</expression>
     <expression name="TmdbFresh5300">String.IsEqual(Container(5300).ListItem(0).Property(param.info),recommendations) + [[!String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEqual(Container(5300).ListItem(0).Property(param.tmdb_id),ListItem.Property(tmdb_id))] | [String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEqual(ListItem.DBType,episode) + String.IsEqual(Container(5300).ListItem(0).Property(param.query),ListItem.TVShowTitle) + String.IsEqual(Container(5300).ListItem(0).Property(param.season),Container(5100).ListItem.Season) + String.IsEqual(Container(5300).ListItem(0).Property(param.episode),Container(5100).ListItem.Episode)] | [String.IsEmpty(ListItem.Property(tmdb_id)) + !String.IsEqual(ListItem.DBType,episode) + [[!String.IsEmpty(ListItem.IMDBNumber) + String.IsEqual(Container(5300).ListItem(0).Property(param.imdb_id),ListItem.IMDBNumber)] | [!String.IsEmpty(ListItem.Title) + String.IsEqual(Container(5300).ListItem(0).Property(param.query),ListItem.Title)]]]]</expression>
     <expression name="TmdbFresh5510">!String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEqual(Container(5510).ListItem(0).Property(param.tmdb_id),ListItem.Property(tmdb_id)) + [[String.IsEqual(Window(Home).Property(nc.info.tab),tv) + !String.IsEmpty(Window(Home).Property(nc.info.live)) + String.IsEqual(Container(5510).ListItem(0).Property(param.info),stars_in_tvshows)] | [String.IsEqual(Window(Home).Property(nc.info.tab),crew) + !String.IsEmpty(Window(Home).Property(nc.info.live)) + String.IsEqual(Container(5510).ListItem(0).Property(param.info),crew_in_both)] | [![String.IsEqual(Window(Home).Property(nc.info.tab),tv) + !String.IsEmpty(Window(Home).Property(nc.info.live))] + ![String.IsEqual(Window(Home).Property(nc.info.tab),crew) + !String.IsEmpty(Window(Home).Property(nc.info.live))] + String.IsEqual(Container(5510).ListItem(0).Property(param.info),stars_in_movies)]]</expression>
@@ -54,9 +56,11 @@
         <onback condition="!String.IsEmpty(Window(Home).Property(nc.chain.guard))">9000</onback>
     </include>
 
-    <!-- Tab above a TMDb credits list (cast / crew, films / shows / crew). OK chooses it: the
-         list's content follows `property` (Home), so moving over the tabs starts no plugin, and a
-         tab never changes while its list still loads. `active` holds for the chosen tab. The
+    <!-- Tab above a TMDb credits list (cast / crew, films / shows / crew). The focus chooses it
+         (DESIGN.md: focus applies): the list's content follows `property` (Home). While a TMDb
+         list loads the choice waits for it (nc.tab.want.*, nc_credits_tab in Timers.xml), so
+         never two plugin lists load at once. OK chooses it too and goes down to the list.
+         `active` holds for the chosen tab. The
          focus goes down to the list only when it has items: Kodi takes the focus from the tab
          first, so an empty list would leave the page without focus. A list that is not in yet
          takes the focus once it is (nc.info.enter, nc_info_enter in Timers.xml), unless the
@@ -85,6 +89,11 @@
                 <alttexturefocus colordiffuse="accent">ui/tab_line.png</alttexturefocus>
                 <alttexturenofocus/>
                 <usealttexture>$PARAM[active]</usealttexture>
+                <onfocus condition="!$EXP[TmdbBusy]">SetProperty($PARAM[property],$PARAM[value],home)</onfocus>
+                <onfocus condition="!$EXP[TmdbBusy]">ClearProperty(nc.tab.want.id,home)</onfocus>
+                <onfocus condition="$EXP[TmdbBusy]">SetProperty(nc.tab.want.prop,$PARAM[property],home)</onfocus>
+                <onfocus condition="$EXP[TmdbBusy]">SetProperty(nc.tab.want.value,$PARAM[value],home)</onfocus>
+                <onfocus condition="$EXP[TmdbBusy]">SetProperty(nc.tab.want.id,$PARAM[id],home)</onfocus>
                 <onclick condition="!Container($PARAM[list]).IsUpdating">SetProperty($PARAM[property],$PARAM[value],home)</onclick>
                 <onclick condition="[$PARAM[active]] + $EXP[TmdbFresh$PARAM[list]] + !Container($PARAM[list]).IsUpdating + Integer.IsGreater(Container($PARAM[list]).NumItems,0)">SetFocus($PARAM[list])</onclick>
                 <onclick condition="!Container($PARAM[list]).IsUpdating + ![[$PARAM[active]] + $EXP[TmdbFresh$PARAM[list]] + !Container($PARAM[list]).IsUpdating + Integer.IsGreater(Container($PARAM[list]).NumItems,0)]">SetProperty(nc.info.enter,$PARAM[list],home)</onclick>

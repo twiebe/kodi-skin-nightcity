@@ -676,6 +676,9 @@
                 <texturenofocus border="12" colordiffuse="accent">ui/cut_btn.png</texturenofocus>
                 <onclick>NotifyAll(nightcity,search)</onclick>
                 <onup>9100</onup>
+                <!-- past the recent terms onto the results (DESIGN.md: a selector is skipped from
+                     above); before a search only the terms are there -->
+                <ondown condition="[Control.IsVisible(9711) | Control.IsVisible(9712) | Control.IsVisible(9713) | Control.IsVisible(9714) | Control.IsVisible(9715)]">9710</ondown>
                 <ondown condition="!String.IsEmpty(Window(Home).Property(nc.search.recent.1))">9770</ondown>
                 <ondown>9710</ondown>
                 <onleft>noop</onleft>

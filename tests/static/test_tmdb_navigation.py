@@ -111,8 +111,7 @@ def test_info_rows_open_pages_in_the_chain():
 
 def test_info_tabs_load_one_list():
     """A title page shows cast or crew, a person page films, shows or crew jobs: one TMDb list
-    per page, its tab chosen with OK (nc.info.tab, reset on load), so moving over the tabs starts
-    no plugin and a tab never changes while its list still loads."""
+    per page, its tab nc.info.tab (reset on load)."""
     assert 'ClearProperty(nc.info.tab,home)' in _onloads('DialogVideoInfo.xml')
     assert _info_control('5500').findtext('content') == '$VAR[InfoPeoplePath]'
     assert _info_control('5510').findtext('content') == '$VAR[InfoPersonCreditsPath]'
@@ -121,7 +120,35 @@ def test_info_tabs_load_one_list():
     tab = _include('CreditsTab')
     clicks = [(o.get('condition') or '', o.text or '') for o in tab.iter('onclick')]
     assert clicks and all('!Container($PARAM[list]).IsUpdating' in cond for cond, _ in clicks)
-    assert not any('nc.info.tab' in (o.text or '') for o in tab.iter('onfocus'))
+
+
+BUSY = ('Container(5500).IsUpdating | Container(5510).IsUpdating | Container(5300).IsUpdating | '
+        'Container(6501).IsUpdating | Container(6599).IsUpdating')
+
+
+def test_a_tab_applies_on_focus_one_list_at_a_time():
+    """DESIGN.md: focus applies. The tab under the cursor is the chosen one, no OK. While a
+    TMDb list loads the choice waits (nc_credits_tab): never two plugin lists at once."""
+    exprs = {e.get('name'): e.text for e in parse(SKIN / 'Includes_Tmdb.xml').iter('expression')}
+    assert exprs['TmdbBusy'] == BUSY
+    tab = _include('CreditsTab')
+    assert [(o.get('condition'), o.text) for o in tab.iter('onfocus')] == [
+        ('!$EXP[TmdbBusy]', 'SetProperty($PARAM[property],$PARAM[value],home)'),
+        ('!$EXP[TmdbBusy]', 'ClearProperty(nc.tab.want.id,home)'),
+        ('$EXP[TmdbBusy]', 'SetProperty(nc.tab.want.prop,$PARAM[property],home)'),
+        ('$EXP[TmdbBusy]', 'SetProperty(nc.tab.want.value,$PARAM[value],home)'),
+        ('$EXP[TmdbBusy]', 'SetProperty(nc.tab.want.id,$PARAM[id],home)'),
+    ]
+    timer = next(t for t in parse(SKIN / 'Timers.xml').iter('timer') if t.findtext('name') == 'nc_credits_tab')
+    want = 'Window(Home).Property(nc.tab.want.id)'
+    assert timer.findtext('start') == '!String.IsEmpty({})'.format(want)
+    assert timer.findtext('stop') == 'String.IsEmpty({0}) | !String.IsEqual(System.CurrentControlId,{0}) | ![{1}]'.format(want, BUSY)
+    stops = [(o.get('condition'), o.text) for o in timer.findall('onstop')]
+    assert stops == [
+        ('String.IsEqual(System.CurrentControlId,{}) + ![{}]'.format(want, BUSY),
+         'SetProperty($INFO[Window(Home).Property(nc.tab.want.prop)],$INFO[Window(Home).Property(nc.tab.want.value)],home)'),
+        (None, 'ClearProperty(nc.tab.want.id,home)'),
+    ]
 
 
 def test_person_credits_skip_documentaries_news_and_talk():

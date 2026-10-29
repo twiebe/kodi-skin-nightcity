@@ -143,12 +143,15 @@ def test_rows_wire_up_and_down_through_empty_slots():
     assert c['9208'] if '9208' in c else True
 
 
-def test_genre_row_focuses_its_tabs_from_above():
+def test_genre_row_skips_its_tabs_from_above():
+    """DESIGN.md: a selector is skipped from above. The group of a genre row takes the focus
+    on its list; up from the list reaches the genre tabs."""
     for page, base, prop in (('movies', '94', 'nc.genre'), ('home', '92', 'nc.tvgenre')):
         skin = {} if page == 'movies' else slot_skin('home', 4, 'genres', 'shows')
         c = controls(load('Home.xml', skin))
         group = c[base + '14']
-        assert group.findtext('defaultcontrol') == base + '30'
+        assert group.findtext('defaultcontrol') == base + '04'
+        assert c[base + '04'].findtext('onup') == base + '30'
         assert group.find('defaultcontrol').get('always') == 'true'
         tabs = c[base + '30']
         assert tabs.findtext('ondown') == base + '04' and tabs.findtext('onup') == base + '13'
