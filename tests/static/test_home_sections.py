@@ -289,11 +289,13 @@ def combos():
 
 LOADERS = {'9000', '9001', '9721', '9722', '9723', '9724', '9725'} | \
           {'{}2{}'.format(b, n) for b in PAGES.values() for n in range(1, 9)}
+# reached by Back in the quick menu only, a numeric target that passes the focus on
+STAND_INS = {'9189'}
 
 
 @pytest.mark.parametrize('skin', list(combos()))
 def test_home_navigation_for_any_combination(skin):
-    assert set(unreachable('Home.xml', skin)) - LOADERS == set()
+    assert set(unreachable('Home.xml', skin)) - LOADERS - STAND_INS == set()
     assert dead_ends('Home.xml', skin) == []
 
 
