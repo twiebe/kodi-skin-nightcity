@@ -478,9 +478,22 @@ def info_select():
     home = _home()
     home.clearProperty('nc.info.ready')
     try:
+        _info_show()
         _select_episode()
     finally:
         home.setProperty('nc.info.ready', '1')
+
+
+def _info_show():
+    """The show of the episode on the info page, for its season tabs, when Kodi left it out:
+    TMDb Helper reopens a library episode of a chain without it, and the tabs listed every show
+    (nc.info.show, InfoShowDBID in Variables.xml)."""
+    import xbmc
+    dbid = xbmc.getInfoLabel('ListItem.DBID')
+    if xbmc.getInfoLabel('ListItem.TvShowDBID') or not dbid.isdigit():
+        return
+    details = _rpc('VideoLibrary.GetEpisodeDetails', episodeid=int(dbid), properties=['tvshowid'])
+    _home().setProperty('nc.info.show', str(details['episodedetails']['tvshowid']))
 
 
 def _select_episode():
@@ -497,6 +510,93 @@ def _select_episode():
         if index is not None:
             _focus('SetFocus(5100,{},absolute)'.format(index))
     _focus('SetFocus(9001)')
+
+
+# --- the way back into a page of a TMDb chain ------------------------------------------------
+# A chain page that TMDb Helper reopens on the way back is a new page: the focus would start on
+# its buttons. A click into the chain keeps where it left (info_leave, Home property nc.ret.<chain
+# position>); the reopened page goes back there (info_back): the tab and the item. An episode
+# page reopens on the episode whose cast was clicked (ChainOriginDBID in Variables.xml).
+
+RETURN_FIELDS = ('list', 'index', 'tab', 'tmdb_id', 'dbid')
+# the TMDb lists of a page have stopped loading: a tab may change what one of them shows (two
+# plugin lists at once crash Kodi; TmdbBusy in Includes_Tmdb.xml)
+INFO_LISTS_REST = {'5500': '!Container(5500).IsUpdating + !Container(5300).IsUpdating',
+                   '5510': '!Container(5510).IsUpdating',
+                   '5300': '!Container(5500).IsUpdating + !Container(5300).IsUpdating'}
+
+
+def return_key(position):
+    """Home property of the way back into the chain page at POSITION; the page a chain starts
+    from has none yet, it becomes the first."""
+    return 'nc.ret.' + (position or '1')
+
+
+def return_point(list_id, item, tab, tmdb_id, dbid):
+    """The way back as text: the list, its item (CurrentItem counts from 1), the tab, the page
+    (TMDb id or library id). None without an item."""
+    if not list_id or not item.isdigit() or int(item) < 1:
+        return None
+    return '|'.join([list_id, str(int(item) - 1), tab, tmdb_id, dbid])
+
+
+def parse_return(text):
+    parts = text.split('|') if text else []
+    if len(parts) != len(RETURN_FIELDS) or not parts[1].isdigit():
+        return None
+    point = dict(zip(RETURN_FIELDS, parts))
+    point['index'] = int(point['index'])
+    return point
+
+
+def return_matches(point, tmdb_id, dbid):
+    """The way back belongs to the page: same TMDb id, or same library id."""
+    return bool((point['tmdb_id'] and point['tmdb_id'] == tmdb_id) or (point['dbid'] and point['dbid'] == dbid))
+
+
+def info_leave(list_id, item, tab, position, tmdb_id, dbid):
+    point = return_point(list_id, item, tab, tmdb_id, dbid)
+    if point:
+        _home().setProperty(return_key(position), point)
+
+
+def info_back():
+    """On a page reopened in a chain: back to the tab and item it was left from. The
+    list may still load: nc_info_enter (Timers.xml) enters it once it is in, then the item."""
+    import xbmc
+    home = _home()
+    key = return_key(xbmc.getInfoLabel('Window(Home).Property(TMDbHelper.Position)'))
+    point = parse_return(home.getProperty(key))
+    if not point or not return_matches(point, xbmc.getInfoLabel('ListItem.Property(tmdb_id)'),
+                                       xbmc.getInfoLabel('ListItem.DBID')):
+        return
+    home.clearProperty(key)
+    if xbmc.getCondVisibility('String.IsEqual(ListItem.DBType,episode)'):
+        # info_select picks the episode first and ends on the play button
+        if not _wait('!String.IsEmpty(Window(Home).Property(nc.info.ready))', 10.0):
+            return
+    if point['tab']:
+        if not _wait(INFO_LISTS_REST.get(point['list'], 'true'), 30.0):
+            return
+        home.setProperty('nc.info.tab', point['tab'])
+    if not xbmc.getCondVisibility('Window.IsActive(movieinformation)'):
+        return
+    home.setProperty('nc.info.enter.from', xbmc.getInfoLabel('System.CurrentControlId'))
+    home.setProperty('nc.info.enter', point['list'])
+    if _wait('Control.HasFocus({})'.format(point['list']), 20.0):
+        _focus('SetFocus({},{},absolute)'.format(point['list'], point['index']))
+
+
+def osd_back(item, tab):
+    """The OSD cast row reopened after a chain: the person it was left from (ITEM counts from 1)."""
+    import xbmc
+    if not item.isdigit() or int(item) < 1:
+        return
+    index = int(item) - 1
+    if _wait('Window.IsActive(1141) + !Container(6501).IsUpdating + Integer.IsGreater(Container(6501).NumItems,{})'
+             ' + String.IsEqual(Container(6501).ListItem(0).Property(param.info),{})'.format(index, tab or 'cast'), 20.0):
+        if xbmc.getCondVisibility('Window.IsActive(1141)'):
+            xbmc.executebuiltin('SetFocus(6501,{},absolute)'.format(index))
 
 
 def _focus(command):
@@ -1153,7 +1253,8 @@ def startup():
 
 
 COMMANDS = {'next_episode': next_episode, 'startup': startup, 'genres': genres, 'genre_pick': genre_pick,
-            'info_select': info_select, 'play': play, 'info': info,
+            'info_select': info_select, 'info_leave': info_leave, 'info_back': info_back,
+            'osd_back': osd_back, 'play': play, 'info': info,
             'streams': streams, 'row': row, 'search': search, 'search_recent': search_recent,
             'search_init': search_init, 'search_clear': search_clear, 'search_forget': search_forget, 'colours': colours,
             'streams_watch': streams_watch, 'section_pick': section_pick,

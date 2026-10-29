@@ -4,14 +4,20 @@
      focused person's name, role and short biography sit above the row; the biography loads in
      the hidden list 6599 once the focus rested (nc_osd_bio, Timers.xml). OK on a person closes
      the OSD and opens the person's page in TMDb Helper's window manager over the running video;
-     "close all" or Back past the first page returns to the video. Playback keeps running. -->
+     "close all" or Back past the first page returns to this row, on that person. Playback keeps
+     running. -->
 <window type="dialog" id="1141">
     <depth>DepthOSD</depth>
     <defaultcontrol always="true">6501</defaultcontrol>
-    <onload>ClearProperty(nc.osd.credits,home)</onload>
+    <!-- reopened after a chain from this row (nc_osd_chain, Timers.xml): the tab and the person
+         it was left from (scripts/nightcity.py osd_back) -->
+    <onload condition="String.IsEmpty(Window(Home).Property(nc.osd.ret))">ClearProperty(nc.osd.credits,home)</onload>
+    <onload condition="!String.IsEmpty(Window(Home).Property(nc.osd.ret))">SetProperty(nc.osd.credits,$INFO[Window(Home).Property(nc.osd.ret.tab)],home)</onload>
+    <onload condition="!String.IsEmpty(Window(Home).Property(nc.osd.ret))">NotifyAll(nightcity,osd_back:$INFO[Window(Home).Property(nc.osd.ret)]:$INFO[Window(Home).Property(nc.osd.ret.tab)])</onload>
     <onload>ClearProperty(nc.osd.bio.id,home)</onload>
     <onload>ClearProperty(nc.osd.bio.pending,home)</onload>
     <onload>ClearProperty(nc.osd.click,home)</onload>
+    <onload>ClearProperty(nc.osd.ret,home)</onload>
     <animation effect="fade" time="150">WindowOpen</animation>
     <animation effect="fade" time="150">WindowClose</animation>
     <controls>
@@ -109,6 +115,9 @@
             <onright>noop</onright>
             <!-- the chain starts first, then the OSD closes; never while a list loads (never two
                  interpreters starting at once) -->
+            <!-- the way back: the chain ends on this row, on this person -->
+            <onclick>SetProperty(nc.osd.ret,$INFO[Container(6501).CurrentItem],home)</onclick>
+            <onclick>SetProperty(nc.osd.ret.tab,$INFO[Window(Home).Property(nc.osd.credits)],home)</onclick>
             <include content="ChainClick">
                 <param name="type" value="person"/>
                 <param name="id" value="$INFO[ListItem.Property(tmdb_id)]"/>

@@ -191,6 +191,7 @@ def test_episode_person_opens_in_the_chain_and_back_returns(breaking_bad):
     episode = _label('Container(5100).ListItem.DBID')
     _down(5100)  # past the season tabs (DESIGN.md)
     _down(5500)
+    action('right', delay=0.6)
     person = _label('Container(5500).ListItem.Label')
     action('select')
     wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),2)', timeout=30)
@@ -204,6 +205,13 @@ def test_episode_person_opens_in_the_chain_and_back_returns(breaking_bad):
     wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),1)', timeout=30)
     wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.DBType,episode)', timeout=20)
     assert _label('ListItem.DBID') == episode
+    # back on the person left, under the episode of its own show: Kodi reopens the episode
+    # without its show id, the season tabs listed every show
+    wait_for('Control.HasFocus(5500) + Integer.IsEqual(Container(5500).CurrentItem,2)', timeout=30)
+    assert _label('Container(5500).ListItem.Label') == person
+    assert _label('Container(5100).ListItem.TVShowTitle') == SHOW
+    assert _label('Container(5100).ListItem.DBID') == episode
+    assert _label('Container(5200).ListItem.TVShowTitle') == SHOW
 
 
 def test_movie_up_from_the_top_goes_back(matrix):

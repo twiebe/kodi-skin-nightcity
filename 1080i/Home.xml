@@ -19,6 +19,7 @@
     <onload condition="!Skin.HasSetting(TMDbHelper.DirectCallAuto)">Skin.SetBool(TMDbHelper.DirectCallAuto)</onload>
     <onload>SetProperty(TMDbHelper.WidgetContainer,9000,home)</onload>
     <onload>ClearProperty(nc.chain.return,home)</onload>
+    <onload>ClearProperty(nc.osd.ret,home)</onload>
     <!-- a page whose menu entry was hidden in the settings -->
     <onload condition="String.IsEqual(Window(Home).Property(nc.page),movies) + Skin.HasSetting(nc.menu.hide.movies)">SetProperty(nc.page,home,home)</onload>
     <onload condition="String.IsEqual(Window(Home).Property(nc.page),shows) + Skin.HasSetting(nc.menu.hide.shows)">SetProperty(nc.page,home,home)</onload>

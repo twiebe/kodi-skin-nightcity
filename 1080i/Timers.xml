@@ -73,6 +73,8 @@
         <start reset="true">!String.IsEmpty(Window(Home).Property(nc.osd.chain)) + String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))</start>
         <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_chain),1)</stop>
         <onstop>ClearProperty(nc.osd.chain,home)</onstop>
+        <!-- ended from the cast row (Custom_1141_OSDCast.xml): back up on it, past the chapter row -->
+        <onstop condition="!String.IsEmpty(Window(Home).Property(nc.osd.ret)) + Window.IsActive(videobookmarks)">ActivateWindow(1141)</onstop>
     </timer>
     <!-- Clears nc.chain.claim (Includes_Tmdb.xml, ChainClick) once TMDb Helper's window manager
          runs, or a few seconds after a click when it failed to start; kept for the seconds, a
@@ -168,6 +170,8 @@
         <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating + !String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">SetProperty(TMDbHelper.Path.To.Add,plugin://plugin.video.themoviedb.helper/?info=details&amp;tmdb_type=person&amp;tmdb_id=$INFO[Window(Home).Property(nc.osd.click)],home)</onstop>
         <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating + String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEmpty(Window(Home).Property(nc.chain.claim))">RunScript(plugin.video.themoviedb.helper,add_tmdb=$INFO[Window(Home).Property(nc.osd.click)],tmdb_type=person,call_auto=1190)</onstop>
         <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating + String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEmpty(Window(Home).Property(nc.chain.claim))">SetProperty(nc.chain.claim,1,home)</onstop>
+        <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating">SetProperty(nc.osd.ret,$INFO[Container(6501).CurrentItem],home)</onstop>
+        <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating">SetProperty(nc.osd.ret.tab,$INFO[Window(Home).Property(nc.osd.credits)],home)</onstop>
         <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating">Dialog.Close(1141)</onstop>
         <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating">Dialog.Close(videobookmarks)</onstop>
         <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating">Dialog.Close(videoosd)</onstop>

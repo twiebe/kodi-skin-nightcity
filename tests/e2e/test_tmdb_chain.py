@@ -439,3 +439,58 @@ def test_more_on_a_title_without_library_copy_opens_its_menu(matrix):
     wait_for('Window.IsVisible(contextmenu)', timeout=3)
     action('back')
     wait_for('Control.HasFocus(9005)', timeout=3)
+
+
+def test_back_in_the_chain_returns_to_the_person_left(matrix):
+    """Back reopens the page before as a new page; it goes back to the item it was left from."""
+    builtin('NotifyAll(nightcity,info:movie:{})'.format(matrix))
+    wait_for('Window.IsActive(movieinformation)', timeout=20)
+    wait_for('Integer.IsGreater(Container(5500).NumItems,3) + !Container(5500).IsUpdating', timeout=30)
+    builtin('SetFocus(5500,2,absolute)')
+    wait_for('Integer.IsEqual(Container(5500).CurrentItem,3)')
+    person = info('Container(5500).ListItem.Label')['Container(5500).ListItem.Label']
+    action('select')
+    _page(2)
+    action('back')
+    _page(1)
+    wait_for('Control.HasFocus(5500) + Integer.IsEqual(Container(5500).CurrentItem,3)', timeout=30)
+    assert info('Container(5500).ListItem.Label')['Container(5500).ListItem.Label'] == person
+
+
+def test_back_in_the_chain_returns_to_the_crew_tab(matrix):
+    builtin('NotifyAll(nightcity,info:movie:{})'.format(matrix))
+    wait_for('Window.IsActive(movieinformation)', timeout=20)
+    wait_for('Integer.IsGreater(Container(5500).NumItems,0) + !Container(5500).IsUpdating', timeout=30)
+    builtin('SetFocus(5522)')  # crew: applies on focus
+    wait_for('String.IsEqual(Container(5500).ListItem(0).Property(param.info),crew) + !Container(5500).IsUpdating + '
+             'Integer.IsGreater(Container(5500).NumItems,1)', timeout=30)
+    builtin('SetFocus(5500,1,absolute)')
+    wait_for('Integer.IsEqual(Container(5500).CurrentItem,2)')
+    person = info('Container(5500).ListItem.Label')['Container(5500).ListItem.Label']
+    action('select')
+    _page(2)
+    action('back')
+    _page(1)
+    wait_for('Control.HasFocus(5500) + Integer.IsEqual(Container(5500).CurrentItem,2) + '
+             'String.IsEqual(Container(5500).ListItem(0).Property(param.info),crew)', timeout=30)
+    assert info('Container(5500).ListItem.Label')['Container(5500).ListItem.Label'] == person
+
+
+def test_up_from_an_osd_chain_returns_to_the_person_left(matrix):
+    """Up at the top of the person page ends the chain back on the cast row, on that person; it
+    used to end on the chapter row."""
+    _play(matrix)
+    time.sleep(2)
+    _open_cast_row()
+    wait_for('Integer.IsGreater(Container(6501).NumItems,3) + !Container(6501).IsUpdating', timeout=20)
+    builtin('SetFocus(6501,2,absolute)')
+    wait_for('Integer.IsEqual(Container(6501).CurrentItem,3)')
+    wait_for('String.IsEqual(Container(6599).ListItem.Property(tmdb_id),Container(6501).ListItem.Property(tmdb_id))', timeout=20)
+    person = info('Container(6501).ListItem.Label')['Container(6501).ListItem.Label']
+    action('select')
+    _page(1)
+    action('up', delay=1)
+    wait_for(IDLE, timeout=20)
+    wait_for('Window.IsActive(1141) + Control.HasFocus(6501) + Integer.IsEqual(Container(6501).CurrentItem,3)', timeout=20)
+    assert info('Container(6501).ListItem.Label')['Container(6501).ListItem.Label'] == person
+    screenshot('tmdb-osd-back-on-the-person')

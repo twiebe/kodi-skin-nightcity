@@ -1118,3 +1118,118 @@ def test_colour_choices_follow_the_colors_folder():
 
 def test_colour_choices_unknown_current_marks_the_default():
     assert nightcity.colour_choices(['defaults.xml'], 'gone')[2] == 0
+
+
+# --- the way back into a page of a TMDb chain --------------------------------------------------
+
+def test_return_key_counts_the_page_a_chain_starts_from_as_the_first():
+    assert nightcity.return_key('') == 'nc.ret.1'
+    assert nightcity.return_key('3') == 'nc.ret.3'
+
+
+def test_return_point_round_trip():
+    text = nightcity.return_point('5500', '4', 'crew', '603', '')
+    assert nightcity.parse_return(text) == {'list': '5500', 'index': 3, 'tab': 'crew', 'tmdb_id': '603', 'dbid': ''}
+
+
+def test_return_point_needs_an_item():
+    assert nightcity.return_point('5500', '', '', '603', '') is None
+    assert nightcity.return_point('5500', '0', '', '603', '') is None
+    assert nightcity.parse_return('') is None
+    assert nightcity.parse_return('junk') is None
+
+
+def test_return_matches_the_page_by_tmdb_id_or_library_id():
+    tmdb = nightcity.parse_return(nightcity.return_point('5500', '1', '', '603', ''))
+    library = nightcity.parse_return(nightcity.return_point('5500', '1', '', '', '807'))
+    assert nightcity.return_matches(tmdb, '603', '')
+    assert not nightcity.return_matches(tmdb, '604', '')
+    assert nightcity.return_matches(library, '', '807')
+    assert not nightcity.return_matches(library, '', '808')
+    nothing = nightcity.parse_return(nightcity.return_point('5500', '1', '', '', ''))
+    assert not nightcity.return_matches(nothing, '', '')
+
+
+class FakeHome(FakeWindow):
+    def getProperty(self, key):
+        return self.props.get(key, '')
+
+    def clearProperty(self, key):
+        self.props.pop(key, None)
+
+
+def test_info_leave_keeps_the_way_back_by_chain_position(monkeypatch):
+    home = FakeHome()
+    monkeypatch.setattr(nightcity, '_home', lambda: home)
+    nightcity.info_leave('5500', '4', 'crew', '', '603', '')
+    assert nightcity.parse_return(home.props['nc.ret.1'])['index'] == 3
+
+
+def _back_env(monkeypatch, true, labels, record):
+    fake = FakeXbmc(true, labels)
+    home = FakeHome()
+    home.props['nc.ret.2'] = record
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    monkeypatch.setattr(nightcity, '_home', lambda: home)
+    monkeypatch.setattr(nightcity, '_monitor', lambda *a: FakeXbmc.Monitor())
+    return fake, home
+
+
+def test_info_back_enters_the_list_on_the_item_left(monkeypatch):
+    labels = {'Window(Home).Property(TMDbHelper.Position)': '2', 'ListItem.Property(tmdb_id)': '603',
+              'System.CurrentControlId': '9001'}
+    true = {'Window.IsActive(movieinformation)', 'Control.HasFocus(5500)'}
+    fake, home = _back_env(monkeypatch, true, labels, nightcity.return_point('5500', '4', '', '603', ''))
+    nightcity.info_back()
+    assert home.props['nc.info.enter.from'] == '9001' and home.props['nc.info.enter'] == '5500'
+    assert fake.builtins == ['SetFocus(5500,3,absolute)']
+    assert 'nc.ret.2' not in home.props
+
+
+def test_info_back_sets_the_tab_left_once_the_lists_rest(monkeypatch):
+    labels = {'Window(Home).Property(TMDbHelper.Position)': '2', 'ListItem.Property(tmdb_id)': '603',
+              'System.CurrentControlId': '9001'}
+    true = {'Window.IsActive(movieinformation)', 'Control.HasFocus(5500)', nightcity.INFO_LISTS_REST['5500']}
+    fake, home = _back_env(monkeypatch, true, labels, nightcity.return_point('5500', '1', 'crew', '603', ''))
+    nightcity.info_back()
+    assert home.props['nc.info.tab'] == 'crew'
+
+
+def test_info_back_leaves_another_page_alone(monkeypatch):
+    labels = {'Window(Home).Property(TMDbHelper.Position)': '2', 'ListItem.Property(tmdb_id)': '604'}
+    true = {'Window.IsActive(movieinformation)', 'Control.HasFocus(5500)'}
+    fake, home = _back_env(monkeypatch, true, labels, nightcity.return_point('5500', '4', '', '603', ''))
+    nightcity.info_back()
+    assert fake.builtins == [] and 'nc.info.enter' not in home.props
+
+
+def test_osd_back_selects_the_person_left(monkeypatch):
+    fake = FakeXbmc({'Window.IsActive(1141) + !Container(6501).IsUpdating + Integer.IsGreater(Container(6501).NumItems,2)'
+                     ' + String.IsEqual(Container(6501).ListItem(0).Property(param.info),cast)', 'Window.IsActive(1141)'}, {})
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    monkeypatch.setattr(nightcity, '_monitor', lambda *a: FakeXbmc.Monitor())
+    nightcity.osd_back('3', '')
+    assert fake.builtins == ['SetFocus(6501,2,absolute)']
+
+
+def test_info_show_fills_in_the_show_of_a_reopened_episode(monkeypatch):
+    """TMDb Helper reopens a library episode of a chain without its show id: the season tabs
+    listed every show, the episodes those of another show."""
+    fake = FakeXbmc(set(), {'ListItem.DBID': '807', 'ListItem.TvShowDBID': ''})
+    home = FakeHome()
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    monkeypatch.setattr(nightcity, '_home', lambda: home)
+    monkeypatch.setattr(nightcity, '_rpc', lambda method, **p: {'episodedetails': {'tvshowid': 42}}
+                        if (method, p) == ('VideoLibrary.GetEpisodeDetails', {'episodeid': 807, 'properties': ['tvshowid']}) else None)
+    nightcity._info_show()
+    assert home.props['nc.info.show'] == '42'
+
+
+def test_info_show_leaves_an_episode_with_its_show_alone(monkeypatch):
+    fake = FakeXbmc(set(), {'ListItem.DBID': '807', 'ListItem.TvShowDBID': '42'})
+    home = FakeHome()
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    monkeypatch.setattr(nightcity, '_home', lambda: home)
+    monkeypatch.setattr(nightcity, '_rpc', lambda *a, **k: pytest.fail('no lookup'))
+    nightcity._info_show()
+    assert 'nc.info.show' not in home.props
