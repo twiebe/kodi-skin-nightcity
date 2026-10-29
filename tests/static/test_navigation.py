@@ -6,7 +6,7 @@ from navigation import dead_ends, unreachable
 # Controls a D-pad never needs: off-screen data lists, hidden setting templates Kodi clones,
 # and controls Kodi focuses itself.
 EXPECTED = {
-    'Home.xml': {'9000', '9001', '9221', '9224', '9422', '9521', '9523', '9721', '9722', '9723', '9724', '9725'},  # spotlight data lists (info parks focus there), loaders
+    'Home.xml': {'9000', '9001', '9221', '9224', '9422', '9521', '9523', '9721', '9722', '9723', '9724', '9725', '9002', '9822'},  # spotlight data lists (info parks focus there), loaders
     'DialogSettings.xml': {str(i) for i in range(7, 16)},
     'DialogAddonSettings.xml': {str(i) for i in range(7, 16)},
     'SettingsCategory.xml': {str(i) for i in range(7, 16)},

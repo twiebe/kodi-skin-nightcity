@@ -11,4 +11,5 @@
     <include file="Includes_Sections.xml"/>
     <include file="Includes_Tmdb.xml"/>
     <include file="Includes_Weather.xml"/>
+    <include file="Includes_Music.xml"/>
 </includes>
