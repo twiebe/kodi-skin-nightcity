@@ -158,6 +158,22 @@ def test_weather_without_addon_opens_its_settings(quick):
     action('back', delay=1)
 
 
+def test_up_from_the_top_to_the_icon(quick):
+    """Up from the weather tile leaves the menu onto the icon next to the clock, also when the
+    held Home key opened it from a row."""
+    builtin('SetFocus(9101)')
+    wait_for('Control.HasFocus(9101)')
+    press(hold=1500)
+    wait_for(OPEN)
+    wait_for('Control.HasFocus(1220)')
+    time.sleep(0.3)
+    action('up')
+    wait_for('Control.HasFocus(1210)')
+    action('up')
+    closed()
+    wait_for('Window.IsActive(home) + Control.HasFocus(9109)')
+
+
 def test_settings_link(quick):
     """The settings page, on its first settings group; Up goes to the quick menu icon."""
     open_menu()
