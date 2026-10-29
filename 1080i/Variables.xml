@@ -87,6 +87,18 @@
         <value condition="!String.IsEmpty(Container(9000).ListItem.HdrType)">$INFO[Container(9000).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9000).ListItem.VideoResolution)">SDR</value>
     </variable>
+    <!-- the same for the episode selected on the info page (list 5100) -->
+    <variable name="InfoEpisodeResolution">
+        <value condition="String.IsEqual(Container(5100).ListItem.VideoResolution,4K)">4K</value>
+        <value condition="!String.IsEmpty(Container(5100).ListItem.VideoResolution)">$INFO[Container(5100).ListItem.VideoResolution]p</value>
+    </variable>
+    <variable name="InfoEpisodeHdr">
+        <value condition="String.IsEqual(Container(5100).ListItem.HdrType,dolbyvision)">DV</value>
+        <value condition="String.IsEqual(Container(5100).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(5100).ListItem.HdrType,hlg)">HLG</value>
+        <value condition="!String.IsEmpty(Container(5100).ListItem.HdrType)">$INFO[Container(5100).ListItem.HdrType]</value>
+        <value condition="!String.IsEmpty(Container(5100).ListItem.VideoResolution)">SDR</value>
+    </variable>
     <!-- Ratings available without API keys: TMDb (via TMDb Helper), then the library rating.
          More sources (IMDb, RT, MDbList) slot in here later. -->
     <!-- favourites have a thumb, no poster -->
