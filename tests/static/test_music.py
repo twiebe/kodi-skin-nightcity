@@ -142,6 +142,58 @@ def test_music_page_navigation_without_dead_ends():
         assert dead_ends('Home.xml', skin) == []
 
 
+# --- album, artist and song page -------------------------------------------------------------
+
+ARTIST = 'String.IsEqual(ListItem.DBType,artist)'
+
+
+def test_music_info_buttons_click_kodis_hidden_ones():
+    """Kodi labels its buttons 8 and 12 itself: they stay hidden, the pills click them."""
+    c = controls(load('DialogMusicInfo.xml'))
+    for kodi in ('8', '12'):
+        assert c[kodi].findtext('visible') == 'false' and c[kodi].findtext('enable') == 'false'
+    assert ('!' + ARTIST, 'SendClick(8)') in actions(c['9001'])
+    assert (ARTIST, 'NotifyAll(nightcity,music_play:artist:$INFO[ListItem.DBID]:1)') in actions(c['9001'])
+    assert ('', 'SendClick(12)') in actions(c['9002'])
+
+
+def test_music_info_up_leaves_down_goes_to_the_rows():
+    c = controls(load('DialogMusicInfo.xml'))
+    assert actions(c['9000'], 'onup') == [('', 'Action(Back)')]
+    assert actions(c['9000'], 'ondown') == [('Control.IsVisible(5410)', '50'), ('!Control.IsVisible(5410)', '5301')]
+    assert '!' + ARTIST in c['5410'].findtext('visible')  # an artist shows albums, no tracks
+
+
+def test_music_info_track_plays_the_album_from_there():
+    c = controls(load('DialogMusicInfo.xml'))
+    [(condition, click)] = actions(c['50'])
+    assert 'String.IsEqual(ListItem.DBType,song)' in condition
+    assert click == ('NotifyAll(nightcity,music_play:album:$INFO[Window(Home).Property(nc.music.album)]'
+                     ':$INFO[Container(50).CurrentItem])')
+
+
+def test_music_info_cards_open_their_page():
+    c = controls(load('DialogMusicInfo.xml'))
+    assert actions(c['5301']) == [('', 'NotifyAll(nightcity,music_info:$INFO[ListItem.DBType]:$INFO[ListItem.DBID])')]
+    content = c['5301'].find('content')
+    assert content.text == '$VAR[MusicInfoMorePath]' and content.get('target') == 'music'
+
+
+def test_music_info_more_path():
+    """An artist: its albums by id. An album: the other albums of its artist, by name (Kodi has no
+    artist id on an album item); the title comes from the tags, a script-opened page has no label."""
+    variables = {v.get('name'): v for v in parse(ROOT / '1080i' / 'Variables.xml').iter('variable')}
+    values = [(v.get('condition'), v.text) for v in variables['MusicInfoMorePath'].findall('value')]
+    assert values[0] == (ARTIST + ' + !String.IsEmpty(ListItem.DBID)', 'musicdb://albums/?artistid=$INFO[ListItem.DBID]')
+    assert '"isnot","value":["$VAR[MusicInfoTitle]"]' in values[1][1]
+    title = [(v.get('condition'), v.text) for v in variables['MusicInfoTitle'].findall('value')]
+    assert ('String.IsEqual(ListItem.DBType,album) + !String.IsEmpty(ListItem.Album)', '$INFO[ListItem.Album]') in title
+
+
+def test_music_info_without_dead_ends():
+    assert dead_ends('DialogMusicInfo.xml', {}) == []
+
+
 def test_music_strings_without_long_dashes():
     for i, text in strings().items():
         if i >= 31400:
