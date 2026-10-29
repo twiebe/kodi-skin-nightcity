@@ -1330,3 +1330,89 @@ def test_osd_hide_writes_the_skin_strings(monkeypatch):
     nightcity.COMMANDS['osd_hide']('8', '1')
     assert fake.builtins == ['Skin.SetString(nc.osd.hide.secs,9)', 'Skin.SetString(nc.osd.hide.wait,8)',
                              'Skin.SetString(nc.osd.hide.from,20)', 'Skin.SetString(nc.osd.hide.to,28)']
+
+
+# --- music ------------------------------------------------------------------------------------
+
+@pytest.mark.parametrize('kind, dbid, item', [
+    ('album', '5', {'albumid': 5}), ('artist', '2', {'artistid': 2}), ('song', '17', {'songid': 17}),
+    ('genre', '3', None), ('album', '', None), ('album', '0', None), ('album', 'x', None),
+])
+def test_music_queue_item(kind, dbid, item):
+    assert nightcity.music_queue_item(kind, dbid) == item
+
+
+@pytest.mark.parametrize('position, start', [('1', 0), ('4', 3), ('', 0), ('0', 0), ('x', 0)])
+def test_music_start_position(position, start):
+    """The skin sends Container(50).CurrentItem (from 1), the playlist counts from 0."""
+    assert nightcity.music_start_position(position) == start
+
+
+@pytest.mark.parametrize('kind, dbid, path', [
+    ('album', '5', 'musicdb://albums/5/'), ('artist', '2', 'musicdb://artists/2/'),
+    ('song', '3', None), ('album', '', None),
+])
+def test_music_info_path(kind, dbid, path):
+    assert nightcity.music_info_path(kind, dbid) == path
+
+
+def test_music_play_queues_the_album_from_the_track(monkeypatch):
+    fake = FakeXbmc(set(), {})
+    calls = []
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    monkeypatch.setattr(nightcity, '_rpc', lambda method, **params: calls.append((method, params)))
+    monkeypatch.setattr(nightcity, '_wait', lambda condition, timeout=5.0: True)
+    nightcity.COMMANDS['music_play']('album', '5', '3')
+    assert calls == [('Playlist.Clear', {'playlistid': 0}),
+                     ('Playlist.Add', {'playlistid': 0, 'item': {'albumid': 5}}),
+                     ('Player.Open', {'item': {'playlistid': 0, 'position': 2}})]
+    assert fake.builtins == ['Dialog.Close(musicinformation,true)', 'ActivateWindow(visualisation)']
+
+
+def test_music_play_ignores_what_is_no_library_item(monkeypatch):
+    fake = FakeXbmc(set(), {})
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    monkeypatch.setattr(nightcity, '_rpc', lambda method, **params: pytest.fail(method))
+    nightcity.COMMANDS['music_play']('genre', '5', '1')
+    assert fake.builtins == []
+
+
+def test_music_goto_jumps_in_the_queue(monkeypatch):
+    calls = []
+    monkeypatch.setattr(nightcity, '_rpc', lambda method, **params: calls.append((method, params)))
+    nightcity.COMMANDS['music_goto']('4')
+    assert calls == [('Player.GoTo', {'playerid': 0, 'to': 3})]
+
+
+def test_music_info_opens_the_album_with_its_art(monkeypatch):
+    """The item of a script-opened info page gets its art from the library: Kodi loads only the
+    tags from the path."""
+    import types
+    fake = FakeXbmc(set(), {})
+    shown = []
+
+    class Item:
+        def __init__(self, path):
+            self.path, self.art, self.folder = path, None, False
+
+        def setIsFolder(self, folder):
+            self.folder = folder
+
+        def getMusicInfoTag(self):
+            return None
+
+        def setArt(self, art):
+            self.art = art
+
+    gui = types.SimpleNamespace(ListItem=Item, Dialog=lambda: types.SimpleNamespace(info=shown.append))
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    monkeypatch.setitem(__import__('sys').modules, 'xbmcgui', gui)
+    monkeypatch.setattr(nightcity, '_wait', lambda condition, timeout=5.0: True)
+    monkeypatch.setattr(nightcity, '_rpc', lambda method, **params: {
+        'albumdetails': {'art': {'thumb': 'c.jpg', 'artist.fanart': 'f.jpg'}}} if (
+        method == 'AudioLibrary.GetAlbumDetails' and params == {'albumid': 5, 'properties': ['art']}) else {})
+    nightcity.COMMANDS['music_info']('album', '5')
+    [item] = shown
+    assert (item.path, item.folder, item.art) == ('musicdb://albums/5/', True,
+                                                  {'thumb': 'c.jpg', 'artist.fanart': 'f.jpg'})
+    assert fake.builtins == ['Dialog.Close(musicinformation,true)']

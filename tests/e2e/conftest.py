@@ -164,8 +164,10 @@ def home():
         if not cond('System.HasActiveModalDialog')['System.HasActiveModalDialog']:
             break
         action('back', delay=1)
-    if rpc('Player.GetActivePlayers'):
-        rpc('Player.Stop', {'playerid': 1})
+    players = rpc('Player.GetActivePlayers')
+    for player in players:  # video 1, music 0
+        rpc('Player.Stop', {'playerid': player['playerid']})
+    if players:
         time.sleep(1)
     builtin('ReplaceWindow(Home)')
     wait_for('Window.IsActive(home)')

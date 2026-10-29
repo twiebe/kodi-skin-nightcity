@@ -417,9 +417,10 @@ def test_no_dead_definitions():
             if el.tag == 'variable':
                 assert re.search(r'\$VAR\[' + name + r'[\],]', texts), name
             elif el.tag == 'include' and name and el.get('content') is None and path.name != 'Includes.xml':
-                # also passed by name to an include that has content="$PARAM[...]"
+                # also passed by name (or as a param's default) to an include that has
+                # content="$PARAM[...]"
                 assert texts.count('>' + name + '<') + texts.count('content="' + name + '"') + \
-                    texts.count('value="' + name + '"') >= 1, name
+                    texts.count('value="' + name + '"') + texts.count('default="' + name + '"') >= 1, name
     for png in (ROOT / 'media' / 'ui').glob('*.png'):
         assert 'ui/' + png.name in texts or png.name in texts, png.name
 

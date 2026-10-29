@@ -232,8 +232,10 @@ def test_stand_in_returns_to_where_the_menu_was_opened_from():
         ('{} + {}'.format(empty, page('movies')), 'SetFocus(9102)'),
         ('{} + {}'.format(empty, page('shows')), 'SetFocus(9103)'),
         ('{} + {}'.format(empty, page('search')), 'SetFocus(9104)'),
+        ('{} + {}'.format(empty, page('music')), 'SetFocus(9107)'),
         ('{} + {}'.format(empty, page('system')), 'SetFocus(9601)'),
-        ('{} + ![{} | {} | {} | {}]'.format(empty, page('movies'), page('shows'), page('search'), page('system')),
+        ('{} + ![{} | {} | {} | {} | {}]'.format(empty, page('movies'), page('shows'), page('search'), page('music'),
+                                                  page('system')),
          'SetFocus(9101)'),
         ('', 'ClearProperty(nc.quick.from,home)'),
     ]
@@ -288,7 +290,8 @@ def test_top_menu_wraps_around():
     icon goes to the last menu entry shown, not to the page that had the focus last."""
     from focus import Page, State
     page = Page('Home.xml')
-    hidden = {'Skin.HasSetting(nc.menu.hide.{})'.format(n): False for n in ('movies', 'shows', 'search')}
+    hidden = {'Skin.HasSetting(nc.menu.hide.{})'.format(n): False for n in ('movies', 'shows', 'music', 'search')}
+    hidden['Library.HasContent(music)'] = False
     state = State(extra=hidden)
     assert page.move('9101', 'onleft', state)[0] == '9109'
     assert page.move('9109', 'onright', state)[0] == '9101'
@@ -296,6 +299,10 @@ def test_top_menu_wraps_around():
     assert page.move('9104', 'onright', state)[0] == '9109'
     hidden['Skin.HasSetting(nc.menu.hide.search)'] = True
     assert page.move('9109', 'onleft', State(extra=hidden))[0] == '9103'
+    # music sits between shows and search, only with music in the library
+    assert page.move('9109', 'onleft', State(extra=dict(hidden, **{'Library.HasContent(music)': True})))[0] == '9107'
+    assert page.move('9109', 'onleft', State(extra=dict(hidden, **{'Library.HasContent(music)': True,
+                                                                 'Skin.HasSetting(nc.menu.hide.music)': True})))[0] == '9103'
     hidden.update({'Skin.HasSetting(nc.menu.hide.{})'.format(n): True for n in ('movies', 'shows', 'search')})
     assert page.move('9109', 'onleft', State(extra=hidden))[0] == '9101'
 

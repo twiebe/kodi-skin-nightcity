@@ -221,6 +221,17 @@
         <stop>![!Skin.HasSetting(nc.osd.autohide.off) + Player.HasVideo + !Player.Paused + Window.IsActive(fullscreenvideo) + Window.IsModalDialogTopmost(videoosd) + !Control.HasFocus(651) + !Control.HasFocus(652) + !Control.HasFocus(653)] | [[String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_hide),7)] | [!String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_hide),Skin.String(nc.osd.hide.wait))]]</stop>
         <onstop condition="!Skin.HasSetting(nc.osd.autohide.off) + Player.HasVideo + !Player.Paused + Window.IsActive(fullscreenvideo) + Window.IsModalDialogTopmost(videoosd) + !Control.HasFocus(651) + !Control.HasFocus(652) + !Control.HasFocus(653) + [[String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_hide),7)] | [!String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_hide),Skin.String(nc.osd.hide.wait))]]">Dialog.Close(videoosd)</onstop>
     </timer>
+    <!-- The music OSD (MusicOSD.xml) hides the same way, with the same switch and delay: while
+         music plays on the player screen with the OSD topmost and no key for the delay. Its
+         queue row is part of the OSD, so it hides with it. -->
+    <timer>
+        <name>nc_musicosd_hide</name>
+        <description>Hide the music player controls after a while without input</description>
+        <start reset="true">!Skin.HasSetting(nc.osd.autohide.off) + Player.HasAudio + !Player.Paused + Window.IsActive(visualisation) + Window.IsModalDialogTopmost(musicosd)</start>
+        <reset>!System.IdleTime(1)</reset>
+        <stop>![!Skin.HasSetting(nc.osd.autohide.off) + Player.HasAudio + !Player.Paused + Window.IsActive(visualisation) + Window.IsModalDialogTopmost(musicosd)] | [[String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_musicosd_hide),7)] | [!String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_musicosd_hide),Skin.String(nc.osd.hide.wait))]]</stop>
+        <onstop condition="!Skin.HasSetting(nc.osd.autohide.off) + Player.HasAudio + !Player.Paused + Window.IsActive(visualisation) + Window.IsModalDialogTopmost(musicosd) + [[String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_musicosd_hide),7)] | [!String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_musicosd_hide),Skin.String(nc.osd.hide.wait))]]">Dialog.Close(musicosd)</onstop>
+    </timer>
     <!-- The power menu's keys (DialogButtonMenu.xml), a frame later with the power menu gone.
          On Home with nothing modal over it: the quick menu panel of Home (QuickMenuPanel), one
          menu instead of two that behave a little differently. The keys go to the icon next to

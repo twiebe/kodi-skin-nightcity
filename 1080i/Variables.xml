@@ -124,6 +124,98 @@
         <value condition="!String.IsEmpty(ListItem.Art(poster))">$INFO[ListItem.Art(poster)]</value>
         <value>$INFO[ListItem.Art(thumb)]</value>
     </variable>
+    <!-- Info page of an album, artist or song (DialogMusicInfo.xml) -->
+    <variable name="MusicInfoPath">
+        <value condition="String.IsEqual(ListItem.DBType,artist)">$LOCALIZE[31405] [COLOR accent2]·[/COLOR] $VAR[MusicInfoTitle]</value>
+        <value>$LOCALIZE[31405] [COLOR accent2]·[/COLOR] $INFO[ListItem.Artist] [COLOR accent2]·[/COLOR] $INFO[ListItem.Album]</value>
+    </variable>
+    <variable name="MusicInfoKicker">
+        <value condition="String.IsEqual(ListItem.DBType,artist)">$INFO[ListItem.Genre]</value>
+        <value condition="String.IsEqual(ListItem.DBType,song)">$INFO[ListItem.Artist]$INFO[ListItem.Album,  ·  ]</value>
+        <value>$INFO[ListItem.Artist]</value>
+    </variable>
+    <!-- a page the script opened (music_info) has no label, only the item's tags -->
+    <variable name="MusicInfoTitle">
+        <value condition="String.IsEqual(ListItem.DBType,song)">$INFO[ListItem.Title]</value>
+        <value condition="String.IsEqual(ListItem.DBType,album) + !String.IsEmpty(ListItem.Album)">$INFO[ListItem.Album]</value>
+        <value condition="String.IsEqual(ListItem.DBType,artist) + String.IsEmpty(ListItem.Label)">$INFO[ListItem.Artist]</value>
+        <value>$INFO[ListItem.Label]</value>
+    </variable>
+    <!-- Kodi's button 12: the artist of an album, the album of a song -->
+    <variable name="MusicInfoLinkLabel">
+        <value condition="String.IsEqual(ListItem.DBType,song)">$INFO[ListItem.Album]</value>
+        <value>$INFO[ListItem.Artist]</value>
+    </variable>
+    <!-- the tracks of the page's album (5050); none on an artist or song page -->
+    <variable name="MusicInfoTracksPath">
+        <value condition="String.IsEqual(ListItem.DBType,album) + !String.IsEmpty(ListItem.DBID)">musicdb://albums/$INFO[ListItem.DBID]/</value>
+    </variable>
+    <variable name="MusicInfoMoreLabel">
+        <value condition="String.IsEqual(ListItem.DBType,artist)">$LOCALIZE[31407]</value>
+        <value>$LOCALIZE[31408] $INFO[ListItem.Artist]</value>
+    </variable>
+    <!-- the albums of an artist; the other albums of the album's artist: Kodi has no artist
+         id for an album item, a name with a double quote breaks the filter (the row stays
+         empty) -->
+    <variable name="MusicInfoMorePath">
+        <value condition="String.IsEqual(ListItem.DBType,artist) + !String.IsEmpty(ListItem.DBID)">musicdb://albums/?artistid=$INFO[ListItem.DBID]</value>
+        <value condition="String.IsEqual(ListItem.DBType,album) + !String.IsEmpty(ListItem.Artist)">musicdb://albums/?xsp={"rules":{"and":[{"field":"artist","operator":"is","value":["$INFO[ListItem.Artist]"]},{"field":"album","operator":"isnot","value":["$VAR[MusicInfoTitle]"]}]},"type":"albums"}</value>
+    </variable>
+    <!-- Track number and title in list 50 -->
+    <variable name="MusicTrackTitle">
+        <value condition="!String.IsEmpty(ListItem.Title)">$INFO[ListItem.Title]</value>
+        <value>$INFO[ListItem.Label]</value>
+    </variable>
+    <!-- Music library list (MyMusicNav.xml): track number or played mark, the length of a song,
+         the year of an album; under the cover the artist and year -->
+    <variable name="MusicNavMark">
+        <value condition="ListItem.IsParentFolder">..</value>
+        <value condition="String.IsEqual(ListItem.DBType,song) + Integer.IsGreater(ListItem.TrackNumber,0)">$INFO[ListItem.TrackNumber]</value>
+        <value condition="Integer.IsGreater(ListItem.PlayCount,0)">▪</value>
+    </variable>
+    <variable name="MusicNavRight">
+        <value condition="String.IsEqual(ListItem.DBType,song)">$INFO[ListItem.Duration]</value>
+        <value condition="String.IsEqual(ListItem.DBType,album)">$INFO[ListItem.Artist]$INFO[ListItem.Year,  ·  ]</value>
+    </variable>
+    <variable name="MusicNavMeta">
+        <value condition="String.IsEqual(ListItem.DBType,artist) | String.IsEqual(ListItem.DBType,genre)">$INFO[ListItem.Genre]</value>
+        <value>$INFO[ListItem.Artist]$INFO[ListItem.Year,  ·  ]</value>
+    </variable>
+    <!-- Player screen and its OSD (MusicVisualisation.xml, MusicOSD.xml) -->
+    <variable name="MusicPlayerLine">
+        <value>$INFO[MusicPlayer.Album]$INFO[MusicPlayer.Year,  ·  ]</value>
+    </variable>
+    <variable name="MusicNextLine">
+        <value condition="MusicPlayer.HasNext">[COLOR accent2]$LOCALIZE[31410][/COLOR]  $INFO[MusicPlayer.offset(1).Title]$INFO[MusicPlayer.offset(1).Artist,  ·  ]</value>
+    </variable>
+    <variable name="MusicShuffleLabel">
+        <value condition="Playlist.IsRandom">[COLOR accent]●[/COLOR] $LOCALIZE[31411]</value>
+        <value>$LOCALIZE[31411]</value>
+    </variable>
+    <variable name="MusicRepeatLabel">
+        <value condition="Playlist.IsRepeat">[COLOR accent]●[/COLOR] $LOCALIZE[31413]</value>
+        <value condition="Playlist.IsRepeatOne">[COLOR accent]●[/COLOR] $LOCALIZE[31414]</value>
+        <value>$LOCALIZE[31412]</value>
+    </variable>
+    <!-- Focused row of list 50: dark text on the focus fill while the list has the focus -->
+    <variable name="MusicRowFocusAccent">
+        <value condition="Control.HasFocus(50) | Control.HasFocus(5050)">focus_text</value>
+        <value>accent2</value>
+    </variable>
+    <variable name="MusicRowFocusText">
+        <value condition="Control.HasFocus(50) | Control.HasFocus(5050)">focus_text</value>
+        <value>text</value>
+    </variable>
+    <variable name="MusicRowFocusMute">
+        <value condition="Control.HasFocus(50) | Control.HasFocus(5050)">focus_text</value>
+        <value>text_mute</value>
+    </variable>
+    <!-- Line under a music card: the artist of an album or song -->
+    <variable name="MusicCardLine">
+        <value condition="ListItem.IsPlaying">[COLOR accent2]▶[/COLOR] $INFO[ListItem.Artist]</value>
+        <value condition="String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)">$INFO[ListItem.Artist]</value>
+        <value condition="String.IsEqual(ListItem.DBType,artist)">$INFO[ListItem.Genre]</value>
+    </variable>
     <variable name="CardArt">
         <value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
         <value>$INFO[ListItem.Art(poster)]</value>

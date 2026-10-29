@@ -10,6 +10,8 @@
              is empty and the list takes the interval of the home spotlight -->
         <param name="interval" default="SpotlightInterval"/>
         <param name="follow" default="false"/>
+        <!-- music for the album spotlight of the Music page -->
+        <param name="target" default="videos"/>
         <definition>
             <control type="wraplist" id="$PARAM[id]">
                 <left>-3000</left>
@@ -73,14 +75,14 @@
                         <texture background="true">$INFO[ListItem.Art(clearlogo)]</texture>
                     </control>
                 </focusedlayout>
-                <content target="videos">$PARAM[content]</content>
+                <content target="$PARAM[target]">$PARAM[content]</content>
             </control>
         </definition>
     </include>
     <include name="SpotlightAutoscroll">
         <param name="time"/>
         <definition>
-            <autoscroll time="$PARAM[time]">!Skin.TimerIsRunning(nc_spot_hold) + !Window.IsActive(fullscreenvideo) + !Window.IsActive(movieinformation) + !System.HasActiveModalDialog</autoscroll>
+            <autoscroll time="$PARAM[time]">!Skin.TimerIsRunning(nc_spot_hold) + !Window.IsActive(fullscreenvideo) + !Window.IsActive(movieinformation) + !Window.IsActive(musicinformation) + !System.HasActiveModalDialog</autoscroll>
         </definition>
     </include>
 
@@ -95,6 +97,7 @@
     <!-- Top line of Home: the menu on the left, the clock on the right. Right of the menu, left
          of the clock, an icon shows the quick menu while it has the focus (QuickMenuPanel). -->
     <include name="HomeTop">
+        <include>MusicNowPlaying</include>
         <control type="grouplist" id="9190">
             <left>64</left>
             <top>22</top>
@@ -135,8 +138,9 @@
                     <!-- the last menu entry shown, not the one that had the focus last; right
                          wraps around to home -->
                     <onleft condition="!Skin.HasSetting(nc.menu.hide.search)">9104</onleft>
-                    <onleft condition="Skin.HasSetting(nc.menu.hide.search) + !Skin.HasSetting(nc.menu.hide.shows)">9103</onleft>
-                    <onleft condition="Skin.HasSetting(nc.menu.hide.search) + Skin.HasSetting(nc.menu.hide.shows) + !Skin.HasSetting(nc.menu.hide.movies)">9102</onleft>
+                    <onleft condition="Skin.HasSetting(nc.menu.hide.search) + !Skin.HasSetting(nc.menu.hide.music) + Library.HasContent(music)">9107</onleft>
+                    <onleft condition="Skin.HasSetting(nc.menu.hide.search) + [Skin.HasSetting(nc.menu.hide.music) | !Library.HasContent(music)] + !Skin.HasSetting(nc.menu.hide.shows)">9103</onleft>
+                    <onleft condition="Skin.HasSetting(nc.menu.hide.search) + [Skin.HasSetting(nc.menu.hide.music) | !Library.HasContent(music)] + Skin.HasSetting(nc.menu.hide.shows) + !Skin.HasSetting(nc.menu.hide.movies)">9102</onleft>
                     <onleft>9101</onleft>
                     <onright>9101</onright>
                     <!-- off the icon the menu hides: forget where the power menu's keys came from -->
@@ -872,6 +876,7 @@
             <ondown condition="String.IsEqual(Window(Home).Property(nc.page),shows)">9550</ondown>
             <ondown condition="String.IsEqual(Window(Home).Property(nc.page),system)">9610</ondown>
             <ondown condition="String.IsEqual(Window(Home).Property(nc.page),search)">9750</ondown>
+            <ondown condition="String.IsEqual(Window(Home).Property(nc.page),music)">9850</ondown>
             <ondown condition="String.IsEqual(Window(Home).Property(nc.page),movies) + String.IsEqual(Skin.String(nc.movies.spotlight),off)">9410</ondown>
             <ondown condition="[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + String.IsEqual(Skin.String(SpotlightSource),off)">9210</ondown>
             <ondown>9050</ondown>
@@ -920,6 +925,21 @@
                 <param name="visible" value="!Skin.HasSetting(nc.menu.hide.shows)"/>
                 <onfocus condition="!String.IsEqual(Window(Home).Property(nc.page),shows) + !String.IsEqual(Skin.String(nc.shows.spotlight),off)">Skin.TimerStart(nc_spot_hold)</onfocus>
                 <onfocus condition="!String.IsEqual(Window(Home).Property(nc.page),shows) + !String.IsEqual(Skin.String(nc.shows.spotlight),off)">Control.Move(9001,1)</onfocus>
+            </include>
+            <include content="TabGap">
+                <param name="id" value="9119"/>
+                <param name="visible" value="!Skin.HasSetting(nc.menu.hide.music) + Library.HasContent(music)"/>
+            </include>
+            <!-- music: only with music in the library -->
+            <include content="MenuButton">
+                <param name="id" value="9107"/>
+                <param name="label" value="$LOCALIZE[31405]"/>
+                <param name="active" value="String.IsEqual(Window(Home).Property(nc.page),music)"/>
+                <param name="onfocus" value="SetProperty(nc.page,music,home)"/>
+                <param name="onclick" value="Action(Down)"/>
+                <param name="visible" value="!Skin.HasSetting(nc.menu.hide.music) + Library.HasContent(music)"/>
+                <onfocus condition="!String.IsEqual(Window(Home).Property(nc.page),music)">Skin.TimerStart(nc_spot_hold)</onfocus>
+                <onfocus condition="!String.IsEqual(Window(Home).Property(nc.page),music)">Control.Move(9002,1)</onfocus>
             </include>
             <include content="TabGap">
                 <param name="id" value="9117"/>
@@ -1388,8 +1408,9 @@
             <onfocus condition="String.IsEmpty(Window(Home).Property(nc.quick.from)) + String.IsEqual(Window(Home).Property(nc.page),movies)">SetFocus(9102)</onfocus>
             <onfocus condition="String.IsEmpty(Window(Home).Property(nc.quick.from)) + String.IsEqual(Window(Home).Property(nc.page),shows)">SetFocus(9103)</onfocus>
             <onfocus condition="String.IsEmpty(Window(Home).Property(nc.quick.from)) + String.IsEqual(Window(Home).Property(nc.page),search)">SetFocus(9104)</onfocus>
+            <onfocus condition="String.IsEmpty(Window(Home).Property(nc.quick.from)) + String.IsEqual(Window(Home).Property(nc.page),music)">SetFocus(9107)</onfocus>
             <onfocus condition="String.IsEmpty(Window(Home).Property(nc.quick.from)) + String.IsEqual(Window(Home).Property(nc.page),system)">SetFocus(9601)</onfocus>
-            <onfocus condition="String.IsEmpty(Window(Home).Property(nc.quick.from)) + ![String.IsEqual(Window(Home).Property(nc.page),movies) | String.IsEqual(Window(Home).Property(nc.page),shows) | String.IsEqual(Window(Home).Property(nc.page),search) | String.IsEqual(Window(Home).Property(nc.page),system)]">SetFocus(9101)</onfocus>
+            <onfocus condition="String.IsEmpty(Window(Home).Property(nc.quick.from)) + ![String.IsEqual(Window(Home).Property(nc.page),movies) | String.IsEqual(Window(Home).Property(nc.page),shows) | String.IsEqual(Window(Home).Property(nc.page),search) | String.IsEqual(Window(Home).Property(nc.page),music) | String.IsEqual(Window(Home).Property(nc.page),system)]">SetFocus(9101)</onfocus>
             <onfocus>ClearProperty(nc.quick.from,home)</onfocus>
             <onup>9100</onup>
             <ondown>9100</ondown>

@@ -6,8 +6,8 @@ import pytest
 from conftest import ROOT, layout_files, parse
 from navigation import load
 
-PAGES = ('home', 'movies', 'shows', 'system', 'search')
-ROWS = {'home': '9210', 'movies': '9410', 'shows': '9510', 'system': '9610', 'search': '9710'}
+PAGES = ('home', 'movies', 'shows', 'system', 'search', 'music')
+ROWS = {'home': '9210', 'movies': '9410', 'shows': '9510', 'system': '9610', 'search': '9710', 'music': '9810'}
 SETTINGS_WINDOWS = ('Settings.xml', 'SettingsCategory.xml', 'SkinSettings.xml', 'SettingsSystemInfo.xml',
                     'EventLog.xml', 'AddonBrowser.xml', 'FileManager.xml', 'SettingsProfile.xml')
 SPOTLIGHT_OFF = {'SpotlightSource': 'off', 'nc.movies.spotlight': 'off', 'nc.shows.spotlight': 'off'}
