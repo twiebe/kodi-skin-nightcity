@@ -6,7 +6,7 @@ from conftest import action, builtin, cond, info, wait_for
 pytestmark = pytest.mark.e2e
 
 MENU = 9100
-TABS = {'home': 9101, 'movies': 9102, 'shows': 9103, 'search': 9104, 'system': 9105}
+TABS = {'home': 9101, 'movies': 9102, 'shows': 9103, 'search': 9104}
 
 
 def focus_tab(name):
@@ -36,7 +36,7 @@ def test_up_from_spotlight_reaches_menu(home):
     wait_for('ControlGroup({}).HasFocus()'.format(MENU))
 
 
-@pytest.mark.parametrize('name', ['movies', 'shows', 'search', 'system', 'home'])
+@pytest.mark.parametrize('name', ['movies', 'shows', 'search', 'home'])
 def test_menu_focus_switches_page(home, name):
     focus_tab(name)
     assert page() == name
@@ -102,9 +102,10 @@ def test_search_recent_tab_searches_again(home):
     wait_for('Integer.IsGreater(Container(9702).NumItems,0)', timeout=15)
 
 
-def test_system_page_opens_settings(home):
-    focus_tab('system')
-    action('down')
+def test_settings_page_opens_settings(home):
+    # the settings page is reached from the quick menu only (test_quick_menu.py)
+    builtin('SetProperty(nc.page,system,home)')
+    builtin('SetFocus(9601)')
     wait_for('Control.HasFocus(9601)')
     action('select')
     wait_for('Window.IsActive(settings) | Window.IsActive(playersettings)')

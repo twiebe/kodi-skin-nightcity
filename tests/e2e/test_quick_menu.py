@@ -87,13 +87,13 @@ def test_back_closes(quick):
 
 
 def test_icon_next_to_the_clock(quick):
-    builtin('SetFocus(9105)')
-    wait_for('Control.HasFocus(9105)')
+    builtin('SetFocus(9104)')
+    wait_for('Control.HasFocus(9104)')
     action('right')
     wait_for('Control.HasFocus(9109)')
     screenshot('quick-anchor')
     action('left')
-    wait_for('Control.HasFocus(9105)')
+    wait_for('Control.HasFocus(9104)')
     action('right')
     wait_for('Control.HasFocus(9109)')
     action('select')
@@ -158,23 +158,20 @@ def test_weather_without_addon_opens_its_settings(quick):
     action('back', delay=1)
 
 
-def test_system_link(quick):
+def test_settings_link(quick):
+    """The settings page, on its first settings group; Up goes to the quick menu icon."""
     open_menu()
-    action('down', 'down', 'right', delay=0.3)
-    wait_for('Integer.IsEqual(Container(1230).CurrentItem,2)')
+    action('down', 'down', delay=0.3)
+    wait_for('Integer.IsEqual(Container(1230).CurrentItem,1)')
     action('select')
     closed()
     wait_for('Window.IsActive(home) + String.IsEqual(Window(Home).Property(nc.page),system) + '
-             'Control.HasFocus(9105)')
+             'Control.HasFocus(9601)')
     time.sleep(1)
-    screenshot('system-page')
-
-
-def test_settings_link(quick):
-    open_menu()
-    action('down', 'down', 'select', delay=0.4)
-    wait_for('Window.IsActive(settings)')
-    action('back', delay=1)
+    screenshot('settings-page')
+    action('up')
+    wait_for('Control.HasFocus(9109)')
+    assert info('Window(Home).Property(nc.page)')['Window(Home).Property(nc.page)'] == 'system'
 
 
 def _over_the_info_page():
@@ -188,9 +185,8 @@ def _over_the_info_page():
 
 
 @pytest.mark.parametrize('item, target', [
-    (0, 'Window.IsActive(settings)'),
-    (1, 'Window.IsActive(home) + String.IsEqual(Window(Home).Property(nc.page),system) + Control.HasFocus(9105)'),
-    (2, 'Window.IsActive(filemanager)')])
+    (0, 'Window.IsActive(home) + String.IsEqual(Window(Home).Property(nc.page),system) + Control.HasFocus(9601)'),
+    (1, 'Window.IsActive(filemanager)')])
 def test_links_over_the_info_page(quick, item, target):
     """The info page is a modal dialog: the link closes it, the target window opens in front."""
     _over_the_info_page()

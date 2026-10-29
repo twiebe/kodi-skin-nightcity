@@ -385,6 +385,25 @@
         </definition>
     </include>
 
+    <!-- Heading of a section of a page, in white: larger than a row's -->
+    <include name="SectionHeading">
+        <param name="label"/>
+        <param name="left" default="0"/>
+        <param name="top" default="0"/>
+        <param name="width" default="1200"/>
+        <definition>
+            <control type="label">
+                <left>$PARAM[left]</left>
+                <top>$PARAM[top]</top>
+                <width>$PARAM[width]</width>
+                <height>40</height>
+                <font>font_caps</font>
+                <textcolor>text</textcolor>
+                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+            </control>
+        </definition>
+    </include>
+
     <!-- Poster or thumb with cut corners. When `focused` holds it gets a cyan outline and glow
          and grows a little; `dim` darkens it (unfocused cards of a focused row). -->
     <include name="CutCard">

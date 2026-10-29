@@ -128,6 +128,18 @@ def radial_glow(width, height, cx, cy, radius):
 CARD_SIZES = [(200, 300), (280, 420), (360, 540), (320, 180), (160, 220)]
 
 
+def hamburger(size, bar=5, gap=8):
+    """The quick menu icon: three bars of the same length."""
+    img = Image.new('RGBA', (size, size), (255, 255, 255, 0))
+    draw = ImageDraw.Draw(img)
+    left, right = size * 10 // 64, size - size * 10 // 64 - 1
+    top = (size - 3 * bar - 2 * gap) // 2
+    for n in range(3):
+        y = top + n * (bar + gap)
+        draw.rectangle((left, y, right, y + bar - 1), fill=(255, 255, 255, 255))
+    return img
+
+
 def main():
     cut(64, 14, line=2).save(UI / 'cut.png')
     cut(64, 14).save(UI / 'cut_fill.png')
@@ -150,6 +162,7 @@ def main():
     fade(256, 4).transpose(Image.Transpose.ROTATE_270).save(UI / 'fade_b.png')
     fade(256, 4, reverse=True).transpose(Image.Transpose.ROTATE_270).save(UI / 'fade_t.png')
     Image.new('RGBA', (2, 12), (255, 255, 255, 255)).save(UI / 'tick.png')  # chapter mark
+    hamburger(64).save(UI / 'qm_menu.png')
     line = Image.new('RGBA', (16, 44), (255, 255, 255, 0))
     line.paste((255, 255, 255, 255), (0, 40, 16, 42))
     line.save(UI / 'tab_line.png')  # focus underline of menu and tab entries

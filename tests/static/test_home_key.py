@@ -35,10 +35,9 @@ def test_home_key_window_takes_the_quick_menu_on():
     it goes on to the link's target, once."""
     loads = [(o.get('condition'), o.text) for o in _window().iter('onload')]
     go = NO_CHAIN + ' + String.IsEqual(Window(Home).Property(nc.go),{})'
-    assert [t for c, t in loads if c == go.format('settings')] == [
-        'ClearProperty(nc.settings.group,home)', 'ActivateWindow(settings)']
+    assert not [t for c, t in loads if c == go.format('settings')]
     assert [t for c, t in loads if c == go.format('system')] == [
-        'SetProperty(nc.page,system,home)', 'SetFocus(9105)']
+        'SetProperty(nc.page,system,home)', 'SetFocus(9601)']
     assert [t for c, t in loads if c == go.format('files')] == ['ActivateWindow(FileManager)']
     assert loads[-1] == (NO_CHAIN, 'ClearProperty(nc.go,home)')
 
