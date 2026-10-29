@@ -298,8 +298,8 @@ def test_home_navigation_for_any_combination(skin):
 # --- settings page ---------------------------------------------------------------------------
 
 # category button -> (label, tab, first control on the right)
-CATEGORIES = {'9001': (31005, 'effects', '600'), '9002': (10000, 'home', '200'), '9003': (342, 'movies', '300'),
-              '9004': (20343, 'shows', '400'), '9005': (31264, 'menu', '500')}
+CATEGORIES = {'9005': (31264, 'menu', '500'), '9002': (10000, 'home', '200'), '9003': (342, 'movies', '300'),
+              '9004': (20343, 'shows', '400')}
 CATEGORY = {'home': '9002', 'movies': '9003', 'shows': '9004'}
 
 
@@ -358,7 +358,8 @@ def test_skin_settings_look_like_kodis_settings_pages():
         assert button.findtext('label') == '$LOCALIZE[{}]'.format(label)
         assert button.findtext('onfocus') == 'SetProperty(nc.hp.tab,{})'.format(tab)
         assert button.findtext('usealttexture') == 'String.IsEqual(Window.Property(nc.hp.tab),{})'.format(tab)
-    for area, tab in (('600', 'effects'), ('200', 'home'), ('300', 'movies'), ('400', 'shows'), ('500', 'menu')):
+    assert '9001' not in c
+    for area, tab in (('200', 'home'), ('300', 'movies'), ('400', 'shows'), ('500', 'menu')):
         assert c[area].findtext('left') == '560' and c[area].findtext('width') == '1240', area
         assert c[area].findtext('visible') == 'String.IsEqual(Window.Property(nc.hp.tab),{})'.format(tab)
     desc = c['6']
@@ -385,19 +386,29 @@ def test_left_and_right_between_the_columns():
             assert run(button, 'onleft', grabbed) == str(SETTINGS_BASE[page] + 20 + n)
 
 
-def test_opened_from_the_console_on_the_home_category():
-    console = controls(load('Settings.xml'))['9224']
-    assert [o.text for o in console.findall('onclick')] == ['SetProperty(nc.ss.open,home,home)', 'ActivateWindow(SkinSettings)']
+def test_opens_on_the_main_menu_category():
+    """The console has one entry for the skin; a second one for the home pages only opened the
+    same page on another category."""
+    assert '9224' not in controls(load('Settings.xml'))
     root = parse(ROOT / '1080i' / 'SkinSettings.xml')
     assert root.findtext('defaultcontrol') == '9000'
     onloads = [(o.get('condition'), o.text) for o in root.findall('onload')]
-    assert ('String.IsEqual(Window(Home).Property(nc.ss.open),home)', 'SetFocus(9002)') in onloads
-    assert (None, 'ClearProperty(nc.ss.open,home)') in onloads
+    assert (None, 'SetProperty(nc.hp.tab,menu)') in onloads
+    # the categories keep their last focus otherwise, under the rows of the main menu
+    assert (None, 'SetFocus(9005)') in onloads
+    assert not [o for o in onloads if 'nc.ss.open' in o[1] or 'nc.ss.open' in (o[0] or '')]
     texts = ''.join(o.text or '' for o in root.iter('onclick'))
     assert 'ActivateWindow(1111)' not in texts
 
 
-def test_effects_category_holds_the_glow():
+def test_main_menu_category_holds_the_glow_under_effects():
+    """One setting gets no category of its own: the glow sits at the end of the main menu
+    category, under a separator and an Effects heading."""
+    area = controls(page_window())['500']
+    labels = [k.findtext('label') for k in area.iter('control') if k.get('type') == 'label']
+    assert '$LOCALIZE[31005]' in labels
+    ids = [k.get('id') for k in area.iter('control') if k.get('id')]
+    assert ids[-1] == '601'
     c = controls(page_window())
     glow = c['601']
     assert glow.get('type') == 'radiobutton' and glow.findtext('width') == '1240'
@@ -525,11 +536,11 @@ def test_menu_category_toggles_the_entries():
 
 
 @pytest.mark.parametrize('skin', [{}, {'SpotlightSource': 'off', 'nc.movies.spotlight': 'off'}])
-@pytest.mark.parametrize('tab', ['effects', 'home', 'movies', 'shows', 'menu'])
+@pytest.mark.parametrize('tab', ['home', 'movies', 'shows', 'menu'])
 def test_settings_page_navigation(skin, tab):
     skin = dict(skin, **{'Window.Property(nc.hp.tab)': tab})
     assert dead_ends('SkinSettings.xml', skin) == []
-    shown = {'effects': '6', 'home': '2', 'movies': '3', 'shows': '4', 'menu': '5'}[tab]
+    shown = {'home': '2', 'movies': '3', 'shows': '4', 'menu': '5'}[tab]
     assert [i for i in unreachable('SkinSettings.xml', skin) if i[0] == shown] == []
 
 

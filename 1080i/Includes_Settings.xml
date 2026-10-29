@@ -255,13 +255,6 @@
             <param name="onclick" value="ActivateWindow(SkinSettings)"/>
         </include>
         <include content="ListButton">
-            <param name="id" value="9224"/>
-            <param name="label" value="$LOCALIZE[31222]"/>
-            <param name="width" value="520"/>
-            <param name="onclick" value="SetProperty(nc.ss.open,home,home)"/>
-            <param name="onclick2" value="ActivateWindow(SkinSettings)"/>
-        </include>
-        <include content="ListButton">
             <param name="id" value="9223"/>
             <param name="label" value="$LOCALIZE[13200]"/>
             <param name="width" value="520"/>
@@ -327,23 +320,15 @@
                 <enable>false</enable>
                 <content>
                     <item>
-                        <label>$LOCALIZE[31007]</label>
-                        <label2>$VAR[GlowStateLabel]</label2>
-                    </item>
-                    <item>
                         <label>$LOCALIZE[31222]</label>
                         <label2>$LOCALIZE[31225], $LOCALIZE[31224], $LOCALIZE[31232]</label2>
                     </item>
+                    <item>
+                        <label>$LOCALIZE[31007]</label>
+                        <label2>$VAR[GlowStateLabel]</label2>
+                    </item>
                 </content>
             </include>
-        </include>
-        <include content="SettingsPreview">
-            <param name="rail" value="9224"/>
-            <param name="list" value="9224"/>
-            <param name="num" value="02"/>
-            <param name="group" value="$LOCALIZE[31160]"/>
-            <param name="title" value="$LOCALIZE[31222]"/>
-            <param name="desc" value="$LOCALIZE[31262]"/>
         </include>
         <include content="SettingsPreview">
             <param name="rail" value="9223"/>

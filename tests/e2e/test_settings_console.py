@@ -110,7 +110,7 @@ def test_rail_skips_headings(home):
     builtin('SetProperty(nc.settings.group,1,home)')
     builtin('ActivateWindow(settings)')
     wait_for('Control.HasFocus(9211)')
-    entries = ['9211', '9212', '9213', '9221', '9222', '9224', '9223', '9231', '9232', '9241', '9242', '9251', '9252']
+    entries = ['9211', '9212', '9213', '9221', '9222', '9223', '9231', '9232', '9241', '9242', '9251', '9252']
     if not cond('System.HasPVRAddon')['System.HasPVRAddon']:
         entries.remove('9213')  # live TV only with a PVR client
     seen = []
