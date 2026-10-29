@@ -900,3 +900,7 @@ msgstr ""
 msgctxt "#31340"
 msgid "The colour scheme of the skin, the same choice as under Interface."
 msgstr ""
+
+msgctxt "#31341"
+msgid "forecast"
+msgstr ""
