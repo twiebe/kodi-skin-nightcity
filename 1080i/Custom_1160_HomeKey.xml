@@ -18,10 +18,8 @@
     <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">Dialog.Close(all,true)</onload>
     <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">ActivateWindow(Home)</onload>
     <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEmpty(Window(Home).Property(nc.go))">SetFocus(9101)</onload>
-    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEqual(Window(Home).Property(nc.go),settings)">ClearProperty(nc.settings.group,home)</onload>
-    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEqual(Window(Home).Property(nc.go),settings)">ActivateWindow(settings)</onload>
     <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEqual(Window(Home).Property(nc.go),system)">SetProperty(nc.page,system,home)</onload>
-    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEqual(Window(Home).Property(nc.go),system)">SetFocus(9105)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEqual(Window(Home).Property(nc.go),system)">SetFocus(9601)</onload>
     <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEqual(Window(Home).Property(nc.go),files)">ActivateWindow(FileManager)</onload>
     <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">ClearProperty(nc.go,home)</onload>
     <controls/>

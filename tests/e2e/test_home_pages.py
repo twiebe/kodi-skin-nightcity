@@ -6,8 +6,8 @@ from conftest import action, builtin, cond, info, screenshot, wait_for
 
 pytestmark = pytest.mark.e2e
 
-PAGES = {'home': (9101, 9010), 'movies': (9102, 9010), 'shows': (9103, 9551), 'system': (9105, 9601)}
-VIEWPORTS = {'home': 9210, 'movies': 9410, 'shows': 9510, 'system': 9610}
+PAGES = {'home': (9101, 9010), 'movies': (9102, 9010), 'shows': (9103, 9551)}
+VIEWPORTS = {'home': 9210, 'movies': 9410, 'shows': 9510}
 
 
 def page():
@@ -44,10 +44,10 @@ def test_focus_switches_page(home_page):
 
 def test_fast_switching(home_page):
     focus(9101)
-    action('right', 'right', 'right', 'right', delay=0.15)
-    wait_for('Control.HasFocus(9105)')
-    assert page() == 'system'
-    assert visible(9610)
+    action('right', 'right', 'right', delay=0.15)
+    wait_for('Control.HasFocus(9104)')
+    assert page() == 'search'
+    assert visible(9710)
 
 
 def test_search_is_a_page(home_page):
@@ -165,7 +165,7 @@ def test_genre_pick_dialog(home_page):
     assert prop('nc.genre.id') == before
 
 
-TITLES = {'home': 9020, 'movies': 9020, 'shows': 9560, 'system': 9660}
+TITLES = {'home': 9020, 'movies': 9020, 'shows': 9560}
 
 
 @pytest.mark.parametrize('name', list(PAGES))

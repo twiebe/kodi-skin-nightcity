@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Quick menu: a small panel that slides in at the top right over whatever is on screen (Home,
      a page, the video). Clock and date, the weather, the power commands and links to the
-     settings and the system page. Kodi's power menu leads here (DialogButtonMenu.xml: the S key,
+     settings page (the only way there) and the file manager. Kodi's power menu leads here (DialogButtonMenu.xml: the S key,
      power and sleep keys, Home held through the skin's keymap), so does the icon next to the
      clock on Home (9109). Back or the same key again closes it.
      No script at all: two Python interpreters starting at once can crash Kodi. Power tiles run
@@ -206,7 +206,7 @@
             <control type="list" id="1230">
                 <left>40</left>
                 <top>680</top>
-                <width>576</width>
+                <width>384</width>
                 <height>76</height>
                 <orientation>horizontal</orientation>
                 <onup>1220</onup>
@@ -222,16 +222,10 @@
                     <include content="QuickLink"/>
                 </focusedlayout>
                 <content>
+                    <!-- the settings page of Home: the machine facts and Kodi's settings groups -->
                     <item>
                         <label>$LOCALIZE[5]</label>
                         <icon>ui/qm_settings.png</icon>
-                        <onclick>Dialog.Close(1170,true)</onclick>
-                        <onclick>SetProperty(nc.go,settings,home)</onclick>
-                        <onclick>ActivateWindow(1160)</onclick>
-                    </item>
-                    <item>
-                        <label>$LOCALIZE[31033]</label>
-                        <icon>ui/qm_system.png</icon>
                         <onclick>Dialog.Close(1170,true)</onclick>
                         <onclick>SetProperty(nc.go,system,home)</onclick>
                         <onclick>ActivateWindow(1160)</onclick>

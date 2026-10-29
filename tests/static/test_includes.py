@@ -701,3 +701,17 @@ def test_search_field_skips_the_recent_terms_from_above():
         ('!String.IsEmpty(Window(Home).Property(nc.search.recent.1))', '9770'),
         (None, '9710'),
     ]
+
+
+def test_settings_page_has_a_system_and_a_settings_section():
+    """The page of the quick menu's settings link: titled Settings, the machine facts under a
+    System heading, Kodi's settings groups under a Settings heading, both in the white heading."""
+    hero = include('SystemHero')
+    titles = [c for c in hero.iter('include') if c.get('content') == 'GlitchTitle']
+    assert [{p.get('name'): p.get('value') for p in t.findall('param')}['label'] for t in titles] == ['$LOCALIZE[5]']
+    headings = [{p.get('name'): p.get('value') for p in c.findall('param')}
+                for c in list(hero.iter('include')) + list(include('SystemWidgets').iter('include'))
+                if c.get('content') == 'SectionHeading']
+    assert [h['label'] for h in headings] == ['$LOCALIZE[31033]', '$LOCALIZE[5]']
+    label = include('SectionHeading').find('.//control')
+    assert label.findtext('textcolor') == 'text'

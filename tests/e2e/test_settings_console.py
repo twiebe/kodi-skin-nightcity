@@ -13,13 +13,10 @@ def label(name):
 
 
 def system_tile(n):
-    """Focus group tile n on the system page with the remote: down from the menu, then right."""
-    builtin('SetFocus(9105)')
-    wait_for('String.IsEqual(Window(Home).Property(nc.page),system)')
+    """Focus group tile n on the settings page (nc.page system): the first tile, then right."""
+    builtin('SetProperty(nc.page,system,home)')
     builtin('SetFocus(9601,0,absolute)')
-    builtin('SetFocus(9105)')
-    action('down')
-    wait_for('Control.HasFocus(9601)')
+    wait_for('Control.HasFocus(9601) + Integer.IsEqual(Container(9601).CurrentItem,1)')
     action(*['right'] * (n - 1))
 
 

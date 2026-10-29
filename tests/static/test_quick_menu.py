@@ -84,18 +84,21 @@ def test_weather_or_how_to_get_it():
         assert label in text
 
 
-def test_links_to_settings_system_and_files():
-    """Static items, so more links (later the user's own) are one item more."""
+def test_links_to_settings_and_files():
+    """Static items, so more links (later the user's own) are one item more. One settings link:
+    the settings page of Home (nc.page system), which holds the machine facts and Kodi's settings
+    groups; Kodi's own settings window and a system page beside it were one too many."""
     links = controls(parse(ROOT / '1080i' / WINDOW))['1230']
     items = links.findall('content/item')
     clicks = [[a for _, a in actions(i)] for i in items]
     # through the Home key window: it closes an info page, the OSD or a TMDb chain first, the
     # link alone would open its window under a dialog
     assert clicks == [['Dialog.Close(1170,true)', 'SetProperty(nc.go,{},home)'.format(go), 'ActivateWindow(1160)']
-                      for go in ('settings', 'system', 'files')]
-    assert (items[2].findtext('label'), items[2].findtext('icon')) == ('$LOCALIZE[744]', 'ui/qm_files.png')
+                      for go in ('system', 'files')]
+    assert (items[0].findtext('label'), items[0].findtext('icon')) == ('$LOCALIZE[5]', 'ui/qm_settings.png')
+    assert (items[1].findtext('label'), items[1].findtext('icon')) == ('$LOCALIZE[744]', 'ui/qm_files.png')
     assert (ROOT / 'media' / 'ui' / 'qm_files.png').exists()
-    # three links fill the row
+    # the links fill the row
     assert int(links.findtext('width')) == 192 * len(items)
 
 
@@ -119,7 +122,6 @@ def test_icon_next_to_the_clock_opens_it():
     home = controls(load('Home.xml'))
     anchor = home['9109']
     assert actions(anchor) == [('', 'ActivateWindow(1170)')]
-    assert anchor.findtext('onleft') == '9105'
     assert home['9100'].findtext('onright') == '9109'
     row = home['9190']
     assert row.get('type') == 'grouplist' and row.findtext('align') == 'right'
@@ -150,12 +152,42 @@ def test_weather_beside_the_clock():
 
 def test_top_menu_wraps_around():
     """Left on home reaches the icon next to the clock, right on the icon home again; left on the
-    icon goes to system, the entry beside it, not to the page that had the focus last."""
+    icon goes to the last menu entry shown, not to the page that had the focus last."""
     from focus import Page, State
     page = Page('Home.xml')
     hidden = {'Skin.HasSetting(nc.menu.hide.{})'.format(n): False for n in ('movies', 'shows', 'search')}
     state = State(extra=hidden)
     assert page.move('9101', 'onleft', state)[0] == '9109'
     assert page.move('9109', 'onright', state)[0] == '9101'
-    assert page.move('9109', 'onleft', state)[0] == '9105'
-    assert page.move('9105', 'onright', state)[0] == '9109'
+    assert page.move('9109', 'onleft', state)[0] == '9104'
+    assert page.move('9104', 'onright', state)[0] == '9109'
+    hidden['Skin.HasSetting(nc.menu.hide.search)'] = True
+    assert page.move('9109', 'onleft', State(extra=hidden))[0] == '9103'
+    hidden.update({'Skin.HasSetting(nc.menu.hide.{})'.format(n): True for n in ('movies', 'shows', 'search')})
+    assert page.move('9109', 'onleft', State(extra=hidden))[0] == '9101'
+
+
+def test_settings_page_only_from_the_quick_menu():
+    """The settings page is not in the top menu: the quick menu leads there."""
+    home = controls(load('Home.xml'))
+    assert '9105' not in home and '9118' not in home
+    # up from the page: the icon it is reached from, the page stays
+    assert home['9601'].findtext('onup') == '9109'
+
+
+def test_menu_icon_is_a_hamburger():
+    """Three bars of the same length, without the knobs of a slider."""
+    from PIL import Image
+    alpha = Image.open(ROOT / 'media' / 'ui' / 'qm_menu.png').split()[-1]
+    width, height = alpha.size
+    rows = [[x for x in range(width) if alpha.getpixel((x, y)) > 128] for y in range(height)]
+    bars, spans = [], set()
+    for y, row in enumerate(rows):
+        if row:
+            spans.add((row[0], row[-1]))
+            if not rows[y - 1]:
+                bars.append(y)
+    assert len(bars) == 3
+    assert len(spans) == 1, spans
+    assert not (ROOT / 'media' / 'ui' / 'qm_anchor.png').exists()
+    assert 'ui/qm_menu.png' in (ROOT / '1080i' / 'Includes_Home.xml').read_text(encoding='utf-8')

@@ -123,14 +123,17 @@
                     <radioposy>6</radioposy>
                     <radiowidth>32</radiowidth>
                     <radioheight>32</radioheight>
-                    <textureradioonfocus colordiffuse="focus_text">ui/qm_anchor.png</textureradioonfocus>
-                    <textureradioonnofocus colordiffuse="text_mute">ui/qm_anchor.png</textureradioonnofocus>
-                    <textureradioofffocus colordiffuse="focus_text">ui/qm_anchor.png</textureradioofffocus>
-                    <textureradiooffnofocus colordiffuse="text_mute">ui/qm_anchor.png</textureradiooffnofocus>
+                    <textureradioonfocus colordiffuse="focus_text">ui/qm_menu.png</textureradioonfocus>
+                    <textureradioonnofocus colordiffuse="text_mute">ui/qm_menu.png</textureradioonnofocus>
+                    <textureradioofffocus colordiffuse="focus_text">ui/qm_menu.png</textureradioofffocus>
+                    <textureradiooffnofocus colordiffuse="text_mute">ui/qm_menu.png</textureradiooffnofocus>
                     <onclick>ActivateWindow(1170)</onclick>
-                    <!-- system beside it, not the menu entry that had the focus last; right wraps
-                         around to home -->
-                    <onleft>9105</onleft>
+                    <!-- the last menu entry shown, not the one that had the focus last; right
+                         wraps around to home -->
+                    <onleft condition="!Skin.HasSetting(nc.menu.hide.search)">9104</onleft>
+                    <onleft condition="Skin.HasSetting(nc.menu.hide.search) + !Skin.HasSetting(nc.menu.hide.shows)">9103</onleft>
+                    <onleft condition="Skin.HasSetting(nc.menu.hide.search) + Skin.HasSetting(nc.menu.hide.shows) + !Skin.HasSetting(nc.menu.hide.movies)">9102</onleft>
+                    <onleft>9101</onleft>
                     <onright>9101</onright>
                     <onup>noop</onup>
                     <ondown>9100</ondown>
@@ -584,7 +587,9 @@
         </control>
     </include>
 
-    <!-- Hero of the system page: versions and machine facts (temperature where Kodi knows it) -->
+    <!-- Hero of the settings page (nc.page system, only from the quick menu): the System section,
+         versions and machine facts (temperature where Kodi knows it); the Settings section with
+         Kodi's settings groups follows below (SystemWidgets) -->
     <include name="SystemHero">
         <control type="group">
             <visible>String.IsEqual(Window(Home).Property(nc.page),system)</visible>
@@ -596,7 +601,7 @@
             </include>
             <include content="GlitchTitle">
                 <param name="id" value="9660"/>
-                <param name="label" value="$LOCALIZE[31033]"/>
+                <param name="label" value="$LOCALIZE[5]"/>
                 <param name="left" value="64"/>
                 <param name="top" value="160"/>
                 <param name="width" value="1600"/>
@@ -607,11 +612,16 @@
             <include content="PageFade">
                 <param name="delay" value="FadeStep1"/>
             </include>
+            <include content="SectionHeading">
+                <param name="label" value="$LOCALIZE[31033]"/>
+                <param name="left" value="64"/>
+                <param name="top" value="276"/>
+            </include>
             <control type="grouplist">
                 <left>64</left>
-                <top>280</top>
+                <top>326</top>
                 <width>1200</width>
-                <height>300</height>
+                <height>260</height>
                 <orientation>vertical</orientation>
                 <itemgap>0</itemgap>
                 <include content="FactLine">
@@ -896,16 +906,6 @@
                 <param name="visible" value="!Skin.HasSetting(nc.menu.hide.search)"/>
             </include>
             <include content="TabGap">
-                <param name="id" value="9118"/>
-            </include>
-            <include content="MenuButton">
-                <param name="id" value="9105"/>
-                <param name="label" value="$LOCALIZE[31033]"/>
-                <param name="active" value="String.IsEqual(Window(Home).Property(nc.page),system)"/>
-                <param name="onfocus" value="SetProperty(nc.page,system,home)"/>
-                <param name="onclick" value="SetFocus(9610)"/>
-            </include>
-            <include content="TabGap">
                 <param name="id" value="9114"/>
             </include>
         </control>
@@ -1184,13 +1184,14 @@
     <include name="SystemWidgets">
         <control type="group" id="9621">
             <height>468</height>
-            <include content="RowHeader">
+            <include content="SectionHeading">
                 <param name="label" value="$LOCALIZE[5]"/>
                 <param name="left" value="64"/>
-                <param name="top" value="6"/>
+                <param name="top" value="0"/>
             </include>
             <control type="list" id="9601">
-                <onup>9100</onup>
+                <!-- up to the quick menu icon: the page is reached from the quick menu only -->
+                <onup>9109</onup>
                 <ondown>noop</ondown>
                 <left>40</left>
                 <top>44</top>
