@@ -61,21 +61,11 @@ def facts():
     return {re.search(r'LOCALIZE\[(\d+)\]', a['key']).group(1): a.get('visible') for a in args}
 
 
-def test_a_fact_shows_only_when_the_add_on_gave_it():
-    """Kodi overwrites the add-on's values with formatted ones: humidity and UV index stay empty
-    without a value, but wind becomes "From  at 0 km/h", so wind goes by the add-on's own
-    direction (Kodi never touches it). Feels like and dew point always show: Kodi makes a
-    missing one 0 degrees, which cannot be told from a real 0 in winter. The list is a
-    grouplist: a hidden line leaves no gap."""
-    prop = 'Window(Weather).Property({})'.format
-    assert facts() == {
-        '402': None,
-        '406': '!String.IsEmpty({})'.format(prop('Current.Humidity')),
-        '404': '!String.IsEmpty({})'.format(prop('Current.WindDirection')),
-        '403': '!String.IsEmpty({})'.format(prop('Current.UVIndex')),
-        '405': None,
-        '12014': '!String.IsEmpty({})'.format(prop('Updated')),
-    }
+def test_every_fact_line_always_shows():
+    """No hiding of facts for now: Kodi replaces the add-on's values with formatted ones (a
+    missing temperature 0 degrees, a missing wind "From  at 0 km/h"), so a missing value cannot
+    always be told from a real one. To be revisited with real weather services."""
+    assert facts() == {key: None for key in ('402', '406', '404', '403', '405', '12014')}
 
 
 def test_temperature_large_and_tight():
