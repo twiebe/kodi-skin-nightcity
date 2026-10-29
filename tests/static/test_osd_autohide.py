@@ -12,7 +12,7 @@ import pytest
 from conftest import ROOT, parse
 from navigation import ATOM, dead_ends, load, unreachable
 
-OSD = ('videoosd', 'videobookmarks', '1141')
+ROWS = ('videobookmarks', '1141')
 ELAPSED = 'Skin.TimerElapsedSecs(nc_osd_hide)'
 
 
@@ -41,9 +41,14 @@ def test_timer_runs_while_the_osd_is_up_over_a_playing_video():
     start = timer().find('start')
     assert start.get('reset') == 'true'
     assert truth(start.text, PLAYING)
-    for level in OSD:
-        state = PLAYING - {'Window.IsModalDialogTopmost(videoosd)'} | {'Window.IsModalDialogTopmost({})'.format(level)}
-        assert truth(start.text, state), level
+
+
+@pytest.mark.parametrize('row', ROWS)
+def test_timer_does_not_run_in_the_rows_below_the_controls(row):
+    """Down from the controls into the chapter row (videobookmarks) or the cast row (1141, its
+    tabs and biography): the OSD stays until the user is back on the controls."""
+    state = PLAYING - {'Window.IsModalDialogTopmost(videoosd)'} | {'Window.IsModalDialogTopmost({})'.format(row)}
+    assert not truth(timer().find('start').text, state)
 
 
 @pytest.mark.parametrize('change', [
@@ -104,10 +109,11 @@ def test_timer_stops_when_its_start_no_longer_holds():
     assert t.findtext('stop').startswith('![{}] | '.format(t.find('start').text))
 
 
-def test_timer_closes_the_osd_and_its_rows():
+def test_timer_closes_the_osd():
+    """It only runs with the OSD on top, so there are no rows to close."""
     t = timer()
     onstops = t.findall('onstop')
-    assert [o.text for o in onstops] == ['Dialog.Close(1141)', 'Dialog.Close(videobookmarks)', 'Dialog.Close(videoosd)']
+    assert [o.text for o in onstops] == ['Dialog.Close(videoosd)']
     # only when the time is up, not when a pause or a dialog stopped the timer
     for o in onstops:
         assert _stop(o.get('condition'), 7, '7')
