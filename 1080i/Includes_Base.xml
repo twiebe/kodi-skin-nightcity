@@ -51,6 +51,9 @@
     <constant name="FadeStep2">100</constant>
     <constant name="FadeStep3">150</constant>
     <constant name="WindowFadeTime">150</constant>
+    <!-- the player's second step: what plays fades in once the OSD controls and the seek line
+         are in (their windows fade 150 ms) -->
+    <constant name="PlayerFadeStep">150</constant>
 
     <!-- A block of a Home page fades in and rises a few pixels `delay` ms after its page comes up
          or Home opens. The block needs the page condition itself: Kodi does not update the
@@ -66,6 +69,25 @@
                 <effect type="slide" start="0,10" end="0,0" time="FadeTime" delay="$PARAM[delay]" tween="cubic" easing="out"/>
             </animation>
             <animation type="WindowOpen" condition="!Player.HasVideo">
+                <effect type="fade" start="100" end="100" time="FadeTime"/>
+                <effect type="fade" start="0" end="100" time="FadeTime" delay="$PARAM[delay]"/>
+                <effect type="slide" start="0,10" end="0,0" time="FadeTime" delay="$PARAM[delay]" tween="cubic" easing="out"/>
+            </animation>
+        </definition>
+    </include>
+
+    <!-- PageFade for what plays in the player (PlayerDetails): it fades in and rises `delay` ms
+         after the seek line dialog opened or the OSD rows gave the space back, while the video
+         plays. -->
+    <include name="PlayerFade">
+        <param name="delay" default="PlayerFadeStep"/>
+        <definition>
+            <animation type="Visible">
+                <effect type="fade" start="100" end="100" time="FadeTime"/>
+                <effect type="fade" start="0" end="100" time="FadeTime" delay="$PARAM[delay]"/>
+                <effect type="slide" start="0,10" end="0,0" time="FadeTime" delay="$PARAM[delay]" tween="cubic" easing="out"/>
+            </animation>
+            <animation type="WindowOpen">
                 <effect type="fade" start="100" end="100" time="FadeTime"/>
                 <effect type="fade" start="0" end="100" time="FadeTime" delay="$PARAM[delay]"/>
                 <effect type="slide" start="0,10" end="0,0" time="FadeTime" delay="$PARAM[delay]" tween="cubic" easing="out"/>
