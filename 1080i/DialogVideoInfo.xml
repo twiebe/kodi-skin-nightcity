@@ -49,6 +49,11 @@
          InfoPeoplePath) -->
     <onload>SetProperty(nc.info.live,1,home)</onload>
     <onunload>ClearProperty(nc.info.live,home)</onunload>
+    <!-- the title menu's list 9006 belongs to this page: the dialog stays in memory, and the next
+         page loads its lists before its onload runs, so the list would start TMDb Helper with
+         empty ids next to the page's own plugin lists (two at once crash Kodi) -->
+    <onunload>ClearProperty(nc.info.more,home)</onunload>
+    <onunload>ClearProperty(nc.info.more.load,home)</onunload>
     <onload condition="String.IsEqual(ListItem.DBType,episode)">NotifyAll(nightcity,info_select)</onload>
     <!-- reopened on the way back in a chain: the tab and the item it was left from -->
     <onload condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEqual(Window(Home).Property(TMDbHelper.Position),Window(Home).Property(nc.ret.top))">SetFocus(9098)</onload>
