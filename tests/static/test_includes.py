@@ -257,14 +257,27 @@ def layout(list_include, tag):
     return list_include.find('.//' + tag)
 
 
+# in front of the current value of a list: the pink middle dot of the title lines (" · "); on
+# the cyan fill of the cursor pink hardly shows, there the dot takes the dark text colour
+DOT = '[COLOR accent2]·[/COLOR] '
+
+
+def marked_right(label):
+    """The current value's dot: pink, on the cursor's fill dark like the text."""
+    text = label.findtext('label') or ''
+    if label.findtext('textcolor') == 'focus_text':
+        return text.startswith('· ')
+    return text.startswith(DOT)
+
+
 def test_select_marks_current_value():
     """The current value of a list (DialogSelect, settings dropdowns) is an accent row with
-    a ◢ in front, whether or not the cursor is on it."""
+    a pink dot in front, whether or not the cursor is on it."""
     lst = include('DialogList')
     for tag in ('itemlayout', 'focusedlayout'):
         marked = [c for c in layout(lst, tag).iter('control')
-                  if c.get('type') == 'label' and '◢' in (c.findtext('label') or '')]
-        assert marked, tag
+                  if c.get('type') == 'label' and '·' in (c.findtext('label') or '')]
+        assert marked and all(marked_right(c) for c in marked), tag
         for c in marked:
             visible = c.findtext('visible') or ''
             assert 'ListItem.IsSelected' in visible and '!ListItem.IsSelected' not in visible, (tag, visible)
@@ -305,13 +318,49 @@ def test_dialog_heading_above_content():
     assert int(heading.find('.//control').findtext('top') or 0) >= 0  # inside the frame, not on its line
 
 
-def test_tab_focus_differs_from_active():
-    """A menu or tab entry that is focused looks different from the active (shown) one: the
-    focus draws a line, the active mark is only the pink ◢ and leaves the label colour alone."""
-    tab = include('TabButton').find('.//control')
-    assert tab.find('texturefocus').text and tab.find('alttexturefocus').text
-    assert not tab.find('texturenofocus').text and not tab.find('alttexturenofocus').text
-    assert '[COLOR accent]' not in tab.findtext('altlabel')
+def test_track_panel_marks_the_playing_track():
+    """The playing track of an OSD panel (subtitles, audio) has the pink dot in front."""
+    panel = include('TrackPanel')
+    for tag in ('itemlayout', 'focusedlayout'):
+        marked = [c for c in layout(panel, tag).iter('control') if c.get('type') == 'label'
+                  and (c.findtext('visible') or '').startswith('String.IsEqual(ListItem.Property(current),1)')]
+        assert marked, tag
+        assert all(marked_right(c) for c in marked), tag
+
+
+@pytest.mark.parametrize('name', ['TabButton', 'CreditsTab'])
+def test_tab_focus_differs_from_active(name):
+    """A tab entry that is focused looks different from the active (shown) one: the focus draws
+    the cyan line, the active one without focus the same line in pink, in the same place (one
+    texture), so the label does not move; the label stays as it is."""
+    tab = include(name).find('.//control')
+    for tag, colour in (('texturefocus', 'accent'), ('alttexturefocus', 'accent'), ('alttexturenofocus', 'accent2')):
+        assert (tab.findtext(tag), tab.find(tag).get('colordiffuse')) == ('ui/tab_line.png', colour), tag
+    assert not tab.find('texturenofocus').text
+    assert tab.findtext('altlabel') == tab.findtext('label')
+
+
+def test_season_tab_active_line():
+    """The shown season: a pink line under it without focus, the focus line with it; both the
+    same size and place, the label the same."""
+    seasons = next(c for c in parse(ROOT / '1080i' / 'DialogVideoInfo.xml').iter('control') if c.get('id') == '5200')
+    lines = [c for c in seasons.find('focusedlayout').findall('control') if c.get('type') == 'image']
+    assert sorted((c.find('texture').get('colordiffuse'), c.findtext('visible')) for c in lines) == [
+        ('accent2', '!Control.HasFocus(5200)'), ('focus', 'Control.HasFocus(5200)')]
+    geometry = {tuple(c.findtext(k) for k in ('left', 'top', 'width', 'height')) + (c.findtext('texture'),)
+                for c in lines}
+    assert len(geometry) == 1
+    labels = [c.findtext('label') for c in include('SeasonTab').iter('control') if c.get('type') == 'label']
+    assert len(set(labels)) == 1
+
+
+def test_triangle_only_between_title_parts():
+    """The pink ◢ is left only as the separator of header lines ("MOVIES ◢ METROPOLIS"); no
+    tab, track or list row is marked with it."""
+    for path in layout_files():
+        for el in parse(path).iter():
+            if isinstance(el.tag, str) and '◢' in (el.text or ''):
+                assert (path.name, el.tag) == ('Variables.xml', 'value'), (path.name, el.tag, el.text)
 
 
 def test_hero_titles_fit_long_names():
