@@ -340,6 +340,9 @@
                 <width>600</width>
                 <height>488</height>
                 <visible>Control.HasFocus($PARAM[button]) | Control.HasFocus($PARAM[id])</visible>
+                <!-- the chapter and cast rows open over the OSD, which keeps its focus on the
+                     button: they replace the controls, the panel goes with them -->
+                <visible>!Window.IsActive(videobookmarks) + !Window.IsActive(1141)</visible>
                 <visible>!String.IsEmpty(Window(Home).Property(nc.$PARAM[prefix].rows))</visible>
                 <animation effect="fade" time="120">VisibleChange</animation>
                 <animation effect="slide" start="0,0" end="0,364" time="0" condition="String.IsEqual(Window(Home).Property(nc.$PARAM[prefix].rows),1)">Conditional</animation>
@@ -613,6 +616,9 @@
                 <width>600</width>
                 <height>436</height>
                 <visible>Control.HasFocus($PARAM[button]) | Control.HasFocus($PARAM[id])</visible>
+                <!-- the chapter and cast rows open over the OSD, which keeps its focus on the
+                     button: they replace the controls, the panel goes with them -->
+                <visible>!Window.IsActive(videobookmarks) + !Window.IsActive(1141)</visible>
                 <animation effect="fade" time="120">VisibleChange</animation>
                 <!-- without a bitrate one row less, the panel keeps its bottom edge -->
                 <animation effect="slide" start="0,0" end="0,52" time="0" condition="String.IsEmpty(VideoPlayer.VideoBitrate)">Conditional</animation>
