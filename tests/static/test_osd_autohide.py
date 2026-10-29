@@ -55,6 +55,11 @@ def test_timer_runs_while_the_osd_is_up_over_a_playing_video():
     PLAYING - {'Window.IsModalDialogTopmost(videoosd)'},
     PLAYING - {'Window.IsActive(fullscreenvideo)'},
     PLAYING - {'Player.HasVideo'},
+    # in a track panel of the OSD (subtitles, audio, video): groups in VideoOSD, so the OSD stays
+    # the topmost dialog; the cursor on the panel's button alone is plain OSD use
+    PLAYING | {'Control.HasFocus(651)'},
+    PLAYING | {'Control.HasFocus(652)'},
+    PLAYING | {'Control.HasFocus(653)'},
 ])
 def test_timer_does_not_run(change):
     assert not truth(timer().find('start').text, change)

@@ -227,3 +227,39 @@ def test_settings_windows_fade_in(name):
     background = [c for c in top if c.find('texture') is not None and 'white.png' in c.findtext('texture')]
     assert background and not fade_in(background[0], 'WindowOpen')
     assert not window.findall('animation'), 'no window level fade: it would dim the background'
+
+
+# --- player ----------------------------------------------------------------------------------
+
+def player_details():
+    return load('DialogSeekBar.xml').find('controls')
+
+
+def details_block():
+    """The PlayerDetails group (poster, title, badges, plot) in the seek bar dialog."""
+    root = player_details()
+    return next(c for c in root.findall('control') if c.find("control[@type='textbox']") is not None)
+
+
+@pytest.mark.parametrize('kind', ['WindowOpen', 'Visible'])
+def test_player_details_fade_in_after_the_controls(kind):
+    """The OSD comes up in two steps like a Home page: the controls fade in with their window
+    (WindowFadeTime), then what plays (poster, title, plot) a step later; also when it comes
+    back from the chapter and cast rows (Visible). The seek line comes with the controls."""
+    details = details_block()
+    delay, time = fade_in(details, kind)
+    assert delay == ms('PlayerFadeStep') >= ms('WindowFadeTime')
+    assert time == ms('FadeTime')
+    for anim in animations(details, kind):
+        assert 'Player.HasVideo' not in (anim.get('condition') or '')
+        # the first effect starts at once (PageFade)
+        assert effects(anim)[0][3] == 0
+    bar = [c for c in player_details().findall('control') if c.findtext('top') == '1000']
+    assert bar and fade_in(bar[0], 'WindowOpen') is None
+
+
+def test_osd_controls_fade_with_their_window():
+    """Controls and seek line: the first step, the windows' own fade (a fade's start is 0)."""
+    for name in ('VideoOSD.xml', 'DialogSeekBar.xml'):
+        [anim] = animations(parse(ROOT / '1080i' / name), 'WindowOpen')
+        assert effects(anim) == [('fade', None, None, 0, 150)], name
