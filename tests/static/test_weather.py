@@ -40,14 +40,72 @@ def test_no_ids_kodi_fills():
 def test_current_conditions():
     """Place, conditions, temperature and the facts Kodi formats in the user's units."""
     body = text(window())
-    for label in ('Weather.Location', 'Weather.Conditions', 'Weather.Temperature'):
+    for label in ('Weather.Location', 'Weather.Conditions'):
         assert '$INFO[{}]'.format(label) in body, label
-    for prop in ('Current.FeelsLike', 'Current.Humidity', 'Current.Wind', 'Current.UVIndex',
+    for prop in ('Current.Temperature', 'Current.FeelsLike', 'Current.Humidity', 'Current.Wind', 'Current.UVIndex',
                  'Current.DewPoint', 'Updated'):
         assert 'Window(Weather).Property({})'.format(prop) in body, prop
     # Kodi's own words: Feels like, UV index, Wind, Dew point, Humidity, Last updated
     for string in (402, 403, 404, 405, 406, 12014):
         assert '$LOCALIZE[{}]'.format(string) in body, string
+
+
+def includes():
+    return parse(ROOT / '1080i' / 'Includes_Weather.xml')
+
+
+def facts():
+    """The fact lines beside the temperature: key string to visible condition."""
+    lines = [i for i in window().iter('include') if i.get('content') == 'FactLine']
+    args = [{p.get('name'): p.get('value') for p in i.findall('param')} for i in lines]
+    return {re.search(r'LOCALIZE\[(\d+)\]', a['key']).group(1): a.get('visible') for a in args}
+
+
+def test_a_fact_shows_only_when_the_add_on_gave_it():
+    """Kodi overwrites the add-on's values with formatted ones: humidity and UV index stay empty
+    without a value, but wind becomes "From  at 0 km/h" and a temperature "0" (32 in Fahrenheit).
+    Wind goes by the add-on's own direction (Kodi never touches it), feels like and dew point
+    are missing when they are Kodi's zero in the user's unit. The list is a grouplist: a hidden
+    line leaves no gap."""
+    prop = 'Window(Weather).Property({})'.format
+    assert facts() == {
+        '402': '$EXP[WeatherHasFeelsLike]',
+        '406': '!String.IsEmpty({})'.format(prop('Current.Humidity')),
+        '404': '!String.IsEmpty({})'.format(prop('Current.WindDirection')),
+        '403': '!String.IsEmpty({})'.format(prop('Current.UVIndex')),
+        '405': '$EXP[WeatherHasDewPoint]',
+        '12014': '!String.IsEmpty({})'.format(prop('Updated')),
+    }
+    expressions = {e.get('name'): e.text for e in includes().iter('expression')}
+    for name, value in (('WeatherHasFeelsLike', 'Current.FeelsLike'), ('WeatherHasDewPoint', 'Current.DewPoint')):
+        v = prop(value)
+        assert expressions[name] == (
+            '!String.IsEmpty({0}) + '
+            '![String.IsEqual(System.TemperatureUnits,°C) + String.IsEqual({0},0)] + '
+            '![String.IsEqual(System.TemperatureUnits,°F) + String.IsEqual({0},32)] + '
+            '![String.IsEqual(System.TemperatureUnits,K) + String.IsEqual({0},273)]').format(v)
+
+
+def test_temperature_large_and_tight():
+    """A large size of the title font, "64°F" as one word: the font's degree sign stands wide
+    apart from digits and letter, so number, degree sign and unit letter are labels of their
+    own, pulled together. Units other than °C and °F (K) come whole."""
+    row = next(c for c in window().iter('control') if c.get('id') == '510')
+    assert row.get('type') == 'grouplist' and row.findtext('orientation') == 'horizontal'
+    assert int(row.findtext('itemgap')) < 0
+    labels = row.findall('control')
+    assert [(c.get('type'), c.findtext('width'), c.findtext('font')) for c in labels] == [('label', 'auto', 'font_temp')] * 3
+    assert [c.findtext('label') for c in labels] == [
+        '$INFO[Window(Weather).Property(Current.Temperature)]', '°', '$VAR[WeatherUnit]']
+    degrees = '[String.IsEqual(System.TemperatureUnits,°C) | String.IsEqual(System.TemperatureUnits,°F)]'
+    assert labels[1].findtext('visible') == degrees
+    unit = next(v for v in includes().iter('variable') if v.get('name') == 'WeatherUnit')
+    assert [(v.get('condition'), v.text) for v in unit.findall('value')] == [
+        ('String.IsEqual(System.TemperatureUnits,°C)', 'C'), ('String.IsEqual(System.TemperatureUnits,°F)', 'F'),
+        (None, '$INFO[System.TemperatureUnits]')]
+    fonts = {f.findtext('name'): (f.findtext('filename'), f.findtext('size'))
+             for f in parse(ROOT / '1080i' / 'Font.xml').iter('font')}
+    assert fonts['font_temp'] == ('RetroUI-Bold.ttf', '140')
 
 
 def test_forecast_row_of_the_next_days():
