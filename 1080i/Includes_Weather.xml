@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The weather page (MyWeather.xml) -->
+<includes>
+    <!-- The letter of the temperature unit, set apart from its degree sign (MyWeather.xml 510);
+         a unit without degree sign (K) whole -->
+    <variable name="WeatherUnit">
+        <value condition="String.IsEqual(System.TemperatureUnits,°C)">C</value>
+        <value condition="String.IsEqual(System.TemperatureUnits,°F)">F</value>
+        <value>$INFO[System.TemperatureUnits]</value>
+    </variable>
+    <!-- One day of the forecast row: day, glyph, high and low, outlook. A card like the others
+         of the skin: plain surface, cut corners and a cyan outline when focused. -->
+    <include name="WeatherDay">
+        <param name="focused"/>
+        <definition>
+            <control type="image">
+                <width>236</width>
+                <height>380</height>
+                <texture colordiffuse="surface">ui/white.png</texture>
+                <visible>!$PARAM[focused]</visible>
+            </control>
+            <control type="image">
+                <width>236</width>
+                <height>380</height>
+                <texture border="16" colordiffuse="surface">ui/cut_fill.png</texture>
+                <visible>$PARAM[focused]</visible>
+            </control>
+            <control type="image">
+                <width>236</width>
+                <height>380</height>
+                <texture border="16" colordiffuse="focus">ui/cut.png</texture>
+                <visible>$PARAM[focused]</visible>
+            </control>
+            <control type="label">
+                <left>16</left>
+                <top>26</top>
+                <width>204</width>
+                <height>34</height>
+                <align>center</align>
+                <font>font_caps_small</font>
+                <textcolor>text_mute</textcolor>
+                <label>[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</label>
+            </control>
+            <control type="image">
+                <left>62</left>
+                <top>76</top>
+                <width>112</width>
+                <height>112</height>
+                <texture fallback="ui/weather/na.png" colordiffuse="accent">ui/weather/$INFO[ListItem.Property(code)].png</texture>
+            </control>
+            <control type="label">
+                <left>16</left>
+                <top>204</top>
+                <width>204</width>
+                <height>56</height>
+                <align>center</align>
+                <font>font_title</font>
+                <textcolor>text</textcolor>
+                <label>$INFO[ListItem.Property(high)]$INFO[System.TemperatureUnits]</label>
+            </control>
+            <control type="label">
+                <left>16</left>
+                <top>258</top>
+                <width>204</width>
+                <height>36</height>
+                <align>center</align>
+                <font>font_num</font>
+                <textcolor>text_dim</textcolor>
+                <label>$INFO[ListItem.Property(low)]$INFO[System.TemperatureUnits]</label>
+            </control>
+            <control type="textbox">
+                <left>16</left>
+                <top>306</top>
+                <width>204</width>
+                <height>64</height>
+                <align>center</align>
+                <font>font_small</font>
+                <textcolor>text_dim</textcolor>
+                <label>$INFO[ListItem.Property(outlook)]</label>
+            </control>
+        </definition>
+    </include>
+</includes>

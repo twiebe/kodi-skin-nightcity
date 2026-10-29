@@ -5,7 +5,7 @@ from fontTools.ttLib import TTFont
 from conftest import ROOT, layout_files, parse
 
 NAMES = {'font_tiny', 'font_small', 'font_body', 'font_label', 'font_title', 'font_hero', 'font_wordmark',
-         'font_caps', 'font_caps_small', 'font_num', 'font_num_small', 'font_clock', 'font10', 'font12', 'font13', 'font14'}
+         'font_caps', 'font_caps_small', 'font_num', 'font_num_small', 'font_clock', 'font_temp', 'font10', 'font12', 'font13', 'font14'}
 UI_FONTS = ['RetroUI-Medium.ttf', 'RetroUI-SemiBold.ttf', 'RetroUI-Bold.ttf',
             'RetroUIWide-SemiBold.ttf', 'RetroUIWide-Bold.ttf']
 MONO_FONT = 'ShareTechMono-Regular.ttf'
