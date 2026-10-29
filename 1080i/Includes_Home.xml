@@ -144,6 +144,8 @@
                     <onright>ClearProperty(nc.quick.from,home)</onright>
                     <onup>noop</onup>
                     <ondown>1210</ondown>
+                    <!-- Back closes the menu: back where it was opened from (9189) -->
+                    <onback>9189</onback>
                 </control>
             </control>
             <!-- the weather of the quick menu, when a weather service is set up -->
@@ -856,8 +858,11 @@
             <height>44</height>
             <orientation>horizontal</orientation>
             <itemgap>0</itemgap>
-            <!-- the menu wraps around over the icon next to the clock -->
+            <!-- the menu wraps around over the icon next to the clock, which remembers where the
+                 focus came from (Back in the quick menu returns there) -->
+            <onleft>SetProperty(nc.quick.from,$INFO[System.CurrentControlId],home)</onleft>
             <onleft>9109</onleft>
+            <onright>SetProperty(nc.quick.from,$INFO[System.CurrentControlId],home)</onright>
             <onright>9109</onright>
             <onup>noop</onup>
             <!-- a page without spotlight starts with its rows -->
@@ -1211,7 +1216,9 @@
                 <param name="top" value="0"/>
             </include>
             <control type="list" id="9601">
-                <!-- up to the quick menu icon: the page is reached from the quick menu only -->
+                <!-- up to the quick menu icon: the page is reached from the quick menu only; Back
+                     in the quick menu returns here -->
+                <onup>SetProperty(nc.quick.from,$INFO[System.CurrentControlId],home)</onup>
                 <onup>9109</onup>
                 <ondown>noop</ondown>
                 <left>40</left>
@@ -1363,6 +1370,30 @@
             <animation effect="fade" start="0" end="55" time="200" condition="!Player.HasVideo">Visible</animation>
             <animation effect="fade" start="55" end="0" time="160" condition="!Player.HasVideo">Hidden</animation>
         </control>
+        <!-- Back in the menu or on the icon closes the menu: the focus comes here, out of sight
+             and outside the panel, which hides, and goes on to where the menu was opened from
+             (nc.quick.from: every way onto the icon and the power menu's keys set it), else to
+             the shown page's own entry; a numeric target, so Home's own Back (the window
+             before) does not run as well -->
+        <control type="button" id="9189">
+            <left>-100</left>
+            <top>-100</top>
+            <width>1</width>
+            <height>1</height>
+            <texturefocus/>
+            <texturenofocus/>
+            <onfocus condition="!String.IsEmpty(Window(Home).Property(nc.quick.from))">SetFocus($INFO[Window(Home).Property(nc.quick.from)])</onfocus>
+            <onfocus condition="String.IsEmpty(Window(Home).Property(nc.quick.from)) + String.IsEqual(Window(Home).Property(nc.page),movies)">SetFocus(9102)</onfocus>
+            <onfocus condition="String.IsEmpty(Window(Home).Property(nc.quick.from)) + String.IsEqual(Window(Home).Property(nc.page),shows)">SetFocus(9103)</onfocus>
+            <onfocus condition="String.IsEmpty(Window(Home).Property(nc.quick.from)) + String.IsEqual(Window(Home).Property(nc.page),search)">SetFocus(9104)</onfocus>
+            <onfocus condition="String.IsEmpty(Window(Home).Property(nc.quick.from)) + String.IsEqual(Window(Home).Property(nc.page),system)">SetFocus(9601)</onfocus>
+            <onfocus condition="String.IsEmpty(Window(Home).Property(nc.quick.from)) + ![String.IsEqual(Window(Home).Property(nc.page),movies) | String.IsEqual(Window(Home).Property(nc.page),shows) | String.IsEqual(Window(Home).Property(nc.page),search) | String.IsEqual(Window(Home).Property(nc.page),system)]">SetFocus(9101)</onfocus>
+            <onfocus>ClearProperty(nc.quick.from,home)</onfocus>
+            <onup>9100</onup>
+            <ondown>9100</ondown>
+            <onleft>9100</onleft>
+            <onright>9100</onright>
+        </control>
         <control type="group" id="9180">
             <left>1232</left>
             <top>96</top>
@@ -1419,8 +1450,9 @@
             <onclick condition="Weather.IsFetched">ActivateWindow(weather)</onclick>
             <onclick condition="!Weather.IsFetched">ActivateWindow(servicesettings,weather)</onclick>
             <ondown>1220</ondown>
-            <!-- Back on Home: the icon, menu still shown; in the dialog Kodi's own Back closes it -->
-            <onback condition="!Window.IsActive(1170)">9109</onback>
+            <!-- Back on Home closes the menu (9189, QuickMenuPanel); in the dialog Kodi's own
+                 Back closes it -->
+            <onback condition="!Window.IsActive(1170)">9189</onback>
             <!-- up leaves the menu, onto the icon next to the clock when Home is behind -->
             <onup>Dialog.Close(1170,true)</onup>
             <onup condition="Window.IsActive(home)">SetFocus(9109)</onup>
@@ -1492,8 +1524,9 @@
             <height>292</height>
             <orientation>vertical</orientation>
             <onup>1210</onup>
-            <!-- Back on Home: the icon, menu still shown; in the dialog Kodi's own Back closes it -->
-            <onback condition="!Window.IsActive(1170)">9109</onback>
+            <!-- Back on Home closes the menu (9189, QuickMenuPanel); in the dialog Kodi's own
+                 Back closes it -->
+            <onback condition="!Window.IsActive(1170)">9189</onback>
             <ondown>1230</ondown>
             <onleft>noop</onleft>
             <onright>noop</onright>
@@ -1569,8 +1602,9 @@
             <height>76</height>
             <orientation>horizontal</orientation>
             <onup>1220</onup>
-            <!-- Back on Home: the icon, menu still shown; in the dialog Kodi's own Back closes it -->
-            <onback condition="!Window.IsActive(1170)">9109</onback>
+            <!-- Back on Home closes the menu (9189, QuickMenuPanel); in the dialog Kodi's own
+                 Back closes it -->
+            <onback condition="!Window.IsActive(1170)">9189</onback>
             <ondown>noop</ondown>
             <onleft>noop</onleft>
             <onright>noop</onright>

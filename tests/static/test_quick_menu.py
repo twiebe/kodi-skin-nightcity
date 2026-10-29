@@ -138,29 +138,20 @@ FROM = 'Window(Home).Property(nc.quick.from)'
 def test_one_menu_on_home():
     """A frame later, the power menu gone: on Home with nothing modal over it the keys use the
     panel of Home, not the dialog (one menu, not two that behave a little differently). They
-    go to the icon next to the clock, which shows it, remembering where the focus was; the same key again
-    takes the focus back there, or to the page's own entry when the menu was reached by hand.
+    go to the icon next to the clock, which shows it, remembering where the focus was; the same key
+    again closes the menu like Back (the stand-in 9189).
     Over any other window the dialog opens and closes as before."""
     timer = next(t for t in parse(ROOT / '1080i' / 'Timers.xml').iter('timer') if t.findtext('name') == 'nc_quick_key')
     assert timer.findtext('start') == '!String.IsEmpty(Window(Home).Property(nc.quick.key))'
     assert timer.find('start').get('reset') == 'true'
     assert timer.findtext('stop') == 'true'
-    page = 'String.IsEqual(Window(Home).Property(nc.page),{})'.format
-    back = '{} + {} + String.IsEmpty({})'.format(HOME_ALONE, PANEL_UP, FROM)
     assert actions(timer, 'onstop') == [
         ('', 'ClearProperty(nc.quick.key,home)'),
         ('Window.IsActive(1170)', 'Dialog.Close(1170)'),
         ('!Window.IsActive(1170) + ![{}]'.format(HOME_ALONE), 'ActivateWindow(1170)'),
         ('{} + !{}'.format(HOME_ALONE, PANEL_UP), 'SetProperty(nc.quick.from,$INFO[System.CurrentControlId],home)'),
         ('{} + !{}'.format(HOME_ALONE, PANEL_UP), 'SetFocus(9109)'),
-        ('{} + {} + !String.IsEmpty({})'.format(HOME_ALONE, PANEL_UP, FROM), 'SetFocus($INFO[{}])'.format(FROM)),
-        ('{} + {}'.format(back, page('movies')), 'SetFocus(9102)'),
-        ('{} + {}'.format(back, page('shows')), 'SetFocus(9103)'),
-        ('{} + {}'.format(back, page('search')), 'SetFocus(9104)'),
-        ('{} + {}'.format(back, page('system')), 'SetFocus(9601)'),
-        ('{} + ![{} | {} | {} | {}]'.format(back, page('movies'), page('shows'), page('search'), page('system')),
-         'SetFocus(9101)'),
-        ('{} + {}'.format(HOME_ALONE, PANEL_UP), 'ClearProperty(nc.quick.from,home)'),
+        ('{} + {}'.format(HOME_ALONE, PANEL_UP), 'SetFocus(9189)'),
     ]
 
 
@@ -180,7 +171,7 @@ def test_icon_next_to_the_clock_shows_it():
     anchor = home['9109']
     assert actions(anchor) == [('', 'SetFocus(1210)')]
     assert anchor.findtext('ondown') == '1210'
-    assert home['9100'].findtext('onright') == '9109'
+    assert ('', '9109') in actions(home['9100'], 'onright')
     row = home['9190']
     assert row.get('type') == 'grouplist' and row.findtext('align') == 'right'
     assert row.findall('control')[0].find('control').get('id') == '9109'
@@ -213,13 +204,61 @@ def test_menu_on_home_over_the_page():
     assert ids.index('9190') < ids.index('9180')
 
 
-def test_back_in_the_menu_on_home_goes_to_the_icon():
-    """Back inside the panel of Home: the icon, menu still shown. In the dialog Back closes it as
-    always (the condition does not hold there, so Kodi's own Back runs)."""
+def test_back_closes_the_menu_on_home():
+    """Back inside the panel of Home and Back on the icon close the menu: the focus goes to the
+    stand-in 9189, which passes it to where it came from. A numeric target, so Kodi counts Back as
+    done (Home's own Back would go to the window before). In the dialog the condition does not
+    hold: Kodi's own Back closes it."""
     for window in ('Home.xml', WINDOW):
         c = controls(load(window))
         for cid in ('1210', '1220', '1230'):
-            assert actions(c[cid], 'onback') == [('!Window.IsActive(1170)', '9109')], (window, cid)
+            assert actions(c[cid], 'onback') == [('!Window.IsActive(1170)', '9189')], (window, cid)
+    assert actions(controls(load('Home.xml'))['9109'], 'onback') == [('', '9189')]
+
+
+def test_stand_in_returns_to_where_the_menu_was_opened_from():
+    """Out of sight, outside the panel (taking the focus hides the panel). It passes the focus to
+    nc.quick.from, else to the shown page's own entry (the settings page: its first row), and
+    forgets it."""
+    home = controls(load('Home.xml'))
+    stand = home['9189']
+    assert stand.get('type') == 'button'
+    assert int(stand.findtext('left')) < 0 and int(stand.findtext('top')) < 0
+    assert '9189' not in {c.get('id') for c in home['9180'].iter('control')}
+    page = 'String.IsEqual(Window(Home).Property(nc.page),{})'.format
+    empty = 'String.IsEmpty({})'.format(FROM)
+    assert actions(stand, 'onfocus') == [
+        ('!' + empty, 'SetFocus($INFO[{}])'.format(FROM)),
+        ('{} + {}'.format(empty, page('movies')), 'SetFocus(9102)'),
+        ('{} + {}'.format(empty, page('shows')), 'SetFocus(9103)'),
+        ('{} + {}'.format(empty, page('search')), 'SetFocus(9104)'),
+        ('{} + {}'.format(empty, page('system')), 'SetFocus(9601)'),
+        ('{} + ![{} | {} | {} | {}]'.format(empty, page('movies'), page('shows'), page('search'), page('system')),
+         'SetFocus(9101)'),
+        ('', 'ClearProperty(nc.quick.from,home)'),
+    ]
+    # should a target refuse the focus, the keys lead on to the top menu
+    assert {stand.findtext(d) for d in ('onup', 'ondown', 'onleft', 'onright')} == {'9100'}
+
+
+def test_every_way_onto_the_icon_remembers_where_it_came_from():
+    """From the page onto the icon (Up from the settings page's first row, Left or Right off the
+    top menu): the control it came from goes to nc.quick.from, Back returns there. Inside the
+    menu Up leads to the icon without it: the origin stays."""
+    import re
+    home = load('Home.xml')
+    panel = {c.get('id') for c in controls(home)['9180'].iter('control')}
+    remember = ('', 'SetProperty(nc.quick.from,$INFO[System.CurrentControlId],home)')
+    onto = []
+    for c in home.iter('control'):
+        if c.get('id') in panel or c.get('id') in ('9109', '9189'):
+            continue
+        for d in ('onup', 'ondown', 'onleft', 'onright'):
+            texts = [(e.text or '').strip() for e in c.findall(d)]
+            if any(t == '9109' or re.match(r'SetFocus\(9109[,)]', t) for t in texts):
+                onto.append((c.get('id'), d))
+                assert remember in actions(c, d), (c.get('id'), d)
+    assert {('9100', 'onleft'), ('9100', 'onright'), ('9601', 'onup')} <= set(onto)
 
 
 def test_power_page_is_gone():
@@ -266,7 +305,7 @@ def test_settings_page_only_from_the_quick_menu():
     home = controls(load('Home.xml'))
     assert '9105' not in home and '9118' not in home
     # up from the page: the icon it is reached from, the page stays
-    assert home['9601'].findtext('onup') == '9109'
+    assert ('', '9109') in actions(home['9601'], 'onup')
 
 
 def test_menu_icon_is_a_hamburger():
