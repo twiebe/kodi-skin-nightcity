@@ -28,9 +28,13 @@ Video only: home with a spotlight and widget rows, video library, info page, pla
 
 ## Install
 
-1. Install jurialmunkey's repository (`https://jurialmunkey.github.io/repository.jurialmunkey/`), which carries TMDb Helper 6.17.9 or newer; the official Kodi repository only has an older one. Kodi installs TMDb Helper with the skin.
-2. Build the zip with `python tools/build.py` (writes `/dist/skin.nightcity-<version>.zip`) or take it from a release.
-3. Kodi: Settings > Add-ons > Install from zip file, then switch the skin under Settings > Interface > Skin.
+Nightcity comes from the twiebe repository (https://github.com/twiebe/kodi-repo), which also keeps it up to date. It needs TMDb Helper 6.17.9 or newer, which only jurialmunkey's repository carries (the official Kodi repository has an older one), so that one goes in first.
+
+1. Settings > File manager > Add source: `https://jurialmunkey.github.io/repository.jurialmunkey/`, and another one: `https://twiebe.github.io/kodi-repo/`
+2. Settings > Add-ons > Install from zip file: `repository.jurialmunkey-<version>.zip` from the first source, then `repository.twiebe-<version>.zip` from the second
+3. Add-ons > Install from repository > twiebe Repository > Look and feel > Skin > Nightcity > Install. Kodi installs TMDb Helper with it and offers to switch to the skin; later under Settings > Interface > Skin.
+
+To try a build of your own, install its zip (`python tools/build.py`, see Development) with Install from zip file instead of step 3. Kodi updates an add-on only from where it was installed from: to get updates again, install Nightcity from the repository once more.
 
 ## Development
 
