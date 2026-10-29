@@ -12,11 +12,14 @@
          picks it or, without chapters or bookmarks, add bookmark. Skin timers would take up to a
          second. -->
     <defaultcontrol always="true">93</defaultcontrol>
+    <!-- a chain from the cast row ended: back up on it at once (Custom_1141_OSDCast.xml), the
+         chapter row hidden meanwhile -->
+    <onload condition="!String.IsEmpty(Window(Home).Property(nc.osd.ret)) + !String.IsEmpty(Window(Home).Property(nc.osd.chain))">ActivateWindow(1141)</onload>
     <animation effect="fade" time="150">WindowOpen</animation>
     <animation effect="fade" time="150">WindowClose</animation>
     <controls>
         <control type="group">
-            <visible>!Window.IsActive(1141)</visible>
+            <visible>!Window.IsActive(1141) + String.IsEmpty(Window(Home).Property(nc.osd.ret))</visible>
             <animation effect="fade" time="150">VisibleChange</animation>
             <include content="RowHeader">
                 <param name="label" value="$LOCALIZE[31140]"/>

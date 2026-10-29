@@ -73,8 +73,6 @@
         <start reset="true">!String.IsEmpty(Window(Home).Property(nc.osd.chain)) + String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))</start>
         <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_chain),1)</stop>
         <onstop>ClearProperty(nc.osd.chain,home)</onstop>
-        <!-- ended from the cast row (Custom_1141_OSDCast.xml): back up on it, past the chapter row -->
-        <onstop condition="!String.IsEmpty(Window(Home).Property(nc.osd.ret)) + Window.IsActive(videobookmarks)">ActivateWindow(1141)</onstop>
     </timer>
     <!-- Clears nc.chain.claim (Includes_Tmdb.xml, ChainClick) once TMDb Helper's window manager
          runs, or a few seconds after a click when it failed to start; kept for the seconds, a
@@ -154,7 +152,7 @@
     <timer>
         <name>nc_osd_bio</name>
         <description>Debounce the biography lookup of the OSD cast row</description>
-        <start reset="true">Window.IsActive(1141) + !String.IsEmpty(Container(6501).ListItem.Property(tmdb_id)) + !String.IsEqual(Window(Home).Property(nc.osd.bio.id),Container(6501).ListItem.Property(tmdb_id))</start>
+        <start reset="true">Window.IsActive(1141) + String.IsEmpty(Window(Home).Property(nc.osd.chain)) + !String.IsEmpty(Container(6501).ListItem.Property(tmdb_id)) + !String.IsEqual(Window(Home).Property(nc.osd.bio.id),Container(6501).ListItem.Property(tmdb_id))</start>
         <onstart>SetProperty(nc.osd.bio.pending,$INFO[Container(6501).ListItem.Property(tmdb_id)],home)</onstart>
         <stop>!Window.IsActive(1141) | !String.IsEqual(Window(Home).Property(nc.osd.bio.pending),Container(6501).ListItem.Property(tmdb_id)) | [Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_bio),1) + !Container(6501).IsUpdating + !Container(6599).IsUpdating]</stop>
         <onstop condition="Window.IsActive(1141) + String.IsEqual(Window(Home).Property(nc.osd.bio.pending),Container(6501).ListItem.Property(tmdb_id))">SetProperty(nc.osd.bio.id,$INFO[Window(Home).Property(nc.osd.bio.pending)],home)</onstop>

@@ -51,9 +51,25 @@
     <onunload>ClearProperty(nc.info.live,home)</onunload>
     <onload condition="String.IsEqual(ListItem.DBType,episode)">NotifyAll(nightcity,info_select)</onload>
     <!-- reopened on the way back in a chain: the tab and the item it was left from -->
+    <onload condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEqual(Window(Home).Property(TMDbHelper.Position),Window(Home).Property(nc.ret.top))">SetFocus(9098)</onload>
     <onload condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">NotifyAll(nightcity,info_back)</onload>
     <controls>
         <include>Background</include>
+        <!-- on the way back in a chain the focus waits here, out of sight, until the list it
+             was left from is in (scripts/nightcity.py info_back); a key goes to the buttons -->
+        <control type="button" id="9098">
+            <include>ChainBackGuard</include>
+            <left>-100</left>
+            <top>-100</top>
+            <width>1</width>
+            <height>1</height>
+            <texturefocus/>
+            <texturenofocus/>
+            <onup>9000</onup>
+            <ondown>9000</ondown>
+            <onleft>9000</onleft>
+            <onright>9000</onright>
+        </control>
         <control type="group">
             <visible>String.IsEqual(ListItem.DBType,episode)</visible>
             <include content="FanartBackdrop">

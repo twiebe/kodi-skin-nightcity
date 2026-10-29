@@ -5,6 +5,8 @@ its first four entries showed. Here every entry, focused one after the other, ha
 on the screenshot: the focused entry is the only wide bar in the focus colour besides the accent
 bar on top of the menu.
 """
+import time
+
 import pytest
 from PIL import Image
 
@@ -94,8 +96,17 @@ def assert_entries_on_screen(name):
 
 def test_context_menu_on_card_shows_every_entry(home_page):
     focus(9102)
-    builtin('SetFocus(9410)')
-    wait_for('ControlGroup(9410).HasFocus() + !String.IsEmpty(Container.ListItem.Label)')
+    # first test of a worker right after the run restarted Kodi: the row may still be empty,
+    # a SetFocus on it goes nowhere
+    end = time.time() + 30
+    while True:
+        builtin('SetFocus(9410)')
+        try:
+            wait_for('ControlGroup(9410).HasFocus() + !String.IsEmpty(Container.ListItem.Label)', timeout=3)
+            break
+        except AssertionError:
+            if time.time() > end:
+                raise
     open_context_menu()
     labels = assert_entries_on_screen('ctx-card')
     assert 'Information' in labels or 'Movie information' in labels, labels

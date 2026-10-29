@@ -1163,6 +1163,8 @@ def test_info_leave_keeps_the_way_back_by_chain_position(monkeypatch):
     monkeypatch.setattr(nightcity, '_home', lambda: home)
     nightcity.info_leave('5500', '4', 'crew', '', '603', '')
     assert nightcity.parse_return(home.props['nc.ret.1'])['index'] == 3
+    # the page that parks its focus at once when it opens again (DialogVideoInfo.xml onload)
+    assert home.props['nc.ret.top'] == '1'
 
 
 def _back_env(monkeypatch, true, labels, record):
@@ -1181,9 +1183,30 @@ def test_info_back_enters_the_list_on_the_item_left(monkeypatch):
     true = {'Window.IsActive(movieinformation)', 'Control.HasFocus(5500)'}
     fake, home = _back_env(monkeypatch, true, labels, nightcity.return_point('5500', '4', '', '603', ''))
     nightcity.info_back()
-    assert home.props['nc.info.enter.from'] == '9001' and home.props['nc.info.enter'] == '5500'
-    assert fake.builtins == ['SetFocus(5500,3,absolute)']
-    assert 'nc.ret.2' not in home.props
+    assert home.props['nc.info.enter.from'] == '9098' and home.props['nc.info.enter'] == '5500'
+    # out of sight first, not a second on the buttons
+    assert fake.builtins == ['SetFocus(9098)', 'SetFocus(5500,3,absolute)']
+    assert 'nc.ret.2' not in home.props and 'nc.info.back' not in home.props
+
+
+def test_info_back_gives_up_on_the_buttons(monkeypatch):
+    labels = {'Window(Home).Property(TMDbHelper.Position)': '2', 'ListItem.Property(tmdb_id)': '603'}
+    true = {'Window.IsActive(movieinformation)', 'Control.HasFocus(9098)'}
+    fake, home = _back_env(monkeypatch, true, labels, nightcity.return_point('5500', '4', '', '603', ''))
+    nightcity.info_back()
+    assert fake.builtins == ['SetFocus(9098)', 'SetFocus(9000)']
+
+
+def test_select_episode_parks_the_focus_on_a_page_on_its_way_back(monkeypatch):
+    fake = FakeXbmc({'Window.IsActive(movieinformation)', 'Integer.IsGreater(Container(5200).NumItems,0)',
+                     'String.IsEqual(Container(5100).ListItemAbsolute(0).Season,1)',
+                     '!String.IsEmpty(Window(Home).Property(nc.info.back))'},
+                    {'ListItem.Season': '1', 'ListItem.Episode': '1', 'Container(5200).NumItems': '1',
+                     'Container(5200).ListItemAbsolute(0).Season': '1', 'Container(5100).NumItems': '1',
+                     'Container(5100).ListItemAbsolute(0).Episode': '1'})
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    nightcity._select_episode()
+    assert fake.builtins[-1] == 'SetFocus(9098)'
 
 
 def test_info_back_sets_the_tab_left_once_the_lists_rest(monkeypatch):
@@ -1233,3 +1256,23 @@ def test_info_show_leaves_an_episode_with_its_show_alone(monkeypatch):
     monkeypatch.setattr(nightcity, '_rpc', lambda *a, **k: pytest.fail('no lookup'))
     nightcity._info_show()
     assert 'nc.info.show' not in home.props
+
+
+def test_info_back_hands_the_parking_down_to_the_page_before(monkeypatch):
+    labels = {'Window(Home).Property(TMDbHelper.Position)': '2', 'ListItem.Property(tmdb_id)': '603'}
+    true = {'Window.IsActive(movieinformation)', 'Control.HasFocus(5500)'}
+    fake, home = _back_env(monkeypatch, true, labels, nightcity.return_point('5500', '4', '', '603', ''))
+    home.props['nc.ret.1'] = nightcity.return_point('5510', '1', '', '17419', '')
+    home.props['nc.ret.top'] = '2'
+    nightcity.info_back()
+    assert home.props['nc.ret.top'] == '1'
+
+
+def test_info_back_frees_a_parked_focus_on_another_page(monkeypatch):
+    labels = {'Window(Home).Property(TMDbHelper.Position)': '2', 'ListItem.Property(tmdb_id)': '604'}
+    true = {'Window.IsActive(movieinformation)', 'Control.HasFocus(9098)'}
+    fake, home = _back_env(monkeypatch, true, labels, nightcity.return_point('5500', '4', '', '603', ''))
+    home.props['nc.ret.top'] = '2'
+    nightcity.info_back()
+    assert fake.builtins == ['SetFocus(9000)']
+    assert 'nc.ret.top' not in home.props
