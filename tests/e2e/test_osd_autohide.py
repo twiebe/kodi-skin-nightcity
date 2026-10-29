@@ -57,12 +57,6 @@ def test_osd_hides_while_playing_stays_while_paused(autohide, tracks):
     assert 2.5 <= time.time() - start <= 5.5
 
 
-def test_osd_hides_with_its_rows(autohide, tracks):
-    action('down', delay=1)
-    wait_for('Window.IsActive(videobookmarks)')
-    wait_for('!Window.IsActive(videoosd) + !Window.IsActive(videobookmarks)', timeout=8)
-
-
 @pytest.fixture
 def autohide_off():
     builtin('Skin.SetBool(nc.osd.autohide.off)')
@@ -162,3 +156,72 @@ def test_osd_stays_while_in_a_track_panel(autohide, tracks, button, panel):
     wait_for('Control.HasFocus({})'.format(button))
     wait_for('!Window.IsActive(videoosd)', timeout=8)
     assert 2.5 <= time.time() - start <= 5.5
+
+
+def test_osd_stays_in_the_chapter_row(autohide, tracks):
+    """Down from the controls into the rows: the OSD stays until the user is back on the
+    controls, then the delay counts again."""
+    action('down')
+    wait_for('Window.IsActive(videobookmarks)')
+    time.sleep(5)
+    assert osd_up() and cond('Window.IsActive(videobookmarks)')['Window.IsActive(videobookmarks)']
+    action('up')
+    wait_for('ControlGroup(9000).HasFocus()')
+    start = time.time()
+    action('up')
+    wait_for('!Window.IsActive(videobookmarks)')
+    wait_for('!Window.IsActive(videoosd)', timeout=8)
+    assert 2.5 <= time.time() - start <= 5.5
+
+
+def test_osd_stays_in_the_cast_row(autohide, playing):
+    action('osd', delay=1)
+    wait_for('Window.IsActive(videoosd)')
+    action('down')
+    wait_for('Window.IsActive(videobookmarks)')
+    action('down')
+    wait_for('Window.IsActive(1141)')
+    time.sleep(5)
+    assert osd_up() and cond('Window.IsActive(1141)')['Window.IsActive(1141)']
+    action('back')
+    wait_for('!Window.IsActive(1141)')
+    start = time.time()
+    action('back')
+    wait_for('!Window.IsActive(videobookmarks)')
+    assert osd_up()
+    wait_for('!Window.IsActive(videoosd)', timeout=8)
+    assert 2.5 <= time.time() - start <= 5.5
+
+
+# the area of the track panels, over the right buttons (Includes_Player.xml TrackPanel)
+PANEL = (1256, 442, 1256 + 600, 442 + 488)
+
+
+def chapter_row_from(button, into_panel):
+    """Paused (a still picture), the chapter row opened Down from BUTTON, coming from inside its
+    panel when INTO_PANEL; the screenshot of it."""
+    builtin('SetFocus({})'.format(button))
+    wait_for('Control.HasFocus({})'.format(button))
+    if into_panel:
+        action('up', delay=0.5)
+    for _ in range(10):
+        action('down', delay=0.5)
+        if cond('Window.IsActive(videobookmarks)')['Window.IsActive(videobookmarks)']:
+            break
+    wait_for('Window.IsActive(videobookmarks)')
+    time.sleep(1)
+    path = screenshot('rows-from-{}-{}'.format(button, into_panel))
+    action('back')
+    wait_for('!Window.IsActive(videobookmarks)')
+    return path
+
+
+@pytest.mark.parametrize('button, panel', [(605, 651), (606, 652), (607, 653)])
+def test_panel_hides_when_the_rows_open(tracks, button, panel):
+    """Down out of a track panel to the chapter row: the row replaces the controls, the panel
+    goes with them (the OSD keeps its focus on the button under the row)."""
+    action('pause')
+    wait_for('Player.Paused')
+    plain = chapter_row_from(602, False)
+    from_panel = chapter_row_from(button, True)
+    assert changed_pixels(plain, from_panel, PANEL) < 200
