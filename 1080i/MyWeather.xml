@@ -74,11 +74,9 @@
                         <label>$VAR[WeatherUnit]</label>
                     </control>
                 </control>
-                <!-- the facts beside, only those the add-on gave; a missing one leaves no gap.
-                     Kodi replaces the add-on's values with formatted ones: humidity and UV index
-                     stay empty without one, wind becomes "From  at 0 km/h" (but Kodi leaves the
-                     add-on's Current.WindDirection alone). Feels like and dew point always show:
-                     Kodi makes a missing one 0 degrees, the same as a real 0 in winter. -->
+                <!-- the facts beside, all of them always: Kodi replaces the add-on's values
+                     with formatted ones (a missing temperature 0 degrees, a missing wind
+                     "From  at 0 km/h"), so a missing value cannot always be told apart -->
                 <control type="grouplist">
                     <left>1064</left>
                     <top>170</top>
@@ -96,7 +94,6 @@
                     <include content="FactLine">
                         <param name="key" value="[LOWERCASE]$LOCALIZE[406][/LOWERCASE]"/>
                         <param name="value" value="$INFO[Window(Weather).Property(Current.Humidity)]"/>
-                        <param name="visible" value="!String.IsEmpty(Window(Weather).Property(Current.Humidity))"/>
                         <param name="width" value="792"/>
                         <param name="keywidth" value="260"/>
                         <param name="height" value="46"/>
@@ -104,7 +101,6 @@
                     <include content="FactLine">
                         <param name="key" value="[LOWERCASE]$LOCALIZE[404][/LOWERCASE]"/>
                         <param name="value" value="$INFO[Window(Weather).Property(Current.Wind)]"/>
-                        <param name="visible" value="!String.IsEmpty(Window(Weather).Property(Current.WindDirection))"/>
                         <param name="width" value="792"/>
                         <param name="keywidth" value="260"/>
                         <param name="height" value="46"/>
@@ -112,7 +108,6 @@
                     <include content="FactLine">
                         <param name="key" value="[LOWERCASE]$LOCALIZE[403][/LOWERCASE]"/>
                         <param name="value" value="$INFO[Window(Weather).Property(Current.UVIndex)]"/>
-                        <param name="visible" value="!String.IsEmpty(Window(Weather).Property(Current.UVIndex))"/>
                         <param name="width" value="792"/>
                         <param name="keywidth" value="260"/>
                         <param name="height" value="46"/>
@@ -127,7 +122,6 @@
                     <include content="FactLine">
                         <param name="key" value="[LOWERCASE]$LOCALIZE[12014][/LOWERCASE]"/>
                         <param name="value" value="$INFO[Window(Weather).Property(Updated)]"/>
-                        <param name="visible" value="!String.IsEmpty(Window(Weather).Property(Updated))"/>
                         <param name="width" value="792"/>
                         <param name="keywidth" value="260"/>
                         <param name="height" value="46"/>
