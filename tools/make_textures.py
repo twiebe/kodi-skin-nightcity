@@ -79,20 +79,22 @@ def sign_mask(size, plus):
 
 
 def sign(size, plus):
-    """The - and + of a setting with a value range (spin control): a white sign on a dark plate,
-    so the sign that is not selected still shows on the cyan focus row."""
-    plate = cut(size, 6, corners=('tr',)).getchannel('A').point(lambda a: a * 150 // 255)
+    """The - and + of a setting with a value range (spin control): a white sign with a dark rim.
+    Kodi draws the sign that is not selected with this texture on the dark row and on the cyan
+    focus row alike: the sign shows on the dark one, the rim on the cyan one."""
     mark = sign_mask(size, plus)
-    image = Image.new('RGBA', (size, size), (0, 0, 0, 0))
-    image.putalpha(plate)
+    rim = Image.new('RGBA', (size, size), (5, 8, 12, 0))
+    rim.putalpha(mark.filter(ImageFilter.MaxFilter(5)))
     white = Image.new('RGBA', (size, size), (255, 255, 255, 255))
     white.putalpha(mark)
-    return Image.alpha_composite(image, white)
+    return Image.alpha_composite(rim, white)
 
 
-def sign_focus(size, plus):
-    """The selected - or +: a filled box with the sign cut out."""
-    box = cut(size, 6, corners=('tr',))
+def sign_focus(size, plus, pad=0):
+    """The selected - or +: a filled box with the sign cut out; `pad` px of air around it keeps
+    it off the other sign (Kodi puts both side by side)."""
+    box = Image.new('RGBA', (size, size), (0, 0, 0, 0))
+    box.paste(cut(size - 2 * pad, 6, corners=('tr',)), (pad, pad))
     alpha = Image.composite(Image.new('L', (size, size), 0), box.getchannel('A'), sign_mask(size, plus))
     box.putalpha(alpha)
     return box
@@ -140,10 +142,10 @@ def main():
     dogear(14).save(UI / 'dogear.png')
     cut(32, 8, line=2, corners=('tr',)).save(UI / 'check_off.png')
     check(32, 8).save(UI / 'check_on.png')
-    sign(28, False).save(UI / 'spin_minus.png')
-    sign(28, True).save(UI / 'spin_plus.png')
-    sign_focus(28, False).save(UI / 'spin_minus_focus.png')
-    sign_focus(28, True).save(UI / 'spin_plus_focus.png')
+    sign(34, False).save(UI / 'spin_minus.png')
+    sign(34, True).save(UI / 'spin_plus.png')
+    sign_focus(34, False, pad=3).save(UI / 'spin_minus_focus.png')
+    sign_focus(34, True, pad=3).save(UI / 'spin_plus_focus.png')
     fade(256, 4).save(UI / 'fade_r.png')
     fade(256, 4).transpose(Image.Transpose.ROTATE_270).save(UI / 'fade_b.png')
     fade(256, 4, reverse=True).transpose(Image.Transpose.ROTATE_270).save(UI / 'fade_t.png')

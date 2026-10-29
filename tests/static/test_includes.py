@@ -532,6 +532,11 @@ def test_toggle_box_inside_the_row():
     assert int(radio.findtext('radiowidth')) >= 24
 
 
+def ET_tostring(el):
+    import xml.etree.ElementTree as ET
+    return ET.tostring(el, encoding='unicode')
+
+
 def test_spin_settings_show_minus_and_plus():
     """A setting with a value range (System > Display > Delay after change of refresh rate)
     shows - and + next to its value, focused or not."""
@@ -543,17 +548,18 @@ def test_spin_settings_show_minus_and_plus():
         assert (ROOT / 'media' / texture).is_file(), texture
 
 
-def test_active_slider_nib_is_pink():
-    """Kodi draws the focus nib only while the slider is being moved, on the cyan focus row:
-    a dark nib there was hard to see."""
+def test_active_slider_nib_is_light():
+    """Kodi draws the focus nib only while the slider is being moved, on the cyan focus row and
+    its dark bar: a dark nib vanished there, pink stood alone in the settings. Light text colour."""
     slider = settings_template('13')
-    assert slider.find('textureslidernibfocus').get('colordiffuse') == 'accent2'
+    assert slider.find('textureslidernibfocus').get('colordiffuse') == 'text'
 
 
 def test_focused_spin_row_shows_both_signs():
-    """On the cyan focus row Kodi draws the arrow that is not selected with its normal texture:
-    a cyan sign alone vanished there. The normal sign sits on a dark plate, the selected one is a
-    pink box, so both show and the selected one stands out."""
+    """On the cyan focus row Kodi draws the sign that is not selected with its normal texture,
+    the same as on a dark row. It is a light sign with a dark rim, so it shows on both, without a
+    plate. The selected one is a dark chip with the sign cut out (cyan shows through), in the
+    dark ink of the focus row, not pink."""
     from PIL import Image
     spin = settings_template('9')
     for sign in ('minus', 'plus'):
@@ -561,11 +567,22 @@ def test_focused_spin_row_shows_both_signs():
         normal = spin.find(tag)
         focus = spin.find(tag + 'focus')
         assert focus.text == 'ui/spin_{}_focus.png'.format(sign)
-        assert focus.get('colordiffuse') == 'accent2'
-        plate = Image.open(ROOT / 'media' / normal.text).convert('RGBA').getpixel((3, 3))
-        assert plate[3] >= 100 and max(plate[:3]) < 40, plate
+        assert focus.get('colordiffuse') == 'focus_text'
+        assert normal.get('colordiffuse') == 'text_dim'
+        mark = Image.open(ROOT / 'media' / normal.text).convert('RGBA')
+        assert mark.getpixel((3, 3))[3] == 0  # no plate
+        mid = mark.width // 2
+        assert min(mark.getpixel((mid, mid))[:3]) > 200 and mark.getpixel((mid, mid))[3] > 200
+        rim = [p for p in mark.getdata() if p[3] > 200 and max(p[:3]) < 60]
+        assert rim, sign
         box = Image.open(ROOT / 'media' / focus.text).convert('RGBA')
-        assert box.getpixel((3, 3))[3] > 200 and box.getpixel((14, 14))[3] < 60
+        assert box.getpixel((3, 3))[3] > 200 and box.getpixel((mid, mid))[3] < 60
+        assert box.getpixel((1, 1))[3] == 0  # air to the other sign
+
+
+def test_settings_rows_are_not_pink():
+    for cid in ('7', '8', '9', '12', '13'):
+        assert 'accent2' not in ET_tostring(settings_template(cid)), cid
 
 
 def test_nothing_overlaps_a_dialog_heading():
