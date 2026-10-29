@@ -74,8 +74,11 @@
                         <label>$VAR[WeatherUnit]</label>
                     </control>
                 </control>
-                <!-- the facts beside, only those the add-on gave (Includes_Weather.xml); a
-                     missing one leaves no gap -->
+                <!-- the facts beside, only those the add-on gave; a missing one leaves no gap.
+                     Kodi replaces the add-on's values with formatted ones: humidity and UV index
+                     stay empty without one, wind becomes "From  at 0 km/h" (but Kodi leaves the
+                     add-on's Current.WindDirection alone). Feels like and dew point always show:
+                     Kodi makes a missing one 0 degrees, the same as a real 0 in winter. -->
                 <control type="grouplist">
                     <left>1064</left>
                     <top>170</top>
@@ -86,7 +89,6 @@
                     <include content="FactLine">
                         <param name="key" value="[LOWERCASE]$LOCALIZE[402][/LOWERCASE]"/>
                         <param name="value" value="$INFO[Window(Weather).Property(Current.FeelsLike)]$INFO[System.TemperatureUnits]"/>
-                        <param name="visible" value="$EXP[WeatherHasFeelsLike]"/>
                         <param name="width" value="792"/>
                         <param name="keywidth" value="260"/>
                         <param name="height" value="46"/>
@@ -118,7 +120,6 @@
                     <include content="FactLine">
                         <param name="key" value="[LOWERCASE]$LOCALIZE[405][/LOWERCASE]"/>
                         <param name="value" value="$INFO[Window(Weather).Property(Current.DewPoint)]$INFO[System.TemperatureUnits]"/>
-                        <param name="visible" value="$EXP[WeatherHasDewPoint]"/>
                         <param name="width" value="792"/>
                         <param name="keywidth" value="260"/>
                         <param name="height" value="46"/>

@@ -1,7 +1,6 @@
 """Weather page (MyWeather.xml) with fixed weather: the fake add-on in fixtures/ is installed
 into this Kodi and chosen as its weather service for the module, then the old service is back."""
 import pathlib
-import re
 import shutil
 import time
 
@@ -14,15 +13,14 @@ pytestmark = pytest.mark.e2e
 ADDON = 'weather.nightcity.fake'
 FIXTURE = pathlib.Path(__file__).parent / 'fixtures' / ADDON
 PAGE = 'Window.IsActive(weather)'
-EXPRESSIONS = dict(re.findall(r'<expression name="(\w+)">([^<]*)</expression>',
-                              (pathlib.Path(__file__).parents[2] / '1080i' / 'Includes_Weather.xml').read_text(encoding='utf-8')))
 WIND = '!String.IsEmpty(Window(Weather).Property(Current.WindDirection))'
+HUMIDITY = '!String.IsEmpty(Window(Weather).Property(Current.Humidity))'
 
 
 def facts_shown():
-    """Feels like and wind lines: whether their visible conditions hold in Kodi."""
-    shown = cond(EXPRESSIONS['WeatherHasFeelsLike'], WIND)
-    return shown[EXPRESSIONS['WeatherHasFeelsLike']], shown[WIND]
+    """Wind and humidity lines: whether their visible conditions hold in Kodi."""
+    shown = cond(WIND, HUMIDITY)
+    return shown[WIND], shown[HUMIDITY]
 
 
 def installed():
@@ -59,8 +57,19 @@ def weather():
 def page(weather):
     """The weather page, opened like a user does: quick menu, up to the weather tile, OK. From
     Home, but not `home`: the page needs no library, so no focus in Home's rows either."""
+    # after a restart: the skin's startup screen, then Home, then jellyfin-kodi's "Resume the
+    # previous sync?" a few seconds later; back answers no (as in `home`)
+    wait_for('!Window.IsActive(startup)', timeout=30)
     builtin('Dialog.Close(all,true)')
     builtin('ReplaceWindow(Home)')
+    clear, end = 0, time.time() + 30
+    while clear < 6 and time.time() < end:
+        if cond('System.HasActiveModalDialog')['System.HasActiveModalDialog']:
+            action('back', delay=1)
+            clear = 0
+        else:
+            clear += 1
+            time.sleep(0.5)
     wait_for('Window.IsActive(home) + !System.HasActiveModalDialog')
     builtin('ActivateWindow(1170)')
     wait_for('Control.HasFocus(1220)')
@@ -124,9 +133,9 @@ def test_opens_on_today(page):
 
 
 def test_facts_the_add_on_left_out_are_hidden(page):
-    """Without feels like and wind Kodi still shows them (0 converted, "From  at 0 km/h"): the
-    lines hide, the rest closes up."""
-    builtin('SetProperty(nc.test.weather.omit,FeelsLike|Wind|WindDirection,home)')
+    """Without wind and humidity Kodi still writes a wind sentence ("From  at 0 km/h"): both
+    lines hide, the rest closes up. Feels like stays, as Kodi's 0 degrees."""
+    builtin('SetProperty(nc.test.weather.omit,FeelsLike|Wind|WindDirection|Humidity,home)')
     try:
         builtin('Weather.Refresh')
         wait_for('String.IsEmpty(Window(Weather).Property(Current.WindDirection))', timeout=30)
@@ -140,4 +149,4 @@ def test_facts_the_add_on_left_out_are_hidden(page):
         builtin('ClearProperty(nc.test.weather.omit,home)')
         builtin('Weather.Refresh')
         wait_for('String.IsEqual(Window(Weather).Property(Current.WindDirection),SW)', timeout=30)
-    wait_for(EXPRESSIONS['WeatherHasFeelsLike'] + ' + ' + WIND, timeout=10)
+    wait_for(WIND + ' + ' + HUMIDITY, timeout=10)
