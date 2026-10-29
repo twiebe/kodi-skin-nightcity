@@ -1,6 +1,7 @@
 """Weather page (MyWeather.xml) with fixed weather: the fake add-on in fixtures/ is installed
 into this Kodi and chosen as its weather service for the module, then the old service is back."""
 import pathlib
+import re
 import shutil
 import time
 
@@ -13,6 +14,15 @@ pytestmark = pytest.mark.e2e
 ADDON = 'weather.nightcity.fake'
 FIXTURE = pathlib.Path(__file__).parent / 'fixtures' / ADDON
 PAGE = 'Window.IsActive(weather)'
+EXPRESSIONS = dict(re.findall(r'<expression name="(\w+)">([^<]*)</expression>',
+                              (pathlib.Path(__file__).parents[2] / '1080i' / 'Includes_Weather.xml').read_text(encoding='utf-8')))
+WIND = '!String.IsEmpty(Window(Weather).Property(Current.WindDirection))'
+
+
+def facts_shown():
+    """Feels like and wind lines: whether their visible conditions hold in Kodi."""
+    shown = cond(EXPRESSIONS['WeatherHasFeelsLike'], WIND)
+    return shown[EXPRESSIONS['WeatherHasFeelsLike']], shown[WIND]
 
 
 def installed():
@@ -74,6 +84,7 @@ def test_current_conditions_and_the_next_days(page):
     assert current['Window(Weather).Property(Current.Humidity)'] == '64%'
     assert current['Window(Weather).Property(Current.FanartCode)'] == '30'
     assert current['Container(500).NumItems'] == '7'
+    assert facts_shown() == (True, True)
     days = [info(*('Container(500).ListItemAbsolute({}).{}'.format(i, f) for f in ('Label', 'Property(code)', 'Property(outlook)')))
             for i in range(7)]
     assert [list(d.values())[0] for d in days] == ['Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday']
@@ -110,3 +121,23 @@ def test_opens_on_today(page):
     builtin('ActivateWindow(weather)')
     wait_for(PAGE + ' + Control.HasFocus(500)')
     assert cond('Integer.IsEqual(Container(500).CurrentItem,1)')['Integer.IsEqual(Container(500).CurrentItem,1)']
+
+
+def test_facts_the_add_on_left_out_are_hidden(page):
+    """Without feels like and wind Kodi still shows them (0 converted, "From  at 0 km/h"): the
+    lines hide, the rest closes up."""
+    builtin('SetProperty(nc.test.weather.omit,FeelsLike|Wind|WindDirection,home)')
+    try:
+        builtin('Weather.Refresh')
+        wait_for('String.IsEmpty(Window(Weather).Property(Current.WindDirection))', timeout=30)
+        time.sleep(1)  # Kodi sets its formatted values after the add-on is done
+        labels = info('Window(Weather).Property(Current.FeelsLike)', 'Window(Weather).Property(Current.Wind)')
+        assert labels['Window(Weather).Property(Current.FeelsLike)'] in ('0', '32')
+        assert 'at 0' in labels['Window(Weather).Property(Current.Wind)']
+        assert facts_shown() == (False, False)
+        screenshot('weather-missing-facts')
+    finally:
+        builtin('ClearProperty(nc.test.weather.omit,home)')
+        builtin('Weather.Refresh')
+        wait_for('String.IsEqual(Window(Weather).Property(Current.WindDirection),SW)', timeout=30)
+    wait_for(EXPRESSIONS['WeatherHasFeelsLike'] + ' + ' + WIND, timeout=10)

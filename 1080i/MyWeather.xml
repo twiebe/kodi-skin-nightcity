@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Weather (Kodi's window "weather", 12600), opened by the weather tile of the quick menu.
-     Current conditions large on top: place, conditions, glyph and temperature, the facts
+     Current conditions large on top: place, conditions, glyph and temperature (510), the facts
      beside them. Below the next days as a row of cards, Day0 (today) to Day6, as far as the
      weather add-on gave them. Kodi converts the add-on's values to the user's units and sets
      them as properties of this window (temperatures without unit, wind as a sentence).
@@ -39,17 +39,43 @@
                     <height>160</height>
                     <texture fallback="ui/weather/na.png" colordiffuse="accent2">ui/weather/$INFO[Window(Weather).Property(Current.FanartCode)].png</texture>
                 </control>
-                <control type="label">
+                <!-- the temperature as one word: the font's degree sign stands wide apart, so
+                     number, degree sign and unit letter come as labels pulled together -->
+                <control type="grouplist" id="510">
                     <left>256</left>
                     <top>282</top>
                     <width>748</width>
                     <height>160</height>
-                    <aligny>center</aligny>
-                    <font>font_wordmark</font>
-                    <textcolor>text</textcolor>
-                    <label>$INFO[Weather.Temperature]</label>
+                    <orientation>horizontal</orientation>
+                    <itemgap>-14</itemgap>
+                    <control type="label">
+                        <width>auto</width>
+                        <height>160</height>
+                        <aligny>center</aligny>
+                        <font>font_temp</font>
+                        <textcolor>text</textcolor>
+                        <label>$INFO[Window(Weather).Property(Current.Temperature)]</label>
+                    </control>
+                    <control type="label">
+                        <width>auto</width>
+                        <height>160</height>
+                        <aligny>center</aligny>
+                        <font>font_temp</font>
+                        <textcolor>text</textcolor>
+                        <label>°</label>
+                        <visible>[String.IsEqual(System.TemperatureUnits,°C) | String.IsEqual(System.TemperatureUnits,°F)]</visible>
+                    </control>
+                    <control type="label">
+                        <width>auto</width>
+                        <height>160</height>
+                        <aligny>center</aligny>
+                        <font>font_temp</font>
+                        <textcolor>text</textcolor>
+                        <label>$VAR[WeatherUnit]</label>
+                    </control>
                 </control>
-                <!-- the facts beside, a missing one leaves no gap -->
+                <!-- the facts beside, only those the add-on gave (Includes_Weather.xml); a
+                     missing one leaves no gap -->
                 <control type="grouplist">
                     <left>1064</left>
                     <top>170</top>
@@ -60,7 +86,7 @@
                     <include content="FactLine">
                         <param name="key" value="[LOWERCASE]$LOCALIZE[402][/LOWERCASE]"/>
                         <param name="value" value="$INFO[Window(Weather).Property(Current.FeelsLike)]$INFO[System.TemperatureUnits]"/>
-                        <param name="visible" value="!String.IsEmpty(Window(Weather).Property(Current.FeelsLike))"/>
+                        <param name="visible" value="$EXP[WeatherHasFeelsLike]"/>
                         <param name="width" value="792"/>
                         <param name="keywidth" value="260"/>
                         <param name="height" value="46"/>
@@ -76,7 +102,7 @@
                     <include content="FactLine">
                         <param name="key" value="[LOWERCASE]$LOCALIZE[404][/LOWERCASE]"/>
                         <param name="value" value="$INFO[Window(Weather).Property(Current.Wind)]"/>
-                        <param name="visible" value="!String.IsEmpty(Window(Weather).Property(Current.Wind))"/>
+                        <param name="visible" value="!String.IsEmpty(Window(Weather).Property(Current.WindDirection))"/>
                         <param name="width" value="792"/>
                         <param name="keywidth" value="260"/>
                         <param name="height" value="46"/>
@@ -92,7 +118,7 @@
                     <include content="FactLine">
                         <param name="key" value="[LOWERCASE]$LOCALIZE[405][/LOWERCASE]"/>
                         <param name="value" value="$INFO[Window(Weather).Property(Current.DewPoint)]$INFO[System.TemperatureUnits]"/>
-                        <param name="visible" value="!String.IsEmpty(Window(Weather).Property(Current.DewPoint))"/>
+                        <param name="visible" value="$EXP[WeatherHasDewPoint]"/>
                         <param name="width" value="792"/>
                         <param name="keywidth" value="260"/>
                         <param name="height" value="46"/>

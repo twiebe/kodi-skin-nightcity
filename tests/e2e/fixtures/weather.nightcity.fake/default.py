@@ -1,7 +1,11 @@
 """Sets fixed weather on Kodi's weather window the way real weather add-ons do: Kodi runs this
 with the location index as argument, reads Current.*, Day0-6.* and Location1 back when it ends
 and converts them (Celsius and km/h in, the user's units out). Daily.* and the other extended
-properties some skins read are set too."""
+properties some skins read are set too.
+
+Window(Home).Property(nc.test.weather.omit): current values to leave out, separated by | (e.g.
+FeelsLike|Wind|WindDirection), as an add-on without them would. They are cleared, since Kodi
+leaves its formatted values of the last fetch on the window."""
 import xbmcgui
 
 WINDOW = xbmcgui.Window(12600)
@@ -34,8 +38,12 @@ def main():
     WINDOW.setProperty('Locations', '1')
     WINDOW.setProperty('Location1', CURRENT['Location'])
     WINDOW.setProperty('WeatherProvider', 'Nightcity test weather')
+    omit = xbmcgui.Window(10000).getProperty('nc.test.weather.omit').split('|')
     for key, value in CURRENT.items():
-        WINDOW.setProperty('Current.' + key, value)
+        if key in omit:
+            WINDOW.clearProperty('Current.' + key)
+        else:
+            WINDOW.setProperty('Current.' + key, value)
     for i, (title, outlook, code, high, low) in enumerate(DAYS):
         day = 'Day{}.'.format(i)
         WINDOW.setProperty(day + 'Title', title)
