@@ -93,7 +93,7 @@
     </include>
 
     <!-- Top line of Home: the menu on the left, the clock on the right. Right of the menu, left
-         of the clock, an icon opens the quick menu (Custom_1170_QuickMenu.xml). -->
+         of the clock, an icon shows the quick menu while it has the focus (QuickMenuPanel). -->
     <include name="HomeTop">
         <control type="grouplist" id="9190">
             <left>64</left>
@@ -124,10 +124,14 @@
                     <radiowidth>32</radiowidth>
                     <radioheight>32</radioheight>
                     <textureradioonfocus colordiffuse="focus_text">ui/qm_menu.png</textureradioonfocus>
-                    <textureradioonnofocus colordiffuse="text_mute">ui/qm_menu.png</textureradioonnofocus>
+                    <!-- marked in the accent colour while the focus is in the quick menu -->
+                    <selected>ControlGroup(9180).HasFocus</selected>
+                    <textureradioonnofocus colordiffuse="accent">ui/qm_menu.png</textureradioonnofocus>
                     <textureradioofffocus colordiffuse="focus_text">ui/qm_menu.png</textureradioofffocus>
                     <textureradiooffnofocus colordiffuse="text_mute">ui/qm_menu.png</textureradiooffnofocus>
-                    <onclick>ActivateWindow(1170)</onclick>
+                    <!-- the quick menu shows while the icon has the focus (QuickMenuPanel): OK
+                         and Down go into it -->
+                    <onclick>SetFocus(1210)</onclick>
                     <!-- the last menu entry shown, not the one that had the focus last; right
                          wraps around to home -->
                     <onleft condition="!Skin.HasSetting(nc.menu.hide.search)">9104</onleft>
@@ -136,7 +140,7 @@
                     <onleft>9101</onleft>
                     <onright>9101</onright>
                     <onup>noop</onup>
-                    <ondown>9100</ondown>
+                    <ondown>1210</ondown>
                 </control>
             </control>
             <!-- the weather of the quick menu, when a weather service is set up -->
@@ -1323,6 +1327,262 @@
                     </item>
                 </content>
             </control>
+        </control>
+    </include>
+
+    <!-- The quick menu on Home: shown while the icon next to the clock (9109) or the menu has the
+         focus (DESIGN.md: focus applies, OK goes). Down or OK on the icon go in, Up from the
+         top and Back come out onto it, Left and Right off the icon hide it. A part of Home, not
+         the dialog: a modal dialog would take the focus away from the icon. The page below
+         dims as under the dialog. -->
+    <include name="QuickMenuPanel">
+        <control type="image">
+            <!-- not the top line: the icon with the focus stays clear -->
+            <top>88</top>
+            <width>1920</width>
+            <height>992</height>
+            <texture colordiffuse="bg">ui/white.png</texture>
+            <visible>Control.HasFocus(9109) | ControlGroup(9180).HasFocus</visible>
+            <animation effect="fade" start="0" end="55" time="200" condition="!Player.HasVideo">Visible</animation>
+            <animation effect="fade" start="55" end="0" time="160" condition="!Player.HasVideo">Hidden</animation>
+        </control>
+        <control type="group" id="9180">
+            <left>1232</left>
+            <top>96</top>
+            <width>640</width>
+            <height>788</height>
+            <visible>Control.HasFocus(9109) | ControlGroup(9180).HasFocus</visible>
+            <animation effect="slide" start="16,-12" end="0,0" time="200" tween="cubic" easing="out" condition="!Player.HasVideo">Visible</animation>
+            <animation effect="fade" start="0" end="100" time="180" condition="!Player.HasVideo">Visible</animation>
+            <animation effect="slide" start="0,0" end="16,-12" time="160" tween="cubic" easing="in" condition="!Player.HasVideo">Hidden</animation>
+            <animation effect="fade" start="100" end="0" time="160" condition="!Player.HasVideo">Hidden</animation>
+            <include>QuickMenuBody</include>
+        </control>
+    </include>
+
+    <!-- The quick menu itself: clock and date, the weather, the power tiles, the links. Two
+         places show it: the dialog over any window (Custom_1170_QuickMenu.xml: held Home key,
+         S key, power menu) and the panel of Home while the icon next to the clock or the menu
+         has the focus (QuickMenuPanel). Same ids in both. The actions fit both: the dialog
+         closes itself first, which does nothing on Home; on Home Up and Back lead to the icon. -->
+    <include name="QuickMenuBody">
+        <include>DialogFrame</include>
+        <control type="label">
+            <left>40</left>
+            <top>34</top>
+            <width>560</width>
+            <height>72</height>
+            <font>font_clock</font>
+            <textcolor>accent2</textcolor>
+            <label>$INFO[System.Time]</label>
+        </control>
+        <control type="label">
+            <left>40</left>
+            <top>106</top>
+            <width>560</width>
+            <height>36</height>
+            <font>font_body</font>
+            <textcolor>text_dim</textcolor>
+            <label>$INFO[System.Date]</label>
+        </control>
+
+        <!-- weather: Kodi has it only with a weather add-on chosen in its settings -->
+        <control type="button" id="1210">
+            <left>40</left>
+            <top>160</top>
+            <width>560</width>
+            <height>112</height>
+            <label/>
+            <texturenofocus border="16" colordiffuse="border_dim">ui/cut.png</texturenofocus>
+            <texturefocus border="16" colordiffuse="focus">ui/cut_fill.png</texturefocus>
+            <!-- Kodi opens no window while a modal dialog is open -->
+            <onclick>Dialog.Close(1170,true)</onclick>
+            <!-- on Home first onto the icon: Back from the weather lands there, menu shown -->
+            <onclick condition="!Window.IsActive(1170)">SetFocus(9109)</onclick>
+            <onclick condition="Weather.IsFetched">ActivateWindow(weather)</onclick>
+            <onclick condition="!Weather.IsFetched">ActivateWindow(servicesettings,weather)</onclick>
+            <ondown>1220</ondown>
+            <!-- Back on Home: the icon, menu still shown; in the dialog Kodi's own Back closes it -->
+            <onback condition="!Window.IsActive(1170)">9109</onback>
+            <!-- up leaves the menu, onto the icon next to the clock when Home is behind -->
+            <onup>Dialog.Close(1170,true)</onup>
+            <onup condition="Window.IsActive(home)">SetFocus(9109)</onup>
+            <onleft>noop</onleft>
+            <onright>noop</onright>
+        </control>
+        <control type="image">
+            <left>64</left>
+            <top>188</top>
+            <width>56</width>
+            <height>56</height>
+            <texture colordiffuse="$VAR[QuickWeatherIcon]">ui/qm_weather.png</texture>
+        </control>
+        <control type="group">
+            <visible>Weather.IsFetched</visible>
+            <control type="label">
+                <left>140</left>
+                <top>176</top>
+                <width>150</width>
+                <height>80</height>
+                <aligny>center</aligny>
+                <font>font_clock</font>
+                <textcolor>$VAR[QuickWeatherText]</textcolor>
+                <label>$INFO[Weather.Temperature]</label>
+            </control>
+            <control type="label">
+                <left>296</left>
+                <top>180</top>
+                <width>284</width>
+                <height>36</height>
+                <font>font_body</font>
+                <textcolor>$VAR[QuickWeatherText]</textcolor>
+                <label>$INFO[Weather.Conditions]</label>
+            </control>
+            <control type="label">
+                <left>296</left>
+                <top>218</top>
+                <width>284</width>
+                <height>32</height>
+                <font>font_num_small</font>
+                <textcolor>$VAR[QuickWeatherSub]</textcolor>
+                <label>$INFO[Weather.Location]</label>
+            </control>
+        </control>
+        <control type="label">
+            <left>140</left>
+            <top>160</top>
+            <width>440</width>
+            <height>112</height>
+            <aligny>center</aligny>
+            <font>font_caps</font>
+            <textcolor>$VAR[QuickWeatherText]</textcolor>
+            <label>[UPPERCASE]$LOCALIZE[31321][/UPPERCASE]</label>
+            <visible>!Weather.IsFetched</visible>
+        </control>
+
+        <include content="RowHeader">
+            <param name="label" value="$LOCALIZE[31089]"/>
+            <param name="left" value="40"/>
+            <param name="top" value="296"/>
+            <param name="width" value="560"/>
+        </include>
+        <!-- no visible conditions: Kodi clicks a static list by position. Tiles the device
+             cannot do are dimmed (property can empty). -->
+        <control type="panel" id="1220">
+            <left>40</left>
+            <top>336</top>
+            <width>576</width>
+            <height>292</height>
+            <orientation>vertical</orientation>
+            <onup>1210</onup>
+            <!-- Back on Home: the icon, menu still shown; in the dialog Kodi's own Back closes it -->
+            <onback condition="!Window.IsActive(1170)">9109</onback>
+            <ondown>1230</ondown>
+            <onleft>noop</onleft>
+            <onright>noop</onright>
+            <itemlayout width="192" height="146">
+                <include content="QuickTile">
+                    <param name="list" value="1220"/>
+                    <param name="focused" value="false"/>
+                </include>
+            </itemlayout>
+            <focusedlayout width="192" height="146">
+                <include content="QuickTile">
+                    <param name="list" value="1220"/>
+                </include>
+            </focusedlayout>
+            <content>
+                <item>
+                    <label>$LOCALIZE[31143]</label>
+                    <icon>ui/qm_power.png</icon>
+                    <property name="can">$VAR[QuickCanPowerdown]</property>
+                    <onclick condition="System.CanPowerDown">Powerdown</onclick>
+                    <onclick condition="!System.CanPowerDown">Notification($LOCALIZE[31089],$LOCALIZE[31154])</onclick>
+                </item>
+                <item>
+                    <label>$LOCALIZE[31144]</label>
+                    <icon>ui/qm_reboot.png</icon>
+                    <property name="can">$VAR[QuickCanReboot]</property>
+                    <onclick condition="System.CanReboot">Reboot</onclick>
+                    <onclick condition="!System.CanReboot">Notification($LOCALIZE[31089],$LOCALIZE[31154])</onclick>
+                </item>
+                <item>
+                    <label>$LOCALIZE[31145]</label>
+                    <icon>ui/qm_standby.png</icon>
+                    <property name="can">$VAR[QuickCanSuspend]</property>
+                    <onclick condition="System.CanSuspend">Suspend</onclick>
+                    <onclick condition="!System.CanSuspend">Notification($LOCALIZE[31089],$LOCALIZE[31154])</onclick>
+                </item>
+                <item>
+                    <label>$LOCALIZE[31147]</label>
+                    <icon>ui/qm_restartapp.png</icon>
+                    <property name="can">$VAR[QuickCanRestartApp]</property>
+                    <onclick condition="System.Platform.Windows | System.Platform.Linux">RestartApp</onclick>
+                    <onclick condition="![System.Platform.Windows | System.Platform.Linux]">Notification($LOCALIZE[31089],$LOCALIZE[31154])</onclick>
+                </item>
+                <item>
+                    <label>$LOCALIZE[31146]</label>
+                    <icon>ui/qm_quit.png</icon>
+                    <property name="can">1</property>
+                    <onclick>Quit</onclick>
+                </item>
+                <!-- shutdown timer: Kodi asks for the minutes; a running one shows what is
+                     left and OK cancels it -->
+                <item>
+                    <label>$LOCALIZE[31323]</label>
+                    <label2>$INFO[System.AlarmPos]</label2>
+                    <icon>ui/qm_timer.png</icon>
+                    <property name="can">1</property>
+                    <onclick condition="!System.HasAlarm(shutdowntimer)">AlarmClock(shutdowntimer,Shutdown())</onclick>
+                    <onclick condition="System.HasAlarm(shutdowntimer)">CancelAlarm(shutdowntimer)</onclick>
+                </item>
+            </content>
+        </control>
+
+        <include content="RowHeader">
+            <param name="label" value="$LOCALIZE[31322]"/>
+            <param name="left" value="40"/>
+            <param name="top" value="640"/>
+            <param name="width" value="560"/>
+        </include>
+        <control type="list" id="1230">
+            <left>40</left>
+            <top>680</top>
+            <width>384</width>
+            <height>76</height>
+            <orientation>horizontal</orientation>
+            <onup>1220</onup>
+            <!-- Back on Home: the icon, menu still shown; in the dialog Kodi's own Back closes it -->
+            <onback condition="!Window.IsActive(1170)">9109</onback>
+            <ondown>noop</ondown>
+            <onleft>noop</onleft>
+            <onright>noop</onright>
+            <itemlayout width="192" height="72">
+                <include content="QuickLink">
+                    <param name="focused" value="false"/>
+                </include>
+            </itemlayout>
+            <focusedlayout width="192" height="72">
+                <include content="QuickLink"/>
+            </focusedlayout>
+            <content>
+                <!-- the settings page of Home: the machine facts and Kodi's settings groups -->
+                <item>
+                    <label>$LOCALIZE[5]</label>
+                    <icon>ui/qm_settings.png</icon>
+                    <onclick>Dialog.Close(1170,true)</onclick>
+                    <onclick>SetProperty(nc.go,system,home)</onclick>
+                    <onclick>ActivateWindow(1160)</onclick>
+                </item>
+                <item>
+                    <!-- Files, the file manager: its own name does not fit the tile -->
+                    <label>$LOCALIZE[744]</label>
+                    <icon>ui/qm_files.png</icon>
+                    <onclick>Dialog.Close(1170,true)</onclick>
+                    <onclick>SetProperty(nc.go,files,home)</onclick>
+                    <onclick>ActivateWindow(1160)</onclick>
+                </item>
+            </content>
         </control>
     </include>
 
