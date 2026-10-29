@@ -30,10 +30,10 @@
         </definition>
     </include>
 
-    <!-- One season in the tab line: like a menu entry, the shown season with a pink ◢ -->
+    <!-- One season in the tab line: like a menu entry, the shown season in accent with a line
+         under it (DialogVideoInfo.xml, 5200) -->
     <include name="SeasonTab">
         <param name="color"/>
-        <param name="active" default="false"/>
         <definition>
             <control type="label">
                 <width>240</width>
@@ -42,16 +42,6 @@
                 <font>font_caps</font>
                 <textcolor>$PARAM[color]</textcolor>
                 <label>[UPPERCASE]$VAR[SeasonTabLabel][/UPPERCASE]</label>
-                <visible>!$PARAM[active]</visible>
-            </control>
-            <control type="label">
-                <width>240</width>
-                <height>44</height>
-                <aligny>center</aligny>
-                <font>font_caps</font>
-                <textcolor>accent</textcolor>
-                <label>[COLOR accent2]◢[/COLOR] [UPPERCASE]$VAR[SeasonTabLabel][/UPPERCASE]</label>
-                <visible>$PARAM[active]</visible>
             </control>
         </definition>
     </include>
