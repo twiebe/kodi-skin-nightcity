@@ -27,7 +27,7 @@ CATEGORIES = {
 # rail button id -> (Kodi label id, window it opens); group = second digit
 RAIL = {
     '9211': (14200, 'PlayerSettings'), '9212': (14211, 'MediaSettings'), '9213': (14204, 'PVRSettings'),
-    '9221': (14206, 'InterfaceSettings'), '9222': (166, 'SkinSettings'), '9224': (31222, 'SkinSettings'), '9223': (13200, 'Profiles'),
+    '9221': (14206, 'InterfaceSettings'), '9222': (166, 'SkinSettings'), '9223': (13200, 'Profiles'),
     '9231': (24001, 'AddonBrowser'), '9232': (10003, 'FileManager'),
     '9241': (13000, 'SystemSettings'), '9242': (14036, 'ServiceSettings'),
     '9251': (10007, 'SystemInfo'), '9252': (14111, 'EventLog'),
@@ -91,7 +91,7 @@ def test_rail_lists_every_entry_under_its_group():
     headings = [c.get('id') for c in children if c.get('type') == 'label']
     assert headings == ['9201', '9202', '9203', '9204', '9205']
     order = [c.get('id') for c in children]
-    assert order == ['9201', '9211', '9212', '9213', '9202', '9221', '9222', '9224', '9223', '9203', '9231',
+    assert order == ['9201', '9211', '9212', '9213', '9202', '9221', '9222', '9223', '9203', '9231',
                      '9232', '9204', '9241', '9242', '9205', '9251', '9252']
     for button in rail_buttons():
         label, window = RAIL[button.get('id')]

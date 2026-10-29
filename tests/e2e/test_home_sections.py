@@ -188,12 +188,20 @@ def test_menu_entries_hide(settings):
 
 
 def test_categories_walk_like_kodis_settings(settings):
-    """Up/down on the categories shows their rows, right enters them, left comes back; the
-    console's home pages entry opens on Home and left on the categories goes back to it."""
-    builtin('SetFocus(9001)')
-    wait_for('Control.HasFocus(9001) + Control.IsVisible(601)')
+    """Up/down on the categories shows their rows, right enters them, left comes back. Main menu
+    comes first, the glow at the end of its rows; left on the categories goes back to the console."""
+    builtin('SetFocus(9005)')
+    wait_for('Control.HasFocus(9005) + Control.IsVisible(500) + Control.IsVisible(601)')
     assert not true('Control.IsVisible(200)')
-    screenshot('hs-settings-effects')
+    builtin('SetFocus(521)')
+    wait_for('Control.HasFocus(521)')
+    action('down')
+    wait_for('Control.HasFocus(601)')
+    screenshot('hs-settings-menu')
+    action('up')
+    wait_for('Control.HasFocus(521)')
+    action('left')
+    wait_for('Control.HasFocus(9005)')
     action('down')
     wait_for('Control.HasFocus(9002) + Control.IsVisible(200)')
     action('right')
@@ -207,12 +215,12 @@ def test_categories_walk_like_kodis_settings(settings):
     wait_for('Window.IsActive(home)')
     builtin('SetProperty(nc.settings.group,2,home)')
     builtin('ActivateWindow(settings)')
-    builtin('SetFocus(9224)')
-    wait_for('Control.HasFocus(9224)')
+    builtin('SetFocus(9222)')
+    wait_for('Control.HasFocus(9222)')
     action('select')
-    wait_for('Window.IsActive(skinsettings) + Control.HasFocus(9002) + Control.IsVisible(200)')
+    wait_for('Window.IsActive(skinsettings) + Control.HasFocus(9005) + Control.IsVisible(500)')
     action('left')
-    wait_for('Window.IsActive(settings) + Control.HasFocus(9224)')
+    wait_for('Window.IsActive(settings) + Control.HasFocus(9222)')
 
 
 @pytest.mark.e2e
