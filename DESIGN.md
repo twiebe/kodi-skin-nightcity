@@ -38,8 +38,10 @@ it. If the screen changes, OK does.
 
 The quick menu on Home follows it too: the cursor on the icon next to the clock shows the menu,
 Down or OK go into it, Up from its top and Back come out onto the icon with the menu still
-shown, Left or Right off the icon hide it. Over other windows (held Home key, S key, power
-menu) it is a dialog as before.
+shown, Left or Right off the icon hide it. The keys that open the quick menu (Home held, the S
+key, Kodi's power menu) go to the icon on every page of Home, which shows the menu; the same key
+again takes the focus back to where it was. Only over other windows (an info page, the player)
+the quick menu is a dialog.
 
 A choice that loads a TMDb list waits while another TMDb list loads (`TmdbBusy`,
 `nc_credits_tab`): two plugin lists at once crash Kodi. The cursor still decides, the list

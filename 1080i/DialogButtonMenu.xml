@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Kodi's power menu (shutdownmenu: the S key, power and sleep keys, Home held through the
-     skin's keymap) leads to the quick menu (Custom_1170_QuickMenu.xml), or closes it when it is
-     open: the same key opens and closes it. Like Arctic Fuse 3. -->
+     skin's keymap) leads to the quick menu, or closes it when it is open: the same key opens
+     and closes it. Like Arctic Fuse 3. It closes at once and leaves the rest to nc_quick_key
+     (Timers.xml) a frame later: Kodi evaluates all onload conditions while this window is the
+     topmost modal dialog, so here it cannot tell whether Home is alone under it. -->
 <window type="dialog">
     <onload>Close</onload>
-    <onload condition="!Window.IsActive(1170)">ActivateWindow(1170)</onload>
-    <onload condition="Window.IsActive(1170)">Dialog.Close(1170)</onload>
+    <onload>SetProperty(nc.quick.key,1,home)</onload>
     <controls/>
 </window>
