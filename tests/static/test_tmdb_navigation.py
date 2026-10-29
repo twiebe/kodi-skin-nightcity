@@ -569,6 +569,8 @@ def test_season_tabs_list_the_show_of_a_reopened_episode():
         # no show id yet: no path, never videodb://tvshows/titles// (every show)
         values = list(variables[name])
         assert len(values) == 1 and values[0].get('condition') and '/$VAR[InfoShowDBID]/' in values[0].text, name
+    # nor before the tabs chose a season: titles/<show>// lists the season folder
+    assert '!String.IsEmpty(Container(5200).ListItem.Season)' in variables['InfoEpisodesPath'][0].get('condition')
     assert [v.text for v in variables['InfoShowDBID']] == ['$INFO[ListItem.TvShowDBID]', '$INFO[Window(Home).Property(nc.info.show)]']
     assert not [v for v in variables.values() for x in v if 'titles/$INFO[ListItem.TvShowDBID]' in (x.text or '')]
     assert 'ClearProperty(nc.info.show,home)' in _onloads('DialogVideoInfo.xml')

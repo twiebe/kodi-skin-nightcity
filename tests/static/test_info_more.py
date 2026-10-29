@@ -48,7 +48,8 @@ def test_the_menu_list_holds_the_title_as_tmdb_helper_lists_it():
     assert menu.findtext('content') == '$VAR[InfoMorePath]'
     values = [(v.get('condition'), v.text) for v in next(
         el for el in parse(SKIN / 'Variables.xml').iter('variable') if el.get('name') == 'InfoMorePath').findall('value')]
-    assert values == [(LOAD, DETAILS)]
+    # never with empty ids: TMDb Helper would start for nothing next to the page's own lists
+    assert values == [(LOAD + ' + !String.IsEmpty(ListItem.Property(tmdb_id))', DETAILS)]
     for key in ('onup', 'ondown', 'onleft', 'onright'):
         assert menu.findtext(key) == '9005', key
 
@@ -80,6 +81,15 @@ def test_a_new_page_forgets_the_menu():
     onloads = [o.text for o in _info().findall('onload')]
     assert 'ClearProperty(nc.info.more,home)' in onloads
     assert 'ClearProperty(nc.info.more.load,home)' in onloads
+
+
+def test_a_closing_page_forgets_the_menu():
+    """The dialog stays in memory and the next page loads its lists before its onload: with the
+    request left over, list 9006 started TMDb Helper with empty ids next to the new page's plugin
+    lists (two interpreters at once crash Kodi)."""
+    onunloads = [o.text for o in _info().findall('onunload')]
+    assert 'ClearProperty(nc.info.more,home)' in onunloads
+    assert 'ClearProperty(nc.info.more.load,home)' in onunloads
 
 
 def test_the_menu_opens_at_the_buttons():

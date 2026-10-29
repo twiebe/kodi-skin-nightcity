@@ -75,16 +75,35 @@ def kdev(*args):
 
 _sync = [0]
 
+# Sends each argument to Kodi's event server as a builtin to execute (ACTION_EXECBUILTIN), in order.
+# kodi-send (kdev builtin) sends a builtin as a button action instead: that goes through the
+# windows like a key press, and Kodi drops every action while the topmost modal dialog plays its
+# close animation ("ignoring action 122" in kodi.log), so a builtin sent right after such a dialog
+# closed never ran, nor did the marker behind it.
+_SEND_BUILTINS = '''import socket, sys
+from kodi.xbmcclient import PacketACTION, ACTION_EXECBUILTIN
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+for command in sys.argv[1:]:
+    PacketACTION(actionmessage=command, actiontype=ACTION_EXECBUILTIN).send(sock, ('127.0.0.1', 9777), uid=0)
+'''
+
+
+def _kodi_container():
+    """The Kodi container of kodi-dev (compose project kodi-dev or kodi-dev-INSTANCE)."""
+    name = os.environ.get('KDEV_INSTANCE')
+    return 'kodi-dev-{}-kodi-1'.format(name) if name else 'kodi-dev-kodi-1'
+
 
 def builtin(command):
     """Run a builtin and return once Kodi has run it.
 
-    kodi-send only queues the builtin, so a marker property is queued right behind it and waited
-    for: builtins run in order, so the marker means the command ran (no fixed sleep).
+    The event server only queues the builtin, so a marker property is queued right behind it and
+    waited for: builtins run in order, so the marker means the command ran (no fixed sleep).
     """
     _sync[0] += 1
-    kdev('builtin', command)
-    kdev('builtin', 'SetProperty(nc.test.sync,{},home)'.format(_sync[0]))
+    subprocess.run(['docker', 'exec', _kodi_container(), 'python3', '-c', _SEND_BUILTINS, command,
+                    'SetProperty(nc.test.sync,{},home)'.format(_sync[0])],
+                   check=True, capture_output=True, text=True)
     wait_for('String.IsEqual(Window(Home).Property(nc.test.sync),{})'.format(_sync[0]))
 
 
