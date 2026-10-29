@@ -73,3 +73,39 @@ def test_episode_number_stands_beside_the_title():
     assert [(v.get('condition'), v.text) for v in var.findall('value')] == [
         ('Integer.IsLess(ListItem.Episode,10)', 'E0$INFO[ListItem.Episode]'),
         (None, 'E$INFO[ListItem.Episode]')]
+
+
+def _variable(name):
+    var = next(v for v in parse(SKIN / 'Variables.xml').iter('variable') if v.get('name') == name)
+    return [(v.get('condition'), v.text) for v in var.iter('value')]
+
+
+def _episode_head():
+    for group in parse(SKIN / 'DialogVideoInfo.xml').find('controls').findall('control'):
+        if group.findtext('visible') == 'String.IsEqual(ListItem.DBType,episode)':
+            for inc in group.findall('include'):
+                if inc.get('content') == 'HeroBody':
+                    return {p.get('name'): p.get('value') for p in inc.findall('param')}
+    raise AssertionError('no episode HeroBody')
+
+
+def test_episode_info_shows_resolution_hdr_and_audio():
+    """The episode head shows resolution, HDR/SDR and the audio track like the spotlight, for the
+    episode selected in the list 5100, as the rest of its text."""
+    head = _episode_head()
+    assert head['item'] == 'Container(5100).ListItem'
+    assert head['tech'] == 'true'
+    assert head['techlabel'] == '$VAR[InfoEpisodeResolution]$VAR[InfoEpisodeHdr, ,]'
+    spot = 'Container(9000).ListItem'
+    episode = 'Container(5100).ListItem'
+    for name in ('Resolution', 'Hdr'):
+        assert _variable('InfoEpisode' + name) == [
+            (c.replace(spot, episode), t.replace(spot, episode)) for c, t in _variable('Spotlight' + name)]
+
+
+def test_hero_tech_label_defaults_to_the_spotlight():
+    hero = next(i for i in parse(SKIN / 'Includes_Home.xml').iter('include') if i.get('name') == 'HeroBody')
+    params = {p.get('name'): p.get('default') for p in hero.findall('param')}
+    assert params['techlabel'] == '$VAR[SpotlightResolution]$VAR[SpotlightHdr, ,]'
+    labels = [p.get('value') for p in hero.iter('param') if p.get('name') == 'label']
+    assert '$PARAM[techlabel]' in labels
