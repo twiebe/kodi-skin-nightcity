@@ -130,6 +130,26 @@
         <animation effect="fade" start="100" end="0" time="FadeTime" condition="!Player.HasVideo">Hidden</animation>
     </include>
 
+    <!-- BackdropFade for the fanart that two pages share (the movie spotlight of home and movies):
+         it stays visible on a switch between them, and its image would crossfade from the old
+         title to the new one in full view. It fades in from nothing whenever one of the two pages
+         comes up instead (a Conditional animation per page, not reversible, as SharedPageFade),
+         the crossfade runs under that fade. No Visible animation: coming from a third page both
+         would run and multiply. No slide, it is a full screen picture. -->
+    <include name="SharedBackdropFade">
+        <param name="page1"/>
+        <param name="page2"/>
+        <definition>
+            <animation type="Conditional" condition="[$PARAM[page1]] + !Player.HasVideo" reversible="false">
+                <effect type="fade" start="0" end="100" time="FadeTime"/>
+            </animation>
+            <animation type="Conditional" condition="[$PARAM[page2]] + !Player.HasVideo" reversible="false">
+                <effect type="fade" start="0" end="100" time="FadeTime"/>
+            </animation>
+            <animation effect="fade" start="100" end="0" time="FadeTime" condition="!Player.HasVideo">Hidden</animation>
+        </definition>
+    </include>
+
     <!-- The content of a settings window fades in when it opens; background and status line
          stay, so going from one settings page to the next does not flash. No close animation:
          it holds the next window back. -->

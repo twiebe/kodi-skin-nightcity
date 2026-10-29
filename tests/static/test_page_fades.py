@@ -189,13 +189,15 @@ def test_page_fades_are_cheap():
 
 
 def test_backdrop_crossfades():
-    """The fanart behind Home fades over when the page or the focused part changes."""
+    """The fanart behind Home fades over when the page or the focused part changes. The movie
+    spotlight's fanart stands behind home and movies alike: it fades in whenever one of the two
+    comes up (SharedBackdropFade, tests/static/test_spotlight_advance.py)."""
     home = load('Home.xml')
     groups = [c for c, _ in walk(home.find('controls'))
               if c.get('type') == 'group' and is_backdrop(c)]
     assert len(groups) >= 3
     for g in groups[:3]:
-        assert fade_in(g, 'Visible'), visible(g)
+        assert fade_in(g, 'Visible') or (page_fade(g, 'home') and page_fade(g, 'movies')), visible(g)
         assert animations(g, 'Hidden'), visible(g)
 
 
