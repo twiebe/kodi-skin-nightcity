@@ -226,7 +226,8 @@
             <!-- the top of the page: Up leaves it one level up, to the row it was opened from or
                  one page back in a TMDb chain -->
             <onup>Action(Back)</onup>
-            <ondown condition="String.IsEqual(ListItem.DBType,episode)">5200</ondown>
+            <!-- past the season tabs onto the episodes, like past the cast and crew tabs -->
+            <ondown condition="String.IsEqual(ListItem.DBType,episode)">5100</ondown>
             <!-- the tabs when the chosen tab has nothing (a crew member with no films still has
                  the crew tab); a person page first: its hidden cast list 5500 keeps the items of
                  the page before -->
