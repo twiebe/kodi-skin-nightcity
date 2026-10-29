@@ -201,6 +201,24 @@ def _info_and_person(matrix, crew_index=None):
     wait_for('!Container(5510).IsUpdating', timeout=30)
 
 
+def test_credits_tab_applies_on_focus(matrix):
+    """DESIGN.md: focus applies. Right from cast to crew shows the crew without OK, Left the
+    cast again; a choice made while the list loads follows once it is in."""
+    builtin('NotifyAll(nightcity,info:movie:{})'.format(matrix))
+    wait_for('Window.IsActive(movieinformation)', timeout=20)
+    loaded = ('String.IsEqual(Container(5500).ListItem(0).Property(param.info),{}) + '
+              '!Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0)')
+    wait_for(loaded.format('cast'), timeout=30)
+    builtin('SetFocus(5521)')
+    wait_for('Control.HasFocus(5521)')
+    action('right', delay=0)
+    wait_for('String.IsEqual(Window(Home).Property(nc.info.tab),crew) + ' + loaded.format('crew'), timeout=30)
+    screenshot('tmdb-crew-on-focus')
+    action('left', delay=0)
+    wait_for('String.IsEqual(Window(Home).Property(nc.info.tab),cast) + ' + loaded.format('cast'), timeout=30)
+    assert _true('Control.HasFocus(5521)')
+
+
 def test_person_without_films_still_reaches_the_tabs(matrix):
     """A crew member with no films (The Matrix's colour timer): Down from the buttons used to do
     nothing, the tabs with the crew jobs were out of reach."""

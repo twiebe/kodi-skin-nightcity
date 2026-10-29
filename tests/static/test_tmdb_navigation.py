@@ -119,11 +119,17 @@ def test_info_tabs_load_one_list():
     assert len(tabs) == 5
     tab = _include('CreditsTab')
     clicks = [(o.get('condition') or '', o.text or '') for o in tab.iter('onclick')]
-    assert clicks and all('!Container($PARAM[list]).IsUpdating' in cond for cond, _ in clicks)
+    # the tab changes only while its list does not load; OK on a tab whose list loads (the focus
+    # started it) still goes down once it is in
+    assert [c for c, t in clicks if t.startswith('SetProperty($PARAM[property]')] == ['!Container($PARAM[list]).IsUpdating']
+    enter = [c for c, t in clicks if t.startswith('SetProperty(nc.info.enter')]
+    assert len(enter) == 2 and not any(c.startswith('!Container($PARAM[list]).IsUpdating') for c in enter)
 
 
-BUSY = ('Container(5500).IsUpdating | Container(5510).IsUpdating | Container(5300).IsUpdating | '
-        'Container(6501).IsUpdating | Container(6599).IsUpdating')
+# only the credits list of the page: the hidden one of the other kind of page stays updating
+PERSON_PAGE = 'String.IsEqual(ListItem.Property(tmdb_type),person)'
+BUSY = ('[!{0} + Container(5500).IsUpdating] | [{0} + Container(5510).IsUpdating] | Container(5300).IsUpdating | '
+        'Container(6501).IsUpdating | Container(6599).IsUpdating').format(PERSON_PAGE)
 
 
 def test_a_tab_applies_on_focus_one_list_at_a_time():

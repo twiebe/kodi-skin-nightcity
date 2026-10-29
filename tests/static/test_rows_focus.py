@@ -74,7 +74,8 @@ def test_ok_on_a_tab_enters_its_list_once_it_is_in():
     assert ('!Container($PARAM[list]).IsUpdating', 'SetProperty($PARAM[property],$PARAM[value],home)') in clicks
     now = '[$PARAM[active]] + $EXP[TmdbFresh$PARAM[list]] + !Container($PARAM[list]).IsUpdating + Integer.IsGreater(Container($PARAM[list]).NumItems,0)'
     assert (now, 'SetFocus($PARAM[list])') in clicks
-    wait = '!Container($PARAM[list]).IsUpdating + ![' + now + ']'
+    # also while the list loads: the focus on the tab started it (DESIGN.md: focus applies)
+    wait = '![' + now + ']'
     assert (wait, 'SetProperty(nc.info.enter,$PARAM[list],home)') in clicks
     assert (wait, 'SetProperty(nc.info.enter.from,$PARAM[id],home)') in clicks
 
