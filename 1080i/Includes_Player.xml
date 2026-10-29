@@ -305,7 +305,7 @@
                         <param name="visible" value="!String.IsEmpty(VideoPlayer.AudioCodec)"/>
                     </include>
                 </control>
-                <control type="textbox">
+                <control type="textbox" id="420">
                     <left>232</left>
                     <top>156</top>
                     <width>900</width>
@@ -316,6 +316,8 @@
                     <textcolor>text_dim</textcolor>
                     <autoscroll delay="6000" time="2000" repeat="8000">true</autoscroll>
                     <label>$VAR[PlayerPlot]</label>
+                    <!-- skin settings, Player: the poster keeps the height, no gap to close -->
+                    <visible>!Skin.HasSetting(nc.osd.plot.off)</visible>
                 </control>
             </control>
         </definition>

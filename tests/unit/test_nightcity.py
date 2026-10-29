@@ -1276,3 +1276,23 @@ def test_info_back_frees_a_parked_focus_on_another_page(monkeypatch):
     nightcity.info_back()
     assert fake.builtins == ['SetFocus(9000)']
     assert 'nc.ret.top' not in home.props
+
+
+@pytest.mark.parametrize('current, step, values', [
+    ('8', '1', (9, 8, 20, 28)), ('8', '-1', (7, 6, 14, 22)), ('8', '0', (8, 7, 17, 25)),
+    ('3', '-1', (3, 2, 0, 8)), ('30', '1', (30, 29, 92, 100)), ('4', '-1', (3, 2, 0, 8)),
+    # never set or broken: the default 8 s
+    ('', '1', (9, 8, 20, 28)), ('abc', '0', (8, 7, 17, 25)), ('99', '0', (30, 29, 92, 100)),
+])
+def test_osd_hide_values(current, step, values):
+    """(seconds, the timer's wait, the nib's span in percent) for the delay slider of the player controls:
+    3 to 30 s; the timer starts counting a second after the last key."""
+    assert nightcity.osd_hide_values(current, step) == values
+
+
+def test_osd_hide_writes_the_skin_strings(monkeypatch):
+    fake = FakeXbmc(set(), {})
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    nightcity.COMMANDS['osd_hide']('8', '1')
+    assert fake.builtins == ['Skin.SetString(nc.osd.hide.secs,9)', 'Skin.SetString(nc.osd.hide.wait,8)',
+                             'Skin.SetString(nc.osd.hide.from,20)', 'Skin.SetString(nc.osd.hide.to,28)']

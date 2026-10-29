@@ -904,3 +904,31 @@ msgstr ""
 msgctxt "#31341"
 msgid "forecast"
 msgstr ""
+
+msgctxt "#31360"
+msgid "Hide the controls automatically"
+msgstr ""
+
+msgctxt "#31361"
+msgid "While a video plays, the player controls close by themselves once no key was pressed for the time set below. While paused they stay; the time starts again when playback goes on."
+msgstr ""
+
+msgctxt "#31362"
+msgid "Hide after"
+msgstr ""
+
+msgctxt "#31363"
+msgid "Time without a key press before the player controls close, 3 to 30 seconds. OK takes the slider, left and right move it, OK lets go."
+msgstr ""
+
+msgctxt "#31364"
+msgid "The video player: its controls and what it shows while they are up."
+msgstr ""
+
+msgctxt "#31365"
+msgid "Show the plot"
+msgstr ""
+
+msgctxt "#31366"
+msgid "The plot of what plays, under its title while the player controls or the seek line are up."
+msgstr ""
