@@ -65,7 +65,10 @@ def test_search_page_finds_library_titles(home):
     wait_for('Integer.IsGreater(Container(9701).NumItems,0)', timeout=15)
     assert info('Window(Home).Property(nc.search.recent.1)')['Window(Home).Property(nc.search.recent.1)'] == 'Bulk 09'
     builtin('SetFocus(9750)')
+    # past the recent terms onto the results, up reaches the terms (DESIGN.md)
     action('down')
+    wait_for('Control.HasFocus(9701)')
+    action('up')
     wait_for('Control.HasFocus(9771)')
     action('down')
     wait_for('Control.HasFocus(9701)')

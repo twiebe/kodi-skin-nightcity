@@ -122,8 +122,7 @@ def test_episode_walk_down_to_the_credits_and_up_to_the_menu(breaking_bad):
     _episode_credits_loaded()
     screenshot('vertical-1-episode-top')
 
-    _down(5200)
-    _down(5100)
+    _down(5100)  # past the season tabs (DESIGN.md)
     screenshot('vertical-2-episodes')
     _down(5500)
     time.sleep(0.5)
@@ -161,8 +160,7 @@ def test_episode_credits_follow_the_selected_episode(breaking_bad):
     wait_for('!String.IsEmpty(Window(Home).Property(nc.info.ready))', timeout=20)
     _episode_credits_loaded()
     first = _label('Container(5100).ListItem.DBID')
-    _down(5200)
-    _down(5100)
+    _down(5100)  # past the season tabs (DESIGN.md)
     # move to another episode: the credits row loads it once the selection rested
     for move in ('left', 'right'):
         action(move, delay=0.4)
@@ -175,7 +173,7 @@ def test_episode_credits_follow_the_selected_episode(breaking_bad):
         _label('Container(5100).ListItem.Season'), _label('Container(5100).ListItem.Episode'))
     wait_for('!Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0)', timeout=45)
     _down(5500)
-    # crew tab: up to the tabs, right, OK loads the episode's crew
+    # crew tab: up to the tabs, right loads the episode's crew, OK goes down once it is in
     _up(5521)  # the cast tab of the tab row 5520
     action('right', delay=0.4)
     action('select', delay=0.5)
@@ -191,8 +189,7 @@ def test_episode_person_opens_in_the_chain_and_back_returns(breaking_bad):
     wait_for('!String.IsEmpty(Window(Home).Property(nc.info.ready))', timeout=20)
     _episode_credits_loaded()
     episode = _label('Container(5100).ListItem.DBID')
-    _down(5200)
-    _down(5100)
+    _down(5100)  # past the season tabs (DESIGN.md)
     _down(5500)
     person = _label('Container(5500).ListItem.Label')
     action('select')

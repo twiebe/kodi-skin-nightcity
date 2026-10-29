@@ -196,8 +196,8 @@
         <name>nc_credits_tab</name>
         <description>Apply a credits tab once no TMDb list loads</description>
         <start>!String.IsEmpty(Window(Home).Property(nc.tab.want.id))</start>
-        <stop>String.IsEmpty(Window(Home).Property(nc.tab.want.id)) | !String.IsEqual(System.CurrentControlId,Window(Home).Property(nc.tab.want.id)) | ![Container(5500).IsUpdating | Container(5510).IsUpdating | Container(5300).IsUpdating | Container(6501).IsUpdating | Container(6599).IsUpdating]</stop>
-        <onstop condition="String.IsEqual(System.CurrentControlId,Window(Home).Property(nc.tab.want.id)) + ![Container(5500).IsUpdating | Container(5510).IsUpdating | Container(5300).IsUpdating | Container(6501).IsUpdating | Container(6599).IsUpdating]">SetProperty($INFO[Window(Home).Property(nc.tab.want.prop)],$INFO[Window(Home).Property(nc.tab.want.value)],home)</onstop>
+        <stop>String.IsEmpty(Window(Home).Property(nc.tab.want.id)) | !String.IsEqual(System.CurrentControlId,Window(Home).Property(nc.tab.want.id)) | ![[!String.IsEqual(ListItem.Property(tmdb_type),person) + Container(5500).IsUpdating] | [String.IsEqual(ListItem.Property(tmdb_type),person) + Container(5510).IsUpdating] | Container(5300).IsUpdating | Container(6501).IsUpdating | Container(6599).IsUpdating]</stop>
+        <onstop condition="String.IsEqual(System.CurrentControlId,Window(Home).Property(nc.tab.want.id)) + ![[!String.IsEqual(ListItem.Property(tmdb_type),person) + Container(5500).IsUpdating] | [String.IsEqual(ListItem.Property(tmdb_type),person) + Container(5510).IsUpdating] | Container(5300).IsUpdating | Container(6501).IsUpdating | Container(6599).IsUpdating]">SetProperty($INFO[Window(Home).Property(nc.tab.want.prop)],$INFO[Window(Home).Property(nc.tab.want.value)],home)</onstop>
         <onstop>ClearProperty(nc.tab.want.id,home)</onstop>
     </timer>
 </timers>

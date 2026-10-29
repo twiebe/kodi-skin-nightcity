@@ -91,7 +91,7 @@ def test_fast_down_waits_for_the_credits_of_the_new_page(matrix):
 
 def test_moving_on_forgets_the_waiting_move(matrix):
     """OK on the crew tab, then Left to the cast tab before the crew is in: the focus stays
-    where it went."""
+    where it went, and the cast it rests on follows once the crew is in (nc_credits_tab)."""
     _third_page(matrix)
     _wait_ready('5500')
     builtin('SetFocus(5522)')
@@ -99,5 +99,5 @@ def test_moving_on_forgets_the_waiting_move(matrix):
     action('select', delay=0)
     action('left', delay=0)
     wait_for('String.IsEmpty(Window(Home).Property(nc.info.enter))', timeout=3)
-    wait_for('String.IsEqual(Container(5500).ListItem(0).Property(param.info),crew) + !Container(5500).IsUpdating', timeout=30)
+    wait_for('String.IsEqual(Container(5500).ListItem(0).Property(param.info),cast) + !Container(5500).IsUpdating', timeout=30)
     assert _true('Control.HasFocus(5521)')
