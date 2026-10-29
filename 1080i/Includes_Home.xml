@@ -139,6 +139,9 @@
                     <onleft condition="Skin.HasSetting(nc.menu.hide.search) + Skin.HasSetting(nc.menu.hide.shows) + !Skin.HasSetting(nc.menu.hide.movies)">9102</onleft>
                     <onleft>9101</onleft>
                     <onright>9101</onright>
+                    <!-- off the icon the menu hides: forget where the power menu's keys came from -->
+                    <onleft>ClearProperty(nc.quick.from,home)</onleft>
+                    <onright>ClearProperty(nc.quick.from,home)</onright>
                     <onup>noop</onup>
                     <ondown>1210</ondown>
                 </control>
@@ -1351,7 +1354,8 @@
             <top>96</top>
             <width>640</width>
             <height>788</height>
-            <visible>Control.HasFocus(9109) | ControlGroup(9180).HasFocus</visible>
+            <!-- the power menu's keys focus power off while it is still hidden (nc_quick_key) -->
+            <visible allowhiddenfocus="true">Control.HasFocus(9109) | ControlGroup(9180).HasFocus</visible>
             <animation effect="slide" start="16,-12" end="0,0" time="200" tween="cubic" easing="out" condition="!Player.HasVideo">Visible</animation>
             <animation effect="fade" start="0" end="100" time="180" condition="!Player.HasVideo">Visible</animation>
             <animation effect="slide" start="0,0" end="16,-12" time="160" tween="cubic" easing="in" condition="!Player.HasVideo">Hidden</animation>
@@ -1361,9 +1365,9 @@
     </include>
 
     <!-- The quick menu itself: clock and date, the weather, the power tiles, the links. Two
-         places show it: the dialog over any window (Custom_1170_QuickMenu.xml: held Home key,
-         S key, power menu) and the panel of Home while the icon next to the clock or the menu
-         has the focus (QuickMenuPanel). Same ids in both. The actions fit both: the dialog
+         places show it: the dialog over any window but Home alone (Custom_1170_QuickMenu.xml)
+         and the panel of Home while the icon next to the clock or the menu has the focus
+         (QuickMenuPanel; the held Home key, the S key and the power menu use it on Home too). Same ids in both. The actions fit both: the dialog
          closes itself first, which does nothing on Home; on Home Up and Back lead to the icon. -->
     <include name="QuickMenuBody">
         <include>DialogFrame</include>

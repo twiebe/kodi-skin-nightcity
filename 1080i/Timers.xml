@@ -222,4 +222,29 @@
         <onstop condition="!Skin.HasSetting(nc.osd.autohide.off) + Player.HasVideo + !Player.Paused + Window.IsActive(fullscreenvideo) + [Window.IsModalDialogTopmost(videoosd) | Window.IsModalDialogTopmost(videobookmarks) | Window.IsModalDialogTopmost(1141)] + !Control.HasFocus(651) + !Control.HasFocus(652) + !Control.HasFocus(653) + [[String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_hide),7)] | [!String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_hide),Skin.String(nc.osd.hide.wait))]]">Dialog.Close(videobookmarks)</onstop>
         <onstop condition="!Skin.HasSetting(nc.osd.autohide.off) + Player.HasVideo + !Player.Paused + Window.IsActive(fullscreenvideo) + [Window.IsModalDialogTopmost(videoosd) | Window.IsModalDialogTopmost(videobookmarks) | Window.IsModalDialogTopmost(1141)] + !Control.HasFocus(651) + !Control.HasFocus(652) + !Control.HasFocus(653) + [[String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_hide),7)] | [!String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_hide),Skin.String(nc.osd.hide.wait))]]">Dialog.Close(videoosd)</onstop>
     </timer>
+    <!-- The power menu's keys (DialogButtonMenu.xml), a frame later with the power menu gone.
+         On Home with nothing modal over it: the quick menu panel of Home (QuickMenuPanel), one
+         menu instead of two that behave a little differently. The keys land on power off, as
+         the dialog does, and remember where the focus was (nc.quick.from); the same key again
+         takes it back there, or to the shown page's own entry when the menu was reached by
+         hand (the icon forgets nc.quick.from when the focus leaves it). Over any other window
+         the dialog (Custom_1170_QuickMenu.xml) opens, or closes when it is open. -->
+    <timer>
+        <name>nc_quick_key</name>
+        <description>Open or close the quick menu for the power menu's keys</description>
+        <start reset="true">!String.IsEmpty(Window(Home).Property(nc.quick.key))</start>
+        <stop>true</stop>
+        <onstop>ClearProperty(nc.quick.key,home)</onstop>
+        <onstop condition="Window.IsActive(1170)">Dialog.Close(1170)</onstop>
+        <onstop condition="!Window.IsActive(1170) + ![Window.IsActive(home) + !System.HasActiveModalDialog]">ActivateWindow(1170)</onstop>
+        <onstop condition="Window.IsActive(home) + !System.HasActiveModalDialog + ![Control.HasFocus(9109) | ControlGroup(9180).HasFocus]">SetProperty(nc.quick.from,$INFO[System.CurrentControlId],home)</onstop>
+        <onstop condition="Window.IsActive(home) + !System.HasActiveModalDialog + ![Control.HasFocus(9109) | ControlGroup(9180).HasFocus]">SetFocus(1220,0,absolute)</onstop>
+        <onstop condition="Window.IsActive(home) + !System.HasActiveModalDialog + [Control.HasFocus(9109) | ControlGroup(9180).HasFocus] + !String.IsEmpty(Window(Home).Property(nc.quick.from))">SetFocus($INFO[Window(Home).Property(nc.quick.from)])</onstop>
+        <onstop condition="Window.IsActive(home) + !System.HasActiveModalDialog + [Control.HasFocus(9109) | ControlGroup(9180).HasFocus] + String.IsEmpty(Window(Home).Property(nc.quick.from)) + String.IsEqual(Window(Home).Property(nc.page),movies)">SetFocus(9102)</onstop>
+        <onstop condition="Window.IsActive(home) + !System.HasActiveModalDialog + [Control.HasFocus(9109) | ControlGroup(9180).HasFocus] + String.IsEmpty(Window(Home).Property(nc.quick.from)) + String.IsEqual(Window(Home).Property(nc.page),shows)">SetFocus(9103)</onstop>
+        <onstop condition="Window.IsActive(home) + !System.HasActiveModalDialog + [Control.HasFocus(9109) | ControlGroup(9180).HasFocus] + String.IsEmpty(Window(Home).Property(nc.quick.from)) + String.IsEqual(Window(Home).Property(nc.page),search)">SetFocus(9104)</onstop>
+        <onstop condition="Window.IsActive(home) + !System.HasActiveModalDialog + [Control.HasFocus(9109) | ControlGroup(9180).HasFocus] + String.IsEmpty(Window(Home).Property(nc.quick.from)) + String.IsEqual(Window(Home).Property(nc.page),system)">SetFocus(9601)</onstop>
+        <onstop condition="Window.IsActive(home) + !System.HasActiveModalDialog + [Control.HasFocus(9109) | ControlGroup(9180).HasFocus] + String.IsEmpty(Window(Home).Property(nc.quick.from)) + ![String.IsEqual(Window(Home).Property(nc.page),movies) | String.IsEqual(Window(Home).Property(nc.page),shows) | String.IsEqual(Window(Home).Property(nc.page),search) | String.IsEqual(Window(Home).Property(nc.page),system)]">SetFocus(9101)</onstop>
+        <onstop condition="Window.IsActive(home) + !System.HasActiveModalDialog + [Control.HasFocus(9109) | ControlGroup(9180).HasFocus]">ClearProperty(nc.quick.from,home)</onstop>
+    </timer>
 </timers>

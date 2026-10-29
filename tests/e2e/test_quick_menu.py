@@ -36,6 +36,7 @@ def closed():
 @pytest.fixture
 def quick(home):
     builtin('NotifyAll(nightcity,home_keymap)')
+    builtin('ClearProperty(nc.quick.from,home)')
     time.sleep(1)
     yield
     if is_open():
@@ -43,16 +44,27 @@ def quick(home):
     closed()
 
 
+PANEL = 'Control.IsVisible(9180)'
+START = 9010  # where `home` leaves the focus
+
+
+def on_panel(cid):
+    """On Home the keys use the panel of Home, not the dialog."""
+    return 'Control.HasFocus({}) + {} + !{}'.format(cid, PANEL, OPEN)
+
+
 @pytest.mark.parametrize('button', ['homepage', 'browser_home', 'home'])
 def test_home_held_opens_and_closes(quick, button):
-    """Home keys go by several names: IR remotes on CoreELEC are keyboards, some send home."""
+    """Home keys go by several names: IR remotes on CoreELEC are keyboards, some send home. On
+    Home the menu shows as Home's panel on power off, the same key again goes back to where the
+    focus was."""
     press(button, hold=1500)
-    wait_for(OPEN)
-    wait_for('Control.HasFocus(1220)')
+    wait_for(on_panel(1220))
     time.sleep(0.5)
     screenshot('quick-menu')
     press(button, hold=1500)
-    closed()
+    wait_for('Control.HasFocus({}) + !{}'.format(START, PANEL))
+    assert not is_open()
 
 
 def test_home_short_still_goes_home(quick):
@@ -66,27 +78,47 @@ def test_home_short_still_goes_home(quick):
 def test_power_menu_toggles(quick):
     """Kodi's power menu leads here, again closes it (as an add-on or the power key opens it)."""
     rpc('GUI.ActivateWindow', {'window': 'shutdownmenu'})
-    wait_for(OPEN)
+    wait_for(on_panel(1220))
     rpc('GUI.ActivateWindow', {'window': 'shutdownmenu'})
-    closed()
+    wait_for('Control.HasFocus({}) + !{}'.format(START, PANEL))
 
 
 def test_s_key(quick):
     press('s')
-    wait_for(OPEN)
+    wait_for(on_panel(1220))
     press('s')
-    closed()
+    wait_for('Control.HasFocus({}) + !{}'.format(START, PANEL))
 
 
-def test_back_closes(quick):
+@pytest.mark.parametrize('entry, page', [(9102, 'movies'), (9103, 'shows'), (9104, 'search')])
+def test_keys_on_every_home_page(quick, entry, page):
+    """The icon is on every page of Home: the keys use the panel there too."""
+    builtin('SetFocus({})'.format(entry))
+    wait_for('String.IsEqual(Window(Home).Property(nc.page),{})'.format(page))
+    press('s')
+    wait_for(on_panel(1220))
+    press('s')
+    wait_for('Control.HasFocus({}) + !{}'.format(entry, PANEL))
+
+
+def test_key_on_the_icon_reached_by_hand_goes_to_the_page(quick):
+    """With the menu shown because the cursor went to the icon, the key goes to the shown page's
+    entry of the top menu: nothing to go back to."""
+    builtin('SetFocus(9103)')
+    wait_for('String.IsEqual(Window(Home).Property(nc.page),shows)')
+    builtin('SetFocus(9109)')
+    wait_for(on_panel(9109))
+    press('s')
+    wait_for('Control.HasFocus(9103) + !' + PANEL)
+
+
+def test_back_goes_to_the_icon(quick):
     press(hold=1500)
-    wait_for(OPEN)
+    wait_for(on_panel(1220))
     action('back')
-    closed()
-    assert cond('Window.IsActive(home)')['Window.IsActive(home)']
+    wait_for(on_panel(9109))
 
 
-PANEL = 'Control.IsVisible(9180)'
 
 
 def test_icon_next_to_the_clock(quick):
@@ -210,19 +242,17 @@ def test_weather_without_addon_opens_its_settings(quick):
 
 
 def test_up_from_the_top_to_the_icon(quick):
-    """Up from the weather tile leaves the menu onto the icon next to the clock, also when the
-    held Home key opened it from a row."""
+    """Up from the weather tile goes onto the icon next to the clock, also when the held Home key
+    showed the menu from a row."""
     builtin('SetFocus(9101)')
     wait_for('Control.HasFocus(9101)')
     press(hold=1500)
-    wait_for(OPEN)
-    wait_for('Control.HasFocus(1220)')
+    wait_for(on_panel(1220))
     time.sleep(0.3)
     action('up')
     wait_for('Control.HasFocus(1210)')
     action('up')
-    closed()
-    wait_for('Window.IsActive(home) + Control.HasFocus(9109)')
+    wait_for(on_panel(9109))
 
 
 def test_settings_link(quick):

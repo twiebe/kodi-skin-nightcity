@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Quick menu: a small panel that slides in at the top right over whatever is on screen (Home,
-     a page, the video). Clock and date, the weather, the power commands and links to the
-     settings page (the only way there) and the file manager. Kodi's power menu leads here (DialogButtonMenu.xml: the S key,
-     power and sleep keys, Home held through the skin's keymap), so does the icon next to the
-     clock on Home (9109). Back or the same key again closes it, Up from the top too (onto
-     that icon when Home is behind).
+<!-- Quick menu as a dialog: a small panel that slides in at the top right over any window but
+     Home alone (an info page, a TMDb chain, the video). Clock and date, the weather, the power
+     commands and links to the settings page (the only way there) and the file manager. Kodi's
+     power menu leads here (DialogButtonMenu.xml, nc_quick_key in Timers.xml: the S key, power
+     and sleep keys, Home held through the skin's keymap); on Home with nothing over it the
+     same keys show the same menu as Home's panel (QuickMenuPanel). Back or the same key again
+     closes it, Up from the top too (onto the icon next to the clock when Home is behind).
      No script at all: two Python interpreters starting at once can crash Kodi. Power tiles run
      their builtin where the device can do it and say so where it cannot (no "are you sure").
      Ids: 1210 weather, 1220 power tiles, 1230 links (static items: more links are one item
