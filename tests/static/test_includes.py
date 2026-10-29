@@ -257,29 +257,37 @@ def layout(list_include, tag):
     return list_include.find('.//' + tag)
 
 
-# in front of the current value of a list: a pink bullet, bigger than the middle dot of the title
-# lines (test_fonts), pink also on the cyan fill of the cursor
-DOT = '[COLOR accent2]•[/COLOR] '
-
-
-def marked_right(label):
-    return (label.findtext('label') or '').startswith(DOT)
+def check_current_mark(lst, selected):
+    """The current value of a list: the text in accent at the same place and with the same words
+    as the other rows (nothing in front that moves it), and a slim pink bar at the row's left
+    edge, before the text, shown only for that row, also over the cursor's fill."""
+    for tag in ('itemlayout', 'focusedlayout'):
+        lay = layout(lst, tag)
+        controls = lay.findall('control')
+        labels = [c for c in controls if c.get('type') == 'label' and c.findtext('align') != 'right']
+        marked = [c for c in labels if (c.findtext('visible') or '').startswith(selected)]
+        others = [c for c in labels if c not in marked]
+        assert marked and others, tag
+        assert {c.findtext('label') for c in labels} == {others[0].findtext('label')}, tag
+        assert {c.findtext('left') for c in labels} == {others[0].findtext('left')}, tag
+        assert '[COLOR' not in others[0].findtext('label'), tag
+        if tag == 'itemlayout':
+            assert all(c.findtext('textcolor') == 'accent' for c in marked), tag
+        bars = [c for c in controls if c.get('type') == 'image' and c.find('texture').get('colordiffuse') == 'accent2']
+        assert len(bars) == 1, tag
+        bar = bars[0]
+        assert bar.findtext('visible') == selected, (tag, bar.findtext('visible'))
+        assert bar.findtext('width') == '3', tag
+        assert int(bar.findtext('left')) + 3 < int(others[0].findtext('left')), tag
+        # drawn after the cursor's fill, so it stays pink on it
+        fills = [c for c in controls if c.get('type') == 'image' and c is not bar]
+        assert all(controls.index(f) < controls.index(bar) for f in fills), tag
 
 
 def test_select_marks_current_value():
-    """The current value of a list (DialogSelect, settings dropdowns) is an accent row with
-    a pink dot in front, whether or not the cursor is on it."""
-    lst = include('DialogList')
-    for tag in ('itemlayout', 'focusedlayout'):
-        marked = [c for c in layout(lst, tag).iter('control')
-                  if c.get('type') == 'label' and '•' in (c.findtext('label') or '')]
-        assert marked and all(marked_right(c) for c in marked), tag
-        for c in marked:
-            visible = c.findtext('visible') or ''
-            assert 'ListItem.IsSelected' in visible and '!ListItem.IsSelected' not in visible, (tag, visible)
-    selected = [c for c in layout(lst, 'itemlayout').iter('control') if c.get('type') == 'label'
-                and (c.findtext('visible') or '').startswith('ListItem.IsSelected')]
-    assert selected and all(c.findtext('textcolor') == 'accent' for c in selected)
+    """The current value of a list (DialogSelect, settings dropdowns): accent text and a pink
+    bar, whether or not the cursor is on it."""
+    check_current_mark(include('DialogList'), 'ListItem.IsSelected')
 
 
 def test_list_labels_keep_colour_when_selected():
@@ -315,13 +323,8 @@ def test_dialog_heading_above_content():
 
 
 def test_track_panel_marks_the_playing_track():
-    """The playing track of an OSD panel (subtitles, audio) has the pink dot in front."""
-    panel = include('TrackPanel')
-    for tag in ('itemlayout', 'focusedlayout'):
-        marked = [c for c in layout(panel, tag).iter('control') if c.get('type') == 'label'
-                  and (c.findtext('visible') or '').startswith('String.IsEqual(ListItem.Property(current),1)')]
-        assert marked, tag
-        assert all(marked_right(c) for c in marked), tag
+    """The playing track of an OSD panel (subtitles, audio): accent text and a pink bar."""
+    check_current_mark(include('TrackPanel'), 'String.IsEqual(ListItem.Property(current),1)')
 
 
 @pytest.mark.parametrize('name', ['TabButton', 'CreditsTab'])

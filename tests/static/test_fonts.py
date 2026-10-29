@@ -123,16 +123,3 @@ def test_wide_composites_shift_once():
         wg.recalcBounds(wide['glyf'])
         ng.recalcBounds(normal['glyf'])
         assert wg.xMin - ng.xMin == 50, name
-
-
-def test_bullet_is_a_round_dot_on_the_middle_of_the_text():
-    """• marks the current value of a list: round and big enough to see at a glance (Rajdhani's
-    own is a narrow sliver, Noto Sans Symbols 2's is taken), centred between baseline and cap
-    height."""
-    for name in UI_FONTS:
-        font = TTFont(ROOT / 'fonts' / name)
-        glyph = font['glyf'][font.getBestCmap()[0x2022]]
-        width, height = glyph.xMax - glyph.xMin, glyph.yMax - glyph.yMin
-        assert width >= 300 and abs(width - height) <= 20, (name, width, height)
-        cap = font['glyf'][font.getBestCmap()[ord('H')]].yMax
-        assert abs((glyph.yMin + glyph.yMax) / 2 - cap / 2) <= 10, (name, glyph.yMin, glyph.yMax, cap)
