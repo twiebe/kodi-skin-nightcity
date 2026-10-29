@@ -423,14 +423,21 @@
                     <focusedlayout width="240" height="48">
                         <include content="SeasonTab">
                             <param name="color" value="accent"/>
-                            <param name="active" value="true"/>
                         </include>
+                        <!-- the shown season: the focus line, without the focus the same line in pink -->
                         <control type="image">
                             <top>44</top>
                             <width>180</width>
                             <height>2</height>
                             <texture colordiffuse="focus">ui/white.png</texture>
                             <visible>Control.HasFocus(5200)</visible>
+                        </control>
+                        <control type="image">
+                            <top>44</top>
+                            <width>180</width>
+                            <height>2</height>
+                            <texture colordiffuse="accent2">ui/white.png</texture>
+                            <visible>!Control.HasFocus(5200)</visible>
                         </control>
                     </focusedlayout>
                     <content target="videos">$VAR[InfoSeasonsPath]</content>
