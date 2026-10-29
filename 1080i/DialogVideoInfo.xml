@@ -80,6 +80,8 @@
                 <param name="titleid" value="9020"/>
                 <param name="kickerid" value="9025"/>
                 <param name="poster" value="false"/>
+                <param name="tech" value="true"/>
+                <param name="techlabel" value="$VAR[InfoEpisodeResolution]$VAR[InfoEpisodeHdr, ,]"/>
                 <param name="shift" value="-320"/>
                 <param name="titlewidth" value="1250"/>
                 <param name="plotwidth" value="1200"/>

@@ -180,6 +180,8 @@
         <param name="ratingid" default="0"/>
         <param name="plotid" default="0"/>
         <param name="tech" default="false"/>
+        <!-- resolution and HDR of item: the variables are bound to one container -->
+        <param name="techlabel" default="$VAR[SpotlightResolution]$VAR[SpotlightHdr, ,]"/>
         <param name="kickerid" default="0"/>
         <param name="poster" default="true"/>
         <param name="shift" default="0"/>
@@ -275,7 +277,7 @@
                         <param name="visible" value="!$PARAM[tech] + !String.IsEmpty($PARAM[item].Genre)"/>
                     </include>
                     <include content="Tag">
-                        <param name="label" value="$VAR[SpotlightResolution]$VAR[SpotlightHdr, ,]"/>
+                        <param name="label" value="$PARAM[techlabel]"/>
                         <param name="color" value="accent"/>
                         <param name="visible" value="$PARAM[tech] + !String.IsEmpty($PARAM[item].VideoResolution)"/>
                     </include>
