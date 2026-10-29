@@ -61,8 +61,7 @@
     </include>
 
     <!-- Vertical list with label and right-aligned label2, focused row a cyan cut fill, the current
-         value (ListItem.IsSelected) in accent with a pink dot in front (dark on the cursor's
-         fill, where pink hardly shows).
+         value (ListItem.IsSelected) in accent with a slim pink bar at the row's left edge.
          Children of the include (static <content>, navigation) go into the list. -->
     <include name="DialogList">
         <param name="id"/>
@@ -93,7 +92,16 @@
                         <label>$PARAM[label]</label>
                         <visible>!ListItem.IsSelected</visible>
                     </control>
-                    <!-- the current value: accent, with a pink dot in front (the " · " of the title lines) -->
+                    <!-- the current value: a pink bar before the text, which stays in place, and the text in accent -->
+                    <control type="image">
+                        <left>6</left>
+                        <top>12</top>
+                        <width>3</width>
+                        <height>28</height>
+                        <texture colordiffuse="accent2">ui/white.png</texture>
+                        <visible>ListItem.IsSelected</visible>
+                    </control>
+                    <!-- the current value: accent -->
                     <control type="label">
                         <left>20</left>
                         <width>$PARAM[width]</width>
@@ -102,7 +110,7 @@
                         <font>$PARAM[font]</font>
                         <textcolor>accent</textcolor>
                         <selectedcolor>accent</selectedcolor>
-                        <label>[COLOR accent2]·[/COLOR] $PARAM[label]</label>
+                        <label>$PARAM[label]</label>
                         <visible>ListItem.IsSelected</visible>
                     </control>
                     <control type="label">
@@ -123,6 +131,15 @@
                         <height>52</height>
                         <texture border="12" colordiffuse="focus">ui/cut_btn_fill.png</texture>
                         <visible>Control.HasFocus($PARAM[id])</visible>
+                    </control>
+                    <!-- the current value's bar, pink also on the cursor's fill -->
+                    <control type="image">
+                        <left>6</left>
+                        <top>12</top>
+                        <width>3</width>
+                        <height>28</height>
+                        <texture colordiffuse="accent2">ui/white.png</texture>
+                        <visible>ListItem.IsSelected</visible>
                     </control>
                     <!-- labels in a list ignore focusedcolor: one label per focus state -->
                     <control type="label">
@@ -158,7 +175,7 @@
                         <textcolor>focus_text</textcolor>
                         <selectedcolor>focus_text</selectedcolor>
                         <scroll>Control.HasFocus($PARAM[id])</scroll>
-                        <label>· $PARAM[label]</label>
+                        <label>$PARAM[label]</label>
                         <visible>ListItem.IsSelected + Control.HasFocus($PARAM[id])</visible>
                     </control>
                     <control type="label">
@@ -170,7 +187,7 @@
                         <textcolor>accent</textcolor>
                         <selectedcolor>accent</selectedcolor>
                         <scroll>Control.HasFocus($PARAM[id])</scroll>
-                        <label>[COLOR accent2]·[/COLOR] $PARAM[label]</label>
+                        <label>$PARAM[label]</label>
                         <visible>ListItem.IsSelected + !Control.HasFocus($PARAM[id])</visible>
                     </control>
                     <control type="label">

@@ -215,7 +215,7 @@
     </include>
 
     <!-- Track panel of the OSD (subtitles or audio) above the right buttons: one row per track
-         from the script's nc.<prefix>.* properties (Home), the playing one marked with a pink dot (dark on the cursor), "off"
+         from the script's nc.<prefix>.* properties (Home), the playing one marked with a pink bar and accent text, "off"
          first for subtitles, and a last row that opens Kodi's full settings (`settings`). The panel grows upwards
          with the number of rows (nc.<prefix>.rows, at most 8). Left and right focus the
          neighbouring buttons of the row (`left`, `right`). -->
@@ -409,6 +409,15 @@
                     <onright>SetFocus($PARAM[right])</onright>
                     <scrolltime>120</scrolltime>
                     <itemlayout width="600" height="52">
+                <!-- the playing track: a pink bar before the text, which stays in place -->
+                <control type="image">
+                    <left>15</left>
+                    <top>12</top>
+                    <width>3</width>
+                    <height>28</height>
+                    <texture colordiffuse="accent2">ui/white.png</texture>
+                    <visible>String.IsEqual(ListItem.Property(current),1)</visible>
+                </control>
                 <control type="label">
                     <left>24</left>
                     <width>440</width>
@@ -428,7 +437,7 @@
                     <font>font_small</font>
                     <textcolor>accent</textcolor>
                     <selectedcolor>accent</selectedcolor>
-                    <label>[COLOR accent2]·[/COLOR] $INFO[ListItem.Label]</label>
+                    <label>$INFO[ListItem.Label]</label>
                     <visible>String.IsEqual(ListItem.Property(current),1)</visible>
                 </control>
                 <control type="label">
@@ -451,6 +460,15 @@
                     <height>52</height>
                     <texture border="12" colordiffuse="focus">ui/cut_btn_fill.png</texture>
                     <visible>Control.HasFocus($PARAM[id])</visible>
+                </control>
+                <!-- the playing track's bar, pink also on the cursor's fill -->
+                <control type="image">
+                    <left>15</left>
+                    <top>12</top>
+                    <width>3</width>
+                    <height>28</height>
+                    <texture colordiffuse="accent2">ui/white.png</texture>
+                    <visible>String.IsEqual(ListItem.Property(current),1)</visible>
                 </control>
                 <control type="label">
                     <left>24</left>
@@ -482,7 +500,7 @@
                     <font>font_small</font>
                     <textcolor>focus_text</textcolor>
                     <selectedcolor>focus_text</selectedcolor>
-                    <label>· $INFO[ListItem.Label]</label>
+                    <label>$INFO[ListItem.Label]</label>
                     <visible>String.IsEqual(ListItem.Property(current),1) + Control.HasFocus($PARAM[id])</visible>
                 </control>
                 <control type="label">
@@ -493,7 +511,7 @@
                     <font>font_small</font>
                     <textcolor>accent</textcolor>
                     <selectedcolor>accent</selectedcolor>
-                    <label>[COLOR accent2]·[/COLOR] $INFO[ListItem.Label]</label>
+                    <label>$INFO[ListItem.Label]</label>
                     <visible>String.IsEqual(ListItem.Property(current),1) + !Control.HasFocus($PARAM[id])</visible>
                 </control>
                 <control type="label">

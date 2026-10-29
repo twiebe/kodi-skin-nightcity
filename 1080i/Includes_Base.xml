@@ -166,7 +166,7 @@
         <animation effect="fade" start="0" end="100" time="WindowFadeTime" condition="!Player.HasVideo">WindowOpen</animation>
     </include>
 
-    <!-- Top line of a page: "FILME ◢ METROPOLIS" on the left, a counter or the clock right -->
+    <!-- Top line of a page: "FILME · METROPOLIS" on the left, a counter or the clock right -->
     <include name="PathLine">
         <param name="id" default="0"/>
         <param name="path"/>

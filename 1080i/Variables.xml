@@ -299,8 +299,8 @@
         <value>E$INFO[VideoPlayer.Episode]</value>
     </variable>
     <variable name="PlayerPath">
-        <value condition="!String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.TVShowTitle] [COLOR accent2]◢[/COLOR] $VAR[PlayerSeasonNum] $VAR[PlayerEpisodeNum]</value>
-        <value>$LOCALIZE[31030] [COLOR accent2]◢[/COLOR] $INFO[VideoPlayer.Title]</value>
+        <value condition="!String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.TVShowTitle] [COLOR accent2]·[/COLOR] $VAR[PlayerSeasonNum] $VAR[PlayerEpisodeNum]</value>
+        <value>$LOCALIZE[31030] [COLOR accent2]·[/COLOR] $INFO[VideoPlayer.Title]</value>
     </variable>
     <variable name="PlayerKicker">
         <value condition="!String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.TVShowTitle] · $VAR[PlayerSeasonNum] $VAR[PlayerEpisodeNum]</value>
@@ -437,10 +437,10 @@
         <value>$INFO[ListItem.DBID]</value>
     </variable>
     <variable name="InfoPath">
-        <value condition="String.IsEqual(ListItem.DBType,episode)">$LOCALIZE[31031] [COLOR accent2]◢[/COLOR] $INFO[ListItem.TVShowTitle] [COLOR accent2]◢[/COLOR] $VAR[InfoSeasonNum] $VAR[InfoEpisodeNum]</value>
-        <value condition="String.IsEqual(ListItem.DBType,tvshow)">$LOCALIZE[31031] [COLOR accent2]◢[/COLOR] $INFO[ListItem.Title]</value>
-        <value condition="String.IsEqual(ListItem.Property(tmdb_type),person)">$LOCALIZE[31302] [COLOR accent2]◢[/COLOR] $INFO[ListItem.Label]</value>
-        <value>$LOCALIZE[31030] [COLOR accent2]◢[/COLOR] $INFO[ListItem.Title]</value>
+        <value condition="String.IsEqual(ListItem.DBType,episode)">$LOCALIZE[31031] [COLOR accent2]·[/COLOR] $INFO[ListItem.TVShowTitle] [COLOR accent2]·[/COLOR] $VAR[InfoSeasonNum] $VAR[InfoEpisodeNum]</value>
+        <value condition="String.IsEqual(ListItem.DBType,tvshow)">$LOCALIZE[31031] [COLOR accent2]·[/COLOR] $INFO[ListItem.Title]</value>
+        <value condition="String.IsEqual(ListItem.Property(tmdb_type),person)">$LOCALIZE[31302] [COLOR accent2]·[/COLOR] $INFO[ListItem.Label]</value>
+        <value>$LOCALIZE[31030] [COLOR accent2]·[/COLOR] $INFO[ListItem.Title]</value>
     </variable>
     <!-- S01 / E05 of the episode shown in the head -->
     <variable name="InfoSeasonNum">
