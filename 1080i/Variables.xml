@@ -61,8 +61,8 @@
         <value condition="Integer.IsGreater(System.CurrentControlID,210) + Integer.IsLess(System.CurrentControlID,500)">$LOCALIZE[31260]</value>
     </variable>
     <variable name="SkinSettingsDesc">
-        <value condition="Control.HasFocus(9001)">$LOCALIZE[31268]</value>
         <value condition="Control.HasFocus(601)">$LOCALIZE[31269]</value>
+        <value condition="Control.HasFocus(602)">$LOCALIZE[31340]</value>
         <value condition="Control.HasFocus(9002)">$LOCALIZE[31265]</value>
         <value condition="Control.HasFocus(9003)">$LOCALIZE[31266]</value>
         <value condition="Control.HasFocus(9004)">$LOCALIZE[31267]</value>
@@ -554,5 +554,10 @@
     </variable>
     <variable name="SearchPath_tmdb_tvshows">
         <value condition="String.IsEqual(Window(Home).Property(nc.page),search) + Skin.TimerIsRunning(nc_search_page) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_search_page),2)">$INFO[Window(Home).Property(nc.search.tmdb_tvshows)]</value>
+    </variable>
+    <!-- the current colour scheme of the skin; Kodi names the default SKINDEFAULT -->
+    <variable name="ColourSchemeLabel">
+        <value condition="String.IsEqual(Skin.CurrentColourTheme,SKINDEFAULT) | String.IsEmpty(Skin.CurrentColourTheme)">$LOCALIZE[571]</value>
+        <value>[CAPITALIZE]$INFO[Skin.CurrentColourTheme][/CAPITALIZE]</value>
     </variable>
 </includes>

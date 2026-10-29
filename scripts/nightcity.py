@@ -948,6 +948,29 @@ def search_forget():
         search_clear()
 
 
+def colour_choices(files, current):
+    """(values, labels, index of current) of the colour schemes in the skin's colors folder, as
+    Kodi's lookandfeel.skincolors names them: SKINDEFAULT for defaults.xml, else the file name."""
+    names = sorted(f[:-4] for f in files if f.endswith('.xml') and f != 'defaults.xml')
+    values = ['SKINDEFAULT'] + names
+    labels = ['Default'] + [n.capitalize() for n in names]
+    return values, labels, values.index(current) if current in values else 0
+
+
+def colours():
+    """Pick the colour scheme from the skin settings: Kodi keeps the choice under Interface."""
+    import os
+    import xbmc
+    import xbmcgui
+    import xbmcvfs
+    files = os.listdir(xbmcvfs.translatePath('special://skin/colors'))
+    current = _rpc('Settings.GetSettingValue', setting='lookandfeel.skincolors')['value']
+    values, labels, index = colour_choices(files, current)
+    chosen = xbmcgui.Dialog().select(xbmc.getLocalizedString(14078), labels, preselect=index)
+    if chosen >= 0 and values[chosen] != current:
+        _rpc('Settings.SetSettingValue', setting='lookandfeel.skincolors', value=values[chosen])
+
+
 def search_recent(n):
     """Search again for remembered term n (1 = latest)."""
     history = _search_history()
@@ -1132,7 +1155,7 @@ def startup():
 COMMANDS = {'next_episode': next_episode, 'startup': startup, 'genres': genres, 'genre_pick': genre_pick,
             'info_select': info_select, 'play': play, 'info': info,
             'streams': streams, 'row': row, 'search': search, 'search_recent': search_recent,
-            'search_init': search_init, 'search_clear': search_clear, 'search_forget': search_forget,
+            'search_init': search_init, 'search_clear': search_clear, 'search_forget': search_forget, 'colours': colours,
             'streams_watch': streams_watch, 'section_pick': section_pick,
             'home': home, 'home_keymap': home_keymap}
 

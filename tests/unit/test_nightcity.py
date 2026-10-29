@@ -1105,3 +1105,16 @@ def test_switching_on_keeps_the_file_alone(monkeypatch, tmp_path):
     _, path, _ = _search_env(monkeypatch, tmp_path)
     nightcity.search_forget()
     assert path.exists()
+
+
+def test_colour_choices_follow_the_colors_folder():
+    """Kodi's lookandfeel.skincolors: SKINDEFAULT for defaults.xml, else the file name."""
+    values, labels, current = nightcity.colour_choices(
+        ['tokyonight.xml', 'defaults.xml', 'catppuccin.xml', 'notes.txt'], 'tokyonight')
+    assert values == ['SKINDEFAULT', 'catppuccin', 'tokyonight']
+    assert labels == ['Default', 'Catppuccin', 'Tokyonight']
+    assert current == 2
+
+
+def test_colour_choices_unknown_current_marks_the_default():
+    assert nightcity.colour_choices(['defaults.xml'], 'gone')[2] == 0

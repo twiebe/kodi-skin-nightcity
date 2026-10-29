@@ -5,7 +5,7 @@
      (script section_pick, Kodi's select dialog), right cycles the option, "move" in the dialog
      grabs the slot (pink), up/down carry it, OK drops it. Slot rows come from
      Includes_Sections.xml (tools/make_sections.py). Window properties: nc.hp.tab (category
-     shown), nc.hp.grab (grabbed slot as page.n). Main menu comes first, the glow at its end. -->
+     shown), nc.hp.grab (grabbed slot as page.n). Main menu comes first, colour scheme and glow at its end. -->
 <window>
     <defaultcontrol always="true">9000</defaultcontrol>
     <onload>SetProperty(nc.hp.tab,menu)</onload>
@@ -133,30 +133,43 @@
                     <param name="setting" value="nc.homekey.off"/>
                     <param name="onclick" value="NotifyAll(nightcity,home_keymap)"/>
                 </include>
-                <!-- effects: one setting, no category of its own. One group under a separator
+                <!-- the look: colour scheme and glow, no category of their own. One group under a separator
                      and a heading: a grouplist stops at a label, the group takes the focus and
                      hands it to the toggle -->
                 <control type="group" id="600">
                     <width>1240</width>
-                    <height>105</height>
+                    <height>157</height>
                     <control type="image">
                         <width>1240</width>
                         <height>1</height>
                         <texture colordiffuse="border_dim">ui/white.png</texture>
                     </control>
                     <include content="SkinSettingsHeading">
-                        <param name="label" value="$LOCALIZE[31005]"/>
+                        <param name="label" value="$LOCALIZE[480]"/>
                         <param name="top" value="1"/>
                     </include>
-                    <!-- in a group the toggle has no grouplist neighbours: its own ways back -->
-                    <control type="radiobutton" id="601">
+                    <!-- in a group the rows have no grouplist neighbours: their own ways back.
+                         Kodi keeps the colour scheme under Interface, the script picks it -->
+                    <control type="button" id="602">
                         <top>53</top>
+                        <width>1240</width>
+                        <include>SettingsRowLook</include>
+                        <label>$LOCALIZE[14078]</label>
+                        <label2>$VAR[ColourSchemeLabel]</label2>
+                        <onclick>NotifyAll(nightcity,colours)</onclick>
+                        <onup>521</onup>
+                        <ondown>601</ondown>
+                        <onleft>9005</onleft>
+                        <onright>noop</onright>
+                    </control>
+                    <control type="radiobutton" id="601">
+                        <top>105</top>
                         <width>1240</width>
                         <include>SettingsToggleLook</include>
                         <label>$LOCALIZE[31007]</label>
                         <selected>!Skin.HasSetting(GlowOff)</selected>
                         <onclick>Skin.ToggleSetting(GlowOff)</onclick>
-                        <onup>521</onup>
+                        <onup>602</onup>
                         <ondown>noop</ondown>
                         <onleft>9005</onleft>
                         <onright>noop</onright>
