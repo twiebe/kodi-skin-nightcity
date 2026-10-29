@@ -61,8 +61,7 @@
     </include>
 
     <!-- Vertical list with label and right-aligned label2, focused row a cyan cut fill, the current
-         value (ListItem.IsSelected) in accent with a pink dot in front (dark on the cursor's
-         fill, where pink hardly shows).
+         value (ListItem.IsSelected) in accent with a pink bullet in front.
          Children of the include (static <content>, navigation) go into the list. -->
     <include name="DialogList">
         <param name="id"/>
@@ -93,7 +92,7 @@
                         <label>$PARAM[label]</label>
                         <visible>!ListItem.IsSelected</visible>
                     </control>
-                    <!-- the current value: accent, with a pink dot in front (the " · " of the title lines) -->
+                    <!-- the current value: accent, with a pink bullet in front -->
                     <control type="label">
                         <left>20</left>
                         <width>$PARAM[width]</width>
@@ -102,7 +101,7 @@
                         <font>$PARAM[font]</font>
                         <textcolor>accent</textcolor>
                         <selectedcolor>accent</selectedcolor>
-                        <label>[COLOR accent2]·[/COLOR] $PARAM[label]</label>
+                        <label>[COLOR accent2]•[/COLOR] $PARAM[label]</label>
                         <visible>ListItem.IsSelected</visible>
                     </control>
                     <control type="label">
@@ -158,7 +157,7 @@
                         <textcolor>focus_text</textcolor>
                         <selectedcolor>focus_text</selectedcolor>
                         <scroll>Control.HasFocus($PARAM[id])</scroll>
-                        <label>· $PARAM[label]</label>
+                        <label>[COLOR accent2]•[/COLOR] $PARAM[label]</label>
                         <visible>ListItem.IsSelected + Control.HasFocus($PARAM[id])</visible>
                     </control>
                     <control type="label">
@@ -170,7 +169,7 @@
                         <textcolor>accent</textcolor>
                         <selectedcolor>accent</selectedcolor>
                         <scroll>Control.HasFocus($PARAM[id])</scroll>
-                        <label>[COLOR accent2]·[/COLOR] $PARAM[label]</label>
+                        <label>[COLOR accent2]•[/COLOR] $PARAM[label]</label>
                         <visible>ListItem.IsSelected + !Control.HasFocus($PARAM[id])</visible>
                     </control>
                     <control type="label">
