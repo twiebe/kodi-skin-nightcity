@@ -218,15 +218,15 @@
                 <width>$PARAM[width]</width>
                 <include>SettingsRowLook</include>
                 <spinposx>12</spinposx>
-                <spinwidth>28</spinwidth>
-                <spinheight>28</spinheight>
+                <spinwidth>34</spinwidth>
+                <spinheight>34</spinheight>
                 <texturefocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</texturefocus>
                 <texturenofocus/>
-                <texturedown colordiffuse="accent">ui/spin_minus.png</texturedown>
-                <texturedownfocus colordiffuse="accent2">ui/spin_minus_focus.png</texturedownfocus>
+                <texturedown colordiffuse="text_dim">ui/spin_minus.png</texturedown>
+                <texturedownfocus colordiffuse="focus_text">ui/spin_minus_focus.png</texturedownfocus>
                 <texturedowndisabled colordiffuse="text_mute">ui/spin_minus.png</texturedowndisabled>
-                <textureup colordiffuse="accent">ui/spin_plus.png</textureup>
-                <textureupfocus colordiffuse="accent2">ui/spin_plus_focus.png</textureupfocus>
+                <textureup colordiffuse="text_dim">ui/spin_plus.png</textureup>
+                <textureupfocus colordiffuse="focus_text">ui/spin_plus_focus.png</textureupfocus>
                 <textureupdisabled colordiffuse="text_mute">ui/spin_plus.png</textureupdisabled>
             </control>
             <control type="image" id="11">
@@ -245,7 +245,7 @@
                 <sliderheight>12</sliderheight>
                 <texturesliderbar colordiffuse="surface_alt">ui/white.png</texturesliderbar>
                 <textureslidernib colordiffuse="accent">ui/white.png</textureslidernib>
-                <textureslidernibfocus colordiffuse="accent2">ui/white.png</textureslidernibfocus>
+                <textureslidernibfocus colordiffuse="text">ui/white.png</textureslidernibfocus>
             </control>
             <control type="label" id="14">
                 <width>$PARAM[width]</width>
