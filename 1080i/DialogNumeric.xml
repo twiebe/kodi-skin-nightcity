@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Numeric input. Kodi ids: 1 heading, 4 input, 10-19 digits, 20 previous, 21 done, 22 next, 23 backspace. -->
+<!-- Numeric input. Kodi ids: 1 heading, 4 input, 10-19 digits, 20 previous, 21 done, 22 next, 23 backspace.
+     The rows are grouplists: up, down and the side buttons name the key by the focused one,
+     else a grouplist hands the focus to the key that had it last. -->
 <window>
     <depth>DepthDialog</depth>
     <defaultcontrol always="true">9010</defaultcontrol>
@@ -25,8 +27,10 @@
                 <label></label>
             </control>
             <control type="grouplist" id="9010">
-                <ondown>9011</ondown>
-                <onright>9014</onright>
+                <ondown condition="Control.HasFocus(11)">14</ondown>
+                <ondown condition="Control.HasFocus(12)">15</ondown>
+                <ondown condition="Control.HasFocus(13)">16</ondown>
+                <onright>23</onright>
                 <left>40</left>
                 <top>160</top>
                 <width>400</width>
@@ -50,9 +54,13 @@
                 </include>
             </control>
             <control type="grouplist" id="9011">
-                <onup>9010</onup>
-                <ondown>9012</ondown>
-                <onright>9014</onright>
+                <onup condition="Control.HasFocus(14)">11</onup>
+                <onup condition="Control.HasFocus(15)">12</onup>
+                <onup condition="Control.HasFocus(16)">13</onup>
+                <ondown condition="Control.HasFocus(14)">17</ondown>
+                <ondown condition="Control.HasFocus(15)">18</ondown>
+                <ondown condition="Control.HasFocus(16)">19</ondown>
+                <onright>21</onright>
                 <left>40</left>
                 <top>228</top>
                 <width>400</width>
@@ -76,9 +84,13 @@
                 </include>
             </control>
             <control type="grouplist" id="9012">
-                <onup>9011</onup>
-                <ondown>9013</ondown>
-                <onright>9014</onright>
+                <onup condition="Control.HasFocus(17)">14</onup>
+                <onup condition="Control.HasFocus(18)">15</onup>
+                <onup condition="Control.HasFocus(19)">16</onup>
+                <ondown condition="Control.HasFocus(17)">20</ondown>
+                <ondown condition="Control.HasFocus(18)">10</ondown>
+                <ondown condition="Control.HasFocus(19)">22</ondown>
+                <onright>21</onright>
                 <left>40</left>
                 <top>296</top>
                 <width>400</width>
@@ -102,8 +114,10 @@
                 </include>
             </control>
             <control type="grouplist" id="9013">
-                <onup>9012</onup>
-                <onright>9014</onright>
+                <onup condition="Control.HasFocus(20)">17</onup>
+                <onup condition="Control.HasFocus(10)">18</onup>
+                <onup condition="Control.HasFocus(22)">19</onup>
+                <onright>21</onright>
                 <left>40</left>
                 <top>364</top>
                 <width>400</width>
@@ -127,7 +141,10 @@
                 </include>
             </control>
             <control type="grouplist" id="9014">
-                <onleft>9010</onleft>
+                <onleft condition="Control.HasFocus(23)">13</onleft>
+                <onleft condition="Control.HasFocus(21)">16</onleft>
+                <onup>23</onup>
+                <ondown>21</ondown>
                 <left>480</left>
                 <top>160</top>
                 <width>180</width>
