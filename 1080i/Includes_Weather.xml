@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- The weather page (MyWeather.xml) -->
 <includes>
-    <!-- Whether the add-on gave a fact. Kodi replaces the add-on's values with its own formatted
-         ones before the skin sees them: humidity and UV index stay empty without a value, wind
-         becomes "From  at 0 km/h" (but Kodi leaves the add-on's Current.WindDirection alone), a
-         missing temperature becomes 0 converted to the user's unit (0, 32 or 273). A real 0
-         degrees feels like or dew point is hidden too: the skin cannot tell them apart. -->
-    <expression name="WeatherHasFeelsLike">!String.IsEmpty(Window(Weather).Property(Current.FeelsLike)) + ![String.IsEqual(System.TemperatureUnits,°C) + String.IsEqual(Window(Weather).Property(Current.FeelsLike),0)] + ![String.IsEqual(System.TemperatureUnits,°F) + String.IsEqual(Window(Weather).Property(Current.FeelsLike),32)] + ![String.IsEqual(System.TemperatureUnits,K) + String.IsEqual(Window(Weather).Property(Current.FeelsLike),273)]</expression>
-    <expression name="WeatherHasDewPoint">!String.IsEmpty(Window(Weather).Property(Current.DewPoint)) + ![String.IsEqual(System.TemperatureUnits,°C) + String.IsEqual(Window(Weather).Property(Current.DewPoint),0)] + ![String.IsEqual(System.TemperatureUnits,°F) + String.IsEqual(Window(Weather).Property(Current.DewPoint),32)] + ![String.IsEqual(System.TemperatureUnits,K) + String.IsEqual(Window(Weather).Property(Current.DewPoint),273)]</expression>
     <!-- The letter of the temperature unit, set apart from its degree sign (MyWeather.xml 510);
          a unit without degree sign (K) whole -->
     <variable name="WeatherUnit">

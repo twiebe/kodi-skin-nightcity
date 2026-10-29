@@ -63,27 +63,19 @@ def facts():
 
 def test_a_fact_shows_only_when_the_add_on_gave_it():
     """Kodi overwrites the add-on's values with formatted ones: humidity and UV index stay empty
-    without a value, but wind becomes "From  at 0 km/h" and a temperature "0" (32 in Fahrenheit).
-    Wind goes by the add-on's own direction (Kodi never touches it), feels like and dew point
-    are missing when they are Kodi's zero in the user's unit. The list is a grouplist: a hidden
-    line leaves no gap."""
+    without a value, but wind becomes "From  at 0 km/h", so wind goes by the add-on's own
+    direction (Kodi never touches it). Feels like and dew point always show: Kodi makes a
+    missing one 0 degrees, which cannot be told from a real 0 in winter. The list is a
+    grouplist: a hidden line leaves no gap."""
     prop = 'Window(Weather).Property({})'.format
     assert facts() == {
-        '402': '$EXP[WeatherHasFeelsLike]',
+        '402': None,
         '406': '!String.IsEmpty({})'.format(prop('Current.Humidity')),
         '404': '!String.IsEmpty({})'.format(prop('Current.WindDirection')),
         '403': '!String.IsEmpty({})'.format(prop('Current.UVIndex')),
-        '405': '$EXP[WeatherHasDewPoint]',
+        '405': None,
         '12014': '!String.IsEmpty({})'.format(prop('Updated')),
     }
-    expressions = {e.get('name'): e.text for e in includes().iter('expression')}
-    for name, value in (('WeatherHasFeelsLike', 'Current.FeelsLike'), ('WeatherHasDewPoint', 'Current.DewPoint')):
-        v = prop(value)
-        assert expressions[name] == (
-            '!String.IsEmpty({0}) + '
-            '![String.IsEqual(System.TemperatureUnits,°C) + String.IsEqual({0},0)] + '
-            '![String.IsEqual(System.TemperatureUnits,°F) + String.IsEqual({0},32)] + '
-            '![String.IsEqual(System.TemperatureUnits,K) + String.IsEqual({0},273)]').format(v)
 
 
 def test_temperature_large_and_tight():
