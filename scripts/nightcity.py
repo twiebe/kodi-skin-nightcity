@@ -1080,6 +1080,31 @@ def search_forget():
         search_clear()
 
 
+OSD_HIDE_MIN, OSD_HIDE_MAX, OSD_HIDE_DEFAULT = 3, 30, 8
+OSD_HIDE_NIB = 8  # width of the slider's nib in percent of its bar
+
+
+def osd_hide_values(current, step):
+    """(seconds, wait, nib from, nib to) after moving the delay slider of the player controls
+    by STEP from CURRENT (default 8 s), within 3 to 30 s. The timer nc_osd_hide counts from a
+    second after the last key, so it waits a second less. The slider is a progress bar whose
+    fill from..to (percent) is the nib."""
+    try:
+        secs = int(current)
+    except ValueError:
+        secs = OSD_HIDE_DEFAULT
+    secs = max(OSD_HIDE_MIN, min(OSD_HIDE_MAX, secs + int(step)))
+    start = int((secs - OSD_HIDE_MIN) * (100 - OSD_HIDE_NIB) / (OSD_HIDE_MAX - OSD_HIDE_MIN) + 0.5)
+    return secs, secs - 1, start, start + OSD_HIDE_NIB
+
+
+def osd_hide(current, step):
+    """The delay slider in the skin settings (Player): move it by STEP seconds."""
+    import xbmc
+    for name, value in zip(('secs', 'wait', 'from', 'to'), osd_hide_values(current, step)):
+        xbmc.executebuiltin('Skin.SetString(nc.osd.hide.{},{})'.format(name, value))
+
+
 def colour_choices(files, current):
     """(values, labels, index of current) of the colour schemes in the skin's colors folder, as
     Kodi's lookandfeel.skincolors names them: SKINDEFAULT for defaults.xml, else the file name."""
@@ -1290,7 +1315,7 @@ COMMANDS = {'next_episode': next_episode, 'startup': startup, 'genres': genres, 
             'streams': streams, 'row': row, 'search': search, 'search_recent': search_recent,
             'search_init': search_init, 'search_clear': search_clear, 'search_forget': search_forget, 'colours': colours,
             'streams_watch': streams_watch, 'section_pick': section_pick,
-            'home': home, 'home_keymap': home_keymap}
+            'home': home, 'home_keymap': home_keymap, 'osd_hide': osd_hide}
 
 
 # --- the skin service -------------------------------------------------------------------------
