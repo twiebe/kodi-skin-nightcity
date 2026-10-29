@@ -121,12 +121,62 @@ def test_up_from_the_top_goes_to_the_hamburger():
 
 
 def test_kodis_power_menu_leads_here():
-    """Like Arctic Fuse: the power menu closes at once and opens the quick menu, or closes it when
-    it is open, so the same key opens and closes it."""
+    """Like Arctic Fuse: the power menu (the S key, power and sleep keys, Home held) closes at once
+    and hands over to nc_quick_key. Its own onload cannot tell whether Home is alone under it:
+    Kodi evaluates all of a window's onload conditions while that window is the topmost modal
+    dialog."""
     root = parse(ROOT / '1080i' / 'DialogButtonMenu.xml')
-    assert actions(root, 'onload') == [('', 'Close'), ('!Window.IsActive(1170)', 'ActivateWindow(1170)'),
-                                       ('Window.IsActive(1170)', 'Dialog.Close(1170)')]
+    assert actions(root, 'onload') == [('', 'Close'), ('', 'SetProperty(nc.quick.key,1,home)')]
     assert not list(root.iter('control'))
+
+
+HOME_ALONE = 'Window.IsActive(home) + !System.HasActiveModalDialog'
+PANEL_UP = '[Control.HasFocus(9109) | ControlGroup(9180).HasFocus]'
+FROM = 'Window(Home).Property(nc.quick.from)'
+
+
+def test_one_menu_on_home():
+    """A frame later, the power menu gone: on Home with nothing modal over it the keys use the
+    panel of Home, not the dialog (one menu, not two that behave a little differently). They
+    land on power off, as the dialog does, remembering where the focus was; the same key again
+    takes the focus back there, or to the page's own entry when the menu was reached by hand.
+    Over any other window the dialog opens and closes as before."""
+    timer = next(t for t in parse(ROOT / '1080i' / 'Timers.xml').iter('timer') if t.findtext('name') == 'nc_quick_key')
+    assert timer.findtext('start') == '!String.IsEmpty(Window(Home).Property(nc.quick.key))'
+    assert timer.find('start').get('reset') == 'true'
+    assert timer.findtext('stop') == 'true'
+    page = 'String.IsEqual(Window(Home).Property(nc.page),{})'.format
+    back = '{} + {} + String.IsEmpty({})'.format(HOME_ALONE, PANEL_UP, FROM)
+    assert actions(timer, 'onstop') == [
+        ('', 'ClearProperty(nc.quick.key,home)'),
+        ('Window.IsActive(1170)', 'Dialog.Close(1170)'),
+        ('!Window.IsActive(1170) + ![{}]'.format(HOME_ALONE), 'ActivateWindow(1170)'),
+        ('{} + !{}'.format(HOME_ALONE, PANEL_UP), 'SetProperty(nc.quick.from,$INFO[System.CurrentControlId],home)'),
+        ('{} + !{}'.format(HOME_ALONE, PANEL_UP), 'SetFocus(1220,0,absolute)'),
+        ('{} + {} + !String.IsEmpty({})'.format(HOME_ALONE, PANEL_UP, FROM), 'SetFocus($INFO[{}])'.format(FROM)),
+        ('{} + {}'.format(back, page('movies')), 'SetFocus(9102)'),
+        ('{} + {}'.format(back, page('shows')), 'SetFocus(9103)'),
+        ('{} + {}'.format(back, page('search')), 'SetFocus(9104)'),
+        ('{} + {}'.format(back, page('system')), 'SetFocus(9601)'),
+        ('{} + ![{} | {} | {} | {}]'.format(back, page('movies'), page('shows'), page('search'), page('system')),
+         'SetFocus(9101)'),
+        ('{} + {}'.format(HOME_ALONE, PANEL_UP), 'ClearProperty(nc.quick.from,home)'),
+    ]
+
+
+def test_panel_takes_the_focus_while_hidden():
+    """The keys put the focus on power off while the panel is still hidden: it shows once the
+    focus is in it."""
+    panel = controls(load('Home.xml'))['9180']
+    assert panel.find('visible').get('allowhiddenfocus') == 'true'
+
+
+def test_leaving_the_icon_forgets_where_the_keys_came_from():
+    """Off the icon to the menu the panel hides: a later key on the icon reached by hand goes to
+    the page's entry, not to where an earlier key came from."""
+    anchor = controls(load('Home.xml'))['9109']
+    for d in ('onleft', 'onright'):
+        assert ('', 'ClearProperty(nc.quick.from,home)') in actions(anchor, d), d
 
 
 def test_icon_next_to_the_clock_shows_it():
