@@ -77,3 +77,40 @@ def test_page_switch_keeps_the_shared_hero_fade():
                   if (a.get('type') or '').lower() == 'conditional']
     assert any('nc.page),movies)' in c for c in conditions)
     assert any('nc.page),home)' in c for c in conditions)
+
+
+def test_hero_art_changes_with_the_title():
+    """Poster and logo of a hero change in the frame the title changes: the spotlight list keeps
+    the art of the next titles loaded (SpotlightList), so there is nothing to wait for. A
+    crossfade (fadetime) would let the old logo shine through after a page switch, longer than
+    the page fade."""
+    images = [c for c in load('Home.xml').iter('control') if c.get('type') == 'image'
+              and re.search(r'Container\(900[01]\)\.ListItem\.Art\((poster|clearlogo)\)', c.findtext('texture') or '')]
+    assert len(images) >= 3  # movie hero poster and logo, show hero
+    for image in images:
+        assert int(image.findtext('fadetime') or 0) == 0, image.findtext('texture')
+
+
+def test_movie_backdrop_fades_in_on_home_and_movies():
+    """The fanart of the movie spotlight stands behind home and movies alike, so it stays visible
+    on a switch between them and would crossfade from the old title to the new one in full view.
+    Like the hero it fades in from nothing whenever one of the two pages comes up (one
+    Conditional animation per page), the crossfade runs under that fade. No Visible animation on
+    top, coming from a third page both would run and multiply."""
+    home = load('Home.xml')
+    group = next(g for g in home.iter('control') if g.get('type') == 'group' and any(
+        'Container(9000).ListItem.Art(fanart)' in (i.findtext('texture') or '') for i in g.findall('control')))
+    anims = group.findall('animation')
+    fades = {}
+    for a in anims:
+        if (a.get('type') or a.text or '').strip().lower() == 'conditional':
+            for page in ('home', 'movies'):
+                if 'nc.page),{})'.format(page) in (a.get('condition') or ''):
+                    fades[page] = a
+    assert set(fades) == {'home', 'movies'}
+    for page, a in fades.items():
+        assert a.get('reversible') == 'false', page
+        assert any((e.get('type') == 'fade' and e.get('start') == '0') for e in a.findall('effect')), page
+        assert not [e for e in a.findall('effect') if e.get('type') == 'slide'], page  # a full screen picture
+    assert not [a for a in anims if (a.get('type') or a.text or '').strip().lower() == 'visible']
+    assert [a for a in anims if (a.get('type') or a.text or '').strip().lower() == 'hidden']

@@ -38,7 +38,10 @@
             <include>BackdropFade</include>
             <control type="group">
                 <visible>Control.IsVisible(9300)</visible>
-                <include>BackdropFade</include>
+                <include content="SharedBackdropFade">
+                    <param name="page1" value="String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)"/>
+                    <param name="page2" value="String.IsEqual(Window(Home).Property(nc.page),movies)"/>
+                </include>
                 <include content="FanartBackdrop">
                     <param name="art" value="Container(9000).ListItem.Art(fanart)"/>
                 </include>
