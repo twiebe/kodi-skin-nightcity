@@ -61,6 +61,10 @@
         <value condition="Integer.IsGreater(System.CurrentControlID,210) + Integer.IsLess(System.CurrentControlID,500)">$LOCALIZE[31260]</value>
     </variable>
     <variable name="SkinSettingsDesc">
+        <value condition="Control.HasFocus(711)">$LOCALIZE[31361]</value>
+        <value condition="Control.HasFocus(712)">$LOCALIZE[31363]</value>
+        <value condition="Control.HasFocus(9006)">$LOCALIZE[31364]</value>
+        <value condition="Control.HasFocus(713)">$LOCALIZE[31366]</value>
         <value condition="Control.HasFocus(601)">$LOCALIZE[31269]</value>
         <value condition="Control.HasFocus(602)">$LOCALIZE[31340]</value>
         <value condition="Control.HasFocus(9002)">$LOCALIZE[31265]</value>
@@ -75,6 +79,20 @@
         <value condition="Control.HasFocus(312)">$LOCALIZE[31257] $LOCALIZE[31258]</value>
         <value condition="Control.HasFocus(212) | Control.HasFocus(412)">$LOCALIZE[31257]</value>
         <value condition="Integer.IsGreater(System.CurrentControlID,220) + Integer.IsLess(System.CurrentControlID,500)">$VAR[HomePagesSlotDesc]</value>
+    </variable>
+    <!-- the delay slider of the player controls (SkinSettings.xml 720): its value, the value's
+         colour on the focused row, the nib light while the slider is taken -->
+    <variable name="OsdHideDelayLabel">
+        <value condition="!String.IsEmpty(Skin.String(nc.osd.hide.secs))">$INFO[Skin.String(nc.osd.hide.secs)] s</value>
+        <value>8 s</value>
+    </variable>
+    <variable name="OsdHideValueColor">
+        <value condition="Control.HasFocus(712)">focus_text</value>
+        <value>text_dim</value>
+    </variable>
+    <variable name="OsdHideNibColor">
+        <value condition="!String.IsEmpty(Window.Property(nc.hp.slide))">text</value>
+        <value>accent</value>
     </variable>
     <variable name="SpotlightResolution">
         <value condition="String.IsEqual(Container(9000).ListItem.VideoResolution,4K)">4K</value>

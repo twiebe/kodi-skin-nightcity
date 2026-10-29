@@ -3,7 +3,8 @@
      dialog. "ends at" beside its times, playback buttons and stop left, track buttons right.
      Subtitles and audio show a track panel, video a panel with what the video is; left and
      right in a panel step along the buttons. "…" swaps subtitles, audio and video for stats.
-     The chapter row is Down from the bar. -->
+     The chapter row is Down from the bar. Switched on in the skin settings (Player), the OSD and
+     its rows close by themselves after a while without a key (Timers.xml nc_osd_hide). -->
 <window>
     <depth>DepthOSD</depth>
     <defaultcontrol always="true">602</defaultcontrol>

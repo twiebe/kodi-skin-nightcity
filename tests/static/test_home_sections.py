@@ -301,7 +301,7 @@ def test_home_navigation_for_any_combination(skin):
 
 # category button -> (label, tab, first control on the right)
 CATEGORIES = {'9005': (31264, 'menu', '500'), '9002': (10000, 'home', '200'), '9003': (342, 'movies', '300'),
-              '9004': (20343, 'shows', '400')}
+              '9004': (20343, 'shows', '400'), '9006': (14200, 'player', '700')}
 CATEGORY = {'home': '9002', 'movies': '9003', 'shows': '9004'}
 
 

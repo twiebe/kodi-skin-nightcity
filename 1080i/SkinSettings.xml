@@ -5,12 +5,16 @@
      (script section_pick, Kodi's select dialog), right cycles the option, "move" in the dialog
      grabs the slot (pink), up/down carry it, OK drops it. Slot rows come from
      Includes_Sections.xml (tools/make_sections.py). Window properties: nc.hp.tab (category
-     shown), nc.hp.grab (grabbed slot as page.n). Main menu comes first, colour scheme and glow at its end. -->
+     shown), nc.hp.grab (grabbed slot as page.n), nc.hp.slide (the delay slider of Player is
+     taken). Main menu comes first, colour scheme and glow at its end; Player last. -->
 <window>
     <defaultcontrol always="true">9000</defaultcontrol>
     <onload>SetProperty(nc.hp.tab,menu)</onload>
     <onload>SetFocus(9005)</onload>
     <onload>ClearProperty(nc.hp.grab)</onload>
+    <!-- the delay slider of the Player category: the default delay, and let go of the slider -->
+    <onload condition="String.IsEmpty(Skin.String(nc.osd.hide.secs))">NotifyAll(nightcity,osd_hide:8:0)</onload>
+    <onload>ClearProperty(nc.hp.slide)</onload>
     <include>HomePagesDefaults</include>
     <controls>
         <include>Background</include>
@@ -32,6 +36,7 @@
                 <onright condition="String.IsEqual(Window.Property(nc.hp.tab),movies)">300</onright>
                 <onright condition="String.IsEqual(Window.Property(nc.hp.tab),shows)">400</onright>
                 <onright condition="String.IsEqual(Window.Property(nc.hp.tab),menu)">500</onright>
+                <onright condition="String.IsEqual(Window.Property(nc.hp.tab),player)">700</onright>
                 <onright>500</onright>
                 <onup>noop</onup>
                 <ondown>noop</ondown>
@@ -54,6 +59,11 @@
                     <param name="id" value="9004"/>
                     <param name="tab" value="shows"/>
                     <param name="label" value="$LOCALIZE[20343]"/>
+                </include>
+                <include content="SkinSettingsCategory">
+                    <param name="id" value="9006"/>
+                    <param name="tab" value="player"/>
+                    <param name="label" value="$LOCALIZE[14200]"/>
                 </include>
             </control>
             <include content="SkinSettingsArea">
@@ -175,6 +185,71 @@
                         <onright>noop</onright>
                     </control>
                 </control>
+            </include>
+            <!-- the player: its controls hide by themselves after the delay of the slider below,
+                 3 to 30 s (Timers.xml nc_osd_hide); the plot under the title. Both on by default,
+                 the skin bools store off. -->
+            <include content="SkinSettingsArea">
+                <param name="id" value="700"/>
+                <param name="tab" value="player"/>
+                <param name="category" value="9006"/>
+                <include content="SkinSettingsToggle">
+                    <param name="id" value="711"/>
+                    <param name="label" value="$LOCALIZE[31360]"/>
+                    <param name="setting" value="nc.osd.autohide.off"/>
+                </include>
+                <!-- the delay as Kodi's settings slider (template 13): OK takes the slider (nib
+                     light, nc.hp.slide), left and right move it a second (script osd_hide), OK or
+                     leaving the row lets go. Taken, left stays on the row (712): Kodi moves to the
+                     first id whose condition holds, after the actions. A group, so the slider bar
+                     can sit on the row. -->
+                <control type="group" id="720">
+                    <width>1240</width>
+                    <height>52</height>
+                    <visible>!Skin.HasSetting(nc.osd.autohide.off)</visible>
+                    <control type="button" id="712">
+                        <width>1240</width>
+                        <include>SettingsRowLook</include>
+                        <label>$LOCALIZE[31362]</label>
+                        <onclick condition="String.IsEmpty(Window.Property(nc.hp.slide))">SetProperty(nc.hp.slide,1)</onclick>
+                        <onclick condition="!String.IsEmpty(Window.Property(nc.hp.slide))">ClearProperty(nc.hp.slide)</onclick>
+                        <onleft condition="!String.IsEmpty(Window.Property(nc.hp.slide))">NotifyAll(nightcity,osd_hide:$INFO[Skin.String(nc.osd.hide.secs)]:-1)</onleft>
+                        <onleft condition="!String.IsEmpty(Window.Property(nc.hp.slide))">712</onleft>
+                        <onleft>9006</onleft>
+                        <onright condition="!String.IsEmpty(Window.Property(nc.hp.slide))">NotifyAll(nightcity,osd_hide:$INFO[Skin.String(nc.osd.hide.secs)]:1)</onright>
+                        <onright>noop</onright>
+                        <onup>711</onup>
+                        <ondown>713</ondown>
+                        <onunfocus>ClearProperty(nc.hp.slide)</onunfocus>
+                    </control>
+                    <control type="label">
+                        <width>896</width>
+                        <height>52</height>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <font>font_label</font>
+                        <textcolor>$VAR[OsdHideValueColor]</textcolor>
+                        <label>$VAR[OsdHideDelayLabel]</label>
+                    </control>
+                    <!-- the bar, its nib the fill between nib from and to (Kodi's slider
+                         control draws a nib of a plain texture far too large) -->
+                    <control type="progress">
+                        <left>920</left>
+                        <top>20</top>
+                        <width>300</width>
+                        <height>12</height>
+                        <info>Skin.Numeric(nc.osd.hide.to)</info>
+                        <info2>Skin.Numeric(nc.osd.hide.from)</info2>
+                        <texturebg colordiffuse="surface_alt">ui/white.png</texturebg>
+                        <midtexture colordiffuse="$VAR[OsdHideNibColor]">ui/white.png</midtexture>
+                    </control>
+                </control>
+                <!-- the plot under the title in the player (Includes_Player.xml PlayerDetails) -->
+                <include content="SkinSettingsToggle">
+                    <param name="id" value="713"/>
+                    <param name="label" value="$LOCALIZE[31365]"/>
+                    <param name="setting" value="nc.osd.plot.off"/>
+                </include>
             </include>
             <!-- description of the focused entry, below it the keys of the page rows -->
             <control type="label" id="6">
