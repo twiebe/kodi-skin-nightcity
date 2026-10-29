@@ -78,7 +78,8 @@
 
     <!-- PageFade for what plays in the player (PlayerDetails): it fades in and rises `delay` ms
          after the seek line dialog opened or the OSD rows gave the space back, while the video
-         plays. -->
+         plays. Closing or making room for the rows it fades out and drops at once, before the
+         controls and the seek line (their windows' WindowClose waits PlayerFadeStep). -->
     <include name="PlayerFade">
         <param name="delay" default="PlayerFadeStep"/>
         <definition>
@@ -91,6 +92,14 @@
                 <effect type="fade" start="100" end="100" time="FadeTime"/>
                 <effect type="fade" start="0" end="100" time="FadeTime" delay="$PARAM[delay]"/>
                 <effect type="slide" start="0,10" end="0,0" time="FadeTime" delay="$PARAM[delay]" tween="cubic" easing="out"/>
+            </animation>
+            <animation type="Hidden">
+                <effect type="fade" start="100" end="0" time="FadeTime"/>
+                <effect type="slide" start="0,0" end="0,10" time="FadeTime" tween="cubic" easing="in"/>
+            </animation>
+            <animation type="WindowClose">
+                <effect type="fade" start="100" end="0" time="FadeTime"/>
+                <effect type="slide" start="0,0" end="0,10" time="FadeTime" tween="cubic" easing="in"/>
             </animation>
         </definition>
     </include>
