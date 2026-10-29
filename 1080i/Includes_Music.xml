@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Music: the Music page of Home (spotlight of random albums, rows of albums, artists and
+     genres), square cards and their click routing. The music windows are DialogMusicInfo.xml,
+     MyMusicNav.xml, MusicVisualisation.xml and MusicOSD.xml. -->
+<includes>
+    <!-- A square music card: cover or photo, the title while there is no art, title and artist
+         under the card -->
+    <include name="MusicCard">
+        <param name="focused" default="false"/>
+        <param name="dim" default="false"/>
+        <param name="labels" default="true"/>
+        <definition>
+            <control type="group">
+                <include content="CutCard">
+                    <param name="width" value="200"/>
+                    <param name="height" value="200"/>
+                    <param name="mask" value="ui/mask_200x200.png"/>
+                    <param name="glowheight" value="248"/>
+                    <param name="image" value="$INFO[ListItem.Art(thumb)]"/>
+                    <param name="focused" value="$PARAM[focused]"/>
+                    <param name="dim" value="$PARAM[dim]"/>
+                    <control type="textbox">
+                        <left>16</left>
+                        <top>16</top>
+                        <width>168</width>
+                        <height>168</height>
+                        <font>font_label</font>
+                        <textcolor>text_mute</textcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>String.IsEmpty(ListItem.Art(thumb))</visible>
+                    </control>
+                </include>
+                <control type="label">
+                    <top>214</top>
+                    <width>200</width>
+                    <height>30</height>
+                    <font>font_small</font>
+                    <textcolor>text_dim</textcolor>
+                    <selectedcolor>text_dim</selectedcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                    <visible>$PARAM[labels] + !String.IsEmpty(ListItem.Art(thumb))</visible>
+                </control>
+                <control type="label">
+                    <top>244</top>
+                    <width>200</width>
+                    <height>28</height>
+                    <font>font_tiny</font>
+                    <textcolor>text_mute</textcolor>
+                    <selectedcolor>text_mute</selectedcolor>
+                    <label>$VAR[MusicCardLine]</label>
+                    <visible>$PARAM[labels]</visible>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Click on a music card: albums and artists open their info page, a genre opens the
+         library on it, anything else Kodi runs (a song plays) -->
+    <include name="MusicClick">
+        <onclick condition="String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,artist)">Action(Info)</onclick>
+        <onclick condition="String.IsEqual(ListItem.DBType,genre)">ActivateWindow(Music,$INFO[ListItem.FolderPath],return)</onclick>
+    </include>
+
+    <!-- One row of the Music page: heading, the focused title and a counter on the right, a
+         horizontal list of square cards. Hidden while empty; loader: the list whose items
+         decide that (the row's own list, or an off-screen one for a row that can fill up). -->
+    <include name="MusicRowBox">
+        <param name="id"/>
+        <param name="group"/>
+        <param name="label"/>
+        <param name="content"/>
+        <param name="loader"/>
+        <param name="up"/>
+        <param name="down" default="noop"/>
+        <param name="sortby" default=""/>
+        <param name="sortorder" default=""/>
+        <param name="limit" default="25"/>
+        <definition>
+            <control type="group" id="$PARAM[group]">
+                <height>468</height>
+                <visible>Integer.IsGreater(Container($PARAM[loader]).NumItems,0) | Container($PARAM[loader]).IsUpdating</visible>
+                <include content="RowHeader">
+                    <param name="label" value="$PARAM[label]"/>
+                    <param name="left" value="64"/>
+                    <param name="top" value="6"/>
+                </include>
+                <control type="label">
+                    <left>600</left>
+                    <top>6</top>
+                    <width>1150</width>
+                    <height>34</height>
+                    <align>right</align>
+                    <font>font_caps_small</font>
+                    <textcolor>text_dim</textcolor>
+                    <selectedcolor>text_dim</selectedcolor>
+                    <label>[UPPERCASE]$INFO[Container($PARAM[id]).ListItem.Label][/UPPERCASE]</label>
+                    <visible>Control.HasFocus($PARAM[id])</visible>
+                </control>
+                <control type="label">
+                    <left>64</left>
+                    <top>6</top>
+                    <width>1792</width>
+                    <height>34</height>
+                    <align>right</align>
+                    <font>font_num</font>
+                    <textcolor>accent2</textcolor>
+                    <selectedcolor>accent2</selectedcolor>
+                    <label>$INFO[Container($PARAM[id]).CurrentItem]/$INFO[Container($PARAM[id]).NumItems]</label>
+                </control>
+                <control type="list" id="$PARAM[id]">
+                    <left>40</left>
+                    <top>44</top>
+                    <width>1880</width>
+                    <height>424</height>
+                    <orientation>horizontal</orientation>
+                    <scrolltime tween="quadratic">200</scrolltime>
+                    <preloaditems>2</preloaditems>
+                    <onup>$PARAM[up]</onup>
+                    <ondown>$PARAM[down]</ondown>
+                    <include>MusicClick</include>
+                    <itemlayout width="228" height="424">
+                        <control type="group">
+                            <left>24</left>
+                            <top>34</top>
+                            <include content="MusicCard">
+                                <param name="dim" value="Control.HasFocus($PARAM[id])"/>
+                            </include>
+                        </control>
+                    </itemlayout>
+                    <focusedlayout width="228" height="424">
+                        <control type="group">
+                            <left>24</left>
+                            <top>34</top>
+                            <include content="MusicCard">
+                                <param name="focused" value="Control.HasFocus($PARAM[id])"/>
+                            </include>
+                        </control>
+                    </focusedlayout>
+                    <content target="music" sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]" limit="$PARAM[limit]">$PARAM[content]</content>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- The rows of the Music page, one at a time like every page -->
+    <include name="MusicRows">
+        <include content="MusicRowBox">
+            <param name="id" value="9801"/>
+            <param name="loader" value="9801"/>
+            <param name="group" value="9811"/>
+            <param name="up" value="9850"/>
+            <param name="down" value="9812"/>
+            <param name="label" value="$LOCALIZE[31400]"/>
+            <param name="content" value="musicdb://recentlyaddedalbums/"/>
+        </include>
+        <!-- fills up after playback: its loader stays visible while the row is hidden -->
+        <include content="MusicRowBox">
+            <param name="id" value="9802"/>
+            <param name="group" value="9812"/>
+            <param name="loader" value="9822"/>
+            <param name="up" value="9811"/>
+            <param name="down" value="9813"/>
+            <param name="label" value="$LOCALIZE[31401]"/>
+            <param name="content" value="musicdb://recentlyplayedalbums/"/>
+        </include>
+        <include content="MusicRowBox">
+            <param name="id" value="9803"/>
+            <param name="loader" value="9803"/>
+            <param name="group" value="9813"/>
+            <param name="up" value="9812"/>
+            <param name="down" value="9814"/>
+            <param name="label" value="$LOCALIZE[31402]"/>
+            <param name="content" value="special://skin/playlists/MusicRandomAlbums.xsp"/>
+        </include>
+        <include content="MusicRowBox">
+            <param name="id" value="9804"/>
+            <param name="loader" value="9804"/>
+            <param name="group" value="9814"/>
+            <param name="up" value="9813"/>
+            <param name="down" value="9815"/>
+            <param name="label" value="$LOCALIZE[31403]"/>
+            <param name="content" value="musicdb://artists/"/>
+            <param name="limit" value="50"/>
+        </include>
+        <include content="MusicRowBox">
+            <param name="id" value="9805"/>
+            <param name="loader" value="9805"/>
+            <param name="group" value="9815"/>
+            <param name="up" value="9814"/>
+            <param name="label" value="$LOCALIZE[31404]"/>
+            <param name="content" value="musicdb://genres/"/>
+            <param name="limit" value="50"/>
+        </include>
+    </include>
+
+    <!-- Off-screen loader of the recently played row (WidgetLoader for music) -->
+    <include name="MusicLoaders">
+        <control type="list" id="9822">
+            <left>-3000</left>
+            <top>0</top>
+            <width>10</width>
+            <height>10</height>
+            <itemlayout width="1" height="1"/>
+            <focusedlayout width="1" height="1"/>
+            <content target="music" limit="1">musicdb://recentlyplayedalbums/</content>
+        </control>
+    </include>
+
+    <!-- Hero of the Music page: the album spotlight (list 9002, random albums). Cover, text and
+         buttons fade in one after the other like the other pages. -->
+    <include name="MusicHero">
+        <control type="group">
+            <left>64</left>
+            <top>116</top>
+            <visible>String.IsEqual(Window(Home).Property(nc.page),music)</visible>
+            <include content="PageFade"/>
+            <include content="CutCard">
+                <param name="width" value="280"/>
+                <param name="height" value="280"/>
+                <param name="mask" value="ui/mask_280x280.png"/>
+                <param name="glowheight" value="328"/>
+                <param name="glowwidth" value="328"/>
+                <param name="image" value="$INFO[Container(9002).ListItem.Art(thumb)]"/>
+            </include>
+        </control>
+        <control type="group">
+            <visible>String.IsEqual(Window(Home).Property(nc.page),music)</visible>
+            <include content="PageFade">
+                <param name="delay" value="FadeStep1"/>
+            </include>
+            <include content="Kicker">
+                <param name="label" value="$INFO[Container(9002).ListItem.Artist]"/>
+                <param name="left" value="384"/>
+                <param name="top" value="116"/>
+            </include>
+            <include content="GlitchTitle">
+                <param name="id" value="9860"/>
+                <param name="label" value="$INFO[Container(9002).ListItem.Label]"/>
+                <param name="left" value="384"/>
+                <param name="top" value="160"/>
+                <param name="width" value="1440"/>
+            </include>
+            <control type="grouplist">
+                <left>384</left>
+                <top>272</top>
+                <width>1400</width>
+                <height>36</height>
+                <orientation>horizontal</orientation>
+                <itemgap>10</itemgap>
+                <include content="Tag">
+                    <param name="label" value="$INFO[Container(9002).ListItem.Year]"/>
+                    <param name="visible" value="!String.IsEmpty(Container(9002).ListItem.Year)"/>
+                </include>
+                <include content="Tag">
+                    <param name="label" value="$INFO[Container(9002).ListItem.Genre]"/>
+                    <param name="visible" value="!String.IsEmpty(Container(9002).ListItem.Genre)"/>
+                </include>
+            </control>
+            <control type="textbox">
+                <left>384</left>
+                <top>330</top>
+                <width>980</width>
+                <height>116</height>
+                <font>font_body</font>
+                <textcolor>text_dim</textcolor>
+                <label>$INFO[Container(9002).ListItem.Property(Album_Description)]</label>
+            </control>
+        </control>
+        <!-- 9850: Now playing while music plays, play, info, the library. Left on the first
+             button the album before, right on the last the next one (like the movie spotlight). -->
+        <control type="grouplist" id="9850">
+            <left>384</left>
+            <top>490</top>
+            <width>1400</width>
+            <height>54</height>
+            <orientation>horizontal</orientation>
+            <itemgap>16</itemgap>
+            <visible>String.IsEqual(Window(Home).Property(nc.page),music)</visible>
+            <include content="PageFade">
+                <param name="delay" value="FadeStep2"/>
+            </include>
+            <onup>9100</onup>
+            <ondown>9810</ondown>
+            <onleft>Skin.TimerStart(nc_spot_hold)</onleft>
+            <onleft>Control.Move(9002,-1)</onleft>
+            <onright>Skin.TimerStart(nc_spot_hold)</onright>
+            <onright>Control.Move(9002,1)</onright>
+            <include content="PillButton">
+                <param name="id" value="9851"/>
+                <param name="label" value="$LOCALIZE[31406]"/>
+                <param name="color" value="accent"/>
+                <param name="textcolor" value="accent"/>
+                <param name="onclick" value="ActivateWindow(visualisation)"/>
+                <param name="visible" value="Player.HasAudio"/>
+            </include>
+            <include content="PillButton">
+                <param name="id" value="9852"/>
+                <param name="label" value="▶ $LOCALIZE[31010]"/>
+                <param name="color" value="accent"/>
+                <param name="textcolor" value="accent"/>
+                <param name="onclick" value="PlayMedia(musicdb://albums/$INFO[Container(9002).ListItem.DBID]/,isdir)"/>
+            </include>
+            <include content="PillButton">
+                <param name="id" value="9853"/>
+                <param name="label" value="$LOCALIZE[31011]"/>
+                <param name="onclick" value="SetFocus(9002)"/>
+                <param name="onclick2" value="Action(Info)"/>
+            </include>
+            <include content="PillButton">
+                <param name="id" value="9854"/>
+                <param name="label" value="$LOCALIZE[31407] »"/>
+                <param name="onclick" value="ActivateWindow(Music,musicdb://albums/,return)"/>
+            </include>
+        </control>
+    </include>
+
+    <!-- Top line of Home: what plays, while music plays, left of the clock and the quick menu
+         icon (they take up to about 340 px with the weather) -->
+    <include name="MusicNowPlaying">
+        <control type="label">
+            <left>900</left>
+            <top>26</top>
+            <width>600</width>
+            <height>36</height>
+            <align>right</align>
+            <font>font_caps_small</font>
+            <textcolor>text_dim</textcolor>
+            <label>[COLOR accent2]▶[/COLOR] [UPPERCASE]$INFO[MusicPlayer.Title]$INFO[MusicPlayer.Artist,  ·  ][/UPPERCASE]</label>
+            <visible>Player.HasAudio</visible>
+        </control>
+    </include>
+</includes>

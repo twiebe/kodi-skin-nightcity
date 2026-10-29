@@ -118,6 +118,11 @@
                     <param name="setting" value="nc.menu.hide.shows"/>
                 </include>
                 <include content="SkinSettingsToggle">
+                    <param name="id" value="516"/>
+                    <param name="label" value="$LOCALIZE[2]"/>
+                    <param name="setting" value="nc.menu.hide.music"/>
+                </include>
+                <include content="SkinSettingsToggle">
                     <param name="id" value="513"/>
                     <param name="label" value="$LOCALIZE[137]"/>
                     <param name="setting" value="nc.menu.hide.search"/>

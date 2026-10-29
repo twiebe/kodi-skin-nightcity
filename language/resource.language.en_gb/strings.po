@@ -932,3 +932,35 @@ msgstr ""
 msgctxt "#31366"
 msgid "The plot of what plays, under its title while the player controls or the seek line are up."
 msgstr ""
+
+msgctxt "#31400"
+msgid "New albums"
+msgstr ""
+
+msgctxt "#31401"
+msgid "Recently played"
+msgstr ""
+
+msgctxt "#31402"
+msgid "Random albums"
+msgstr ""
+
+msgctxt "#31403"
+msgid "Artists"
+msgstr ""
+
+msgctxt "#31404"
+msgid "Genres"
+msgstr ""
+
+msgctxt "#31405"
+msgid "music"
+msgstr ""
+
+msgctxt "#31406"
+msgid "now playing"
+msgstr ""
+
+msgctxt "#31407"
+msgid "albums"
+msgstr ""
