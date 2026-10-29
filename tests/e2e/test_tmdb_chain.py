@@ -59,6 +59,10 @@ def _settle(timeout=20):
     interpreters start at once, which crashes Kodi."""
     wait_for(IDLE, timeout=timeout)
     wait_for('String.IsEmpty(Window(Home).Property(nc.osd.chain))', timeout=5)
+    _quiet(timeout)
+
+
+def _quiet(timeout=20):
     end = time.time() + timeout
     quiet = 0
     while quiet < 2:  # twice in a row: a timer's script shows up in the log a moment late
@@ -66,6 +70,16 @@ def _settle(timeout=20):
             raise AssertionError('Python still running: {}'.format(sorted(_python_running())))
         time.sleep(0.4)
         quiet = quiet + 1 if not _python_running() else 0
+
+
+def _list_in(cid, timeout=30):
+    """A TMDb list of the page holds its items and nothing loads. The info page keeps its lists
+    between pages: a list that loads again still holds the items of before (NumItems) while it
+    reads IsUpdating, and a click on it then does nothing (ChainClick waits for
+    !IsUpdating). Its plugin may start a moment after the page opened, so no plugin may run."""
+    wait_for('Integer.IsGreater(Container({}).NumItems,0)'.format(cid), timeout=timeout)
+    _quiet(timeout)
+    wait_for('!Container({}).IsUpdating + Integer.IsGreater(Container({}).NumItems,0)'.format(cid, cid))
 
 
 def _leave_chain():
@@ -107,13 +121,13 @@ def matrix(home):
 def test_info_cast_opens_person_then_movie_and_back(matrix):
     builtin('NotifyAll(nightcity,info:movie:{})'.format(matrix))
     wait_for('Window.IsActive(movieinformation)', timeout=20)
-    wait_for('Integer.IsGreater(Container(5500).NumItems,0)', timeout=30)
+    _list_in('5500')
     builtin('SetFocus(5500)')
     person = info('Container(5500).ListItem.Label')['Container(5500).ListItem.Label']
     action('select')
     _page(2)  # the library page is the chain's origin
     assert info('ListItem.Label')['ListItem.Label'] == person
-    wait_for('Integer.IsGreater(Container(5510).NumItems,0)', timeout=30)
+    _list_in('5510')
     screenshot('tmdb-person')
     builtin('SetFocus(5510)')
     title = info('Container(5510).ListItem.Label')['Container(5510).ListItem.Label']
