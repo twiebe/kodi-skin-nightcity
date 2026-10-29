@@ -39,7 +39,7 @@ it. If the screen changes, OK does.
 The quick menu on Home follows it too: the cursor on the icon next to the clock shows the menu,
 Down or OK go into it, Up from its top and Back come out onto the icon with the menu still
 shown, Left or Right off the icon hide it. The keys that open the quick menu (Home held, the S
-key, Kodi's power menu) show the same menu on every page of Home, on power off; the same key
+key, Kodi's power menu) go to the icon on every page of Home, which shows the menu; the same key
 again takes the focus back to where it was. Only over other windows (an info page, the player)
 the quick menu is a dialog.
 
