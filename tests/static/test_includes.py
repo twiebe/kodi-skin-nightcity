@@ -257,17 +257,13 @@ def layout(list_include, tag):
     return list_include.find('.//' + tag)
 
 
-# in front of the current value of a list: the pink middle dot of the title lines (" · "); on
-# the cyan fill of the cursor pink hardly shows, there the dot takes the dark text colour
-DOT = '[COLOR accent2]·[/COLOR] '
+# in front of the current value of a list: a pink bullet, bigger than the middle dot of the title
+# lines (test_fonts), pink also on the cyan fill of the cursor
+DOT = '[COLOR accent2]•[/COLOR] '
 
 
 def marked_right(label):
-    """The current value's dot: pink, on the cursor's fill dark like the text."""
-    text = label.findtext('label') or ''
-    if label.findtext('textcolor') == 'focus_text':
-        return text.startswith('· ')
-    return text.startswith(DOT)
+    return (label.findtext('label') or '').startswith(DOT)
 
 
 def test_select_marks_current_value():
@@ -276,7 +272,7 @@ def test_select_marks_current_value():
     lst = include('DialogList')
     for tag in ('itemlayout', 'focusedlayout'):
         marked = [c for c in layout(lst, tag).iter('control')
-                  if c.get('type') == 'label' and '·' in (c.findtext('label') or '')]
+                  if c.get('type') == 'label' and '•' in (c.findtext('label') or '')]
         assert marked and all(marked_right(c) for c in marked), tag
         for c in marked:
             visible = c.findtext('visible') or ''
@@ -354,13 +350,21 @@ def test_season_tab_active_line():
     assert len(set(labels)) == 1
 
 
-def test_triangle_only_between_title_parts():
-    """The pink ◢ is left only as the separator of header lines ("MOVIES ◢ METROPOLIS"); no
-    tab, track or list row is marked with it."""
+def test_no_triangle_marker():
+    """No ◢ in any label: header lines separate their parts with the pink middle dot."""
     for path in layout_files():
         for el in parse(path).iter():
-            if isinstance(el.tag, str) and '◢' in (el.text or ''):
-                assert (path.name, el.tag) == ('Variables.xml', 'value'), (path.name, el.tag, el.text)
+            if isinstance(el.tag, str):
+                assert '◢' not in (el.text or ''), (path.name, el.tag, el.text)
+
+
+@pytest.mark.parametrize('name', ['PlayerPath', 'InfoPath'])
+def test_header_parts_split_by_a_pink_dot(name):
+    """"MOVIES · METROPOLIS": the parts of a header line split by a pink middle dot, spaced like
+    the " · " of the episode view."""
+    var = next(v for v in parse(ROOT / '1080i' / 'Variables.xml').iter('variable') if v.get('name') == name)
+    for value in var.findall('value'):
+        assert ' [COLOR accent2]·[/COLOR] ' in value.text, value.text
 
 
 def test_hero_titles_fit_long_names():
