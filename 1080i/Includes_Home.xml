@@ -1354,8 +1354,7 @@
             <top>96</top>
             <width>640</width>
             <height>788</height>
-            <!-- the power menu's keys focus power off while it is still hidden (nc_quick_key) -->
-            <visible allowhiddenfocus="true">Control.HasFocus(9109) | ControlGroup(9180).HasFocus</visible>
+            <visible>Control.HasFocus(9109) | ControlGroup(9180).HasFocus</visible>
             <animation effect="slide" start="16,-12" end="0,0" time="200" tween="cubic" easing="out" condition="!Player.HasVideo">Visible</animation>
             <animation effect="fade" start="0" end="100" time="180" condition="!Player.HasVideo">Visible</animation>
             <animation effect="slide" start="0,0" end="16,-12" time="160" tween="cubic" easing="in" condition="!Player.HasVideo">Hidden</animation>

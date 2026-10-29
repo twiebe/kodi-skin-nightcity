@@ -224,8 +224,8 @@
     </timer>
     <!-- The power menu's keys (DialogButtonMenu.xml), a frame later with the power menu gone.
          On Home with nothing modal over it: the quick menu panel of Home (QuickMenuPanel), one
-         menu instead of two that behave a little differently. The keys land on power off, as
-         the dialog does, and remember where the focus was (nc.quick.from); the same key again
+         menu instead of two that behave a little differently. The keys go to the icon next to
+         the clock, which shows it, and remember where the focus was (nc.quick.from); the same key again
          takes it back there, or to the shown page's own entry when the menu was reached by
          hand (the icon forgets nc.quick.from when the focus leaves it). Over any other window
          the dialog (Custom_1170_QuickMenu.xml) opens, or closes when it is open. -->
@@ -238,7 +238,7 @@
         <onstop condition="Window.IsActive(1170)">Dialog.Close(1170)</onstop>
         <onstop condition="!Window.IsActive(1170) + ![Window.IsActive(home) + !System.HasActiveModalDialog]">ActivateWindow(1170)</onstop>
         <onstop condition="Window.IsActive(home) + !System.HasActiveModalDialog + ![Control.HasFocus(9109) | ControlGroup(9180).HasFocus]">SetProperty(nc.quick.from,$INFO[System.CurrentControlId],home)</onstop>
-        <onstop condition="Window.IsActive(home) + !System.HasActiveModalDialog + ![Control.HasFocus(9109) | ControlGroup(9180).HasFocus]">SetFocus(1220,0,absolute)</onstop>
+        <onstop condition="Window.IsActive(home) + !System.HasActiveModalDialog + ![Control.HasFocus(9109) | ControlGroup(9180).HasFocus]">SetFocus(9109)</onstop>
         <onstop condition="Window.IsActive(home) + !System.HasActiveModalDialog + [Control.HasFocus(9109) | ControlGroup(9180).HasFocus] + !String.IsEmpty(Window(Home).Property(nc.quick.from))">SetFocus($INFO[Window(Home).Property(nc.quick.from)])</onstop>
         <onstop condition="Window.IsActive(home) + !System.HasActiveModalDialog + [Control.HasFocus(9109) | ControlGroup(9180).HasFocus] + String.IsEmpty(Window(Home).Property(nc.quick.from)) + String.IsEqual(Window(Home).Property(nc.page),movies)">SetFocus(9102)</onstop>
         <onstop condition="Window.IsActive(home) + !System.HasActiveModalDialog + [Control.HasFocus(9109) | ControlGroup(9180).HasFocus] + String.IsEmpty(Window(Home).Property(nc.quick.from)) + String.IsEqual(Window(Home).Property(nc.page),shows)">SetFocus(9103)</onstop>

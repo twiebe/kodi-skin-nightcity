@@ -56,10 +56,10 @@ def on_panel(cid):
 @pytest.mark.parametrize('button', ['homepage', 'browser_home', 'home'])
 def test_home_held_opens_and_closes(quick, button):
     """Home keys go by several names: IR remotes on CoreELEC are keyboards, some send home. On
-    Home the menu shows as Home's panel on power off, the same key again goes back to where the
-    focus was."""
+    Home the key goes to the icon next to the clock, which shows the menu; the same key again
+    goes back to where the focus was."""
     press(button, hold=1500)
-    wait_for(on_panel(1220))
+    wait_for(on_panel(9109))
     time.sleep(0.5)
     screenshot('quick-menu')
     press(button, hold=1500)
@@ -78,14 +78,14 @@ def test_home_short_still_goes_home(quick):
 def test_power_menu_toggles(quick):
     """Kodi's power menu leads here, again closes it (as an add-on or the power key opens it)."""
     rpc('GUI.ActivateWindow', {'window': 'shutdownmenu'})
-    wait_for(on_panel(1220))
+    wait_for(on_panel(9109))
     rpc('GUI.ActivateWindow', {'window': 'shutdownmenu'})
     wait_for('Control.HasFocus({}) + !{}'.format(START, PANEL))
 
 
 def test_s_key(quick):
     press('s')
-    wait_for(on_panel(1220))
+    wait_for(on_panel(9109))
     press('s')
     wait_for('Control.HasFocus({}) + !{}'.format(START, PANEL))
 
@@ -96,7 +96,7 @@ def test_keys_on_every_home_page(quick, entry, page):
     builtin('SetFocus({})'.format(entry))
     wait_for('String.IsEqual(Window(Home).Property(nc.page),{})'.format(page))
     press('s')
-    wait_for(on_panel(1220))
+    wait_for(on_panel(9109))
     press('s')
     wait_for('Control.HasFocus({}) + !{}'.format(entry, PANEL))
 
@@ -114,6 +114,8 @@ def test_key_on_the_icon_reached_by_hand_goes_to_the_page(quick):
 
 def test_back_goes_to_the_icon(quick):
     press(hold=1500)
+    wait_for(on_panel(9109))
+    action('down', 'down')
     wait_for(on_panel(1220))
     action('back')
     wait_for(on_panel(9109))
@@ -247,9 +249,8 @@ def test_up_from_the_top_to_the_icon(quick):
     builtin('SetFocus(9101)')
     wait_for('Control.HasFocus(9101)')
     press(hold=1500)
-    wait_for(on_panel(1220))
-    time.sleep(0.3)
-    action('up')
+    wait_for(on_panel(9109))
+    action('down')
     wait_for('Control.HasFocus(1210)')
     action('up')
     wait_for(on_panel(9109))
