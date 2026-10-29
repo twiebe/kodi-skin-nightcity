@@ -67,7 +67,7 @@ def test_seek_bar_hint():
     bar shows that key. The OSD and the stats dialog bring their own keys."""
     key, label, top, visible = _hint('DialogSeekBar.xml', '490')
     assert (key, label, top) == ('⏎', MENU, BOTTOM)
-    assert visible == '!Window.IsActive(videoosd) + !Window.IsActive(playerprocessinfo)'
+    assert visible == '!Window.IsVisible(videoosd) + !Window.IsActive(playerprocessinfo)'
 
 
 def test_osd_hint():

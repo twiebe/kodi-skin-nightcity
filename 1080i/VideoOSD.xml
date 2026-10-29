@@ -20,7 +20,12 @@
     <!-- an OSD the pause opened (Custom_1150_PauseOSD.xml) and that is closed by hand stays closed -->
     <onunload>ClearProperty(nc.osd.auto,home)</onunload>
     <animation effect="fade" time="150">WindowOpen</animation>
-    <animation effect="fade" time="150">WindowClose</animation>
+    <!-- closing is the opening backwards: what plays (PlayerFade) fades out first, the controls
+         and the seek line PlayerFadeStep later; 300 ms in all, as Kodi drops keys while the OSD
+         runs its close animation -->
+    <animation type="WindowClose">
+        <effect type="fade" start="100" end="0" time="WindowFadeTime" delay="PlayerFadeStep"/>
+    </animation>
     <controls>
         <control type="image">
             <left>0</left>
