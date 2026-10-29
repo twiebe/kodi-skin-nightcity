@@ -840,6 +840,14 @@
 
     <!-- The menu in the top line: the focused entry a filled accent button, the shown page an
          accent outline. Focus switches the page. -->
+    <!-- A switch to a page with a spotlight moves that spotlight on by one title (home and
+         movies share list 9000), so the page never comes up with the title that was just on
+         the other one; nc_spot_hold starts the rotation over, the new title gets its whole
+         interval. Only when the page changes: focus coming back to the tab of the shown page
+         (up from its rows, Home back from the info page or the player) keeps the title. Kodi
+         checks the conditions before it runs the first action, all of them see the old page.
+         The hero still fades on each page (SharedPageFade): a source with one title, or two
+         pages landing on the same one, bring no new content. -->
     <include name="MainMenu">
         <control type="grouplist" id="9100">
             <left>-18</left>
@@ -875,6 +883,8 @@
                 <param name="active" value="String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)"/>
                 <param name="onfocus" value="SetProperty(nc.page,home,home)"/>
                 <param name="onclick" value="Action(Down)"/>
+                <onfocus condition="![String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + !String.IsEqual(Skin.String(SpotlightSource),off)">Skin.TimerStart(nc_spot_hold)</onfocus>
+                <onfocus condition="![String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + !String.IsEqual(Skin.String(SpotlightSource),off)">Control.Move(9000,1)</onfocus>
             </include>
             <include content="TabGap">
                 <param name="id" value="9115"/>
@@ -887,6 +897,8 @@
                 <param name="onfocus" value="SetProperty(nc.page,movies,home)"/>
                 <param name="onclick" value="Action(Down)"/>
                 <param name="visible" value="!Skin.HasSetting(nc.menu.hide.movies)"/>
+                <onfocus condition="!String.IsEqual(Window(Home).Property(nc.page),movies) + !String.IsEqual(Skin.String(nc.movies.spotlight),off)">Skin.TimerStart(nc_spot_hold)</onfocus>
+                <onfocus condition="!String.IsEqual(Window(Home).Property(nc.page),movies) + !String.IsEqual(Skin.String(nc.movies.spotlight),off)">Control.Move(9000,1)</onfocus>
             </include>
             <include content="TabGap">
                 <param name="id" value="9116"/>
@@ -899,6 +911,8 @@
                 <param name="onfocus" value="SetProperty(nc.page,shows,home)"/>
                 <param name="onclick" value="Action(Down)"/>
                 <param name="visible" value="!Skin.HasSetting(nc.menu.hide.shows)"/>
+                <onfocus condition="!String.IsEqual(Window(Home).Property(nc.page),shows) + !String.IsEqual(Skin.String(nc.shows.spotlight),off)">Skin.TimerStart(nc_spot_hold)</onfocus>
+                <onfocus condition="!String.IsEqual(Window(Home).Property(nc.page),shows) + !String.IsEqual(Skin.String(nc.shows.spotlight),off)">Control.Move(9001,1)</onfocus>
             </include>
             <include content="TabGap">
                 <param name="id" value="9117"/>

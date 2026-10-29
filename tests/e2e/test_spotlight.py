@@ -109,3 +109,94 @@ def test_spotlight_interval_from_skin_settings(home):
     finally:
         builtin('Skin.Reset(SpotlightInterval)')
         reopen_home()
+
+
+def spot(list_id):
+    """(position, number of titles, title) of a spotlight list."""
+    keys = ['Container({}).{}'.format(list_id, k) for k in ('CurrentItem', 'NumItems', 'ListItem.Label')]
+    labels = info(*keys)
+    return tuple(labels[k] for k in keys)
+
+
+def next_position(list_id):
+    position, count, _ = spot(list_id)
+    return int(position) % int(count) + 1
+
+
+def to_page(tab_id, page):
+    builtin('SetFocus({})'.format(tab_id))
+    wait_for('String.IsEqual(Window(Home).Property(nc.page),{})'.format(page))
+
+
+def hold_rotation():
+    """Start the rotation over, so no autoscroll step comes in the next seconds."""
+    builtin('Skin.TimerStart(nc_spot_hold)')
+
+
+def test_page_switch_advances_the_movie_spotlight(home):
+    """Home and movies share the movie spotlight: each switch between them shows the next title,
+    never the one that was just up on the other page."""
+    wait_for('Integer.IsGreater(Container(9000).NumItems,2)')
+    try:
+        for tab_id, page in (('9102', 'movies'), ('9101', 'home'), ('9102', 'movies')):
+            hold_rotation()
+            expected, title = next_position(9000), spot(9000)[2]
+            to_page(tab_id, page)
+            wait_for('Integer.IsEqual(Container(9000).CurrentItem,{})'.format(expected), timeout=3)
+            assert spot(9000)[2] != title, page
+    finally:
+        to_page('9101', 'home')
+
+
+def test_page_switch_advances_the_show_spotlight(home):
+    wait_for('Integer.IsGreater(Container(9001).NumItems,2)')
+    try:
+        hold_rotation()
+        expected, title = next_position(9001), spot(9001)[2]
+        to_page('9103', 'shows')
+        wait_for('Integer.IsEqual(Container(9001).CurrentItem,{})'.format(expected), timeout=3)
+        assert spot(9001)[2] != title
+        # back on home its movie spotlight moves on too
+        hold_rotation()
+        expected = next_position(9000)
+        to_page('9101', 'home')
+        wait_for('Integer.IsEqual(Container(9000).CurrentItem,{})'.format(expected), timeout=3)
+    finally:
+        to_page('9101', 'home')
+
+
+def test_switched_in_title_gets_its_full_interval(home):
+    """The rotation starts over with the page switch: the next autoscroll step comes a whole
+    interval (15 s) later, not what was left of the old one."""
+    key = 'Container(9000).CurrentItem'
+    wait_for('Integer.IsGreater(Container(9000).NumItems,2)')
+    try:
+        start = info(key)[key]
+        wait_for('!Integer.IsEqual({},{})'.format(key, start), timeout=20)
+        time.sleep(9)  # 6 s left of this interval
+        expected = next_position(9000)
+        to_page('9102', 'movies')
+        wait_for('Integer.IsEqual({},{})'.format(key, expected), timeout=3)
+        t0 = time.time()
+        wait_for('!Integer.IsEqual({},{})'.format(key, expected), timeout=25)
+        assert time.time() - t0 >= 13
+    finally:
+        to_page('9101', 'home')
+
+
+def test_return_from_another_window_keeps_the_title(home):
+    """Only page switches advance: Home coming back from another window with the movies tab
+    focused (its onfocus runs again) keeps its title."""
+    wait_for('Integer.IsGreater(Container(9000).NumItems,2)')
+    try:
+        to_page('9102', 'movies')
+        hold_rotation()
+        position, _, title = spot(9000)
+        builtin('ActivateWindow(Settings)')
+        wait_for('Window.IsActive(settings)')
+        action('back')
+        wait_for('Window.IsActive(home) + Control.HasFocus(9102)')
+        time.sleep(1)
+        assert spot(9000)[0] == position and spot(9000)[2] == title
+    finally:
+        to_page('9101', 'home')
