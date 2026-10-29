@@ -642,6 +642,8 @@
                 <alttexturefocus border="12" colordiffuse="accent">ui/cut_btn_fill.png</alttexturefocus>
                 <alttexturenofocus border="12" colordiffuse="accent">ui/cut_btn.png</alttexturenofocus>
                 <usealttexture>$PARAM[active]</usealttexture>
+                <!-- extra actions, e.g. the spotlight advance of a page tab (MainMenu) -->
+                <nested/>
                 <onfocus>$PARAM[onfocus]</onfocus>
                 <onclick>$PARAM[onclick]</onclick>
                 <altclick>$PARAM[onclick]</altclick>

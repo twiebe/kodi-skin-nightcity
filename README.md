@@ -8,7 +8,7 @@ Video only: home with a spotlight and widget rows, video library, info page, pla
 
 - Netrunner look: cut-corner cards and buttons, small spaced headings above the rows, a glitch title for the focused item, a path line at the top
 - Home pages: home, movies, shows, search, system, power. The page switches as you move along the menu, no click needed. The fanart of the focused item fills the background, the hero shows its poster, tags, rating and plot
-- Spotlight with random movies or shows: left on the play button goes back, right on the info button goes forward
+- Spotlight with random movies or shows: left on the play button goes back, right on the info button goes forward, a switch to another page brings up the next title
 - Rows: 8 slots per page (home, movies, shows) from a fixed catalogue in the skin settings (categories home, movies, shows): continue watching, next up, new movies, new episodes, genres, random movies, unwatched, top rated, favourites, TMDb trending, recently watched, sets, in progress; OK picks a section, right its option, "Move" reorders; spotlight per page (source, interval or off) and main menu entries to hide
 - "all movies" / "all shows": a full poster grid, sortable by title, year, date added or rating
 - Search page: a field for the keyboard, the last five terms, rows of library movies, shows and episodes and of TMDb movies and shows
