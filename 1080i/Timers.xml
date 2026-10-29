@@ -202,4 +202,22 @@
         <onstop condition="String.IsEqual(System.CurrentControlId,Window(Home).Property(nc.tab.want.id)) + ![[!String.IsEqual(ListItem.Property(tmdb_type),person) + Container(5500).IsUpdating] | [String.IsEqual(ListItem.Property(tmdb_type),person) + Container(5510).IsUpdating] | Container(5300).IsUpdating | Container(6501).IsUpdating | Container(6599).IsUpdating]">SetProperty($INFO[Window(Home).Property(nc.tab.want.prop)],$INFO[Window(Home).Property(nc.tab.want.value)],home)</onstop>
         <onstop>ClearProperty(nc.tab.want.id,home)</onstop>
     </timer>
+    <!-- Player controls that hide by themselves (skin settings, Player; on unless
+         nc.osd.autohide.off): runs while the video
+         plays and the OSD, its chapter row or its cast row is the topmost dialog, so never while
+         paused (it starts at zero when playback goes on) and never while a dialog opened from
+         them is up (track settings, subtitle search, keyboard, a select list). Every key resets
+         it until a second passed without input, so it waits the delay less that second
+         (nc.osd.hide.wait, written with the delay by the script osd_hide; 8 s while never set),
+         then closes the controls. -->
+    <timer>
+        <name>nc_osd_hide</name>
+        <description>Hide the player controls after a while without input</description>
+        <start reset="true">!Skin.HasSetting(nc.osd.autohide.off) + Player.HasVideo + !Player.Paused + Window.IsActive(fullscreenvideo) + [Window.IsModalDialogTopmost(videoosd) | Window.IsModalDialogTopmost(videobookmarks) | Window.IsModalDialogTopmost(1141)]</start>
+        <reset>!System.IdleTime(1)</reset>
+        <stop>![!Skin.HasSetting(nc.osd.autohide.off) + Player.HasVideo + !Player.Paused + Window.IsActive(fullscreenvideo) + [Window.IsModalDialogTopmost(videoosd) | Window.IsModalDialogTopmost(videobookmarks) | Window.IsModalDialogTopmost(1141)]] | [[String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_hide),7)] | [!String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_hide),Skin.String(nc.osd.hide.wait))]]</stop>
+        <onstop condition="!Skin.HasSetting(nc.osd.autohide.off) + Player.HasVideo + !Player.Paused + Window.IsActive(fullscreenvideo) + [Window.IsModalDialogTopmost(videoosd) | Window.IsModalDialogTopmost(videobookmarks) | Window.IsModalDialogTopmost(1141)] + [[String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_hide),7)] | [!String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_hide),Skin.String(nc.osd.hide.wait))]]">Dialog.Close(1141)</onstop>
+        <onstop condition="!Skin.HasSetting(nc.osd.autohide.off) + Player.HasVideo + !Player.Paused + Window.IsActive(fullscreenvideo) + [Window.IsModalDialogTopmost(videoosd) | Window.IsModalDialogTopmost(videobookmarks) | Window.IsModalDialogTopmost(1141)] + [[String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_hide),7)] | [!String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_hide),Skin.String(nc.osd.hide.wait))]]">Dialog.Close(videobookmarks)</onstop>
+        <onstop condition="!Skin.HasSetting(nc.osd.autohide.off) + Player.HasVideo + !Player.Paused + Window.IsActive(fullscreenvideo) + [Window.IsModalDialogTopmost(videoosd) | Window.IsModalDialogTopmost(videobookmarks) | Window.IsModalDialogTopmost(1141)] + [[String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_hide),7)] | [!String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_osd_hide),Skin.String(nc.osd.hide.wait))]]">Dialog.Close(videoosd)</onstop>
+    </timer>
 </timers>
