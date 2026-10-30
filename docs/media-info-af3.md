@@ -122,10 +122,12 @@ Each with what it costs if it turns out wrong.
    reuse them; text also keeps the calm look. Cost: less recognisable at a glance than logos;
    logos could be added later as small monochrome glyphs.
 2. **All ratings, fixed order, no slots.** The user asked for all of them; AF3's three slots
-   need a settings page Nightcity does not have. With every key set the line holds eight
-   entries (about 900 px), which fits the 1016 px column; anything beyond is cut by the
-   grouplist. Cost: a crowded line for users with every source; a skin setting can pick
-   sources later.
+   need a settings page Nightcity does not have. With every source (an MDbList key gives all
+   eight) the line needs about 1400 px. On Home it has them; on the info page it stops before
+   the details or cast column (1000 px for a movie, 1300 for an episode), so a movie shows
+   IMDb to Trakt and Letterboxd and MDbList stay out (a grouplist leaves out what does not fit
+   whole). Cost: the last sources missing on the info page for users with every key; shorter
+   names, fewer sources or a skin setting to pick them would fix it.
 3. **Ends at in the tags row, pink.** It sits right after the runtime ("136 MIN  ENDS AT
    23:42"), so it reads with it. Pink (accent2) because it is state: it moves with the clock,
    the resume point and the player. Cost: a third colour in the row (grey facts, pink state,
@@ -133,9 +135,15 @@ Each with what it costs if it turns out wrong.
 4. **Ratings only for the item they belong to.** On the episode head the TMDb Helper values
    show only while the selected episode (list 5100) is the dialog's own episode (same season
    and episode), since TMDb Helper watches the dialog's item, not the list. Other episodes
-   fall back to Kodi's ratings. TMDb Helper values also hide while TMDb Helper updates
-   (`IsUpdating`, `IsUpdatingRatings` for the online ones), so a new page never shows the
-   previous title's ratings. Cost: on a slow connection the line comes a moment later.
+   fall back to Kodi's ratings. On Home the hero takes TMDb Helper's values only while
+   `TMDbHelper.WidgetContainer` names its spotlight (9000 movies, 9001 shows): a row clears it,
+   and TMDb Helper then describes the focused card, not the hero. The online ratings hide
+   while `TMDbHelper.IsUpdatingRatings` is set, so a new page does not show the previous
+   title's IMDb or Rotten Tomatoes values while the new ones load. The TMDb value is not
+   gated on `TMDbHelper.IsUpdating`: that flag also blinks while the info page loads its
+   lists, the line would flicker. Cost: for the fraction of a second before TMDb Helper sees a
+   new item, the TMDb value can still be the previous title's (as in AF3); on Home the
+   hero shows Kodi's rating while a row has the focus.
 5. **Same block on home and on the info page.** The home movie hero gets ends at and the
    full ratings line too, since it is the same include. Cost: the hero line gets longer; it
    has the full width there.
