@@ -150,3 +150,67 @@ Each with what it costs if it turns out wrong.
 6. **The player OSD stays as it is.** It already shows resolution, HDR, audio and
    `Player.FinishTime`; ratings in the OSD (AF3 uses `TMDbHelper.Player.*`) are left for
    later, the OSD has no free line for them.
+
+## Ratings source
+
+The spotlight used to look restless: rotating without focus, the hero showed the library
+rating (Jellyfin for Kodi syncs the community rating as Kodi's "default" rating, no source
+name); on focus TMDb Helper's ratings joined; when focus went to a row they vanished again,
+because the row cleared `TMDbHelper.WidgetContainer` and TMDb Helper let go of the hero.
+
+Two skin settings, under Main menu > Ratings, after the look:
+
+- **Ratings only from TMDb Helper** (on by default; the skin bool `nc.ratings.library` stores
+  off). "Show only the ratings TMDb Helper fetched for exactly this title. Off: the library's
+  own rating (from Jellyfin) fills in while TMDb Helper has none." On, the ratings line never
+  shows `ListItem.Rating`, `Rating(imdb)`, `Rating(themoviedb)` or `Rating(tmdb)`; with no
+  TMDb Helper data it hides. On the info page and the heroes alike. Off is the behaviour
+  before, with the fallbacks.
+- **Load spotlight ratings without focus** (off by default; `nc.ratings.spotlight`). "Fetch
+  the ratings of each spotlight title as it rotates, also without focus. Off saves online
+  requests: the ratings load once the title has focus and then stay."
+
+How the heroes get their ratings (`scripts/nightcity.py`, `hero_tick`, a thread of the skin
+service that looks at Home every 0.25 s and does nothing elsewhere or under a dialog):
+
+- **TMDb Helper's hook.** With `Window(Home).Property(TMDbHelper.WidgetContainer)` set, TMDb
+  Helper's poller watches `Container(<id>).ListItem` whether that container has focus or not
+  (`monitor/utils.py widget_id`, `poller.py is_on_globalwidgetcontainer`); empty on Home it
+  clears and idles. Info dialogs use their own `ListItem` regardless (`CV_USE_LISTITEM`). The
+  rows cleared the property before, so TMDb Helper never watched a row card on Home: pointing
+  it at the hero takes nothing away. `Skin.String(TMDbHelper.MonitorContainer)` was the
+  other hook; it is global and makes TMDb Helper do nothing in windows without that control.
+- **Who sets it.** The service, no longer the skin: the hero's spotlight (9000 on home and
+  movies, 9001 on shows; `Control.IsVisible(9300)` / `(9301)`) while a hero button has focus
+  (`ControlGroup(9050)` / `(9550)`), or always with "load without focus"; empty on rows, the
+  main menu and off Home.
+- **Keeping.** When TMDb Helper is done (`IsUpdating` and `IsUpdatingRatings` empty) and its
+  item is the hero's (`base_dbtype` and `base_dbid`, the latter from
+  `extras/tmdbhelper/baseitem.json`; `base_label` for a TMDb Helper started before the skin
+  brought that file), the service takes a snapshot of the nine rating properties. It keeps
+  it once it stayed 0.8 s (after a title change TMDb Helper's properties hold the title
+  before for about 0.3 s with both flags empty), per `dbtype:dbid`, for the session. The
+  first snapshot of a title stays; only an empty one gets replaced by one with ratings.
+- **Showing.** The service writes the kept ratings of the hero's current title to
+  `nc.hero.<container>.<Source>` plus `.dbid` and `.dbtype`; the hero's `RatingsLine` reads
+  that prefix and shows only while `dbid`/`dbtype` match the hero's item. On a title change
+  `dbid` is cleared first and set last, so the line never shows one title's ratings on
+  another. The line fades in (200 ms) and goes at once.
+
+### Design calls
+
+1. **A service thread, not skin conditions.** Kodi cannot use an info label inside a property
+   name, so per-title properties cannot be read straight from the skin; one published set per
+   hero plus a key match can. Cost: a poll on Home (about a dozen info calls every 0.25 s,
+   none elsewhere), and the line shows about 1 s after TMDb Helper has the ratings (0.8 s
+   stability plus the poll).
+2. **The service owns `TMDbHelper.WidgetContainer`.** One place decides it (focus, page,
+   setting) instead of onfocus actions on every row and button. Cost: up to 0.25 s later
+   than an onfocus action before TMDb Helper starts on a focused hero.
+3. **Keep first, no updates.** A title's line never changes once shown in a session. Cost:
+   ratings TMDb Helper updates later in the session (a new IMDb value) show after a restart.
+4. **Library ratings off by default.** Cost: titles TMDb Helper cannot match (no TMDb id)
+   show no rating at all; the setting brings the library's back. With it off, the hero's
+   library rating is replaced once by TMDb Helper's when they arrive (one swap per title).
+5. **Session cache only.** Kept in the service's memory; a Kodi restart starts empty.
+   TMDb Helper's own cache (7 days, ItemDetails.db) makes a refetch a database read.
