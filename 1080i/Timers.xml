@@ -110,12 +110,12 @@
     <!-- … of a TMDb title without library copy (DialogVideoInfo 9005): OK asks for the title's
          menu (nc.info.more). Its list 9006 starts a plugin, so it loads once the page's own
          plugin lists are idle (nc.info.more.load), then the menu opens on it. Not the person
-         credits (5510): never on this page, and without a path it can keep IsUpdating from the
-         page before. -->
+         credits (5510) and the recommendations while hidden (a show page): never on this page,
+         and without a path they keep IsUpdating from the page before. -->
     <timer>
         <name>nc_info_more</name>
         <description>Open the context menu of a TMDb title once its list is loaded</description>
-        <start reset="true">Window.IsActive(movieinformation) + !String.IsEmpty(Window(Home).Property(nc.info.more)) + !Container(5500).IsUpdating + !Container(5300).IsUpdating</start>
+        <start reset="true">Window.IsActive(movieinformation) + !String.IsEmpty(Window(Home).Property(nc.info.more)) + !Container(5500).IsUpdating + ![Control.IsVisible(5402) + Container(5300).IsUpdating]</start>
         <onstart>SetProperty(nc.info.more.load,1,home)</onstart>
         <stop>!Window.IsActive(movieinformation) | Integer.IsGreater(Container(9006).NumItems,0) | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_info_more),10)</stop>
         <onstop condition="Window.IsActive(movieinformation) + Integer.IsGreater(Container(9006).NumItems,0)">SetFocus(9006)</onstop>
@@ -198,8 +198,8 @@
         <name>nc_credits_tab</name>
         <description>Apply a credits tab once no TMDb list loads</description>
         <start>!String.IsEmpty(Window(Home).Property(nc.tab.want.id))</start>
-        <stop>String.IsEmpty(Window(Home).Property(nc.tab.want.id)) | !String.IsEqual(System.CurrentControlId,Window(Home).Property(nc.tab.want.id)) | ![[!String.IsEqual(ListItem.Property(tmdb_type),person) + Container(5500).IsUpdating] | [String.IsEqual(ListItem.Property(tmdb_type),person) + Container(5510).IsUpdating] | Container(5300).IsUpdating | Container(6501).IsUpdating | Container(6599).IsUpdating]</stop>
-        <onstop condition="String.IsEqual(System.CurrentControlId,Window(Home).Property(nc.tab.want.id)) + ![[!String.IsEqual(ListItem.Property(tmdb_type),person) + Container(5500).IsUpdating] | [String.IsEqual(ListItem.Property(tmdb_type),person) + Container(5510).IsUpdating] | Container(5300).IsUpdating | Container(6501).IsUpdating | Container(6599).IsUpdating]">SetProperty($INFO[Window(Home).Property(nc.tab.want.prop)],$INFO[Window(Home).Property(nc.tab.want.value)],home)</onstop>
+        <stop>String.IsEmpty(Window(Home).Property(nc.tab.want.id)) | !String.IsEqual(System.CurrentControlId,Window(Home).Property(nc.tab.want.id)) | ![[!String.IsEqual(ListItem.Property(tmdb_type),person) + Container(5500).IsUpdating] | [String.IsEqual(ListItem.Property(tmdb_type),person) + Container(5510).IsUpdating] | [Control.IsVisible(5402) + Container(5300).IsUpdating] | Container(6501).IsUpdating | Container(6599).IsUpdating]</stop>
+        <onstop condition="String.IsEqual(System.CurrentControlId,Window(Home).Property(nc.tab.want.id)) + ![[!String.IsEqual(ListItem.Property(tmdb_type),person) + Container(5500).IsUpdating] | [String.IsEqual(ListItem.Property(tmdb_type),person) + Container(5510).IsUpdating] | [Control.IsVisible(5402) + Container(5300).IsUpdating] | Container(6501).IsUpdating | Container(6599).IsUpdating]">SetProperty($INFO[Window(Home).Property(nc.tab.want.prop)],$INFO[Window(Home).Property(nc.tab.want.value)],home)</onstop>
         <onstop>ClearProperty(nc.tab.want.id,home)</onstop>
     </timer>
     <!-- Player controls that hide by themselves (skin settings, Player; on unless

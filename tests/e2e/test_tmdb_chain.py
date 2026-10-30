@@ -233,6 +233,24 @@ def test_credits_tab_applies_on_focus(matrix):
     assert _true('Control.HasFocus(5521)')
 
 
+def test_person_tabs_apply_on_focus_after_back_from_a_title(matrix):
+    """Back from a title page whose recommendations still loaded left them hidden and updating
+    on the person page; every tab then waited for them (TmdbBusy) and needed OK."""
+    _info_and_person(matrix)
+    _list_in(5510)
+    builtin('SetFocus(5510,0,absolute)')
+    action('select')
+    _page(3)
+    action('back', delay=0)
+    wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),person)', timeout=30)
+    _list_in(5510)
+    builtin('SetFocus(5523)')
+    wait_for('Control.HasFocus(5523)')
+    action('right', delay=0)
+    wait_for('String.IsEqual(Window(Home).Property(nc.info.tab),tv) + '
+             'String.IsEqual(Container(5510).ListItem(0).Property(param.info),stars_in_tvshows)', timeout=30)
+
+
 def test_person_without_films_still_reaches_the_tabs(matrix):
     """A crew member with no films (The Matrix's colour timer): Down from the buttons used to do
     nothing, the tabs with the crew jobs were out of reach."""
