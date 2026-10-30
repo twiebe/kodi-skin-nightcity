@@ -95,7 +95,7 @@
                 <height>34</height>
                 <align>right</align>
                 <font>font_num</font>
-                <textcolor>accent2</textcolor>
+                <textcolor>state_text</textcolor>
                 <label>$VAR[MusicQueueCounter]</label>
                 <visible>Control.HasFocus(700) | Control.HasFocus(701)</visible>
             </control>

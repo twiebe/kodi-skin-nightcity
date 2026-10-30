@@ -73,7 +73,7 @@
     <include name="MusicTrackRow">
         <param name="focused" default="false"/>
         <!-- colours: plain in the item layout, the focus text colour on the focused row -->
-        <param name="accent" default="accent2"/>
+        <param name="accent" default="state_text"/>
         <param name="text" default="text_dim"/>
         <param name="mute" default="text_mute"/>
         <definition>
@@ -163,8 +163,8 @@
                     <height>34</height>
                     <align>right</align>
                     <font>font_num</font>
-                    <textcolor>accent2</textcolor>
-                    <selectedcolor>accent2</selectedcolor>
+                    <textcolor>state_text</textcolor>
+                    <selectedcolor>state_text</selectedcolor>
                     <label>$INFO[Container($PARAM[id]).CurrentItem]/$INFO[Container($PARAM[id]).NumItems]</label>
                 </control>
                 <control type="list" id="$PARAM[id]">

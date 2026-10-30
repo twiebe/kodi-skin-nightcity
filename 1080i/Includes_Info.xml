@@ -145,7 +145,7 @@
     <!-- "Ends at" of a movie or episode with a runtime, as a tag in a row of tags: now plus the
          time left from the resume point (EndTimeResume); for the item that is playing the
          player's own finish time, the stored resume point is stale then and a TMDb Helper item
-         has none (Arctic Fuse 3, 99010ae). Pink: it is state, it moves with the clock.
+         has none (Arctic Fuse 3, 99010ae). It looks like the runtime tag next to it.
          Window level only: inside an item layout Kodi reads Player.FileNameAndPath and
          VideoPlayer.* from the list item, so every item would count as playing. -->
     <include name="EndsAtTags">
@@ -166,15 +166,13 @@
     </include>
     <include name="EndsAtTagPair">
         <definition>
-            <!-- without a runtime EndTimeResume is the current time -->
+            <!-- like the runtime tag next to it; without a runtime EndTimeResume is the current time -->
             <include content="Tag">
                 <param name="label" value="$LOCALIZE[31059] $INFO[$PARAM[item].EndTimeResume]"/>
-                <param name="color" value="accent2"/>
                 <param name="visible" value="$PARAM[type] + !String.IsEmpty($PARAM[item].Duration) + !String.IsEmpty($PARAM[item].EndTimeResume) + ![$PARAM[playing]]"/>
             </include>
             <include content="Tag">
                 <param name="label" value="$LOCALIZE[31059] $INFO[Player.FinishTime]"/>
-                <param name="color" value="accent2"/>
                 <param name="visible" value="$PARAM[type] + $PARAM[playing] + !String.IsEmpty(Player.FinishTime)"/>
             </include>
         </definition>
@@ -195,6 +193,10 @@
         <param name="top" default="0"/>
         <!-- the sources that do not fit stay out, the last first -->
         <param name="width" default="1000"/>
+        <!-- where the ratings are: TMDb Helper's properties, or those the service keeps for a
+             hero (nc.kept.<container>.), which only holds them once all are there -->
+        <param name="prefix" default="TMDbHelper.ListItem."/>
+        <param name="wait" default="String.IsEmpty(Window(Home).Property(TMDbHelper.IsUpdatingRatings))"/>
         <definition>
             <include content="RatingsLineBody">
                 <param name="id" value="$PARAM[id]"/>
@@ -202,11 +204,15 @@
                 <param name="left" value="$PARAM[left]"/>
                 <param name="top" value="$PARAM[top]"/>
                 <param name="width" value="$PARAM[width]"/>
+                <param name="prefix" value="$PARAM[prefix]"/>
                 <param name="tmdb" value="[$PARAM[tmdb]]"/>
-                <param name="online" value="[$PARAM[tmdb]] + String.IsEmpty(Window(Home).Property(TMDbHelper.IsUpdatingRatings))"/>
+                <param name="online" value="[$PARAM[tmdb]] + [$PARAM[wait]]"/>
+                <param name="library" value="Skin.HasSetting(nc.ratings.library)"/>
             </include>
         </definition>
     </include>
+    <!-- each source shows while its toggle is on (SkinSettings.xml 631-638), Kodi's own IMDb and
+         TMDb ratings too -->
     <include name="RatingsLineBody">
         <definition>
             <include content="RatingsLineEntries">
@@ -215,17 +221,19 @@
                 <param name="left" value="$PARAM[left]"/>
                 <param name="top" value="$PARAM[top]"/>
                 <param name="width" value="$PARAM[width]"/>
-                <param name="imdb" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.IMDb_Rating))"/>
-                <param name="tmdbr" value="$PARAM[tmdb] + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.TMDb_Rating))"/>
-                <param name="rt" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.RottenTomatoes_Rating))"/>
-                <param name="rtu" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.RottenTomatoes_UserMeter))"/>
-                <param name="mc" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.MetaCritic_Rating))"/>
-                <param name="trakt" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Trakt_Rating))"/>
-                <param name="lb" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Letterboxd_Rating))"/>
-                <param name="mdb" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.MDBList_Rating))"/>
-                <param name="own_imdb" value="![$PARAM[online] + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.IMDb_Rating))] + !String.IsEmpty($PARAM[item].Rating(imdb))"/>
-                <param name="own_moviedb" value="![$PARAM[tmdb] + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.TMDb_Rating))] + !String.IsEmpty($PARAM[item].Rating(themoviedb))"/>
-                <param name="own_tmdb" value="![$PARAM[tmdb] + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.TMDb_Rating))] + String.IsEmpty($PARAM[item].Rating(themoviedb)) + !String.IsEmpty($PARAM[item].Rating(tmdb))"/>
+                <param name="prefix" value="$PARAM[prefix]"/>
+                <param name="library" value="$PARAM[library]"/>
+                <param name="imdb" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]IMDb_Rating)) + !Skin.HasSetting(nc.ratings.hide.imdb)"/>
+                <param name="tmdbr" value="$PARAM[tmdb] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]TMDb_Rating)) + Skin.HasSetting(nc.ratings.show.tmdb)"/>
+                <param name="rt" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]RottenTomatoes_Rating)) + !Skin.HasSetting(nc.ratings.hide.rt)"/>
+                <param name="rtu" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]RottenTomatoes_UserMeter)) + Skin.HasSetting(nc.ratings.show.rtu)"/>
+                <param name="mc" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]MetaCritic_Rating)) + Skin.HasSetting(nc.ratings.show.mc)"/>
+                <param name="trakt" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]Trakt_Rating)) + Skin.HasSetting(nc.ratings.show.trakt)"/>
+                <param name="lb" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]Letterboxd_Rating)) + Skin.HasSetting(nc.ratings.show.lb)"/>
+                <param name="mdb" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]MDBList_Rating)) + Skin.HasSetting(nc.ratings.show.mdb)"/>
+                <param name="own_imdb" value="![$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]IMDb_Rating))] + !String.IsEmpty($PARAM[item].Rating(imdb)) + $PARAM[library] + !Skin.HasSetting(nc.ratings.hide.imdb)"/>
+                <param name="own_moviedb" value="![$PARAM[tmdb] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]TMDb_Rating))] + !String.IsEmpty($PARAM[item].Rating(themoviedb)) + $PARAM[library] + Skin.HasSetting(nc.ratings.show.tmdb)"/>
+                <param name="own_tmdb" value="![$PARAM[tmdb] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]TMDb_Rating))] + String.IsEmpty($PARAM[item].Rating(themoviedb)) + !String.IsEmpty($PARAM[item].Rating(tmdb)) + $PARAM[library] + Skin.HasSetting(nc.ratings.show.tmdb)"/>
             </include>
         </definition>
     </include>
@@ -235,7 +243,9 @@
                 <left>$PARAM[left]</left>
                 <top>$PARAM[top]</top>
                 <visible>!String.IsEmpty($PARAM[item].Title)</visible>
-                <visible>[$PARAM[imdb]] | [$PARAM[tmdbr]] | [$PARAM[rt]] | [$PARAM[rtu]] | [$PARAM[mc]] | [$PARAM[trakt]] | [$PARAM[lb]] | [$PARAM[mdb]] | [$PARAM[own_imdb]] | [$PARAM[own_moviedb]] | [$PARAM[own_tmdb]] | [!String.IsEmpty($PARAM[item].Rating) + !String.IsEqual($PARAM[item].Rating,0.0)]</visible>
+                <visible>[$PARAM[imdb]] | [$PARAM[tmdbr]] | [$PARAM[rt]] | [$PARAM[rtu]] | [$PARAM[mc]] | [$PARAM[trakt]] | [$PARAM[lb]] | [$PARAM[mdb]] | [$PARAM[own_imdb]] | [$PARAM[own_moviedb]] | [$PARAM[own_tmdb]] | [!String.IsEmpty($PARAM[item].Rating) + !String.IsEqual($PARAM[item].Rating,0.0) + $PARAM[library]]</visible>
+                <!-- comes in softly, goes at once: on a new title the old values would fade on it -->
+                <animation effect="fade" start="0" end="100" time="200" condition="!Player.HasVideo">Visible</animation>
                 <control type="grouplist">
                     <width>$PARAM[width]</width>
                     <height>34</height>
@@ -250,7 +260,7 @@
                         <width>-36</width>
                     </control>
                     <include content="RatingEntry">
-                        <param name="label" value="[COLOR text]$INFO[Window(Home).Property(TMDbHelper.ListItem.IMDb_Rating)][/COLOR] IMDb$INFO[Window(Home).Property(TMDbHelper.ListItem.Top250), #,]"/>
+                        <param name="label" value="[COLOR text]$INFO[Window(Home).Property($PARAM[prefix]IMDb_Rating)][/COLOR] IMDb$INFO[Window(Home).Property($PARAM[prefix]Top250), #,]"/>
                         <param name="visible" value="$PARAM[imdb]"/>
                     </include>
                     <include content="RatingEntry">
@@ -258,7 +268,7 @@
                         <param name="visible" value="$PARAM[own_imdb]"/>
                     </include>
                     <include content="RatingEntry">
-                        <param name="label" value="[COLOR text]$INFO[Window(Home).Property(TMDbHelper.ListItem.TMDb_Rating)][/COLOR] TMDb"/>
+                        <param name="label" value="[COLOR text]$INFO[Window(Home).Property($PARAM[prefix]TMDb_Rating)][/COLOR] TMDb"/>
                         <param name="visible" value="$PARAM[tmdbr]"/>
                     </include>
                     <include content="RatingEntry">
@@ -270,34 +280,35 @@
                         <param name="visible" value="$PARAM[own_tmdb]"/>
                     </include>
                     <include content="RatingEntry">
-                        <param name="label" value="[COLOR text]$INFO[Window(Home).Property(TMDbHelper.ListItem.RottenTomatoes_Rating),,%][/COLOR] RT"/>
+                        <param name="label" value="[COLOR text]$INFO[Window(Home).Property($PARAM[prefix]RottenTomatoes_Rating),,%][/COLOR] RT"/>
                         <param name="visible" value="$PARAM[rt]"/>
                     </include>
                     <include content="RatingEntry">
-                        <param name="label" value="[COLOR text]$INFO[Window(Home).Property(TMDbHelper.ListItem.RottenTomatoes_UserMeter),,%][/COLOR] RT $LOCALIZE[31440]"/>
+                        <param name="label" value="[COLOR text]$INFO[Window(Home).Property($PARAM[prefix]RottenTomatoes_UserMeter),,%][/COLOR] RT $LOCALIZE[31440]"/>
                         <param name="visible" value="$PARAM[rtu]"/>
                     </include>
                     <include content="RatingEntry">
-                        <param name="label" value="[COLOR text]$INFO[Window(Home).Property(TMDbHelper.ListItem.MetaCritic_Rating)][/COLOR] Metacritic"/>
+                        <param name="label" value="[COLOR text]$INFO[Window(Home).Property($PARAM[prefix]MetaCritic_Rating)][/COLOR] Metacritic"/>
                         <param name="visible" value="$PARAM[mc]"/>
                     </include>
                     <include content="RatingEntry">
-                        <param name="label" value="[COLOR text]$INFO[Window(Home).Property(TMDbHelper.ListItem.Trakt_Rating)][/COLOR] Trakt"/>
+                        <param name="label" value="[COLOR text]$INFO[Window(Home).Property($PARAM[prefix]Trakt_Rating)][/COLOR] Trakt"/>
                         <param name="visible" value="$PARAM[trakt]"/>
                     </include>
                     <include content="RatingEntry">
-                        <param name="label" value="[COLOR text]$INFO[Window(Home).Property(TMDbHelper.ListItem.Letterboxd_Rating)][/COLOR] Letterboxd"/>
+                        <param name="label" value="[COLOR text]$INFO[Window(Home).Property($PARAM[prefix]Letterboxd_Rating)][/COLOR] Letterboxd"/>
                         <param name="visible" value="$PARAM[lb]"/>
                     </include>
                     <include content="RatingEntry">
-                        <param name="label" value="[COLOR text]$INFO[Window(Home).Property(TMDbHelper.ListItem.MDBList_Rating),,%][/COLOR] MDbList"/>
+                        <param name="label" value="[COLOR text]$INFO[Window(Home).Property($PARAM[prefix]MDBList_Rating),,%][/COLOR] MDbList"/>
                         <param name="visible" value="$PARAM[mdb]"/>
                     </include>
                     <!-- the library's rating has no source name (Jellyfin for Kodi stores its
-                         community rating so) -->
+                         community rating so); Kodi's own ones only with "Ratings only from TMDb
+                         Helper" off -->
                     <include content="RatingEntry">
                         <param name="label" value="[COLOR text]$INFO[$PARAM[item].Rating][/COLOR]"/>
-                        <param name="visible" value="![$PARAM[imdb]] + ![$PARAM[tmdbr]] + ![$PARAM[rt]] + ![$PARAM[rtu]] + ![$PARAM[mc]] + ![$PARAM[trakt]] + ![$PARAM[lb]] + ![$PARAM[mdb]] + ![$PARAM[own_imdb]] + ![$PARAM[own_moviedb]] + ![$PARAM[own_tmdb]] + !String.IsEmpty($PARAM[item].Rating) + !String.IsEqual($PARAM[item].Rating,0.0)"/>
+                        <param name="visible" value="![$PARAM[imdb]] + ![$PARAM[tmdbr]] + ![$PARAM[rt]] + ![$PARAM[rtu]] + ![$PARAM[mc]] + ![$PARAM[trakt]] + ![$PARAM[lb]] + ![$PARAM[mdb]] + ![$PARAM[own_imdb]] + ![$PARAM[own_moviedb]] + ![$PARAM[own_tmdb]] + !String.IsEmpty($PARAM[item].Rating) + !String.IsEqual($PARAM[item].Rating,0.0) + $PARAM[library]"/>
                     </include>
                 </control>
             </control>

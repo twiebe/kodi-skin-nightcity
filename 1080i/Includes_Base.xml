@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Netrunner building blocks: dark petrol page, cyan for focus and progress, pink for small
-     accents, cut corners instead of rounded boxes, no labels in frame lines. -->
+<!-- Netrunner building blocks: dark petrol page, cyan for focus and progress, dark blue for
+     state, pink for the kicker over a title, cut corners instead of rounded boxes, no labels in
+     frame lines. -->
 <includes>
     <!-- Startup.xml: online once the startup script is done, but not before a second ahead of
          the hand-over to Home (nc_startup in Timers.xml, 4 s minimum) -->
@@ -196,7 +197,7 @@
                 <height>36</height>
                 <align>right</align>
                 <font>$PARAM[counterfont]</font>
-                <textcolor>accent2</textcolor>
+                <textcolor>state_text</textcolor>
                 <label>$PARAM[counter]</label>
             </control>
         </definition>
@@ -620,8 +621,8 @@
     </include>
 
     <!-- A menu or tab entry: letter-spaced caps, no frame. Focused it turns cyan with a cyan line
-         below; while `active` holds (the page or season shown) the same line is pink without the
-         focus, in the same place, so the label does not move. Width follows the label; the
+         below; while `active` holds (the page or season shown) the same line is dark blue without
+         the focus, in the same place, so the label does not move. Width follows the label; the
          line fits the text: tab_line.png's clear ends (border 8) leave out the padding but 2 px. -->
     <include name="TabButton">
         <param name="id"/>
@@ -644,7 +645,7 @@
                 <texturefocus colordiffuse="accent" border="8,0,8,0">ui/tab_line.png</texturefocus>
                 <texturenofocus/>
                 <alttexturefocus colordiffuse="accent" border="8,0,8,0">ui/tab_line.png</alttexturefocus>
-                <alttexturenofocus colordiffuse="accent2" border="8,0,8,0">ui/tab_line.png</alttexturenofocus>
+                <alttexturenofocus colordiffuse="state" border="8,0,8,0">ui/tab_line.png</alttexturenofocus>
                 <usealttexture>$PARAM[active]</usealttexture>
                 <onfocus>$PARAM[onfocus]</onfocus>
                 <onclick>$PARAM[onclick]</onclick>

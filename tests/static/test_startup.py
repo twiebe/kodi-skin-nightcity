@@ -19,11 +19,12 @@ def _secs(text, name='nc_startup'):
 
 
 def test_startup_onloads():
-    """Startup still switches on the TMDb Helper service and its window manager's direct mode and
-    clears the ready flag of an earlier run; the script and the hand-over are left to the timers."""
+    """Startup still switches on the TMDb Helper service, its window manager's direct mode and
+    its local widget containers, and clears the ready flag of an earlier run; the script and the
+    hand-over are left to the timers."""
     onloads = [o.text for o in _startup().iter('onload')]
     assert onloads == ['Skin.SetBool(TMDbHelper.Service)', 'Skin.SetBool(TMDbHelper.DirectCallAuto)',
-                       'ClearProperty(nc.startup.ready,home)']
+                       'Skin.SetBool(TMDbHelper.UseLocalWidgetContainer)', 'ClearProperty(nc.startup.ready,home)']
 
 
 def test_startup_script_starts_after_services():

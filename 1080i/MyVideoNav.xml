@@ -27,8 +27,8 @@
                     <height>56</height>
                     <aligny>center</aligny>
                     <font>font_label</font>
-                    <textcolor>accent2</textcolor>
-                    <selectedcolor>accent2</selectedcolor>
+                    <textcolor>state_text</textcolor>
+                    <selectedcolor>state_text</selectedcolor>
                     <label>$VAR[LibraryMark]</label>
                 </control>
                 <control type="label">
@@ -110,7 +110,7 @@
                 <width>360</width>
                 <height>36</height>
                 <font>font_small</font>
-                <textcolor>accent2</textcolor>
+                <textcolor>state_text</textcolor>
                 <label>$VAR[LibraryMeta]</label>
             </control>
             <control type="textbox">

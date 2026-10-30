@@ -6,10 +6,12 @@
      nc_startup_script timer starts it a second after the service add-ons, which Kodi starts
      together with this window. TMDbHelper.Service switches on TMDb Helper's poller (it idles
      without it), TMDbHelper.DirectCallAuto lets its window manager open the info pages of a
-     chain itself (Custom_1190_TMDbHelper.xml). -->
+     chain itself (Custom_1190_TMDbHelper.xml), TMDbHelper.UseLocalWidgetContainer makes it read
+     TMDbHelper.WidgetContainer of the window on top (DialogVideoInfo.xml names its episode list). -->
 <window>
     <onload>Skin.SetBool(TMDbHelper.Service)</onload>
     <onload>Skin.SetBool(TMDbHelper.DirectCallAuto)</onload>
+    <onload>Skin.SetBool(TMDbHelper.UseLocalWidgetContainer)</onload>
     <onload>ClearProperty(nc.startup.ready,home)</onload>
     <controls>
         <include>Background</include>
@@ -131,7 +133,7 @@
                     <height>32</height>
                     <align>right</align>
                     <font>font_num_small</font>
-                    <textcolor>accent2</textcolor>
+                    <textcolor>state_text</textcolor>
                     <label>$INFO[System.Time]</label>
                 </control>
             </control>

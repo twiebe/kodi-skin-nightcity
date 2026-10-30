@@ -10,7 +10,7 @@
         <control type="image" id="2">
             <width>20</width>
             <height>32</height>
-            <texture colordiffuse="accent2">ui/white.png</texture>
+            <texture colordiffuse="state_text">ui/white.png</texture>
         </control>
         <control type="image" id="3">
             <width>20</width>

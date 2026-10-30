@@ -772,7 +772,7 @@ msgid "[COLOR accent]OK[/COLOR] choose   [COLOR accent]Right[/COLOR] option   [C
 msgstr ""
 
 msgctxt "#31261"
-msgid "[COLOR accent2]Up/Down[/COLOR] move   [COLOR accent2]OK[/COLOR] drop"
+msgid "[COLOR state_text]Up/Down[/COLOR] move   [COLOR state_text]OK[/COLOR] drop"
 msgstr ""
 
 msgctxt "#31262"
@@ -999,4 +999,96 @@ msgstr ""
 
 msgctxt "#31440"
 msgid "audience"
+msgstr ""
+
+msgctxt "#31441"
+msgid "Ratings only from TMDb Helper"
+msgstr ""
+
+msgctxt "#31442"
+msgid "Show only the ratings TMDb Helper fetched for exactly this title. Off: the library's own rating (from Jellyfin) fills in while TMDb Helper has none."
+msgstr ""
+
+msgctxt "#31443"
+msgid "Load spotlight ratings without focus"
+msgstr ""
+
+msgctxt "#31444"
+msgid "Fetch the ratings of each spotlight title as it rotates, also without focus. Off saves online requests: the ratings load once the title has focus and then stay."
+msgstr ""
+
+msgctxt "#31445"
+msgid "Ratings"
+msgstr ""
+
+msgctxt "#31446"
+msgid "Sources"
+msgstr ""
+
+msgctxt "#31447"
+msgid "Which ratings the ratings line of the spotlight and the info page shows, and where they come from."
+msgstr ""
+
+msgctxt "#31450"
+msgid "IMDb"
+msgstr ""
+
+msgctxt "#31451"
+msgid "TMDb"
+msgstr ""
+
+msgctxt "#31452"
+msgid "Rotten Tomatoes critics"
+msgstr ""
+
+msgctxt "#31453"
+msgid "Rotten Tomatoes audience"
+msgstr ""
+
+msgctxt "#31454"
+msgid "Metacritic"
+msgstr ""
+
+msgctxt "#31455"
+msgid "Trakt"
+msgstr ""
+
+msgctxt "#31456"
+msgid "Letterboxd"
+msgstr ""
+
+msgctxt "#31457"
+msgid "MDbList"
+msgstr ""
+
+msgctxt "#31460"
+msgid "IMDb users, 0 to 10, with the Top 250 rank. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr ""
+
+msgctxt "#31461"
+msgid "TMDb users, 0 to 10. Needs no key."
+msgstr ""
+
+msgctxt "#31462"
+msgid "Tomatometer: the share of positive critic reviews. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr ""
+
+msgctxt "#31463"
+msgid "Popcornmeter: the share of positive audience ratings. Needs an MDbList or OMDb key in TMDb Helper."
+msgstr ""
+
+msgctxt "#31464"
+msgid "A weighted average of critic reviews, 0 to 100, mostly for theatrical films and big series. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr ""
+
+msgctxt "#31465"
+msgid "Trakt users, 0 to 10. Needs a connected Trakt account in TMDb Helper: fetched from Trakt, not MDbList."
+msgstr ""
+
+msgctxt "#31466"
+msgid "Letterboxd users, 0 to 5, mostly films. Needs an MDbList key in TMDb Helper."
+msgstr ""
+
+msgctxt "#31467"
+msgid "MDbList score: an average of the other sources, 0 to 100. Needs an MDbList key in TMDb Helper."
 msgstr ""

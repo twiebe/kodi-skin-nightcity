@@ -273,13 +273,13 @@ def check_current_mark(lst, selected):
         assert '[COLOR' not in others[0].findtext('label'), tag
         if tag == 'itemlayout':
             assert all(c.findtext('textcolor') == 'accent' for c in marked), tag
-        bars = [c for c in controls if c.get('type') == 'image' and c.find('texture').get('colordiffuse') == 'accent2']
+        bars = [c for c in controls if c.get('type') == 'image' and c.find('texture').get('colordiffuse') == 'state']
         assert len(bars) == 1, tag
         bar = bars[0]
         assert bar.findtext('visible') == selected, (tag, bar.findtext('visible'))
         assert bar.findtext('width') == '3', tag
         assert int(bar.findtext('left')) + 3 < int(others[0].findtext('left')), tag
-        # drawn after the cursor's fill, so it stays pink on it
+        # drawn after the cursor's fill, so it stays on it
         fills = [c for c in controls if c.get('type') == 'image' and c is not bar]
         assert all(controls.index(f) < controls.index(bar) for f in fills), tag
 
@@ -323,17 +323,17 @@ def test_dialog_heading_above_content():
 
 
 def test_track_panel_marks_the_playing_track():
-    """The playing track of an OSD panel (subtitles, audio): accent text and a pink bar."""
+    """The playing track of an OSD panel (subtitles, audio): accent text and a dark blue bar."""
     check_current_mark(include('TrackPanel'), 'String.IsEqual(ListItem.Property(current),1)')
 
 
 @pytest.mark.parametrize('name', ['TabButton', 'CreditsTab'])
 def test_tab_focus_differs_from_active(name):
     """A tab entry that is focused looks different from the active (shown) one: the focus draws
-    the cyan line, the active one without focus the same line in pink, in the same place (one
+    the cyan line, the active one without focus the same line in dark blue (state), in the same place (one
     texture), so the label does not move; the label stays as it is."""
     tab = include(name).find('.//control')
-    for tag, colour in (('texturefocus', 'accent'), ('alttexturefocus', 'accent'), ('alttexturenofocus', 'accent2')):
+    for tag, colour in (('texturefocus', 'accent'), ('alttexturefocus', 'accent'), ('alttexturenofocus', 'state')):
         assert (tab.findtext(tag), tab.find(tag).get('colordiffuse')) == ('ui/tab_line.png', colour), tag
         # the ends of the texture are clear and keep their size: the line leaves out the
         # padding (textoffsetx) up to TAB_LINE_OVERHANG, it fits the text
@@ -361,7 +361,7 @@ def test_tab_line_texture_has_clear_ends():
 
 
 def test_season_tab_active_line():
-    """The shown season: a pink line under it without focus, the focus line with it. A list
+    """The shown season: a dark blue line under it without focus, the focus line with it. A list
     layout has no auto width, so the line is the season's own label again in font_caps_line,
     whose letters are bars as wide as the letters of font_caps: as long as the text."""
     seasons = next(c for c in parse(ROOT / '1080i' / 'DialogVideoInfo.xml').iter('control') if c.get('id') == '5200')
@@ -369,7 +369,7 @@ def test_season_tab_active_line():
     assert not [c for c in controls if c.get('type') == 'image']
     lines = [c for c in controls if c.get('type') == 'label']
     assert sorted((c.findtext('textcolor'), c.findtext('visible')) for c in lines) == [
-        ('accent2', '!Control.HasFocus(5200)'), ('focus', 'Control.HasFocus(5200)')]
+        ('focus', 'Control.HasFocus(5200)'), ('state', '!Control.HasFocus(5200)')]
     text = [c for c in include('SeasonTab').iter('control') if c.get('type') == 'label']
     assert len(text) == 1
     text = text[0]
@@ -382,7 +382,7 @@ def test_season_tab_active_line():
 
 
 def test_no_triangle_marker():
-    """No ◢ in any label: header lines separate their parts with the pink middle dot."""
+    """No ◢ in any label: header lines separate their parts with the dark blue middle dot."""
     for path in layout_files():
         for el in parse(path).iter():
             if isinstance(el.tag, str):
@@ -390,12 +390,12 @@ def test_no_triangle_marker():
 
 
 @pytest.mark.parametrize('name', ['PlayerPath', 'InfoPath'])
-def test_header_parts_split_by_a_pink_dot(name):
-    """"MOVIES · METROPOLIS": the parts of a header line split by a pink middle dot, spaced like
+def test_header_parts_split_by_a_dark_blue_dot(name):
+    """"MOVIES · METROPOLIS": the parts of a header line split by a dark blue middle dot, spaced like
     the " · " of the episode view."""
     var = next(v for v in parse(ROOT / '1080i' / 'Variables.xml').iter('variable') if v.get('name') == name)
     for value in var.findall('value'):
-        assert ' [COLOR accent2]·[/COLOR] ' in value.text, value.text
+        assert ' [COLOR state_text]·[/COLOR] ' in value.text, value.text
 
 
 def test_hero_titles_fit_long_names():

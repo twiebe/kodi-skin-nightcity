@@ -90,7 +90,7 @@
                         <font>font_small</font>
                         <textcolor>text_dim</textcolor>
                         <selectedcolor>text_dim</selectedcolor>
-                        <label>[COLOR accent2]$INFO[ListItem.Label][/COLOR]  $INFO[ListItem.Label2]$INFO[ListItem.Property(sync), [COLOR text_mute]sync ,[/COLOR]]</label>
+                        <label>[COLOR state_text]$INFO[ListItem.Label][/COLOR]  $INFO[ListItem.Label2]$INFO[ListItem.Property(sync), [COLOR text_mute]sync ,[/COLOR]]</label>
                     </control>
                 </itemlayout>
                 <focusedlayout width="1060" height="52">
@@ -109,7 +109,7 @@
                         <textcolor>text</textcolor>
                         <selectedcolor>text</selectedcolor>
                         <focusedcolor>focus_text</focusedcolor>
-                        <label>[COLOR accent2]$INFO[ListItem.Label][/COLOR]  $INFO[ListItem.Label2]$INFO[ListItem.Property(sync), [COLOR text_mute]sync ,[/COLOR]]</label>
+                        <label>[COLOR state_text]$INFO[ListItem.Label][/COLOR]  $INFO[ListItem.Label2]$INFO[ListItem.Property(sync), [COLOR text_mute]sync ,[/COLOR]]</label>
                     </control>
                 </focusedlayout>
             </control>

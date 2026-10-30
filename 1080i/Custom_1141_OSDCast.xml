@@ -93,7 +93,7 @@
             <align>right</align>
             <height>34</height>
             <font>font_num</font>
-            <textcolor>accent2</textcolor>
+            <textcolor>state_text</textcolor>
             <label>$INFO[Container(6501).CurrentItem]/$INFO[Container(6501).NumItems]</label>
             <visible>Integer.IsGreater(Container(6501).NumItems,0)</visible>
         </control>

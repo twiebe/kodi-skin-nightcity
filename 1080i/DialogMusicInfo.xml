@@ -232,7 +232,7 @@
                     <height>34</height>
                     <align>right</align>
                     <font>font_num</font>
-                    <textcolor>accent2</textcolor>
+                    <textcolor>state_text</textcolor>
                     <label>$INFO[Container(5050).CurrentItem]/$INFO[Container(5050).NumItems]</label>
                 </control>
                 <control type="panel" id="5050">

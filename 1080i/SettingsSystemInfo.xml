@@ -206,7 +206,7 @@
                     <width>1240</width>
                     <height>40</height>
                     <font>font_small</font>
-                    <textcolor>accent2</textcolor>
+                    <textcolor>state_text</textcolor>
                     <aligny>center</aligny>
                     <label>cpu $INFO[System.CpuUsage][COLOR text_mute] ▪ [/COLOR]mem $INFO[System.Memory(used.percent)][COLOR text_mute] ▪ [/COLOR]$INFO[System.Uptime]</label>
                 </control>

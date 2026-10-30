@@ -161,7 +161,7 @@
                 <top>8</top>
                 <width>28</width>
                 <height>28</height>
-                <texture colordiffuse="accent2">ui/qm_weather.png</texture>
+                <texture colordiffuse="state_text">ui/qm_weather.png</texture>
                 <visible>Weather.IsFetched</visible>
             </control>
             <control type="label">
@@ -169,7 +169,7 @@
                 <height>44</height>
                 <aligny>center</aligny>
                 <font>font_num</font>
-                <textcolor>accent2</textcolor>
+                <textcolor>state_text</textcolor>
                 <label>$INFO[Weather.Temperature]</label>
                 <visible>Weather.IsFetched</visible>
             </control>
@@ -178,7 +178,7 @@
                 <height>44</height>
                 <aligny>center</aligny>
                 <font>font_num</font>
-                <textcolor>accent2</textcolor>
+                <textcolor>state_text</textcolor>
                 <label>$INFO[System.Time]</label>
             </control>
         </control>
@@ -212,6 +212,8 @@
         <param name="titlefont" default="font_hero"/>
         <param name="plotwidth" default="980"/>
         <param name="ratingswidth" default="1400"/>
+        <param name="ratingsprefix" default="TMDbHelper.ListItem."/>
+        <param name="ratingswait" default="String.IsEmpty(Window(Home).Property(TMDbHelper.IsUpdatingRatings))"/>
         <param name="page" default="true"/>
         <param name="fade" default="false"/>
         <param name="shared" default="false"/>
@@ -323,6 +325,8 @@
                     <param name="left" value="384"/>
                     <param name="top" value="318"/>
                     <param name="width" value="$PARAM[ratingswidth]"/>
+                    <param name="prefix" value="$PARAM[ratingsprefix]"/>
+                    <param name="wait" value="$PARAM[ratingswait]"/>
                 </include>
                 <control type="textbox" id="$PARAM[plotid]">
                     <left>384</left>
@@ -435,7 +439,11 @@
             <param name="ratingid" value="9030"/>
             <param name="plotid" value="9022"/>
             <param name="tech" value="true"/>
-            <param name="tmdb" value="String.IsEqual(Window(Home).Property(TMDbHelper.WidgetContainer),9000)"/>
+            <!-- the ratings the service kept for the title on screen (scripts/nightcity.py hero_tick),
+                 complete when they are there -->
+            <param name="tmdb" value="Integer.IsEqual(Container(9000).ListItem.DBID,Window(Home).Property(nc.kept.9000.dbid)) + String.IsEqual(Container(9000).ListItem.DBType,Window(Home).Property(nc.kept.9000.dbtype))"/>
+            <param name="ratingsprefix" value="nc.kept.9000."/>
+            <param name="ratingswait" value="true"/>
             <param name="page" value="[[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + !String.IsEqual(Skin.String(SpotlightSource),off)] | [String.IsEqual(Window(Home).Property(nc.page),movies) + !String.IsEqual(Skin.String(nc.movies.spotlight),off)]"/>
             <param name="fade" value="true"/>
             <param name="shared" value="true"/>
@@ -459,7 +467,6 @@
                     <param name="id" value="9010"/>
                     <param name="content" value="$VAR[SpotlightItemPath]"/>
                     <param name="onclick" value="NotifyAll(nightcity,play:movie:$INFO[Container(9000).ListItem.DBID]:resume)"/>
-                    <param name="onfocus" value="SetProperty(TMDbHelper.WidgetContainer,9000,home)"/>
                     <onleft>Skin.TimerStart(nc_spot_hold)</onleft>
                     <onleft>Control.Move(9000,-1)</onleft>
                     <onright>9011</onright>
@@ -470,7 +477,6 @@
                     <param name="content" value="$VAR[SpotlightItemPath]"/>
                     <param name="onclick" value="SetFocus(9000)"/>
                     <param name="onclick2" value="Action(Info)"/>
-                    <param name="onfocus" value="SetProperty(TMDbHelper.WidgetContainer,9000,home)"/>
                     <onleft>9010</onleft>
                     <onright condition="String.IsEqual(Window(Home).Property(nc.page),movies)">9012</onright>
                     <onright condition="!String.IsEqual(Window(Home).Property(nc.page),movies)">Skin.TimerStart(nc_spot_hold)</onright>
@@ -528,11 +534,15 @@
             <param name="item" value="Container(9001).ListItem"/>
             <param name="kicker" value="$LOCALIZE[31100]"/>
             <param name="titleid" value="9560"/>
-            <param name="tmdb" value="String.IsEqual(Window(Home).Property(TMDbHelper.WidgetContainer),9001)"/>
+            <param name="tmdb" value="Integer.IsEqual(Container(9001).ListItem.DBID,Window(Home).Property(nc.kept.9001.dbid)) + String.IsEqual(Container(9001).ListItem.DBType,Window(Home).Property(nc.kept.9001.dbtype))"/>
+            <param name="ratingsprefix" value="nc.kept.9001."/>
+            <param name="ratingswait" value="true"/>
+            <param name="ratingid" value="9561"/>
             <param name="page" value="String.IsEqual(Window(Home).Property(nc.page),shows)"/>
             <param name="fade" value="true"/>
         </include>
-        <control type="group">
+        <!-- 9301: the show hero is on screen -->
+        <control type="group" id="9301">
             <visible>String.IsEqual(Window(Home).Property(nc.page),shows)</visible>
             <include content="PageFade">
                 <param name="delay" value="FadeStep2"/>
@@ -545,7 +555,6 @@
                     <param name="id" value="9551"/>
                     <param name="content" value="$VAR[SpotlightShowItemPath]"/>
                     <param name="onclick" value="NotifyAll(nightcity,next_episode:$INFO[Container(9001).ListItem.DBID])"/>
-                    <param name="onfocus" value="SetProperty(TMDbHelper.WidgetContainer,9001,home)"/>
                     <onleft>Skin.TimerStart(nc_spot_hold)</onleft>
                     <onleft>Control.Move(9001,-1)</onleft>
                     <onright>9552</onright>
@@ -557,7 +566,6 @@
                     <param name="content" value="$VAR[SpotlightShowItemPath]"/>
                     <param name="onclick" value="SetFocus(9001)"/>
                     <param name="onclick2" value="Action(Info)"/>
-                    <param name="onfocus" value="SetProperty(TMDbHelper.WidgetContainer,9001,home)"/>
                     <onleft>9551</onleft>
                     <onright>9553</onright>
                     <onup>9100</onup>
@@ -1025,8 +1033,8 @@
                     <height>34</height>
                     <align>right</align>
                     <font>font_num</font>
-                    <textcolor>accent2</textcolor>
-                    <selectedcolor>accent2</selectedcolor>
+                    <textcolor>state_text</textcolor>
+                    <selectedcolor>state_text</selectedcolor>
                     <label>$INFO[Container($PARAM[id]).CurrentItem]/$INFO[Container($PARAM[id]).NumItems]</label>
                 </control>
                 <control type="list" id="$PARAM[id]">
@@ -1047,7 +1055,6 @@
                          neighbouring row group itself; a hidden group passes the move on -->
                     <onup>$PARAM[up]</onup>
                     <ondown>$PARAM[down]</ondown>
-                    <onfocus>ClearProperty(TMDbHelper.WidgetContainer,home)</onfocus>
                     <include content="$PARAM[click]"/>
                     <itemlayout width="228" height="424">
                         <control type="group">
@@ -1228,7 +1235,7 @@
         <param name="tilewidth"/>
         <param name="textwidth"/>
         <param name="subwidth"/>
-        <param name="numcolor" default="accent2"/>
+        <param name="numcolor" default="state_text"/>
         <param name="color" default="text_dim"/>
         <param name="subcolor" default="text_mute"/>
         <definition>
@@ -1463,7 +1470,7 @@
             <width>560</width>
             <height>72</height>
             <font>font_clock</font>
-            <textcolor>accent2</textcolor>
+            <textcolor>state_text</textcolor>
             <label>$INFO[System.Time]</label>
         </control>
         <control type="label">
@@ -1725,7 +1732,7 @@
                     <align>right</align>
                     <aligny>center</aligny>
                     <font>font_num_small</font>
-                    <textcolor>accent2</textcolor>
+                    <textcolor>state_text</textcolor>
                     <label>$INFO[ListItem.Label2]</label>
                     <visible>![$PARAM[focused] + Control.HasFocus($PARAM[list])]</visible>
                 </control>
