@@ -309,12 +309,10 @@
                     </include>
                     <include content="Tag">
                         <param name="label" value="$PARAM[techlabel]"/>
-                        <param name="color" value="accent"/>
                         <param name="visible" value="$PARAM[tech] + !String.IsEmpty($PARAM[item].VideoResolution)"/>
                     </include>
                     <include content="Tag">
                         <param name="label" value="$PARAM[audiolabel]"/>
-                        <param name="color" value="accent"/>
                         <param name="visible" value="$PARAM[tech] + !String.IsEmpty($PARAM[item].AudioCodec)"/>
                     </include>
                 </control>
@@ -884,8 +882,8 @@
         </include>
     </include>
 
-    <!-- The menu in the top line: the focused entry a filled accent button, the shown page an
-         accent outline. Focus switches the page. -->
+    <!-- The menu in the top line: the focused entry a filled accent button, the shown page a
+         dark blue outline. Focus switches the page. -->
     <!-- Down from the top line (the menu, what plays) into the shown page; a page without
          spotlight starts with its rows -->
     <include name="HomePageDown">
@@ -1267,7 +1265,7 @@
         <param name="tilewidth"/>
         <param name="textwidth"/>
         <param name="subwidth"/>
-        <param name="numcolor" default="state_text"/>
+        <param name="numcolor" default="accent2"/>
         <param name="color" default="text_dim"/>
         <param name="subcolor" default="text_mute"/>
         <definition>

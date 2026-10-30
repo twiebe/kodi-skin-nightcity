@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
+    <!-- A notification that warns (DialogNotification.xml): a warning or error toast without a
+         picture of its own gets Kodi's DefaultIconWarning.png or DefaultIconError.png in its icon
+         400 (GUIDialogKaiToast.cpp); an image's label is its file. -->
+    <expression name="NotificationWarns">String.IsEqual(Control.GetLabel(400),DefaultIconWarning.png) | String.IsEqual(Control.GetLabel(400),DefaultIconError.png)</expression>
     <!-- Left-aligned menu row: plain text, the focused row a cyan cut fill. For context and button
          menus. -->
     <include name="ListButton">
@@ -61,7 +65,7 @@
     </include>
 
     <!-- Vertical list with label and right-aligned label2, focused row a cyan cut fill, the current
-         value (ListItem.IsSelected) in accent with a slim dark blue bar at the row's left edge.
+         value (ListItem.IsSelected) in state_text with a slim dark blue bar at the row's left edge.
          Children of the include (static <content>, navigation) go into the list. -->
     <include name="DialogList">
         <param name="id"/>
@@ -92,7 +96,7 @@
                         <label>$PARAM[label]</label>
                         <visible>!ListItem.IsSelected</visible>
                     </control>
-                    <!-- the current value: a dark blue bar before the text, which stays in place, and the text in accent -->
+                    <!-- the current value: a dark blue bar before the text, which stays in place, and the text in state_text -->
                     <control type="image">
                         <left>6</left>
                         <top>12</top>
@@ -101,15 +105,15 @@
                         <texture colordiffuse="state">ui/white.png</texture>
                         <visible>ListItem.IsSelected</visible>
                     </control>
-                    <!-- the current value: accent -->
+                    <!-- the current value: state_text -->
                     <control type="label">
                         <left>20</left>
                         <width>$PARAM[width]</width>
                         <height>52</height>
                         <aligny>center</aligny>
                         <font>$PARAM[font]</font>
-                        <textcolor>accent</textcolor>
-                        <selectedcolor>accent</selectedcolor>
+                        <textcolor>state_text</textcolor>
+                        <selectedcolor>state_text</selectedcolor>
                         <label>$PARAM[label]</label>
                         <visible>ListItem.IsSelected</visible>
                     </control>
@@ -184,8 +188,8 @@
                         <height>52</height>
                         <aligny>center</aligny>
                         <font>$PARAM[font]</font>
-                        <textcolor>accent</textcolor>
-                        <selectedcolor>accent</selectedcolor>
+                        <textcolor>state_text</textcolor>
+                        <selectedcolor>state_text</selectedcolor>
                         <scroll>Control.HasFocus($PARAM[id])</scroll>
                         <label>$PARAM[label]</label>
                         <visible>ListItem.IsSelected + !Control.HasFocus($PARAM[id])</visible>
@@ -324,7 +328,7 @@
         <radiowidth>32</radiowidth>
         <radioheight>32</radioheight>
         <textureradioonfocus colordiffuse="focus_text">ui/check_on.png</textureradioonfocus>
-        <textureradioonnofocus colordiffuse="accent">ui/check_on.png</textureradioonnofocus>
+        <textureradioonnofocus colordiffuse="state_text">ui/check_on.png</textureradioonnofocus>
         <textureradiooffnofocus colordiffuse="text_mute">ui/check_off.png</textureradiooffnofocus>
         <textureradioofffocus colordiffuse="focus_text">ui/check_off.png</textureradioofffocus>
     </include>

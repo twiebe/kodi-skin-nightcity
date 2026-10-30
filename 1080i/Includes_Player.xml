@@ -215,7 +215,7 @@
     </include>
 
     <!-- Track panel of the OSD (subtitles or audio) above the right buttons: one row per track
-         from the script's nc.<prefix>.* properties (Home), the playing one marked with a dark blue bar and accent text, "off"
+         from the script's nc.<prefix>.* properties (Home), the playing one marked with a dark blue bar and state_text, "off"
          first for subtitles, and a last row that opens Kodi's full settings (`settings`). The panel grows upwards
          with the number of rows (nc.<prefix>.rows, at most 8). Left and right focus the
          neighbouring buttons of the row (`left`, `right`). -->
@@ -449,8 +449,8 @@
                     <height>52</height>
                     <aligny>center</aligny>
                     <font>font_small</font>
-                    <textcolor>accent</textcolor>
-                    <selectedcolor>accent</selectedcolor>
+                    <textcolor>state_text</textcolor>
+                    <selectedcolor>state_text</selectedcolor>
                     <label>$INFO[ListItem.Label]</label>
                     <visible>String.IsEqual(ListItem.Property(current),1)</visible>
                 </control>
@@ -523,8 +523,8 @@
                     <height>52</height>
                     <aligny>center</aligny>
                     <font>font_small</font>
-                    <textcolor>accent</textcolor>
-                    <selectedcolor>accent</selectedcolor>
+                    <textcolor>state_text</textcolor>
+                    <selectedcolor>state_text</selectedcolor>
                     <label>$INFO[ListItem.Label]</label>
                     <visible>String.IsEqual(ListItem.Property(current),1) + !Control.HasFocus($PARAM[id])</visible>
                 </control>

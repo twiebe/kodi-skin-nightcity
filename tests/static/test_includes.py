@@ -258,7 +258,7 @@ def layout(list_include, tag):
 
 
 def check_current_mark(lst, selected):
-    """The current value of a list: the text in accent at the same place and with the same words
+    """The current value of a list: the text in state_text at the same place and with the same words
     as the other rows (nothing in front that moves it), and a slim pink bar at the row's left
     edge, before the text, shown only for that row, also over the cursor's fill."""
     for tag in ('itemlayout', 'focusedlayout'):
@@ -272,7 +272,7 @@ def check_current_mark(lst, selected):
         assert {c.findtext('left') for c in labels} == {others[0].findtext('left')}, tag
         assert '[COLOR' not in others[0].findtext('label'), tag
         if tag == 'itemlayout':
-            assert all(c.findtext('textcolor') == 'accent' for c in marked), tag
+            assert all(c.findtext('textcolor') == 'state_text' for c in marked), tag
         bars = [c for c in controls if c.get('type') == 'image' and c.find('texture').get('colordiffuse') == 'state']
         assert len(bars) == 1, tag
         bar = bars[0]
@@ -556,13 +556,13 @@ def test_system_facts_in_columns():
 
 def test_main_menu_entries_are_buttons():
     """The top menu: the focused entry is a filled accent button with dark text, the shown page
-    an accent outline; no underline, no ◢."""
+    a dark blue (state) outline; no underline, no ◢."""
     calls = [c for c in include('MainMenu').iter('include') if c.get('content') in ('TabButton', 'MenuButton')]
     assert calls and all(c.get('content') == 'MenuButton' for c in calls)
     button = include('MenuButton').find('.//control')
     assert button.find('texturefocus').text == 'ui/cut_btn_fill.png' and button.find('texturefocus').get('colordiffuse') == 'accent'
     assert button.find('alttexturefocus').text == 'ui/cut_btn_fill.png'
-    assert button.find('alttexturenofocus').text == 'ui/cut_btn.png' and button.find('alttexturenofocus').get('colordiffuse') == 'accent'
+    assert button.find('alttexturenofocus').text == 'ui/cut_btn.png' and button.find('alttexturenofocus').get('colordiffuse') == 'state'
     assert not button.find('texturenofocus').text
     assert button.findtext('focusedcolor') == 'focus_text'
     assert '◢' not in button.findtext('altlabel') and 'tab_line' not in ''.join(button.itertext())

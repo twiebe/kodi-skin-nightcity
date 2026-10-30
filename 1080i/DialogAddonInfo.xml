@@ -56,7 +56,7 @@
                 <height>420</height>
                 <font>font_small</font>
                 <textcolor>text</textcolor>
-                <label>$INFO[ListItem.AddonDescription]$INFO[ListItem.AddonNews,[CR][CR][COLOR accent3]news[/COLOR][CR],]</label>
+                <label>$INFO[ListItem.AddonDescription]$INFO[ListItem.AddonNews,[CR][CR][COLOR accent2]news[/COLOR][CR],]</label>
             </control>
             <control type="panel" id="50">
                 <left>-4000</left>
@@ -123,7 +123,7 @@
                 <radiowidth>32</radiowidth>
                 <radioheight>32</radioheight>
                 <textureradioonfocus colordiffuse="focus_text">ui/check_on.png</textureradioonfocus>
-                <textureradioonnofocus colordiffuse="accent">ui/check_on.png</textureradioonnofocus>
+                <textureradioonnofocus colordiffuse="state_text">ui/check_on.png</textureradioonnofocus>
                 <textureradiooffnofocus colordiffuse="text_mute">ui/check_off.png</textureradiooffnofocus>
                 <textureradioofffocus colordiffuse="focus_text">ui/check_off.png</textureradioofffocus>
                 <ondown>9000</ondown>

@@ -4,7 +4,7 @@
      as deep links. One include per group for the rail and one for its previews, so the rail can
      also show a single group. -->
 <includes>
-    <!-- Group heading in the rail: dark blue number, caps label. Inside the grouplist it keeps an id:
+    <!-- Group heading in the rail: pink number, caps label. Inside the grouplist it keeps an id:
          Kodi moves over it by id, id 0 stops the move. -->
     <include name="SettingsRailHeading">
         <param name="id"/>
@@ -18,7 +18,7 @@
                 <aligny>center</aligny>
                 <font>font_caps_small</font>
                 <textcolor>text_mute</textcolor>
-                <label>[COLOR state_text]$PARAM[num][/COLOR]  [UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                <label>[COLOR accent2]$PARAM[num][/COLOR]  [UPPERCASE]$PARAM[label][/UPPERCASE]</label>
             </control>
         </definition>
     </include>

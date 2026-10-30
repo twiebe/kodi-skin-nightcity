@@ -527,7 +527,7 @@
             <!-- beside the card, not inside it: the card's dimming must not reach the dog-ear -->
             <control type="group">
                 <animation effect="zoom" end="106" center="auto" time="150" condition="$PARAM[focused]">Conditional</animation>
-                <!-- unwatched, never started: an accent dog-ear in the bottom right corner (no cut
+                <!-- unwatched, never started: a dark blue dog-ear in the bottom right corner (no cut
                      there), as big as the frame's cut -->
                 <control type="group">
                     <width>$PARAM[width]</width>
@@ -537,7 +537,7 @@
                         <bottom>0</bottom>
                         <width>14</width>
                         <height>14</height>
-                        <texture colordiffuse="accent">ui/dogear.png</texture>
+                        <texture colordiffuse="state_text">ui/dogear.png</texture>
                         <visible>[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,episode)] + !String.IsEmpty(ListItem.DBID) + Integer.IsEqual(ListItem.PlayCount,0) + !ListItem.IsResumable</visible>
                     </control>
                 </control>
@@ -656,7 +656,7 @@
     </include>
 
     <!-- Entry of the top menu: the focused one a filled accent button with dark text, the shown
-         page an accent outline -->
+         page a dark blue (state) outline -->
     <include name="MenuButton">
         <param name="id"/>
         <param name="label"/>
@@ -678,7 +678,7 @@
                 <texturefocus border="12" colordiffuse="accent">ui/cut_btn_fill.png</texturefocus>
                 <texturenofocus/>
                 <alttexturefocus border="12" colordiffuse="accent">ui/cut_btn_fill.png</alttexturefocus>
-                <alttexturenofocus border="12" colordiffuse="accent">ui/cut_btn.png</alttexturenofocus>
+                <alttexturenofocus border="12" colordiffuse="state">ui/cut_btn.png</alttexturenofocus>
                 <usealttexture>$PARAM[active]</usealttexture>
                 <onfocus>$PARAM[onfocus]</onfocus>
                 <onclick>$PARAM[onclick]</onclick>

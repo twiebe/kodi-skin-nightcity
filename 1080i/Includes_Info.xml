@@ -72,7 +72,7 @@
                     <height>36</height>
                     <font>font_label</font>
                     <textcolor>text</textcolor>
-                    <label>[COLOR accent]$VAR[EpisodeCardNum][/COLOR]  $INFO[ListItem.Title]</label>
+                    <label>[COLOR state_text]$VAR[EpisodeCardNum][/COLOR]  $INFO[ListItem.Title]</label>
                     <visible>!$PARAM[selected]</visible>
                 </control>
                 <control type="label">
@@ -260,7 +260,7 @@
                     <orientation>horizontal</orientation>
                     <itemgap>24</itemgap>
                     <include content="RatingEntry">
-                        <param name="label" value="[COLOR accent3]★[/COLOR]"/>
+                        <param name="label" value="[COLOR text_dim]★[/COLOR]"/>
                     </include>
                     <!-- the star stands closer to the first rating than the ratings to each other:
                          the spacer takes back the two item gaps around it but 12 px -->

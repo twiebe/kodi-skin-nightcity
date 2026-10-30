@@ -60,13 +60,13 @@ def test_spotlight_play_resumes_through_script():
 
 def test_episode_number_stands_beside_the_title():
     """On the still the number got lost on bright pictures: it stands before the title, in the
-    accent colour, and the still stays free."""
+    state colour (the next episode's in cyan, the latent cursor), and the still stays free."""
     card = next(i for i in parse(SKIN / 'Includes_Info.xml').iter('include')
                 if i.get('name') == 'EpisodeCard')
     assert not [c for c in card.iter('control') if c.findtext('font') == 'font_num_small']
     titles = [c for c in card.iter('control') if c.findtext('top') == '192']
     assert [c.findtext('label') for c in titles] == [
-        '[COLOR accent]$VAR[EpisodeCardNum][/COLOR]  $INFO[ListItem.Title]',
+        '[COLOR state_text]$VAR[EpisodeCardNum][/COLOR]  $INFO[ListItem.Title]',
         '$VAR[EpisodeCardNum]  $INFO[ListItem.Title]']
     var = next(v for v in parse(SKIN / 'Variables.xml').iter('variable')
                if v.get('name') == 'EpisodeCardNum')

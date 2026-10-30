@@ -406,7 +406,7 @@
          while it has. The playing track has a progress line under it. -->
     <include name="MusicQueueRow">
         <param name="focused" default="false"/>
-        <param name="number" default="accent"/>
+        <param name="number" default="state_text"/>
         <param name="title" default="text"/>
         <param name="mute" default="text_mute"/>
         <definition>
