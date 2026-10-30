@@ -365,6 +365,7 @@
                 <param name="label" value="$LOCALIZE[31407] »"/>
                 <param name="onclick" value="ActivateWindow(Music,musicdb://albums/,return)"/>
             </include>
+            <include>SpotlightMore</include>
         </control>
     </include>
 

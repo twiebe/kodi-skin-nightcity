@@ -408,6 +408,18 @@
             </control>
         </definition>
     </include>
+    <!-- A dim > after the spotlight buttons, as tall as they are: Right on the last button moves
+         the spotlight on to the next title -->
+    <include name="SpotlightMore">
+        <control type="label">
+            <width>auto</width>
+            <height>54</height>
+            <aligny>center</aligny>
+            <font>font_arrow</font>
+            <textcolor>state</textcolor>
+            <label>&gt;</label>
+        </control>
+    </include>
     <include name="SpotlightPillLook">
         <param name="label"/>
         <param name="textcolor"/>
@@ -517,6 +529,7 @@
                     <param name="label" value="$LOCALIZE[31101] »"/>
                     <param name="visible" value="String.IsEqual(Window(Home).Property(nc.page),movies)"/>
                 </include>
+                <include>SpotlightMore</include>
             </control>
             <include content="ProgressLine">
                 <param name="left" value="384"/>
@@ -604,6 +617,7 @@
                     <param name="button" value="9553"/>
                     <param name="label" value="$LOCALIZE[31102] »"/>
                 </include>
+                <include>SpotlightMore</include>
             </control>
         </control>
     </include>
