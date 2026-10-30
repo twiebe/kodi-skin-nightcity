@@ -92,7 +92,7 @@
                     <orientation>horizontal</orientation>
                     <itemgap>24</itemgap>
                     <include content="RatingEntry">
-                        <param name="label" value="[COLOR accent3]★[/COLOR]"/>
+                        <param name="label" value="[COLOR text_dim]★[/COLOR]"/>
                     </include>
                     <!-- the star closer to the first rating, as in the video ratings line -->
                     <control type="group">

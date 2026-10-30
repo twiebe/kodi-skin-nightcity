@@ -18,13 +18,26 @@
                 <height>80</height>
                 <aspectratio>keep</aspectratio>
             </control>
+            <!-- the heading pink, yellow when it warns: Kodi sets 401, a copy shows it then (a
+                 colour variable would not see this dialog's controls) -->
             <control type="label" id="401">
                 <left>120</left>
                 <top>18</top>
                 <width>500</width>
                 <height>40</height>
                 <font>font_label</font>
-                <textcolor>accent3</textcolor>
+                <textcolor>accent2</textcolor>
+                <visible>!$EXP[NotificationWarns]</visible>
+            </control>
+            <control type="label">
+                <left>120</left>
+                <top>18</top>
+                <width>500</width>
+                <height>40</height>
+                <font>font_label</font>
+                <textcolor>warn</textcolor>
+                <label>$INFO[Control.GetLabel(401)]</label>
+                <visible>$EXP[NotificationWarns]</visible>
             </control>
             <control type="fadelabel" id="402">
                 <left>120</left>

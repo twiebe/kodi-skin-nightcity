@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Mouse pointer: a block cursor. Kodi ids 1-4 are the pointer states. -->
+<!-- Mouse pointer: a block cursor, cyan as every cursor. Kodi ids 1-4 are the pointer states. -->
 <window>
     <controls>
         <control type="image" id="1">
@@ -10,12 +10,12 @@
         <control type="image" id="2">
             <width>20</width>
             <height>32</height>
-            <texture colordiffuse="state_text">ui/white.png</texture>
+            <texture colordiffuse="accent">ui/white.png</texture>
         </control>
         <control type="image" id="3">
             <width>20</width>
             <height>32</height>
-            <texture colordiffuse="accent3">ui/white.png</texture>
+            <texture colordiffuse="accent">ui/white.png</texture>
         </control>
         <control type="image" id="4">
             <width>20</width>

@@ -97,7 +97,7 @@
             <height>34</height>
             <font>font_caps_small</font>
             <textcolor>text_mute</textcolor>
-            <label>[COLOR accent3]★[/COLOR] [COLOR text]$INFO[ListItem.Rating][/COLOR]</label>
+            <label>[COLOR text_dim]★[/COLOR] [COLOR text]$INFO[ListItem.Rating][/COLOR]</label>
             <visible>!String.IsEmpty(ListItem.Rating) + !String.IsEqual(ListItem.Rating,0.0)</visible>
         </control>
         <control type="textbox" id="9022">

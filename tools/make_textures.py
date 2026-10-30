@@ -152,6 +152,25 @@ def chevron(width, height, stroke):
     return image
 
 
+def notification_icon(size, corner, kind):
+    """Kodi's icons of a notification without a picture of its own (DefaultIcon<kind>.png): a
+    cut outline as the check box, inside an i (info), a ! (warning) or an x (error)."""
+    image = cut(size, corner, line=3, corners=('tr',))
+    big = Image.new('L', (size * SCALE, size * SCALE), 0)
+    draw = ImageDraw.Draw(big)
+    s, w = size * SCALE, 6 * SCALE
+    if kind == 'error':
+        for a, b in (((0.32, 0.32), (0.68, 0.68)), ((0.68, 0.32), (0.32, 0.68))):
+            draw.line([(a[0] * s, a[1] * s), (b[0] * s, b[1] * s)], fill=255, width=w)
+    else:
+        bar, dot = ((0.42, 0.72), 0.30) if kind == 'info' else ((0.26, 0.58), 0.72)
+        draw.rectangle((s / 2 - w / 2, bar[0] * s, s / 2 + w / 2, bar[1] * s), fill=255)
+        draw.ellipse((s / 2 - w * 0.6, dot * s - w * 0.6, s / 2 + w * 0.6, dot * s + w * 0.6), fill=255)
+    mark = big.resize((size, size), Image.LANCZOS)
+    image.putalpha(Image.composite(mark, image.getchannel('A'), mark))
+    return image
+
+
 def main():
     cut(64, 14, line=2).save(UI / 'cut.png')
     cut(64, 14).save(UI / 'cut_fill.png')
@@ -176,6 +195,9 @@ def main():
     Image.new('RGBA', (2, 12), (255, 255, 255, 255)).save(UI / 'tick.png')  # chapter mark
     hamburger(64).save(UI / 'qm_menu.png')
     chevron(13, 30, 4).save(UI / 'spot_more.png')
+    # Kodi's names, looked up in media/ itself: the notification tells a warning by its icon
+    for kind in ('Info', 'Warning', 'Error'):
+        notification_icon(80, 16, kind.lower()).save(UI.parent / 'DefaultIcon{}.png'.format(kind))
     # underline of tab entries: clear ends of 8 px, drawn unscaled with border="8,0,8,0", so the
     # line leaves out most of the button's padding and fits the text
     line = Image.new('RGBA', (20, 44), (255, 255, 255, 0))

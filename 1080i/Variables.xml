@@ -224,12 +224,12 @@
         <value condition="MusicPlayer.HasNext">[COLOR state_text]$LOCALIZE[31410][/COLOR]  $INFO[MusicPlayer.offset(1).Title]$INFO[MusicPlayer.offset(1).Artist,  ·  ]</value>
     </variable>
     <variable name="MusicShuffleLabel">
-        <value condition="Playlist.IsRandom">[COLOR accent]●[/COLOR] $LOCALIZE[31411]</value>
+        <value condition="Playlist.IsRandom">[COLOR state_text]●[/COLOR] $LOCALIZE[31411]</value>
         <value>$LOCALIZE[31411]</value>
     </variable>
     <variable name="MusicRepeatLabel">
-        <value condition="Playlist.IsRepeat">[COLOR accent]●[/COLOR] $LOCALIZE[31413]</value>
-        <value condition="Playlist.IsRepeatOne">[COLOR accent]●[/COLOR] $LOCALIZE[31414]</value>
+        <value condition="Playlist.IsRepeat">[COLOR state_text]●[/COLOR] $LOCALIZE[31413]</value>
+        <value condition="Playlist.IsRepeatOne">[COLOR state_text]●[/COLOR] $LOCALIZE[31414]</value>
         <value>$LOCALIZE[31412]</value>
     </variable>
     <!-- Focused row of list 50: dark text on the focus fill while the list has the focus -->
@@ -496,9 +496,9 @@
         <value>$INFO[VideoPlayer.PlotOutline]</value>
     </variable>
     <variable name="PlayerState">
-        <value condition="Player.Rewinding">[COLOR accent]◄◄[/COLOR] $INFO[Player.PlaySpeed]x</value>
-        <value condition="Player.Forwarding">[COLOR accent]▶▶[/COLOR] $INFO[Player.PlaySpeed]x</value>
-        <value condition="Player.Paused">[COLOR accent]❚❚[/COLOR] $LOCALIZE[31051]</value>
+        <value condition="Player.Rewinding">[COLOR state_text]◄◄[/COLOR] $INFO[Player.PlaySpeed]x</value>
+        <value condition="Player.Forwarding">[COLOR state_text]▶▶[/COLOR] $INFO[Player.PlaySpeed]x</value>
+        <value condition="Player.Paused">[COLOR state_text]❚❚[/COLOR] $LOCALIZE[31051]</value>
     </variable>
     <!-- the row below the OSD bar (VideoOSDBookmarks.xml): chapters, or only bookmarks -->
     <variable name="PlayerChaptersLevel">
@@ -555,7 +555,7 @@
     <!-- group number and sub-line of the focused system tile: dark on the fill -->
     <variable name="SystemTileNumColor">
         <value condition="Control.HasFocus(9601)">focus_text</value>
-        <value>state_text</value>
+        <value>accent2</value>
     </variable>
     <variable name="SystemTileSubColor">
         <value condition="Control.HasFocus(9601)">focus_text</value>

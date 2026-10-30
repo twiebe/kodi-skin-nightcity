@@ -110,14 +110,14 @@ def test_card_cut_only_when_focused():
 
 
 def test_unwatched_dog_ear():
-    """Unwatched, never started movies and episodes get an accent dog-ear in the bottom right
+    """Unwatched, never started movies and episodes get a dark blue (state) dog-ear in the bottom right
     corner (like Plex marks unwatched), as big as the frame's cut; that corner has no cut, so one
     ear serves focused and unfocused cards. No ✓ on episode stills."""
     ears = [c for c in _card().iter('control') if c.get('type') == 'image' and
             'dogear' in (c.findtext('texture') or '')]
     assert [c.findtext('texture') for c in ears] == ['ui/dogear.png']
     ear = ears[0]
-    assert ear.find('texture').get('colordiffuse') == 'accent'
+    assert ear.find('texture').get('colordiffuse') == 'state_text'
     assert ear.findtext('right') == '0' and ear.findtext('bottom') == '0'
     frame = cut_length(ROOT / 'media' / 'ui' / 'cut.png')
     assert ear.findtext('width') == ear.findtext('height') == str(frame)

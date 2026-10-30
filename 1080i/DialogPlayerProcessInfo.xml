@@ -25,7 +25,6 @@
                     <param name="keywidth" value="120"/>
                     <param name="height" value="52"/>
                     <param name="font" value="font_small"/>
-                    <param name="keycolor" value="accent3"/>
                     <param name="color" value="text"/>
                 </include>
                 <include content="FactLine">
@@ -35,7 +34,6 @@
                     <param name="keywidth" value="120"/>
                     <param name="height" value="52"/>
                     <param name="font" value="font_small"/>
-                    <param name="keycolor" value="accent3"/>
                     <param name="color" value="text"/>
                 </include>
                 <include content="FactLine">
@@ -45,7 +43,6 @@
                     <param name="keywidth" value="120"/>
                     <param name="height" value="52"/>
                     <param name="font" value="font_small"/>
-                    <param name="keycolor" value="accent3"/>
                     <param name="color" value="text"/>
                 </include>
                 <include content="FactLine">
@@ -55,7 +52,6 @@
                     <param name="keywidth" value="120"/>
                     <param name="height" value="52"/>
                     <param name="font" value="font_small"/>
-                    <param name="keycolor" value="accent3"/>
                     <param name="color" value="text"/>
                 </include>
                 <include content="FactLine">
@@ -65,7 +61,6 @@
                     <param name="keywidth" value="120"/>
                     <param name="height" value="52"/>
                     <param name="font" value="font_small"/>
-                    <param name="keycolor" value="accent3"/>
                     <param name="color" value="text"/>
                 </include>
                 <include content="FactLine">
@@ -75,7 +70,6 @@
                     <param name="keywidth" value="120"/>
                     <param name="height" value="52"/>
                     <param name="font" value="font_small"/>
-                    <param name="keycolor" value="accent3"/>
                     <param name="color" value="text"/>
                 </include>
             </control>
