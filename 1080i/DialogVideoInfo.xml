@@ -424,19 +424,27 @@
                         <include content="SeasonTab">
                             <param name="color" value="accent"/>
                         </include>
-                        <!-- the shown season: the focus line, without the focus the same line in pink -->
-                        <control type="image">
-                            <top>44</top>
-                            <width>180</width>
-                            <height>2</height>
-                            <texture colordiffuse="focus">ui/white.png</texture>
+                        <!-- the shown season: the focus line, without the focus the same line in pink;
+                             as long as the text: the label again in the line font (a list layout
+                             has no auto width for an image) -->
+                        <control type="label">
+                            <width>240</width>
+                            <height>44</height>
+                            <aligny>center</aligny>
+                            <font>font_caps_line</font>
+                            <textcolor>focus</textcolor>
+                            <selectedcolor>focus</selectedcolor>
+                            <label>[UPPERCASE]$VAR[SeasonTabLabel][/UPPERCASE]</label>
                             <visible>Control.HasFocus(5200)</visible>
                         </control>
-                        <control type="image">
-                            <top>44</top>
-                            <width>180</width>
-                            <height>2</height>
-                            <texture colordiffuse="accent2">ui/white.png</texture>
+                        <control type="label">
+                            <width>240</width>
+                            <height>44</height>
+                            <aligny>center</aligny>
+                            <font>font_caps_line</font>
+                            <textcolor>accent2</textcolor>
+                            <selectedcolor>accent2</selectedcolor>
+                            <label>[UPPERCASE]$VAR[SeasonTabLabel][/UPPERCASE]</label>
                             <visible>!Control.HasFocus(5200)</visible>
                         </control>
                     </focusedlayout>

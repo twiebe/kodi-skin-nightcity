@@ -163,9 +163,11 @@ def main():
     fade(256, 4, reverse=True).transpose(Image.Transpose.ROTATE_270).save(UI / 'fade_t.png')
     Image.new('RGBA', (2, 12), (255, 255, 255, 255)).save(UI / 'tick.png')  # chapter mark
     hamburger(64).save(UI / 'qm_menu.png')
-    line = Image.new('RGBA', (16, 44), (255, 255, 255, 0))
-    line.paste((255, 255, 255, 255), (0, 40, 16, 42))
-    line.save(UI / 'tab_line.png')  # focus underline of menu and tab entries
+    # underline of tab entries: clear ends of 8 px, drawn unscaled with border="8,0,8,0", so the
+    # line leaves out most of the button's padding and fits the text
+    line = Image.new('RGBA', (20, 44), (255, 255, 255, 0))
+    line.paste((255, 255, 255, 255), (8, 40, 12, 42))
+    line.save(UI / 'tab_line.png')
     Image.new('RGBA', (4, 16), (255, 255, 255, 255)).save(UI / 'seek_head.png')
     # invisible track of the seek head: Kodi scales a progress control's end texture by
     # control width / track texture width, so the track is as wide as the seek line
