@@ -103,7 +103,8 @@ def test_numbers_count_the_shown_rows(page):
 def test_genre_row_puts_its_number_before_the_tabs():
     """A genre row has tabs where the title would be: the number stands in front of them, the
     tabs start where the title of a row starts after its number. The number sits on the line
-    of the tab labels: same font, top, height and vertical alignment as a tab."""
+    of the tab labels: same top, height and vertical alignment as a tab, and both in the font of
+    the row headings (font_caps_small)."""
     for page, base in (('movies', '94'), ('shows', '95')):
         group = next(g for g in load('Home.xml', FULL).iter('control') if g.get('id') == base + '15')
         tabs = next(c for c in group.iter('control') if c.get('id') == base + '30')
@@ -115,3 +116,6 @@ def test_genre_row_puts_its_number_before_the_tabs():
         assert int(label.findtext('top')) == int(tabs.findtext('top')) + int(tab.findtext('top') or 0)
         for tag in ('height', 'font', 'aligny'):
             assert label.findtext(tag) == tab.findtext(tag), (page, tag)
+        for c in tabs.findall('control'):
+            if c.get('type') == 'togglebutton':
+                assert c.findtext('font') == 'font_caps_small', (page, c.get('id'))
