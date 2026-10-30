@@ -161,7 +161,7 @@
                 <top>8</top>
                 <width>28</width>
                 <height>28</height>
-                <texture colordiffuse="state_text">ui/qm_weather.png</texture>
+                <texture colordiffuse="text">ui/qm_weather.png</texture>
                 <visible>Weather.IsFetched</visible>
             </control>
             <control type="label">
@@ -169,7 +169,7 @@
                 <height>44</height>
                 <aligny>center</aligny>
                 <font>font_num</font>
-                <textcolor>state_text</textcolor>
+                <textcolor>text</textcolor>
                 <label>$INFO[Weather.Temperature]</label>
                 <visible>Weather.IsFetched</visible>
             </control>
@@ -178,7 +178,7 @@
                 <height>44</height>
                 <aligny>center</aligny>
                 <font>font_num</font>
-                <textcolor>state_text</textcolor>
+                <textcolor>text</textcolor>
                 <label>$INFO[System.Time]</label>
             </control>
         </control>
@@ -1470,7 +1470,7 @@
             <width>560</width>
             <height>72</height>
             <font>font_clock</font>
-            <textcolor>state_text</textcolor>
+            <textcolor>text</textcolor>
             <label>$INFO[System.Time]</label>
         </control>
         <control type="label">
