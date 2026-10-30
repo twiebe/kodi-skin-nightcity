@@ -268,14 +268,35 @@ def test_music_osd_buttons_and_queue():
     assert [k.get('id') for k in c['620'].findall('control')] == ['621', '622']
     assert ('', 'PlayerControl(Random)') in actions(c['621'])
     assert ('', 'PlayerControl(Repeat)') in actions(c['622'])
-    # Down: the queue on the next track (the playlist counts from 1, the list from 0)
+    # Down: the queue, the cursor already on the playing track (music_queue_select, onload)
     for group in ('600', '620'):
-        assert ('Control.IsVisible(710)', 'SetFocus(700,$INFO[MusicPlayer.PlaylistPosition],absolute)') in \
-            actions(c[group], 'ondown')
+        assert actions(c[group], 'ondown') == [('Control.IsVisible(701)', '701'), ('Control.IsVisible(700)', '700'),
+                                                ('', 'noop')]
         assert actions(c[group], 'onup') == [('', 'noop')]
-    assert c['700'].findtext('content') == 'playlistmusic://'
-    assert actions(c['700']) == [('', 'NotifyAll(nightcity,music_goto:$INFO[Container(700).CurrentItem])')]
-    assert actions(c['700'], 'onup') == [('', '600')]
+    window = parse(ROOT / '1080i' / 'MusicOSD.xml')
+    assert 'NotifyAll(nightcity,music_queue_select)' in [o.text for o in window.findall('onload')]
+    # one album: lines (701); else cards (700); only the shown list loads
+    one = 'String.IsEmpty(Window(Home).Property(nc.music.queue.album))'
+    assert c['700'].findtext('visible') == one and c['701'].findtext('visible') == '!' + one
+    for list_id in ('700', '701'):
+        assert c[list_id].findtext('content') == 'playlistmusic://'
+        assert actions(c[list_id]) == [
+            ('', 'NotifyAll(nightcity,music_goto:$INFO[Container({}).CurrentItem])'.format(list_id))]
+        assert actions(c[list_id], 'onup') == [('', '600')]
+
+
+def test_music_queue_marks_like_the_episode_list():
+    """No mark of its own (DESIGN.md colours): the cursor's title in the accent colour also while
+    the list has no focus, a progress line under the playing track, as under a started episode."""
+    c = controls(load('MusicOSD.xml'))
+    for list_id in ('700', '701'):
+        for layout in ('itemlayout', 'focusedlayout'):
+            bars = [p for p in c[list_id].find(layout).iter('control') if p.get('type') == 'progress']
+            assert [(b.findtext('info'), b.findtext('visible')) for b in bars] == [('Player.Progress', 'ListItem.IsPlaying')]
+        text = ET.tostring(c[list_id]).decode()
+        assert '▶' not in text and 'accent2' not in text
+    focused = ET.tostring(c['700'].find('focusedlayout')).decode()
+    assert '<textcolor>accent</textcolor>' in focused  # the cursor's title
 
 
 def test_music_osd_hides_like_the_video_osd():
