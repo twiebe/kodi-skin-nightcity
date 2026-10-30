@@ -17,6 +17,7 @@
     <!-- Also here: switching skins opens Home without Startup -->
     <onload condition="!Skin.HasSetting(TMDbHelper.Service)">Skin.SetBool(TMDbHelper.Service)</onload>
     <onload condition="!Skin.HasSetting(TMDbHelper.DirectCallAuto)">Skin.SetBool(TMDbHelper.DirectCallAuto)</onload>
+    <onload condition="!Skin.HasSetting(TMDbHelper.UseLocalWidgetContainer)">Skin.SetBool(TMDbHelper.UseLocalWidgetContainer)</onload>
     <onload>ClearProperty(nc.chain.return,home)</onload>
     <onload>ClearProperty(nc.osd.ret,home)</onload>
     <!-- a page whose menu entry was hidden in the settings -->

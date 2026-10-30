@@ -1,7 +1,7 @@
 """The ratings of the spotlight titles (docs/media-info-af3.md, "Ratings source").
 
 The service points TMDb Helper at the hero while a hero button has focus (or always with
-nc.ratings.spotlight) and keeps what it fetched per title in nc.hero.<container>.*: the hero's
+nc.ratings.spotlight) and keeps what it fetched per title in nc.kept.<container>.*: the hero's
 ratings line stays when focus leaves and when the spotlight comes back to the title. Only The
 Matrix resolves in TMDb Helper in kodi-dev (TMDb 8.2, no keys for the online ratings).
 """
@@ -15,7 +15,7 @@ from test_media_info import MOVIE_RATINGS, _open_info, _shown, _visible_of
 pytestmark = pytest.mark.e2e
 
 WIDGET = 'Window(Home).Property(TMDbHelper.WidgetContainer)'
-KEPT = 'Window(Home).Property(nc.hero.9000.TMDb_Rating)'
+KEPT = 'Window(Home).Property(nc.kept.9000.TMDb_Rating)'
 
 
 def _visible(cid):
@@ -172,8 +172,67 @@ def test_show_hero_keeps_what_tmdb_helper_had(home, no_spotlight_setting):
              timeout=30)
     builtin('SetFocus(9551)')
     wait_for('String.IsEqual({},9001)'.format(WIDGET))
-    wait_for('Integer.IsEqual(Container(9001).ListItem.DBID,Window(Home).Property(nc.hero.9001.dbid))', timeout=10)
+    wait_for('Integer.IsEqual(Container(9001).ListItem.DBID,Window(Home).Property(nc.kept.9001.dbid))', timeout=10)
     builtin('SetFocus(9510)')
     wait_for('String.IsEmpty({})'.format(WIDGET))
-    assert _label('Window(Home).Property(nc.hero.9001.dbtype)') == 'tvshow'
+    assert _label('Window(Home).Property(nc.kept.9001.dbtype)') == 'tvshow'
     builtin('SetFocus(9101)')
+
+
+@pytest.fixture
+def breaking_bad(home):
+    """Breaking Bad's episodes, which TMDb Helper finds by show title, season, episode and air
+    year: kodi-dev's Jellyfin gives them 1970, so they get their real air dates for the test."""
+    shows = rpc('VideoLibrary.GetTVShows', {'filter': {'field': 'title', 'operator': 'is', 'value': 'Breaking Bad'}})
+    if not shows.get('tvshows'):
+        pytest.skip('no Breaking Bad in this Kodi')
+    tvshowid = shows['tvshows'][0]['tvshowid']
+    episodes = rpc('VideoLibrary.GetEpisodes', {'tvshowid': tvshowid,
+                                                'properties': ['season', 'episode', 'firstaired']})['episodes']
+    aired = {1: '2008-01-20', 2: '2008-01-27', 3: '2008-02-10'}
+    for e in episodes:
+        rpc('VideoLibrary.SetEpisodeDetails', {'episodeid': e['episodeid'], 'firstaired': aired[e['episode']]})
+    builtin('Skin.SetBool(nc.ratings.show.tmdb)')
+    yield tvshowid
+    builtin('Skin.Reset(nc.ratings.show.tmdb)')
+    builtin('Dialog.Close(all,true)')
+    for e in episodes:
+        rpc('VideoLibrary.SetEpisodeDetails', {'episodeid': e['episodeid'], 'firstaired': e['firstaired']})
+
+
+EPISODE_KEPT = 'Window(Home).Property(nc.kept.5100.{})'
+
+
+def _episode_line_for(episode):
+    """The head's ratings line shows the kept ratings of EPISODE, the focused one."""
+    wait_for('Integer.IsEqual(Container(5100).ListItem.Episode,{})'.format(episode))
+    wait_for('String.IsEqual({},{}) + !String.IsEmpty({})'.format(
+        EPISODE_KEPT.format('episode'), episode, EPISODE_KEPT.format('TMDb_Rating')), timeout=20)
+    wait_for(_visible_of(9043), timeout=2)
+    return _label(EPISODE_KEPT.format('TMDb_Rating'))
+
+
+def test_episode_ratings_follow_the_focused_episode(breaking_bad):
+    """Moving through the episode list loads the ratings of each episode (TMDb's vote of the
+    episode itself), and an episode the list comes back to shows its ratings at once."""
+    builtin('ClearProperty(nc.info.ready,home)')
+    builtin('NotifyAll(nightcity,next_episode:{})'.format(breaking_bad))
+    wait_for('Window.IsActive(movieinformation)')
+    wait_for('!String.IsEmpty(Window(Home).Property(nc.info.ready))')
+    first = int(_label('Container(5100).ListItem.Episode'))
+    ratings = {first: _episode_line_for(first)}
+    screenshot('ratings-episode-first')
+    builtin('SetFocus(5100)')
+    wait_for('Control.HasFocus(5100)')
+    position = int(_label('Container(5100).CurrentItem'))
+    step, back = ('right', 'left') if position < int(_label('Container(5100).NumItems')) else ('left', 'right')
+    action(step)
+    wait_for('!Integer.IsEqual(Container(5100).ListItem.Episode,{})'.format(first))
+    second = int(_label('Container(5100).ListItem.Episode'))
+    ratings[second] = _episode_line_for(second)
+    screenshot('ratings-episode-second')
+    assert ratings[first] != ratings[second], ratings
+    action(back)
+    wait_for('Integer.IsEqual(Container(5100).ListItem.Episode,{})'.format(first))
+    wait_for(_visible_of(9043), timeout=1)
+    assert _label(EPISODE_KEPT.format('TMDb_Rating')) == ratings[first]

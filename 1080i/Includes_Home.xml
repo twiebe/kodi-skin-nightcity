@@ -441,8 +441,8 @@
             <param name="tech" value="true"/>
             <!-- the ratings the service kept for the title on screen (scripts/nightcity.py hero_tick),
                  complete when they are there -->
-            <param name="tmdb" value="Integer.IsEqual(Container(9000).ListItem.DBID,Window(Home).Property(nc.hero.9000.dbid)) + String.IsEqual(Container(9000).ListItem.DBType,Window(Home).Property(nc.hero.9000.dbtype))"/>
-            <param name="ratingsprefix" value="nc.hero.9000."/>
+            <param name="tmdb" value="Integer.IsEqual(Container(9000).ListItem.DBID,Window(Home).Property(nc.kept.9000.dbid)) + String.IsEqual(Container(9000).ListItem.DBType,Window(Home).Property(nc.kept.9000.dbtype))"/>
+            <param name="ratingsprefix" value="nc.kept.9000."/>
             <param name="ratingswait" value="true"/>
             <param name="page" value="[[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + !String.IsEqual(Skin.String(SpotlightSource),off)] | [String.IsEqual(Window(Home).Property(nc.page),movies) + !String.IsEqual(Skin.String(nc.movies.spotlight),off)]"/>
             <param name="fade" value="true"/>
@@ -534,8 +534,8 @@
             <param name="item" value="Container(9001).ListItem"/>
             <param name="kicker" value="$LOCALIZE[31100]"/>
             <param name="titleid" value="9560"/>
-            <param name="tmdb" value="Integer.IsEqual(Container(9001).ListItem.DBID,Window(Home).Property(nc.hero.9001.dbid)) + String.IsEqual(Container(9001).ListItem.DBType,Window(Home).Property(nc.hero.9001.dbtype))"/>
-            <param name="ratingsprefix" value="nc.hero.9001."/>
+            <param name="tmdb" value="Integer.IsEqual(Container(9001).ListItem.DBID,Window(Home).Property(nc.kept.9001.dbid)) + String.IsEqual(Container(9001).ListItem.DBType,Window(Home).Property(nc.kept.9001.dbtype))"/>
+            <param name="ratingsprefix" value="nc.kept.9001."/>
             <param name="ratingswait" value="true"/>
             <param name="ratingid" value="9561"/>
             <param name="page" value="String.IsEqual(Window(Home).Property(nc.page),shows)"/>

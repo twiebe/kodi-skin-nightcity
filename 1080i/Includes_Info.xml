@@ -194,7 +194,7 @@
         <!-- the sources that do not fit stay out, the last first -->
         <param name="width" default="1000"/>
         <!-- where the ratings are: TMDb Helper's properties, or those the service keeps for a
-             hero (nc.hero.<container>.), which only holds them once all are there -->
+             hero (nc.kept.<container>.), which only holds them once all are there -->
         <param name="prefix" default="TMDbHelper.ListItem."/>
         <param name="wait" default="String.IsEmpty(Window(Home).Property(TMDbHelper.IsUpdatingRatings))"/>
         <definition>
