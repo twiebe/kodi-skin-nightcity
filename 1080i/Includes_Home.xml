@@ -181,15 +181,17 @@
         <include>MainMenu</include>
     </include>
 
-    <!-- Poster, kicker, title or logo, tags, rating and plot of one item (item = info prefix,
+    <!-- Poster, kicker, title or logo, tags, ratings and plot of one item (item = info prefix,
          e.g. Container(9000).ListItem); kicker is the pink line above the title.
+         tmdb: the condition under which TMDb Helper's ListItem properties describe item
+         (RatingsLine); tech: resolution, HDR and audio instead of the genre.
          The fanart of the item lies behind the whole page (FanartBackdrop in Home.xml).
          page: the condition of the Home page it stands on; fade: poster and text fade in one
          after the other when that page comes up (PageFade). -->
     <include name="HeroBody">
         <param name="item"/>
         <param name="kicker"/>
-        <param name="tmdbrating" default="Window(Home).Property(TMDbHelper.ListItem.tmdb_rating)"/>
+        <param name="tmdb" default="false"/>
         <param name="titleid" default="0"/>
         <param name="logoid" default="0"/>
         <param name="metaid" default="0"/>
@@ -198,12 +200,14 @@
         <param name="tech" default="false"/>
         <!-- resolution and HDR of item: the variables are bound to one container -->
         <param name="techlabel" default="$VAR[SpotlightResolution]$VAR[SpotlightHdr, ,]"/>
+        <param name="audiolabel" default="$VAR[SpotlightAudio]"/>
         <param name="kickerid" default="0"/>
         <param name="poster" default="true"/>
         <param name="shift" default="0"/>
         <param name="titlewidth" default="1440"/>
         <param name="titlefont" default="font_hero"/>
         <param name="plotwidth" default="980"/>
+        <param name="ratingswidth" default="1400"/>
         <param name="page" default="true"/>
         <param name="fade" default="false"/>
         <param name="shared" default="false"/>
@@ -290,6 +294,9 @@
                         <param name="label" value="$INFO[$PARAM[item].Duration(mins)] $LOCALIZE[31012]"/>
                         <param name="visible" value="!String.IsEmpty($PARAM[item].Duration(mins))"/>
                     </include>
+                    <include content="EndsAtTags">
+                        <param name="item" value="$PARAM[item]"/>
+                    </include>
                     <include content="Tag">
                         <param name="label" value="$INFO[$PARAM[item].Genre]"/>
                         <param name="visible" value="!$PARAM[tech] + !String.IsEmpty($PARAM[item].Genre)"/>
@@ -300,34 +307,19 @@
                         <param name="visible" value="$PARAM[tech] + !String.IsEmpty($PARAM[item].VideoResolution)"/>
                     </include>
                     <include content="Tag">
-                        <param name="label" value="$INFO[$PARAM[item].AudioCodec]$INFO[$PARAM[item].AudioChannels, ,ch]"/>
+                        <param name="label" value="$PARAM[audiolabel]"/>
                         <param name="color" value="accent"/>
                         <param name="visible" value="$PARAM[tech] + !String.IsEmpty($PARAM[item].AudioCodec)"/>
                     </include>
                 </control>
-                <control type="group" id="$PARAM[ratingid]">
-                    <left>384</left>
-                    <top>318</top>
-                    <visible>!String.IsEmpty($PARAM[item].Title) + [!String.IsEmpty($PARAM[tmdbrating]) | [!String.IsEmpty($PARAM[item].Rating) + !String.IsEqual($PARAM[item].Rating,0.0)]]</visible>
-                    <control type="label">
-                        <width>600</width>
-                        <height>34</height>
-                        <font>font_caps_small</font>
-                        <textcolor>text_mute</textcolor>
-                        <selectedcolor>text_mute</selectedcolor>
-                        <label>[COLOR accent3]★[/COLOR] [COLOR text]$INFO[$PARAM[tmdbrating]][/COLOR]  TMDB</label>
-                        <visible>!String.IsEmpty($PARAM[tmdbrating])</visible>
-                    </control>
-                    <control type="label">
-                        <width>600</width>
-                        <height>34</height>
-                        <font>font_caps_small</font>
-                        <textcolor>text_mute</textcolor>
-                        <selectedcolor>text_mute</selectedcolor>
-                        <label>[COLOR accent3]★[/COLOR] [COLOR text]$INFO[$PARAM[item].Rating][/COLOR]</label>
-                        <visible>String.IsEmpty($PARAM[tmdbrating])</visible>
-                    </control>
-                </control>
+                <include content="RatingsLine">
+                    <param name="id" value="$PARAM[ratingid]"/>
+                    <param name="item" value="$PARAM[item]"/>
+                    <param name="tmdb" value="$PARAM[tmdb]"/>
+                    <param name="left" value="384"/>
+                    <param name="top" value="318"/>
+                    <param name="width" value="$PARAM[ratingswidth]"/>
+                </include>
                 <control type="textbox" id="$PARAM[plotid]">
                     <left>384</left>
                     <top>360</top>
@@ -439,6 +431,7 @@
             <param name="ratingid" value="9030"/>
             <param name="plotid" value="9022"/>
             <param name="tech" value="true"/>
+            <param name="tmdb" value="String.IsEqual(Window(Home).Property(TMDbHelper.WidgetContainer),9000)"/>
             <param name="page" value="[[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + !String.IsEqual(Skin.String(SpotlightSource),off)] | [String.IsEqual(Window(Home).Property(nc.page),movies) + !String.IsEqual(Skin.String(nc.movies.spotlight),off)]"/>
             <param name="fade" value="true"/>
             <param name="shared" value="true"/>
@@ -531,6 +524,7 @@
             <param name="item" value="Container(9001).ListItem"/>
             <param name="kicker" value="$LOCALIZE[31100]"/>
             <param name="titleid" value="9560"/>
+            <param name="tmdb" value="String.IsEqual(Window(Home).Property(TMDbHelper.WidgetContainer),9001)"/>
             <param name="page" value="String.IsEqual(Window(Home).Property(nc.page),shows)"/>
             <param name="fade" value="true"/>
         </include>
