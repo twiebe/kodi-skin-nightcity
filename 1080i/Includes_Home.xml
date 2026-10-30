@@ -1024,7 +1024,10 @@
         <param name="sortby" default=""/>
         <param name="sortorder" default=""/>
         <param name="limit" default=""/>
-        <param name="titlevisible" default="true"/>
+        <!-- header: the include of the heading (NumberedRowHeader with num on the pages of Home,
+             RowNumber for a row with tabs in its top line) -->
+        <param name="header" default="RowHeader"/>
+        <param name="num" default=""/>
         <!-- the loader holds this row's own items, not those of a search before (TMDb rows keep
              them without IsUpdating until the new ones are in) -->
         <param name="fresh" default="true"/>
@@ -1038,11 +1041,11 @@
             <control type="group" id="$PARAM[group]">
                 <height>468</height>
                 <visible>[Integer.IsGreater(Container($PARAM[loader]).NumItems,0) + [$PARAM[fresh]]] | [Container($PARAM[loader]).IsUpdating + !Integer.IsGreater(Container($PARAM[loader]).NumItems,0)]</visible>
-                <include content="RowHeader">
+                <include content="$PARAM[header]">
                     <param name="label" value="$PARAM[label]"/>
+                    <param name="num" value="$PARAM[num]"/>
                     <param name="left" value="64"/>
                     <param name="top" value="6"/>
-                    <param name="visible" value="$PARAM[titlevisible]"/>
                 </include>
                 <control type="label">
                     <left>600</left>
@@ -1178,9 +1181,10 @@
         <param name="prop"/>
         <param name="picklabel"/>
         <param name="pick"/>
+        <param name="left" default="30"/>
         <definition>
             <control type="grouplist" id="$PARAM[base]30">
-                <left>30</left>
+                <left>$PARAM[left]</left>
                 <top>0</top>
                 <width>1500</width>
                 <height>44</height>

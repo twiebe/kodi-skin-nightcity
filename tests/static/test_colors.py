@@ -160,8 +160,9 @@ DIALOG_HEADINGS = [('DialogVideoManager.xml', '2'), ('DialogSlider.xml', '10'), 
 def test_pink_is_order_and_identity():
     """Pink (accent2) names or numbers something and never changes with input (DESIGN.md "What
     the colours say"): the kicker over a title, dialog headings, the settings rail numbers, the
-    system tile numbers, the add-on news heading, the heading of a notification."""
-    assert _uses('accent2') == {'Includes_Base.xml': 1, 'Includes_Settings.xml': 1, 'Includes_Home.xml': 1,
+    system tile numbers, the row numbers on Home, the add-on news heading, the heading of a
+    notification."""
+    assert _uses('accent2') == {'Includes_Base.xml': 3, 'Includes_Settings.xml': 1, 'Includes_Home.xml': 1,
                                 'Variables.xml': 1, 'DialogVideoManager.xml': 1, 'DialogSlider.xml': 1,
                                 'DialogExtendedProgressBar.xml': 1, 'DialogKeyboard.xml': 1,
                                 'DialogSubtitles.xml': 1, 'DialogAddonInfo.xml': 1, 'DialogNotification.xml': 1}
@@ -169,6 +170,8 @@ def test_pink_is_order_and_identity():
     assert _include('Includes_Base.xml', 'Kicker').find('.//textcolor').text == 'accent2'
     rail = _include('Includes_Settings.xml', 'SettingsRailHeading').find('.//label').text
     assert rail.startswith('[COLOR accent2]$PARAM[num][/COLOR]')
+    for name in ('NumberedRowHeader', 'RowNumber'):
+        assert _include('Includes_Base.xml', name).find('.//label').text.startswith('[COLOR accent2]$PARAM[num][/COLOR]')
     tile = {p.get('name'): p.get('default') for p in _include('Includes_Home.xml', 'SystemTile').findall('param')}
     assert tile['numcolor'] == 'accent2'
     for path, cid in DIALOG_HEADINGS:

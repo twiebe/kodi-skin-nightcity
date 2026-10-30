@@ -440,6 +440,44 @@
         </definition>
     </include>
 
+    <!-- Heading of a row of a page of Home: its number in pink in front, like the rail headings
+         of the settings (num: the two digits, RowNumber_* in Includes_Sections.xml) -->
+    <include name="NumberedRowHeader">
+        <param name="label"/>
+        <param name="num"/>
+        <param name="left" default="0"/>
+        <param name="top" default="0"/>
+        <definition>
+            <control type="label">
+                <left>$PARAM[left]</left>
+                <top>$PARAM[top]</top>
+                <width>1200</width>
+                <height>34</height>
+                <font>font_caps_small</font>
+                <textcolor>text_mute</textcolor>
+                <label>[COLOR accent2]$PARAM[num][/COLOR]  [UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Only the number of a row whose top line holds tabs instead of a title (genre rows) -->
+    <include name="RowNumber">
+        <param name="num"/>
+        <param name="left" default="0"/>
+        <param name="top" default="0"/>
+        <definition>
+            <control type="label">
+                <left>$PARAM[left]</left>
+                <top>$PARAM[top]</top>
+                <width>100</width>
+                <height>34</height>
+                <font>font_caps_small</font>
+                <textcolor>text_mute</textcolor>
+                <label>[COLOR accent2]$PARAM[num][/COLOR]</label>
+            </control>
+        </definition>
+    </include>
+
     <!-- Heading of a section of a page, in white: larger than a row's -->
     <include name="SectionHeading">
         <param name="label"/>
