@@ -35,7 +35,7 @@
         </control>
         <include content="PathLine">
             <param name="id" value="9026"/>
-            <param name="path" value="$LOCALIZE[31405] [COLOR accent2]·[/COLOR] $LOCALIZE[31406]"/>
+            <param name="path" value="$LOCALIZE[31405] [COLOR state_text]·[/COLOR] $LOCALIZE[31406]"/>
             <param name="left" value="64"/>
             <param name="top" value="30"/>
             <param name="width" value="1792"/>

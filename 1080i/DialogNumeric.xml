@@ -22,7 +22,7 @@
                 <width>620</width>
                 <height>56</height>
                 <font>font_title</font>
-                <textcolor>accent2</textcolor>
+                <textcolor>state_text</textcolor>
                 <aligny>center</aligny>
                 <label></label>
             </control>

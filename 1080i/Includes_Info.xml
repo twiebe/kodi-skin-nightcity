@@ -145,7 +145,7 @@
     <!-- "Ends at" of a movie or episode with a runtime, as a tag in a row of tags: now plus the
          time left from the resume point (EndTimeResume); for the item that is playing the
          player's own finish time, the stored resume point is stale then and a TMDb Helper item
-         has none (Arctic Fuse 3, 99010ae). Pink: it is state, it moves with the clock.
+         has none (Arctic Fuse 3, 99010ae). It looks like the runtime tag next to it.
          Window level only: inside an item layout Kodi reads Player.FileNameAndPath and
          VideoPlayer.* from the list item, so every item would count as playing. -->
     <include name="EndsAtTags">

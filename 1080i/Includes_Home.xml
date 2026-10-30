@@ -161,7 +161,7 @@
                 <top>8</top>
                 <width>28</width>
                 <height>28</height>
-                <texture colordiffuse="accent2">ui/qm_weather.png</texture>
+                <texture colordiffuse="state_text">ui/qm_weather.png</texture>
                 <visible>Weather.IsFetched</visible>
             </control>
             <control type="label">
@@ -169,7 +169,7 @@
                 <height>44</height>
                 <aligny>center</aligny>
                 <font>font_num</font>
-                <textcolor>accent2</textcolor>
+                <textcolor>state_text</textcolor>
                 <label>$INFO[Weather.Temperature]</label>
                 <visible>Weather.IsFetched</visible>
             </control>
@@ -178,7 +178,7 @@
                 <height>44</height>
                 <aligny>center</aligny>
                 <font>font_num</font>
-                <textcolor>accent2</textcolor>
+                <textcolor>state_text</textcolor>
                 <label>$INFO[System.Time]</label>
             </control>
         </control>
@@ -1033,8 +1033,8 @@
                     <height>34</height>
                     <align>right</align>
                     <font>font_num</font>
-                    <textcolor>accent2</textcolor>
-                    <selectedcolor>accent2</selectedcolor>
+                    <textcolor>state_text</textcolor>
+                    <selectedcolor>state_text</selectedcolor>
                     <label>$INFO[Container($PARAM[id]).CurrentItem]/$INFO[Container($PARAM[id]).NumItems]</label>
                 </control>
                 <control type="list" id="$PARAM[id]">
@@ -1235,7 +1235,7 @@
         <param name="tilewidth"/>
         <param name="textwidth"/>
         <param name="subwidth"/>
-        <param name="numcolor" default="accent2"/>
+        <param name="numcolor" default="state_text"/>
         <param name="color" default="text_dim"/>
         <param name="subcolor" default="text_mute"/>
         <definition>
@@ -1470,7 +1470,7 @@
             <width>560</width>
             <height>72</height>
             <font>font_clock</font>
-            <textcolor>accent2</textcolor>
+            <textcolor>state_text</textcolor>
             <label>$INFO[System.Time]</label>
         </control>
         <control type="label">
@@ -1732,7 +1732,7 @@
                     <align>right</align>
                     <aligny>center</aligny>
                     <font>font_num_small</font>
-                    <textcolor>accent2</textcolor>
+                    <textcolor>state_text</textcolor>
                     <label>$INFO[ListItem.Label2]</label>
                     <visible>![$PARAM[focused] + Control.HasFocus($PARAM[list])]</visible>
                 </control>

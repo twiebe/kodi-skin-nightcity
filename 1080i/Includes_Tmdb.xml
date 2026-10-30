@@ -61,7 +61,7 @@
          (DESIGN.md: focus applies): the list's content follows `property` (Home). While a TMDb
          list loads the choice waits for it (nc.tab.want.*, nc_credits_tab in Timers.xml), so
          never two plugin lists load at once. OK chooses it too and goes down to the list.
-         `active` holds for the chosen tab, underlined in pink without the focus (TabButton). The
+         `active` holds for the chosen tab, underlined in dark blue without the focus (TabButton). The
          focus goes down to the list only when it has items: Kodi takes the focus from the tab
          first, so an empty list would leave the page without focus. A list that is not in yet
          takes the focus once it is (nc.info.enter, nc_info_enter in Timers.xml), unless the
@@ -88,7 +88,7 @@
                 <texturefocus colordiffuse="accent" border="8,0,8,0">ui/tab_line.png</texturefocus>
                 <texturenofocus/>
                 <alttexturefocus colordiffuse="accent" border="8,0,8,0">ui/tab_line.png</alttexturefocus>
-                <alttexturenofocus colordiffuse="accent2" border="8,0,8,0">ui/tab_line.png</alttexturenofocus>
+                <alttexturenofocus colordiffuse="state" border="8,0,8,0">ui/tab_line.png</alttexturenofocus>
                 <usealttexture>$PARAM[active]</usealttexture>
                 <onfocus condition="!$EXP[TmdbBusy]">SetProperty($PARAM[property],$PARAM[value],home)</onfocus>
                 <onfocus condition="!$EXP[TmdbBusy]">ClearProperty(nc.tab.want.id,home)</onfocus>

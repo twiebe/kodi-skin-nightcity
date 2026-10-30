@@ -7,6 +7,8 @@
     <color name="surface_alt">F0292E42</color>
     <color name="border">FF7AA2F7</color>
     <color name="border_dim">407AA2F7</color>
+    <color name="state">FF323D5A</color>
+    <color name="state_text">FF6382C5</color>
     <color name="text">FFC0CAF5</color>
     <color name="text_dim">FFA9B1D6</color>
     <color name="text_mute">FF8089B3</color>

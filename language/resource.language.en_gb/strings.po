@@ -772,7 +772,7 @@ msgid "[COLOR accent]OK[/COLOR] choose   [COLOR accent]Right[/COLOR] option   [C
 msgstr ""
 
 msgctxt "#31261"
-msgid "[COLOR accent2]Up/Down[/COLOR] move   [COLOR accent2]OK[/COLOR] drop"
+msgid "[COLOR state_text]Up/Down[/COLOR] move   [COLOR state_text]OK[/COLOR] drop"
 msgstr ""
 
 msgctxt "#31262"

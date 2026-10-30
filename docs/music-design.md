@@ -92,7 +92,7 @@ Walks top down like the video info page:
   playing track (`music_queue_select` moves both lists with Control.Move). Not focused, that
   latent cursor shows its title in the cyan accent; focused, the normal focus look. The playing
   track has a progress line under it (Player.Progress, the episode progress style), which stays
-  on it when the cursor moves away. No ▶, no pink: pink is state, the bar says where you are.
+  on it when the cursor moves away. No ▶, no state colour: the bar says where you are.
 - One album or mixed: the service checks at playback start and on every queue change (debounced
   `music_queue`, Playlist.GetItems with albumid) whether the whole queue comes from one album and
   sets `nc.music.queue.album` on Home. One album (700 hidden, 701 shown): a text list with track
