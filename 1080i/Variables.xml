@@ -438,6 +438,11 @@
         <value condition="Control.HasFocus(9601)">focus_text</value>
         <value>text_mute</value>
     </variable>
+    <!-- the system page's tile for the OS's own Configuration add-on (CoreELEC or LibreELEC) -->
+    <variable name="ElecSettingsName">
+        <value condition="System.AddonIsEnabled(service.coreelec.settings)">CoreELEC</value>
+        <value>LibreELEC</value>
+    </variable>
     <!-- live TV only counts with a PVR client, like its rail entry -->
     <variable name="SystemTilePvr">
         <value condition="System.HasPVRAddon">, $LOCALIZE[14204]</value>

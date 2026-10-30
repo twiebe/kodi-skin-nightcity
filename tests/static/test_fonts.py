@@ -157,3 +157,34 @@ def test_line_font_sits_on_the_baseline_of_its_text():
     assert top + bottom == sum(cell(text))
     bars = [line['glyf'][name] for name in line.getGlyphOrder()]
     assert bottom <= min(g.yMin for g in bars) and max(g.yMax for g in bars) <= top
+
+
+# text controls of add-on windows that may come without a <font> (service.coreelec.settings:
+# its setting rows are labels, its wizard's choices radiobuttons labelled from Python)
+DEFAULT_FONT_TYPES = ['label', 'fadelabel', 'textbox', 'radiobutton']
+
+
+def test_add_on_text_without_font_gets_one():
+    """Kodi draws no text for a control without <font> (CGUITextLayout without a font): the
+    CoreELEC Configuration's setting rows were blank. Like Estuary and Arctic Fuse 3, Defaults.xml
+    gives these controls font13, which Kodi also falls back to for unknown font names."""
+    root = parse(ROOT / '1080i' / 'Defaults.xml')
+    fonts = {d.get('type'): d.findtext('font') for d in root.iter('default')}
+    for kind in DEFAULT_FONT_TYPES:
+        assert fonts.get(kind) == 'font13', kind
+    assert 'font13' in font_files_by_name()
+
+
+def test_own_text_labels_name_their_font():
+    """The defaults are for add-on windows: every label of the skin names its own font, so the
+    default changes none of them."""
+    import sys
+    sys.path.insert(0, str(ROOT / 'tests' / 'static'))
+    from navigation import load
+    skip = ('Includes', 'Defaults', 'Font', 'Variables', 'Timers')
+    for path in layout_files():
+        if path.name.startswith(skip):
+            continue
+        for el in load(path.name).iter('control'):
+            if el.get('type') in ('label', 'fadelabel', 'textbox'):
+                assert el.findtext('font'), (path.name, el.get('id'), el.findtext('label'))

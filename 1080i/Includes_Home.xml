@@ -1227,7 +1227,75 @@
         <definition/>
     </include>
 
-    <!-- System page: one cut-corner tile per settings group (all five fit). OK opens
+    <!-- CoreELEC's or LibreELEC's Configuration add-on is installed and enabled: the system page shows its tile -->
+    <expression name="ElecSettings">System.AddonIsEnabled(service.coreelec.settings) | System.AddonIsEnabled(service.libreelec.settings)</expression>
+
+    <!-- One tile of the system page (9601) in a slot `width` wide (tilewidth = width - 24,
+         textwidth = width - 70, subwidth = width - 64); `focused` for the focused layout, whose
+         tile fills while the row has the focus (pass the SystemTile*Color variables then). -->
+    <include name="SystemTile">
+        <param name="width"/>
+        <param name="focused"/>
+        <param name="tilewidth"/>
+        <param name="textwidth"/>
+        <param name="subwidth"/>
+        <param name="numcolor" default="accent2"/>
+        <param name="color" default="text_dim"/>
+        <param name="subcolor" default="text_mute"/>
+        <definition>
+            <control type="image">
+                <left>24</left>
+                <top>20</top>
+                <width>$PARAM[tilewidth]</width>
+                <height>170</height>
+                <texture border="16" colordiffuse="border_dim">ui/cut.png</texture>
+                <visible>![$PARAM[focused] + Control.HasFocus(9601)]</visible>
+            </control>
+            <control type="image">
+                <left>24</left>
+                <top>20</top>
+                <width>$PARAM[tilewidth]</width>
+                <height>170</height>
+                <texture border="16" colordiffuse="focus">ui/cut_fill.png</texture>
+                <visible>$PARAM[focused] + Control.HasFocus(9601)</visible>
+            </control>
+            <control type="label">
+                <left>46</left>
+                <top>34</top>
+                <width>$PARAM[textwidth]</width>
+                <height>32</height>
+                <font>font_num</font>
+                <textcolor>$PARAM[numcolor]</textcolor>
+                <selectedcolor>$PARAM[numcolor]</selectedcolor>
+                <label>0$INFO[ListItem.CurrentItem]</label>
+            </control>
+            <control type="label">
+                <left>46</left>
+                <top>68</top>
+                <width>$PARAM[textwidth]</width>
+                <height>72</height>
+                <font>font_caps</font>
+                <wrapmultiline>true</wrapmultiline>
+                <textcolor>$PARAM[color]</textcolor>
+                <selectedcolor>$PARAM[color]</selectedcolor>
+                <label>[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</label>
+            </control>
+            <control type="label">
+                <left>46</left>
+                <top>144</top>
+                <width>$PARAM[subwidth]</width>
+                <height>32</height>
+                <font>font_tiny</font>
+                <textcolor>$PARAM[subcolor]</textcolor>
+                <selectedcolor>$PARAM[subcolor]</selectedcolor>
+                <scroll>$PARAM[focused] + Control.HasFocus(9601)</scroll>
+                <label>$INFO[ListItem.Label2]</label>
+            </control>
+        </definition>
+    </include>
+
+    <!-- System page: one cut-corner tile per settings group (all five fit, six with the OS
+         settings tile). OK opens
          the settings console at the group's first entry (Settings.xml reads nc.settings.group). -->
     <include name="SystemWidgets">
         <control type="group" id="9621">
@@ -1249,97 +1317,50 @@
                 <height>240</height>
                 <orientation>horizontal</orientation>
                 <scrolltime tween="quadratic">200</scrolltime>
-                <itemlayout width="360" height="210">
-                    <control type="image">
-                        <left>24</left>
-                        <top>20</top>
-                        <width>336</width>
-                        <height>170</height>
-                        <texture border="16" colordiffuse="border_dim">ui/cut.png</texture>
-                    </control>
-                    <control type="label">
-                        <left>46</left>
-                        <top>34</top>
-                        <width>290</width>
-                        <height>32</height>
-                        <font>font_num</font>
-                        <textcolor>accent2</textcolor>
-                        <selectedcolor>accent2</selectedcolor>
-                        <label>0$INFO[ListItem.CurrentItem]</label>
-                    </control>
-                    <control type="label">
-                        <left>46</left>
-                        <top>68</top>
-                        <width>290</width>
-                        <height>72</height>
-                        <font>font_caps</font>
-                        <wrapmultiline>true</wrapmultiline>
-                        <textcolor>text_dim</textcolor>
-                        <selectedcolor>text_dim</selectedcolor>
-                        <label>[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</label>
-                    </control>
-                    <control type="label">
-                        <left>46</left>
-                        <top>144</top>
-                        <width>296</width>
-                        <height>32</height>
-                        <font>font_tiny</font>
-                        <textcolor>text_mute</textcolor>
-                        <selectedcolor>text_mute</selectedcolor>
-                        <label>$INFO[ListItem.Label2]</label>
-                    </control>
+                <!-- six tiles with the OS settings tile (the last), else five; both end at the same place -->
+                <itemlayout width="300" height="210" condition="$EXP[ElecSettings]">
+                    <include content="SystemTile">
+                        <param name="width" value="300"/>
+                        <param name="focused" value="false"/>
+                        <param name="tilewidth" value="276"/>
+                        <param name="textwidth" value="230"/>
+                        <param name="subwidth" value="236"/>
+                    </include>
                 </itemlayout>
-                <focusedlayout width="360" height="210">
-                    <control type="image">
-                        <left>24</left>
-                        <top>20</top>
-                        <width>336</width>
-                        <height>170</height>
-                        <texture border="16" colordiffuse="border_dim">ui/cut.png</texture>
-                        <visible>!Control.HasFocus(9601)</visible>
-                    </control>
-                    <control type="image">
-                        <left>24</left>
-                        <top>20</top>
-                        <width>336</width>
-                        <height>170</height>
-                        <texture border="16" colordiffuse="focus">ui/cut_fill.png</texture>
-                        <visible>Control.HasFocus(9601)</visible>
-                    </control>
-                    <control type="label">
-                        <left>46</left>
-                        <top>34</top>
-                        <width>290</width>
-                        <height>32</height>
-                        <font>font_num</font>
-                        <textcolor>$VAR[SystemTileNumColor]</textcolor>
-                        <selectedcolor>$VAR[SystemTileNumColor]</selectedcolor>
-                        <label>0$INFO[ListItem.CurrentItem]</label>
-                    </control>
-                    <control type="label">
-                        <left>46</left>
-                        <top>68</top>
-                        <width>290</width>
-                        <height>72</height>
-                        <font>font_caps</font>
-                        <wrapmultiline>true</wrapmultiline>
-                        <textcolor>$VAR[SystemTileColor]</textcolor>
-                        <selectedcolor>$VAR[SystemTileColor]</selectedcolor>
-                        <label>[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</label>
-                    </control>
-                    <control type="label">
-                        <left>46</left>
-                        <top>144</top>
-                        <width>296</width>
-                        <height>32</height>
-                        <font>font_tiny</font>
-                        <textcolor>$VAR[SystemTileSubColor]</textcolor>
-                        <selectedcolor>$VAR[SystemTileSubColor]</selectedcolor>
-                        <scroll>Control.HasFocus(9601)</scroll>
-                        <label>$INFO[ListItem.Label2]</label>
-                    </control>
+                <itemlayout width="360" height="210">
+                    <include content="SystemTile">
+                        <param name="width" value="360"/>
+                        <param name="focused" value="false"/>
+                        <param name="tilewidth" value="336"/>
+                        <param name="textwidth" value="290"/>
+                        <param name="subwidth" value="296"/>
+                    </include>
+                </itemlayout>
+                <focusedlayout width="300" height="210" condition="$EXP[ElecSettings]">
+                    <include content="SystemTile">
+                        <param name="width" value="300"/>
+                        <param name="focused" value="true"/>
+                        <param name="tilewidth" value="276"/>
+                        <param name="textwidth" value="230"/>
+                        <param name="subwidth" value="236"/>
+                        <param name="numcolor" value="$VAR[SystemTileNumColor]"/>
+                        <param name="color" value="$VAR[SystemTileColor]"/>
+                        <param name="subcolor" value="$VAR[SystemTileSubColor]"/>
+                    </include>
                 </focusedlayout>
-                <!-- no visible conditions: Kodi clicks a static list by position -->
+                <focusedlayout width="360" height="210">
+                    <include content="SystemTile">
+                        <param name="width" value="360"/>
+                        <param name="focused" value="true"/>
+                        <param name="tilewidth" value="336"/>
+                        <param name="textwidth" value="290"/>
+                        <param name="subwidth" value="296"/>
+                        <param name="numcolor" value="$VAR[SystemTileNumColor]"/>
+                        <param name="color" value="$VAR[SystemTileColor]"/>
+                        <param name="subcolor" value="$VAR[SystemTileSubColor]"/>
+                    </include>
+                </focusedlayout>
+                <!-- no visible conditions before the last item: Kodi clicks a static list by position -->
                 <content>
                     <item>
                         <label>$LOCALIZE[31159]</label>
@@ -1370,6 +1391,15 @@
                         <label2>$LOCALIZE[10007], $LOCALIZE[14111]</label2>
                         <onclick>SetProperty(nc.settings.group,5,home)</onclick>
                         <onclick>ActivateWindow(settings)</onclick>
+                    </item>
+                    <!-- CoreELEC's (or LibreELEC's) own Configuration add-on, where installed; last,
+                         so the groups keep their places -->
+                    <item>
+                        <label>$VAR[ElecSettingsName]</label>
+                        <label2>$LOCALIZE[31420]</label2>
+                        <onclick condition="System.AddonIsEnabled(service.coreelec.settings)">RunAddon(service.coreelec.settings)</onclick>
+                        <onclick condition="!System.AddonIsEnabled(service.coreelec.settings)">RunAddon(service.libreelec.settings)</onclick>
+                        <visible>$EXP[ElecSettings]</visible>
                     </item>
                 </content>
             </control>
