@@ -25,7 +25,7 @@
                 <height>40</height>
                 <align>right</align>
                 <font>font_label</font>
-                <textcolor>accent2</textcolor>
+                <textcolor>state_text</textcolor>
             </control>
             <control type="slider" id="11">
                 <left>40</left>

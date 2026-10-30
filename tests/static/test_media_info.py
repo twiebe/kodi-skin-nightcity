@@ -186,11 +186,14 @@ def _ratings(episode):
 
 @pytest.mark.parametrize('episode', [False, True])
 def test_ratings_line_has_every_source_tmdb_helper_knows(episode):
+    """The episode head reads what the service kept for the focused episode
+    (tests/static/test_ratings_source.py)."""
     line = _ratings(episode)
     shown = [label for label, _, _ in _labels(line)]
+    prop = 'Window(Home).Property(nc.kept.5100.{})' if episode else TH
     order = []
     for source in SOURCES:
-        hits = [i for i, label in enumerate(shown) if TH.format(source) in label]
+        hits = [i for i, label in enumerate(shown) if prop.format(source) in label]
         assert hits, source
         order.append(hits[0])
     assert order == sorted(order), 'IMDb, TMDb, Rotten Tomatoes, Metacritic, Trakt, Letterboxd, MDbList'
@@ -198,25 +201,26 @@ def test_ratings_line_has_every_source_tmdb_helper_knows(episode):
 
 @pytest.mark.parametrize('episode, item', HEADS)
 def test_ratings_fall_back_to_kodis_own(episode, item):
+    prop = 'Window(Home).Property(nc.kept.5100.{})' if episode else TH
     line = _ratings(episode)
     for source, name in (('IMDb_Rating', 'imdb'), ('TMDb_Rating', 'themoviedb'), ('TMDb_Rating', 'tmdb')):
         own = _with(line, '$INFO[{}.Rating({})]'.format(item, name))
         assert len(own) == 1
         # only while TMDb Helper has none
-        assert '!String.IsEmpty({})'.format(TH.format(source)) in own[0][1]
+        assert '!String.IsEmpty({})'.format(prop.format(source)) in own[0][1]
     # the plain rating without a source only when no named one shows
     plain = [(label, visible) for label, visible, _ in _labels(line) if '$INFO[{}.Rating]'.format(item) in label]
     assert len(plain) == 1
     for source in SOURCES:
-        assert TH.format(source) in plain[0][1], source
+        assert prop.format(source) in plain[0][1], source
     assert '!String.IsEqual({}.Rating,0.0)'.format(item) in plain[0][1]
 
 
-@pytest.mark.parametrize('episode', [False, True])
-def test_online_ratings_wait_for_tmdb_helper(episode):
+def test_online_ratings_wait_for_tmdb_helper():
     """IMDb, Rotten Tomatoes ... come from a second thread of TMDb Helper: until it is done the
-    properties still hold the ratings of the title before."""
-    line = _ratings(episode)
+    properties still hold the ratings of the title before. (The episode head reads ratings the
+    service kept once TMDb Helper was done.)"""
+    line = _ratings(False)
     for source in SOURCES:
         if source == 'TMDb_Rating':
             continue
@@ -225,41 +229,18 @@ def test_online_ratings_wait_for_tmdb_helper(episode):
                 assert 'String.IsEmpty(Window(Home).Property(TMDbHelper.IsUpdatingRatings))' in visible, source
 
 
-def test_episode_ratings_from_tmdb_helper_only_for_the_dialogs_episode():
-    """TMDb Helper watches the info page's own item, the head follows the episode list: another
-    episode there shows Kodi's ratings, not those of the opened one."""
-    line = _ratings(True)
-    for label, visible, _ in _labels(line):
-        if 'TMDbHelper.ListItem.' in label:
-            assert 'Integer.IsEqual(Container(5100).ListItem.Season,ListItem.Season)' in visible
-            assert 'Integer.IsEqual(Container(5100).ListItem.Episode,ListItem.Episode)' in visible
-
-
 def test_movie_info_page_reads_tmdb_helper():
     """It used to hide the TMDb Helper rating (nc.none): library movies from Jellyfin showed none."""
     assert 'nc.none' not in (SKIN / 'DialogVideoInfo.xml').read_text(encoding='utf-8')
     _with(_ratings(False), TH.format('TMDb_Rating'))
 
 
-def test_home_heroes_read_tmdb_helper_only_for_their_spotlight():
-    """On Home TMDb Helper follows TMDbHelper.WidgetContainer, which a row clears: the hero's
-    ratings come from it only while it watches the hero's spotlight (9000 movies, 9001 shows)."""
-    home = navigation.load('Home.xml')
-    want = re.compile(r'String\.IsEqual\(Window\(Home\)\.Property\(TMDbHelper\.WidgetContainer\),(900[01])\)')
-    seen = set()
-    for label, visible, _ in _labels(home):
-        if 'TMDbHelper.ListItem.' in label:
-            match = want.search(visible)
-            assert match, label
-            seen.add(match.group(1))
-    assert seen == {'9000', '9001'}
-
-
 def test_ratings_line_hides_without_ratings():
-    """test_spotlight.test_rating_slot_hidden_without_data checks 9030 on Home."""
+    """test_spotlight.test_rating_slot_hidden_without_data checks 9030 on Home. The hero reads
+    the ratings the service kept for its title (tests/static/test_ratings_source.py)."""
     visible = _visible(_movie_hero())
     for source in SOURCES:
-        assert TH.format(source) in visible, source
+        assert 'Window(Home).Property(nc.kept.9000.{})'.format(source) in visible, source
     assert 'Container(9000).ListItem.Rating' in visible
 
 
@@ -286,3 +267,17 @@ def test_info_key_names_hdr_and_audio_like_the_osd():
     assert tags['[UPPERCASE]$INFO[VideoPlayer.AudioLanguage,, ]$VAR[PlayerAudio][/UPPERCASE]'] == \
         '!String.IsEmpty(VideoPlayer.AudioCodec)'
     assert not [label for label in tags if 'VideoPlayer.HdrType' in label or 'AudioChannels' in label]
+
+
+@pytest.mark.parametrize('episode, item', HEADS)
+def test_ends_at_looks_like_the_runtime(episode, item):
+    """Not pink: ends at reads with the runtime next to it, in the same colour and style."""
+    head = _head(episode)
+    controls = {label: c for label, _, c in _labels(head)}
+    runtime = next(c for label, c in controls.items() if '$INFO[{}.Duration(mins)] $LOCALIZE[31012]'.format(item) in label)
+    for text in ('$LOCALIZE[31059] $INFO[{}.EndTimeResume]'.format(item), '$LOCALIZE[31059] $INFO[Player.FinishTime]'):
+        ends = next(c for label, c in controls.items() if text in label)
+        for tag in ('textcolor', 'disabledcolor', 'font', 'height', 'textoffsetx'):
+            assert ends.findtext(tag) == runtime.findtext(tag), (text, tag)
+        for tag in ('texturenofocus', 'texturefocus'):
+            assert ends.find(tag).attrib == runtime.find(tag).attrib, (text, tag)

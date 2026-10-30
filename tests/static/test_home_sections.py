@@ -303,7 +303,7 @@ def test_home_navigation_for_any_combination(skin):
 
 # category button -> (label, tab, first control on the right)
 CATEGORIES = {'9005': (31264, 'menu', '500'), '9002': (10000, 'home', '200'), '9003': (342, 'movies', '300'),
-              '9004': (20343, 'shows', '400'), '9006': (14200, 'player', '700')}
+              '9004': (20343, 'shows', '400'), '9007': (31445, 'ratings', '800'), '9006': (14200, 'player', '700')}
 CATEGORY = {'home': '9002', 'movies': '9003', 'shows': '9004'}
 
 
@@ -508,10 +508,10 @@ def test_move_carries_the_slot():
     assert run(slot_button('home', 1), 'onup', state) == '212'
 
 
-def test_grab_turns_the_slot_pink():
+def test_grab_turns_the_slot_dark_blue():
     variables = {v.get('name'): v for v in parse(ROOT / '1080i' / 'Variables.xml').iter('variable')}
     values = [(v.get('condition') or '', v.text) for v in variables['HomePagesFocusColor'].findall('value')]
-    assert values == [('!String.IsEmpty(Window.Property(nc.hp.grab))', 'accent2'), ('', 'focus')]
+    assert values == [('!String.IsEmpty(Window.Property(nc.hp.grab))', 'state_text'), ('', 'focus')]
     button = slot_button('home', 1)
     assert button.find('texturefocus').get('colordiffuse') == '$VAR[HomePagesFocusColor]'
 

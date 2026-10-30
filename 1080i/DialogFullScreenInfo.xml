@@ -18,7 +18,7 @@
                 <height>48</height>
                 <aligny>center</aligny>
                 <font>font_caps_small</font>
-                <textcolor>accent2</textcolor>
+                <textcolor>state_text</textcolor>
                 <label>[UPPERCASE]$VAR[PlayerEpisodeTag][/UPPERCASE]</label>
             </control>
             <control type="label">

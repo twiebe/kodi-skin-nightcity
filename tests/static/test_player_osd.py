@@ -93,7 +93,7 @@ def test_seek_delta_while_stepping():
                                       (None, '$INFO[Player.SeekOffset]')]
     bubble = next(i for i in parse(ROOT / '1080i' / 'Includes_Player.xml').iter('include') if i.get('name') == 'SeekBubble')
     label = next(c for c in bubble.iter('control') if c.get('type') == 'label').findtext('label')
-    assert label.startswith('$VAR[SeekDelta,[COLOR accent2],[/COLOR]  ]')
+    assert label.startswith('$VAR[SeekDelta,[COLOR state_text],[/COLOR]  ]')
     assert 'Player.SeekOffset' not in label
 
 

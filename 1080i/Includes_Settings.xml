@@ -4,7 +4,7 @@
      as deep links. One include per group for the rail and one for its previews, so the rail can
      also show a single group. -->
 <includes>
-    <!-- Group heading in the rail: pink number, caps label. Inside the grouplist it keeps an id:
+    <!-- Group heading in the rail: dark blue number, caps label. Inside the grouplist it keeps an id:
          Kodi moves over it by id, id 0 stops the move. -->
     <include name="SettingsRailHeading">
         <param name="id"/>
@@ -18,7 +18,7 @@
                 <aligny>center</aligny>
                 <font>font_caps_small</font>
                 <textcolor>text_mute</textcolor>
-                <label>[COLOR accent2]$PARAM[num][/COLOR]  [UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                <label>[COLOR state_text]$PARAM[num][/COLOR]  [UPPERCASE]$PARAM[label][/UPPERCASE]</label>
             </control>
         </definition>
     </include>
@@ -621,7 +621,7 @@
                 <textoffsetx>20</textoffsetx>
                 <aligny>center</aligny>
                 <font>font_caps_small</font>
-                <textcolor>accent2</textcolor>
+                <textcolor>state_text</textcolor>
                 <label>$PARAM[label]</label>
             </control>
         </definition>
@@ -640,7 +640,7 @@
         </include>
     </include>
 
-    <!-- A setting row: label left, value right, the focused row a cut fill (pink while grabbed) -->
+    <!-- A setting row: label left, value right, the focused row a cut fill (dark blue while grabbed) -->
     <include name="HomePagesRow">
         <width>1240</width>
         <height>52</height>
@@ -668,6 +668,21 @@
                 <selected>!Skin.HasSetting($PARAM[setting])</selected>
                 <onclick>Skin.ToggleSetting($PARAM[setting])</onclick>
                 <onclick>$PARAM[onclick]</onclick>
+            </control>
+        </definition>
+    </include>
+    <!-- The same for a setting off by default: the skin bool stores on -->
+    <include name="SkinSettingsToggleOptIn">
+        <param name="id"/>
+        <param name="label"/>
+        <param name="setting"/>
+        <definition>
+            <control type="radiobutton" id="$PARAM[id]">
+                <width>1240</width>
+                <include>SettingsToggleLook</include>
+                <label>$PARAM[label]</label>
+                <selected>Skin.HasSetting($PARAM[setting])</selected>
+                <onclick>Skin.ToggleSetting($PARAM[setting])</onclick>
             </control>
         </definition>
     </include>

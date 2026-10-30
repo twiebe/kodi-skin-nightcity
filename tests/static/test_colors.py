@@ -4,7 +4,7 @@ from conftest import ROOT, layout_files, parse
 
 NAMES = {'bg', 'bg_alt', 'petrol', 'surface', 'surface_alt', 'border', 'border_dim', 'text', 'text_dim',
          'text_mute', 'accent', 'accent2', 'accent3', 'focus', 'focus_text', 'glow', 'glitch_a', 'glitch_b',
-         'fanart', 'ok', 'warn', 'error', 'scrim'}
+         'fanart', 'ok', 'warn', 'error', 'scrim', 'state', 'state_text'}
 PALETTES = ['defaults.xml', 'tokyonight.xml', 'catppuccin.xml']
 HEX = re.compile(r'^[0-9A-Fa-f]{8}$')
 COLOR_TAGS = ('textcolor', 'focusedcolor', 'disabledcolor', 'shadowcolor', 'selectedcolor',
@@ -110,3 +110,47 @@ def test_glitch_copies_at_original_strength():
         colors = {c.get('name'): c.text for c in parse(path).iter('color')}
         for name in ('glitch_a', 'glitch_b'):
             assert colors[name][:2] == '88', (path.name, name)
+
+
+def test_state_is_border_dim_made_opaque():
+    """Dark blue for state (the shown tab, the current value, counters): border_dim over the page,
+    opaque, so a thin line looks the same on any background."""
+    for name in PALETTES:
+        p = palette(name)
+        assert p['state'] == over(p['border_dim'], p['bg']), name
+
+
+def test_state_text_is_a_readable_state():
+    """Text in the state colour: the same hue lighter, as state itself is too dark to read. It is
+    border over the page at the least strength from 60 % on that reads at 4.5:1."""
+    for name in PALETTES:
+        p = palette(name)
+        mixes = [over('{:02X}'.format(a) + p['border'][2:], p['bg']) for a in range(0x99, 0x100)]
+        assert p['state_text'] == next(c for c in mixes if contrast(c, p['bg']) >= 4.5), name
+        assert contrast(p['state'], p['bg']) < 3.0, name
+        assert contrast(p['state_text'], p['bg']) >= 4.5, name
+
+
+def test_pink_only_for_titles():
+    """Pink (accent2) is for titles only: the kicker line over the title of a movie or episode
+    (and of every other page with one). State and decoration take the dark blue."""
+    uses = []
+    for path in layout_files():
+        text = re.sub(r'<!--.*?-->', '', path.read_text(encoding='utf-8'), flags=re.S)
+        uses += [path.name for _ in re.finditer('accent2', text)]
+    assert uses == ['Includes_Base.xml']
+    assert 'accent2' not in (ROOT / 'language' / 'resource.language.en_gb' / 'strings.po').read_text(encoding='utf-8')
+    kicker = next(i for i in parse(ROOT / '1080i' / 'Includes_Base.xml').iter('include') if i.get('name') == 'Kicker')
+    assert kicker.find('.//textcolor').text == 'accent2'
+
+
+def counters(path):
+    return [c for c in parse(path).iter('control') if c.get('type') == 'label'
+            and '.CurrentItem]/$INFO[' in (c.findtext('label') or '')]
+
+
+def test_counters_in_state_text():
+    """"3/12" over a row or the episodes of a season: state, readable."""
+    found = [c for path in layout_files() for c in counters(path)]
+    assert len(found) >= 6
+    assert {c.findtext('textcolor') for c in found} == {'state_text'}

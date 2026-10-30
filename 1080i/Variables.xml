@@ -50,10 +50,10 @@
         <value condition="!String.IsEmpty(Container(9001).ListItem.Path)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":"$INFO[Container(9001).ListItem.Path]"}]},"type":"tvshows"}</value>
         <value>videodb://tvshows/titles/?xsp={"type":"tvshows","limit":1}</value>
     </variable>
-    <!-- Skin settings: a grabbed slot is pink; the key hint shows on the rows of the page
+    <!-- Skin settings: a grabbed slot is dark blue; the key hint shows on the rows of the page
          categories (ids 211 to 428) -->
     <variable name="HomePagesFocusColor">
-        <value condition="!String.IsEmpty(Window.Property(nc.hp.grab))">accent2</value>
+        <value condition="!String.IsEmpty(Window.Property(nc.hp.grab))">state_text</value>
         <value>focus</value>
     </variable>
     <variable name="HomePagesHint">
@@ -66,6 +66,17 @@
         <value condition="Control.HasFocus(9006)">$LOCALIZE[31364]</value>
         <value condition="Control.HasFocus(713)">$LOCALIZE[31366]</value>
         <value condition="Control.HasFocus(601)">$LOCALIZE[31269]</value>
+        <value condition="Control.HasFocus(621)">$LOCALIZE[31442]</value>
+        <value condition="Control.HasFocus(622)">$LOCALIZE[31444]</value>
+        <value condition="Control.HasFocus(9007)">$LOCALIZE[31447]</value>
+        <value condition="Control.HasFocus(631)">$LOCALIZE[31460]</value>
+        <value condition="Control.HasFocus(632)">$LOCALIZE[31461]</value>
+        <value condition="Control.HasFocus(633)">$LOCALIZE[31462]</value>
+        <value condition="Control.HasFocus(634)">$LOCALIZE[31463]</value>
+        <value condition="Control.HasFocus(635)">$LOCALIZE[31464]</value>
+        <value condition="Control.HasFocus(636)">$LOCALIZE[31465]</value>
+        <value condition="Control.HasFocus(637)">$LOCALIZE[31466]</value>
+        <value condition="Control.HasFocus(638)">$LOCALIZE[31467]</value>
         <value condition="Control.HasFocus(602)">$LOCALIZE[31340]</value>
         <value condition="Control.HasFocus(9002)">$LOCALIZE[31265]</value>
         <value condition="Control.HasFocus(9003)">$LOCALIZE[31266]</value>
@@ -128,8 +139,8 @@
     </variable>
     <!-- Info page of an album, artist or song (DialogMusicInfo.xml) -->
     <variable name="MusicInfoPath">
-        <value condition="String.IsEqual(ListItem.DBType,artist)">$LOCALIZE[31405] [COLOR accent2]·[/COLOR] $VAR[MusicInfoTitle]</value>
-        <value>$LOCALIZE[31405] [COLOR accent2]·[/COLOR] $INFO[ListItem.Artist] [COLOR accent2]·[/COLOR] $INFO[ListItem.Album]</value>
+        <value condition="String.IsEqual(ListItem.DBType,artist)">$LOCALIZE[31405] [COLOR state_text]·[/COLOR] $VAR[MusicInfoTitle]</value>
+        <value>$LOCALIZE[31405] [COLOR state_text]·[/COLOR] $INFO[ListItem.Artist] [COLOR state_text]·[/COLOR] $INFO[ListItem.Album]</value>
     </variable>
     <variable name="MusicInfoKicker">
         <value condition="String.IsEqual(ListItem.DBType,artist)">$INFO[ListItem.Genre]</value>
@@ -186,7 +197,7 @@
     <!-- What plays in the top line of Home (MusicNowPlaying): the mark dark on the focus fill -->
     <variable name="MusicNowPlayingLabel">
         <value condition="Control.HasFocus(9108)">▶ [UPPERCASE]$INFO[MusicPlayer.Title]$INFO[MusicPlayer.Artist,  ·  ][/UPPERCASE]</value>
-        <value>[COLOR accent2]▶[/COLOR] [UPPERCASE]$INFO[MusicPlayer.Title]$INFO[MusicPlayer.Artist,  ·  ][/UPPERCASE]</value>
+        <value>[COLOR state_text]▶[/COLOR] [UPPERCASE]$INFO[MusicPlayer.Title]$INFO[MusicPlayer.Artist,  ·  ][/UPPERCASE]</value>
     </variable>
     <!-- The music OSD's queue (MusicOSD.xml): the cursor in the accent colour, the focus text
          colour on the focus fill; the artist of a track only where it is not the album's -->
@@ -210,7 +221,7 @@
         <value>$INFO[MusicPlayer.Album]$INFO[MusicPlayer.Year,  ·  ]</value>
     </variable>
     <variable name="MusicNextLine">
-        <value condition="MusicPlayer.HasNext">[COLOR accent2]$LOCALIZE[31410][/COLOR]  $INFO[MusicPlayer.offset(1).Title]$INFO[MusicPlayer.offset(1).Artist,  ·  ]</value>
+        <value condition="MusicPlayer.HasNext">[COLOR state_text]$LOCALIZE[31410][/COLOR]  $INFO[MusicPlayer.offset(1).Title]$INFO[MusicPlayer.offset(1).Artist,  ·  ]</value>
     </variable>
     <variable name="MusicShuffleLabel">
         <value condition="Playlist.IsRandom">[COLOR accent]●[/COLOR] $LOCALIZE[31411]</value>
@@ -224,7 +235,7 @@
     <!-- Focused row of list 50: dark text on the focus fill while the list has the focus -->
     <variable name="MusicRowFocusAccent">
         <value condition="Control.HasFocus(50) | Control.HasFocus(5050)">focus_text</value>
-        <value>accent2</value>
+        <value>state_text</value>
     </variable>
     <variable name="MusicRowFocusText">
         <value condition="Control.HasFocus(50) | Control.HasFocus(5050)">focus_text</value>
@@ -503,8 +514,8 @@
         <value>E$INFO[VideoPlayer.Episode]</value>
     </variable>
     <variable name="PlayerPath">
-        <value condition="!String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.TVShowTitle] [COLOR accent2]·[/COLOR] $VAR[PlayerSeasonNum] $VAR[PlayerEpisodeNum]</value>
-        <value>$LOCALIZE[31030] [COLOR accent2]·[/COLOR] $INFO[VideoPlayer.Title]</value>
+        <value condition="!String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.TVShowTitle] [COLOR state_text]·[/COLOR] $VAR[PlayerSeasonNum] $VAR[PlayerEpisodeNum]</value>
+        <value>$LOCALIZE[31030] [COLOR state_text]·[/COLOR] $INFO[VideoPlayer.Title]</value>
     </variable>
     <variable name="PlayerKicker">
         <value condition="!String.IsEmpty(VideoPlayer.TVShowTitle)">$INFO[VideoPlayer.TVShowTitle] · $VAR[PlayerSeasonNum] $VAR[PlayerEpisodeNum]</value>
@@ -544,7 +555,7 @@
     <!-- group number and sub-line of the focused system tile: dark on the fill -->
     <variable name="SystemTileNumColor">
         <value condition="Control.HasFocus(9601)">focus_text</value>
-        <value>accent2</value>
+        <value>state_text</value>
     </variable>
     <variable name="SystemTileSubColor">
         <value condition="Control.HasFocus(9601)">focus_text</value>
@@ -590,7 +601,7 @@
     </variable>
     <variable name="QuickWeatherIcon">
         <value condition="Control.HasFocus(1210)">focus_text</value>
-        <value>accent2</value>
+        <value>state_text</value>
     </variable>
 
     <!-- Last genre tab: the picked genre when it is none of the three tabs -->
@@ -646,10 +657,10 @@
         <value>$INFO[ListItem.DBID]</value>
     </variable>
     <variable name="InfoPath">
-        <value condition="String.IsEqual(ListItem.DBType,episode)">$LOCALIZE[31031] [COLOR accent2]·[/COLOR] $INFO[ListItem.TVShowTitle] [COLOR accent2]·[/COLOR] $VAR[InfoSeasonNum] $VAR[InfoEpisodeNum]</value>
-        <value condition="String.IsEqual(ListItem.DBType,tvshow)">$LOCALIZE[31031] [COLOR accent2]·[/COLOR] $INFO[ListItem.Title]</value>
-        <value condition="String.IsEqual(ListItem.Property(tmdb_type),person)">$LOCALIZE[31302] [COLOR accent2]·[/COLOR] $INFO[ListItem.Label]</value>
-        <value>$LOCALIZE[31030] [COLOR accent2]·[/COLOR] $INFO[ListItem.Title]</value>
+        <value condition="String.IsEqual(ListItem.DBType,episode)">$LOCALIZE[31031] [COLOR state_text]·[/COLOR] $INFO[ListItem.TVShowTitle] [COLOR state_text]·[/COLOR] $VAR[InfoSeasonNum] $VAR[InfoEpisodeNum]</value>
+        <value condition="String.IsEqual(ListItem.DBType,tvshow)">$LOCALIZE[31031] [COLOR state_text]·[/COLOR] $INFO[ListItem.Title]</value>
+        <value condition="String.IsEqual(ListItem.Property(tmdb_type),person)">$LOCALIZE[31302] [COLOR state_text]·[/COLOR] $INFO[ListItem.Label]</value>
+        <value>$LOCALIZE[31030] [COLOR state_text]·[/COLOR] $INFO[ListItem.Title]</value>
     </variable>
     <!-- S01 / E05 of the episode shown in the head -->
     <variable name="InfoSeasonNum">
