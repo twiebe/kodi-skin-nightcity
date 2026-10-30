@@ -415,6 +415,7 @@
             <onclick>ActivateWindow(visualisation)</onclick>
             <onup>noop</onup>
             <include>HomePageDown</include>
+            <include>QuickMenuFade</include>
         </control>
     </include>
     <!-- A track of the music OSD's queue while it holds one album (MusicOSD.xml 701): number,

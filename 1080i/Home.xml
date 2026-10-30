@@ -179,6 +179,7 @@
             <param name="up" value="9850"/>
             <include>MusicRows</include>
         </include>
+        <include>QuickMenuDim</include>
         <include>HomeTop</include>
         <include>QuickMenuPanel</include>
         <!-- while the script follows an episode's playback and reopens its info page: only the

@@ -3,6 +3,7 @@ Kodi's power menu (S key), the icon next to the clock; Back or the same key clos
 import time
 
 import pytest
+from PIL import Image
 
 from conftest import action, builtin, cond, info, rpc, screenshot, wait_for
 
@@ -237,6 +238,35 @@ def test_weather_tile_on_home_comes_back_to_the_icon(quick):
     wait_for('Window.IsActive(home) + Control.HasFocus(9109) + ' + PANEL)
     action('back')  # where the menu was opened from before
     wait_for(closed_on(9101))
+
+
+def content_brightest(path):
+    """Brightest pixel of the page left of the panel, below the top line (x 40 to 1180, y 120
+    to 1000 of 1920 x 1080): the dimmed spotlight and rows still show, a black layer does not."""
+    img = Image.open(path).convert('L')
+    w, h = img.size
+    box = img.crop((int(w * 40 / 1920), int(h * 120 / 1080), int(w * 1180 / 1920), int(h * 1000 / 1080)))
+    return box.getextrema()[1]
+
+
+def test_page_stays_dimmed_after_the_weather(quick):
+    """Home held, the weather tile, Back: the page under the menu is dimmed as before, not
+    covered. Home comes back with the menu already shown, the dim layer plays no fade in then."""
+    press(hold=1500)
+    wait_for(on_panel(9109))
+    time.sleep(0.5)
+    before = content_brightest(screenshot('quick-dim-before-weather'))
+    action('down')
+    wait_for('Control.HasFocus(1210)')
+    action('select')
+    wait_for('Window.IsActive(weather) | Window.IsActive(servicesettings)')
+    time.sleep(0.5)
+    action('back', delay=1)
+    wait_for(on_panel(9109))
+    time.sleep(1)
+    after = content_brightest(screenshot('quick-dim-after-weather'))
+    assert before > 40
+    assert after > 40, (before, after)
 
 
 def test_tiles_and_rows(quick):

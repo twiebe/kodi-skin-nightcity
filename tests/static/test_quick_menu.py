@@ -205,6 +205,44 @@ def test_menu_on_home_over_the_page():
     assert ids.index('9190') < ids.index('9180')
 
 
+SHOWN = 'Control.HasFocus(9109) | ControlGroup(9180).HasFocus'
+
+
+def test_dim_covers_the_top_line_but_the_icon():
+    """The whole screen dims under the menu, the top line too. The layer lies under the top
+    line, whose entries fade like the page: all but the icon with the focus, which stays clear."""
+    root = load('Home.xml').find('controls')
+    ids = [c.get('id') for c in root.findall('control')]
+    assert ids.index('9188') < ids.index('9190') < ids.index('9100')
+    dim = controls(root)['9188']
+    assert dim.findtext('top') in (None, '0') and dim.findtext('height') == '1080'
+    assert dim.findtext('width') == '1920'
+    assert dim.findtext('visible') == SHOWN
+
+    def fades(el):
+        return [(a.get('start'), a.get('end')) for a in el.findall('animation')
+                if a.text == 'Conditional' and a.get('effect') == 'fade' and SHOWN in a.get('condition')]
+    home = controls(root)
+    entries = [e for e in home['9190'].findall('control') if e.get('id') != '9199']
+    assert len(entries) == 4  # what plays, the weather icon and temperature, the clock
+    for el in entries + [home['9100']]:
+        assert fades(el) == [('100', '45')], (el.get('id'), el.findtext('label'))
+    assert not any(fades(el) for el in home['9199'].iter('control'))
+
+
+def test_dim_does_not_rest_on_a_fade():
+    """Home comes back with the menu shown (Back from the weather): the layer is visible from
+    the start and plays no fade in. Its strength is in its colour, the fades only go to and
+    from it, so it never stays at the full black of bg."""
+    dim = controls(load('Home.xml'))['9188']
+    assert dim.find('texture').get('colordiffuse') == 'dim'
+    for a in dim.findall('animation'):
+        assert {a.get('start'), a.get('end')} == {'0', '100'}, a.attrib
+    for palette in (ROOT / 'colors').glob('*.xml'):
+        colors = {c.get('name'): c.text for c in parse(palette).iter('color')}
+        assert colors['dim'] == '8C' + colors['bg'][2:], palette.name
+
+
 def test_back_closes_the_menu_on_home():
     """Back inside the panel of Home and Back on the icon close the menu: the focus goes to the
     stand-in 9189, which passes it to where it came from. A numeric target, so Kodi counts Back as
