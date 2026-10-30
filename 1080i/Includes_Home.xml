@@ -163,6 +163,7 @@
                 <height>28</height>
                 <texture colordiffuse="text">ui/qm_weather.png</texture>
                 <visible>Weather.IsFetched</visible>
+                <include>QuickMenuFade</include>
             </control>
             <control type="label">
                 <width>auto</width>
@@ -172,6 +173,7 @@
                 <textcolor>text</textcolor>
                 <label>$INFO[Weather.Temperature]</label>
                 <visible>Weather.IsFetched</visible>
+                <include>QuickMenuFade</include>
             </control>
             <control type="label">
                 <width>auto</width>
@@ -180,6 +182,7 @@
                 <font>font_num</font>
                 <textcolor>text</textcolor>
                 <label>$INFO[System.Time]</label>
+                <include>QuickMenuFade</include>
             </control>
         </control>
         <include>MainMenu</include>
@@ -920,6 +923,7 @@
             <onright>9109</onright>
             <onup>noop</onup>
             <include>HomePageDown</include>
+            <include>QuickMenuFade</include>
             <include content="TabGap">
                 <param name="id" value="9111"/>
             </include>
@@ -1449,22 +1453,32 @@
         </control>
     </include>
 
+    <!-- The screen under the quick menu of Home dims as under the dialog: drawn before the top
+         line, whose entries fade alike (QuickMenuFade), all but the icon with the focus, which
+         stays clear. The strength is in the colour (dim), not in the end of a fade: back from a
+         window over Home (the weather tile) the menu is shown from the start and Kodi plays no
+         fade in. -->
+    <include name="QuickMenuDim">
+        <control type="image" id="9188">
+            <width>1920</width>
+            <height>1080</height>
+            <texture colordiffuse="dim">ui/white.png</texture>
+            <visible>Control.HasFocus(9109) | ControlGroup(9180).HasFocus</visible>
+            <animation effect="fade" start="0" end="100" time="200" condition="!Player.HasVideo">Visible</animation>
+            <animation effect="fade" start="100" end="0" time="160" condition="!Player.HasVideo">Hidden</animation>
+        </control>
+    </include>
+    <!-- An entry of the top line dims with the screen while the quick menu shows (QuickMenuDim) -->
+    <include name="QuickMenuFade">
+        <animation effect="fade" start="100" end="45" time="200" condition="Control.HasFocus(9109) | ControlGroup(9180).HasFocus">Conditional</animation>
+    </include>
+
     <!-- The quick menu on Home: shown while the icon next to the clock (9109) or the menu has the
          focus (DESIGN.md: focus applies, OK goes). Down or OK on the icon go in, Up from the
          top and Back come out onto it, Left and Right off the icon hide it. A part of Home, not
          the dialog: a modal dialog would take the focus away from the icon. The page below
-         dims as under the dialog. -->
+         dims as under the dialog (QuickMenuDim). -->
     <include name="QuickMenuPanel">
-        <control type="image">
-            <!-- not the top line: the icon with the focus stays clear -->
-            <top>88</top>
-            <width>1920</width>
-            <height>992</height>
-            <texture colordiffuse="bg">ui/white.png</texture>
-            <visible>Control.HasFocus(9109) | ControlGroup(9180).HasFocus</visible>
-            <animation effect="fade" start="0" end="55" time="200" condition="!Player.HasVideo">Visible</animation>
-            <animation effect="fade" start="55" end="0" time="160" condition="!Player.HasVideo">Hidden</animation>
-        </control>
         <!-- Back in the menu or on the icon closes the menu: the focus comes here, out of sight
              and outside the panel, which hides, and goes on to where the menu was opened from
              (nc.quick.from: every way onto the icon and the power menu's keys set it), else to
