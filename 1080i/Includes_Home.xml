@@ -97,7 +97,6 @@
     <!-- Top line of Home: the menu on the left, the clock on the right. Right of the menu, left
          of the clock, an icon shows the quick menu while it has the focus (QuickMenuPanel). -->
     <include name="HomeTop">
-        <include>MusicNowPlaying</include>
         <control type="grouplist" id="9190">
             <left>64</left>
             <top>22</top>
@@ -110,9 +109,13 @@
             <!-- a grouplist hands its own left and right to its first and last entry -->
             <onleft>9100</onleft>
             <onright>noop</onright>
+            <!-- what plays, while music plays (Includes_Music.xml) -->
+            <include>MusicNowPlaying</include>
             <!-- in a group of its own: the grouplist sets left and right of its entries to their
-                 neighbours, here the weather and the clock, which cannot take the focus -->
-            <control type="group">
+                 neighbours, here the weather and the clock, which cannot take the focus. Its id
+                 is Right of what plays (9108), the grouplist's neighbour: the focus goes to the
+                 icon in it -->
+            <control type="group" id="9199">
                 <width>56</width>
                 <height>44</height>
                 <!-- the icon is the radio texture: a button has no room for an icon -->
@@ -137,6 +140,7 @@
                     <onclick>SetFocus(1210)</onclick>
                     <!-- the last menu entry shown, not the one that had the focus last; right
                          wraps around to home -->
+                    <onleft condition="Player.HasAudio">9108</onleft>
                     <onleft condition="!Skin.HasSetting(nc.menu.hide.search)">9104</onleft>
                     <onleft condition="Skin.HasSetting(nc.menu.hide.search) + !Skin.HasSetting(nc.menu.hide.music) + Library.HasContent(music)">9107</onleft>
                     <onleft condition="Skin.HasSetting(nc.menu.hide.search) + [Skin.HasSetting(nc.menu.hide.music) | !Library.HasContent(music)] + !Skin.HasSetting(nc.menu.hide.shows)">9103</onleft>
@@ -856,6 +860,19 @@
          checks the conditions before it runs the first action, all of them see the old page.
          The hero still fades on each page (SharedPageFade): a source with one title, or two
          pages landing on the same one, bring no new content. -->
+    <!-- Down from the top line (the menu, what plays) into the shown page; a page without
+         spotlight starts with its rows -->
+    <include name="HomePageDown">
+        <ondown condition="String.IsEqual(Window(Home).Property(nc.page),shows) + String.IsEqual(Skin.String(nc.shows.spotlight),off)">9510</ondown>
+        <ondown condition="String.IsEqual(Window(Home).Property(nc.page),shows)">9550</ondown>
+        <ondown condition="String.IsEqual(Window(Home).Property(nc.page),system)">9610</ondown>
+        <ondown condition="String.IsEqual(Window(Home).Property(nc.page),search)">9750</ondown>
+        <ondown condition="String.IsEqual(Window(Home).Property(nc.page),music)">9850</ondown>
+        <ondown condition="String.IsEqual(Window(Home).Property(nc.page),movies) + String.IsEqual(Skin.String(nc.movies.spotlight),off)">9410</ondown>
+        <ondown condition="[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + String.IsEqual(Skin.String(SpotlightSource),off)">9210</ondown>
+        <ondown>9050</ondown>
+    </include>
+
     <include name="MainMenu">
         <control type="grouplist" id="9100">
             <left>-18</left>
@@ -869,17 +886,11 @@
             <onleft>SetProperty(nc.quick.from,$INFO[System.CurrentControlId],home)</onleft>
             <onleft>9109</onleft>
             <onright>SetProperty(nc.quick.from,$INFO[System.CurrentControlId],home)</onright>
+            <!-- what plays comes between the menu and the icon, while music plays -->
+            <onright condition="Player.HasAudio">9108</onright>
             <onright>9109</onright>
             <onup>noop</onup>
-            <!-- a page without spotlight starts with its rows -->
-            <ondown condition="String.IsEqual(Window(Home).Property(nc.page),shows) + String.IsEqual(Skin.String(nc.shows.spotlight),off)">9510</ondown>
-            <ondown condition="String.IsEqual(Window(Home).Property(nc.page),shows)">9550</ondown>
-            <ondown condition="String.IsEqual(Window(Home).Property(nc.page),system)">9610</ondown>
-            <ondown condition="String.IsEqual(Window(Home).Property(nc.page),search)">9750</ondown>
-            <ondown condition="String.IsEqual(Window(Home).Property(nc.page),music)">9850</ondown>
-            <ondown condition="String.IsEqual(Window(Home).Property(nc.page),movies) + String.IsEqual(Skin.String(nc.movies.spotlight),off)">9410</ondown>
-            <ondown condition="[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + String.IsEqual(Skin.String(SpotlightSource),off)">9210</ondown>
-            <ondown>9050</ondown>
+            <include>HomePageDown</include>
             <include content="TabGap">
                 <param name="id" value="9111"/>
             </include>

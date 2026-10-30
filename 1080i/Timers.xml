@@ -232,6 +232,20 @@
         <stop>![!Skin.HasSetting(nc.osd.autohide.off) + Player.HasAudio + !Player.Paused + Window.IsActive(visualisation) + Window.IsModalDialogTopmost(musicosd)] | [[String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_musicosd_hide),7)] | [!String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_musicosd_hide),Skin.String(nc.osd.hide.wait))]]</stop>
         <onstop condition="!Skin.HasSetting(nc.osd.autohide.off) + Player.HasAudio + !Player.Paused + Window.IsActive(visualisation) + Window.IsModalDialogTopmost(musicosd) + [[String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_musicosd_hide),7)] | [!String.IsEmpty(Skin.String(nc.osd.hide.wait)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_musicosd_hide),Skin.String(nc.osd.hide.wait))]]">Dialog.Close(musicosd)</onstop>
     </timer>
+    <!-- What plays in the top line of Home (9108) goes when the music stops. Its way back from
+         the quick menu (nc.quick.from) goes with it. With the focus on it Kodi puts the focus
+         on Home's default control (nc.np.gone), or Home comes back from the player without a
+         focus (no control id): the focus goes to the shown page's own tab (the stand-in 9189
+         without a way back). -->
+    <timer>
+        <name>nc_np_gone</name>
+        <description>Move the focus off what plays when the music stops</description>
+        <start reset="true">Window.IsActive(home) + !Player.HasAudio + [String.IsEqual(Window(Home).Property(nc.quick.from),9108) | !String.IsEmpty(Window(Home).Property(nc.np.gone)) | String.IsEmpty(System.CurrentControlId)]</start>
+        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_np_gone),1) | ![Window.IsActive(home) + !Player.HasAudio + [String.IsEqual(Window(Home).Property(nc.quick.from),9108) | !String.IsEmpty(Window(Home).Property(nc.np.gone)) | String.IsEmpty(System.CurrentControlId)]]</stop>
+        <onstop condition="String.IsEqual(Window(Home).Property(nc.quick.from),9108) + !Player.HasAudio">ClearProperty(nc.quick.from,home)</onstop>
+        <onstop condition="Window.IsActive(home) + [!String.IsEmpty(Window(Home).Property(nc.np.gone)) | String.IsEmpty(System.CurrentControlId)] + !System.HasActiveModalDialog + !Player.HasAudio">SetFocus(9189)</onstop>
+        <onstop>ClearProperty(nc.np.gone,home)</onstop>
+    </timer>
     <!-- The power menu's keys (DialogButtonMenu.xml), a frame later with the power menu gone.
          On Home with nothing modal over it: the quick menu panel of Home (QuickMenuPanel), one
          menu instead of two that behave a little differently. The keys go to the icon next to
