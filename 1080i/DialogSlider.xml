@@ -16,7 +16,7 @@
                 <width>600</width>
                 <height>40</height>
                 <font>font_label</font>
-                <textcolor>accent3</textcolor>
+                <textcolor>accent2</textcolor>
             </control>
             <control type="label" id="12">
                 <left>640</left>

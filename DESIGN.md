@@ -64,15 +64,26 @@ browser.
 
 ## What the colours say
 
-- **Cyan (accent) is the cursor**, active or latent. Focused: the filled focus look. Not
-  focused, a list keeps its cursor by showing that item's title in cyan: the next episode to
-  watch, the playing track in the music queue.
-- **Dark blue (state) is state**: the active tab, a selected value, a counter, the mode that is
-  on, the clock, the · between the parts of a header line. It is border_dim made opaque over the
-  page, so a thin line looks the same on any background; text takes `state_text`, the same hue
-  just light enough to read (4.5:1). It never marks a cursor.
-- **Pink (accent2) is for titles**: the kicker line over the title of a movie or an episode (and
-  of every other page that has one). Nothing else is pink.
+| Colour | Role | Examples |
+|---|---|---|
+| White (`text`, graded `text_dim`/`text_mute`) | content, what you read | titles, plot, values, clock, tags, rating stars and labels |
+| Cyan (`accent`) | the cursor, where you are | focus fill and line, latent cursor (next episode title), Play pill, mouse pointer |
+| Dimmed blue (`state`/`state_text`) | state and hints, quiet | active tab, selected value, counters 3/25, separators, progress background, scroll chevron |
+| Pink (`accent2`) | order and identity: names or numbers something, never changes with input | the kicker line over titles, dialog headings, the numbering in the settings (rail numbers) and on the system page (tile numbers) |
+| Yellow (`accent3`/`warn`) | warnings only | notifications that warn about something |
+
+- Pink never shows state or cursor; that is the dimmed blue. At most one pink element per area.
+- Yellow only for warnings: the heading of a warning or error notification. `accent3` is not
+  used. The skin tells such a notification by Kodi's icon for it (`media/DefaultIconWarning.png`,
+  `DefaultIconError.png`, drawn by `tools/make_textures.py`); every other one has a pink heading.
+- The keys in a hint line (OK open, Back close) are hints: dimmed blue.
+- `state` is border_dim made opaque over the page, so a thin line looks the same on any
+  background; text and small marks take `state_text`, the same hue just light enough to read
+  (4.5:1).
+- Cyan also marks a few things that are where you go or act: the primary button (Play), the
+  search field's outline, the quick menu's icon while the focus is in that menu (Up and Back
+  lead there), slider nibs, the fill of a progress bar and the playing time.
+- The static test `tests/static/test_colors.py` holds the skin to this table.
 - **A progress line says where you are** in something that plays or was watched: under an
   episode or a card, under the playing track of the music queue (live, from Player.Progress).
   It stays on its item when the cursor moves away.

@@ -16,7 +16,7 @@
                 <width>820</width>
                 <height>40</height>
                 <font>font_small</font>
-                <textcolor>accent3</textcolor>
+                <textcolor>state_text</textcolor>
                 <aligny>center</aligny>
                 <label></label>
             </control>
@@ -26,7 +26,7 @@
                 <width>820</width>
                 <height>40</height>
                 <font>font_small</font>
-                <textcolor>accent3</textcolor>
+                <textcolor>state_text</textcolor>
                 <aligny>center</aligny>
                 <label></label>
             </control>

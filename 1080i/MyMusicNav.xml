@@ -186,7 +186,7 @@
                 <radiowidth>32</radiowidth>
                 <radioheight>32</radioheight>
                 <textureradioonfocus colordiffuse="focus_text">ui/check_on.png</textureradioonfocus>
-                <textureradioonnofocus colordiffuse="accent">ui/check_on.png</textureradioonnofocus>
+                <textureradioonnofocus colordiffuse="state_text">ui/check_on.png</textureradioonnofocus>
                 <textureradiooffnofocus colordiffuse="text_mute">ui/check_off.png</textureradiooffnofocus>
                 <textureradioofffocus colordiffuse="focus_text">ui/check_off.png</textureradioofffocus>
             </control>
