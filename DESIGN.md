@@ -61,3 +61,14 @@ Not applied on focus, on purpose:
 Kodi's own windows keep Kodi's way until it is settled how they should behave: the settings
 (Settings, setting categories, skin settings, add-on settings), the file manager and the add-on
 browser.
+
+## What the colours say
+
+- **Cyan (accent) is the cursor**, active or latent. Focused: the filled focus look. Not
+  focused, a list keeps its cursor by showing that item's title in cyan: the next episode to
+  watch, the playing track in the music queue.
+- **Pink (accent2) is state**: the active tab, a selected value, the mode that is on, the clock.
+  It never marks a cursor.
+- **A progress line says where you are** in something that plays or was watched: under an
+  episode or a card, under the playing track of the music queue (live, from Player.Progress).
+  It stays on its item when the cursor moves away.
