@@ -82,8 +82,9 @@ Walks top down like the video info page:
   it plays (`MusicStart`, `now_playing`; it waits for Kodi's busy dialog, which drops windows).
 
 - The player screen: the artist's fanart behind, Kodi's visualisation if one is set, the cover,
-  artist, title, album and year, the next track, a progress line with times, the place in the
-  queue. Kodi's keymap: OK opens the OSD, Up and Down skip tracks, Left and Right step.
+  artist, title, album and year, Kodi's ratings of the song and album (the user's own first;
+  docs/media-info-af3.md, "Ratings in the player"), the next track, a progress line with times,
+  the place in the queue. Kodi's keymap: OK opens the OSD, Up and Down skip tracks, Left and Right step.
 - The OSD: playback buttons left (previous, play/pause, next, stop), shuffle and repeat right
   (a dot marks the mode that is on). While it is open, what plays moves up to make room.
   Down: **Up next**, the play queue; OK plays the chosen track (script `music_goto`). Up from

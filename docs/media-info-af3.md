@@ -251,3 +251,75 @@ does nothing off Home and the episode info page:
    OMDb or MDbList key a user sees no ratings at all until they switch TMDb on.
 8. **A Ratings category instead of the main menu category.** Ten rows do not fit under the
    main menu rows and the look. Cost: one more category on the left.
+
+## Ratings in the player
+
+The block over the seek line (`Includes_Player.xml` `PlayerDetails`: poster, kicker, title,
+badges, plot) had no ratings, for video nor for music, and its plot often scrolled after three
+lines.
+
+### Video
+
+- **Source.** TMDb Helper's player monitor (`monitor/player.py`) looks up what plays on
+  `onAVStarted` and sets `TMDbHelper.Player.*`: the ratings first, then the details
+  (`DBType`, `Title`, `TVShowTitle`, `Season`, `Episode`, `imdb_id`, `Rating`, ...). They need
+  no focus and no widget container, are set once per item and cleared when playback ends; a
+  new item clears and sets them again only once it has started, so for a moment they are the
+  last item's. Arctic Fuse 3 reads them straight (`TMDbHelper.Player.RottenTomatoes_Rating`).
+- **Keeping.** The skin service's `player_tick` (same thread, every 0.25 s while a video
+  plays) keeps them like a hero's: once TMDb Helper's details name what plays
+  (`player_same_title`: an episode by season and episode plus its title or its show's title,
+  a movie by IMDb number, by title without one) and the ratings stayed 0.8 s. Key: the title
+  and `Player.FilenameAndPath`; the line reads `nc.kept.player.*` and shows only while
+  `nc.kept.player.file` is the file that plays. Once kept the service no longer reads TMDb
+  Helper's properties for that item (one condition and two labels per look).
+- **Episodes** keep their own ratings as on the info page: IMDb and Trakt, TMDb from the
+  episode's vote (`Rating`); TMDb Helper's `TMDb_Rating` and `Top250` are the show's.
+- **Settings.** The per-source toggles and "Ratings only from TMDb Helper" apply as on the
+  info pages. The library fallback is Kodi's unnamed `VideoPlayer.Rating` only:
+  `VideoPlayer.Rating(imdb)` is not parsed with its name (`GUIInfoManager.cpp` passes no
+  parameter for `videoplayer`), it returns the default rating, so the named IMDb and TMDb
+  library entries stay off in the player (`RatingsLine` `own`).
+- **Fade.** The line fades in (200 ms) when its ratings arrive while the block is shown, also
+  over the video (`RatingsLine` `fade`); with the block it comes and goes with `PlayerFade`.
+
+### Room
+
+The block starts 48 px higher (`top` 620 to 572; with the OSD 442): badges, the ratings line
+(150), the plot (192) with five whole lines of `font_body` instead of three (192 px, longer
+plots still scroll). The text keeps its size. The plot keeps its place whether ratings are
+there or not, so nothing moves when they arrive. The dark gradient behind starts 100 px higher
+(`DialogSeekBar.xml`, top 340) to stay behind the kicker with the OSD open.
+
+### Music
+
+TMDb Helper has nothing for music (its player monitor returns early for songs). Kodi offers
+the song's `MusicPlayer.Rating` (from tags or scrapers), `MusicPlayer.UserRating` (the user's
+own, 1 to 10, set in Kodi) and the album's `MusicPlayer.Property(Album_Rating)` (only when Kodi
+filled the album properties of the playing item: playing a single song from the library, not
+an album started over JSON-RPC). The music player screen (`MusicVisualisation.xml`) shows them
+under the album line in the same style: the user's as "8 My rating", the song's without a
+name (as the library rating of a video), the album's as "Album".
+
+Jellyfin for Kodi writes 0 for the song and album ratings on every sync (`objects/music.py`
+`obj["Rating"] = 0`), so with it only the user's own rating shows. The Ratings settings do not
+apply to music: there is no TMDb Helper source to prefer, and none of the per-source toggles
+names a music rating.
+
+### Design calls
+
+1. **Keep through the service, not TMDb Helper's properties straight.** They are the last
+   item's for a moment after a new one starts, and they arrive one by one. Cost: the line
+   shows about 1 s after TMDb Helper (0.8 s stability plus the poll), and the service looks
+   while a video plays (four times a second; once kept, one condition and two labels).
+2. **Match by details.** A movie whose TMDb title differs from the library title and has no
+   IMDb number, or an episode whose title and show title both differ from TMDb's (another
+   language), gets no TMDb Helper ratings in the player; the library rating shows with "only
+   TMDb Helper" off.
+3. **Only the unnamed library rating in the player.** Cost: with "only TMDb Helper" off the
+   player shows Kodi's default rating without a source name where the info page shows IMDb or
+   TMDb by name.
+4. **48 px higher, five plot lines.** Cost: the block covers more of the picture while the
+   OSD or the seek line is up, and the gradient darkens 100 px more of it.
+5. **Music ignores the Ratings settings.** Cost: a user who turned all sources off still sees
+   their own music rating.

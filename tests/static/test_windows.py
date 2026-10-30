@@ -255,10 +255,10 @@ def test_addon_browser_rows_match_the_settings_pages():
 
 
 def test_player_plot_shows_whole_lines():
-    """140 px of font_body (38 px lines) showed the top half of a fourth line; three whole lines,
-    the rest scrolls."""
+    """140 px of font_body (38 px lines) showed the top half of a fourth line; five whole lines
+    (test_player_ratings.py), the rest scrolls."""
     root = parse(ROOT / '1080i' / 'Includes_Player.xml')
     details = next(i for i in root.iter('include') if i.get('name') == 'PlayerDetails')
     plot = next(t for t in details.iter('control') if t.get('type') == 'textbox')
-    assert int(plot.findtext('height')) == 116
+    assert int(plot.findtext('height')) == 5 * 38 + 2
     assert plot.findtext('autoscroll') == 'true'
