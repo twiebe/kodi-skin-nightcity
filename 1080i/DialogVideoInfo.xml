@@ -101,12 +101,17 @@
             <include content="HeroBody">
                 <param name="item" value="Container(5100).ListItem"/>
                 <param name="kicker" value="$INFO[ListItem.TVShowTitle] · $LOCALIZE[31131] $INFO[Container(5100).ListItem.Season] · $LOCALIZE[31132] $INFO[Container(5100).ListItem.Episode]"/>
-                <param name="tmdbrating" value="Window(Home).Property(nc.none)"/>
+                <!-- TMDb Helper watches the page's own episode, the head the episode list -->
+                <param name="tmdb" value="Integer.IsEqual(Container(5100).ListItem.Season,ListItem.Season) + Integer.IsEqual(Container(5100).ListItem.Episode,ListItem.Episode)"/>
                 <param name="titleid" value="9020"/>
                 <param name="kickerid" value="9025"/>
                 <param name="poster" value="false"/>
                 <param name="tech" value="true"/>
                 <param name="techlabel" value="$VAR[InfoEpisodeResolution]$VAR[InfoEpisodeHdr, ,]"/>
+                <param name="audiolabel" value="$VAR[InfoEpisodeAudio]"/>
+                <param name="ratingid" value="9043"/>
+                <!-- up to the cast on the right -->
+                <param name="ratingswidth" value="1300"/>
                 <param name="shift" value="-320"/>
                 <param name="titlewidth" value="1250"/>
                 <param name="plotwidth" value="1200"/>
@@ -143,9 +148,16 @@
             <include content="HeroBody">
                 <param name="item" value="ListItem"/>
                 <param name="kicker" value="$INFO[ListItem.Genre]"/>
-                <param name="tmdbrating" value="Window(Home).Property(nc.none)"/>
+                <param name="tmdb" value="true"/>
                 <param name="titleid" value="9030"/>
                 <param name="kickerid" value="9027"/>
+                <!-- the genre is the kicker already -->
+                <param name="tech" value="true"/>
+                <param name="techlabel" value="$VAR[ItemResolution]$VAR[ItemHdr, ,]"/>
+                <param name="audiolabel" value="$VAR[ItemAudio]"/>
+                <param name="ratingid" value="9046"/>
+                <!-- up to the details on the right -->
+                <param name="ratingswidth" value="1000"/>
                 <param name="titlewidth" value="960"/>
                 <param name="titlefont" value="font_title"/>
                 <param name="plotwidth" value="960"/>
