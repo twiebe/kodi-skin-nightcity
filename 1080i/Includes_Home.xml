@@ -408,18 +408,33 @@
             </control>
         </definition>
     </include>
-    <!-- A small dim chevron after the spotlight buttons, centred on them and set apart: Right on the last button moves
-         the spotlight on to the next title -->
+    <!-- Three small chevrons after the spotlight buttons, a step darker each to the right, like
+         a direction hint in a racing game: Right on the last button moves the spotlight on to the
+         next title -->
     <include name="SpotlightMore">
         <control type="group">
-            <width>38</width>
+            <width>53</width>
             <height>54</height>
             <control type="image">
-                <left>24</left>
+                <left>18</left>
                 <top>12</top>
                 <width>13</width>
                 <height>30</height>
-                <texture colordiffuse="state">ui/spot_more.png</texture>
+                <texture colordiffuse="state_text">ui/spot_more.png</texture>
+            </control>
+            <control type="image">
+                <left>29</left>
+                <top>12</top>
+                <width>13</width>
+                <height>30</height>
+                <texture colordiffuse="state_fade">ui/spot_more.png</texture>
+            </control>
+            <control type="image">
+                <left>40</left>
+                <top>12</top>
+                <width>13</width>
+                <height>30</height>
+                <texture colordiffuse="state_faint">ui/spot_more.png</texture>
             </control>
         </control>
     </include>

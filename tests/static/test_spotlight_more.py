@@ -15,15 +15,27 @@ def _include(name):
     return match.group(1)
 
 
-def test_spotlight_more_is_a_dim_arrow_as_tall_as_the_buttons():
-    """A drawn chevron, narrow and smaller than the buttons, centred on them and set apart."""
+def test_spotlight_more_is_three_chevrons_fading_to_the_right():
+    """Three small drawn chevrons close together, like a direction hint in a racing game, each a
+    step darker to the right; centred on the buttons and set apart from them."""
     body = _include('SpotlightMore')
-    assert '<control type="group">' in body and '<control type="image">' in body
-    assert '<texture colordiffuse="state">ui/spot_more.png</texture>' in body
+    images = re.findall(r'<control type="image">(.*?)</control>', body, re.S)
+    assert len(images) == 3
+    colours = [re.search(r'colordiffuse="(\w+)">ui/spot_more.png<', i).group(1) for i in images]
+    assert colours == ['state_text', 'state_fade', 'state_faint']
+    lefts = [int(re.search(r'<left>(\d+)</left>', i).group(1)) for i in images]
+    assert lefts[0] == 18 and lefts[1] - lefts[0] == lefts[2] - lefts[1] == 11
+    for image in images:
+        assert '<top>12</top>' in image and '<height>30</height>' in image
     assert '<height>54</height>' in body  # the group, as tall as the buttons
-    assert '<left>24</left>' in body and '<top>12</top>' in body and '<height>30</height>' in body
-    assert '&gt;' not in body
-    assert (ROOT / 'media' / 'ui' / 'spot_more.png').is_file()
+
+
+def test_chevron_fades_are_state_text_with_less_alpha():
+    for scheme in ('defaults', 'catppuccin', 'tokyonight'):
+        root = ET.parse(ROOT / 'colors' / '{}.xml'.format(scheme)).getroot()
+        colours = {c.get('name'): c.text for c in root.iter('color')}
+        assert colours['state_fade'] == 'A0' + colours['state_text'][2:], scheme
+        assert colours['state_faint'] == '50' + colours['state_text'][2:], scheme
 
 
 def test_spot_more_texture_is_a_narrow_chevron():
