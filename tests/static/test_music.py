@@ -289,13 +289,13 @@ def test_music_osd_buttons_and_queue():
 
 
 def test_music_queue_marks_like_the_episode_list():
-    """No mark of its own (DESIGN.md colours): the cursor's title in the accent colour also while
-    the list has no focus, a progress line under the playing track, as under a started episode."""
+    """No mark of its own (DESIGN.md colours): the cursor, which opens on the playing track, shows
+    its title in the accent colour also while the list has no focus. No progress line: Kodi
+    redraws a list item only while the cursor is on it, so the line stood still elsewhere."""
     c = controls(load('MusicOSD.xml'))
     for list_id in ('700', '701'):
         for layout in ('itemlayout', 'focusedlayout'):
-            bars = [p for p in c[list_id].find(layout).iter('control') if p.get('type') == 'progress']
-            assert [(b.findtext('info'), b.findtext('visible')) for b in bars] == [('Player.Progress', 'ListItem.IsPlaying')]
+            assert not [p for p in c[list_id].find(layout).iter('control') if p.get('type') == 'progress']
         text = ET.tostring(c[list_id]).decode()
         assert '▶' not in text and 'accent2' not in text
     focused = ET.tostring(c['700'].find('focusedlayout')).decode()
