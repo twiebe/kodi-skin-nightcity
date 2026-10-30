@@ -5,7 +5,7 @@ import time
 
 import pytest
 
-from conftest import action, builtin, cond, info, screenshot, wait_for
+from conftest import action, builtin, cond, info, rpc, screenshot, wait_for
 
 pytestmark = pytest.mark.e2e
 
@@ -21,6 +21,8 @@ def music(home):
     builtin('Skin.SetBool(nc.osd.autohide.off)')  # the OSD stays while the test looks at it
     yield
     builtin('Skin.Reset(nc.osd.autohide.off)')
+    # the stop closes the player screen: no album page opening again over the next test
+    builtin('ClearProperty(nc.music.back,home)')
     if holds('Player.HasAudio'):
         builtin('PlayerControl(Stop)')
         wait_for('!Player.HasAudio')
@@ -36,7 +38,6 @@ def test_music_page_tab_and_buttons(music):
     open_page()
     action('down')
     wait_for('ControlGroup(9850).HasFocus()')  # the buttons (the one focused last)
-    assert not holds('Control.IsVisible(9851)')  # nothing plays, so no Now playing
     action('down')
     wait_for('Control.HasFocus(9801)')
     action('up', 'up')
@@ -76,6 +77,12 @@ def test_a_track_plays_the_album_from_there(music):
     wait_for('Player.HasAudio')
     wait_for('Integer.IsEqual(MusicPlayer.PlaylistPosition,2)')
     assert not holds('Window.IsActive(musicinformation)')
+    # Back: the album page again, the music plays on
+    time.sleep(1)
+    action('back')
+    wait_for('Window.IsActive(musicinformation)')
+    assert info('ListItem.DBType')['ListItem.DBType'] == 'album'
+    assert holds('Player.HasAudio')
 
 
 def test_osd_queue_plays_the_chosen_track(music):
@@ -91,15 +98,109 @@ def test_osd_queue_plays_the_chosen_track(music):
     action('osd')
     wait_for('Window.IsActive(musicosd)')
     wait_for('Control.HasFocus(602)')
-    action('down')
-    wait_for('Control.HasFocus(700)')
-    assert info('Container(700).CurrentItem')['Container(700).CurrentItem'] == '2'  # up next
+    # one album: the text list, its latent cursor on the playing track (nightcity.py music_queue)
+    wait_for('!String.IsEmpty(Window(Home).Property(nc.music.queue.album))')
+    wait_for('Control.IsVisible(701) + !Control.IsVisible(700)')
+    wait_for('Integer.IsEqual(Container(701).CurrentItem,1)')
     screenshot('e2e-music-osd')
-    action('right', 'select')
-    wait_for('Integer.IsEqual(MusicPlayer.PlaylistPosition,3)')
-    wait_for('Control.HasFocus(700)')  # a busy dialog may come up while the track loads
-    action('up')
+    action('down')
+    wait_for('Control.HasFocus(701)')
+    assert info('Container(701).CurrentItem')['Container(701).CurrentItem'] == '1'  # what plays
+    action('down', 'select')
+    wait_for('Integer.IsEqual(MusicPlayer.PlaylistPosition,2)')
+    wait_for('Control.HasFocus(701)')  # a busy dialog may come up while the track loads
+    action('up', 'up')  # the list goes up to its first track, then to the buttons
     wait_for('ControlGroup(600).HasFocus()')
     action('back')
     wait_for('!Window.IsActive(musicosd)')
     assert holds('Window.IsActive(visualisation)')
+
+
+def mixed_artist():
+    """An artist whose songs come from more than one album, or None."""
+    songs = rpc('AudioLibrary.GetSongs', {'properties': ['albumid', 'artistid']})['songs']
+    albums = {}
+    for song in songs:
+        for artist in song['artistid']:
+            albums.setdefault(artist, set()).add(song['albumid'])
+    return next((artist for artist, ids in sorted(albums.items()) if len(ids) > 1), None)
+
+
+def test_osd_queue_of_several_albums_shows_covers(music):
+    artist = mixed_artist()
+    if artist is None:
+        pytest.skip('no artist with songs on more than one album')
+    builtin('NotifyAll(nightcity,music_play:artist:{}:1)'.format(artist))
+    wait_for('Window.IsActive(visualisation)', timeout=15)
+    wait_for('Player.HasAudio + Integer.IsGreater(Playlist.Length(music),1)')
+    time.sleep(1)
+    action('osd')
+    wait_for('Window.IsActive(musicosd)')
+    wait_for('Control.IsVisible(700) + !Control.IsVisible(701)')
+    assert holds('String.IsEmpty(Window(Home).Property(nc.music.queue.album))')
+    wait_for('Integer.IsEqual(Container(700).CurrentItem,1)')  # the cursor on what plays
+    screenshot('e2e-music-osd-mixed')
+    action('down')
+    wait_for('Control.HasFocus(700)')
+    action('back')
+    wait_for('!Window.IsActive(musicosd)')
+
+
+def test_spotlight_play_goes_to_now_playing_and_back(music):
+    open_page()
+    builtin('SetFocus(9852)')
+    wait_for('Control.HasFocus(9852)')
+    action('select')
+    wait_for('Window.IsActive(visualisation)')
+    wait_for('Player.HasAudio')
+    time.sleep(1)
+    action('back')
+    wait_for('Window.IsActive(home)')
+    wait_for('Control.HasFocus(9852)')  # where it was started, the music plays on
+    assert holds('Player.HasAudio')
+    assert not holds('Window.IsActive(musicinformation)')
+
+
+def test_library_play_goes_to_now_playing_and_back(music):
+    album = rpc('AudioLibrary.GetAlbums', {'limits': {'end': 1}})['albums'][0]['albumid']
+    builtin('ActivateWindow(Music,musicdb://albums/{}/,return)'.format(album))
+    wait_for('Window.IsActive(music) + Integer.IsGreater(Container.NumItems,0)')
+    action('down')  # past ..
+    wait_for('String.IsEqual(ListItem.DBType,song)')
+    action('select')
+    wait_for('Window.IsActive(visualisation)', timeout=15)  # nightcity.py now_playing
+    time.sleep(1)
+    action('back')
+    wait_for('Window.IsActive(music)')
+    assert holds('Player.HasAudio')
+    builtin('ReplaceWindow(Home)')
+    wait_for('Window.IsActive(home)')
+
+
+def test_now_playing_in_the_top_line(music):
+    """Right from the menu, OK opens the player screen, Back comes back to it; when the music
+    stops the focus goes to the shown page's tab."""
+    open_page()
+    builtin('SetFocus(9852)')
+    action('select')
+    wait_for('Window.IsActive(visualisation) + Player.HasAudio')
+    time.sleep(1)
+    action('back')
+    wait_for('Window.IsActive(home)')
+    builtin('SetFocus(9104)')  # the last tab: search
+    wait_for('Control.HasFocus(9104)')
+    action('right')
+    wait_for('Control.HasFocus(9108)')
+    screenshot('e2e-music-np-topline')
+    action('right')
+    wait_for('Control.HasFocus(9109)')  # the quick menu icon
+    action('left')
+    wait_for('Control.HasFocus(9108)')
+    action('select')
+    wait_for('Window.IsActive(visualisation)')
+    time.sleep(1)
+    action('back')
+    wait_for('Window.IsActive(home) + Control.HasFocus(9108)')
+    builtin('PlayerControl(Stop)')
+    wait_for('!Player.HasAudio')
+    wait_for('Control.HasFocus(9104)')  # gone with the music: the shown page's own tab

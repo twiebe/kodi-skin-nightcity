@@ -4,6 +4,8 @@
      track. OK opens the OSD (MusicOSD.xml, Kodi's keymap); while it is open the block moves up
      to make room for its buttons and the queue row. -->
 <window>
+    <!-- music started on an album or artist page: Back goes to that page again -->
+    <onunload>NotifyAll(nightcity,music_back)</onunload>
     <animation effect="fade" time="200">WindowOpen</animation>
     <animation effect="fade" time="200">WindowClose</animation>
     <controls>

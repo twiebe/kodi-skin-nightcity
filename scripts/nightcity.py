@@ -1354,16 +1354,151 @@ def music_info_path(kind, dbid):
 
 def music_play(kind, dbid, position='1'):
     """Play an album (an artist: all its songs) from the track at POSITION of the info page's
-    list and show the player screen. Kodi's play button (8) only plays from the first track."""
+    list and show the player screen. Kodi's play button (8) only plays from the first track.
+    Started on an album or artist page, Back on the player screen opens that page again
+    (music_back); started elsewhere (the Music page) it lands where Kodi was."""
     import xbmc
     item = music_queue_item(kind, dbid)
     if item is None:
         return
+    home = _home()
+    if xbmc.getCondVisibility('Window.IsActive(musicinformation)'):
+        home.setProperty(MUSIC_BACK, '{}:{}'.format(kind, dbid))
+    else:
+        home.clearProperty(MUSIC_BACK)
     xbmc.executebuiltin('Dialog.Close(musicinformation,true)')
     _rpc('Playlist.Clear', playlistid=0)
     _rpc('Playlist.Add', playlistid=0, item=item)
     _rpc('Player.Open', item={'playlistid': 0, 'position': music_start_position(position)})
     xbmc.executebuiltin('ActivateWindow(visualisation)')
+
+
+MUSIC_BACK = 'nc.music.back'  # the album or artist page music was started on: kind:dbid
+MUSIC_START = 3.0  # s from a cleared music queue to the playback that counts as started anew
+
+
+class MusicStart:
+    """Tells a new music playback from the next track of the queue: Kodi fills the music queue
+    anew before it plays something new (the library, Kodi's own play buttons, music_play): it
+    clears it (no notice when it was empty) and adds from position 0. Not before the next
+    track."""
+
+    def __init__(self):
+        self.cleared = None
+
+    def notice(self, method, data, now):
+        """True when METHOD (a Kodi notification with DATA, a dict) starts music anew."""
+        if data.get('playlistid') == 0 and (method == 'Playlist.OnClear' or (
+                method == 'Playlist.OnAdd' and data.get('position') == 0)):
+            self.cleared = now
+            return False
+        if method == 'Player.OnPlay' and (data.get('player') or {}).get('playerid') == 0:
+            started = self.cleared is not None and now - self.cleared <= MUSIC_START
+            self.cleared = None
+            return started
+        return False
+
+
+def now_playing():
+    """Show the player screen for music that just started (the library, Kodi's play button on a
+    song page). Started from the library, Back on it goes back there (Kodi's window before)."""
+    import xbmc
+    # Kodi tells of the playback before the player has it
+    if not _wait('Player.HasAudio', 5.0) or xbmc.getCondVisibility(
+            'Window.IsActive(visualisation) | Player.HasVideo'):
+        return
+    if xbmc.getCondVisibility('Window.IsActive(musicinformation)'):
+        xbmc.executebuiltin('Dialog.Close(musicinformation,true)')
+    _home().clearProperty(MUSIC_BACK)
+    # Kodi ignores the window while its busy dialog is up (a stream starting)
+    _wait('!Window.IsActive(busydialog) + !Window.IsActive(busydialognocancel)', 10.0)
+    xbmc.executebuiltin('ActivateWindow(visualisation)')
+
+
+class Debounce:
+    """Runs ACTION once a burst of changes is over (DELAY s without a new one): Kodi tells of
+    every item it adds to a queue on its own."""
+
+    def __init__(self, action, delay=0.5):
+        self.action, self.delay, self.count = action, delay, 0
+
+    def changed(self):
+        import threading
+        self.count += 1
+        timer = threading.Timer(self.delay, self._fire, args=(self.count,))
+        timer.daemon = True
+        timer.start()
+
+    def _fire(self, count):
+        if count == self.count:
+            self.action()
+
+
+MUSIC_QUEUE_ALBUM = 'nc.music.queue.album'  # set while the music queue holds one album
+MUSIC_QUEUE_LISTS = ('700', '701')  # the music OSD's queue: cards, lines
+
+
+def queue_one_album(items):
+    """True when the queue ITEMS (Playlist.GetItems with albumid) all come from one album."""
+    albums = {item.get('albumid') for item in items}
+    return len(albums) == 1 and bool(albums.pop())
+
+
+def music_queue():
+    """Note whether the music queue holds one album (MUSIC_QUEUE_ALBUM): the OSD shows its
+    tracks as lines then, else cards with covers. On every change of the queue (the service)."""
+    try:
+        items = _rpc('Playlist.GetItems', playlistid=0, properties=['albumid']).get('items') or []
+    except RuntimeError:
+        items = []
+    home = _home()
+    if queue_one_album(items):
+        home.setProperty(MUSIC_QUEUE_ALBUM, '1')
+    else:
+        home.clearProperty(MUSIC_QUEUE_ALBUM)
+
+
+def queue_move(playing, current):
+    """The Control.Move step that takes a list from item CURRENT (from 1) to the PLAYING
+    position (from 0), or 0."""
+    try:
+        return int(playing) + 1 - int(current)
+    except (TypeError, ValueError):
+        return 0
+
+
+def music_queue_select():
+    """The music OSD opened (MusicOSD.xml onload): put the queue's cursor on the playing track,
+    without the focus (the buttons keep it), once the shown list is in."""
+    import xbmc
+    music_queue()
+    if not _wait('Integer.IsGreater(Container(700).NumItems,0) | Integer.IsGreater(Container(701).NumItems,0)', 3.0):
+        return
+    try:
+        playing = _rpc('Player.GetProperties', playerid=0, properties=['position'])['position']
+    except (RuntimeError, KeyError):
+        return
+    for list_id in MUSIC_QUEUE_LISTS:
+        current = xbmc.getInfoLabel('Container({}).CurrentItem'.format(list_id))
+        step = queue_move(playing, current) if current else 0
+        if step:
+            xbmc.executebuiltin('Control.Move({},{})'.format(list_id, step))
+
+
+def music_back():
+    """The player screen closed (MusicVisualisation.xml onunload): when its music was started on
+    an album or artist page, open that page again over the window below."""
+    home = _home()
+    point = home.getProperty(MUSIC_BACK)
+    home.clearProperty(MUSIC_BACK)
+    kind, _, dbid = point.partition(':')
+    if music_info_path(kind, dbid) is None:
+        return
+    if not _wait('!Window.IsActive(visualisation) + [Window.IsActive(home) | Window.IsActive(music)]'
+                 ' + !System.HasActiveModalDialog', 3.0):
+        _log('music_back: no way back to the {} page {}'.format(kind, dbid))
+        return
+    music_info(kind, dbid)
 
 
 def music_goto(position):
@@ -1404,7 +1539,9 @@ COMMANDS = {'next_episode': next_episode, 'startup': startup, 'genres': genres, 
             'search_init': search_init, 'search_clear': search_clear, 'search_forget': search_forget, 'colours': colours,
             'streams_watch': streams_watch, 'section_pick': section_pick,
             'home': home, 'home_keymap': home_keymap, 'osd_hide': osd_hide,
-            'music_play': music_play, 'music_goto': music_goto, 'music_info': music_info}
+            'music_play': music_play, 'music_goto': music_goto, 'music_info': music_info,
+            'music_back': music_back, 'now_playing': now_playing, 'music_queue': music_queue,
+            'music_queue_select': music_queue_select}
 
 
 # --- the skin service -------------------------------------------------------------------------
@@ -1453,10 +1590,24 @@ def service(*first):
     command to run before (startup)."""
     import xbmc
 
+    music_start = MusicStart()
+    queue_watch = Debounce(lambda: run_command('music_queue', []))
+
     class Listener(xbmc.Monitor):
         def onNotification(self, sender, method, data):
             if sender == 'xbmc' and method == 'System.OnQuit':
                 QUIT.set()
+            if sender == 'xbmc' and method in ('Playlist.OnClear', 'Playlist.OnAdd', 'Playlist.OnRemove',
+                                               'Player.OnPlay'):
+                import time
+                try:
+                    details = json.loads(data) or {}
+                except ValueError:
+                    details = {}
+                if isinstance(details, dict) and music_start.notice(method, details, time.time()):
+                    run_command('now_playing', [])
+                if isinstance(details, dict) and (method == 'Player.OnPlay' or details.get('playlistid') == 0):
+                    queue_watch.changed()
             message = parse_message(sender, method)
             if message:
                 run_command(*message)

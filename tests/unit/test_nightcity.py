@@ -1356,10 +1356,16 @@ def test_music_info_path(kind, dbid, path):
     assert nightcity.music_info_path(kind, dbid) == path
 
 
-def test_music_play_queues_the_album_from_the_track(monkeypatch):
-    fake = FakeXbmc(set(), {})
+@pytest.mark.parametrize('on_page, back', [(True, 'album:5'), (False, None)])
+def test_music_play_queues_the_album_from_the_track(monkeypatch, on_page, back):
+    """Started on the album page, Back on the player screen opens that page again; started on
+    Home, it forgets an older way back."""
+    fake = FakeXbmc({'Window.IsActive(musicinformation)'} if on_page else set(), {})
+    home = FakeHome()
+    home.props['nc.music.back'] = 'artist:9'
     calls = []
     monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    monkeypatch.setattr(nightcity, '_home', lambda: home)
     monkeypatch.setattr(nightcity, '_rpc', lambda method, **params: calls.append((method, params)))
     monkeypatch.setattr(nightcity, '_wait', lambda condition, timeout=5.0: True)
     nightcity.COMMANDS['music_play']('album', '5', '3')
@@ -1367,6 +1373,59 @@ def test_music_play_queues_the_album_from_the_track(monkeypatch):
                      ('Playlist.Add', {'playlistid': 0, 'item': {'albumid': 5}}),
                      ('Player.Open', {'item': {'playlistid': 0, 'position': 2}})]
     assert fake.builtins == ['Dialog.Close(musicinformation,true)', 'ActivateWindow(visualisation)']
+    assert home.props.get('nc.music.back') == back
+
+
+def test_music_start_tells_new_music_from_the_next_track():
+    """Kodi clears the music queue before it plays something new, not before the next track."""
+    start = nightcity.MusicStart()
+    music = {'item': {'type': 'song'}, 'player': {'playerid': 0}}
+    assert not start.notice('Player.OnPlay', music, 10.0)  # the next track
+    assert not start.notice('Playlist.OnClear', {'playlistid': 0}, 20.0)
+    assert start.notice('Player.OnPlay', music, 21.0)  # new music
+    assert not start.notice('Player.OnPlay', music, 22.0)  # its next track
+    start.notice('Playlist.OnClear', {'playlistid': 0}, 30.0)
+    assert not start.notice('Player.OnPlay', music, 30.0 + nightcity.MUSIC_START + 1)  # too late
+    start.notice('Playlist.OnClear', {'playlistid': 1}, 40.0)  # the video queue
+    assert not start.notice('Player.OnPlay', music, 40.5)
+    start.notice('Playlist.OnClear', {'playlistid': 0}, 50.0)
+    assert not start.notice('Player.OnPlay', {'item': {'type': 'movie'}, 'player': {'playerid': 1}}, 50.5)
+    # an empty queue filled anew: no clear notice, the first item lands at 0
+    start.notice('Playlist.OnAdd', {'playlistid': 0, 'position': 0}, 60.0)
+    assert start.notice('Player.OnPlay', music, 60.5)
+    start.notice('Playlist.OnAdd', {'playlistid': 0, 'position': 7}, 70.0)  # queued at the end
+    assert not start.notice('Player.OnPlay', music, 70.5)
+
+
+@pytest.mark.parametrize('true, opens', [
+    ({'Player.HasAudio'}, True),
+    ({'Player.HasAudio', 'Window.IsActive(visualisation) | Player.HasVideo'}, False),
+    (set(), False),
+])
+def test_now_playing_opens_the_player_screen(monkeypatch, true, opens):
+    fake = FakeXbmc(true, {})
+    home = FakeHome()
+    home.props['nc.music.back'] = 'album:5'
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    monkeypatch.setattr(nightcity, '_home', lambda: home)
+    monkeypatch.setattr(nightcity, '_wait', lambda condition, timeout=5.0: condition in true)
+    nightcity.COMMANDS['now_playing']()
+    assert fake.builtins == (['ActivateWindow(visualisation)'] if opens else [])
+    # music from elsewhere: Back on the player screen goes to Kodi's window before
+    assert ('nc.music.back' not in home.props) == opens
+
+
+@pytest.mark.parametrize('point, reopens', [('album:5', True), ('artist:2', True), ('', False), ('song:3', False)])
+def test_music_back_opens_the_page_again(monkeypatch, point, reopens):
+    home = FakeHome()
+    home.props['nc.music.back'] = point
+    opened = []
+    monkeypatch.setattr(nightcity, '_home', lambda: home)
+    monkeypatch.setattr(nightcity, '_wait', lambda condition, timeout=5.0: True)
+    monkeypatch.setattr(nightcity, 'music_info', lambda kind, dbid: opened.append((kind, dbid)))
+    nightcity.COMMANDS['music_back']()
+    assert opened == ([tuple(point.split(':'))] if reopens else [])
+    assert 'nc.music.back' not in home.props  # once
 
 
 def test_music_play_ignores_what_is_no_library_item(monkeypatch):
@@ -1416,3 +1475,42 @@ def test_music_info_opens_the_album_with_its_art(monkeypatch):
     assert (item.path, item.folder, item.art) == ('musicdb://albums/5/', True,
                                                   {'thumb': 'c.jpg', 'artist.fanart': 'f.jpg'})
     assert fake.builtins == ['Dialog.Close(musicinformation,true)']
+
+
+@pytest.mark.parametrize('items, one', [
+    ([{'albumid': 3}, {'albumid': 3}], True),
+    ([{'albumid': 3}], True),
+    ([{'albumid': 3}, {'albumid': 4}], False),
+    ([], False),
+    ([{'albumid': 0}, {'albumid': 0}], False),  # not from the library
+    ([{'id': 1}], False),
+])
+def test_queue_one_album(items, one):
+    assert nightcity.queue_one_album(items) is one
+
+
+@pytest.mark.parametrize('playing, current, step', [(0, '1', 0), (4, '1', 4), (2, '5', -2), (3, '', 0), (None, '1', 0)])
+def test_queue_move_puts_the_cursor_on_the_playing_track(playing, current, step):
+    """Kodi's position counts from 0, the list's CurrentItem from 1."""
+    assert nightcity.queue_move(playing, current) == step
+
+
+def test_music_queue_notes_one_album(monkeypatch):
+    home = FakeHome()
+    monkeypatch.setattr(nightcity, '_home', lambda: home)
+    monkeypatch.setattr(nightcity, '_rpc', lambda method, **params: {'items': [{'albumid': 7}, {'albumid': 7}]})
+    nightcity.COMMANDS['music_queue']()
+    assert home.props['nc.music.queue.album'] == '1'
+    monkeypatch.setattr(nightcity, '_rpc', lambda method, **params: {'items': [{'albumid': 7}, {'albumid': 8}]})
+    nightcity.COMMANDS['music_queue']()
+    assert 'nc.music.queue.album' not in home.props
+
+
+def test_debounce_runs_once_after_a_burst():
+    import time
+    runs = []
+    debounce = nightcity.Debounce(lambda: runs.append(1), delay=0.05)
+    for _ in range(5):
+        debounce.changed()
+    time.sleep(0.2)
+    assert runs == [1]
