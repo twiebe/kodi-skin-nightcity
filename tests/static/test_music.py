@@ -44,11 +44,10 @@ def test_music_tab_only_with_music_and_hideable():
 
 
 def test_music_tab_switches_the_page_on_focus():
-    """DESIGN.md: focus applies. A switch to the page moves the album spotlight on by one."""
+    """DESIGN.md: focus applies. The album spotlight stays where it is
+    (tests/static/test_spotlight_switch.py)."""
     tab = controls(load('Home.xml'))['9107']
-    assert ('', 'SetProperty(nc.page,music,home)') in actions(tab, 'onfocus')
-    assert ('!' + PAGE, 'Control.Move(9002,1)') in actions(tab, 'onfocus')
-    assert ('!' + PAGE, 'Skin.TimerStart(nc_spot_hold)') in actions(tab, 'onfocus')
+    assert actions(tab, 'onfocus') == [('', 'SetProperty(nc.page,music,home)')]
 
 
 def test_settings_switch_for_the_music_entry():
