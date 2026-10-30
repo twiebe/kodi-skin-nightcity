@@ -219,8 +219,8 @@
          first for subtitles, and a last row that opens Kodi's full settings (`settings`). The panel grows upwards
          with the number of rows (nc.<prefix>.rows, at most 8). Left and right focus the
          neighbouring buttons of the row (`left`, `right`). -->
-    <!-- What plays, above the seek line: poster, kicker, title, badges and a short plot. The text
-         column ends left of the OSD track panels. -->
+    <!-- What plays, above the seek line: poster, kicker, title, badges, ratings and the plot.
+         The text column ends left of the OSD track panels. -->
     <!-- Card of the chapter row (VideoOSDBookmarks.xml): the chapter's thumbnail, its name and
          start time; a bookmark shows its own thumbnail. For Jellyfin streams the server's
          chapter images, else Kodi's own (ChapterThumb). -->
@@ -265,7 +265,7 @@
         <definition>
             <control type="group">
                 <left>64</left>
-                <top>620</top>
+                <top>572</top>
                 <!-- the chapter and cast rows of the OSD take this space -->
                 <visible>!Window.IsActive(videobookmarks) + !Window.IsActive(1141)</visible>
                 <animation effect="slide" end="0,-130" time="150" condition="Window.IsVisible(videoosd)">Conditional</animation>
@@ -307,13 +307,27 @@
                         <param name="visible" value="!String.IsEmpty(VideoPlayer.AudioCodec)"/>
                     </include>
                 </control>
+                <!-- ratings of what plays, as the skin service kept them (nc.kept.player.*); the
+                     plot keeps its place without them -->
+                <include content="RatingsLine">
+                    <param name="id" value="421"/>
+                    <param name="item" value="VideoPlayer"/>
+                    <param name="tmdb" value="String.IsEqual(Player.FilenameAndPath,Window(Home).Property(nc.kept.player.file))"/>
+                    <param name="left" value="232"/>
+                    <param name="top" value="150"/>
+                    <param name="width" value="900"/>
+                    <param name="prefix" value="nc.kept.player."/>
+                    <param name="wait" value="true"/>
+                    <param name="own" value="false"/>
+                    <param name="fade" value="true"/>
+                </include>
                 <control type="textbox" id="420">
                     <left>232</left>
-                    <top>156</top>
+                    <top>192</top>
                     <width>900</width>
-                    <!-- three whole lines of font_body (38 px each): a taller box shows
-                         the top of a fourth line; longer plots scroll -->
-                    <height>116</height>
+                    <!-- five whole lines of font_body (38 px each): a taller box shows
+                         the top of a sixth line; longer plots scroll -->
+                    <height>192</height>
                     <font>font_body</font>
                     <textcolor>text_dim</textcolor>
                     <autoscroll delay="6000" time="2000" repeat="8000">true</autoscroll>

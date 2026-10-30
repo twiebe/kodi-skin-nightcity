@@ -78,9 +78,43 @@
                 <textcolor>text_dim</textcolor>
                 <label>$VAR[MusicPlayerLine]</label>
             </control>
-            <control type="label">
+            <!-- Kodi's own ratings (TMDb Helper has none for music, so the Ratings settings do
+                 not apply): the user's rating of the song, the song's, its album's. Jellyfin for
+                 Kodi syncs none, the user's own rating from Kodi stays. -->
+            <control type="group" id="9029">
                 <left>320</left>
                 <top>210</top>
+                <visible>!String.IsEmpty(MusicPlayer.UserRating) | !String.IsEmpty(MusicPlayer.Rating) | !String.IsEmpty(MusicPlayer.Property(Album_Rating))</visible>
+                <animation effect="fade" start="0" end="100" time="200">Visible</animation>
+                <control type="grouplist">
+                    <width>1400</width>
+                    <height>34</height>
+                    <orientation>horizontal</orientation>
+                    <itemgap>24</itemgap>
+                    <include content="RatingEntry">
+                        <param name="label" value="[COLOR accent3]★[/COLOR]"/>
+                    </include>
+                    <!-- the star closer to the first rating, as in the video ratings line -->
+                    <control type="group">
+                        <width>-36</width>
+                    </control>
+                    <include content="RatingEntry">
+                        <param name="label" value="[COLOR text]$INFO[MusicPlayer.UserRating][/COLOR] $LOCALIZE[38018]"/>
+                        <param name="visible" value="!String.IsEmpty(MusicPlayer.UserRating)"/>
+                    </include>
+                    <include content="RatingEntry">
+                        <param name="label" value="[COLOR text]$INFO[MusicPlayer.Rating][/COLOR]"/>
+                        <param name="visible" value="!String.IsEmpty(MusicPlayer.Rating)"/>
+                    </include>
+                    <include content="RatingEntry">
+                        <param name="label" value="[COLOR text]$INFO[MusicPlayer.Property(Album_Rating)][/COLOR] $LOCALIZE[558]"/>
+                        <param name="visible" value="!String.IsEmpty(MusicPlayer.Property(Album_Rating))"/>
+                    </include>
+                </control>
+            </control>
+            <control type="label">
+                <left>320</left>
+                <top>256</top>
                 <width>800</width>
                 <height>36</height>
                 <font>font_caps_small</font>

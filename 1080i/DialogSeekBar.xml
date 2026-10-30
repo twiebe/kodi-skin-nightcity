@@ -19,9 +19,9 @@
     <controls>
         <control type="image">
             <left>0</left>
-            <top>440</top>
+            <top>340</top>
             <width>1920</width>
-            <height>640</height>
+            <height>740</height>
             <texture colordiffuse="scrim">ui/fade_b.png</texture>
         </control>
         <include>PlayerDetails</include>

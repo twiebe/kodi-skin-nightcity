@@ -1736,3 +1736,78 @@ def test_hero_tick_keeps_the_ratings_of_the_focused_episode(monkeypatch):
     nightcity.hero_tick(kept, 2.0)
     nightcity.hero_tick(kept, 3.0)
     assert 'nc.kept.5100.episode' not in home.props
+
+
+PLAYING_MATRIX = {'VideoPlayer.Title': 'The Matrix', 'VideoPlayer.IMDBNumber': 'tt0133093',
+                  'Player.FilenameAndPath': 'http://jellyfin:8096/Videos/1/stream.mkv'}
+TH_PLAYER_MATRIX = {'TMDbHelper.Player.DBType': 'movie', 'TMDbHelper.Player.Title': 'The Matrix',
+                    'TMDbHelper.Player.imdb_id': 'tt0133093', 'TMDbHelper.Player.TMDb_Rating': '8.2',
+                    'TMDbHelper.Player.Top250': '16'}
+
+
+@pytest.mark.parametrize('props, playing, same', [
+    ({'DBType': 'movie', 'imdb_id': 'tt1', 'Title': 'A'}, {'IMDBNumber': 'tt1', 'Title': 'B'}, True),
+    ({'DBType': 'movie', 'imdb_id': 'tt1', 'Title': 'A'}, {'IMDBNumber': 'tt2', 'Title': 'A'}, False),
+    ({'DBType': 'movie', 'imdb_id': '', 'Title': 'A'}, {'IMDBNumber': 'tt2', 'Title': 'A'}, True),
+    ({'DBType': 'movie', 'imdb_id': 'tt1', 'Title': 'A'}, {'IMDBNumber': '', 'Title': 'B'}, False),
+    ({'DBType': 'episode', 'Season': '1', 'Episode': '2', 'Title': 'Cat', 'TVShowTitle': 'BB'},
+     {'Season': '1', 'Episode': '2', 'Title': 'Katze', 'TVShowTitle': 'BB'}, True),
+    ({'DBType': 'episode', 'Season': '1', 'Episode': '1', 'Title': 'Pilot', 'TVShowTitle': 'BB'},
+     {'Season': '1', 'Episode': '2', 'Title': 'Cat', 'TVShowTitle': 'BB'}, False),
+    ({'DBType': 'episode', 'Season': '1', 'Episode': '2', 'Title': 'Cat', 'TVShowTitle': 'BB'},
+     {'Season': '1', 'Episode': '2', 'Title': 'Other', 'TVShowTitle': 'Other show'}, False),
+    ({'DBType': '', 'Title': 'A'}, {'Title': 'A'}, False),
+])
+def test_player_same_title(props, playing, same):
+    """TMDb Helper's player properties belong to what plays: it sets them again for a new item
+    only once that has started, before that they are the last item's."""
+    assert nightcity.player_same_title(props, playing) is same
+
+
+def _player_env(monkeypatch, labels, props):
+    return _hero_env(monkeypatch, {nightcity.PLAYER_VIDEO}, labels, props)
+
+
+def test_player_tick_keeps_the_ratings_of_what_plays(monkeypatch):
+    home = _player_env(monkeypatch, PLAYING_MATRIX, TH_PLAYER_MATRIX)
+    kept = nightcity.HeroRatings()
+    nightcity.player_tick(kept, 0.0)
+    assert 'nc.kept.player.file' not in home.props
+    nightcity.player_tick(kept, nightcity.HERO_STABLE)
+    assert home.props['nc.kept.player.TMDb_Rating'] == '8.2'
+    assert home.props['nc.kept.player.Top250'] == '16'
+    assert home.props['nc.kept.player.file'] == PLAYING_MATRIX['Player.FilenameAndPath']
+    # the next item starts: TMDb Helper still has the last one's until it has started
+    sys_xbmc = __import__('sys').modules['xbmc']
+    sys_xbmc.labels.update({'VideoPlayer.Title': 'Other', 'VideoPlayer.IMDBNumber': 'tt9',
+                            'Player.FilenameAndPath': 'http://jellyfin:8096/Videos/2/stream.mkv'})
+    nightcity.player_tick(kept, 2.0)
+    nightcity.player_tick(kept, 3.0)
+    assert 'nc.kept.player.file' not in home.props
+    assert 'nc.kept.player.TMDb_Rating' not in home.props
+    # back to the first: its ratings at once
+    sys_xbmc.labels.update(PLAYING_MATRIX)
+    for key in list(TH_PLAYER_MATRIX):
+        home.props.pop(key)
+    nightcity.player_tick(kept, 4.0)
+    assert home.props['nc.kept.player.TMDb_Rating'] == '8.2'
+    # playback ends
+    sys_xbmc.true.discard(nightcity.PLAYER_VIDEO)
+    nightcity.player_tick(kept, 5.0)
+    assert not [k for k in home.props if k.startswith('nc.kept.player.')]
+
+
+def test_player_tick_keeps_an_episodes_own_ratings(monkeypatch):
+    """For an episode the episode's own: TMDb from its vote; Top250 and the rest are the show's."""
+    playing = {'VideoPlayer.Title': 'Pilot', 'VideoPlayer.TVShowTitle': 'Breaking Bad', 'VideoPlayer.Season': '1',
+               'VideoPlayer.Episode': '1', 'Player.FilenameAndPath': 'http://jellyfin:8096/Videos/3/stream.mkv'}
+    props = {'TMDbHelper.Player.DBType': 'episode', 'TMDbHelper.Player.Title': 'Pilot',
+             'TMDbHelper.Player.TVShowTitle': 'Breaking Bad', 'TMDbHelper.Player.Season': '1',
+             'TMDbHelper.Player.Episode': '1', 'TMDbHelper.Player.TMDb_Rating': '8.9',
+             'TMDbHelper.Player.Top250': '1', 'TMDbHelper.Player.Rating': '8.44'}
+    home = _player_env(monkeypatch, playing, props)
+    kept = nightcity.HeroRatings()
+    nightcity.player_tick(kept, 0.0)
+    nightcity.player_tick(kept, nightcity.HERO_STABLE)
+    assert home.props['nc.kept.player.TMDb_Rating'] == '8.4'
+    assert 'nc.kept.player.Top250' not in home.props
