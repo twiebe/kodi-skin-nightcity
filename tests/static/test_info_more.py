@@ -8,7 +8,9 @@ from conftest import ROOT, parse
 SKIN = ROOT / '1080i'
 MORE = '!String.IsEmpty(Window(Home).Property(nc.info.more))'
 LOAD = '!String.IsEmpty(Window(Home).Property(nc.info.more.load))'
-IDLE = '!Container(5500).IsUpdating + !Container(5300).IsUpdating'
+# the recommendations count only while shown: hidden (a show or person page) they keep the
+# IsUpdating of the page before and never load
+IDLE = '!Container(5500).IsUpdating + ![Control.IsVisible(5402) + Container(5300).IsUpdating]'
 DETAILS = ('plugin://plugin.video.themoviedb.helper/?info=details&tmdb_type=$INFO[ListItem.Property(tmdb_type)]'
            '&tmdb_id=$INFO[ListItem.Property(tmdb_id)]')
 
