@@ -276,3 +276,13 @@ def test_ratings_line_stops_before_the_right_column(episode):
         left += int(node.findtext('left') or 0)
         node = parents.get(node)
     assert left + width <= 1400 - 16, (left, width)
+
+
+def test_info_key_names_hdr_and_audio_like_the_osd():
+    """The info key during playback (DialogFullScreenInfo) showed hdr10 and 6CH; it uses the
+    OSD's names: HDR10 / SDR, DD+ 5.1."""
+    tags = {label: visible for label, visible, _ in _labels(navigation.load('DialogFullScreenInfo.xml'))}
+    assert tags['[UPPERCASE]$VAR[PlayerHdr][/UPPERCASE]'] == '!String.IsEmpty(VideoPlayer.VideoResolution)'
+    assert tags['[UPPERCASE]$INFO[VideoPlayer.AudioLanguage,, ]$VAR[PlayerAudio][/UPPERCASE]'] == \
+        '!String.IsEmpty(VideoPlayer.AudioCodec)'
+    assert not [label for label in tags if 'VideoPlayer.HdrType' in label or 'AudioChannels' in label]
