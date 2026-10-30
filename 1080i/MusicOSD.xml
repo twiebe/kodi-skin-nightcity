@@ -41,13 +41,13 @@
             </include>
             <include content="PillButton">
                 <param name="id" value="603"/>
-                <param name="label" value="⏭"/>
-                <param name="onclick" value="PlayerControl(Next)"/>
+                <param name="label" value="■ $LOCALIZE[31052]"/>
+                <param name="onclick" value="PlayerControl(Stop)"/>
             </include>
             <include content="PillButton">
                 <param name="id" value="604"/>
-                <param name="label" value="■ $LOCALIZE[31052]"/>
-                <param name="onclick" value="PlayerControl(Stop)"/>
+                <param name="label" value="⏭"/>
+                <param name="onclick" value="PlayerControl(Next)"/>
             </include>
         </control>
         <control type="grouplist" id="620">

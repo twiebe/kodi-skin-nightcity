@@ -268,6 +268,9 @@ def test_music_osd_buttons_and_queue():
     c = controls(load('MusicOSD.xml'))
     assert parse(ROOT / '1080i' / 'MusicOSD.xml').findtext('defaultcontrol') == '602'
     assert [k.get('id') for k in c['600'].findall('control')] == ['601', '602', '603', '604']
+    # the order of the video player: previous, play/pause, stop, next
+    assert [actions(k)[0][1] for k in c['600'].findall('control')] == [
+        'PlayerControl(Previous)', 'PlayerControl(Play)', 'PlayerControl(Stop)', 'PlayerControl(Next)']
     assert [k.get('id') for k in c['620'].findall('control')] == ['621', '622']
     assert ('', 'PlayerControl(Random)') in actions(c['621'])
     assert ('', 'PlayerControl(Repeat)') in actions(c['622'])
