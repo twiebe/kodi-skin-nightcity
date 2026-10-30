@@ -335,22 +335,50 @@ def test_tab_focus_differs_from_active(name):
     tab = include(name).find('.//control')
     for tag, colour in (('texturefocus', 'accent'), ('alttexturefocus', 'accent'), ('alttexturenofocus', 'accent2')):
         assert (tab.findtext(tag), tab.find(tag).get('colordiffuse')) == ('ui/tab_line.png', colour), tag
+        # the ends of the texture are clear and keep their size: the line leaves out the
+        # padding (textoffsetx) up to TAB_LINE_OVERHANG, it fits the text
+        assert tab.find(tag).get('border') == '{0},0,{0},0'.format(TAB_LINE_INSET), tag
+    assert int(tab.findtext('textoffsetx')) - TAB_LINE_INSET == TAB_LINE_OVERHANG
     assert not tab.find('texturenofocus').text
     assert tab.findtext('altlabel') == tab.findtext('label')
 
 
+# a tab's underline overhangs the text by a few px on each side (plus the letters' own side
+# bearings), not the whole padding of the button
+TAB_LINE_INSET = 8
+TAB_LINE_OVERHANG = 2
+
+
+def test_tab_line_texture_has_clear_ends():
+    from PIL import Image
+    alpha = Image.open(ROOT / 'media' / 'ui' / 'tab_line.png').split()[-1]
+    width, height = alpha.size
+    assert height == 44 and width > 2 * TAB_LINE_INSET
+    for x in range(width):
+        column = [alpha.getpixel((x, y)) for y in range(height)]
+        inside = TAB_LINE_INSET <= x < width - TAB_LINE_INSET
+        assert column == ([0] * 40 + [255] * 2 + [0] * 2 if inside else [0] * 44), x
+
+
 def test_season_tab_active_line():
-    """The shown season: a pink line under it without focus, the focus line with it; both the
-    same size and place, the label the same."""
+    """The shown season: a pink line under it without focus, the focus line with it. A list
+    layout has no auto width, so the line is the season's own label again in font_caps_line,
+    whose letters are bars as wide as the letters of font_caps: as long as the text."""
     seasons = next(c for c in parse(ROOT / '1080i' / 'DialogVideoInfo.xml').iter('control') if c.get('id') == '5200')
-    lines = [c for c in seasons.find('focusedlayout').findall('control') if c.get('type') == 'image']
-    assert sorted((c.find('texture').get('colordiffuse'), c.findtext('visible')) for c in lines) == [
+    controls = seasons.find('focusedlayout').findall('control')
+    assert not [c for c in controls if c.get('type') == 'image']
+    lines = [c for c in controls if c.get('type') == 'label']
+    assert sorted((c.findtext('textcolor'), c.findtext('visible')) for c in lines) == [
         ('accent2', '!Control.HasFocus(5200)'), ('focus', 'Control.HasFocus(5200)')]
-    geometry = {tuple(c.findtext(k) for k in ('left', 'top', 'width', 'height')) + (c.findtext('texture'),)
-                for c in lines}
-    assert len(geometry) == 1
-    labels = [c.findtext('label') for c in include('SeasonTab').iter('control') if c.get('type') == 'label']
-    assert len(set(labels)) == 1
+    text = [c for c in include('SeasonTab').iter('control') if c.get('type') == 'label']
+    assert len(text) == 1
+    text = text[0]
+    for line in lines:
+        assert line.findtext('font') == 'font_caps_line', line.findtext('font')
+        assert line.findtext('label') == text.findtext('label')
+        assert line.findtext('selectedcolor') == line.findtext('textcolor')
+        for tag in ('left', 'width', 'height', 'align', 'aligny'):
+            assert line.findtext(tag) == text.findtext(tag), tag
 
 
 def test_no_triangle_marker():
