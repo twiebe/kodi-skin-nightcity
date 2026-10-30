@@ -85,10 +85,10 @@
                 <focusedcolor>accent</focusedcolor>
                 <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
                 <altlabel>[UPPERCASE]$PARAM[label][/UPPERCASE]</altlabel>
-                <texturefocus colordiffuse="accent">ui/tab_line.png</texturefocus>
+                <texturefocus colordiffuse="accent" border="8,0,8,0">ui/tab_line.png</texturefocus>
                 <texturenofocus/>
-                <alttexturefocus colordiffuse="accent">ui/tab_line.png</alttexturefocus>
-                <alttexturenofocus colordiffuse="accent2">ui/tab_line.png</alttexturenofocus>
+                <alttexturefocus colordiffuse="accent" border="8,0,8,0">ui/tab_line.png</alttexturefocus>
+                <alttexturenofocus colordiffuse="accent2" border="8,0,8,0">ui/tab_line.png</alttexturenofocus>
                 <usealttexture>$PARAM[active]</usealttexture>
                 <onfocus condition="!$EXP[TmdbBusy]">SetProperty($PARAM[property],$PARAM[value],home)</onfocus>
                 <onfocus condition="!$EXP[TmdbBusy]">ClearProperty(nc.tab.want.id,home)</onfocus>

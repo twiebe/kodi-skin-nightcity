@@ -44,6 +44,13 @@
             <filename>RetroUIWide-SemiBold.ttf</filename>
             <size>26</size>
         </font>
+        <!-- underline of a text in font_caps: the same text in it is a line as long as the text
+             (tools/make_fonts.py) -->
+        <font>
+            <name>font_caps_line</name>
+            <filename>RetroUIWideLine-SemiBold.ttf</filename>
+            <size>26</size>
+        </font>
         <font>
             <name>font_caps_small</name>
             <filename>RetroUIWide-SemiBold.ttf</filename>

@@ -614,7 +614,8 @@
 
     <!-- A menu or tab entry: letter-spaced caps, no frame. Focused it turns cyan with a cyan line
          below; while `active` holds (the page or season shown) the same line is pink without the
-         focus, in the same place, so the label does not move. Width follows the label. -->
+         focus, in the same place, so the label does not move. Width follows the label; the
+         line fits the text: tab_line.png's clear ends (border 8) leave out the padding but 2 px. -->
     <include name="TabButton">
         <param name="id"/>
         <param name="label"/>
@@ -633,10 +634,10 @@
                 <focusedcolor>accent</focusedcolor>
                 <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
                 <altlabel>[UPPERCASE]$PARAM[label][/UPPERCASE]</altlabel>
-                <texturefocus colordiffuse="accent">ui/tab_line.png</texturefocus>
+                <texturefocus colordiffuse="accent" border="8,0,8,0">ui/tab_line.png</texturefocus>
                 <texturenofocus/>
-                <alttexturefocus colordiffuse="accent">ui/tab_line.png</alttexturefocus>
-                <alttexturenofocus colordiffuse="accent2">ui/tab_line.png</alttexturenofocus>
+                <alttexturefocus colordiffuse="accent" border="8,0,8,0">ui/tab_line.png</alttexturefocus>
+                <alttexturenofocus colordiffuse="accent2" border="8,0,8,0">ui/tab_line.png</alttexturenofocus>
                 <usealttexture>$PARAM[active]</usealttexture>
                 <onfocus>$PARAM[onfocus]</onfocus>
                 <onclick>$PARAM[onclick]</onclick>
