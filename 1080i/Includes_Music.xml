@@ -406,7 +406,8 @@
     <!-- A track of the music OSD's queue while it holds one album (MusicOSD.xml 701): number,
          title, the artist where it is not the album's, length. Like the episodes of a show: the
          cursor's title in the accent colour, also while the list has no focus; the focus fill
-         while it has. -->
+         while it has. The playing track: a dark blue bar before the number, wherever the
+         cursor is, as the current value of a list dialog. -->
     <include name="MusicQueueRow">
         <param name="focused" default="false"/>
         <param name="number" default="state_text"/>
@@ -418,6 +419,14 @@
                 <height>48</height>
                 <texture border="12" colordiffuse="focus">ui/cut_btn_fill.png</texture>
                 <visible>$PARAM[focused]</visible>
+            </control>
+            <control type="image">
+                <left>6</left>
+                <top>10</top>
+                <width>3</width>
+                <height>28</height>
+                <texture colordiffuse="state">ui/white.png</texture>
+                <visible>ListItem.IsPlaying</visible>
             </control>
             <control type="label">
                 <left>20</left>
