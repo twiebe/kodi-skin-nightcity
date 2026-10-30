@@ -175,7 +175,7 @@ def main():
     fade(256, 4, reverse=True).transpose(Image.Transpose.ROTATE_270).save(UI / 'fade_t.png')
     Image.new('RGBA', (2, 12), (255, 255, 255, 255)).save(UI / 'tick.png')  # chapter mark
     hamburger(64).save(UI / 'qm_menu.png')
-    chevron(22, 54, 6).save(UI / 'spot_more.png')
+    chevron(13, 30, 4).save(UI / 'spot_more.png')
     # underline of tab entries: clear ends of 8 px, drawn unscaled with border="8,0,8,0", so the
     # line leaves out most of the button's padding and fits the text
     line = Image.new('RGBA', (20, 44), (255, 255, 255, 0))
