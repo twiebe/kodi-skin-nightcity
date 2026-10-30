@@ -135,12 +135,16 @@
         <param name="limit" default="25"/>
         <!-- the include with the click actions: MusicClick on Home, MusicInfoClick on the info page -->
         <param name="click" default="MusicClick"/>
+        <!-- header: NumberedRowHeader with num on the Music page -->
+        <param name="header" default="RowHeader"/>
+        <param name="num" default=""/>
         <definition>
             <control type="group" id="$PARAM[group]">
                 <height>468</height>
                 <visible>Integer.IsGreater(Container($PARAM[loader]).NumItems,0) | Container($PARAM[loader]).IsUpdating</visible>
-                <include content="RowHeader">
+                <include content="$PARAM[header]">
                     <param name="label" value="$PARAM[label]"/>
+                    <param name="num" value="$PARAM[num]"/>
                     <param name="left" value="64"/>
                     <param name="top" value="6"/>
                 </include>
@@ -208,6 +212,8 @@
             <param name="id" value="9801"/>
             <param name="loader" value="9801"/>
             <param name="group" value="9811"/>
+            <param name="header" value="NumberedRowHeader"/>
+            <param name="num" value="$VAR[RowNumber_music_1]"/>
             <param name="up" value="9850"/>
             <param name="down" value="9812"/>
             <param name="label" value="$LOCALIZE[31400]"/>
@@ -217,6 +223,8 @@
         <include content="MusicRowBox">
             <param name="id" value="9802"/>
             <param name="group" value="9812"/>
+            <param name="header" value="NumberedRowHeader"/>
+            <param name="num" value="$VAR[RowNumber_music_2]"/>
             <param name="loader" value="9822"/>
             <param name="up" value="9811"/>
             <param name="down" value="9813"/>
@@ -227,6 +235,8 @@
             <param name="id" value="9803"/>
             <param name="loader" value="9803"/>
             <param name="group" value="9813"/>
+            <param name="header" value="NumberedRowHeader"/>
+            <param name="num" value="$VAR[RowNumber_music_3]"/>
             <param name="up" value="9812"/>
             <param name="down" value="9814"/>
             <param name="label" value="$LOCALIZE[31402]"/>
@@ -236,6 +246,8 @@
             <param name="id" value="9804"/>
             <param name="loader" value="9804"/>
             <param name="group" value="9814"/>
+            <param name="header" value="NumberedRowHeader"/>
+            <param name="num" value="$VAR[RowNumber_music_4]"/>
             <param name="up" value="9813"/>
             <param name="down" value="9815"/>
             <param name="label" value="$LOCALIZE[31403]"/>
@@ -246,6 +258,8 @@
             <param name="id" value="9805"/>
             <param name="loader" value="9805"/>
             <param name="group" value="9815"/>
+            <param name="header" value="NumberedRowHeader"/>
+            <param name="num" value="$VAR[RowNumber_music_5]"/>
             <param name="up" value="9814"/>
             <param name="label" value="$LOCALIZE[31404]"/>
             <param name="content" value="musicdb://genres/"/>
