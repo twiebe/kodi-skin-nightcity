@@ -992,3 +992,7 @@ msgstr ""
 msgctxt "#31414"
 msgid "repeat one"
 msgstr ""
+
+msgctxt "#31420"
+msgid "Network, Bluetooth, updates"
+msgstr ""

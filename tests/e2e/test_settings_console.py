@@ -141,3 +141,50 @@ def test_logging_link_lands_in_its_category(home):
     wait_for('Window.IsActive(systemsettings)')
     wait_for('ControlGroup(3).HasFocus() + String.IsEqual(System.CurrentControl,Logging)')
     builtin('ReplaceWindow(Home)')
+
+
+ELEC = 'service.coreelec.settings'
+ELEC_WINDOW = 'Window.IsActive(service-CoreELEC-Settings-mainWindow.xml)'
+
+
+def _set_elec(enabled):
+    from conftest import rpc
+    rpc('Addons.SetAddonEnabled', {'addonid': ELEC, 'enabled': enabled})
+    wait_for(('' if enabled else '!') + 'System.AddonIsEnabled({})'.format(ELEC))
+
+
+@pytest.fixture
+def elec(home):
+    """kodi-dev has no CoreELEC: a stand-in add-on with its id (opening the real add-on's window
+    XML) must be installed in the instance, else skip."""
+    from conftest import rpc
+    addons = rpc('Addons.GetAddons', {'type': 'xbmc.python.script'})['addons']
+    if ELEC not in [a['addonid'] for a in addons]:
+        pytest.skip('no {} in this instance'.format(ELEC))
+    _set_elec(True)
+    yield
+    _set_elec(True)
+    if cond(ELEC_WINDOW)[ELEC_WINDOW]:
+        action('back', delay=0.5)
+
+
+def test_os_settings_tile_runs_the_add_on(elec):
+    """The sixth tile, named after the installed add-on, opens its Configuration; Back returns to
+    the tile."""
+    system_tile(6)
+    wait_for('Integer.IsEqual(Container(9601).CurrentItem,6) + Integer.IsEqual(Container(9601).NumItems,6)')
+    assert label('Container(9601).ListItem.Label') == 'CoreELEC'
+    screenshot('settings-coreelec-tile')
+    action('select')
+    wait_for(ELEC_WINDOW, timeout=10)
+    screenshot('coreelec-configuration')
+    action('back', delay=0.5)
+    wait_for('!' + ELEC_WINDOW + ' + Control.HasFocus(9601) + Integer.IsEqual(Container(9601).CurrentItem,6)')
+
+
+def test_os_settings_tile_only_with_the_add_on(elec):
+    _set_elec(False)
+    system_tile(5)
+    wait_for('Integer.IsEqual(Container(9601).NumItems,5) + Integer.IsEqual(Container(9601).CurrentItem,5)')
+    assert label('Container(9601).ListItem.Label') != 'CoreELEC'
+    screenshot('settings-without-coreelec')
