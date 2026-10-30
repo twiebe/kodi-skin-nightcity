@@ -166,15 +166,13 @@
     </include>
     <include name="EndsAtTagPair">
         <definition>
-            <!-- without a runtime EndTimeResume is the current time -->
+            <!-- like the runtime tag next to it; without a runtime EndTimeResume is the current time -->
             <include content="Tag">
                 <param name="label" value="$LOCALIZE[31059] $INFO[$PARAM[item].EndTimeResume]"/>
-                <param name="color" value="accent2"/>
                 <param name="visible" value="$PARAM[type] + !String.IsEmpty($PARAM[item].Duration) + !String.IsEmpty($PARAM[item].EndTimeResume) + ![$PARAM[playing]]"/>
             </include>
             <include content="Tag">
                 <param name="label" value="$LOCALIZE[31059] $INFO[Player.FinishTime]"/>
-                <param name="color" value="accent2"/>
                 <param name="visible" value="$PARAM[type] + $PARAM[playing] + !String.IsEmpty(Player.FinishTime)"/>
             </include>
         </definition>
