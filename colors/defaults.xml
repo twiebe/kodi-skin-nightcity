@@ -27,4 +27,5 @@
     <color name="warn">FFFEDE5D</color>
     <color name="error">FFFE4450</color>
     <color name="scrim">E005080C</color>
+    <color name="dim">8C05080C</color>
 </colors>
