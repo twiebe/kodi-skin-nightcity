@@ -9,6 +9,8 @@
     <color name="border_dim">40CBA6F7</color>
     <color name="state">FF494060</color>
     <color name="state_text">FF947BB7</color>
+    <color name="state_fade">A0947BB7</color>
+    <color name="state_faint">50947BB7</color>
     <color name="text">FFCDD6F4</color>
     <color name="text_dim">FFBAC2DE</color>
     <color name="text_mute">FF9399B2</color>
