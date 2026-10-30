@@ -115,6 +115,15 @@ Kodi itself: Back on Home while anything plays goes to the player (CGUIWindowHom
 control's onback. So while music plays Back in the quick menu or on the icon opens the player
 screen instead of closing the menu; as with video.
 
+Kodi itself: covers on Home blink for a frame or two when a library changes. On every library
+announcement except OnScanStarted/OnCleanStarted (AudioLibrary.OnUpdate after each played
+song, VideoLibrary.OnScanFinished after each Jellyfin sync) CGUIWindowHome::Announce sends
+GUI_MSG_REFRESH_THUMBS to all of Home. Every image with a dynamic texture and every list's
+items then free their textures at once (CGUIImage::OnMessage, CGUIBaseContainer::OnMessage),
+and the large texture loader brings them back in the background. Textures another window
+still holds (the cover on the player screen) stay. Not the list reloads, not the fades: a
+video scan, which reloads no music list, blanks the music covers the same way.
+
 ## DESIGN.md mapping
 
 - Up/Left one level up, Down/Right down: page tab, spotlight buttons, rows; info head, buttons,
