@@ -290,9 +290,10 @@ def test_music_osd_buttons_and_queue():
 
 def test_music_queue_marks_the_playing_track():
     """The cursor, which opens on the playing track, shows its title in the accent colour also
-    while the list has no focus. The playing track keeps a dark blue bar before its text (state,
-    DESIGN.md colours), like the current value of a list dialog, wherever the cursor is. No
-    progress line: Kodi redraws a list item only while the cursor is on it, so the line stood
+    while the list has no focus. The playing track keeps a dark blue mark (state, DESIGN.md
+    colours) wherever the cursor is: in the track list a bar before its number, like the current
+    value of a list dialog; on a card a line under its title, a bar would get lost by the cover.
+    No progress line: Kodi redraws a list item only while the cursor is on it, so the line stood
     still elsewhere."""
     c = controls(load('MusicOSD.xml'))
     for list_id in ('700', '701'):
@@ -302,7 +303,11 @@ def test_music_queue_marks_the_playing_track():
             bars = [i for i in controls_in if i.get('type') == 'image'
                     and (i.findtext('visible') or '').strip() == 'ListItem.IsPlaying']
             assert len(bars) == 1, (list_id, layout)
-            assert bars[0].findtext('width') == '3'
+            width, height = int(bars[0].findtext('width')), int(bars[0].findtext('height'))
+            if list_id == '701':
+                assert width == 3 and height > width  # the bar before the number
+            else:
+                assert height == 3 and width > height  # the line under the title
             assert bars[0].find('texture').get('colordiffuse') == 'state'
             assert bars[0].findtext('texture') == 'ui/white.png'
         text = ET.tostring(c[list_id]).decode()
