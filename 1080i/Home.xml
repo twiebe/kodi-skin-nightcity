@@ -45,6 +45,7 @@
                 </include>
                 <include content="FanartBackdrop">
                     <param name="art" value="Container(9000).ListItem.Art(fanart)"/>
+                    <param name="fadetime" value="400"/>
                 </include>
             </control>
             <control type="group">
@@ -52,6 +53,7 @@
                 <include>BackdropFade</include>
                 <include content="FanartBackdrop">
                     <param name="art" value="Container(9001).ListItem.Art(fanart)"/>
+                    <param name="fadetime" value="400"/>
                 </include>
             </control>
             <!-- music: an album has the fanart of its artist -->
@@ -60,6 +62,7 @@
                 <include>BackdropFade</include>
                 <include content="FanartBackdrop">
                     <param name="art" value="Container(9002).ListItem.Art(artist.fanart)"/>
+                    <param name="fadetime" value="400"/>
                 </include>
             </control>
         </control>
