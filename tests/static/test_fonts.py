@@ -5,7 +5,7 @@ from fontTools.ttLib import TTFont
 from conftest import ROOT, layout_files, parse
 
 NAMES = {'font_tiny', 'font_small', 'font_body', 'font_label', 'font_title', 'font_hero', 'font_wordmark',
-         'font_caps', 'font_caps_small', 'font_num', 'font_num_small', 'font_clock', 'font_temp', 'font10', 'font12', 'font13', 'font14'}
+         'font_caps', 'font_caps_line', 'font_caps_small', 'font_num', 'font_num_small', 'font_clock', 'font_temp', 'font10', 'font12', 'font13', 'font14'}
 UI_FONTS = ['RetroUI-Medium.ttf', 'RetroUI-SemiBold.ttf', 'RetroUI-Bold.ttf',
             'RetroUIWide-SemiBold.ttf', 'RetroUIWide-Bold.ttf']
 MONO_FONT = 'ShareTechMono-Regular.ttf'
@@ -123,3 +123,37 @@ def test_wide_composites_shift_once():
         wg.recalcBounds(wide['glyf'])
         ng.recalcBounds(normal['glyf'])
         assert wg.xMin - ng.xMin == 50, name
+
+
+def test_line_font_draws_bars_as_wide_as_the_letters():
+    """font_caps_line (the season tab's underline): every glyph of RetroUIWide-SemiBold has the
+    same advance, and is a bar 2 px high (at the size of font_caps) a little below the baseline,
+    a bit wider than the advance so neighbours overlap and the ends overhang the text."""
+    files = font_files_by_name()
+    sizes = {f.findtext('name'): f.findtext('size') for f in fontsets()['Default'].iter('font')}
+    assert files['font_caps_line'] == 'RetroUIWideLine-SemiBold.ttf'
+    assert sizes['font_caps_line'] == sizes['font_caps']
+    line, text = TTFont(ROOT / 'fonts' / files['font_caps_line']), TTFont(ROOT / 'fonts' / files['font_caps'])
+    assert line.getBestCmap() == text.getBestCmap()
+    size = int(sizes['font_caps'])
+    for cp, name in sorted(line.getBestCmap().items())[:400]:
+        advance = text['hmtx'][name][0]
+        assert line['hmtx'][name][0] == advance, hex(cp)
+        glyph = line['glyf'][name]
+        assert glyph.numberOfContours == 1 and len(glyph.coordinates) == 4, hex(cp)
+        assert glyph.xMin < 0 and glyph.xMax > advance, hex(cp)
+        assert round((glyph.yMax - glyph.yMin) * size / 1000) == 2, hex(cp)
+
+
+def test_line_font_sits_on_the_baseline_of_its_text():
+    """Kodi centres a label on the font's cell, from max(bbox top, ascender) to min(bbox bottom,
+    descender): the line font's cell must have the same middle as RetroUIWide-SemiBold's, so both
+    labels share a baseline, and must hold the bars, which Kodi would clip."""
+    def cell(font):
+        head, hhea = font['head'], font['hhea']
+        return max(head.yMax, hhea.ascent), min(head.yMin, hhea.descent)
+    line, text = TTFont(ROOT / 'fonts' / 'RetroUIWideLine-SemiBold.ttf'), TTFont(ROOT / 'fonts' / 'RetroUIWide-SemiBold.ttf')
+    top, bottom = cell(line)
+    assert top + bottom == sum(cell(text))
+    bars = [line['glyf'][name] for name in line.getGlyphOrder()]
+    assert bottom <= min(g.yMin for g in bars) and max(g.yMax for g in bars) <= top
