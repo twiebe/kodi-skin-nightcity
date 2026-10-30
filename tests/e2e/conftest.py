@@ -14,6 +14,9 @@ import urllib.request
 import pytest
 
 KODI_DEV = pathlib.Path(os.environ.get('KODI_DEV', '/workspaces/kodi-dev'))
+# the skin checkout, as in tests/static/conftest.py: tests/static/navigation.py reads it from here
+# when an e2e test builds a window with it
+ROOT = pathlib.Path(__file__).resolve().parents[2]
 
 if os.environ.get('KDEV_POOL'):
     # Set before any kdev call: the kdev subprocesses read it too
