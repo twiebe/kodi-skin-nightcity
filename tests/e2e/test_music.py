@@ -1,6 +1,5 @@
 """Music (docs/music-design.md): the Music page of Home, an album's page, playing from a track
-and the music OSD with its queue row. Needs a music library in Kodi (skipped without one; the
-kodi-dev pool has none yet)."""
+and the music OSD with its queue row. Needs a music library in Kodi (skipped without one)."""
 import time
 
 import pytest
@@ -26,6 +25,16 @@ def music(home):
     if holds('Player.HasAudio'):
         builtin('PlayerControl(Stop)')
         wait_for('!Player.HasAudio')
+
+
+def player_screen(condition='Player.HasAudio', timeout=10):
+    """Wait for the player screen with the music on and Kodi's busy dialog gone: that dialog
+    takes the keys while the track loads (a Back or OSD key then gets lost). Right after the
+    last test stopped its music Kodi opens its audio output again, and the busy dialog stays
+    up longer than a second; it comes up a moment after the player screen, so look after it."""
+    wait_for('Window.IsActive(visualisation) + {}'.format(condition), timeout=timeout)
+    time.sleep(1)
+    wait_for('!Window.IsActive(busydialog) + !Window.IsActive(busydialognocancel)')
 
 
 def open_page():
@@ -104,12 +113,9 @@ def test_a_track_plays_the_album_from_there(music):
     builtin('SetFocus(5050,1,absolute)')  # the second track
     wait_for('Integer.IsEqual(Container(5050).CurrentItem,2)')
     action('select')
-    wait_for('Window.IsActive(visualisation)')
-    wait_for('Player.HasAudio')
-    wait_for('Integer.IsEqual(MusicPlayer.PlaylistPosition,2)')
+    player_screen('Integer.IsEqual(MusicPlayer.PlaylistPosition,2)')
     assert not holds('Window.IsActive(musicinformation)')
     # Back: the album page again, the music plays on
-    time.sleep(1)
     action('back')
     wait_for('Window.IsActive(musicinformation)')
     assert info('ListItem.DBType')['ListItem.DBType'] == 'album'
@@ -125,7 +131,7 @@ def test_osd_queue_plays_the_chosen_track(music):
     wait_for('Integer.IsEqual(MusicPlayer.PlaylistPosition,1)')
     # the album page closes as the player screen opens: an OSD key before it is gone gets lost
     wait_for('!Window.IsVisible(musicinformation)')
-    time.sleep(1)
+    player_screen()
     action('osd')
     wait_for('Window.IsActive(musicosd)')
     wait_for('Control.HasFocus(602)')
@@ -177,9 +183,7 @@ def test_osd_queue_of_several_albums_shows_covers(music):
     if artist is None:
         pytest.skip('no artist with songs on more than one album')
     builtin('NotifyAll(nightcity,music_play:artist:{}:1)'.format(artist))
-    wait_for('Window.IsActive(visualisation)', timeout=15)
-    wait_for('Player.HasAudio + Integer.IsGreater(Playlist.Length(music),1)')
-    time.sleep(1)
+    player_screen('Player.HasAudio + Integer.IsGreater(Playlist.Length(music),1)', timeout=15)
     action('osd')
     wait_for('Window.IsActive(musicosd)')
     wait_for('Control.IsVisible(700) + !Control.IsVisible(701)')
@@ -197,9 +201,7 @@ def test_spotlight_play_goes_to_now_playing_and_back(music):
     builtin('SetFocus(9852)')
     wait_for('Control.HasFocus(9852)')
     action('select')
-    wait_for('Window.IsActive(visualisation)')
-    wait_for('Player.HasAudio')
-    time.sleep(1)
+    player_screen()
     action('back')
     wait_for('Window.IsActive(home)')
     wait_for('Control.HasFocus(9852)')  # where it was started, the music plays on
@@ -214,8 +216,7 @@ def test_library_play_goes_to_now_playing_and_back(music):
     action('down')  # past ..
     wait_for('String.IsEqual(ListItem.DBType,song)')
     action('select')
-    wait_for('Window.IsActive(visualisation)', timeout=15)  # nightcity.py now_playing
-    time.sleep(1)
+    player_screen(timeout=15)  # nightcity.py now_playing
     action('back')
     wait_for('Window.IsActive(music)')
     assert holds('Player.HasAudio')
@@ -229,8 +230,7 @@ def test_now_playing_in_the_top_line(music):
     open_page()
     builtin('SetFocus(9852)')
     action('select')
-    wait_for('Window.IsActive(visualisation) + Player.HasAudio')
-    time.sleep(1)
+    player_screen()
     action('back')
     wait_for('Window.IsActive(home)')
     builtin('SetFocus(9104)')  # the last tab: search
