@@ -1475,3 +1475,42 @@ def test_music_info_opens_the_album_with_its_art(monkeypatch):
     assert (item.path, item.folder, item.art) == ('musicdb://albums/5/', True,
                                                   {'thumb': 'c.jpg', 'artist.fanart': 'f.jpg'})
     assert fake.builtins == ['Dialog.Close(musicinformation,true)']
+
+
+@pytest.mark.parametrize('items, one', [
+    ([{'albumid': 3}, {'albumid': 3}], True),
+    ([{'albumid': 3}], True),
+    ([{'albumid': 3}, {'albumid': 4}], False),
+    ([], False),
+    ([{'albumid': 0}, {'albumid': 0}], False),  # not from the library
+    ([{'id': 1}], False),
+])
+def test_queue_one_album(items, one):
+    assert nightcity.queue_one_album(items) is one
+
+
+@pytest.mark.parametrize('playing, current, step', [(0, '1', 0), (4, '1', 4), (2, '5', -2), (3, '', 0), (None, '1', 0)])
+def test_queue_move_puts_the_cursor_on_the_playing_track(playing, current, step):
+    """Kodi's position counts from 0, the list's CurrentItem from 1."""
+    assert nightcity.queue_move(playing, current) == step
+
+
+def test_music_queue_notes_one_album(monkeypatch):
+    home = FakeHome()
+    monkeypatch.setattr(nightcity, '_home', lambda: home)
+    monkeypatch.setattr(nightcity, '_rpc', lambda method, **params: {'items': [{'albumid': 7}, {'albumid': 7}]})
+    nightcity.COMMANDS['music_queue']()
+    assert home.props['nc.music.queue.album'] == '1'
+    monkeypatch.setattr(nightcity, '_rpc', lambda method, **params: {'items': [{'albumid': 7}, {'albumid': 8}]})
+    nightcity.COMMANDS['music_queue']()
+    assert 'nc.music.queue.album' not in home.props
+
+
+def test_debounce_runs_once_after_a_burst():
+    import time
+    runs = []
+    debounce = nightcity.Debounce(lambda: runs.append(1), delay=0.05)
+    for _ in range(5):
+        debounce.changed()
+    time.sleep(0.2)
+    assert runs == [1]

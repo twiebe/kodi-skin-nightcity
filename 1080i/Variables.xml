@@ -186,6 +186,23 @@
         <value condition="Control.HasFocus(9108)">▶ [UPPERCASE]$INFO[MusicPlayer.Title]$INFO[MusicPlayer.Artist,  ·  ][/UPPERCASE]</value>
         <value>[COLOR accent2]▶[/COLOR] [UPPERCASE]$INFO[MusicPlayer.Title]$INFO[MusicPlayer.Artist,  ·  ][/UPPERCASE]</value>
     </variable>
+    <!-- The music OSD's queue (MusicOSD.xml): the cursor in the accent colour, the focus text
+         colour on the focus fill; the artist of a track only where it is not the album's -->
+    <variable name="MusicQueueCursor">
+        <value condition="Control.HasFocus(701)">focus_text</value>
+        <value>accent</value>
+    </variable>
+    <variable name="MusicQueueCursorMute">
+        <value condition="Control.HasFocus(701)">focus_text</value>
+        <value>text_mute</value>
+    </variable>
+    <variable name="MusicQueueCounter">
+        <value condition="Control.HasFocus(701)">$INFO[Container(701).CurrentItem]/$INFO[Container(701).NumItems]</value>
+        <value>$INFO[Container(700).CurrentItem]/$INFO[Container(700).NumItems]</value>
+    </variable>
+    <variable name="MusicQueueArtist">
+        <value condition="!String.IsEmpty(ListItem.Artist) + !String.IsEqual(ListItem.Artist,ListItem.AlbumArtist)">$INFO[ListItem.Artist,  ·  ]</value>
+    </variable>
     <!-- Player screen and its OSD (MusicVisualisation.xml, MusicOSD.xml) -->
     <variable name="MusicPlayerLine">
         <value>$INFO[MusicPlayer.Album]$INFO[MusicPlayer.Year,  ·  ]</value>
@@ -217,7 +234,6 @@
     </variable>
     <!-- Line under a music card: the artist of an album or song -->
     <variable name="MusicCardLine">
-        <value condition="ListItem.IsPlaying">[COLOR accent2]▶[/COLOR] $INFO[ListItem.Artist]</value>
         <value condition="String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)">$INFO[ListItem.Artist]</value>
         <value condition="String.IsEqual(ListItem.DBType,artist)">$INFO[ListItem.Genre]</value>
     </variable>

@@ -86,9 +86,19 @@ Walks top down like the video info page:
   queue. Kodi's keymap: OK opens the OSD, Up and Down skip tracks, Left and Right step.
 - The OSD: playback buttons left (previous, play/pause, next, stop), shuffle and repeat right
   (a dot marks the mode that is on). While it is open, what plays moves up to make room.
-  Down: **Up next**, the play queue as a row of cards, the cursor on the next track and the
-  playing one marked ▶; OK plays the chosen track (script `music_goto`). Up from the row: the
-  buttons. Up from the buttons: nothing (as in the video OSD); Back closes the OSD.
+  Down: **Up next**, the play queue; OK plays the chosen track (script `music_goto`). Up from
+  the queue: the buttons. Up from the buttons: nothing (as in the video OSD); Back closes the OSD.
+- The queue works like the episode list of a TV show page. It opens with the cursor on the
+  playing track (`music_queue_select` moves both lists with Control.Move). Not focused, that
+  latent cursor shows its title in the cyan accent; focused, the normal focus look. The playing
+  track has a progress line under it (Player.Progress, the episode progress style), which stays
+  on it when the cursor moves away. No ▶, no pink: pink is state, the bar says where you are.
+- One album or mixed: the service checks at playback start and on every queue change (debounced
+  `music_queue`, Playlist.GetItems with albumid) whether the whole queue comes from one album and
+  sets `nc.music.queue.album` on Home. One album (700 hidden, 701 shown): a text list with track
+  number, title (plus the artist only when it differs from the album artist) and duration, no
+  covers; the big cover is on the player screen. Mixed (artist, playlists, party mode): cards with
+  covers (700). The counter right of the header shows the cursor's place in the queue.
 - Auto-hide: the same switch and delay as the video OSD (`nc.osd.autohide.off`,
   `nc.osd.hide.wait`), own timer `nc_musicosd_hide`.
 
