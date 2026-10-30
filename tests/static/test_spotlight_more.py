@@ -16,12 +16,25 @@ def _include(name):
 
 
 def test_spotlight_more_is_a_dim_arrow_as_tall_as_the_buttons():
+    """A drawn chevron, narrow and as tall as the buttons, not a > from a font."""
     body = _include('SpotlightMore')
-    assert '<control type="label">' in body
-    assert '<label>&gt;</label>' in body
-    assert '<textcolor>state</textcolor>' in body
+    assert '<control type="image">' in body
+    assert '<texture colordiffuse="state">ui/spot_more.png</texture>' in body
     assert '<height>54</height>' in body
-    assert '<aligny>center</aligny>' in body
+    assert '&gt;' not in body
+    assert (ROOT / 'media' / 'ui' / 'spot_more.png').is_file()
+
+
+def test_spot_more_texture_is_a_narrow_chevron():
+    from PIL import Image
+    image = Image.open(ROOT / 'media' / 'ui' / 'spot_more.png')
+    width, height = image.size
+    assert height == 54 and width < height / 2
+    alpha = image.getchannel('A')
+    # the tip in the middle of the right edge, the open ends at the left top and bottom
+    assert alpha.getpixel((width - 2, height // 2)) > 128
+    assert alpha.getpixel((1, 1)) > 128 and alpha.getpixel((1, height - 2)) > 128
+    assert alpha.getpixel((1, height // 2)) == 0
 
 
 def test_every_spotlight_button_row_ends_with_the_arrow():

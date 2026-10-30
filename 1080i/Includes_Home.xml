@@ -408,16 +408,13 @@
             </control>
         </definition>
     </include>
-    <!-- A dim > after the spotlight buttons, as tall as they are: Right on the last button moves
+    <!-- A dim chevron after the spotlight buttons, as tall as they are: Right on the last button moves
          the spotlight on to the next title -->
     <include name="SpotlightMore">
-        <control type="label">
-            <width>auto</width>
+        <control type="image">
+            <width>22</width>
             <height>54</height>
-            <aligny>center</aligny>
-            <font>font_arrow</font>
-            <textcolor>state</textcolor>
-            <label>&gt;</label>
+            <texture colordiffuse="state">ui/spot_more.png</texture>
         </control>
     </include>
     <include name="SpotlightPillLook">
