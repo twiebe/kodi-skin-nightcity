@@ -45,9 +45,13 @@ def _move_to(title):
 
 @pytest.fixture
 def no_spotlight_setting():
+    """Spotlight ratings on focus only; the TMDb source on (off by default, the only one kodi-dev
+    has without keys)."""
     builtin('Skin.Reset(nc.ratings.spotlight)')
+    builtin('Skin.SetBool(nc.ratings.show.tmdb)')
     yield
     builtin('Skin.Reset(nc.ratings.spotlight)')
+    builtin('Skin.Reset(nc.ratings.show.tmdb)')
 
 
 def test_hero_keeps_its_ratings_once_fetched(home, no_spotlight_setting):
@@ -118,27 +122,43 @@ def test_library_rating_only_with_the_setting(home):
         rpc('VideoLibrary.SetMovieDetails', {'movieid': movieid, 'rating': 0.0})
 
 
-def test_rating_settings_follow_the_look(home):
-    """Main menu category: the two rating toggles under a Ratings heading after the glow, each
-    with its description; OK switches them."""
+def test_source_toggle_hides_its_rating(home, no_spotlight_setting):
+    """The hero's line keeps TMDb's rating, the TMDb toggle decides whether it shows."""
+    _move_to('The Matrix')
+    wait_for('String.IsEqual({},8.2) + Control.IsVisible(9030)'.format(KEPT), timeout=20)
+    builtin('Skin.Reset(nc.ratings.show.tmdb)')
+    wait_for('!Control.IsVisible(9030)', timeout=2)
+    builtin('Skin.SetBool(nc.ratings.show.tmdb)')
+    wait_for('Control.IsVisible(9030)', timeout=2)
+
+
+def test_rating_settings_have_their_category(home):
+    """Skin settings > Ratings: the two settings, then one toggle per source with its
+    description; OK switches them."""
     builtin('ActivateWindow(SkinSettings)')
     try:
         wait_for('Window.IsActive(skinsettings)')
-        builtin('SetFocus(601)')
-        wait_for('Control.HasFocus(601)')
-        action('down')
+        builtin('SetFocus(9007)')
+        wait_for('Control.HasFocus(9007) + Control.IsVisible(800)')
+        action('right')
         wait_for('Control.HasFocus(621) + !Skin.HasSetting(nc.ratings.library)')
         assert 'Jellyfin' in _label('Control.GetLabel(6)')
         action('down')
         wait_for('Control.HasFocus(622) + !Skin.HasSetting(nc.ratings.spotlight)')
         assert 'online requests' in _label('Control.GetLabel(6)')
+        action('down')
+        wait_for('Control.HasFocus(631)')
+        assert 'Top 250' in _label('Control.GetLabel(6)')
+        action('down', 'down', 'down', 'down', 'down')
+        wait_for('Control.HasFocus(636)')
+        assert 'Trakt account' in _label('Control.GetLabel(6)')
         screenshot('ratings-settings')
         action('select')
-        wait_for('Skin.HasSetting(nc.ratings.spotlight)')
-        action('up', 'up')
-        wait_for('Control.HasFocus(601)')
+        wait_for('Skin.HasSetting(nc.ratings.show.trakt)')
+        action('left')
+        wait_for('Control.HasFocus(9007)')
     finally:
-        builtin('Skin.Reset(nc.ratings.spotlight)')
+        builtin('Skin.Reset(nc.ratings.show.trakt)')
         builtin('Dialog.Close(all,true)')
         builtin('ReplaceWindow(Home)')
         wait_for('Window.IsActive(home)')

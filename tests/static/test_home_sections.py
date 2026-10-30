@@ -303,7 +303,7 @@ def test_home_navigation_for_any_combination(skin):
 
 # category button -> (label, tab, first control on the right)
 CATEGORIES = {'9005': (31264, 'menu', '500'), '9002': (10000, 'home', '200'), '9003': (342, 'movies', '300'),
-              '9004': (20343, 'shows', '400'), '9006': (14200, 'player', '700')}
+              '9004': (20343, 'shows', '400'), '9007': (31445, 'ratings', '800'), '9006': (14200, 'player', '700')}
 CATEGORY = {'home': '9002', 'movies': '9003', 'shows': '9004'}
 
 
@@ -407,12 +407,12 @@ def test_opens_on_the_main_menu_category():
 
 def test_main_menu_category_holds_the_look_under_appearance():
     """The look gets no category of its own: colour scheme and glow sit at the end of the main
-    menu category, under a separator and an Appearance heading; only the ratings come after."""
+    menu category, under a separator and an Appearance heading."""
     area = controls(page_window())['500']
     labels = [k.findtext('label') for k in area.iter('control') if k.get('type') == 'label']
     assert '$LOCALIZE[480]' in labels
     ids = [k.get('id') for k in area.iter('control') if k.get('id')]
-    assert ids[-4:] == ['601', '620', '621', '622']
+    assert ids[-1] == '601'
     c = controls(page_window())
     glow = c['601']
     assert glow.get('type') == 'radiobutton' and glow.findtext('width') == '1240'

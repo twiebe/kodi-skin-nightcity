@@ -671,4 +671,19 @@
             </control>
         </definition>
     </include>
+    <!-- The same for a setting off by default: the skin bool stores on -->
+    <include name="SkinSettingsToggleOptIn">
+        <param name="id"/>
+        <param name="label"/>
+        <param name="setting"/>
+        <definition>
+            <control type="radiobutton" id="$PARAM[id]">
+                <width>1240</width>
+                <include>SettingsToggleLook</include>
+                <label>$PARAM[label]</label>
+                <selected>Skin.HasSetting($PARAM[setting])</selected>
+                <onclick>Skin.ToggleSetting($PARAM[setting])</onclick>
+            </control>
+        </definition>
+    </include>
 </includes>

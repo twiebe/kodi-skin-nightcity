@@ -150,11 +150,14 @@ def test_ratings_line_shows_tmdb_helpers_rating(home):
     movies = rpc('VideoLibrary.GetMovies', {'filter': {'field': 'title', 'operator': 'is', 'value': 'The Matrix'}})
     if not movies.get('movies'):
         pytest.skip('The Matrix not in the library')
+    # TMDb is the one source kodi-dev has without keys; its toggle is off by default
+    builtin('Skin.SetBool(nc.ratings.show.tmdb)')
     _open_info(movies['movies'][0]['movieid'])
     try:
         wait_for('!String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.TMDb_Rating))', timeout=30)
         wait_for(_visible_of(MOVIE_RATINGS))
     finally:
+        builtin('Skin.Reset(nc.ratings.show.tmdb)')
         builtin('Dialog.Close(all,true)')
 
 

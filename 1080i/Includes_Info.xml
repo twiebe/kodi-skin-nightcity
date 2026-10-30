@@ -213,6 +213,8 @@
             </include>
         </definition>
     </include>
+    <!-- each source shows while its toggle is on (SkinSettings.xml 631-638), Kodi's own IMDb and
+         TMDb ratings too -->
     <include name="RatingsLineBody">
         <definition>
             <include content="RatingsLineEntries">
@@ -223,17 +225,17 @@
                 <param name="width" value="$PARAM[width]"/>
                 <param name="prefix" value="$PARAM[prefix]"/>
                 <param name="library" value="$PARAM[library]"/>
-                <param name="imdb" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]IMDb_Rating))"/>
-                <param name="tmdbr" value="$PARAM[tmdb] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]TMDb_Rating))"/>
-                <param name="rt" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]RottenTomatoes_Rating))"/>
-                <param name="rtu" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]RottenTomatoes_UserMeter))"/>
-                <param name="mc" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]MetaCritic_Rating))"/>
-                <param name="trakt" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]Trakt_Rating))"/>
-                <param name="lb" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]Letterboxd_Rating))"/>
-                <param name="mdb" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]MDBList_Rating))"/>
-                <param name="own_imdb" value="![$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]IMDb_Rating))] + !String.IsEmpty($PARAM[item].Rating(imdb)) + $PARAM[library]"/>
-                <param name="own_moviedb" value="![$PARAM[tmdb] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]TMDb_Rating))] + !String.IsEmpty($PARAM[item].Rating(themoviedb)) + $PARAM[library]"/>
-                <param name="own_tmdb" value="![$PARAM[tmdb] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]TMDb_Rating))] + String.IsEmpty($PARAM[item].Rating(themoviedb)) + !String.IsEmpty($PARAM[item].Rating(tmdb)) + $PARAM[library]"/>
+                <param name="imdb" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]IMDb_Rating)) + !Skin.HasSetting(nc.ratings.hide.imdb)"/>
+                <param name="tmdbr" value="$PARAM[tmdb] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]TMDb_Rating)) + Skin.HasSetting(nc.ratings.show.tmdb)"/>
+                <param name="rt" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]RottenTomatoes_Rating)) + !Skin.HasSetting(nc.ratings.hide.rt)"/>
+                <param name="rtu" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]RottenTomatoes_UserMeter)) + Skin.HasSetting(nc.ratings.show.rtu)"/>
+                <param name="mc" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]MetaCritic_Rating)) + Skin.HasSetting(nc.ratings.show.mc)"/>
+                <param name="trakt" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]Trakt_Rating)) + Skin.HasSetting(nc.ratings.show.trakt)"/>
+                <param name="lb" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]Letterboxd_Rating)) + Skin.HasSetting(nc.ratings.show.lb)"/>
+                <param name="mdb" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]MDBList_Rating)) + Skin.HasSetting(nc.ratings.show.mdb)"/>
+                <param name="own_imdb" value="![$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]IMDb_Rating))] + !String.IsEmpty($PARAM[item].Rating(imdb)) + $PARAM[library] + !Skin.HasSetting(nc.ratings.hide.imdb)"/>
+                <param name="own_moviedb" value="![$PARAM[tmdb] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]TMDb_Rating))] + !String.IsEmpty($PARAM[item].Rating(themoviedb)) + $PARAM[library] + Skin.HasSetting(nc.ratings.show.tmdb)"/>
+                <param name="own_tmdb" value="![$PARAM[tmdb] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]TMDb_Rating))] + String.IsEmpty($PARAM[item].Rating(themoviedb)) + !String.IsEmpty($PARAM[item].Rating(tmdb)) + $PARAM[library] + Skin.HasSetting(nc.ratings.show.tmdb)"/>
             </include>
         </definition>
     </include>

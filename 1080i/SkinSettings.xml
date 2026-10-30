@@ -6,7 +6,7 @@
      grabs the slot (pink), up/down carry it, OK drops it. Slot rows come from
      Includes_Sections.xml (tools/make_sections.py). Window properties: nc.hp.tab (category
      shown), nc.hp.grab (grabbed slot as page.n), nc.hp.slide (the delay slider of Player is
-     taken). Main menu comes first, colour scheme and glow at its end, then the ratings; Player last. -->
+     taken). Main menu comes first, colour scheme and glow at its end; Ratings and Player last. -->
 <window>
     <defaultcontrol always="true">9000</defaultcontrol>
     <onload>SetProperty(nc.hp.tab,menu)</onload>
@@ -36,6 +36,7 @@
                 <onright condition="String.IsEqual(Window.Property(nc.hp.tab),movies)">300</onright>
                 <onright condition="String.IsEqual(Window.Property(nc.hp.tab),shows)">400</onright>
                 <onright condition="String.IsEqual(Window.Property(nc.hp.tab),menu)">500</onright>
+                <onright condition="String.IsEqual(Window.Property(nc.hp.tab),ratings)">800</onright>
                 <onright condition="String.IsEqual(Window.Property(nc.hp.tab),player)">700</onright>
                 <onright>500</onright>
                 <onup>noop</onup>
@@ -59,6 +60,11 @@
                     <param name="id" value="9004"/>
                     <param name="tab" value="shows"/>
                     <param name="label" value="$LOCALIZE[20343]"/>
+                </include>
+                <include content="SkinSettingsCategory">
+                    <param name="id" value="9007"/>
+                    <param name="tab" value="ratings"/>
+                    <param name="label" value="$LOCALIZE[31445]"/>
                 </include>
                 <include content="SkinSettingsCategory">
                     <param name="id" value="9006"/>
@@ -185,48 +191,138 @@
                         <selected>!Skin.HasSetting(GlowOff)</selected>
                         <onclick>Skin.ToggleSetting(GlowOff)</onclick>
                         <onup>602</onup>
-                        <ondown>621</ondown>
+                        <ondown>noop</ondown>
                         <onleft>9005</onleft>
                         <onright>noop</onright>
                     </control>
                 </control>
-                <!-- the ratings line of heroes and info pages (Includes_Info.xml RatingsLine): only
-                     TMDb Helper's ratings, on by default (the skin bool stores off); the spotlight's
-                     ratings fetched without focus, off by default (scripts/nightcity.py hero_tick) -->
-                <control type="group" id="620">
+            </include>
+            <!-- the ratings line of heroes and info pages (Includes_Info.xml RatingsLine): only
+                 TMDb Helper's ratings, on by default (the skin bool stores off); the spotlight's
+                 ratings fetched without focus, off by default (scripts/nightcity.py hero_tick);
+                 then one toggle per source in the line's order. IMDb and Rotten Tomatoes critics
+                 are on by default (nc.ratings.hide.*), the others off (nc.ratings.show.*). -->
+            <include content="SkinSettingsArea">
+                <param name="id" value="800"/>
+                <param name="tab" value="ratings"/>
+                <param name="category" value="9007"/>
+                <include content="SkinSettingsToggle">
+                    <param name="id" value="621"/>
+                    <param name="label" value="$LOCALIZE[31441]"/>
+                    <param name="setting" value="nc.ratings.library"/>
+                </include>
+                <include content="SkinSettingsToggleOptIn">
+                    <param name="id" value="622"/>
+                    <param name="label" value="$LOCALIZE[31443]"/>
+                    <param name="setting" value="nc.ratings.spotlight"/>
+                </include>
+                <!-- a group under a separator and a heading, like the look of the main menu -->
+                <control type="group" id="630">
                     <width>1240</width>
-                    <height>157</height>
+                    <height>469</height>
                     <control type="image">
                         <width>1240</width>
                         <height>1</height>
                         <texture colordiffuse="border_dim">ui/white.png</texture>
                     </control>
                     <include content="SkinSettingsHeading">
-                        <param name="label" value="$LOCALIZE[31445]"/>
+                        <param name="label" value="$LOCALIZE[31446]"/>
                         <param name="top" value="1"/>
                     </include>
-                    <control type="radiobutton" id="621">
+                    <control type="radiobutton" id="631">
                         <top>53</top>
                         <width>1240</width>
                         <include>SettingsToggleLook</include>
-                        <label>$LOCALIZE[31441]</label>
-                        <selected>!Skin.HasSetting(nc.ratings.library)</selected>
-                        <onclick>Skin.ToggleSetting(nc.ratings.library)</onclick>
-                        <onup>601</onup>
-                        <ondown>622</ondown>
-                        <onleft>9005</onleft>
+                        <label>$LOCALIZE[31450]</label>
+                        <selected>!Skin.HasSetting(nc.ratings.hide.imdb)</selected>
+                        <onclick>Skin.ToggleSetting(nc.ratings.hide.imdb)</onclick>
+                        <onup>622</onup>
+                        <ondown>632</ondown>
+                        <onleft>9007</onleft>
                         <onright>noop</onright>
                     </control>
-                    <control type="radiobutton" id="622">
+                    <control type="radiobutton" id="632">
                         <top>105</top>
                         <width>1240</width>
                         <include>SettingsToggleLook</include>
-                        <label>$LOCALIZE[31443]</label>
-                        <selected>Skin.HasSetting(nc.ratings.spotlight)</selected>
-                        <onclick>Skin.ToggleSetting(nc.ratings.spotlight)</onclick>
-                        <onup>621</onup>
+                        <label>$LOCALIZE[31451]</label>
+                        <selected>Skin.HasSetting(nc.ratings.show.tmdb)</selected>
+                        <onclick>Skin.ToggleSetting(nc.ratings.show.tmdb)</onclick>
+                        <onup>631</onup>
+                        <ondown>633</ondown>
+                        <onleft>9007</onleft>
+                        <onright>noop</onright>
+                    </control>
+                    <control type="radiobutton" id="633">
+                        <top>157</top>
+                        <width>1240</width>
+                        <include>SettingsToggleLook</include>
+                        <label>$LOCALIZE[31452]</label>
+                        <selected>!Skin.HasSetting(nc.ratings.hide.rt)</selected>
+                        <onclick>Skin.ToggleSetting(nc.ratings.hide.rt)</onclick>
+                        <onup>632</onup>
+                        <ondown>634</ondown>
+                        <onleft>9007</onleft>
+                        <onright>noop</onright>
+                    </control>
+                    <control type="radiobutton" id="634">
+                        <top>209</top>
+                        <width>1240</width>
+                        <include>SettingsToggleLook</include>
+                        <label>$LOCALIZE[31453]</label>
+                        <selected>Skin.HasSetting(nc.ratings.show.rtu)</selected>
+                        <onclick>Skin.ToggleSetting(nc.ratings.show.rtu)</onclick>
+                        <onup>633</onup>
+                        <ondown>635</ondown>
+                        <onleft>9007</onleft>
+                        <onright>noop</onright>
+                    </control>
+                    <control type="radiobutton" id="635">
+                        <top>261</top>
+                        <width>1240</width>
+                        <include>SettingsToggleLook</include>
+                        <label>$LOCALIZE[31454]</label>
+                        <selected>Skin.HasSetting(nc.ratings.show.mc)</selected>
+                        <onclick>Skin.ToggleSetting(nc.ratings.show.mc)</onclick>
+                        <onup>634</onup>
+                        <ondown>636</ondown>
+                        <onleft>9007</onleft>
+                        <onright>noop</onright>
+                    </control>
+                    <control type="radiobutton" id="636">
+                        <top>313</top>
+                        <width>1240</width>
+                        <include>SettingsToggleLook</include>
+                        <label>$LOCALIZE[31455]</label>
+                        <selected>Skin.HasSetting(nc.ratings.show.trakt)</selected>
+                        <onclick>Skin.ToggleSetting(nc.ratings.show.trakt)</onclick>
+                        <onup>635</onup>
+                        <ondown>637</ondown>
+                        <onleft>9007</onleft>
+                        <onright>noop</onright>
+                    </control>
+                    <control type="radiobutton" id="637">
+                        <top>365</top>
+                        <width>1240</width>
+                        <include>SettingsToggleLook</include>
+                        <label>$LOCALIZE[31456]</label>
+                        <selected>Skin.HasSetting(nc.ratings.show.lb)</selected>
+                        <onclick>Skin.ToggleSetting(nc.ratings.show.lb)</onclick>
+                        <onup>636</onup>
+                        <ondown>638</ondown>
+                        <onleft>9007</onleft>
+                        <onright>noop</onright>
+                    </control>
+                    <control type="radiobutton" id="638">
+                        <top>417</top>
+                        <width>1240</width>
+                        <include>SettingsToggleLook</include>
+                        <label>$LOCALIZE[31457]</label>
+                        <selected>Skin.HasSetting(nc.ratings.show.mdb)</selected>
+                        <onclick>Skin.ToggleSetting(nc.ratings.show.mdb)</onclick>
+                        <onup>637</onup>
                         <ondown>noop</ondown>
-                        <onleft>9005</onleft>
+                        <onleft>9007</onleft>
                         <onright>noop</onright>
                     </control>
                 </control>
