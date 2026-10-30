@@ -33,12 +33,6 @@
             <filename>RetroUI-Bold.ttf</filename>
             <size>76</size>
         </font>
-        <!-- the > after the spotlight buttons: its glyph as tall as the buttons -->
-        <font>
-            <name>font_arrow</name>
-            <filename>RetroUI-Bold.ttf</filename>
-            <size>120</size>
-        </font>
         <!-- the NIGHTCITY wordmark on the Startup screen -->
         <font>
             <name>font_wordmark</name>

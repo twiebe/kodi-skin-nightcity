@@ -140,6 +140,18 @@ def hamburger(size, bar=5, gap=8):
     return img
 
 
+def chevron(width, height, stroke):
+    """The arrow after the spotlight buttons: a narrow chevron pointing right, as tall as the
+    buttons, its arms `stroke` px wide measured across."""
+    w, h = width * SCALE, height * SCALE
+    big = Image.new('L', (w, h), 0)
+    t = stroke * SCALE
+    ImageDraw.Draw(big).polygon([(0, 0), (t, 0), (w, h / 2), (t, h), (0, h), (w - t, h / 2)], fill=255)
+    image = Image.new('RGBA', (width, height), (255, 255, 255, 0))
+    image.putalpha(big.resize((width, height), Image.LANCZOS))
+    return image
+
+
 def main():
     cut(64, 14, line=2).save(UI / 'cut.png')
     cut(64, 14).save(UI / 'cut_fill.png')
@@ -163,6 +175,7 @@ def main():
     fade(256, 4, reverse=True).transpose(Image.Transpose.ROTATE_270).save(UI / 'fade_t.png')
     Image.new('RGBA', (2, 12), (255, 255, 255, 255)).save(UI / 'tick.png')  # chapter mark
     hamburger(64).save(UI / 'qm_menu.png')
+    chevron(22, 54, 6).save(UI / 'spot_more.png')
     # underline of tab entries: clear ends of 8 px, drawn unscaled with border="8,0,8,0", so the
     # line leaves out most of the button's padding and fits the text
     line = Image.new('RGBA', (20, 44), (255, 255, 255, 0))
