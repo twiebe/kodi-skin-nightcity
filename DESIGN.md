@@ -85,5 +85,7 @@ browser.
   lead there), slider nibs, the fill of a progress bar and the playing time.
 - The static test `tests/static/test_colors.py` holds the skin to this table.
 - **A progress line says where you are** in something that plays or was watched: under an
-  episode or a card, under the playing track of the music queue (live, from Player.Progress).
-  It stays on its item when the cursor moves away.
+  episode or a card. It stays on its item when the cursor moves away. The music queue has none:
+  Kodi redraws a list item only while the cursor is on it, so a live line elsewhere stood still.
+  Its playing track has a dark blue mark instead, wherever the cursor is: the bar of a current
+  value before a track's number, a line under a card's title.
