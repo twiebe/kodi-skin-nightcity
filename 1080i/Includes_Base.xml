@@ -28,6 +28,9 @@
          `art` is an infolabel such as ListItem.Art(fanart). -->
     <include name="FanartBackdrop">
         <param name="art"/>
+        <!-- fadetime: crossfade to the next picture; a spotlight backdrop takes longer, as the
+             rest of its hero -->
+        <param name="fadetime" default="200"/>
         <definition>
             <control type="image">
                 <description>fanart backdrop</description>
@@ -36,7 +39,7 @@
                 <width>1920</width>
                 <height>1080</height>
                 <aspectratio>scale</aspectratio>
-                <fadetime>200</fadetime>
+                <fadetime>$PARAM[fadetime]</fadetime>
                 <texture colordiffuse="fanart" diffuse="ui/fade_r.png" background="true">$INFO[$PARAM[art]]</texture>
                 <visible>!String.IsEmpty($PARAM[art])</visible>
             </control>
@@ -461,6 +464,8 @@
         <param name="width" default="200"/>
         <param name="height" default="300"/>
         <param name="image"/>
+        <!-- fadetime: crossfade of the artwork when it changes (a hero on a title change) -->
+        <param name="fadetime" default="0"/>
         <param name="mask" default="ui/mask_200x300.png"/>
         <param name="glowwidth" default="248"/>
         <param name="glowheight" default="348"/>
@@ -496,6 +501,7 @@
                     <width>$PARAM[width]</width>
                     <height>$PARAM[height]</height>
                     <aspectratio>scale</aspectratio>
+                    <fadetime>$PARAM[fadetime]</fadetime>
                     <texture background="true">$PARAM[image]</texture>
                     <visible>!$PARAM[focused]</visible>
                 </control>
@@ -503,6 +509,7 @@
                     <width>$PARAM[width]</width>
                     <height>$PARAM[height]</height>
                     <aspectratio scalediffuse="false">scale</aspectratio>
+                    <fadetime>$PARAM[fadetime]</fadetime>
                     <texture diffuse="$PARAM[mask]" background="true">$PARAM[image]</texture>
                     <visible>$PARAM[focused]</visible>
                 </control>
@@ -672,8 +679,6 @@
                 <alttexturefocus border="12" colordiffuse="accent">ui/cut_btn_fill.png</alttexturefocus>
                 <alttexturenofocus border="12" colordiffuse="accent">ui/cut_btn.png</alttexturenofocus>
                 <usealttexture>$PARAM[active]</usealttexture>
-                <!-- extra actions, e.g. the spotlight advance of a page tab (MainMenu) -->
-                <nested/>
                 <onfocus>$PARAM[onfocus]</onfocus>
                 <onclick>$PARAM[onclick]</onclick>
                 <altclick>$PARAM[onclick]</altclick>

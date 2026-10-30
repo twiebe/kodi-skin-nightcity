@@ -279,6 +279,7 @@
                 <param name="glowheight" value="328"/>
                 <param name="glowwidth" value="328"/>
                 <param name="image" value="$INFO[Container(9002).ListItem.Art(thumb)]"/>
+                <param name="fadetime" value="400"/>
             </include>
         </control>
         <control type="group">
