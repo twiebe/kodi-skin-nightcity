@@ -128,10 +128,10 @@ Each with what it costs if it turns out wrong.
    IMDb to Trakt and Letterboxd and MDbList stay out (a grouplist leaves out what does not fit
    whole). Cost: the last sources missing on the info page for users with every key; shorter
    names, fewer sources or a skin setting to pick them would fix it.
-3. **Ends at in the tags row, pink.** It sits right after the runtime ("136 MIN  ENDS AT
-   23:42"), so it reads with it. Pink (accent2) because it is state: it moves with the clock,
-   the resume point and the player. Cost: a third colour in the row (grey facts, pink state,
-   cyan tech); if that is too busy it can go grey.
+3. **Ends at in the tags row, like the runtime.** It sits right after the runtime ("136 MIN
+   ENDS AT 23:42"), so it reads with it, in the same grey tag. It was pink at first (state: it
+   moves with the clock, the resume point and the player); the user chose the runtime's look,
+   pink stays for titles. Cost: it does not stand out from the facts around it.
 4. **Ratings only for the item they belong to.** On the episode head the TMDb Helper values
    show only while the selected episode (list 5100) is the dialog's own episode (same season
    and episode), since TMDb Helper watches the dialog's item, not the list. Other episodes

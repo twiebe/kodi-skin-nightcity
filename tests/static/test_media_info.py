@@ -273,3 +273,17 @@ def test_info_key_names_hdr_and_audio_like_the_osd():
     assert tags['[UPPERCASE]$INFO[VideoPlayer.AudioLanguage,, ]$VAR[PlayerAudio][/UPPERCASE]'] == \
         '!String.IsEmpty(VideoPlayer.AudioCodec)'
     assert not [label for label in tags if 'VideoPlayer.HdrType' in label or 'AudioChannels' in label]
+
+
+@pytest.mark.parametrize('episode, item', HEADS)
+def test_ends_at_looks_like_the_runtime(episode, item):
+    """Not pink: ends at reads with the runtime next to it, in the same colour and style."""
+    head = _head(episode)
+    controls = {label: c for label, _, c in _labels(head)}
+    runtime = next(c for label, c in controls.items() if '$INFO[{}.Duration(mins)] $LOCALIZE[31012]'.format(item) in label)
+    for text in ('$LOCALIZE[31059] $INFO[{}.EndTimeResume]'.format(item), '$LOCALIZE[31059] $INFO[Player.FinishTime]'):
+        ends = next(c for label, c in controls.items() if text in label)
+        for tag in ('textcolor', 'disabledcolor', 'font', 'height', 'textoffsetx'):
+            assert ends.findtext(tag) == runtime.findtext(tag), (text, tag)
+        for tag in ('texturenofocus', 'texturefocus'):
+            assert ends.find(tag).attrib == runtime.find(tag).attrib, (text, tag)
