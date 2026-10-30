@@ -10,6 +10,7 @@
     </default>
     <default type="radiobutton">
         <pulseonselect>false</pulseonselect>
+        <font>font13</font>
     </default>
     <default type="edit">
         <pulseonselect>false</pulseonselect>
@@ -22,5 +23,18 @@
     </default>
     <default type="colorbutton">
         <pulseonselect>false</pulseonselect>
+    </default>
+    <!-- Kodi draws no text for a control without a font. Add-on windows that bring their own XML
+         rely on the skin for it, like Estuary and Arctic Fuse 3 do: the CoreELEC Configuration's
+         setting rows (labels) were blank, its wizard's choices (radiobuttons) too. The skin's
+         own labels all name their font; its fontless buttons are stand-ins and stay without. -->
+    <default type="label">
+        <font>font13</font>
+    </default>
+    <default type="fadelabel">
+        <font>font13</font>
+    </default>
+    <default type="textbox">
+        <font>font13</font>
     </default>
 </includes>
