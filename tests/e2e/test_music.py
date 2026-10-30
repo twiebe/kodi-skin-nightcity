@@ -45,6 +45,37 @@ def test_music_page_tab_and_buttons(music):
     screenshot('e2e-music-page')
 
 
+def spotlight_moves(direction, step):
+    """Press direction and wait for the album spotlight to move one album. It also scrolls on
+    its own, so a scroll between reading and pressing gets another try."""
+    key = 'Container(9002).CurrentItem'
+    total = int(info('Container(9002).NumItems')['Container(9002).NumItems'])
+    for _ in range(3):
+        start = int(info(key)[key])
+        action(direction)
+        try:
+            wait_for('Integer.IsEqual({},{})'.format(key, (start - 1 + step) % total + 1), timeout=3)
+            return
+        except AssertionError:
+            continue
+    raise AssertionError('album spotlight did not move {}'.format(direction))
+
+
+def test_spotlight_prev_next_album(music):
+    """Left on the first button the album before, Right on the last the next one; the chevron
+    hint after the last button takes no focus."""
+    open_page()
+    wait_for('Integer.IsGreater(Container(9002).NumItems,2)')
+    builtin('SetFocus(9852)')
+    wait_for('Control.HasFocus(9852)')
+    spotlight_moves('left', -1)
+    assert holds('Control.HasFocus(9852)')
+    builtin('SetFocus(9854)')
+    wait_for('Control.HasFocus(9854)')
+    spotlight_moves('right', 1)
+    assert holds('Control.HasFocus(9854)')
+
+
 def open_album():
     open_page()
     action('down')

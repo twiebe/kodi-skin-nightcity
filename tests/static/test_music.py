@@ -87,6 +87,10 @@ def test_music_spotlight_steps_at_the_ends():
     group = controls(load('Home.xml'))['9850']
     assert actions(group, 'onleft') == [('', 'Skin.TimerStart(nc_spot_hold)'), ('', 'Control.Move(9002,-1)')]
     assert actions(group, 'onright') == [('', 'Skin.TimerStart(nc_spot_hold)'), ('', 'Control.Move(9002,1)')]
+    # as the remote sees it: the arrow after the last button takes no focus and passes Right on
+    page, state = Page('Home.xml'), _home_state()
+    assert page.move('9852', 'onleft', state) == (None, ['Skin.TimerStart(nc_spot_hold)', 'Control.Move(9002,-1)'])
+    assert page.move('9854', 'onright', state) == (None, ['Skin.TimerStart(nc_spot_hold)', 'Control.Move(9002,1)'])
 
 
 def test_music_spotlight_buttons():
