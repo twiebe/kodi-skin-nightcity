@@ -17,14 +17,14 @@ def _include(name):
 
 def test_spotlight_more_is_three_chevrons_fading_to_the_right():
     """Three small drawn chevrons close together, like a direction hint in a racing game, each a
-    step darker to the right; centred on the buttons and set apart from them."""
+    step darker to the right, centred on the buttons, the usual button gap before them."""
     body = _include('SpotlightMore')
     images = re.findall(r'<control type="image">(.*?)</control>', body, re.S)
     assert len(images) == 3
     colours = [re.search(r'colordiffuse="(\w+)">ui/spot_more.png<', i).group(1) for i in images]
     assert colours == ['state_text', 'state_fade', 'state_faint']
     lefts = [int(re.search(r'<left>(\d+)</left>', i).group(1)) for i in images]
-    assert lefts[0] == 18 and lefts[1] - lefts[0] == lefts[2] - lefts[1] == 11
+    assert lefts[0] == 0 and lefts[1] - lefts[0] == lefts[2] - lefts[1] == 11
     for image in images:
         assert '<top>12</top>' in image and '<height>30</height>' in image
     assert '<height>54</height>' in body  # the group, as tall as the buttons

@@ -6,7 +6,7 @@ import xml.etree.ElementTree as ET
 import zipfile
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-EXCLUDE = {'.git', '.gitignore', '.superpowers', 'docs', 'tests', 'tools', 'requirements-dev.txt', 'pytest.ini',
+EXCLUDE = {'.git', '.gitignore', '.superpowers', 'CLAUDE.md', 'docs', 'tests', 'tools', 'requirements-dev.txt', 'pytest.ini',
            '__pycache__', '.venv', '.pytest_cache'}
 
 
