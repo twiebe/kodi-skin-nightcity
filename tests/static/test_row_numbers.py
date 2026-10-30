@@ -83,7 +83,9 @@ def test_every_row_heading_has_a_pink_number(page, skin):
     assert found
     for group, variable, label in found:
         assert variable == 'RowNumber_{}_{}'.format(page, PAGES[page][1].index(group) + 1)
-        assert label.findtext('font') == rail.findtext('font')
+        # a number alone stands before tabs and takes their font (test_genre_row_...)
+        if not label.findtext('label').endswith('[/COLOR]'):
+            assert label.findtext('font') == rail.findtext('font')
         assert label.findtext('textcolor') == rail.findtext('textcolor')
 
 
@@ -100,7 +102,8 @@ def test_numbers_count_the_shown_rows(page):
 
 def test_genre_row_puts_its_number_before_the_tabs():
     """A genre row has tabs where the title would be: the number stands in front of them, the
-    tabs start where the title of a row starts after its number."""
+    tabs start where the title of a row starts after its number. The number sits on the line
+    of the tab labels: same font, top, height and vertical alignment as a tab."""
     for page, base in (('movies', '94'), ('shows', '95')):
         group = next(g for g in load('Home.xml', FULL).iter('control') if g.get('id') == base + '15')
         tabs = next(c for c in group.iter('control') if c.get('id') == base + '30')
@@ -108,3 +111,7 @@ def test_genre_row_puts_its_number_before_the_tabs():
         assert label.findtext('label').endswith('[/COLOR]')
         assert int(label.findtext('left')) == 64
         assert int(tabs.findtext('left')) > 64
+        tab = next(c for c in tabs.iter('control') if c.get('id') == base + '31')
+        assert int(label.findtext('top')) == int(tabs.findtext('top')) + int(tab.findtext('top') or 0)
+        for tag in ('height', 'font', 'aligny'):
+            assert label.findtext(tag) == tab.findtext(tag), (page, tag)

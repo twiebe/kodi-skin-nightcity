@@ -143,7 +143,7 @@
                     <param name="prop" value="genre"/>
                     <param name="picklabel" value="$VAR[GenrePickLabel]"/>
                     <param name="pick" value="genre_pick"/>
-                    <param name="left" value="72"/>
+                    <param name="left" value="75"/>
                 </include>
             </include>
             <include content="RowBox" condition="[String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),genres) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_genres]]] + String.IsEqual(Skin.String(nc.home.slot$PARAM[n].opt),shows)">
@@ -167,7 +167,7 @@
                     <param name="prop" value="tvgenre"/>
                     <param name="picklabel" value="$VAR[ShowGenrePickLabel]"/>
                     <param name="pick" value="genre_pick:tvshow"/>
-                    <param name="left" value="72"/>
+                    <param name="left" value="75"/>
                 </include>
             </include>
             <include content="RowBox" condition="[String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),random) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_random]]] + ![String.IsEqual(Skin.String(nc.home.slot$PARAM[n].opt),unwatched)]">
@@ -583,7 +583,7 @@
                     <param name="prop" value="genre"/>
                     <param name="picklabel" value="$VAR[GenrePickLabel]"/>
                     <param name="pick" value="genre_pick"/>
-                    <param name="left" value="72"/>
+                    <param name="left" value="75"/>
                 </include>
             </include>
             <include content="RowBox" condition="[String.IsEqual(Skin.String(nc.movies.slot$PARAM[n]),sets) | [String.IsEmpty(Skin.String(nc.movies.slot$PARAM[n])) + $PARAM[def_sets]]]">
@@ -815,7 +815,7 @@
                     <param name="prop" value="tvgenre"/>
                     <param name="picklabel" value="$VAR[ShowGenrePickLabel]"/>
                     <param name="pick" value="genre_pick:tvshow"/>
-                    <param name="left" value="72"/>
+                    <param name="left" value="75"/>
                 </include>
             </include>
             <include content="RowBox" condition="[String.IsEqual(Skin.String(nc.shows.slot$PARAM[n]),trending) | [String.IsEmpty(Skin.String(nc.shows.slot$PARAM[n])) + $PARAM[def_trending]]]">

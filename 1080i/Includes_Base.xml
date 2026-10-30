@@ -460,18 +460,19 @@
         </definition>
     </include>
 
-    <!-- Only the number of a row whose top line holds tabs instead of a title (genre rows) -->
+    <!-- Only the number of a row whose top line holds tabs instead of a title (genre rows): on
+         the line of the tab labels (TabButton: top of the row, height 44, centred, font_caps) -->
     <include name="RowNumber">
         <param name="num"/>
         <param name="left" default="0"/>
-        <param name="top" default="0"/>
         <definition>
             <control type="label">
                 <left>$PARAM[left]</left>
-                <top>$PARAM[top]</top>
+                <top>0</top>
                 <width>100</width>
-                <height>34</height>
-                <font>font_caps_small</font>
+                <height>44</height>
+                <aligny>center</aligny>
+                <font>font_caps</font>
                 <textcolor>text_mute</textcolor>
                 <label>[COLOR accent2]$PARAM[num][/COLOR]</label>
             </control>
