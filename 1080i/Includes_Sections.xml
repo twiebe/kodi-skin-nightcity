@@ -11,9 +11,10 @@
             </control>
         </definition>
     </include>
-    <!-- One slot of the home page: the row of its section (n, up and down from HomeSlots) -->
+    <!-- One slot of the home page: the row of its section (n, num, up and down from HomeSlots) -->
     <include name="HomeSlot">
         <param name="n"/>
+        <param name="num"/>
         <param name="up"/>
         <param name="down" default="noop"/>
         <param name="def_continue" default="false"/>
@@ -34,6 +35,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31233]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetInProgressMovies.xsp"/>
                 <param name="content2" value="special://skin/playlists/WidgetInProgressEpisodes.xsp"/>
                 <param name="loader" value="922$PARAM[n]"/>
@@ -45,6 +48,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31233]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetInProgressMovies.xsp"/>
                 <param name="loader" value="922$PARAM[n]"/>
                 <param name="wait" value="true"/>
@@ -55,6 +60,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31233]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetInProgressEpisodes.xsp"/>
                 <param name="loader" value="922$PARAM[n]"/>
                 <param name="wait" value="true"/>
@@ -65,6 +72,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31234]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetContinueShows.xsp"/>
                 <param name="loader" value="922$PARAM[n]"/>
                 <param name="wait" value="true"/>
@@ -75,6 +84,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31235]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetNewMovies.xsp"/>
                 <param name="loader" value="920$PARAM[n]"/>
             </include>
@@ -84,6 +95,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31235]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetNewMoviesUnwatched.xsp"/>
                 <param name="loader" value="920$PARAM[n]"/>
             </include>
@@ -93,6 +106,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31236]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetNewShows.xsp"/>
                 <param name="loader" value="920$PARAM[n]"/>
             </include>
@@ -102,6 +117,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31236]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetNewShowsUnwatched.xsp"/>
                 <param name="loader" value="920$PARAM[n]"/>
             </include>
@@ -111,9 +128,10 @@
                 <param name="up" value="9230"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[135]"/>
+                <param name="header" value="RowNumber"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="videodb://movies/genres/$INFO[Window(Home).Property(nc.genre.id)]/"/>
                 <param name="loader" value="920$PARAM[n]"/>
-                <param name="titlevisible" value="false"/>
                 <param name="sortby" value="dateadded"/>
                 <param name="sortorder" value="descending"/>
                 <param name="limit" value="25"/>
@@ -125,6 +143,7 @@
                     <param name="prop" value="genre"/>
                     <param name="picklabel" value="$VAR[GenrePickLabel]"/>
                     <param name="pick" value="genre_pick"/>
+                    <param name="left" value="72"/>
                 </include>
             </include>
             <include content="RowBox" condition="[String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),genres) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_genres]]] + String.IsEqual(Skin.String(nc.home.slot$PARAM[n].opt),shows)">
@@ -133,9 +152,10 @@
                 <param name="up" value="9230"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[135]"/>
+                <param name="header" value="RowNumber"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="videodb://tvshows/genres/$INFO[Window(Home).Property(nc.tvgenre.id)]/"/>
                 <param name="loader" value="920$PARAM[n]"/>
-                <param name="titlevisible" value="false"/>
                 <param name="sortby" value="dateadded"/>
                 <param name="sortorder" value="descending"/>
                 <param name="limit" value="25"/>
@@ -147,6 +167,7 @@
                     <param name="prop" value="tvgenre"/>
                     <param name="picklabel" value="$VAR[ShowGenrePickLabel]"/>
                     <param name="pick" value="genre_pick:tvshow"/>
+                    <param name="left" value="72"/>
                 </include>
             </include>
             <include content="RowBox" condition="[String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),random) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_random]]] + ![String.IsEqual(Skin.String(nc.home.slot$PARAM[n].opt),unwatched)]">
@@ -155,6 +176,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31237]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetRandomMovies.xsp"/>
                 <param name="loader" value="920$PARAM[n]"/>
             </include>
@@ -164,6 +187,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31237]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetRandomMoviesUnwatched.xsp"/>
                 <param name="loader" value="920$PARAM[n]"/>
             </include>
@@ -173,6 +198,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[16101]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetUnwatchedMovies.xsp"/>
                 <param name="loader" value="920$PARAM[n]"/>
             </include>
@@ -182,6 +209,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[16101]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetUnwatchedShows.xsp"/>
                 <param name="loader" value="920$PARAM[n]"/>
             </include>
@@ -191,6 +220,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[16101]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetUnwatchedMovies.xsp"/>
                 <param name="content2" value="special://skin/playlists/WidgetUnwatchedShows.xsp"/>
                 <param name="loader" value="920$PARAM[n]"/>
@@ -201,6 +232,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31238]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetTopRatedMovies.xsp"/>
                 <param name="loader" value="920$PARAM[n]"/>
             </include>
@@ -210,6 +243,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31238]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetTopRatedShows.xsp"/>
                 <param name="loader" value="920$PARAM[n]"/>
             </include>
@@ -219,6 +254,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[1036]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="favourites://"/>
                 <param name="loader" value="920$PARAM[n]"/>
                 <param name="click" value="ProviderClick"/>
@@ -230,6 +267,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31239]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="$VAR[TmdbTrendingHomeMovies]"/>
                 <param name="loader" value="922$PARAM[n]"/>
                 <param name="wait" value="true"/>
@@ -240,6 +279,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31239]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="$VAR[TmdbTrendingHomeShows]"/>
                 <param name="loader" value="922$PARAM[n]"/>
                 <param name="wait" value="true"/>
@@ -250,6 +291,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31240]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetRecentMovies.xsp"/>
                 <param name="content2" value="special://skin/playlists/WidgetRecentEpisodes.xsp"/>
                 <param name="loader" value="922$PARAM[n]"/>
@@ -261,6 +304,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31240]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetRecentMovies.xsp"/>
                 <param name="loader" value="922$PARAM[n]"/>
                 <param name="wait" value="true"/>
@@ -271,6 +316,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31240]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetRecentEpisodes.xsp"/>
                 <param name="loader" value="922$PARAM[n]"/>
                 <param name="wait" value="true"/>
@@ -341,45 +388,53 @@
         <definition>
             <include content="HomeSlot">
                 <param name="n" value="1"/>
+                <param name="num" value="$VAR[RowNumber_home_1]"/>
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="9212"/>
                 <param name="def_continue" value="true"/>
             </include>
             <include content="HomeSlot">
                 <param name="n" value="2"/>
+                <param name="num" value="$VAR[RowNumber_home_2]"/>
                 <param name="up" value="9211"/>
                 <param name="down" value="9213"/>
                 <param name="def_newmovies" value="true"/>
             </include>
             <include content="HomeSlot">
                 <param name="n" value="3"/>
+                <param name="num" value="$VAR[RowNumber_home_3]"/>
                 <param name="up" value="9212"/>
                 <param name="down" value="9214"/>
                 <param name="def_newepisodes" value="true"/>
             </include>
             <include content="HomeSlot">
                 <param name="n" value="4"/>
+                <param name="num" value="$VAR[RowNumber_home_4]"/>
                 <param name="up" value="9213"/>
                 <param name="down" value="9215"/>
                 <param name="def_nextup" value="true"/>
             </include>
             <include content="HomeSlot">
                 <param name="n" value="5"/>
+                <param name="num" value="$VAR[RowNumber_home_5]"/>
                 <param name="up" value="9214"/>
                 <param name="down" value="9216"/>
             </include>
             <include content="HomeSlot">
                 <param name="n" value="6"/>
+                <param name="num" value="$VAR[RowNumber_home_6]"/>
                 <param name="up" value="9215"/>
                 <param name="down" value="9217"/>
             </include>
             <include content="HomeSlot">
                 <param name="n" value="7"/>
+                <param name="num" value="$VAR[RowNumber_home_7]"/>
                 <param name="up" value="9216"/>
                 <param name="down" value="9218"/>
             </include>
             <include content="HomeSlot">
                 <param name="n" value="8"/>
+                <param name="num" value="$VAR[RowNumber_home_8]"/>
                 <param name="up" value="9217"/>
             </include>
         </definition>
@@ -414,9 +469,10 @@
             <param name="n" value="8"/>
         </include>
     </include>
-    <!-- One slot of the movies page: the row of its section (n, up and down from MoviesSlots) -->
+    <!-- One slot of the movies page: the row of its section (n, num, up and down from MoviesSlots) -->
     <include name="MoviesSlot">
         <param name="n"/>
+        <param name="num"/>
         <param name="up"/>
         <param name="down" default="noop"/>
         <param name="def_continue" default="false"/>
@@ -434,6 +490,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31233]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetInProgressMovies.xsp"/>
                 <param name="loader" value="942$PARAM[n]"/>
                 <param name="wait" value="true"/>
@@ -444,6 +502,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31235]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetNewMovies.xsp"/>
                 <param name="loader" value="940$PARAM[n]"/>
             </include>
@@ -453,6 +513,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31235]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetNewMoviesUnwatched.xsp"/>
                 <param name="loader" value="940$PARAM[n]"/>
             </include>
@@ -462,6 +524,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[16101]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetUnwatchedMovies.xsp"/>
                 <param name="loader" value="940$PARAM[n]"/>
             </include>
@@ -471,6 +535,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31237]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetRandomMovies.xsp"/>
                 <param name="loader" value="940$PARAM[n]"/>
             </include>
@@ -480,6 +546,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31237]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetRandomMoviesUnwatched.xsp"/>
                 <param name="loader" value="940$PARAM[n]"/>
             </include>
@@ -489,6 +557,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31238]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetTopRatedMovies.xsp"/>
                 <param name="loader" value="940$PARAM[n]"/>
             </include>
@@ -498,9 +568,10 @@
                 <param name="up" value="9430"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[135]"/>
+                <param name="header" value="RowNumber"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="videodb://movies/genres/$INFO[Window(Home).Property(nc.genre.id)]/"/>
                 <param name="loader" value="940$PARAM[n]"/>
-                <param name="titlevisible" value="false"/>
                 <param name="sortby" value="dateadded"/>
                 <param name="sortorder" value="descending"/>
                 <param name="limit" value="25"/>
@@ -512,6 +583,7 @@
                     <param name="prop" value="genre"/>
                     <param name="picklabel" value="$VAR[GenrePickLabel]"/>
                     <param name="pick" value="genre_pick"/>
+                    <param name="left" value="72"/>
                 </include>
             </include>
             <include content="RowBox" condition="[String.IsEqual(Skin.String(nc.movies.slot$PARAM[n]),sets) | [String.IsEmpty(Skin.String(nc.movies.slot$PARAM[n])) + $PARAM[def_sets]]]">
@@ -520,6 +592,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[20434]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="videodb://movies/sets/"/>
                 <param name="loader" value="940$PARAM[n]"/>
                 <param name="click" value="ProviderClick"/>
@@ -530,6 +604,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31239]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="$VAR[TmdbTrendingMoviesMovies]"/>
                 <param name="loader" value="942$PARAM[n]"/>
                 <param name="wait" value="true"/>
@@ -567,45 +643,53 @@
         <definition>
             <include content="MoviesSlot">
                 <param name="n" value="1"/>
+                <param name="num" value="$VAR[RowNumber_movies_1]"/>
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="9412"/>
                 <param name="def_newmovies" value="true"/>
             </include>
             <include content="MoviesSlot">
                 <param name="n" value="2"/>
+                <param name="num" value="$VAR[RowNumber_movies_2]"/>
                 <param name="up" value="9411"/>
                 <param name="down" value="9413"/>
                 <param name="def_continue" value="true"/>
             </include>
             <include content="MoviesSlot">
                 <param name="n" value="3"/>
+                <param name="num" value="$VAR[RowNumber_movies_3]"/>
                 <param name="up" value="9412"/>
                 <param name="down" value="9414"/>
                 <param name="def_unwatched" value="true"/>
             </include>
             <include content="MoviesSlot">
                 <param name="n" value="4"/>
+                <param name="num" value="$VAR[RowNumber_movies_4]"/>
                 <param name="up" value="9413"/>
                 <param name="down" value="9415"/>
                 <param name="def_genres" value="true"/>
             </include>
             <include content="MoviesSlot">
                 <param name="n" value="5"/>
+                <param name="num" value="$VAR[RowNumber_movies_5]"/>
                 <param name="up" value="9414"/>
                 <param name="down" value="9416"/>
             </include>
             <include content="MoviesSlot">
                 <param name="n" value="6"/>
+                <param name="num" value="$VAR[RowNumber_movies_6]"/>
                 <param name="up" value="9415"/>
                 <param name="down" value="9417"/>
             </include>
             <include content="MoviesSlot">
                 <param name="n" value="7"/>
+                <param name="num" value="$VAR[RowNumber_movies_7]"/>
                 <param name="up" value="9416"/>
                 <param name="down" value="9418"/>
             </include>
             <include content="MoviesSlot">
                 <param name="n" value="8"/>
+                <param name="num" value="$VAR[RowNumber_movies_8]"/>
                 <param name="up" value="9417"/>
             </include>
         </definition>
@@ -640,9 +724,10 @@
             <param name="n" value="8"/>
         </include>
     </include>
-    <!-- One slot of the shows page: the row of its section (n, up and down from ShowsSlots) -->
+    <!-- One slot of the shows page: the row of its section (n, num, up and down from ShowsSlots) -->
     <include name="ShowsSlot">
         <param name="n"/>
+        <param name="num"/>
         <param name="up"/>
         <param name="down" default="noop"/>
         <param name="def_nextup" default="false"/>
@@ -658,6 +743,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31234]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetContinueShows.xsp"/>
                 <param name="loader" value="952$PARAM[n]"/>
                 <param name="wait" value="true"/>
@@ -668,6 +755,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31236]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetNewShows.xsp"/>
                 <param name="loader" value="950$PARAM[n]"/>
             </include>
@@ -677,6 +766,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31236]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetNewShowsUnwatched.xsp"/>
                 <param name="loader" value="950$PARAM[n]"/>
             </include>
@@ -686,6 +777,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[575]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetInProgressEpisodes.xsp"/>
                 <param name="loader" value="952$PARAM[n]"/>
                 <param name="wait" value="true"/>
@@ -696,6 +789,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[16101]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="special://skin/playlists/WidgetUnwatchedShows.xsp"/>
                 <param name="loader" value="950$PARAM[n]"/>
             </include>
@@ -705,9 +800,10 @@
                 <param name="up" value="9530"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[135]"/>
+                <param name="header" value="RowNumber"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="videodb://tvshows/genres/$INFO[Window(Home).Property(nc.tvgenre.id)]/"/>
                 <param name="loader" value="950$PARAM[n]"/>
-                <param name="titlevisible" value="false"/>
                 <param name="sortby" value="dateadded"/>
                 <param name="sortorder" value="descending"/>
                 <param name="limit" value="25"/>
@@ -719,6 +815,7 @@
                     <param name="prop" value="tvgenre"/>
                     <param name="picklabel" value="$VAR[ShowGenrePickLabel]"/>
                     <param name="pick" value="genre_pick:tvshow"/>
+                    <param name="left" value="72"/>
                 </include>
             </include>
             <include content="RowBox" condition="[String.IsEqual(Skin.String(nc.shows.slot$PARAM[n]),trending) | [String.IsEmpty(Skin.String(nc.shows.slot$PARAM[n])) + $PARAM[def_trending]]]">
@@ -727,6 +824,8 @@
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="$PARAM[down]"/>
                 <param name="label" value="$LOCALIZE[31239]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
                 <param name="content1" value="$VAR[TmdbTrendingShowsShows]"/>
                 <param name="loader" value="952$PARAM[n]"/>
                 <param name="wait" value="true"/>
@@ -766,45 +865,53 @@
         <definition>
             <include content="ShowsSlot">
                 <param name="n" value="1"/>
+                <param name="num" value="$VAR[RowNumber_shows_1]"/>
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="9512"/>
                 <param name="def_nextup" value="true"/>
             </include>
             <include content="ShowsSlot">
                 <param name="n" value="2"/>
+                <param name="num" value="$VAR[RowNumber_shows_2]"/>
                 <param name="up" value="9511"/>
                 <param name="down" value="9513"/>
                 <param name="def_newepisodes" value="true"/>
             </include>
             <include content="ShowsSlot">
                 <param name="n" value="3"/>
+                <param name="num" value="$VAR[RowNumber_shows_3]"/>
                 <param name="up" value="9512"/>
                 <param name="down" value="9514"/>
                 <param name="def_inprogress" value="true"/>
             </include>
             <include content="ShowsSlot">
                 <param name="n" value="4"/>
+                <param name="num" value="$VAR[RowNumber_shows_4]"/>
                 <param name="up" value="9513"/>
                 <param name="down" value="9515"/>
                 <param name="def_unwatched" value="true"/>
             </include>
             <include content="ShowsSlot">
                 <param name="n" value="5"/>
+                <param name="num" value="$VAR[RowNumber_shows_5]"/>
                 <param name="up" value="9514"/>
                 <param name="down" value="9516"/>
             </include>
             <include content="ShowsSlot">
                 <param name="n" value="6"/>
+                <param name="num" value="$VAR[RowNumber_shows_6]"/>
                 <param name="up" value="9515"/>
                 <param name="down" value="9517"/>
             </include>
             <include content="ShowsSlot">
                 <param name="n" value="7"/>
+                <param name="num" value="$VAR[RowNumber_shows_7]"/>
                 <param name="up" value="9516"/>
                 <param name="down" value="9518"/>
             </include>
             <include content="ShowsSlot">
                 <param name="n" value="8"/>
+                <param name="num" value="$VAR[RowNumber_shows_8]"/>
                 <param name="up" value="9517"/>
             </include>
         </definition>
@@ -839,6 +946,308 @@
             <param name="n" value="8"/>
         </include>
     </include>
+    <!-- Row numbers (pink, in front of the headings): a row counts the shown rows above
+         it; the spotlight is 00 and has no heading, so the first shown row is 01 -->
+    <expression name="RowsShown_home_1_0">!Control.IsVisible(9211)</expression>
+    <expression name="RowsShown_home_1_1">Control.IsVisible(9211)</expression>
+    <expression name="RowsShown_home_2_0">[!Control.IsVisible(9212) + $EXP[RowsShown_home_1_0]]</expression>
+    <expression name="RowsShown_home_2_1">[Control.IsVisible(9212) + $EXP[RowsShown_home_1_0]] | [!Control.IsVisible(9212) + $EXP[RowsShown_home_1_1]]</expression>
+    <expression name="RowsShown_home_2_2">[Control.IsVisible(9212) + $EXP[RowsShown_home_1_1]]</expression>
+    <expression name="RowsShown_home_3_0">[!Control.IsVisible(9213) + $EXP[RowsShown_home_2_0]]</expression>
+    <expression name="RowsShown_home_3_1">[Control.IsVisible(9213) + $EXP[RowsShown_home_2_0]] | [!Control.IsVisible(9213) + $EXP[RowsShown_home_2_1]]</expression>
+    <expression name="RowsShown_home_3_2">[Control.IsVisible(9213) + $EXP[RowsShown_home_2_1]] | [!Control.IsVisible(9213) + $EXP[RowsShown_home_2_2]]</expression>
+    <expression name="RowsShown_home_3_3">[Control.IsVisible(9213) + $EXP[RowsShown_home_2_2]]</expression>
+    <expression name="RowsShown_home_4_0">[!Control.IsVisible(9214) + $EXP[RowsShown_home_3_0]]</expression>
+    <expression name="RowsShown_home_4_1">[Control.IsVisible(9214) + $EXP[RowsShown_home_3_0]] | [!Control.IsVisible(9214) + $EXP[RowsShown_home_3_1]]</expression>
+    <expression name="RowsShown_home_4_2">[Control.IsVisible(9214) + $EXP[RowsShown_home_3_1]] | [!Control.IsVisible(9214) + $EXP[RowsShown_home_3_2]]</expression>
+    <expression name="RowsShown_home_4_3">[Control.IsVisible(9214) + $EXP[RowsShown_home_3_2]] | [!Control.IsVisible(9214) + $EXP[RowsShown_home_3_3]]</expression>
+    <expression name="RowsShown_home_4_4">[Control.IsVisible(9214) + $EXP[RowsShown_home_3_3]]</expression>
+    <expression name="RowsShown_home_5_0">[!Control.IsVisible(9215) + $EXP[RowsShown_home_4_0]]</expression>
+    <expression name="RowsShown_home_5_1">[Control.IsVisible(9215) + $EXP[RowsShown_home_4_0]] | [!Control.IsVisible(9215) + $EXP[RowsShown_home_4_1]]</expression>
+    <expression name="RowsShown_home_5_2">[Control.IsVisible(9215) + $EXP[RowsShown_home_4_1]] | [!Control.IsVisible(9215) + $EXP[RowsShown_home_4_2]]</expression>
+    <expression name="RowsShown_home_5_3">[Control.IsVisible(9215) + $EXP[RowsShown_home_4_2]] | [!Control.IsVisible(9215) + $EXP[RowsShown_home_4_3]]</expression>
+    <expression name="RowsShown_home_5_4">[Control.IsVisible(9215) + $EXP[RowsShown_home_4_3]] | [!Control.IsVisible(9215) + $EXP[RowsShown_home_4_4]]</expression>
+    <expression name="RowsShown_home_5_5">[Control.IsVisible(9215) + $EXP[RowsShown_home_4_4]]</expression>
+    <expression name="RowsShown_home_6_0">[!Control.IsVisible(9216) + $EXP[RowsShown_home_5_0]]</expression>
+    <expression name="RowsShown_home_6_1">[Control.IsVisible(9216) + $EXP[RowsShown_home_5_0]] | [!Control.IsVisible(9216) + $EXP[RowsShown_home_5_1]]</expression>
+    <expression name="RowsShown_home_6_2">[Control.IsVisible(9216) + $EXP[RowsShown_home_5_1]] | [!Control.IsVisible(9216) + $EXP[RowsShown_home_5_2]]</expression>
+    <expression name="RowsShown_home_6_3">[Control.IsVisible(9216) + $EXP[RowsShown_home_5_2]] | [!Control.IsVisible(9216) + $EXP[RowsShown_home_5_3]]</expression>
+    <expression name="RowsShown_home_6_4">[Control.IsVisible(9216) + $EXP[RowsShown_home_5_3]] | [!Control.IsVisible(9216) + $EXP[RowsShown_home_5_4]]</expression>
+    <expression name="RowsShown_home_6_5">[Control.IsVisible(9216) + $EXP[RowsShown_home_5_4]] | [!Control.IsVisible(9216) + $EXP[RowsShown_home_5_5]]</expression>
+    <expression name="RowsShown_home_6_6">[Control.IsVisible(9216) + $EXP[RowsShown_home_5_5]]</expression>
+    <expression name="RowsShown_home_7_0">[!Control.IsVisible(9217) + $EXP[RowsShown_home_6_0]]</expression>
+    <expression name="RowsShown_home_7_1">[Control.IsVisible(9217) + $EXP[RowsShown_home_6_0]] | [!Control.IsVisible(9217) + $EXP[RowsShown_home_6_1]]</expression>
+    <expression name="RowsShown_home_7_2">[Control.IsVisible(9217) + $EXP[RowsShown_home_6_1]] | [!Control.IsVisible(9217) + $EXP[RowsShown_home_6_2]]</expression>
+    <expression name="RowsShown_home_7_3">[Control.IsVisible(9217) + $EXP[RowsShown_home_6_2]] | [!Control.IsVisible(9217) + $EXP[RowsShown_home_6_3]]</expression>
+    <expression name="RowsShown_home_7_4">[Control.IsVisible(9217) + $EXP[RowsShown_home_6_3]] | [!Control.IsVisible(9217) + $EXP[RowsShown_home_6_4]]</expression>
+    <expression name="RowsShown_home_7_5">[Control.IsVisible(9217) + $EXP[RowsShown_home_6_4]] | [!Control.IsVisible(9217) + $EXP[RowsShown_home_6_5]]</expression>
+    <expression name="RowsShown_home_7_6">[Control.IsVisible(9217) + $EXP[RowsShown_home_6_5]] | [!Control.IsVisible(9217) + $EXP[RowsShown_home_6_6]]</expression>
+    <expression name="RowsShown_home_7_7">[Control.IsVisible(9217) + $EXP[RowsShown_home_6_6]]</expression>
+    <variable name="RowNumber_home_1">
+        <value>01</value>
+    </variable>
+    <variable name="RowNumber_home_2">
+        <value condition="$EXP[RowsShown_home_1_0]">01</value>
+        <value>02</value>
+    </variable>
+    <variable name="RowNumber_home_3">
+        <value condition="$EXP[RowsShown_home_2_0]">01</value>
+        <value condition="$EXP[RowsShown_home_2_1]">02</value>
+        <value>03</value>
+    </variable>
+    <variable name="RowNumber_home_4">
+        <value condition="$EXP[RowsShown_home_3_0]">01</value>
+        <value condition="$EXP[RowsShown_home_3_1]">02</value>
+        <value condition="$EXP[RowsShown_home_3_2]">03</value>
+        <value>04</value>
+    </variable>
+    <variable name="RowNumber_home_5">
+        <value condition="$EXP[RowsShown_home_4_0]">01</value>
+        <value condition="$EXP[RowsShown_home_4_1]">02</value>
+        <value condition="$EXP[RowsShown_home_4_2]">03</value>
+        <value condition="$EXP[RowsShown_home_4_3]">04</value>
+        <value>05</value>
+    </variable>
+    <variable name="RowNumber_home_6">
+        <value condition="$EXP[RowsShown_home_5_0]">01</value>
+        <value condition="$EXP[RowsShown_home_5_1]">02</value>
+        <value condition="$EXP[RowsShown_home_5_2]">03</value>
+        <value condition="$EXP[RowsShown_home_5_3]">04</value>
+        <value condition="$EXP[RowsShown_home_5_4]">05</value>
+        <value>06</value>
+    </variable>
+    <variable name="RowNumber_home_7">
+        <value condition="$EXP[RowsShown_home_6_0]">01</value>
+        <value condition="$EXP[RowsShown_home_6_1]">02</value>
+        <value condition="$EXP[RowsShown_home_6_2]">03</value>
+        <value condition="$EXP[RowsShown_home_6_3]">04</value>
+        <value condition="$EXP[RowsShown_home_6_4]">05</value>
+        <value condition="$EXP[RowsShown_home_6_5]">06</value>
+        <value>07</value>
+    </variable>
+    <variable name="RowNumber_home_8">
+        <value condition="$EXP[RowsShown_home_7_0]">01</value>
+        <value condition="$EXP[RowsShown_home_7_1]">02</value>
+        <value condition="$EXP[RowsShown_home_7_2]">03</value>
+        <value condition="$EXP[RowsShown_home_7_3]">04</value>
+        <value condition="$EXP[RowsShown_home_7_4]">05</value>
+        <value condition="$EXP[RowsShown_home_7_5]">06</value>
+        <value condition="$EXP[RowsShown_home_7_6]">07</value>
+        <value>08</value>
+    </variable>
+    <expression name="RowsShown_movies_1_0">!Control.IsVisible(9411)</expression>
+    <expression name="RowsShown_movies_1_1">Control.IsVisible(9411)</expression>
+    <expression name="RowsShown_movies_2_0">[!Control.IsVisible(9412) + $EXP[RowsShown_movies_1_0]]</expression>
+    <expression name="RowsShown_movies_2_1">[Control.IsVisible(9412) + $EXP[RowsShown_movies_1_0]] | [!Control.IsVisible(9412) + $EXP[RowsShown_movies_1_1]]</expression>
+    <expression name="RowsShown_movies_2_2">[Control.IsVisible(9412) + $EXP[RowsShown_movies_1_1]]</expression>
+    <expression name="RowsShown_movies_3_0">[!Control.IsVisible(9413) + $EXP[RowsShown_movies_2_0]]</expression>
+    <expression name="RowsShown_movies_3_1">[Control.IsVisible(9413) + $EXP[RowsShown_movies_2_0]] | [!Control.IsVisible(9413) + $EXP[RowsShown_movies_2_1]]</expression>
+    <expression name="RowsShown_movies_3_2">[Control.IsVisible(9413) + $EXP[RowsShown_movies_2_1]] | [!Control.IsVisible(9413) + $EXP[RowsShown_movies_2_2]]</expression>
+    <expression name="RowsShown_movies_3_3">[Control.IsVisible(9413) + $EXP[RowsShown_movies_2_2]]</expression>
+    <expression name="RowsShown_movies_4_0">[!Control.IsVisible(9414) + $EXP[RowsShown_movies_3_0]]</expression>
+    <expression name="RowsShown_movies_4_1">[Control.IsVisible(9414) + $EXP[RowsShown_movies_3_0]] | [!Control.IsVisible(9414) + $EXP[RowsShown_movies_3_1]]</expression>
+    <expression name="RowsShown_movies_4_2">[Control.IsVisible(9414) + $EXP[RowsShown_movies_3_1]] | [!Control.IsVisible(9414) + $EXP[RowsShown_movies_3_2]]</expression>
+    <expression name="RowsShown_movies_4_3">[Control.IsVisible(9414) + $EXP[RowsShown_movies_3_2]] | [!Control.IsVisible(9414) + $EXP[RowsShown_movies_3_3]]</expression>
+    <expression name="RowsShown_movies_4_4">[Control.IsVisible(9414) + $EXP[RowsShown_movies_3_3]]</expression>
+    <expression name="RowsShown_movies_5_0">[!Control.IsVisible(9415) + $EXP[RowsShown_movies_4_0]]</expression>
+    <expression name="RowsShown_movies_5_1">[Control.IsVisible(9415) + $EXP[RowsShown_movies_4_0]] | [!Control.IsVisible(9415) + $EXP[RowsShown_movies_4_1]]</expression>
+    <expression name="RowsShown_movies_5_2">[Control.IsVisible(9415) + $EXP[RowsShown_movies_4_1]] | [!Control.IsVisible(9415) + $EXP[RowsShown_movies_4_2]]</expression>
+    <expression name="RowsShown_movies_5_3">[Control.IsVisible(9415) + $EXP[RowsShown_movies_4_2]] | [!Control.IsVisible(9415) + $EXP[RowsShown_movies_4_3]]</expression>
+    <expression name="RowsShown_movies_5_4">[Control.IsVisible(9415) + $EXP[RowsShown_movies_4_3]] | [!Control.IsVisible(9415) + $EXP[RowsShown_movies_4_4]]</expression>
+    <expression name="RowsShown_movies_5_5">[Control.IsVisible(9415) + $EXP[RowsShown_movies_4_4]]</expression>
+    <expression name="RowsShown_movies_6_0">[!Control.IsVisible(9416) + $EXP[RowsShown_movies_5_0]]</expression>
+    <expression name="RowsShown_movies_6_1">[Control.IsVisible(9416) + $EXP[RowsShown_movies_5_0]] | [!Control.IsVisible(9416) + $EXP[RowsShown_movies_5_1]]</expression>
+    <expression name="RowsShown_movies_6_2">[Control.IsVisible(9416) + $EXP[RowsShown_movies_5_1]] | [!Control.IsVisible(9416) + $EXP[RowsShown_movies_5_2]]</expression>
+    <expression name="RowsShown_movies_6_3">[Control.IsVisible(9416) + $EXP[RowsShown_movies_5_2]] | [!Control.IsVisible(9416) + $EXP[RowsShown_movies_5_3]]</expression>
+    <expression name="RowsShown_movies_6_4">[Control.IsVisible(9416) + $EXP[RowsShown_movies_5_3]] | [!Control.IsVisible(9416) + $EXP[RowsShown_movies_5_4]]</expression>
+    <expression name="RowsShown_movies_6_5">[Control.IsVisible(9416) + $EXP[RowsShown_movies_5_4]] | [!Control.IsVisible(9416) + $EXP[RowsShown_movies_5_5]]</expression>
+    <expression name="RowsShown_movies_6_6">[Control.IsVisible(9416) + $EXP[RowsShown_movies_5_5]]</expression>
+    <expression name="RowsShown_movies_7_0">[!Control.IsVisible(9417) + $EXP[RowsShown_movies_6_0]]</expression>
+    <expression name="RowsShown_movies_7_1">[Control.IsVisible(9417) + $EXP[RowsShown_movies_6_0]] | [!Control.IsVisible(9417) + $EXP[RowsShown_movies_6_1]]</expression>
+    <expression name="RowsShown_movies_7_2">[Control.IsVisible(9417) + $EXP[RowsShown_movies_6_1]] | [!Control.IsVisible(9417) + $EXP[RowsShown_movies_6_2]]</expression>
+    <expression name="RowsShown_movies_7_3">[Control.IsVisible(9417) + $EXP[RowsShown_movies_6_2]] | [!Control.IsVisible(9417) + $EXP[RowsShown_movies_6_3]]</expression>
+    <expression name="RowsShown_movies_7_4">[Control.IsVisible(9417) + $EXP[RowsShown_movies_6_3]] | [!Control.IsVisible(9417) + $EXP[RowsShown_movies_6_4]]</expression>
+    <expression name="RowsShown_movies_7_5">[Control.IsVisible(9417) + $EXP[RowsShown_movies_6_4]] | [!Control.IsVisible(9417) + $EXP[RowsShown_movies_6_5]]</expression>
+    <expression name="RowsShown_movies_7_6">[Control.IsVisible(9417) + $EXP[RowsShown_movies_6_5]] | [!Control.IsVisible(9417) + $EXP[RowsShown_movies_6_6]]</expression>
+    <expression name="RowsShown_movies_7_7">[Control.IsVisible(9417) + $EXP[RowsShown_movies_6_6]]</expression>
+    <variable name="RowNumber_movies_1">
+        <value>01</value>
+    </variable>
+    <variable name="RowNumber_movies_2">
+        <value condition="$EXP[RowsShown_movies_1_0]">01</value>
+        <value>02</value>
+    </variable>
+    <variable name="RowNumber_movies_3">
+        <value condition="$EXP[RowsShown_movies_2_0]">01</value>
+        <value condition="$EXP[RowsShown_movies_2_1]">02</value>
+        <value>03</value>
+    </variable>
+    <variable name="RowNumber_movies_4">
+        <value condition="$EXP[RowsShown_movies_3_0]">01</value>
+        <value condition="$EXP[RowsShown_movies_3_1]">02</value>
+        <value condition="$EXP[RowsShown_movies_3_2]">03</value>
+        <value>04</value>
+    </variable>
+    <variable name="RowNumber_movies_5">
+        <value condition="$EXP[RowsShown_movies_4_0]">01</value>
+        <value condition="$EXP[RowsShown_movies_4_1]">02</value>
+        <value condition="$EXP[RowsShown_movies_4_2]">03</value>
+        <value condition="$EXP[RowsShown_movies_4_3]">04</value>
+        <value>05</value>
+    </variable>
+    <variable name="RowNumber_movies_6">
+        <value condition="$EXP[RowsShown_movies_5_0]">01</value>
+        <value condition="$EXP[RowsShown_movies_5_1]">02</value>
+        <value condition="$EXP[RowsShown_movies_5_2]">03</value>
+        <value condition="$EXP[RowsShown_movies_5_3]">04</value>
+        <value condition="$EXP[RowsShown_movies_5_4]">05</value>
+        <value>06</value>
+    </variable>
+    <variable name="RowNumber_movies_7">
+        <value condition="$EXP[RowsShown_movies_6_0]">01</value>
+        <value condition="$EXP[RowsShown_movies_6_1]">02</value>
+        <value condition="$EXP[RowsShown_movies_6_2]">03</value>
+        <value condition="$EXP[RowsShown_movies_6_3]">04</value>
+        <value condition="$EXP[RowsShown_movies_6_4]">05</value>
+        <value condition="$EXP[RowsShown_movies_6_5]">06</value>
+        <value>07</value>
+    </variable>
+    <variable name="RowNumber_movies_8">
+        <value condition="$EXP[RowsShown_movies_7_0]">01</value>
+        <value condition="$EXP[RowsShown_movies_7_1]">02</value>
+        <value condition="$EXP[RowsShown_movies_7_2]">03</value>
+        <value condition="$EXP[RowsShown_movies_7_3]">04</value>
+        <value condition="$EXP[RowsShown_movies_7_4]">05</value>
+        <value condition="$EXP[RowsShown_movies_7_5]">06</value>
+        <value condition="$EXP[RowsShown_movies_7_6]">07</value>
+        <value>08</value>
+    </variable>
+    <expression name="RowsShown_shows_1_0">!Control.IsVisible(9511)</expression>
+    <expression name="RowsShown_shows_1_1">Control.IsVisible(9511)</expression>
+    <expression name="RowsShown_shows_2_0">[!Control.IsVisible(9512) + $EXP[RowsShown_shows_1_0]]</expression>
+    <expression name="RowsShown_shows_2_1">[Control.IsVisible(9512) + $EXP[RowsShown_shows_1_0]] | [!Control.IsVisible(9512) + $EXP[RowsShown_shows_1_1]]</expression>
+    <expression name="RowsShown_shows_2_2">[Control.IsVisible(9512) + $EXP[RowsShown_shows_1_1]]</expression>
+    <expression name="RowsShown_shows_3_0">[!Control.IsVisible(9513) + $EXP[RowsShown_shows_2_0]]</expression>
+    <expression name="RowsShown_shows_3_1">[Control.IsVisible(9513) + $EXP[RowsShown_shows_2_0]] | [!Control.IsVisible(9513) + $EXP[RowsShown_shows_2_1]]</expression>
+    <expression name="RowsShown_shows_3_2">[Control.IsVisible(9513) + $EXP[RowsShown_shows_2_1]] | [!Control.IsVisible(9513) + $EXP[RowsShown_shows_2_2]]</expression>
+    <expression name="RowsShown_shows_3_3">[Control.IsVisible(9513) + $EXP[RowsShown_shows_2_2]]</expression>
+    <expression name="RowsShown_shows_4_0">[!Control.IsVisible(9514) + $EXP[RowsShown_shows_3_0]]</expression>
+    <expression name="RowsShown_shows_4_1">[Control.IsVisible(9514) + $EXP[RowsShown_shows_3_0]] | [!Control.IsVisible(9514) + $EXP[RowsShown_shows_3_1]]</expression>
+    <expression name="RowsShown_shows_4_2">[Control.IsVisible(9514) + $EXP[RowsShown_shows_3_1]] | [!Control.IsVisible(9514) + $EXP[RowsShown_shows_3_2]]</expression>
+    <expression name="RowsShown_shows_4_3">[Control.IsVisible(9514) + $EXP[RowsShown_shows_3_2]] | [!Control.IsVisible(9514) + $EXP[RowsShown_shows_3_3]]</expression>
+    <expression name="RowsShown_shows_4_4">[Control.IsVisible(9514) + $EXP[RowsShown_shows_3_3]]</expression>
+    <expression name="RowsShown_shows_5_0">[!Control.IsVisible(9515) + $EXP[RowsShown_shows_4_0]]</expression>
+    <expression name="RowsShown_shows_5_1">[Control.IsVisible(9515) + $EXP[RowsShown_shows_4_0]] | [!Control.IsVisible(9515) + $EXP[RowsShown_shows_4_1]]</expression>
+    <expression name="RowsShown_shows_5_2">[Control.IsVisible(9515) + $EXP[RowsShown_shows_4_1]] | [!Control.IsVisible(9515) + $EXP[RowsShown_shows_4_2]]</expression>
+    <expression name="RowsShown_shows_5_3">[Control.IsVisible(9515) + $EXP[RowsShown_shows_4_2]] | [!Control.IsVisible(9515) + $EXP[RowsShown_shows_4_3]]</expression>
+    <expression name="RowsShown_shows_5_4">[Control.IsVisible(9515) + $EXP[RowsShown_shows_4_3]] | [!Control.IsVisible(9515) + $EXP[RowsShown_shows_4_4]]</expression>
+    <expression name="RowsShown_shows_5_5">[Control.IsVisible(9515) + $EXP[RowsShown_shows_4_4]]</expression>
+    <expression name="RowsShown_shows_6_0">[!Control.IsVisible(9516) + $EXP[RowsShown_shows_5_0]]</expression>
+    <expression name="RowsShown_shows_6_1">[Control.IsVisible(9516) + $EXP[RowsShown_shows_5_0]] | [!Control.IsVisible(9516) + $EXP[RowsShown_shows_5_1]]</expression>
+    <expression name="RowsShown_shows_6_2">[Control.IsVisible(9516) + $EXP[RowsShown_shows_5_1]] | [!Control.IsVisible(9516) + $EXP[RowsShown_shows_5_2]]</expression>
+    <expression name="RowsShown_shows_6_3">[Control.IsVisible(9516) + $EXP[RowsShown_shows_5_2]] | [!Control.IsVisible(9516) + $EXP[RowsShown_shows_5_3]]</expression>
+    <expression name="RowsShown_shows_6_4">[Control.IsVisible(9516) + $EXP[RowsShown_shows_5_3]] | [!Control.IsVisible(9516) + $EXP[RowsShown_shows_5_4]]</expression>
+    <expression name="RowsShown_shows_6_5">[Control.IsVisible(9516) + $EXP[RowsShown_shows_5_4]] | [!Control.IsVisible(9516) + $EXP[RowsShown_shows_5_5]]</expression>
+    <expression name="RowsShown_shows_6_6">[Control.IsVisible(9516) + $EXP[RowsShown_shows_5_5]]</expression>
+    <expression name="RowsShown_shows_7_0">[!Control.IsVisible(9517) + $EXP[RowsShown_shows_6_0]]</expression>
+    <expression name="RowsShown_shows_7_1">[Control.IsVisible(9517) + $EXP[RowsShown_shows_6_0]] | [!Control.IsVisible(9517) + $EXP[RowsShown_shows_6_1]]</expression>
+    <expression name="RowsShown_shows_7_2">[Control.IsVisible(9517) + $EXP[RowsShown_shows_6_1]] | [!Control.IsVisible(9517) + $EXP[RowsShown_shows_6_2]]</expression>
+    <expression name="RowsShown_shows_7_3">[Control.IsVisible(9517) + $EXP[RowsShown_shows_6_2]] | [!Control.IsVisible(9517) + $EXP[RowsShown_shows_6_3]]</expression>
+    <expression name="RowsShown_shows_7_4">[Control.IsVisible(9517) + $EXP[RowsShown_shows_6_3]] | [!Control.IsVisible(9517) + $EXP[RowsShown_shows_6_4]]</expression>
+    <expression name="RowsShown_shows_7_5">[Control.IsVisible(9517) + $EXP[RowsShown_shows_6_4]] | [!Control.IsVisible(9517) + $EXP[RowsShown_shows_6_5]]</expression>
+    <expression name="RowsShown_shows_7_6">[Control.IsVisible(9517) + $EXP[RowsShown_shows_6_5]] | [!Control.IsVisible(9517) + $EXP[RowsShown_shows_6_6]]</expression>
+    <expression name="RowsShown_shows_7_7">[Control.IsVisible(9517) + $EXP[RowsShown_shows_6_6]]</expression>
+    <variable name="RowNumber_shows_1">
+        <value>01</value>
+    </variable>
+    <variable name="RowNumber_shows_2">
+        <value condition="$EXP[RowsShown_shows_1_0]">01</value>
+        <value>02</value>
+    </variable>
+    <variable name="RowNumber_shows_3">
+        <value condition="$EXP[RowsShown_shows_2_0]">01</value>
+        <value condition="$EXP[RowsShown_shows_2_1]">02</value>
+        <value>03</value>
+    </variable>
+    <variable name="RowNumber_shows_4">
+        <value condition="$EXP[RowsShown_shows_3_0]">01</value>
+        <value condition="$EXP[RowsShown_shows_3_1]">02</value>
+        <value condition="$EXP[RowsShown_shows_3_2]">03</value>
+        <value>04</value>
+    </variable>
+    <variable name="RowNumber_shows_5">
+        <value condition="$EXP[RowsShown_shows_4_0]">01</value>
+        <value condition="$EXP[RowsShown_shows_4_1]">02</value>
+        <value condition="$EXP[RowsShown_shows_4_2]">03</value>
+        <value condition="$EXP[RowsShown_shows_4_3]">04</value>
+        <value>05</value>
+    </variable>
+    <variable name="RowNumber_shows_6">
+        <value condition="$EXP[RowsShown_shows_5_0]">01</value>
+        <value condition="$EXP[RowsShown_shows_5_1]">02</value>
+        <value condition="$EXP[RowsShown_shows_5_2]">03</value>
+        <value condition="$EXP[RowsShown_shows_5_3]">04</value>
+        <value condition="$EXP[RowsShown_shows_5_4]">05</value>
+        <value>06</value>
+    </variable>
+    <variable name="RowNumber_shows_7">
+        <value condition="$EXP[RowsShown_shows_6_0]">01</value>
+        <value condition="$EXP[RowsShown_shows_6_1]">02</value>
+        <value condition="$EXP[RowsShown_shows_6_2]">03</value>
+        <value condition="$EXP[RowsShown_shows_6_3]">04</value>
+        <value condition="$EXP[RowsShown_shows_6_4]">05</value>
+        <value condition="$EXP[RowsShown_shows_6_5]">06</value>
+        <value>07</value>
+    </variable>
+    <variable name="RowNumber_shows_8">
+        <value condition="$EXP[RowsShown_shows_7_0]">01</value>
+        <value condition="$EXP[RowsShown_shows_7_1]">02</value>
+        <value condition="$EXP[RowsShown_shows_7_2]">03</value>
+        <value condition="$EXP[RowsShown_shows_7_3]">04</value>
+        <value condition="$EXP[RowsShown_shows_7_4]">05</value>
+        <value condition="$EXP[RowsShown_shows_7_5]">06</value>
+        <value condition="$EXP[RowsShown_shows_7_6]">07</value>
+        <value>08</value>
+    </variable>
+    <expression name="RowsShown_music_1_0">!Control.IsVisible(9811)</expression>
+    <expression name="RowsShown_music_1_1">Control.IsVisible(9811)</expression>
+    <expression name="RowsShown_music_2_0">[!Control.IsVisible(9812) + $EXP[RowsShown_music_1_0]]</expression>
+    <expression name="RowsShown_music_2_1">[Control.IsVisible(9812) + $EXP[RowsShown_music_1_0]] | [!Control.IsVisible(9812) + $EXP[RowsShown_music_1_1]]</expression>
+    <expression name="RowsShown_music_2_2">[Control.IsVisible(9812) + $EXP[RowsShown_music_1_1]]</expression>
+    <expression name="RowsShown_music_3_0">[!Control.IsVisible(9813) + $EXP[RowsShown_music_2_0]]</expression>
+    <expression name="RowsShown_music_3_1">[Control.IsVisible(9813) + $EXP[RowsShown_music_2_0]] | [!Control.IsVisible(9813) + $EXP[RowsShown_music_2_1]]</expression>
+    <expression name="RowsShown_music_3_2">[Control.IsVisible(9813) + $EXP[RowsShown_music_2_1]] | [!Control.IsVisible(9813) + $EXP[RowsShown_music_2_2]]</expression>
+    <expression name="RowsShown_music_3_3">[Control.IsVisible(9813) + $EXP[RowsShown_music_2_2]]</expression>
+    <expression name="RowsShown_music_4_0">[!Control.IsVisible(9814) + $EXP[RowsShown_music_3_0]]</expression>
+    <expression name="RowsShown_music_4_1">[Control.IsVisible(9814) + $EXP[RowsShown_music_3_0]] | [!Control.IsVisible(9814) + $EXP[RowsShown_music_3_1]]</expression>
+    <expression name="RowsShown_music_4_2">[Control.IsVisible(9814) + $EXP[RowsShown_music_3_1]] | [!Control.IsVisible(9814) + $EXP[RowsShown_music_3_2]]</expression>
+    <expression name="RowsShown_music_4_3">[Control.IsVisible(9814) + $EXP[RowsShown_music_3_2]] | [!Control.IsVisible(9814) + $EXP[RowsShown_music_3_3]]</expression>
+    <expression name="RowsShown_music_4_4">[Control.IsVisible(9814) + $EXP[RowsShown_music_3_3]]</expression>
+    <variable name="RowNumber_music_1">
+        <value>01</value>
+    </variable>
+    <variable name="RowNumber_music_2">
+        <value condition="$EXP[RowsShown_music_1_0]">01</value>
+        <value>02</value>
+    </variable>
+    <variable name="RowNumber_music_3">
+        <value condition="$EXP[RowsShown_music_2_0]">01</value>
+        <value condition="$EXP[RowsShown_music_2_1]">02</value>
+        <value>03</value>
+    </variable>
+    <variable name="RowNumber_music_4">
+        <value condition="$EXP[RowsShown_music_3_0]">01</value>
+        <value condition="$EXP[RowsShown_music_3_1]">02</value>
+        <value condition="$EXP[RowsShown_music_3_2]">03</value>
+        <value>04</value>
+    </variable>
+    <variable name="RowNumber_music_5">
+        <value condition="$EXP[RowsShown_music_4_0]">01</value>
+        <value condition="$EXP[RowsShown_music_4_1]">02</value>
+        <value condition="$EXP[RowsShown_music_4_2]">03</value>
+        <value condition="$EXP[RowsShown_music_4_3]">04</value>
+        <value>05</value>
+    </variable>
     <!-- TMDb rows run a plugin: only on their page, 2 s after it came up (Timers.xml), so a
          plugin never starts next to Home's script or another page's TMDb row -->
     <variable name="TmdbTrendingHomeMovies">
