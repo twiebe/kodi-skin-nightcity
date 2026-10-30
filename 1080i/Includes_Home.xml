@@ -1029,7 +1029,10 @@
         <param name="sortby" default=""/>
         <param name="sortorder" default=""/>
         <param name="limit" default=""/>
-        <param name="titlevisible" default="true"/>
+        <!-- header: the include of the heading (NumberedRowHeader with num on the pages of Home,
+             RowNumber for a row with tabs in its top line) -->
+        <param name="header" default="RowHeader"/>
+        <param name="num" default=""/>
         <!-- the loader holds this row's own items, not those of a search before (TMDb rows keep
              them without IsUpdating until the new ones are in) -->
         <param name="fresh" default="true"/>
@@ -1043,11 +1046,11 @@
             <control type="group" id="$PARAM[group]">
                 <height>468</height>
                 <visible>[Integer.IsGreater(Container($PARAM[loader]).NumItems,0) + [$PARAM[fresh]]] | [Container($PARAM[loader]).IsUpdating + !Integer.IsGreater(Container($PARAM[loader]).NumItems,0)]</visible>
-                <include content="RowHeader">
+                <include content="$PARAM[header]">
                     <param name="label" value="$PARAM[label]"/>
+                    <param name="num" value="$PARAM[num]"/>
                     <param name="left" value="64"/>
                     <param name="top" value="6"/>
-                    <param name="visible" value="$PARAM[titlevisible]"/>
                 </include>
                 <control type="label">
                     <left>600</left>
@@ -1183,9 +1186,12 @@
         <param name="prop"/>
         <param name="picklabel"/>
         <param name="pick"/>
+        <param name="left" default="30"/>
+        <!-- font of the tab labels -->
+        <param name="font" default="font_caps"/>
         <definition>
             <control type="grouplist" id="$PARAM[base]30">
-                <left>30</left>
+                <left>$PARAM[left]</left>
                 <top>0</top>
                 <width>1500</width>
                 <height>44</height>
@@ -1202,6 +1208,7 @@
                     <param name="id" value="$PARAM[base]31"/>
                     <param name="n" value="1"/>
                     <param name="prop" value="$PARAM[prop]"/>
+                    <param name="font" value="$PARAM[font]"/>
                 </include>
                 <include content="TabGap">
                     <param name="id" value="$PARAM[base]42"/>
@@ -1211,6 +1218,7 @@
                     <param name="id" value="$PARAM[base]32"/>
                     <param name="n" value="2"/>
                     <param name="prop" value="$PARAM[prop]"/>
+                    <param name="font" value="$PARAM[font]"/>
                 </include>
                 <include content="TabGap">
                     <param name="id" value="$PARAM[base]43"/>
@@ -1220,6 +1228,7 @@
                     <param name="id" value="$PARAM[base]33"/>
                     <param name="n" value="3"/>
                     <param name="prop" value="$PARAM[prop]"/>
+                    <param name="font" value="$PARAM[font]"/>
                 </include>
                 <include content="TabGap">
                     <param name="id" value="$PARAM[base]44"/>
@@ -1229,6 +1238,7 @@
                     <param name="label" value="$PARAM[picklabel]"/>
                     <param name="active" value="!String.IsEmpty(Window(Home).Property(nc.$PARAM[prop].id)) + !String.IsEqual(Window(Home).Property(nc.$PARAM[prop].id),Window(Home).Property(nc.$PARAM[prop].1.id)) + !String.IsEqual(Window(Home).Property(nc.$PARAM[prop].id),Window(Home).Property(nc.$PARAM[prop].2.id)) + !String.IsEqual(Window(Home).Property(nc.$PARAM[prop].id),Window(Home).Property(nc.$PARAM[prop].3.id))"/>
                     <param name="onclick" value="NotifyAll(nightcity,$PARAM[pick])"/>
+                    <param name="font" value="$PARAM[font]"/>
                 </include>
                 <include content="TabGap">
                     <param name="id" value="$PARAM[base]45"/>
@@ -1241,9 +1251,11 @@
         <param name="id"/>
         <param name="n"/>
         <param name="prop"/>
+        <param name="font"/>
         <definition>
             <include content="TabButton">
                 <param name="id" value="$PARAM[id]"/>
+                <param name="font" value="$PARAM[font]"/>
                 <param name="label" value="$INFO[Window(Home).Property(nc.$PARAM[prop].$PARAM[n].label)]"/>
                 <param name="active" value="!String.IsEmpty(Window(Home).Property(nc.$PARAM[prop].$PARAM[n].id)) + String.IsEqual(Window(Home).Property(nc.$PARAM[prop].id),Window(Home).Property(nc.$PARAM[prop].$PARAM[n].id))"/>
                 <param name="onfocus" value="SetProperty(nc.$PARAM[prop].id,$INFO[Window(Home).Property(nc.$PARAM[prop].$PARAM[n].id)],home)"/>

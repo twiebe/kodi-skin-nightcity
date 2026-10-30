@@ -39,6 +39,8 @@ PAGE_SHOWN = {
     'shows': 'String.IsEqual(Window(Home).Property(nc.page),shows)',
 }
 TMDB = 'plugin://plugin.video.themoviedb.helper/?info=trending_week&amp;tmdb_type={}'
+# a genre row's tabs start after its number, where a row's title starts after its number
+GENRE_TABS_LEFT = 73
 GENRES = {'movies': ('movies', 'genre', 'GenrePickLabel', 'genre_pick'),
           'shows': ('tvshows', 'tvgenre', 'ShowGenrePickLabel', 'genre_pick:tvshow')}
 
@@ -121,9 +123,10 @@ def param(name, value):
 
 def slot_include(page):
     base = BASE[page]
-    out = ['    <!-- One slot of the {} page: the row of its section (n, up and down from {}Slots) -->'.format(page, page.capitalize()),
+    out = ['    <!-- One slot of the {} page: the row of its section (n, num, up and down from {}Slots) -->'.format(page, page.capitalize()),
            '    <include name="{}Slot">'.format(page.capitalize()),
-           '        <param name="n"/>', '        <param name="up"/>', '        <param name="down" default="noop"/>']
+           '        <param name="n"/>', '        <param name="num"/>', '        <param name="up"/>',
+           '        <param name="down" default="noop"/>']
     out += ['        <param name="def_{}" default="false"/>'.format(key) for key, _ in nightcity.CATALOGUE[page]]
     out.append('        <definition>')
     for key, kind, values, value in variants(page):
@@ -133,6 +136,8 @@ def slot_include(page):
         params = [param('id', base + '0$PARAM[n]'), param('group', base + '1$PARAM[n]'),
                   param('up', base + '30' if row.get('genres') else '$PARAM[up]'), param('down', '$PARAM[down]'),
                   param('label', '$LOCALIZE[{}]'.format(nightcity.SECTIONS[key][0])),
+                  param('header', 'RowNumber' if row.get('genres') else 'NumberedRowHeader'),
+                  param('num', '$PARAM[num]'),
                   param('content1', row['content'][0])]
         if len(row['content']) > 1:
             params.append(param('content2', row['content'][1]))
@@ -145,7 +150,7 @@ def slot_include(page):
         nested = []
         if row.get('genres'):
             db, prop, label, pick = GENRES[row['genres']]
-            params += [param('titlevisible', 'false'), param('sortby', 'dateadded'),
+            params += [param('sortby', 'dateadded'),
                        param('sortorder', 'descending'), param('limit', '25')]
             # the list, not the tabs: a selector is skipped from above (DESIGN.md)
             nested = ['<defaultcontrol always="true">{}0$PARAM[n]</defaultcontrol>'.format(base),
@@ -153,7 +158,8 @@ def slot_include(page):
                       '    ' + param('base', base), '    ' + param('list', base + '0$PARAM[n]'),
                       '    ' + param('up', '$PARAM[up]'), '    ' + param('prop', prop),
                       '    ' + param('picklabel', '$VAR[{}]'.format(label)),
-                      '    ' + param('pick', pick), '</include>']
+                      '    ' + param('pick', pick), '    ' + param('left', GENRE_TABS_LEFT),
+                      '    ' + param('font', 'font_caps_small'), '</include>']
         out.append('            <include content="RowBox" condition="{}">'.format(cond))
         out += ['                ' + p for p in params + nested]
         out.append('            </include>')
@@ -193,6 +199,7 @@ def slots_include(page):
     for n in range(1, nightcity.SLOTS + 1):
         out.append('            <include content="{}Slot">'.format(cap))
         out.append('                ' + param('n', n))
+        out.append('                ' + param('num', '$VAR[RowNumber_{}_{}]'.format(page, n)))
         out.append('                ' + param('up', '$PARAM[up]' if n == 1 else '{}1{}'.format(base, n - 1)))
         if n < nightcity.SLOTS:
             out.append('                ' + param('down', '{}1{}'.format(base, n + 1)))
@@ -207,6 +214,42 @@ def slots_include(page):
             out.append('            ' + param('def_' + defaults[n - 1], 'true'))
         out.append('        </include>')
     out.append('    </include>')
+    return out
+
+
+# the rows of the Music page (MusicRows in Includes_Music.xml): groups 9811 to 9815
+MUSIC_ROWS = 5
+
+
+def row_numbers():
+    """Number of each row of the pages of Home: 1 + the rows above it that are shown. A shown row
+    is a visible row group (an empty slot is a hidden group, a row without items hides itself).
+    RowsShown_<page>_<n>_<k>: exactly k of the first n rows are shown."""
+    out = ['    <!-- Row numbers (pink, in front of the headings): a row counts the shown rows above',
+           '         it; the spotlight is 00 and has no heading, so the first shown row is 01 -->']
+    groups = {page: ['{}1{}'.format(BASE[page], n) for n in range(1, nightcity.SLOTS + 1)] for page in PAGES}
+    groups['music'] = ['981{}'.format(n) for n in range(1, MUSIC_ROWS + 1)]
+    for page, ids in groups.items():
+        for n, group in enumerate(ids[:-1], 1):
+            for k in range(n + 1):
+                shown, hidden = 'Control.IsVisible({})'.format(group), '!Control.IsVisible({})'.format(group)
+                if n == 1:
+                    cond = shown if k else hidden
+                else:
+                    prev = '$EXP[RowsShown_{}_{}_{{}}]'.format(page, n - 1)
+                    parts = []
+                    if k:
+                        parts.append('[{} + {}]'.format(shown, prev.format(k - 1)))
+                    if k < n:
+                        parts.append('[{} + {}]'.format(hidden, prev.format(k)))
+                    cond = ' | '.join(parts)
+                out.append('    <expression name="RowsShown_{}_{}_{}">{}</expression>'.format(page, n, k, cond))
+        for n in range(1, len(ids) + 1):
+            out.append('    <variable name="RowNumber_{}_{}">'.format(page, n))
+            for k in range(n - 1):
+                out.append('        <value condition="$EXP[RowsShown_{}_{}_{}]">{:02d}</value>'.format(page, n - 1, k, k + 1))
+            out.append('        <value>{:02d}</value>'.format(n))
+            out.append('    </variable>')
     return out
 
 
@@ -418,7 +461,7 @@ def render():
            '    </include>']
     for page in PAGES:
         out += slot_include(page) + loader_include(page) + slots_include(page)
-    out += trending_variables() + settings_defaults()
+    out += row_numbers() + trending_variables() + settings_defaults()
     for page in PAGES:
         out += settings_header(page) + settings_slots(page)
     out += settings_variables()
