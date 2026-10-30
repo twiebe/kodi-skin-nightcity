@@ -59,4 +59,4 @@ def test_every_spotlight_button_row_ends_with_the_arrow():
     assert len(rows) == 3, len(rows)
     for row in rows:
         last = [c for c in row if c.tag in ('include', 'control')][-1]
-        assert last.tag == 'include' and last.text == 'SpotlightMore', ET.tostring(last)[:80]
+        assert last.tag == 'include' and 'SpotlightMore' in (last.text, last.get('content')), ET.tostring(last)[:80]
