@@ -63,14 +63,56 @@ def home_include(name):
     return next(i for i in root.iter('include') if i.get('name') == name)
 
 
+ELEC = 'System.AddonIsEnabled(service.coreelec.settings) | System.AddonIsEnabled(service.libreelec.settings)'
+
+
 def test_system_page_has_five_group_tiles():
     """The system page holds one tile per group; OK remembers the group and opens the console."""
     tiles = home_include('SystemWidgets').find(".//control[@id='9601']")
-    items = tiles.find('content').findall('item')
+    items = tiles.find('content').findall('item')[:5]
     assert len(items) == 5
     for n, item in enumerate(items, 1):
         assert clicks(item) == ['SetProperty(nc.settings.group,{},home)'.format(n), 'ActivateWindow(settings)']
         assert item.find('visible') is None  # a static list clicks by position
+
+
+def test_system_page_runs_the_os_settings_add_on():
+    """A sixth tile, last so the groups keep their places, runs CoreELEC's or LibreELEC's
+    Configuration add-on, shown and named by which one is installed."""
+    tiles = home_include('SystemWidgets').find(".//control[@id='9601']")
+    items = tiles.find('content').findall('item')
+    assert len(items) == 6
+    item = items[5]
+    assert item.findtext('visible') == '$EXP[ElecSettings]'
+    assert item.findtext('label') == '$VAR[ElecSettingsName]'
+    assert [(o.get('condition'), o.text) for o in item.findall('onclick')] == [
+        ('System.AddonIsEnabled(service.coreelec.settings)', 'RunAddon(service.coreelec.settings)'),
+        ('!System.AddonIsEnabled(service.coreelec.settings)', 'RunAddon(service.libreelec.settings)')]
+    variables = parse(ROOT / '1080i' / 'Variables.xml')
+    home = parse(ROOT / '1080i' / 'Includes_Home.xml')
+    expression = next(e for e in home.iter('expression') if e.get('name') == 'ElecSettings')
+    assert expression.text == ELEC
+    name = next(v for v in variables.iter('variable') if v.get('name') == 'ElecSettingsName')
+    assert [(v.get('condition'), v.text) for v in name.findall('value')] == [
+        ('System.AddonIsEnabled(service.coreelec.settings)', 'CoreELEC'), (None, 'LibreELEC')]
+
+
+def test_system_page_tiles_fit_the_row():
+    """Five tiles fill the row; with the sixth they narrow so all six still fit (no tile cut at
+    the right edge). Both forms the same tile, from one include."""
+    tiles = home_include('SystemWidgets').find(".//control[@id='9601']")
+    width = int(tiles.findtext('width'))
+    for tag in ('itemlayout', 'focusedlayout'):
+        layouts = tiles.findall(tag)
+        assert [lay.get('condition') for lay in layouts] == ['$EXP[ElecSettings]', None], tag
+        six, five = (int(lay.get('width')) for lay in layouts)
+        assert 6 * six == 5 * five <= width, tag  # six end where five end
+        for lay in layouts:
+            calls = lay.findall('include')
+            assert [c.get('content') for c in calls] == ['SystemTile'], tag
+            params = {q.get('name'): q.get('value') for q in calls[0].findall('param')}
+            assert params['width'] == lay.get('width'), tag
+            assert params['focused'] == str(tag == 'focusedlayout').lower(), tag
 
 
 def test_console_focuses_the_chosen_group():
