@@ -456,7 +456,7 @@ msgid "Categories"
 msgstr ""
 
 msgctxt "#31178"
-msgid "[COLOR accent]OK[/COLOR] open   [COLOR accent]Back[/COLOR] close"
+msgid "[COLOR state_text]OK[/COLOR] open   [COLOR state_text]Back[/COLOR] close"
 msgstr ""
 
 msgctxt "#31181"
@@ -768,7 +768,7 @@ msgid "Show or hide entries of the main menu. Home, system and power always stay
 msgstr ""
 
 msgctxt "#31260"
-msgid "[COLOR accent]OK[/COLOR] choose   [COLOR accent]Right[/COLOR] option   [COLOR accent]Left[/COLOR] back"
+msgid "[COLOR state_text]OK[/COLOR] choose   [COLOR state_text]Right[/COLOR] option   [COLOR state_text]Left[/COLOR] back"
 msgstr ""
 
 msgctxt "#31261"

@@ -18,7 +18,7 @@
                 <width>1000</width>
                 <height>48</height>
                 <font>font_label</font>
-                <textcolor>accent3</textcolor>
+                <textcolor>accent2</textcolor>
                 <aligny>center</aligny>
             </control>
             <control type="edit" id="312">

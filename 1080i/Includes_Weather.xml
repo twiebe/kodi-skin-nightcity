@@ -46,7 +46,7 @@
                 <top>76</top>
                 <width>112</width>
                 <height>112</height>
-                <texture fallback="ui/weather/na.png" colordiffuse="accent">ui/weather/$INFO[ListItem.Property(code)].png</texture>
+                <texture fallback="ui/weather/na.png" colordiffuse="state_text">ui/weather/$INFO[ListItem.Property(code)].png</texture>
             </control>
             <control type="label">
                 <left>16</left>
