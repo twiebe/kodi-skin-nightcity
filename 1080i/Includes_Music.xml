@@ -343,20 +343,13 @@
             <onleft>Control.Move(9002,-1)</onleft>
             <onright>Skin.TimerStart(nc_spot_hold)</onright>
             <onright>Control.Move(9002,1)</onright>
-            <include content="PillButton">
-                <param name="id" value="9851"/>
-                <param name="label" value="$LOCALIZE[31406]"/>
-                <param name="color" value="accent"/>
-                <param name="textcolor" value="accent"/>
-                <param name="onclick" value="ActivateWindow(visualisation)"/>
-                <param name="visible" value="Player.HasAudio"/>
-            </include>
+            <!-- plays the album and opens the player screen; Back there comes back here -->
             <include content="PillButton">
                 <param name="id" value="9852"/>
                 <param name="label" value="▶ $LOCALIZE[31010]"/>
                 <param name="color" value="accent"/>
                 <param name="textcolor" value="accent"/>
-                <param name="onclick" value="PlayMedia(musicdb://albums/$INFO[Container(9002).ListItem.DBID]/,isdir)"/>
+                <param name="onclick" value="NotifyAll(nightcity,music_play:album:$INFO[Container(9002).ListItem.DBID]:1)"/>
             </include>
             <include content="PillButton">
                 <param name="id" value="9853"/>
@@ -372,19 +365,35 @@
         </control>
     </include>
 
-    <!-- Top line of Home: what plays, while music plays, left of the clock and the quick menu
-         icon (they take up to about 340 px with the weather) -->
+    <!-- Top line of Home, while music plays: what plays, the first entry of the grouplist on
+         the right (HomeTop 9190), left of the quick menu icon. It sits between the menu and the
+         icon: Right from the last menu tab, Left from the icon; Left from it is the grouplist's
+         own Left, the menu. OK opens the player screen; Back there comes back here. Down goes
+         into the shown page like the menu. When the music stops while it has the focus,
+         nc_np_gone (Timers.xml) moves the focus to the shown page's own tab. Directly in the
+         grouplist (a group would need a fixed width): the grouplist sets its Left (the menu)
+         and Right (the icon's group 9199). -->
     <include name="MusicNowPlaying">
-        <control type="label">
-            <left>900</left>
-            <top>26</top>
-            <width>600</width>
-            <height>36</height>
-            <align>right</align>
+        <control type="button" id="9108">
+            <width max="560">auto</width>
+            <height>44</height>
+            <textoffsetx>14</textoffsetx>
+            <aligny>center</aligny>
             <font>font_caps_small</font>
             <textcolor>text_dim</textcolor>
-            <label>[COLOR accent2]▶[/COLOR] [UPPERCASE]$INFO[MusicPlayer.Title]$INFO[MusicPlayer.Artist,  ·  ][/UPPERCASE]</label>
+            <focusedcolor>focus_text</focusedcolor>
+            <texturefocus border="12" colordiffuse="accent">ui/cut_btn_fill.png</texturefocus>
+            <texturenofocus/>
+            <label>$VAR[MusicNowPlayingLabel]</label>
             <visible>Player.HasAudio</visible>
+            <!-- Right (the grouplist) goes to the icon: Back there comes back here -->
+            <onunfocus>SetProperty(nc.quick.from,9108,home)</onunfocus>
+            <!-- gone with the music: Kodi puts the focus on Home's default control, which may
+                 belong to another page; nc_np_gone moves it on -->
+            <onunfocus condition="!Player.HasAudio">SetProperty(nc.np.gone,1,home)</onunfocus>
+            <onclick>ActivateWindow(visualisation)</onclick>
+            <onup>noop</onup>
+            <include>HomePageDown</include>
         </control>
     </include>
 </includes>

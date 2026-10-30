@@ -174,7 +174,8 @@ def test_icon_next_to_the_clock_shows_it():
     assert ('', '9109') in actions(home['9100'], 'onright')
     row = home['9190']
     assert row.get('type') == 'grouplist' and row.findtext('align') == 'right'
-    assert row.findall('control')[0].find('control').get('id') == '9109'
+    # first entry: what plays while music plays (test_music.py), then the icon
+    assert row.findall('control')[1].find('control').get('id') == '9109'
     panel = home['9180']
     assert panel.findtext('visible') == 'Control.HasFocus(9109) | ControlGroup(9180).HasFocus'
     # inside the menu the icon stays marked in the accent colour: Up and Back lead there
@@ -276,8 +277,9 @@ def test_weather_beside_the_clock():
     row = controls(load('Home.xml'))['9190']
     parts = row.findall('control')
     assert [(c.get('type'), c.findtext('visible')) for c in parts] == [
-        ('group', None), ('image', 'Weather.IsFetched'), ('label', 'Weather.IsFetched'), ('label', None)]
-    icon, temperature, clock = parts[1:]
+        ('button', 'Player.HasAudio'), ('group', None), ('image', 'Weather.IsFetched'),
+        ('label', 'Weather.IsFetched'), ('label', None)]
+    icon, temperature, clock = parts[2:]
     assert icon.find('texture').text == 'ui/qm_weather.png'
     assert icon.find('texture').get('colordiffuse') == clock.findtext('textcolor')
     assert temperature.findtext('label') == '$INFO[Weather.Temperature]'
@@ -292,6 +294,7 @@ def test_top_menu_wraps_around():
     page = Page('Home.xml')
     hidden = {'Skin.HasSetting(nc.menu.hide.{})'.format(n): False for n in ('movies', 'shows', 'music', 'search')}
     hidden['Library.HasContent(music)'] = False
+    hidden['Player.HasAudio'] = False
     state = State(extra=hidden)
     assert page.move('9101', 'onleft', state)[0] == '9109'
     assert page.move('9109', 'onright', state)[0] == '9101'

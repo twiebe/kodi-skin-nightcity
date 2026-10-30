@@ -181,6 +181,11 @@
         <value condition="String.IsEqual(ListItem.DBType,artist) | String.IsEqual(ListItem.DBType,genre)">$INFO[ListItem.Genre]</value>
         <value>$INFO[ListItem.Artist]$INFO[ListItem.Year,  ·  ]</value>
     </variable>
+    <!-- What plays in the top line of Home (MusicNowPlaying): the mark dark on the focus fill -->
+    <variable name="MusicNowPlayingLabel">
+        <value condition="Control.HasFocus(9108)">▶ [UPPERCASE]$INFO[MusicPlayer.Title]$INFO[MusicPlayer.Artist,  ·  ][/UPPERCASE]</value>
+        <value>[COLOR accent2]▶[/COLOR] [UPPERCASE]$INFO[MusicPlayer.Title]$INFO[MusicPlayer.Artist,  ·  ][/UPPERCASE]</value>
+    </variable>
     <!-- Player screen and its OSD (MusicVisualisation.xml, MusicOSD.xml) -->
     <variable name="MusicPlayerLine">
         <value>$INFO[MusicPlayer.Album]$INFO[MusicPlayer.Year,  ·  ]</value>

@@ -183,7 +183,8 @@
                 <param name="label" value="▶ $LOCALIZE[31010]"/>
                 <param name="color" value="accent"/>
                 <param name="textcolor" value="accent"/>
-                <onclick condition="!String.IsEqual(ListItem.DBType,artist)">SendClick(8)</onclick>
+                <onclick condition="String.IsEqual(ListItem.DBType,album)">NotifyAll(nightcity,music_play:album:$INFO[ListItem.DBID]:1)</onclick>
+                <onclick condition="String.IsEqual(ListItem.DBType,song)">SendClick(8)</onclick>
                 <onclick condition="String.IsEqual(ListItem.DBType,artist)">NotifyAll(nightcity,music_play:artist:$INFO[ListItem.DBID]:1)</onclick>
             </include>
             <include content="PillButton">

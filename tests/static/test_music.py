@@ -92,9 +92,10 @@ def test_music_spotlight_steps_at_the_ends():
 
 def test_music_spotlight_buttons():
     c = controls(load('Home.xml'))
-    assert c['9851'].findtext('visible') == 'Player.HasAudio'  # now playing, first while music plays
-    assert c['9851'].findtext('onclick') == 'ActivateWindow(visualisation)'
-    assert c['9852'].findall('onclick')[0].text == 'PlayMedia(musicdb://albums/$INFO[Container(9002).ListItem.DBID]/,isdir)'
+    assert '9851' not in c  # what plays is in the top line (9108)
+    # play goes to the player screen (scripts/nightcity.py music_play); Back there comes back
+    assert c['9852'].findall('onclick')[0].text == \
+        'NotifyAll(nightcity,music_play:album:$INFO[Container(9002).ListItem.DBID]:1)'
     assert [a.text for a in c['9853'].findall('onclick')][:2] == ['SetFocus(9002)', 'Action(Info)']
     assert c['9854'].findall('onclick')[0].text == 'ActivateWindow(Music,musicdb://albums/,return)'
     spot = c['9002']
@@ -132,10 +133,50 @@ def test_music_playlists():
 
 
 def test_now_playing_in_the_top_line():
-    labels = [c for c in load('Home.xml').iter('control') if c.findtext('visible') == 'Player.HasAudio'
-              and c.get('type') == 'label']
-    assert len(labels) == 1
-    assert 'MusicPlayer.Title' in labels[0].findtext('label')
+    """What plays, a button of the top line while music plays: OK opens the player screen."""
+    c = controls(load('Home.xml'))
+    button = c['9108']
+    assert button.findtext('visible') == 'Player.HasAudio'
+    assert [a.text for a in button.findall('onclick')] == ['ActivateWindow(visualisation)']
+    assert button.findtext('label') == '$VAR[MusicNowPlayingLabel]'
+    assert c['9190'].findall('control')[0] is button  # left of the quick menu icon
+    # Down goes into the shown page, like the menu
+    assert actions(button, 'ondown') == actions(c['9100'], 'ondown')
+
+
+def test_now_playing_between_menu_and_icon():
+    """Right from the menu, Left from the icon; without music both skip it."""
+    page = Page('Home.xml')
+    playing = _home_state('home', **{'Player.HasAudio': True})
+    assert page.move('9104', 'onright', playing)[0] == '9108'
+    assert page.move('9109', 'onleft', playing)[0] == '9108'
+    silent = _home_state('home')
+    assert page.move('9104', 'onright', silent)[0] == '9109'
+    assert page.move('9109', 'onleft', silent)[0] == '9104'
+
+
+def test_now_playing_gone_moves_the_focus():
+    """No dead end when the music stops with the focus on it: Home without a focus goes to the
+    page's own tab, and the quick menu's way back to it (nc.quick.from) goes too."""
+    timers = {t.findtext('name'): t for t in parse(ROOT / '1080i' / 'Timers.xml').iter('timer')}
+    timer = timers['nc_np_gone']
+    start = timer.findtext('start')
+    for part in ('!Player.HasAudio', 'String.IsEmpty(System.CurrentControlId)',
+                 'String.IsEqual(Window(Home).Property(nc.quick.from),9108)'):
+        assert part in start
+    assert 'nc.np.gone' in start
+    assert [o.text for o in timer.findall('onstop')] == ['ClearProperty(nc.quick.from,home)', 'SetFocus(9189)',
+                                                         'ClearProperty(nc.np.gone,home)']
+    c = controls(load('Home.xml'))
+    # Right goes to the icon's group (the grouplist's neighbour); Back there comes back
+    assert c['9190'].findall('control')[1].get('id') == '9199'
+    assert actions(c['9108'], 'onunfocus') == [('', 'SetProperty(nc.quick.from,9108,home)'),
+                                               ('!Player.HasAudio', 'SetProperty(nc.np.gone,1,home)')]
+
+
+def test_player_screen_back_reopens_the_page():
+    window = parse(ROOT / '1080i' / 'MusicVisualisation.xml')
+    assert [o.text for o in window.findall('onunload')] == ['NotifyAll(nightcity,music_back)']
 
 
 def test_music_page_navigation_without_dead_ends():
@@ -153,7 +194,10 @@ def test_music_info_buttons_click_kodis_hidden_ones():
     c = controls(load('DialogMusicInfo.xml'))
     for kodi in ('8', '12'):
         assert c[kodi].findtext('visible') == 'false' and c[kodi].findtext('enable') == 'false'
-    assert ('!' + ARTIST, 'SendClick(8)') in actions(c['9001'])
+    assert ('String.IsEqual(ListItem.DBType,song)', 'SendClick(8)') in actions(c['9001'])
+    # an album plays through the script: it opens the player screen, Back comes back here
+    assert ('String.IsEqual(ListItem.DBType,album)', 'NotifyAll(nightcity,music_play:album:$INFO[ListItem.DBID]:1)') \
+        in actions(c['9001'])
     assert (ARTIST, 'NotifyAll(nightcity,music_play:artist:$INFO[ListItem.DBID]:1)') in actions(c['9001'])
     assert ('', 'SendClick(12)') in actions(c['9002'])
 
