@@ -156,9 +156,13 @@ Each with what it costs if it turns out wrong.
 The spotlight used to look restless: rotating without focus, the hero showed the library
 rating (Jellyfin for Kodi syncs the community rating as Kodi's "default" rating, no source
 name); on focus TMDb Helper's ratings joined; when focus went to a row they vanished again,
-because the row cleared `TMDbHelper.WidgetContainer` and TMDb Helper let go of the hero.
+because the row cleared `TMDbHelper.WidgetContainer` and TMDb Helper let go of the hero. On an
+episode's info page only the episode the page opened with got ratings.
 
-Two skin settings, under Main menu > Ratings, after the look:
+### Settings: Skin settings > Ratings
+
+A category of its own before Player (all eight sources no longer fit on the info page, and the
+main menu category had no room):
 
 - **Ratings only from TMDb Helper** (on by default; the skin bool `nc.ratings.library` stores
   off). "Show only the ratings TMDb Helper fetched for exactly this title. Off: the library's
@@ -169,44 +173,71 @@ Two skin settings, under Main menu > Ratings, after the look:
 - **Load spotlight ratings without focus** (off by default; `nc.ratings.spotlight`). "Fetch
   the ratings of each spotlight title as it rotates, also without focus. Off saves online
   requests: the ratings load once the title has focus and then stay."
+- **Sources**, one toggle each in the line's order: IMDb (with the Top 250 rank), TMDb, Rotten
+  Tomatoes critics, Rotten Tomatoes audience, Metacritic, Trakt, Letterboxd, MDbList. IMDb and
+  Rotten Tomatoes critics are on by default (`nc.ratings.hide.imdb`, `nc.ratings.hide.rt` store
+  off), the others off (`nc.ratings.show.tmdb`, `.rtu`, `.mc`, `.trakt`, `.lb`, `.mdb`). A
+  source shows only while its toggle is on and the item has a value; Kodi's own IMDb and TMDb
+  ratings (with "only TMDb Helper" off) follow the IMDb and TMDb toggles. Each toggle says
+  where TMDb Helper gets it: IMDb, Rotten Tomatoes and Metacritic need an OMDb or MDbList key,
+  Letterboxd and MDbList an MDbList key, Trakt a connected Trakt account (fetched from Trakt,
+  not MDbList), TMDb nothing. Metacritic is a weighted average of critic reviews, mostly for
+  theatrical films and big series; MDbList is an average of the other sources.
 
-How the heroes get their ratings (`scripts/nightcity.py`, `hero_tick`, a thread of the skin
-service that looks at Home every 0.25 s and does nothing elsewhere or under a dialog):
+### How the ratings get to the line
 
-- **TMDb Helper's hook.** With `Window(Home).Property(TMDbHelper.WidgetContainer)` set, TMDb
-  Helper's poller watches `Container(<id>).ListItem` whether that container has focus or not
-  (`monitor/utils.py widget_id`, `poller.py is_on_globalwidgetcontainer`); empty on Home it
-  clears and idles. Info dialogs use their own `ListItem` regardless (`CV_USE_LISTITEM`). The
-  rows cleared the property before, so TMDb Helper never watched a row card on Home: pointing
-  it at the hero takes nothing away. `Skin.String(TMDbHelper.MonitorContainer)` was the
-  other hook; it is global and makes TMDb Helper do nothing in windows without that control.
-- **Who sets it.** The service, no longer the skin: the hero's spotlight (9000 on home and
-  movies, 9001 on shows; `Control.IsVisible(9300)` / `(9301)`) while a hero button has focus
-  (`ControlGroup(9050)` / `(9550)`), or always with "load without focus"; empty on rows, the
-  main menu and off Home.
+`scripts/nightcity.py` `hero_tick`, a thread of the skin service that looks every 0.25 s and
+does nothing off Home and the episode info page:
+
+- **TMDb Helper's hook.** TMDb Helper watches `Container(<id>).ListItem` of the container
+  named in `TMDbHelper.WidgetContainer`, whether it has focus or not (`monitor/utils.py
+  widget_id`). The skin sets `TMDbHelper.UseLocalWidgetContainer`: TMDb Helper then reads the
+  property of the window on top (`poller.py is_on_localwidgetcontainer`), on Home
+  `Window(Home)`'s as before, on the info page the page's own. Without it an info dialog
+  always uses its own `ListItem` (`CV_USE_LISTITEM`), so the episode list could not be
+  watched. `Skin.String(TMDbHelper.MonitorContainer)` was the other hook; it is global and
+  makes TMDb Helper do nothing in windows without that control.
+- **Home.** The service sets `Window(Home).Property(TMDbHelper.WidgetContainer)`, not the
+  skin: the hero's spotlight (9000 on home and movies, 9001 on shows; `Control.IsVisible(9300)`
+  / `(9301)`) while a hero button has focus (`ControlGroup(9050)` / `(9550)`), or always with
+  "load without focus"; empty on rows, the main menu and off Home. The rows cleared the
+  property before, so TMDb Helper never watched a row card on Home: pointing it at the hero
+  takes nothing away.
+- **Episode info page.** `DialogVideoInfo.xml` sets its own `TMDbHelper.WidgetContainer` to
+  the episode list (5100) when it opens for an episode and clears it on any other page (the
+  property stays on the window from one page to the next). TMDb Helper then fetches the
+  focused episode; the head follows the same episode.
 - **Keeping.** When TMDb Helper is done (`IsUpdating` and `IsUpdatingRatings` empty) and its
-  item is the hero's (`base_dbtype` and `base_dbid`, the latter from
-  `extras/tmdbhelper/baseitem.json`; `base_label` for a TMDb Helper started before the skin
-  brought that file), the service takes a snapshot of the nine rating properties. It keeps
-  it once it stayed 0.8 s (after a title change TMDb Helper's properties hold the title
-  before for about 0.3 s with both flags empty), per `dbtype:dbid`, for the session. The
-  first snapshot of a title stays; only an empty one gets replaced by one with ratings.
-- **Showing.** The service writes the kept ratings of the hero's current title to
-  `nc.hero.<container>.<Source>` plus `.dbid` and `.dbtype`; the hero's `RatingsLine` reads
-  that prefix and shows only while `dbid`/`dbtype` match the hero's item. On a title change
-  `dbid` is cleared first and set last, so the line never shows one title's ratings on
-  another. The line fades in (200 ms) and goes at once.
+  item is the one on screen (`base_dbtype`, and `base_dbid` from
+  `extras/tmdbhelper/baseitem.json`, or `base_label` for items without a library id), the
+  service takes a snapshot of the rating properties. It keeps it once it stayed 0.8 s (after
+  a title change TMDb Helper's properties hold the title before for about 0.3 s with both
+  flags empty), for the session: heroes by `dbtype`/`dbid`, episodes by label, season and
+  episode (a TMDb Helper chain lists episodes without a library id). The first snapshot of a
+  title stays; only an empty one gets replaced by one with ratings.
+- **Episodes.** For an episode TMDb Helper's TMDb, Rotten Tomatoes, Metacritic, Letterboxd and
+  MDbList ratings are the show's (`get_all_ratings`: the show's ratings, then season and
+  episode ratings from MDbList and Trakt on top). The service keeps IMDb and Trakt as they are
+  and TMDb's vote of the episode itself (TMDb Helper's `Rating`, one decimal); the others stay
+  out. So with the default toggles (IMDb, Rotten Tomatoes critics) an episode shows its IMDb
+  rating when TMDb Helper has an MDbList key (or an OMDb key, which gives the show's IMDb
+  rating), else nothing; with TMDb on, TMDb's vote of the episode.
+- **Showing.** The service writes the kept ratings of the item on screen to
+  `nc.kept.<container>.<Source>` plus the key (`.dbtype`/`.dbid`, or `.label`/`.season`/
+  `.episode`); the `RatingsLine` reads that prefix and shows only while the key matches the
+  item on screen. On a change the last key field is cleared first and set last, so the line
+  never shows one title's ratings on another. The line fades in (200 ms) and goes at once.
 
 ### Design calls
 
 1. **A service thread, not skin conditions.** Kodi cannot use an info label inside a property
    name, so per-title properties cannot be read straight from the skin; one published set per
-   hero plus a key match can. Cost: a poll on Home (about a dozen info calls every 0.25 s,
-   none elsewhere), and the line shows about 1 s after TMDb Helper has the ratings (0.8 s
-   stability plus the poll).
-2. **The service owns `TMDbHelper.WidgetContainer`.** One place decides it (focus, page,
-   setting) instead of onfocus actions on every row and button. Cost: up to 0.25 s later
-   than an onfocus action before TMDb Helper starts on a focused hero.
+   container plus a key match can. Cost: a poll on Home and the episode page (about a dozen
+   info calls every 0.25 s, none elsewhere), and the line shows about 1 s after TMDb Helper
+   has the ratings (0.8 s stability plus the poll).
+2. **The service owns Home's `TMDbHelper.WidgetContainer`.** One place decides it (focus,
+   page, setting) instead of onfocus actions on every row and button. Cost: up to 0.25 s
+   later than an onfocus action before TMDb Helper starts on a focused hero.
 3. **Keep first, no updates.** A title's line never changes once shown in a session. Cost:
    ratings TMDb Helper updates later in the session (a new IMDb value) show after a restart.
 4. **Library ratings off by default.** Cost: titles TMDb Helper cannot match (no TMDb id)
@@ -214,3 +245,9 @@ service that looks at Home every 0.25 s and does nothing elsewhere or under a di
    library rating is replaced once by TMDb Helper's when they arrive (one swap per title).
 5. **Session cache only.** Kept in the service's memory; a Kodi restart starts empty.
    TMDb Helper's own cache (7 days, ItemDetails.db) makes a refetch a database read.
+6. **Episodes show only their own ratings.** Cost: an episode shows fewer ratings than before
+   (no Rotten Tomatoes or Metacritic of the show); the show's ratings are on the show's page.
+7. **TMDb off by default** (as asked: IMDb and Rotten Tomatoes critics only). Cost: without an
+   OMDb or MDbList key a user sees no ratings at all until they switch TMDb on.
+8. **A Ratings category instead of the main menu category.** Ten rows do not fit under the
+   main menu rows and the look. Cost: one more category on the left.
