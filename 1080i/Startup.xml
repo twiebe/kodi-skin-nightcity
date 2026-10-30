@@ -133,7 +133,7 @@
                     <height>32</height>
                     <align>right</align>
                     <font>font_num_small</font>
-                    <textcolor>accent2</textcolor>
+                    <textcolor>state_text</textcolor>
                     <label>$INFO[System.Time]</label>
                 </control>
             </control>

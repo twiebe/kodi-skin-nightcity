@@ -61,7 +61,7 @@
     </include>
 
     <!-- Vertical list with label and right-aligned label2, focused row a cyan cut fill, the current
-         value (ListItem.IsSelected) in accent with a slim pink bar at the row's left edge.
+         value (ListItem.IsSelected) in accent with a slim dark blue bar at the row's left edge.
          Children of the include (static <content>, navigation) go into the list. -->
     <include name="DialogList">
         <param name="id"/>
@@ -92,13 +92,13 @@
                         <label>$PARAM[label]</label>
                         <visible>!ListItem.IsSelected</visible>
                     </control>
-                    <!-- the current value: a pink bar before the text, which stays in place, and the text in accent -->
+                    <!-- the current value: a dark blue bar before the text, which stays in place, and the text in accent -->
                     <control type="image">
                         <left>6</left>
                         <top>12</top>
                         <width>3</width>
                         <height>28</height>
-                        <texture colordiffuse="accent2">ui/white.png</texture>
+                        <texture colordiffuse="state">ui/white.png</texture>
                         <visible>ListItem.IsSelected</visible>
                     </control>
                     <!-- the current value: accent -->
@@ -132,13 +132,13 @@
                         <texture border="12" colordiffuse="focus">ui/cut_btn_fill.png</texture>
                         <visible>Control.HasFocus($PARAM[id])</visible>
                     </control>
-                    <!-- the current value's bar, pink also on the cursor's fill -->
+                    <!-- the current value's bar, dark blue also on the cursor's fill -->
                     <control type="image">
                         <left>6</left>
                         <top>12</top>
                         <width>3</width>
                         <height>28</height>
-                        <texture colordiffuse="accent2">ui/white.png</texture>
+                        <texture colordiffuse="state">ui/white.png</texture>
                         <visible>ListItem.IsSelected</visible>
                     </control>
                     <!-- labels in a list ignore focusedcolor: one label per focus state -->
@@ -269,7 +269,7 @@
                 <width>$PARAM[width]</width>
                 <height>52</height>
                 <font>font_caps_small</font>
-                <textcolor>accent2</textcolor>
+                <textcolor>state_text</textcolor>
                 <aligny>center</aligny>
                 <textoffsetx>20</textoffsetx>
             </control>

@@ -508,10 +508,10 @@ def test_move_carries_the_slot():
     assert run(slot_button('home', 1), 'onup', state) == '212'
 
 
-def test_grab_turns_the_slot_pink():
+def test_grab_turns_the_slot_dark_blue():
     variables = {v.get('name'): v for v in parse(ROOT / '1080i' / 'Variables.xml').iter('variable')}
     values = [(v.get('condition') or '', v.text) for v in variables['HomePagesFocusColor'].findall('value')]
-    assert values == [('!String.IsEmpty(Window.Property(nc.hp.grab))', 'accent2'), ('', 'focus')]
+    assert values == [('!String.IsEmpty(Window.Property(nc.hp.grab))', 'state_text'), ('', 'focus')]
     button = slot_button('home', 1)
     assert button.find('texturefocus').get('colordiffuse') == '$VAR[HomePagesFocusColor]'
 

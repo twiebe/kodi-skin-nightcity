@@ -419,7 +419,7 @@
                     <align>right</align>
                     <aligny>center</aligny>
                     <font>font_num</font>
-                    <textcolor>accent2</textcolor>
+                    <textcolor>state_text</textcolor>
                     <label>$INFO[Container(5100).CurrentItem]/$INFO[Container(5100).NumItems]</label>
                 </control>
                 <control type="list" id="5200">
@@ -446,9 +446,9 @@
                         <include content="SeasonTab">
                             <param name="color" value="accent"/>
                         </include>
-                        <!-- the shown season: the focus line, without the focus the same line in pink;
-                             as long as the text: the label again in the line font (a list layout
-                             has no auto width for an image) -->
+                        <!-- the shown season: the focus line, without the focus the same line in
+                             dark blue; as long as the text: the label again in the line font (a
+                             list layout has no auto width for an image) -->
                         <control type="label">
                             <width>240</width>
                             <height>44</height>
@@ -464,8 +464,8 @@
                             <height>44</height>
                             <aligny>center</aligny>
                             <font>font_caps_line</font>
-                            <textcolor>accent2</textcolor>
-                            <selectedcolor>accent2</selectedcolor>
+                            <textcolor>state</textcolor>
+                            <selectedcolor>state</selectedcolor>
                             <label>[UPPERCASE]$VAR[SeasonTabLabel][/UPPERCASE]</label>
                             <visible>!Control.HasFocus(5200)</visible>
                         </control>
@@ -601,7 +601,7 @@
                     <height>34</height>
                     <align>right</align>
                     <font>font_caps_small</font>
-                    <textcolor>accent2</textcolor>
+                    <textcolor>state_text</textcolor>
                     <label>$INFO[Container(5500).CurrentItem]/$INFO[Container(5500).NumItems]</label>
                     <visible>Control.HasFocus(5500)</visible>
                 </control>

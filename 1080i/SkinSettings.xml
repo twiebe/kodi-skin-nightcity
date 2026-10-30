@@ -3,7 +3,7 @@
      left, the rows of the focused category on the right, its description at the bottom. Home,
      Movies and Shows hold the spotlight and 8 slots of their page: OK on a slot picks a section
      (script section_pick, Kodi's select dialog), right cycles the option, "move" in the dialog
-     grabs the slot (pink), up/down carry it, OK drops it. Slot rows come from
+     grabs the slot (dark blue), up/down carry it, OK drops it. Slot rows come from
      Includes_Sections.xml (tools/make_sections.py). Window properties: nc.hp.tab (category
      shown), nc.hp.grab (grabbed slot as page.n), nc.hp.slide (the delay slider of Player is
      taken). Main menu comes first, colour scheme and glow at its end; Ratings and Player last. -->

@@ -102,7 +102,7 @@
                     <aligny>center</aligny>
                     <font>font_num</font>
                     <textcolor>text</textcolor>
-                    <label>$VAR[SeekDelta,[COLOR accent2],[/COLOR]  ]$VAR[PlayerTime]</label>
+                    <label>$VAR[SeekDelta,[COLOR state_text],[/COLOR]  ]$VAR[PlayerTime]</label>
                 </control>
             </control>
         </definition>
@@ -215,7 +215,7 @@
     </include>
 
     <!-- Track panel of the OSD (subtitles or audio) above the right buttons: one row per track
-         from the script's nc.<prefix>.* properties (Home), the playing one marked with a pink bar and accent text, "off"
+         from the script's nc.<prefix>.* properties (Home), the playing one marked with a dark blue bar and accent text, "off"
          first for subtitles, and a last row that opens Kodi's full settings (`settings`). The panel grows upwards
          with the number of rows (nc.<prefix>.rows, at most 8). Left and right focus the
          neighbouring buttons of the row (`left`, `right`). -->
@@ -409,13 +409,13 @@
                     <onright>SetFocus($PARAM[right])</onright>
                     <scrolltime>120</scrolltime>
                     <itemlayout width="600" height="52">
-                <!-- the playing track: a pink bar before the text, which stays in place -->
+                <!-- the playing track: a dark blue bar before the text, which stays in place -->
                 <control type="image">
                     <left>15</left>
                     <top>12</top>
                     <width>3</width>
                     <height>28</height>
-                    <texture colordiffuse="accent2">ui/white.png</texture>
+                    <texture colordiffuse="state">ui/white.png</texture>
                     <visible>String.IsEqual(ListItem.Property(current),1)</visible>
                 </control>
                 <control type="label">
@@ -461,13 +461,13 @@
                     <texture border="12" colordiffuse="focus">ui/cut_btn_fill.png</texture>
                     <visible>Control.HasFocus($PARAM[id])</visible>
                 </control>
-                <!-- the playing track's bar, pink also on the cursor's fill -->
+                <!-- the playing track's bar, dark blue also on the cursor's fill -->
                 <control type="image">
                     <left>15</left>
                     <top>12</top>
                     <width>3</width>
                     <height>28</height>
-                    <texture colordiffuse="accent2">ui/white.png</texture>
+                    <texture colordiffuse="state">ui/white.png</texture>
                     <visible>String.IsEqual(ListItem.Property(current),1)</visible>
                 </control>
                 <control type="label">
