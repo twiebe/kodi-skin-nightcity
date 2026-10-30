@@ -197,6 +197,11 @@
              hero (nc.kept.<container>.), which only holds them once all are there -->
         <param name="prefix" default="TMDbHelper.ListItem."/>
         <param name="wait" default="String.IsEmpty(Window(Home).Property(TMDbHelper.IsUpdatingRatings))"/>
+        <!-- the library's IMDb and TMDb ratings by name: VideoPlayer.Rating(name) is Kodi's
+             default rating whatever the name, so the player has only the unnamed one -->
+        <param name="own" default="true"/>
+        <!-- the line's fade in: not over a playing video, but in the player itself -->
+        <param name="fade" default="!Player.HasVideo"/>
         <definition>
             <include content="RatingsLineBody">
                 <param name="id" value="$PARAM[id]"/>
@@ -208,6 +213,8 @@
                 <param name="tmdb" value="[$PARAM[tmdb]]"/>
                 <param name="online" value="[$PARAM[tmdb]] + [$PARAM[wait]]"/>
                 <param name="library" value="Skin.HasSetting(nc.ratings.library)"/>
+                <param name="own" value="$PARAM[own]"/>
+                <param name="fade" value="$PARAM[fade]"/>
             </include>
         </definition>
     </include>
@@ -223,6 +230,7 @@
                 <param name="width" value="$PARAM[width]"/>
                 <param name="prefix" value="$PARAM[prefix]"/>
                 <param name="library" value="$PARAM[library]"/>
+                <param name="fade" value="$PARAM[fade]"/>
                 <param name="imdb" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]IMDb_Rating)) + !Skin.HasSetting(nc.ratings.hide.imdb)"/>
                 <param name="tmdbr" value="$PARAM[tmdb] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]TMDb_Rating)) + Skin.HasSetting(nc.ratings.show.tmdb)"/>
                 <param name="rt" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]RottenTomatoes_Rating)) + !Skin.HasSetting(nc.ratings.hide.rt)"/>
@@ -231,9 +239,9 @@
                 <param name="trakt" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]Trakt_Rating)) + Skin.HasSetting(nc.ratings.show.trakt)"/>
                 <param name="lb" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]Letterboxd_Rating)) + Skin.HasSetting(nc.ratings.show.lb)"/>
                 <param name="mdb" value="$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]MDBList_Rating)) + Skin.HasSetting(nc.ratings.show.mdb)"/>
-                <param name="own_imdb" value="![$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]IMDb_Rating))] + !String.IsEmpty($PARAM[item].Rating(imdb)) + $PARAM[library] + !Skin.HasSetting(nc.ratings.hide.imdb)"/>
-                <param name="own_moviedb" value="![$PARAM[tmdb] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]TMDb_Rating))] + !String.IsEmpty($PARAM[item].Rating(themoviedb)) + $PARAM[library] + Skin.HasSetting(nc.ratings.show.tmdb)"/>
-                <param name="own_tmdb" value="![$PARAM[tmdb] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]TMDb_Rating))] + String.IsEmpty($PARAM[item].Rating(themoviedb)) + !String.IsEmpty($PARAM[item].Rating(tmdb)) + $PARAM[library] + Skin.HasSetting(nc.ratings.show.tmdb)"/>
+                <param name="own_imdb" value="![$PARAM[online] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]IMDb_Rating))] + !String.IsEmpty($PARAM[item].Rating(imdb)) + $PARAM[library] + $PARAM[own] + !Skin.HasSetting(nc.ratings.hide.imdb)"/>
+                <param name="own_moviedb" value="![$PARAM[tmdb] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]TMDb_Rating))] + !String.IsEmpty($PARAM[item].Rating(themoviedb)) + $PARAM[library] + $PARAM[own] + Skin.HasSetting(nc.ratings.show.tmdb)"/>
+                <param name="own_tmdb" value="![$PARAM[tmdb] + !String.IsEmpty(Window(Home).Property($PARAM[prefix]TMDb_Rating))] + String.IsEmpty($PARAM[item].Rating(themoviedb)) + !String.IsEmpty($PARAM[item].Rating(tmdb)) + $PARAM[library] + $PARAM[own] + Skin.HasSetting(nc.ratings.show.tmdb)"/>
             </include>
         </definition>
     </include>
@@ -245,7 +253,7 @@
                 <visible>!String.IsEmpty($PARAM[item].Title)</visible>
                 <visible>[$PARAM[imdb]] | [$PARAM[tmdbr]] | [$PARAM[rt]] | [$PARAM[rtu]] | [$PARAM[mc]] | [$PARAM[trakt]] | [$PARAM[lb]] | [$PARAM[mdb]] | [$PARAM[own_imdb]] | [$PARAM[own_moviedb]] | [$PARAM[own_tmdb]] | [!String.IsEmpty($PARAM[item].Rating) + !String.IsEqual($PARAM[item].Rating,0.0) + $PARAM[library]]</visible>
                 <!-- comes in softly, goes at once: on a new title the old values would fade on it -->
-                <animation effect="fade" start="0" end="100" time="200" condition="!Player.HasVideo">Visible</animation>
+                <animation effect="fade" start="0" end="100" time="200" condition="$PARAM[fade]">Visible</animation>
                 <control type="grouplist">
                     <width>$PARAM[width]</width>
                     <height>34</height>

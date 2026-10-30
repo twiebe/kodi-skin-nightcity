@@ -1539,7 +1539,8 @@ def music_info(kind, dbid):
 # episode's info page points it at its episode list itself (DialogVideoInfo.xml, 5100). The
 # service keeps what TMDb Helper fetched per title for the session and shows the kept ratings of
 # the item on screen in nc.kept.<container>.*, which the ratings line reads: they stay once
-# fetched, also when the spotlight or the list comes back to a title.
+# fetched, also when the spotlight or the list comes back to a title. While a video plays it
+# keeps TMDb Helper's player ratings (TMDbHelper.Player.*) the same way in nc.kept.player.*.
 
 HERO_SOURCES = ('IMDb_Rating', 'Top250', 'TMDb_Rating', 'RottenTomatoes_Rating', 'RottenTomatoes_UserMeter',
                 'MetaCritic_Rating', 'Trakt_Rating', 'Letterboxd_Rating', 'MDBList_Rating')
@@ -1560,6 +1561,12 @@ HERO_FOCUS = 'ControlGroup({}).HasFocus()'
 HERO_WITHOUT_FOCUS = 'Skin.HasSetting(nc.ratings.spotlight)'
 INFO_EPISODES = ('Window.IsActive(movieinformation) + '
                  'String.IsEqual(Window(movieinformation).Property(TMDbHelper.WidgetContainer),5100)')
+# the player: TMDb Helper sets TMDbHelper.Player.* for a movie or an episode once it has started;
+# kept for what plays (title and file, the file guards the line) in nc.kept.player.*
+PLAYER_VIDEO = 'Player.HasVideo'
+PLAYER_KEY = (('title', 'VideoPlayer.Title'), ('file', 'Player.FilenameAndPath'))
+PLAYER_INFO = ('DBType', 'Title', 'TVShowTitle', 'Season', 'Episode', 'imdb_id')
+PLAYING_INFO = ('Title', 'TVShowTitle', 'Season', 'Episode', 'IMDBNumber')
 
 
 def hero_widget_container(container, focused, without_focus):
@@ -1657,6 +1664,48 @@ def _keep(kept, home, container, fields, watched, now):
             home.clearProperty(name)
 
 
+def player_same_title(props, playing):
+    """TMDb Helper's player properties PROPS ({name: value}) belong to what plays (PLAYING,
+    VideoPlayer.* without the prefix): for a new item it sets them only once that has started,
+    before that they are the last item's. An episode by season and episode and its title or
+    show; a movie by IMDb number, by title without one."""
+    if props.get('DBType') == 'episode':
+        return (props.get('Season'), props.get('Episode')) == (playing.get('Season'), playing.get('Episode')) and (
+            props.get('Title') == playing.get('Title') or props.get('TVShowTitle') == playing.get('TVShowTitle'))
+    if props.get('DBType') == 'movie':
+        if props.get('imdb_id') and playing.get('IMDBNumber'):
+            return props['imdb_id'] == playing['IMDBNumber']
+        return bool(props.get('Title')) and props.get('Title') == playing.get('Title')
+    return False
+
+
+def player_tick(kept, now):
+    """One look while a video plays: keep TMDb Helper's ratings of what plays, show the kept ones."""
+    import xbmc
+    home = _home()
+    key = None
+    if xbmc.getCondVisibility(PLAYER_VIDEO):
+        values = tuple((name, xbmc.getInfoLabel(info)) for name, info in PLAYER_KEY)
+        key = values if all(v for _, v in values) else None
+    if key and any(kept.cache.get(key, {}).values()):
+        pass  # kept for good: no need to look at TMDb Helper's again while it plays
+    elif key:
+        props = {n: home.getProperty('TMDbHelper.Player.' + n) for n in PLAYER_INFO + HERO_SOURCES + ('Rating',)}
+        playing = {n: xbmc.getInfoLabel('VideoPlayer.' + n) for n in PLAYING_INFO}
+        if player_same_title(props, playing):
+            kept.seen(key, episode_ratings(props) if props['DBType'] == 'episode' else
+                      {s: props[s] for s in HERO_SOURCES}, now)
+        else:
+            kept.seen(None, None, now)
+    else:
+        kept.seen(None, None, now)
+    for name, value in kept.changes('player', key):
+        if value:
+            home.setProperty(name, value)
+        else:
+            home.clearProperty(name)
+
+
 def hero_tick(kept, now):
     """One look: on an episode's info page keep the ratings of the focused episode; on Home point
     TMDb Helper at the hero, keep its ratings, show the kept ones."""
@@ -1686,12 +1735,13 @@ def hero_tick(kept, now):
 
 
 def hero_watch(monitor, stop):
-    """hero_tick every HERO_POLL s until STOP, Kodi ends or the service goes."""
+    """player_tick and hero_tick every HERO_POLL s until STOP, Kodi ends or the service goes."""
     import time
     import xbmc
-    kept = HeroRatings()
+    kept, playing = HeroRatings(), HeroRatings()
     while not stop.wait(HERO_POLL) and not QUIT.is_set() and not monitor.abortRequested():
         try:
+            player_tick(playing, time.monotonic())
             hero_tick(kept, time.monotonic())
         except Exception as e:  # a failing look must not end the watch
             xbmc.log('nightcity: hero ratings failed: {!r}'.format(e), xbmc.LOGERROR)

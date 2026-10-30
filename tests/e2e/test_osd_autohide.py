@@ -79,8 +79,8 @@ def changed_pixels(before, after, box):
 
 # with the OSD up: the plot (textbox 420 of the seek bar dialog, which JSON-RPC cannot ask
 # about: Control.IsVisible looks at the OSD) and the title above it
-PLOT = (296, 646, 296 + 900, 646 + 116)
-TITLE = (296, 520, 296 + 900, 520 + 60)
+PLOT = (296, 634, 296 + 900, 634 + 192)
+TITLE = (296, 472, 296 + 900, 472 + 60)
 
 
 def test_plot_follows_its_switch(playing):
