@@ -1516,9 +1516,13 @@ def test_debounce_runs_once_after_a_burst():
     assert runs == [1]
 
 
-# --- ratings of the spotlight titles (hero_tick) -----------------------------------------------
+# --- ratings kept per title (hero_tick) ---------------------------------------------------------
 
 MATRIX = {'TMDb_Rating': '8.2', 'IMDb_Rating': '8.7'}
+M5 = (('dbtype', 'movie'), ('dbid', '5'))
+M6 = (('dbtype', 'movie'), ('dbid', '6'))
+M9 = (('dbtype', 'movie'), ('dbid', '9'))
+T7 = (('dbtype', 'tvshow'), ('dbid', '7'))
 
 
 def _ratings(**values):
@@ -1529,63 +1533,89 @@ def test_hero_ratings_keeps_ratings_that_stay_long_enough():
     """TMDb Helper's properties can still hold the title before for a moment after it took up
     the new one: only ratings that stay HERO_STABLE s count."""
     kept = nightcity.HeroRatings()
-    assert not kept.seen('movie:5', _ratings(**MATRIX), 10.0)
-    assert not kept.seen('movie:5', _ratings(**MATRIX), 10.0 + nightcity.HERO_STABLE / 2)
-    assert kept.seen('movie:5', _ratings(**MATRIX), 10.0 + nightcity.HERO_STABLE)
-    assert kept.cache['movie:5'] == _ratings(**MATRIX)
+    assert not kept.seen(M5, _ratings(**MATRIX), 10.0)
+    assert not kept.seen(M5, _ratings(**MATRIX), 10.0 + nightcity.HERO_STABLE / 2)
+    assert kept.seen(M5, _ratings(**MATRIX), 10.0 + nightcity.HERO_STABLE)
+    assert kept.cache[M5] == _ratings(**MATRIX)
 
 
 def test_hero_ratings_start_over_when_they_change():
     kept = nightcity.HeroRatings()
-    kept.seen('movie:5', _ratings(TMDb_Rating='6.0'), 10.0)
-    kept.seen('movie:5', _ratings(**MATRIX), 10.5)
-    assert not kept.seen('movie:5', _ratings(**MATRIX), 11.0)
-    assert kept.seen('movie:5', _ratings(**MATRIX), 11.5)
-    assert kept.cache['movie:5']['TMDb_Rating'] == '8.2'
+    kept.seen(M5, _ratings(TMDb_Rating='6.0'), 10.0)
+    kept.seen(M5, _ratings(**MATRIX), 10.5)
+    assert not kept.seen(M5, _ratings(**MATRIX), 11.0)
+    assert kept.seen(M5, _ratings(**MATRIX), 11.5)
+    assert kept.cache[M5]['TMDb_Rating'] == '8.2'
 
 
 def test_hero_ratings_start_over_after_a_gap():
     """None: TMDb Helper is busy or on another title."""
     kept = nightcity.HeroRatings()
-    kept.seen('movie:5', _ratings(**MATRIX), 10.0)
+    kept.seen(M5, _ratings(**MATRIX), 10.0)
     kept.seen(None, None, 10.5)
-    assert not kept.seen('movie:5', _ratings(**MATRIX), 11.0)
-    assert 'movie:5' not in kept.cache
+    assert not kept.seen(M5, _ratings(**MATRIX), 11.0)
+    assert M5 not in kept.cache
 
 
 def test_hero_ratings_keep_the_first_ratings_of_a_title():
     """The line does not swap its content: later ratings of the same title are left out, unless
     the first had none."""
     kept = nightcity.HeroRatings()
-    kept.seen('movie:5', _ratings(**MATRIX), 0.0)
-    kept.seen('movie:5', _ratings(**MATRIX), 1.0)
-    kept.seen('movie:5', _ratings(TMDb_Rating='8.3'), 2.0)
-    assert not kept.seen('movie:5', _ratings(TMDb_Rating='8.3'), 3.0)
-    assert kept.cache['movie:5'] == _ratings(**MATRIX)
-    kept.seen('tvshow:7', _ratings(), 0.0)
-    assert kept.seen('tvshow:7', _ratings(), 1.0)
-    kept.seen('tvshow:7', _ratings(TMDb_Rating='7.0'), 2.0)
-    assert kept.seen('tvshow:7', _ratings(TMDb_Rating='7.0'), 3.0)
-    assert kept.cache['tvshow:7']['TMDb_Rating'] == '7.0'
+    kept.seen(M5, _ratings(**MATRIX), 0.0)
+    kept.seen(M5, _ratings(**MATRIX), 1.0)
+    kept.seen(M5, _ratings(TMDb_Rating='8.3'), 2.0)
+    assert not kept.seen(M5, _ratings(TMDb_Rating='8.3'), 3.0)
+    assert kept.cache[M5] == _ratings(**MATRIX)
+    kept.seen(T7, _ratings(), 0.0)
+    assert kept.seen(T7, _ratings(), 1.0)
+    kept.seen(T7, _ratings(TMDb_Rating='7.0'), 2.0)
+    assert kept.seen(T7, _ratings(TMDb_Rating='7.0'), 3.0)
+    assert kept.cache[T7]['TMDb_Rating'] == '7.0'
 
 
 def test_hero_ratings_publish_hides_the_line_before_it_changes_the_title():
-    """The line shows while nc.hero.<container>.dbid/dbtype name the hero's title: they go
-    first and come back last, so it never shows the ratings of one title on another."""
+    """The line shows while nc.kept.<container>.* name the item on screen: the last key field
+    goes first and comes back last, so it never shows the ratings of one title on another."""
     kept = nightcity.HeroRatings()
-    kept.cache = {'movie:5': _ratings(**MATRIX), 'movie:6': _ratings(TMDb_Rating='7.1')}
-    first = kept.changes('9000', 'movie:5')
-    assert first == [('nc.hero.9000.IMDb_Rating', '8.7'), ('nc.hero.9000.TMDb_Rating', '8.2'),
-                     ('nc.hero.9000.dbtype', 'movie'), ('nc.hero.9000.dbid', '5')]
-    assert kept.changes('9000', 'movie:5') == []
-    second = kept.changes('9000', 'movie:6')
-    assert second[0] == ('nc.hero.9000.dbid', '')
-    assert second[1:] == [('nc.hero.9000.IMDb_Rating', ''), ('nc.hero.9000.TMDb_Rating', '7.1'),
-                          ('nc.hero.9000.dbid', '6')]
+    kept.cache = {M5: _ratings(**MATRIX), M6: _ratings(TMDb_Rating='7.1')}
+    first = kept.changes('9000', M5)
+    assert first == [('nc.kept.9000.IMDb_Rating', '8.7'), ('nc.kept.9000.TMDb_Rating', '8.2'),
+                     ('nc.kept.9000.dbtype', 'movie'), ('nc.kept.9000.dbid', '5')]
+    assert kept.changes('9000', M5) == []
+    second = kept.changes('9000', M6)
+    assert second[0] == ('nc.kept.9000.dbid', '')
+    assert second[1:] == [('nc.kept.9000.IMDb_Rating', ''), ('nc.kept.9000.TMDb_Rating', '7.1'),
+                          ('nc.kept.9000.dbid', '6')]
     # a title without kept ratings: nothing of the one before stays
-    assert kept.changes('9000', 'movie:9') == [('nc.hero.9000.dbid', ''), ('nc.hero.9000.TMDb_Rating', ''),
-                                               ('nc.hero.9000.dbtype', '')]
+    assert kept.changes('9000', M9) == [('nc.kept.9000.dbid', ''), ('nc.kept.9000.TMDb_Rating', ''),
+                                        ('nc.kept.9000.dbtype', '')]
     assert kept.changes('9001', None) == []
+
+
+def test_kept_episodes_name_label_season_and_episode():
+    """Episodes of the info page's list (5100) need no library id: a TMDb Helper chain lists its
+    own. The episode guards the line, so it changes last."""
+    kept = nightcity.HeroRatings()
+    one = (('label', 'Pilot'), ('season', '1'), ('episode', '1'))
+    two = (('label', "Cat's in the Bag..."), ('season', '1'), ('episode', '2'))
+    kept.cache = {one: _ratings(TMDb_Rating='8.5'), two: _ratings(TMDb_Rating='8.3')}
+    assert kept.changes('5100', one) == [('nc.kept.5100.TMDb_Rating', '8.5'), ('nc.kept.5100.label', 'Pilot'),
+                                         ('nc.kept.5100.season', '1'), ('nc.kept.5100.episode', '1')]
+    assert kept.changes('5100', two) == [('nc.kept.5100.episode', ''), ('nc.kept.5100.TMDb_Rating', '8.3'),
+                                         ('nc.kept.5100.label', "Cat's in the Bag..."),
+                                         ('nc.kept.5100.episode', '2')]
+
+
+def test_episode_ratings_are_the_episodes_own():
+    """For an episode TMDb Helper's TMDb_Rating, Rotten Tomatoes, Metacritic, Letterboxd and
+    MDbList are the show's; IMDb (MDbList) and Trakt are the episode's, and TMDb's vote of the
+    episode is its Rating, one decimal like the others."""
+    props = _ratings(TMDb_Rating='8.9', IMDb_Rating='9.0', RottenTomatoes_Rating='96', Trakt_Rating='8.7',
+                     MetaCritic_Rating='85', MDBList_Rating='90', Top250='1')
+    props['Rating'] = '8.523'
+    assert nightcity.episode_ratings(props) == _ratings(TMDb_Rating='8.5', IMDb_Rating='9.0', Trakt_Rating='8.7')
+    props['Rating'] = ''
+    assert nightcity.episode_ratings(props)['TMDb_Rating'] == ''
 
 
 def test_hero_widget_container_follows_focus_unless_loaded_without():
@@ -1650,23 +1680,23 @@ def test_hero_tick_keeps_the_ratings_once_focus_leaves(monkeypatch):
     kept = nightcity.HeroRatings()
     nightcity.hero_tick(kept, 0.0)
     nightcity.hero_tick(kept, nightcity.HERO_STABLE)
-    assert home.props['nc.hero.9000.TMDb_Rating'] == '8.2'
-    assert home.props['nc.hero.9000.dbid'] == '5'
+    assert home.props['nc.kept.9000.TMDb_Rating'] == '8.2'
+    assert home.props['nc.kept.9000.dbid'] == '5'
     # focus on a row: TMDb Helper lets go and clears its properties, the hero keeps them
     sys_xbmc = __import__('sys').modules['xbmc']
     sys_xbmc.true.discard(MOVIE_FOCUS)
     for key in list(TH_MATRIX):
         home.props.pop(key, None)
     nightcity.hero_tick(kept, 2.0)
-    assert home.props['nc.hero.9000.TMDb_Rating'] == '8.2'
+    assert home.props['nc.kept.9000.TMDb_Rating'] == '8.2'
     # it rotates on and back
     sys_xbmc.labels.update({'Container(9000).ListItem.DBID': '6', 'Container(9000).ListItem.Label': 'Other'})
     nightcity.hero_tick(kept, 3.0)
-    assert 'nc.hero.9000.dbid' not in home.props
+    assert 'nc.kept.9000.dbid' not in home.props
     sys_xbmc.labels.update(MATRIX_ITEM)
     nightcity.hero_tick(kept, 4.0)
-    assert home.props['nc.hero.9000.TMDb_Rating'] == '8.2'
-    assert home.props['nc.hero.9000.dbid'] == '5'
+    assert home.props['nc.kept.9000.TMDb_Rating'] == '8.2'
+    assert home.props['nc.kept.9000.dbid'] == '5'
 
 
 def test_hero_tick_waits_for_tmdb_helper(monkeypatch):
@@ -1678,4 +1708,31 @@ def test_hero_tick_waits_for_tmdb_helper(monkeypatch):
         nightcity.hero_tick(kept, 0.0)
         nightcity.hero_tick(kept, nightcity.HERO_STABLE)
         assert kept.cache == {}, busy
-        assert 'nc.hero.9000.dbid' not in home.props
+        assert 'nc.kept.9000.dbid' not in home.props
+
+
+EPISODE_ITEM = {'Container(5100).ListItem.DBID': '806', 'Container(5100).ListItem.DBType': 'episode',
+                'Container(5100).ListItem.Label': "Cat's in the Bag...", 'Container(5100).ListItem.Season': '1',
+                'Container(5100).ListItem.Episode': '2'}
+TH_EPISODE = {'TMDbHelper.ListItem.base_dbid': '806', 'TMDbHelper.ListItem.base_dbtype': 'episode',
+              'TMDbHelper.ListItem.base_label': "Cat's in the Bag...", 'TMDbHelper.ListItem.TMDb_Rating': '8.9',
+              'TMDbHelper.ListItem.Rating': '8.312'}
+
+
+def test_hero_tick_keeps_the_ratings_of_the_focused_episode(monkeypatch):
+    """On an episode's info page TMDb Helper watches the episode list (5100, the page sets its
+    TMDbHelper.WidgetContainer): the service keeps what it has for the focused episode."""
+    home = _hero_env(monkeypatch, {HOME, nightcity.HERO_DIALOG, nightcity.INFO_EPISODES}, EPISODE_ITEM, TH_EPISODE)
+    kept = nightcity.HeroRatings()
+    nightcity.hero_tick(kept, 0.0)
+    nightcity.hero_tick(kept, nightcity.HERO_STABLE)
+    assert home.props['nc.kept.5100.TMDb_Rating'] == '8.3'
+    assert home.props['nc.kept.5100.episode'] == '2'
+    assert 'TMDbHelper.WidgetContainer' not in home.props
+    # TMDb Helper still on the episode before: nothing kept for this one
+    sys_xbmc = __import__('sys').modules['xbmc']
+    sys_xbmc.labels.update({'Container(5100).ListItem.DBID': '807', 'Container(5100).ListItem.Label': 'Pilot',
+                            'Container(5100).ListItem.Episode': '1'})
+    nightcity.hero_tick(kept, 2.0)
+    nightcity.hero_tick(kept, 3.0)
+    assert 'nc.kept.5100.episode' not in home.props

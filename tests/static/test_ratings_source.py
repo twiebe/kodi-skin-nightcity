@@ -3,7 +3,7 @@
 A Ratings category in the skin settings: only TMDb Helper's ratings (on by default, the skin
 bool nc.ratings.library stores off), the spotlight's ratings loaded without focus (off by
 default, nc.ratings.spotlight), and one toggle per source. The heroes on Home read the ratings the skin service kept for
-their current title (nc.hero.<container>.*), so they stay once fetched; the service also sets
+their current title (nc.kept.<container>.*), so they stay once fetched; the service also sets
 TMDbHelper.WidgetContainer, the skin no longer does.
 """
 import json
@@ -185,10 +185,10 @@ def test_library_ratings_only_when_the_setting_allows():
 
 @pytest.mark.parametrize('container, line', HEROES)
 def test_heroes_read_the_ratings_kept_for_their_title(container, line):
-    """The service copies TMDb Helper's ratings of the hero's title into nc.hero.<container>.*
+    """The service copies TMDb Helper's ratings of the hero's title into nc.kept.<container>.*
     and keeps them: they only count while they belong to the title on screen."""
     hero = _control(navigation.load('Home.xml'), line)
-    prop = 'Window(Home).Property(nc.hero.{}.{{}})'.format(container)
+    prop = 'Window(Home).Property(nc.kept.{}.{{}})'.format(container)
     key = ('Integer.IsEqual(Container({0}).ListItem.DBID,{1}) + String.IsEqual(Container({0}).ListItem.DBType,{2})'
            .format(container, prop.format('dbid'), prop.format('dbtype')))
     seen = set()
@@ -207,12 +207,54 @@ def test_info_page_still_reads_tmdb_helper():
     assert any('Window(Home).Property(TMDbHelper.ListItem.IMDb_Rating)' in label for label, _ in _labels(line))
 
 
-def test_skin_leaves_the_widget_container_to_the_service():
+def test_skin_leaves_the_widget_container_of_home_to_the_service():
     """The service points TMDb Helper at the hero (scripts/nightcity.py hero_tick): on focus, or
-    always with "load without focus"."""
+    always with "load without focus". Only an info page sets its own (local) one."""
     for path in SKIN.glob('*.xml'):
-        text = path.read_text(encoding='utf-8')
-        assert 'TMDbHelper.WidgetContainer' not in text, path.name
+        text = re.sub(r'<!--.*?-->', '', path.read_text(encoding='utf-8'), flags=re.S)
+        found = re.findall(r'[\w(),]*TMDbHelper\.WidgetContainer[^<"]*', text)
+        if path.name == 'DialogVideoInfo.xml':
+            assert set(found) == {'SetProperty(TMDbHelper.WidgetContainer,5100)',
+                                  'ClearProperty(TMDbHelper.WidgetContainer)'}, found
+        else:
+            assert not found, (path.name, found)
+
+
+def test_tmdb_helper_reads_the_widget_container_of_the_window_on_top():
+    """TMDbHelper.UseLocalWidgetContainer: TMDb Helper reads TMDbHelper.WidgetContainer of the
+    window on top, Home's on Home (as before), the info page's over it."""
+    for name in ('Startup.xml', 'Home.xml'):
+        onloads = [o.text for o in parse(SKIN / name).findall('onload')]
+        assert any('Skin.SetBool(TMDbHelper.UseLocalWidgetContainer)' in (o or '') for o in onloads), name
+
+
+def test_episode_info_page_points_tmdb_helper_at_its_episode_list():
+    """TMDb Helper watches the info page's own item unless the page names a container: on an
+    episode's page the focused episode of the list (5100), on any other none (the property
+    stays on the window from one page to the next)."""
+    onloads = [(o.get('condition'), o.text) for o in parse(SKIN / 'DialogVideoInfo.xml').findall('onload')]
+    assert ('String.IsEqual(ListItem.DBType,episode)', 'SetProperty(TMDbHelper.WidgetContainer,5100)') in onloads
+    assert ('!String.IsEqual(ListItem.DBType,episode)', 'ClearProperty(TMDbHelper.WidgetContainer)') in onloads
+
+
+def test_episode_head_reads_the_ratings_kept_for_the_focused_episode():
+    """The head follows the focused episode of 5100: its line shows what the service kept for
+    that episode (by label, season and episode: a TMDb Helper chain lists episodes without a
+    library id), nothing of another one."""
+    line = _control(navigation.load('DialogVideoInfo.xml'), '9043')
+    prop = 'Window(Home).Property(nc.kept.5100.{})'
+    key = ('String.IsEqual(Container(5100).ListItem.Label,{}) + Integer.IsEqual(Container(5100).ListItem.Season,{}) '
+           '+ Integer.IsEqual(Container(5100).ListItem.Episode,{})').format(
+               prop.format('label'), prop.format('season'), prop.format('episode'))
+    seen = set()
+    for label, visible in _labels(line):
+        assert 'TMDbHelper.' not in label + visible, label
+        for source in SOURCES:
+            if prop.format(source) in label:
+                assert key in visible, label
+                seen.add(source)
+    assert seen == set(SOURCES)
+    assert 'IsUpdatingRatings' not in _visible(line)
 
 
 def test_show_hero_is_marked_for_the_service():

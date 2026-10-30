@@ -21,6 +21,12 @@
     <onload>ClearProperty(nc.info.tab,home)</onload>
     <!-- a move that waits for its list (nc_info_enter, Timers.xml) belongs to the page before -->
     <onload>ClearProperty(nc.info.enter,home)</onload>
+    <!-- TMDb Helper reads this page's TMDbHelper.WidgetContainer (TMDbHelper.UseLocalWidgetContainer,
+         Home.xml): on an episode's page the focused episode of the list, the head follows it; on
+         any other page none, TMDb Helper then watches the page's own item. The property stays on
+         the window from one page to the next. -->
+    <onload condition="String.IsEqual(ListItem.DBType,episode)">SetProperty(TMDbHelper.WidgetContainer,5100)</onload>
+    <onload condition="!String.IsEqual(ListItem.DBType,episode)">ClearProperty(TMDbHelper.WidgetContainer)</onload>
     <!-- the episode the credits row loaded for (nc_info_ep, Timers.xml) belongs to the last page -->
     <onload>ClearProperty(nc.info.ep.query,home)</onload>
     <onload>ClearProperty(nc.info.ep.id,home)</onload>
@@ -101,8 +107,12 @@
             <include content="HeroBody">
                 <param name="item" value="Container(5100).ListItem"/>
                 <param name="kicker" value="$INFO[ListItem.TVShowTitle] · $LOCALIZE[31131] $INFO[Container(5100).ListItem.Season] · $LOCALIZE[31132] $INFO[Container(5100).ListItem.Episode]"/>
-                <!-- TMDb Helper watches the page's own episode, the head the episode list -->
-                <param name="tmdb" value="Integer.IsEqual(Container(5100).ListItem.Season,ListItem.Season) + Integer.IsEqual(Container(5100).ListItem.Episode,ListItem.Episode)"/>
+                <!-- TMDb Helper watches the focused episode of the list; the line shows what the
+                     service kept for it (scripts/nightcity.py hero_tick), by label, season and
+                     episode: a TMDb Helper chain lists episodes without a library id -->
+                <param name="tmdb" value="String.IsEqual(Container(5100).ListItem.Label,Window(Home).Property(nc.kept.5100.label)) + Integer.IsEqual(Container(5100).ListItem.Season,Window(Home).Property(nc.kept.5100.season)) + Integer.IsEqual(Container(5100).ListItem.Episode,Window(Home).Property(nc.kept.5100.episode))"/>
+                <param name="ratingsprefix" value="nc.kept.5100."/>
+                <param name="ratingswait" value="true"/>
                 <param name="titleid" value="9020"/>
                 <param name="kickerid" value="9025"/>
                 <param name="poster" value="false"/>
