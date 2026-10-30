@@ -411,24 +411,24 @@
          next title -->
     <include name="SpotlightMore">
         <control type="group">
-            <width>53</width>
+            <width>35</width>
             <height>54</height>
             <control type="image">
-                <left>18</left>
+                <left>0</left>
                 <top>12</top>
                 <width>13</width>
                 <height>30</height>
                 <texture colordiffuse="state_text">ui/spot_more.png</texture>
             </control>
             <control type="image">
-                <left>29</left>
+                <left>11</left>
                 <top>12</top>
                 <width>13</width>
                 <height>30</height>
                 <texture colordiffuse="state_fade">ui/spot_more.png</texture>
             </control>
             <control type="image">
-                <left>40</left>
+                <left>22</left>
                 <top>12</top>
                 <width>13</width>
                 <height>30</height>

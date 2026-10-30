@@ -40,16 +40,16 @@ To try a build of your own, install its zip (`python tools/build.py`, see Develo
 
 ```
 python -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
-.venv/bin/pytest tests/static -q
-.venv/bin/pytest tests/unit -q
-.venv/bin/pytest tests/e2e -q -m e2e   # needs the kodi-dev environment, see tools/kodidev_setup.py
+.venv/bin/python -m pytest tests/static -q
+.venv/bin/python -m pytest tests/unit -q
+.venv/bin/python -m pytest tests/e2e -q -m e2e   # needs the kodi-dev environment, see tools/kodidev_setup.py
 ```
 
 The e2e suite runs in parallel on a kodi-dev pool (several environments, each with its own Kodi and Jellyfin, see the kodi-dev README), one pytest-xdist worker per Kodi. The pool copies kodi-dev's `data/` as its template, so run `tools/kodidev_setup.py` before the first `pool up`: it also adds the titles the TMDb tests open. Each test run restarts the pool Kodis, so the skin's startup is the working tree's. `--dist loadfile` keeps each file on one Kodi, some files rely on their test order. `-m "e2e and not slow"` leaves out the tests that take more than 20 s.
 
 ```
 /workspaces/kodi-dev/kdev pool up --skin "$PWD"   # this checkout in every worker
-KDEV_POOL=1 .venv/bin/pytest tests/e2e -q -m e2e -n auto --dist loadfile
+KDEV_POOL=1 .venv/bin/python -m pytest tests/e2e -q -m e2e -n auto --dist loadfile
 ```
 
 The player tests write a clip with two audio tracks, two subtitles and three chapters with `tools/make_tracks_clip.py` (needs ffmpeg).
