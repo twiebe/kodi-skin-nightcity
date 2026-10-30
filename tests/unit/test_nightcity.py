@@ -1252,6 +1252,13 @@ def test_info_back_sets_the_tab_left_once_the_lists_rest(monkeypatch):
     assert home.props['nc.info.tab'] == 'crew'
 
 
+def test_info_lists_rest_skips_hidden_recommendations():
+    """Hidden (a show or person page) the recommendations keep the IsUpdating of the page
+    before and never load: waiting for them held the tab left until the timeout."""
+    assert nightcity.INFO_LISTS_REST['5500'] == (
+        '!Container(5500).IsUpdating + ![Control.IsVisible(5402) + Container(5300).IsUpdating]')
+
+
 def test_info_back_leaves_another_page_alone(monkeypatch):
     labels = {'Window(Home).Property(TMDbHelper.Position)': '2', 'ListItem.Property(tmdb_id)': '604'}
     true = {'Window.IsActive(movieinformation)', 'Control.HasFocus(5500)'}

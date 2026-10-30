@@ -533,8 +533,9 @@ def _select_episode():
 RETURN_FIELDS = ('list', 'index', 'tab', 'tmdb_id', 'dbid')
 INFO_STAND_IN = '9098'  # DialogVideoInfo.xml: the focus out of sight
 # the TMDb lists of a page have stopped loading: a tab may change what one of them shows (two
-# plugin lists at once crash Kodi; TmdbBusy in Includes_Tmdb.xml)
-INFO_LISTS_REST = {'5500': '!Container(5500).IsUpdating + !Container(5300).IsUpdating',
+# plugin lists at once crash Kodi; TmdbBusy in Includes_Tmdb.xml). The recommendations only
+# while shown: hidden (a show or person page) they keep the IsUpdating of the page before.
+INFO_LISTS_REST = {'5500': '!Container(5500).IsUpdating + ![Control.IsVisible(5402) + Container(5300).IsUpdating]',
                    '5510': '!Container(5510).IsUpdating',
                    '5300': '!Container(5500).IsUpdating + !Container(5300).IsUpdating'}
 

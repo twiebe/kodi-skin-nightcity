@@ -126,9 +126,12 @@ def test_info_tabs_load_one_list():
     assert len(enter) == 2 and not any(c.startswith('!Container($PARAM[list]).IsUpdating') for c in enter)
 
 
-# only the credits list of the page: the hidden one of the other kind of page stays updating
+# only the lists shown: a hidden list keeps the IsUpdating it had and never loads (the credits
+# list of the other kind of page; the recommendations after Back left a title page mid-load,
+# which held every tab on the person page until OK)
 PERSON_PAGE = 'String.IsEqual(ListItem.Property(tmdb_type),person)'
-BUSY = ('[!{0} + Container(5500).IsUpdating] | [{0} + Container(5510).IsUpdating] | Container(5300).IsUpdating | '
+BUSY = ('[!{0} + Container(5500).IsUpdating] | [{0} + Container(5510).IsUpdating] | '
+        '[Control.IsVisible(5402) + Container(5300).IsUpdating] | '
         'Container(6501).IsUpdating | Container(6599).IsUpdating').format(PERSON_PAGE)
 
 
