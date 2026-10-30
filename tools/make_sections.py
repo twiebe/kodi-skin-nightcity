@@ -40,7 +40,7 @@ PAGE_SHOWN = {
 }
 TMDB = 'plugin://plugin.video.themoviedb.helper/?info=trending_week&amp;tmdb_type={}'
 # a genre row's tabs start after its number, where a row's title starts after its number
-GENRE_TABS_LEFT = 75
+GENRE_TABS_LEFT = 73
 GENRES = {'movies': ('movies', 'genre', 'GenrePickLabel', 'genre_pick'),
           'shows': ('tvshows', 'tvgenre', 'ShowGenrePickLabel', 'genre_pick:tvshow')}
 
@@ -158,7 +158,8 @@ def slot_include(page):
                       '    ' + param('base', base), '    ' + param('list', base + '0$PARAM[n]'),
                       '    ' + param('up', '$PARAM[up]'), '    ' + param('prop', prop),
                       '    ' + param('picklabel', '$VAR[{}]'.format(label)),
-                      '    ' + param('pick', pick), '    ' + param('left', GENRE_TABS_LEFT), '</include>']
+                      '    ' + param('pick', pick), '    ' + param('left', GENRE_TABS_LEFT),
+                      '    ' + param('font', 'font_caps_small'), '</include>']
         out.append('            <include content="RowBox" condition="{}">'.format(cond))
         out += ['                ' + p for p in params + nested]
         out.append('            </include>')

@@ -1182,6 +1182,8 @@
         <param name="picklabel"/>
         <param name="pick"/>
         <param name="left" default="30"/>
+        <!-- font of the tab labels -->
+        <param name="font" default="font_caps"/>
         <definition>
             <control type="grouplist" id="$PARAM[base]30">
                 <left>$PARAM[left]</left>
@@ -1201,6 +1203,7 @@
                     <param name="id" value="$PARAM[base]31"/>
                     <param name="n" value="1"/>
                     <param name="prop" value="$PARAM[prop]"/>
+                    <param name="font" value="$PARAM[font]"/>
                 </include>
                 <include content="TabGap">
                     <param name="id" value="$PARAM[base]42"/>
@@ -1210,6 +1213,7 @@
                     <param name="id" value="$PARAM[base]32"/>
                     <param name="n" value="2"/>
                     <param name="prop" value="$PARAM[prop]"/>
+                    <param name="font" value="$PARAM[font]"/>
                 </include>
                 <include content="TabGap">
                     <param name="id" value="$PARAM[base]43"/>
@@ -1219,6 +1223,7 @@
                     <param name="id" value="$PARAM[base]33"/>
                     <param name="n" value="3"/>
                     <param name="prop" value="$PARAM[prop]"/>
+                    <param name="font" value="$PARAM[font]"/>
                 </include>
                 <include content="TabGap">
                     <param name="id" value="$PARAM[base]44"/>
@@ -1228,6 +1233,7 @@
                     <param name="label" value="$PARAM[picklabel]"/>
                     <param name="active" value="!String.IsEmpty(Window(Home).Property(nc.$PARAM[prop].id)) + !String.IsEqual(Window(Home).Property(nc.$PARAM[prop].id),Window(Home).Property(nc.$PARAM[prop].1.id)) + !String.IsEqual(Window(Home).Property(nc.$PARAM[prop].id),Window(Home).Property(nc.$PARAM[prop].2.id)) + !String.IsEqual(Window(Home).Property(nc.$PARAM[prop].id),Window(Home).Property(nc.$PARAM[prop].3.id))"/>
                     <param name="onclick" value="NotifyAll(nightcity,$PARAM[pick])"/>
+                    <param name="font" value="$PARAM[font]"/>
                 </include>
                 <include content="TabGap">
                     <param name="id" value="$PARAM[base]45"/>
@@ -1240,9 +1246,11 @@
         <param name="id"/>
         <param name="n"/>
         <param name="prop"/>
+        <param name="font"/>
         <definition>
             <include content="TabButton">
                 <param name="id" value="$PARAM[id]"/>
+                <param name="font" value="$PARAM[font]"/>
                 <param name="label" value="$INFO[Window(Home).Property(nc.$PARAM[prop].$PARAM[n].label)]"/>
                 <param name="active" value="!String.IsEmpty(Window(Home).Property(nc.$PARAM[prop].$PARAM[n].id)) + String.IsEqual(Window(Home).Property(nc.$PARAM[prop].id),Window(Home).Property(nc.$PARAM[prop].$PARAM[n].id))"/>
                 <param name="onfocus" value="SetProperty(nc.$PARAM[prop].id,$INFO[Window(Home).Property(nc.$PARAM[prop].$PARAM[n].id)],home)"/>

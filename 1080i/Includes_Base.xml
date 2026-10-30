@@ -461,7 +461,8 @@
     </include>
 
     <!-- Only the number of a row whose top line holds tabs instead of a title (genre rows): on
-         the line of the tab labels (TabButton: top of the row, height 44, centred, font_caps) -->
+         the line of the tab labels (TabButton: top of the row, height 44, centred) in the font
+         of the row headings, like the genre tabs -->
     <include name="RowNumber">
         <param name="num"/>
         <param name="left" default="0"/>
@@ -472,7 +473,7 @@
                 <width>100</width>
                 <height>44</height>
                 <aligny>center</aligny>
-                <font>font_caps</font>
+                <font>font_caps_small</font>
                 <textcolor>text_mute</textcolor>
                 <label>[COLOR accent2]$PARAM[num][/COLOR]</label>
             </control>
@@ -670,11 +671,12 @@
         <param name="onfocus" default="noop"/>
         <param name="onclick" default="noop"/>
         <param name="visible" default="true"/>
+        <param name="font" default="font_caps"/>
         <definition>
             <control type="togglebutton" id="$PARAM[id]">
                 <width>auto</width>
                 <height>44</height>
-                <font>font_caps</font>
+                <font>$PARAM[font]</font>
                 <textoffsetx>10</textoffsetx>
                 <aligny>center</aligny>
                 <textcolor>text_mute</textcolor>
