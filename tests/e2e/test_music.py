@@ -140,7 +140,22 @@ def test_osd_queue_plays_the_chosen_track(music):
     action('down', 'select')
     wait_for('Integer.IsEqual(MusicPlayer.PlaylistPosition,2)')
     wait_for('Control.HasFocus(701)')  # a busy dialog may come up while the track loads
-    action('up', 'up')  # the list goes up to its first track, then to the buttons
+    # the cursor away from what plays: the bar stays on track 2, then moves to 1 by itself
+    wait_for('Player.HasAudio + !Window.IsActive(busydialognocancel)')
+    time.sleep(1)  # the queue reloads as the track starts, the cursor with it
+    last = info('Container(701).NumItems')['Container(701).NumItems']
+    builtin('SetFocus(701,{},absolute)'.format(int(last) - 1))  # the last track
+    wait_for('Integer.IsEqual(Container(701).CurrentItem,{})'.format(last))
+    screenshot('e2e-music-osd-playing-2')
+    rpc('Player.GoTo', {'playerid': 0, 'to': 0})
+    wait_for('Integer.IsEqual(MusicPlayer.PlaylistPosition,1)')
+    wait_for('Control.HasFocus(701) + !Window.IsActive(busydialognocancel)')
+    time.sleep(1)
+    screenshot('e2e-music-osd-playing-1')
+    assert info('Container(701).CurrentItem')['Container(701).CurrentItem'] == last
+    builtin('SetFocus(701,0,absolute)')
+    wait_for('Integer.IsEqual(Container(701).CurrentItem,1)')
+    action('up')  # from the first track to the buttons
     wait_for('ControlGroup(600).HasFocus()')
     action('back')
     wait_for('!Window.IsActive(musicosd)')

@@ -288,14 +288,23 @@ def test_music_osd_buttons_and_queue():
         assert actions(c[list_id], 'onup') == [('', '600')]
 
 
-def test_music_queue_marks_like_the_episode_list():
-    """No mark of its own (DESIGN.md colours): the cursor, which opens on the playing track, shows
-    its title in the accent colour also while the list has no focus. No progress line: Kodi
-    redraws a list item only while the cursor is on it, so the line stood still elsewhere."""
+def test_music_queue_marks_the_playing_track():
+    """The cursor, which opens on the playing track, shows its title in the accent colour also
+    while the list has no focus. The playing track keeps a dark blue bar before its text (state,
+    DESIGN.md colours), like the current value of a list dialog, wherever the cursor is. No
+    progress line: Kodi redraws a list item only while the cursor is on it, so the line stood
+    still elsewhere."""
     c = controls(load('MusicOSD.xml'))
     for list_id in ('700', '701'):
         for layout in ('itemlayout', 'focusedlayout'):
-            assert not [p for p in c[list_id].find(layout).iter('control') if p.get('type') == 'progress']
+            controls_in = list(c[list_id].find(layout).iter('control'))
+            assert not [p for p in controls_in if p.get('type') == 'progress']
+            bars = [i for i in controls_in if i.get('type') == 'image'
+                    and (i.findtext('visible') or '').strip() == 'ListItem.IsPlaying']
+            assert len(bars) == 1, (list_id, layout)
+            assert bars[0].findtext('width') == '3'
+            assert bars[0].find('texture').get('colordiffuse') == 'state'
+            assert bars[0].findtext('texture') == 'ui/white.png'
         text = ET.tostring(c[list_id]).decode()
         assert '▶' not in text and 'accent2' not in text
     focused = ET.tostring(c['700'].find('focusedlayout')).decode()

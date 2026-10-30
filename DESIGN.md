@@ -87,3 +87,4 @@ browser.
 - **A progress line says where you are** in something that plays or was watched: under an
   episode or a card. It stays on its item when the cursor moves away. The music queue has none:
   Kodi redraws a list item only while the cursor is on it, so a live line elsewhere stood still.
+  Its playing track has the dark blue bar of a current value instead, wherever the cursor is.

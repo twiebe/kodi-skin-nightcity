@@ -91,9 +91,10 @@ Walks top down like the video info page:
   the queue: the buttons. Up from the buttons: nothing (as in the video OSD); Back closes the OSD.
 - The queue works like the episode list of a TV show page. It opens with the cursor on the
   playing track (`music_queue_select` moves both lists with Control.Move). Not focused, that
-  latent cursor shows its title in the cyan accent; focused, the normal focus look. No progress
-  line under the playing track: Kodi redraws a list item only while the cursor is on it, so a
-  Player.Progress line elsewhere stood still. No ▶, no state colour.
+  latent cursor shows its title in the cyan accent; focused, the normal focus look. The playing
+  track has a dark blue bar (`state`, 3 px) before its number or title, as the current value of a
+  list dialog, wherever the cursor is. No progress line under it: Kodi redraws a list item only
+  while the cursor is on it, so a Player.Progress line elsewhere stood still. No ▶.
 - One album or mixed: the service checks at playback start and on every queue change (debounced
   `music_queue`, Playlist.GetItems with albumid) whether the whole queue comes from one album and
   sets `nc.music.queue.album` on Home. One album (700 hidden, 701 shown): a text list with track
