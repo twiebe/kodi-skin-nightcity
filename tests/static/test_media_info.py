@@ -241,25 +241,12 @@ def test_movie_info_page_reads_tmdb_helper():
     _with(_ratings(False), TH.format('TMDb_Rating'))
 
 
-def test_home_heroes_read_tmdb_helper_only_for_their_spotlight():
-    """On Home TMDb Helper follows TMDbHelper.WidgetContainer, which a row clears: the hero's
-    ratings come from it only while it watches the hero's spotlight (9000 movies, 9001 shows)."""
-    home = navigation.load('Home.xml')
-    want = re.compile(r'String\.IsEqual\(Window\(Home\)\.Property\(TMDbHelper\.WidgetContainer\),(900[01])\)')
-    seen = set()
-    for label, visible, _ in _labels(home):
-        if 'TMDbHelper.ListItem.' in label:
-            match = want.search(visible)
-            assert match, label
-            seen.add(match.group(1))
-    assert seen == {'9000', '9001'}
-
-
 def test_ratings_line_hides_without_ratings():
-    """test_spotlight.test_rating_slot_hidden_without_data checks 9030 on Home."""
+    """test_spotlight.test_rating_slot_hidden_without_data checks 9030 on Home. The hero reads
+    the ratings the service kept for its title (tests/static/test_ratings_source.py)."""
     visible = _visible(_movie_hero())
     for source in SOURCES:
-        assert TH.format(source) in visible, source
+        assert 'Window(Home).Property(nc.hero.9000.{})'.format(source) in visible, source
     assert 'Container(9000).ListItem.Rating' in visible
 
 

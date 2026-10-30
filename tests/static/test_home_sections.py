@@ -407,12 +407,12 @@ def test_opens_on_the_main_menu_category():
 
 def test_main_menu_category_holds_the_look_under_appearance():
     """The look gets no category of its own: colour scheme and glow sit at the end of the main
-    menu category, under a separator and an Appearance heading."""
+    menu category, under a separator and an Appearance heading; only the ratings come after."""
     area = controls(page_window())['500']
     labels = [k.findtext('label') for k in area.iter('control') if k.get('type') == 'label']
     assert '$LOCALIZE[480]' in labels
     ids = [k.get('id') for k in area.iter('control') if k.get('id')]
-    assert ids[-1] == '601'
+    assert ids[-4:] == ['601', '620', '621', '622']
     c = controls(page_window())
     glow = c['601']
     assert glow.get('type') == 'radiobutton' and glow.findtext('width') == '1240'

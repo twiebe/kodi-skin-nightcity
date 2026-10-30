@@ -1514,3 +1514,168 @@ def test_debounce_runs_once_after_a_burst():
         debounce.changed()
     time.sleep(0.2)
     assert runs == [1]
+
+
+# --- ratings of the spotlight titles (hero_tick) -----------------------------------------------
+
+MATRIX = {'TMDb_Rating': '8.2', 'IMDb_Rating': '8.7'}
+
+
+def _ratings(**values):
+    return dict({s: '' for s in nightcity.HERO_SOURCES}, **values)
+
+
+def test_hero_ratings_keeps_ratings_that_stay_long_enough():
+    """TMDb Helper's properties can still hold the title before for a moment after it took up
+    the new one: only ratings that stay HERO_STABLE s count."""
+    kept = nightcity.HeroRatings()
+    assert not kept.seen('movie:5', _ratings(**MATRIX), 10.0)
+    assert not kept.seen('movie:5', _ratings(**MATRIX), 10.0 + nightcity.HERO_STABLE / 2)
+    assert kept.seen('movie:5', _ratings(**MATRIX), 10.0 + nightcity.HERO_STABLE)
+    assert kept.cache['movie:5'] == _ratings(**MATRIX)
+
+
+def test_hero_ratings_start_over_when_they_change():
+    kept = nightcity.HeroRatings()
+    kept.seen('movie:5', _ratings(TMDb_Rating='6.0'), 10.0)
+    kept.seen('movie:5', _ratings(**MATRIX), 10.5)
+    assert not kept.seen('movie:5', _ratings(**MATRIX), 11.0)
+    assert kept.seen('movie:5', _ratings(**MATRIX), 11.5)
+    assert kept.cache['movie:5']['TMDb_Rating'] == '8.2'
+
+
+def test_hero_ratings_start_over_after_a_gap():
+    """None: TMDb Helper is busy or on another title."""
+    kept = nightcity.HeroRatings()
+    kept.seen('movie:5', _ratings(**MATRIX), 10.0)
+    kept.seen(None, None, 10.5)
+    assert not kept.seen('movie:5', _ratings(**MATRIX), 11.0)
+    assert 'movie:5' not in kept.cache
+
+
+def test_hero_ratings_keep_the_first_ratings_of_a_title():
+    """The line does not swap its content: later ratings of the same title are left out, unless
+    the first had none."""
+    kept = nightcity.HeroRatings()
+    kept.seen('movie:5', _ratings(**MATRIX), 0.0)
+    kept.seen('movie:5', _ratings(**MATRIX), 1.0)
+    kept.seen('movie:5', _ratings(TMDb_Rating='8.3'), 2.0)
+    assert not kept.seen('movie:5', _ratings(TMDb_Rating='8.3'), 3.0)
+    assert kept.cache['movie:5'] == _ratings(**MATRIX)
+    kept.seen('tvshow:7', _ratings(), 0.0)
+    assert kept.seen('tvshow:7', _ratings(), 1.0)
+    kept.seen('tvshow:7', _ratings(TMDb_Rating='7.0'), 2.0)
+    assert kept.seen('tvshow:7', _ratings(TMDb_Rating='7.0'), 3.0)
+    assert kept.cache['tvshow:7']['TMDb_Rating'] == '7.0'
+
+
+def test_hero_ratings_publish_hides_the_line_before_it_changes_the_title():
+    """The line shows while nc.hero.<container>.dbid/dbtype name the hero's title: they go
+    first and come back last, so it never shows the ratings of one title on another."""
+    kept = nightcity.HeroRatings()
+    kept.cache = {'movie:5': _ratings(**MATRIX), 'movie:6': _ratings(TMDb_Rating='7.1')}
+    first = kept.changes('9000', 'movie:5')
+    assert first == [('nc.hero.9000.IMDb_Rating', '8.7'), ('nc.hero.9000.TMDb_Rating', '8.2'),
+                     ('nc.hero.9000.dbtype', 'movie'), ('nc.hero.9000.dbid', '5')]
+    assert kept.changes('9000', 'movie:5') == []
+    second = kept.changes('9000', 'movie:6')
+    assert second[0] == ('nc.hero.9000.dbid', '')
+    assert second[1:] == [('nc.hero.9000.IMDb_Rating', ''), ('nc.hero.9000.TMDb_Rating', '7.1'),
+                          ('nc.hero.9000.dbid', '6')]
+    # a title without kept ratings: nothing of the one before stays
+    assert kept.changes('9000', 'movie:9') == [('nc.hero.9000.dbid', ''), ('nc.hero.9000.TMDb_Rating', ''),
+                                               ('nc.hero.9000.dbtype', '')]
+    assert kept.changes('9001', None) == []
+
+
+def test_hero_widget_container_follows_focus_unless_loaded_without():
+    assert nightcity.hero_widget_container('9000', focused=True, without_focus=False) == '9000'
+    assert nightcity.hero_widget_container('9000', focused=False, without_focus=False) == ''
+    assert nightcity.hero_widget_container('9001', focused=False, without_focus=True) == '9001'
+    assert nightcity.hero_widget_container('', focused=False, without_focus=True) == ''
+
+
+def _hero_env(monkeypatch, true, labels, props=None):
+    fake = FakeXbmc(set(true), dict(labels))
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    home = FakeHome()
+    home.props.update(props or {})
+    monkeypatch.setattr(nightcity, '_home', lambda: home)
+    return home
+
+
+HOME = nightcity.HERO_ON_HOME
+MOVIE_HERO = nightcity.HERO_SHOWN.format('9300')
+MOVIE_FOCUS = nightcity.HERO_FOCUS.format('9050')
+MATRIX_ITEM = {'Container(9000).ListItem.DBID': '5', 'Container(9000).ListItem.DBType': 'movie',
+               'Container(9000).ListItem.Label': 'The Matrix'}
+TH_MATRIX = {'TMDbHelper.WidgetContainer': '9000', 'TMDbHelper.ListItem.base_dbid': '5',
+             'TMDbHelper.ListItem.base_dbtype': 'movie', 'TMDbHelper.ListItem.base_label': 'The Matrix',
+             'TMDbHelper.ListItem.TMDb_Rating': '8.2'}
+
+
+def test_hero_tick_points_tmdb_helper_at_the_focused_hero(monkeypatch):
+    home = _hero_env(monkeypatch, {HOME, MOVIE_HERO, MOVIE_FOCUS}, MATRIX_ITEM)
+    nightcity.hero_tick(nightcity.HeroRatings(), 0.0)
+    assert home.props['TMDbHelper.WidgetContainer'] == '9000'
+
+
+def test_hero_tick_lets_tmdb_helper_go_without_focus(monkeypatch):
+    home = _hero_env(monkeypatch, {HOME, MOVIE_HERO}, MATRIX_ITEM, {'TMDbHelper.WidgetContainer': '9000'})
+    nightcity.hero_tick(nightcity.HeroRatings(), 0.0)
+    assert 'TMDbHelper.WidgetContainer' not in home.props
+
+
+def test_hero_tick_keeps_tmdb_helper_on_the_hero_with_the_setting(monkeypatch):
+    home = _hero_env(monkeypatch, {HOME, MOVIE_HERO, nightcity.HERO_WITHOUT_FOCUS}, MATRIX_ITEM)
+    nightcity.hero_tick(nightcity.HeroRatings(), 0.0)
+    assert home.props['TMDbHelper.WidgetContainer'] == '9000'
+
+
+def test_hero_tick_leaves_everything_alone_under_a_dialog(monkeypatch):
+    home = _hero_env(monkeypatch, {HOME, nightcity.HERO_DIALOG, MOVIE_HERO}, MATRIX_ITEM,
+                     {'TMDbHelper.WidgetContainer': '9000'})
+    nightcity.hero_tick(nightcity.HeroRatings(), 0.0)
+    assert home.props == {'TMDbHelper.WidgetContainer': '9000'}
+
+
+def test_hero_tick_lets_tmdb_helper_go_off_home(monkeypatch):
+    home = _hero_env(monkeypatch, set(), {}, {'TMDbHelper.WidgetContainer': '9001'})
+    nightcity.hero_tick(nightcity.HeroRatings(), 0.0)
+    assert 'TMDbHelper.WidgetContainer' not in home.props
+
+
+def test_hero_tick_keeps_the_ratings_once_focus_leaves(monkeypatch):
+    home = _hero_env(monkeypatch, {HOME, MOVIE_HERO, MOVIE_FOCUS}, MATRIX_ITEM, TH_MATRIX)
+    kept = nightcity.HeroRatings()
+    nightcity.hero_tick(kept, 0.0)
+    nightcity.hero_tick(kept, nightcity.HERO_STABLE)
+    assert home.props['nc.hero.9000.TMDb_Rating'] == '8.2'
+    assert home.props['nc.hero.9000.dbid'] == '5'
+    # focus on a row: TMDb Helper lets go and clears its properties, the hero keeps them
+    sys_xbmc = __import__('sys').modules['xbmc']
+    sys_xbmc.true.discard(MOVIE_FOCUS)
+    for key in list(TH_MATRIX):
+        home.props.pop(key, None)
+    nightcity.hero_tick(kept, 2.0)
+    assert home.props['nc.hero.9000.TMDb_Rating'] == '8.2'
+    # it rotates on and back
+    sys_xbmc.labels.update({'Container(9000).ListItem.DBID': '6', 'Container(9000).ListItem.Label': 'Other'})
+    nightcity.hero_tick(kept, 3.0)
+    assert 'nc.hero.9000.dbid' not in home.props
+    sys_xbmc.labels.update(MATRIX_ITEM)
+    nightcity.hero_tick(kept, 4.0)
+    assert home.props['nc.hero.9000.TMDb_Rating'] == '8.2'
+    assert home.props['nc.hero.9000.dbid'] == '5'
+
+
+def test_hero_tick_waits_for_tmdb_helper(monkeypatch):
+    """Busy, or still on the title before: nothing is kept."""
+    for busy in ({'TMDbHelper.IsUpdating': 'True'}, {'TMDbHelper.IsUpdatingRatings': 'True'},
+                 {'TMDbHelper.ListItem.base_dbid': '4'}):
+        home = _hero_env(monkeypatch, {HOME, MOVIE_HERO, MOVIE_FOCUS}, MATRIX_ITEM, dict(TH_MATRIX, **busy))
+        kept = nightcity.HeroRatings()
+        nightcity.hero_tick(kept, 0.0)
+        nightcity.hero_tick(kept, nightcity.HERO_STABLE)
+        assert kept.cache == {}, busy
+        assert 'nc.hero.9000.dbid' not in home.props
