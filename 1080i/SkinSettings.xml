@@ -6,7 +6,7 @@
      grabs the slot (pink), up/down carry it, OK drops it. Slot rows come from
      Includes_Sections.xml (tools/make_sections.py). Window properties: nc.hp.tab (category
      shown), nc.hp.grab (grabbed slot as page.n), nc.hp.slide (the delay slider of Player is
-     taken). Main menu comes first, colour scheme and glow at its end; Player last. -->
+     taken). Main menu comes first, colour scheme and glow at its end, then the ratings; Player last. -->
 <window>
     <defaultcontrol always="true">9000</defaultcontrol>
     <onload>SetProperty(nc.hp.tab,menu)</onload>
@@ -185,6 +185,46 @@
                         <selected>!Skin.HasSetting(GlowOff)</selected>
                         <onclick>Skin.ToggleSetting(GlowOff)</onclick>
                         <onup>602</onup>
+                        <ondown>621</ondown>
+                        <onleft>9005</onleft>
+                        <onright>noop</onright>
+                    </control>
+                </control>
+                <!-- the ratings line of heroes and info pages (Includes_Info.xml RatingsLine): only
+                     TMDb Helper's ratings, on by default (the skin bool stores off); the spotlight's
+                     ratings fetched without focus, off by default (scripts/nightcity.py hero_tick) -->
+                <control type="group" id="620">
+                    <width>1240</width>
+                    <height>157</height>
+                    <control type="image">
+                        <width>1240</width>
+                        <height>1</height>
+                        <texture colordiffuse="border_dim">ui/white.png</texture>
+                    </control>
+                    <include content="SkinSettingsHeading">
+                        <param name="label" value="$LOCALIZE[31445]"/>
+                        <param name="top" value="1"/>
+                    </include>
+                    <control type="radiobutton" id="621">
+                        <top>53</top>
+                        <width>1240</width>
+                        <include>SettingsToggleLook</include>
+                        <label>$LOCALIZE[31441]</label>
+                        <selected>!Skin.HasSetting(nc.ratings.library)</selected>
+                        <onclick>Skin.ToggleSetting(nc.ratings.library)</onclick>
+                        <onup>601</onup>
+                        <ondown>622</ondown>
+                        <onleft>9005</onleft>
+                        <onright>noop</onright>
+                    </control>
+                    <control type="radiobutton" id="622">
+                        <top>105</top>
+                        <width>1240</width>
+                        <include>SettingsToggleLook</include>
+                        <label>$LOCALIZE[31443]</label>
+                        <selected>Skin.HasSetting(nc.ratings.spotlight)</selected>
+                        <onclick>Skin.ToggleSetting(nc.ratings.spotlight)</onclick>
+                        <onup>621</onup>
                         <ondown>noop</ondown>
                         <onleft>9005</onleft>
                         <onright>noop</onright>

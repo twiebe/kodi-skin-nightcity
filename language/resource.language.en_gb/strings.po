@@ -1000,3 +1000,23 @@ msgstr ""
 msgctxt "#31440"
 msgid "audience"
 msgstr ""
+
+msgctxt "#31441"
+msgid "Ratings only from TMDb Helper"
+msgstr ""
+
+msgctxt "#31442"
+msgid "Show only the ratings TMDb Helper fetched for exactly this title. Off: the library's own rating (from Jellyfin) fills in while TMDb Helper has none."
+msgstr ""
+
+msgctxt "#31443"
+msgid "Load spotlight ratings without focus"
+msgstr ""
+
+msgctxt "#31444"
+msgid "Fetch the ratings of each spotlight title as it rotates, also without focus. Off saves online requests: the ratings load once the title has focus and then stay."
+msgstr ""
+
+msgctxt "#31445"
+msgid "Ratings"
+msgstr ""

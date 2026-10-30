@@ -1532,6 +1532,138 @@ def music_info(kind, dbid):
     xbmcgui.Dialog().info(item)
 
 
+# --- ratings of the spotlight titles ------------------------------------------------------------
+# TMDb Helper fetches ratings for the item of TMDbHelper.WidgetContainer (Window(Home)) and clears
+# them when that goes. The service points it at the hero's spotlight (9000 movies, 9001 shows)
+# while a hero button has focus, or always with "load without focus" (nc.ratings.spotlight), and
+# keeps what it fetched per title for the session: the hero's ratings line reads them from
+# nc.hero.<container>.*, so they stay once fetched, also when the spotlight comes back to a title.
+
+HERO_SOURCES = ('IMDb_Rating', 'Top250', 'TMDb_Rating', 'RottenTomatoes_Rating', 'RottenTomatoes_UserMeter',
+                'MetaCritic_Rating', 'Trakt_Rating', 'Letterboxd_Rating', 'MDBList_Rating')
+HERO_STABLE = 0.8  # s TMDb Helper's ratings stay before they count: they lag behind its title
+HERO_POLL = 0.25  # s between two looks
+HERO_PROPS = 'nc.hero.{}.{}'
+# container of the spotlight, the group on screen with its hero, the group of its buttons
+HEROES = (('9000', '9300', '9050'), ('9001', '9301', '9550'))
+HERO_ON_HOME = 'Window.IsActive(home)'
+HERO_DIALOG = 'System.HasActiveModalDialog'
+HERO_SHOWN = 'Control.IsVisible({})'
+HERO_FOCUS = 'ControlGroup({}).HasFocus()'
+HERO_WITHOUT_FOCUS = 'Skin.HasSetting(nc.ratings.spotlight)'
+
+
+def hero_widget_container(container, focused, without_focus):
+    """What TMDbHelper.WidgetContainer should be: the hero's spotlight CONTAINER ('' none) while
+    a hero button has focus, or always WITHOUT_FOCUS."""
+    return container if container and (focused or without_focus) else ''
+
+
+class HeroRatings:
+    """The ratings TMDb Helper fetched for the spotlight titles, kept per title (dbtype:dbid)."""
+
+    def __init__(self):
+        self.cache = {}
+        self.pending = None  # (key, ratings, since)
+        self.shown = {}  # container -> what nc.hero.<container>.* hold now
+
+    def seen(self, key, ratings, now):
+        """TMDb Helper is done with title KEY and has RATINGS ({source: value}); None: busy or on
+        another title. True when they are kept: they stayed HERO_STABLE s, and the title had none
+        kept yet (or only empty ones), so the line does not swap its content."""
+        if key is None:
+            self.pending = None
+            return False
+        if self.pending is None or self.pending[:2] != (key, ratings):
+            self.pending = (key, ratings, now)
+            return False
+        if now - self.pending[2] < HERO_STABLE:
+            return False
+        old = self.cache.get(key)
+        if old is not None and (any(old.values()) or not any(ratings.values())):
+            return False
+        self.cache[key] = dict(ratings)
+        return True
+
+    def changes(self, container, key):
+        """[(property, value)] that make nc.hero.<CONTAINER>.* hold the kept ratings of title KEY
+        (None: no title), '' clears. dbid goes first and comes back last: the line only shows
+        while it names the hero's title."""
+        want = {}
+        if key in self.cache:
+            dbtype, dbid = key.split(':', 1)
+            want = dict(self.cache[key], dbtype=dbtype, dbid=dbid)
+        now = self.shown.get(container, {})
+        out = []
+        if now.get('dbid') and now.get('dbid') != want.get('dbid'):
+            out.append(('dbid', ''))
+            now = dict(now, dbid='')
+        for name in HERO_SOURCES + ('dbtype', 'dbid'):
+            if want.get(name, '') != now.get(name, ''):
+                out.append((name, want.get(name, '')))
+        self.shown[container] = {k: v for k, v in want.items() if v}
+        return [(HERO_PROPS.format(container, name), value) for name, value in out]
+
+
+def _hero_same_title(home, dbid, label):
+    """TMDb Helper's item is the hero's: by dbid (extras/tmdbhelper/baseitem.json), by label for
+    a TMDb Helper that started before the skin brought that file."""
+    base = home.getProperty('TMDbHelper.ListItem.base_dbid')
+    return base == dbid if base else home.getProperty('TMDbHelper.ListItem.base_label') == label
+
+
+def hero_tick(kept, now):
+    """One look at Home: point TMDb Helper at the hero, keep its ratings, show the kept ones."""
+    import xbmc
+    home = _home()
+    if not xbmc.getCondVisibility(HERO_ON_HOME):
+        if home.getProperty('TMDbHelper.WidgetContainer'):
+            home.clearProperty('TMDbHelper.WidgetContainer')
+        return
+    # the info page over Home watches its own item
+    if xbmc.getCondVisibility(HERO_DIALOG):
+        return
+    container, buttons = next(((c, b) for c, group, b in HEROES if xbmc.getCondVisibility(HERO_SHOWN.format(group))),
+                              ('', ''))
+    widget = hero_widget_container(container, bool(buttons) and xbmc.getCondVisibility(HERO_FOCUS.format(buttons)),
+                                   xbmc.getCondVisibility(HERO_WITHOUT_FOCUS))
+    if home.getProperty('TMDbHelper.WidgetContainer') != widget:
+        if widget:
+            home.setProperty('TMDbHelper.WidgetContainer', widget)
+        else:
+            home.clearProperty('TMDbHelper.WidgetContainer')
+    if not container:
+        return
+    item = 'Container({}).ListItem.'.format(container)
+    dbid, dbtype = xbmc.getInfoLabel(item + 'DBID'), xbmc.getInfoLabel(item + 'DBType')
+    key = '{}:{}'.format(dbtype, dbid) if dbid and dbtype else None
+    if widget and key and not home.getProperty('TMDbHelper.IsUpdating') and \
+            not home.getProperty('TMDbHelper.IsUpdatingRatings') and \
+            home.getProperty('TMDbHelper.ListItem.base_dbtype') == dbtype and \
+            _hero_same_title(home, dbid, xbmc.getInfoLabel(item + 'Label')):
+        kept.seen(key, {s: home.getProperty('TMDbHelper.ListItem.' + s) for s in HERO_SOURCES}, now)
+    else:
+        kept.seen(None, None, now)
+    for name, value in kept.changes(container, key):
+        if value:
+            home.setProperty(name, value)
+        else:
+            home.clearProperty(name)
+
+
+def hero_watch(monitor, stop):
+    """hero_tick every HERO_POLL s until STOP, Kodi ends or the service goes."""
+    import time
+    import xbmc
+    kept = HeroRatings()
+    while not stop.wait(HERO_POLL) and not QUIT.is_set() and not monitor.abortRequested():
+        try:
+            hero_tick(kept, time.monotonic())
+        except Exception as e:  # a failing look must not end the watch
+            xbmc.log('nightcity: hero ratings failed: {!r}'.format(e), xbmc.LOGERROR)
+            stop.wait(5)
+
+
 COMMANDS = {'next_episode': next_episode, 'startup': startup, 'genres': genres, 'genre_pick': genre_pick,
             'info_select': info_select, 'info_leave': info_leave, 'info_back': info_back,
             'osd_back': osd_back, 'play': play, 'info': info,
@@ -1622,11 +1754,15 @@ def service(*first):
     home.setProperty('nc.service', '1')
     if first:
         _run(first[0], list(first[1:]))
+    stop = threading.Event()
+    threading.Thread(target=hero_watch, args=(monitor, stop), daemon=True).start()
     while not monitor.waitForAbort(1):
         if xbmc.getSkinDir() != ADDON_ID:
             # back on this skin, Home starts a new one
+            stop.set()
             home.clearProperty('nc.service')
             return
+    stop.set()
     # Kodi ends: it holds the GUI while it waits for this script, so no window calls here
 
 
