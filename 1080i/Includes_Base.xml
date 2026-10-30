@@ -170,11 +170,11 @@
         <animation effect="fade" start="0" end="100" time="WindowFadeTime" condition="!Player.HasVideo">WindowOpen</animation>
     </include>
 
-    <!-- Top line of a page: "FILME · METROPOLIS" on the left, a counter or the clock right -->
+    <!-- Top line of a page: "FILME · METROPOLIS" on the left, a counter (dark blue) or the clock (white) right -->
     <include name="PathLine">
         <param name="id" default="0"/>
         <param name="path"/>
-        <param name="counter" default="$INFO[System.Time]"/>
+        <param name="counter" default="[COLOR text]$INFO[System.Time][/COLOR]"/>
         <param name="counterid" default="0"/>
         <param name="counterfont" default="font_num"/>
         <param name="left" default="48"/>
@@ -605,7 +605,7 @@
          such as 12/240 on the right (id 9028; the clock unless given) -->
     <include name="StatusBar">
         <param name="title"/>
-        <param name="counter" default="$INFO[System.Time]"/>
+        <param name="counter" default="[COLOR text]$INFO[System.Time][/COLOR]"/>
         <definition>
             <include content="PathLine">
                 <param name="id" value="9026"/>
