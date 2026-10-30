@@ -45,6 +45,37 @@ def test_music_page_tab_and_buttons(music):
     screenshot('e2e-music-page')
 
 
+def spotlight_moves(direction, step):
+    """Press direction and wait for the album spotlight to move one album. It also scrolls on
+    its own, so a scroll between reading and pressing gets another try."""
+    key = 'Container(9002).CurrentItem'
+    total = int(info('Container(9002).NumItems')['Container(9002).NumItems'])
+    for _ in range(3):
+        start = int(info(key)[key])
+        action(direction)
+        try:
+            wait_for('Integer.IsEqual({},{})'.format(key, (start - 1 + step) % total + 1), timeout=3)
+            return
+        except AssertionError:
+            continue
+    raise AssertionError('album spotlight did not move {}'.format(direction))
+
+
+def test_spotlight_prev_next_album(music):
+    """Left on the first button the album before, Right on the last the next one; the chevron
+    hint after the last button takes no focus."""
+    open_page()
+    wait_for('Integer.IsGreater(Container(9002).NumItems,2)')
+    builtin('SetFocus(9852)')
+    wait_for('Control.HasFocus(9852)')
+    spotlight_moves('left', -1)
+    assert holds('Control.HasFocus(9852)')
+    builtin('SetFocus(9854)')
+    wait_for('Control.HasFocus(9854)')
+    spotlight_moves('right', 1)
+    assert holds('Control.HasFocus(9854)')
+
+
 def open_album():
     open_page()
     action('down')
@@ -109,7 +140,22 @@ def test_osd_queue_plays_the_chosen_track(music):
     action('down', 'select')
     wait_for('Integer.IsEqual(MusicPlayer.PlaylistPosition,2)')
     wait_for('Control.HasFocus(701)')  # a busy dialog may come up while the track loads
-    action('up', 'up')  # the list goes up to its first track, then to the buttons
+    # the cursor away from what plays: the bar stays on track 2, then moves to 1 by itself
+    wait_for('Player.HasAudio + !Window.IsActive(busydialognocancel)')
+    time.sleep(1)  # the queue reloads as the track starts, the cursor with it
+    last = info('Container(701).NumItems')['Container(701).NumItems']
+    builtin('SetFocus(701,{},absolute)'.format(int(last) - 1))  # the last track
+    wait_for('Integer.IsEqual(Container(701).CurrentItem,{})'.format(last))
+    screenshot('e2e-music-osd-playing-2')
+    rpc('Player.GoTo', {'playerid': 0, 'to': 0})
+    wait_for('Integer.IsEqual(MusicPlayer.PlaylistPosition,1)')
+    wait_for('Control.HasFocus(701) + !Window.IsActive(busydialognocancel)')
+    time.sleep(1)
+    screenshot('e2e-music-osd-playing-1')
+    assert info('Container(701).CurrentItem')['Container(701).CurrentItem'] == last
+    builtin('SetFocus(701,0,absolute)')
+    wait_for('Integer.IsEqual(Container(701).CurrentItem,1)')
+    action('up')  # from the first track to the buttons
     wait_for('ControlGroup(600).HasFocus()')
     action('back')
     wait_for('!Window.IsActive(musicosd)')

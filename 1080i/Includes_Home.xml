@@ -408,33 +408,38 @@
     </include>
     <!-- Three small chevrons after the spotlight buttons, a step darker each to the right, like
          a direction hint in a racing game: Right on the last button moves the spotlight on to the
-         next title -->
+         next title. In a grouplist that takes focus give it an id: the grouplist sets Right of
+         the last button to it, and Kodi passes a move to a control without focus on along its own
+         Right, which the grouplist set to the grouplist's onright (id 0 ends the move). -->
     <include name="SpotlightMore">
-        <control type="group">
-            <width>35</width>
-            <height>54</height>
-            <control type="image">
-                <left>0</left>
-                <top>12</top>
-                <width>13</width>
-                <height>30</height>
-                <texture colordiffuse="state_text">ui/spot_more.png</texture>
+        <param name="id" default="0"/>
+        <definition>
+            <control type="group" id="$PARAM[id]">
+                <width>35</width>
+                <height>54</height>
+                <control type="image">
+                    <left>0</left>
+                    <top>12</top>
+                    <width>13</width>
+                    <height>30</height>
+                    <texture colordiffuse="state_text">ui/spot_more.png</texture>
+                </control>
+                <control type="image">
+                    <left>11</left>
+                    <top>12</top>
+                    <width>13</width>
+                    <height>30</height>
+                    <texture colordiffuse="state_fade">ui/spot_more.png</texture>
+                </control>
+                <control type="image">
+                    <left>22</left>
+                    <top>12</top>
+                    <width>13</width>
+                    <height>30</height>
+                    <texture colordiffuse="state_faint">ui/spot_more.png</texture>
+                </control>
             </control>
-            <control type="image">
-                <left>11</left>
-                <top>12</top>
-                <width>13</width>
-                <height>30</height>
-                <texture colordiffuse="state_fade">ui/spot_more.png</texture>
-            </control>
-            <control type="image">
-                <left>22</left>
-                <top>12</top>
-                <width>13</width>
-                <height>30</height>
-                <texture colordiffuse="state_faint">ui/spot_more.png</texture>
-            </control>
-        </control>
+        </definition>
     </include>
     <include name="SpotlightPillLook">
         <param name="label"/>

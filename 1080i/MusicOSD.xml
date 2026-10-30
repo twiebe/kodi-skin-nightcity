@@ -77,7 +77,8 @@
         </control>
 
         <!-- the play queue, the cursor on the playing track (nightcity.py music_queue_select,
-             onload), which has a progress line under it. One album (nc.music.queue.album,
+             onload); the playing track has a dark blue mark, no progress line (Kodi redraws an
+             item only under the cursor). One album (nc.music.queue.album,
              nightcity.py music_queue): its tracks as lines, the cover is on the player screen
              already; else cards with covers. Kodi fills no hidden list: the shown one loads. -->
         <control type="group" id="710">
@@ -121,12 +122,15 @@
                         <include content="MusicCard">
                             <param name="dim" value="Control.HasFocus(700)"/>
                         </include>
-                        <include content="ProgressLine">
-                            <param name="top" value="282"/>
-                            <param name="width" value="200"/>
-                            <param name="info" value="Player.Progress"/>
-                            <param name="visible" value="ListItem.IsPlaying"/>
-                        </include>
+                        <!-- the playing track: a dark blue line under its title -->
+                        <control type="image">
+                            <left>0</left>
+                            <top>245</top>
+                            <width>200</width>
+                            <height>3</height>
+                            <texture colordiffuse="state">ui/white.png</texture>
+                            <visible>ListItem.IsPlaying</visible>
+                        </control>
                     </control>
                 </itemlayout>
                 <focusedlayout width="228" height="320">
@@ -137,12 +141,15 @@
                             <param name="focused" value="Control.HasFocus(700)"/>
                             <param name="titlecolor" value="accent"/>
                         </include>
-                        <include content="ProgressLine">
-                            <param name="top" value="282"/>
-                            <param name="width" value="200"/>
-                            <param name="info" value="Player.Progress"/>
-                            <param name="visible" value="ListItem.IsPlaying"/>
-                        </include>
+                        <!-- the playing track: a dark blue line under its title -->
+                        <control type="image">
+                            <left>0</left>
+                            <top>245</top>
+                            <width>200</width>
+                            <height>3</height>
+                            <texture colordiffuse="state">ui/white.png</texture>
+                            <visible>ListItem.IsPlaying</visible>
+                        </control>
                     </control>
                 </focusedlayout>
             </control>

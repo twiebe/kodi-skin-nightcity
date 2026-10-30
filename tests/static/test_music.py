@@ -87,6 +87,10 @@ def test_music_spotlight_steps_at_the_ends():
     group = controls(load('Home.xml'))['9850']
     assert actions(group, 'onleft') == [('', 'Skin.TimerStart(nc_spot_hold)'), ('', 'Control.Move(9002,-1)')]
     assert actions(group, 'onright') == [('', 'Skin.TimerStart(nc_spot_hold)'), ('', 'Control.Move(9002,1)')]
+    # as the remote sees it: the arrow after the last button takes no focus and passes Right on
+    page, state = Page('Home.xml'), _home_state()
+    assert page.move('9852', 'onleft', state) == (None, ['Skin.TimerStart(nc_spot_hold)', 'Control.Move(9002,-1)'])
+    assert page.move('9854', 'onright', state) == (None, ['Skin.TimerStart(nc_spot_hold)', 'Control.Move(9002,1)'])
 
 
 def test_music_spotlight_buttons():
@@ -284,14 +288,28 @@ def test_music_osd_buttons_and_queue():
         assert actions(c[list_id], 'onup') == [('', '600')]
 
 
-def test_music_queue_marks_like_the_episode_list():
-    """No mark of its own (DESIGN.md colours): the cursor's title in the accent colour also while
-    the list has no focus, a progress line under the playing track, as under a started episode."""
+def test_music_queue_marks_the_playing_track():
+    """The cursor, which opens on the playing track, shows its title in the accent colour also
+    while the list has no focus. The playing track keeps a dark blue mark (state, DESIGN.md
+    colours) wherever the cursor is: in the track list a bar before its number, like the current
+    value of a list dialog; on a card a line under its title, a bar would get lost by the cover.
+    No progress line: Kodi redraws a list item only while the cursor is on it, so the line stood
+    still elsewhere."""
     c = controls(load('MusicOSD.xml'))
     for list_id in ('700', '701'):
         for layout in ('itemlayout', 'focusedlayout'):
-            bars = [p for p in c[list_id].find(layout).iter('control') if p.get('type') == 'progress']
-            assert [(b.findtext('info'), b.findtext('visible')) for b in bars] == [('Player.Progress', 'ListItem.IsPlaying')]
+            controls_in = list(c[list_id].find(layout).iter('control'))
+            assert not [p for p in controls_in if p.get('type') == 'progress']
+            bars = [i for i in controls_in if i.get('type') == 'image'
+                    and (i.findtext('visible') or '').strip() == 'ListItem.IsPlaying']
+            assert len(bars) == 1, (list_id, layout)
+            width, height = int(bars[0].findtext('width')), int(bars[0].findtext('height'))
+            if list_id == '701':
+                assert width == 3 and height > width  # the bar before the number
+            else:
+                assert height == 3 and width > height  # the line under the title
+            assert bars[0].find('texture').get('colordiffuse') == 'state'
+            assert bars[0].findtext('texture') == 'ui/white.png'
         text = ET.tostring(c[list_id]).decode()
         assert '▶' not in text and 'accent2' not in text
     focused = ET.tostring(c['700'].find('focusedlayout')).decode()
