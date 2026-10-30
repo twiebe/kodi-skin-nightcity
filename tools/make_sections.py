@@ -40,7 +40,7 @@ PAGE_SHOWN = {
 }
 TMDB = 'plugin://plugin.video.themoviedb.helper/?info=trending_week&amp;tmdb_type={}'
 # a genre row's tabs start after its number, where a row's title starts after its number
-GENRE_TABS_LEFT = 72
+GENRE_TABS_LEFT = 75
 GENRES = {'movies': ('movies', 'genre', 'GenrePickLabel', 'genre_pick'),
           'shows': ('tvshows', 'tvgenre', 'ShowGenrePickLabel', 'genre_pick:tvshow')}
 
