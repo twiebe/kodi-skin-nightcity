@@ -256,12 +256,12 @@ def test_addon_browser_rows_match_the_settings_pages():
 
 def test_player_plot_shows_whole_lines():
     """140 px of font_body (38 px lines) showed the top half of a fourth line; five whole lines
-    (test_player_ratings.py), the rest scrolls."""
+    (test_player_ratings.py), the rest is cut off (test_plot_text.py)."""
     root = parse(ROOT / '1080i' / 'Includes_Player.xml')
     details = next(i for i in root.iter('include') if i.get('name') == 'PlayerDetails')
     plot = next(t for t in details.iter('control') if t.get('type') == 'textbox')
     assert int(plot.findtext('height')) == 5 * 38 + 2
-    assert plot.findtext('autoscroll') == 'true'
+    assert plot.find('autoscroll') is None
 
 
 def test_windows_over_a_playing_video_keep_it_rendering():

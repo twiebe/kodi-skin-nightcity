@@ -77,11 +77,12 @@ def test_ratings_sit_between_badges_and_plot():
 
 
 def test_plot_is_taller_with_the_same_font():
-    """Five whole lines of font_body instead of three; longer plots still scroll."""
+    """Five whole lines of font_body instead of three; longer plots are cut off, an autoscrolling
+    text redraws the whole screen (test_plot_text.py)."""
     plot = next(c for c in details().findall('control') if c.get('type') == 'textbox')
     assert plot.findtext('font') == 'font_body'
     assert int(plot.findtext('height')) == 5 * PLOT_LINE + 2
-    assert plot.findtext('autoscroll') == 'true'
+    assert plot.find('autoscroll') is None
 
 
 def test_block_ends_above_the_seek_line():

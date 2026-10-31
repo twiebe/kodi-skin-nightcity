@@ -31,6 +31,12 @@ EXTRA = {
     'Container(5901).ListItem.IsResumable': False,
     'String.IsEqual(Container(5100).ListItem.DBID,ListItem.DBID)': True,
     'String.IsEqual(Window(Home).Property(nc.info.ep.id),Container(5100).ListItem.DBID)': True,
+    # a plot that fits its box (test_plot_text.py has long and missing ones)
+    'Container(9050).HasNext': False,
+    'Container(9051).HasNext': False,
+    'Container(9052).HasNext': False,
+    'String.IsEmpty(ListItem.Plot)': False,
+    'String.IsEmpty(Container(5100).ListItem.Plot)': False,
 }
 
 
@@ -70,12 +76,15 @@ def test_info_page_has_no_dead_end(info_page, label):
 
 
 def test_up_on_the_top_row_leaves_the_page(info_page):
-    """Up on any button of the top row is Back: one page back in a chain, else to the row the
-    page was opened from."""
+    """Up on any button of the top row goes to the plot, Up there is Back: one page back in a
+    chain, else to the row the page was opened from (test_plot_text.py)."""
+    texts = ('9060', '9061', '9062')
     for label, state in INFO_STATES.items():
         for cid in ('9001', '9002', '9003', '9004'):
             if info_page.can_focus(cid, state):
-                assert 'Action(Back)' in info_page.move(cid, 'onup', state)[1], (label, cid)
+                text, ran = info_page.move(cid, 'onup', state)
+                assert text in texts and not ran, (label, cid)
+                assert 'Action(Back)' in info_page.move(text, 'onup', state)[1], (label, cid)
 
 
 def _osd_states():

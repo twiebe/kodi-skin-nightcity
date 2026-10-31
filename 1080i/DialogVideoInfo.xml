@@ -120,6 +120,7 @@
                 <param name="techlabel" value="$VAR[InfoEpisodeResolution]$VAR[InfoEpisodeHdr, ,]"/>
                 <param name="audiolabel" value="$VAR[InfoEpisodeAudio]"/>
                 <param name="ratingid" value="9043"/>
+                <param name="plotid" value="9051"/>
                 <!-- up to the cast on the right -->
                 <param name="ratingswidth" value="1300"/>
                 <param name="shift" value="-320"/>
@@ -132,6 +133,19 @@
                 <param name="width" value="420"/>
                 <param name="info" value="Container(5100).ListItem.PercentPlayed"/>
                 <param name="visible" value="Container(5100).ListItem.IsResumable"/>
+            </include>
+            <include content="PlotFocus">
+                <param name="id" value="9061"/>
+                <param name="visible" value="String.IsEqual(ListItem.DBType,episode)"/>
+                <param name="more" value="String.IsEqual(ListItem.DBType,episode) + Container(9051).HasNext"/>
+                <param name="item" value="Container(5100).ListItem"/>
+                <param name="left" value="48"/>
+                <param name="top" value="350"/>
+                <param name="width" value="1232"/>
+                <param name="height" value="136"/>
+                <param name="hintleft" value="64"/>
+                <param name="hintwidth" value="1200"/>
+                <param name="texttop" value="360"/>
             </include>
             <control type="group">
                 <left>1400</left>
@@ -166,6 +180,7 @@
                 <param name="techlabel" value="$VAR[ItemResolution]$VAR[ItemHdr, ,]"/>
                 <param name="audiolabel" value="$VAR[ItemAudio]"/>
                 <param name="ratingid" value="9046"/>
+                <param name="plotid" value="9050"/>
                 <!-- up to the details on the right -->
                 <param name="ratingswidth" value="1000"/>
                 <param name="titlewidth" value="960"/>
@@ -178,6 +193,19 @@
                 <param name="width" value="420"/>
                 <param name="info" value="ListItem.PercentPlayed"/>
                 <param name="visible" value="ListItem.IsResumable"/>
+            </include>
+            <include content="PlotFocus">
+                <param name="id" value="9060"/>
+                <param name="visible" value="!String.IsEqual(ListItem.DBType,episode) + !String.IsEqual(ListItem.Property(tmdb_type),person)"/>
+                <param name="more" value="!String.IsEqual(ListItem.DBType,episode) + !String.IsEqual(ListItem.Property(tmdb_type),person) + Container(9050).HasNext"/>
+                <param name="item" value="ListItem"/>
+                <param name="left" value="368"/>
+                <param name="top" value="350"/>
+                <param name="width" value="992"/>
+                <param name="height" value="136"/>
+                <param name="hintleft" value="384"/>
+                <param name="hintwidth" value="960"/>
+                <param name="texttop" value="360"/>
             </include>
             <control type="grouplist">
                 <left>1400</left>
@@ -251,16 +279,28 @@
                     <param name="visible" value="Integer.IsGreater(ListItem.Property(numitems.tmdb.tvshows.cast),0)"/>
                 </include>
             </control>
-            <control type="textbox">
+            <control type="textbox" id="9052">
                 <left>384</left>
                 <top>318</top>
                 <width>1472</width>
                 <height>160</height>
                 <font>font_body</font>
                 <textcolor>text_dim</textcolor>
-                <autoscroll delay="8000" time="3000" repeat="8000">true</autoscroll>
                 <label>$INFO[ListItem.Plot]</label>
             </control>
+            <include content="PlotFocus">
+                <param name="id" value="9062"/>
+                <param name="visible" value="String.IsEqual(ListItem.Property(tmdb_type),person)"/>
+                <param name="more" value="String.IsEqual(ListItem.Property(tmdb_type),person) + Container(9052).HasNext"/>
+                <param name="item" value="ListItem"/>
+                <param name="left" value="368"/>
+                <param name="top" value="308"/>
+                <param name="width" value="1504"/>
+                <param name="height" value="180"/>
+                <param name="hintleft" value="384"/>
+                <param name="hintwidth" value="1472"/>
+                <param name="texttop" value="318"/>
+            </include>
         </control>
 
         <control type="grouplist" id="9000">
@@ -272,9 +312,12 @@
             <itemgap>16</itemgap>
             <onleft>noop</onleft>
             <onright>noop</onright>
-            <!-- the top of the page: Up leaves it one level up, to the row it was opened from or
-                 one page back in a TMDb chain -->
-            <onup>Action(Back)</onup>
+            <!-- the top of the page: Up goes to the plot of the page (PlotFocus), Up from there
+                 leaves it one level up, to the row it was opened from or one page back in a
+                 TMDb chain -->
+            <onup condition="!String.IsEqual(ListItem.DBType,episode) + !String.IsEqual(ListItem.Property(tmdb_type),person)">9060</onup>
+            <onup condition="String.IsEqual(ListItem.DBType,episode)">9061</onup>
+            <onup condition="String.IsEqual(ListItem.Property(tmdb_type),person)">9062</onup>
             <!-- past the season tabs onto the episodes, like past the cast and crew tabs -->
             <ondown condition="String.IsEqual(ListItem.DBType,episode)">5100</ondown>
             <!-- past the cast and crew tabs into their list (DESIGN.md: a selector is skipped from

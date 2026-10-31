@@ -45,6 +45,13 @@ def _down(cid, timeout=10):
     _focus_is(cid, timeout)
 
 
+def _up_past_the_text():
+    """Up from the button row of a person page, out of the page: the biography is a stop on the
+    way (test_plot_text.py), Up from it leaves."""
+    _up(9062)
+    action('up', delay=1)
+
+
 def _leave_chain():
     if _true(RUNNING):
         builtin('SetProperty(TMDbHelper.Command,exit,home)')
@@ -138,6 +145,7 @@ def test_episode_walk_down_to_the_credits_and_up_to_the_menu(breaking_bad):
     _up(5200)
     _up(9001)
     screenshot('vertical-4-back-at-the-top')
+    _up(9061)  # the episode's plot (test_plot_text.py)
     action('up', delay=1)
     wait_for('!Window.IsActive(movieinformation)', timeout=10)
     _focus_is(row)
@@ -201,7 +209,7 @@ def test_episode_person_opens_in_the_chain_and_back_returns(breaking_bad):
     screenshot('vertical-person-from-episode')
     # Up on the top of the person page: one page back, the episode
     _focus_is(9004)  # a person page has no play button: close all is the first one
-    action('up', delay=1)
+    _up_past_the_text()
     wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),1)', timeout=30)
     wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.DBType,episode)', timeout=20)
     assert _label('ListItem.DBID') == episode
@@ -227,6 +235,7 @@ def test_movie_up_from_the_top_goes_back(matrix):
     _down(5500)
     _up(5521)  # the cast tab of the tab row 5520
     _up(9001)
+    _up(9060)  # the plot (test_plot_text.py)
     action('up', delay=1)
     wait_for('!Window.IsActive(movieinformation)', timeout=10)
     assert _true('Window.IsActive(home)')
@@ -243,6 +252,6 @@ def test_tmdb_page_up_from_the_top_steps_back_in_the_chain(matrix):
     # TMDb Helper polls for the page every half second; Back before it saw the page stalls it
     time.sleep(1.5)
     _focus_is(9004)
-    action('up', delay=1)
+    _up_past_the_text()
     wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),1)', timeout=30)
     wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.DBID,{})'.format(matrix), timeout=20)

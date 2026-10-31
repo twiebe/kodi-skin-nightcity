@@ -54,7 +54,7 @@
                 <height>120</height>
                 <font>font_body</font>
                 <textcolor>text_dim</textcolor>
-                <autoscroll delay="6000" time="3000" repeat="6000">true</autoscroll>
+                <!-- cut off: an autoscrolling text redraws the whole screen all the time -->
                 <label>$INFO[Container(6599).ListItem.Plot]</label>
                 <visible>String.IsEqual(Container(6599).ListItem.Property(tmdb_id),Container(6501).ListItem.Property(tmdb_id))</visible>
             </control>

@@ -82,6 +82,14 @@ def _list_in(cid, timeout=30):
     wait_for('!Container({}).IsUpdating + Integer.IsGreater(Container({}).NumItems,0)'.format(cid, cid))
 
 
+def _up_past_the_text():
+    """Up from the button row of a person page, out of the page: the biography is a stop on the
+    way (test_plot_text.py), Up from it leaves."""
+    action('up', delay=1)
+    wait_for('Integer.IsEqual(System.CurrentControlId,9062)')
+    action('up', delay=1)
+
+
 def _leave_chain():
     if _true(RUNNING):
         builtin('SetProperty(TMDbHelper.Command,exit,home)')
@@ -435,7 +443,8 @@ def test_walking_back_out_of_an_osd_chain_never_seeks(matrix):
     _page(1)
     before = rpc('Player.GetProperties', {'playerid': 1, 'properties': ['time']})['time']
     started = time.time()
-    for _ in range(3):
+    # the biography is a stop above the buttons (test_plot_text.py): one Up more than before
+    for _ in range(4):
         key('up')
         time.sleep(0.6)
     wait_for(IDLE, timeout=20)
@@ -546,7 +555,7 @@ def test_up_from_an_osd_chain_returns_to_the_person_left(matrix):
     person = info('Container(6501).ListItem.Label')['Container(6501).ListItem.Label']
     action('select')
     _page(1)
-    action('up', delay=1)
+    _up_past_the_text()
     wait_for(IDLE, timeout=20)
     wait_for('Window.IsActive(1141) + Control.HasFocus(6501) + Integer.IsEqual(Container(6501).CurrentItem,3)', timeout=20)
     assert info('Container(6501).ListItem.Label')['Container(6501).ListItem.Label'] == person
