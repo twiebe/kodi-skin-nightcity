@@ -38,7 +38,7 @@
                 <width>500</width>
                 <height>40</height>
                 <font>font_label</font>
-                <textcolor>text</textcolor>
+                <textcolor>accent2</textcolor>
                 <visible>!$EXP[NotificationWarns]</visible>
             </control>
             <control type="label">
