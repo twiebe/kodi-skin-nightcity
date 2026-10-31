@@ -95,13 +95,13 @@ def test_chapter_marks_leave_the_line_alone():
     assert width == 2
 
 
-def test_seek_head_is_cyan_and_ends_with_the_line():
-    """The head is the cursor of the line: cyan as the played part. Its top stays 6 px over the
-    line, its foot is flush with the line's bottom edge, so head and played part form an L."""
+def test_seek_head_is_cyan_and_closes_the_line():
+    """The head is the cursor of the line: cyan as the played part. It reaches 6 px over and
+    6 px under the line, a block that closes the played part off."""
     head = next(c for c in _bar('Player.SeekBar') if c.findtext('righttexture'))
     assert head.find('righttexture').get('colordiffuse') == 'accent'
     rows, width = _drawn(head, 'righttexture')
-    assert {row for row, alpha in rows.items() if alpha} == set(range(-6, 4))
+    assert {row for row, alpha in rows.items() if alpha} == set(range(-6, 10))
     assert set(rows.values()) <= {0, 255}
     assert width == 4
 
