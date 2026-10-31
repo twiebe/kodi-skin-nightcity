@@ -4,6 +4,16 @@ A Kodi 21 skin with a calm cyberpunk look ("Netrunner"): dark backgrounds, cyan 
 
 Video only: home with a spotlight and widget rows, video library, info page, playback and the dialogs Kodi needs. Ratings come from [TMDb Helper](https://github.com/jurialmunkey/plugin.video.themoviedb.helper), which is a required dependency.
 
+## Screenshots
+
+| Home with the spotlight | Info page with cast and crew |
+|---|---|
+| ![Home page with the spotlight on Blade Runner 2049 and the continue watching row](resources/screenshots/01-home.jpg) | ![Info page of The Matrix with its cast from TMDb Helper](resources/screenshots/03-info.jpg) |
+| **A person in a TMDb chain** | **Player, paused** |
+| ![Person page of Keanu Reeves with his films](resources/screenshots/04-person.jpg) | ![Paused player with the OSD, seek bar and chapter marks](resources/screenshots/05-player.jpg) |
+
+More in Kodi's add-on browser: movies, music, settings and the quick menu. `tools/screenshots.py` takes them all again, see Development.
+
 ## Features
 
 - Netrunner look: cut-corner cards and buttons, small spaced headings above the rows, a glitch title for the focused item, a path line at the top
@@ -51,6 +61,17 @@ The e2e suite runs in parallel on a kodi-dev pool (several environments, each wi
 /workspaces/kodi-dev/kdev pool up --skin "$PWD"   # this checkout in every worker
 KDEV_POOL=1 .venv/bin/python -m pytest tests/e2e -q -m e2e -n auto --dist loadfile
 ```
+
+`make screenshots` takes the screenshots in `resources/screenshots/` (listed in `addon.xml`, four of them above). It runs `tools/screenshots.py` in a container, so it needs only Docker and a kodi-dev checkout next to this one (`KODI_DEV`, default `../kodi-dev`) with its pool template (`tools/kodidev_setup.py`, then `kdev pool up` once). The script starts a kodi-dev instance of its own at 1920x1080 from the pool template, gives its library films and shows with their artwork from TMDb (internet access needed), opens each view and removes the instance again; about ten minutes. TMDb Helper fetches IMDb, Rotten Tomatoes and Metacritic ratings only with an API key: export yours as `MDBLIST_API_KEY` or `OMDB_API_KEY` for the run, the container gets them from the environment. Without them the pages show TMDb's rating.
+
+```
+make screenshots                                       # all eight
+make screenshots KODI_DEV=/workspaces/kodi-dev SHOTS="info player" SCREENSHOTS_ARGS=--keep
+MDBLIST_API_KEY=... make screenshots                   # with IMDb and the other ratings
+.venv/bin/python tools/screenshots.py --instance shots info   # without the container (needs ffmpeg), on a kept instance
+```
+
+The container runs on the host network, since kdev publishes the instance's ports on 127.0.0.1 of the Docker host, and mounts both checkouts at their own paths, since kdev hands them to the same Docker daemon.
 
 The player tests write a clip with two audio tracks, two subtitles and three chapters with `tools/make_tracks_clip.py` (needs ffmpeg).
 
