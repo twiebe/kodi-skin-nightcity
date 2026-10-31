@@ -59,7 +59,7 @@
                      next, so a chapter starts where a range ends -->
                 <lefttexture/>
                 <midtexture/>
-                <righttexture colordiffuse="accent">ui/tick.png</righttexture>
+                <righttexture colordiffuse="border_dim">ui/tick.png</righttexture>
                 <info>Player.Chapters</info>
             </control>
             <!-- the head at the end of an invisible fill -->

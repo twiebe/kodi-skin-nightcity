@@ -42,8 +42,9 @@ def test_chapter_marks_have_a_colour():
     at 0."""
     bar = next(i for i in parse(ROOT / '1080i' / 'Includes_Player.xml').iter('include') if i.get('name') == 'PlayerBar')
     chapters = next(c for c in bar.iter('control') if c.findtext('info') == 'Player.Chapters')
-    # the line's own blue: pink stood out too much
-    assert chapters.find('righttexture').get('colordiffuse') == 'accent'
+    # the track's own dimmed blue: pink and then the bright line blue stood out too much
+    track = next(c for c in bar.iter('control') if c.findtext('info') == 'Player.ProgressCache')
+    assert chapters.find('righttexture').get('colordiffuse') == track.find('texturebg').get('colordiffuse') == 'border_dim'
     assert chapters.find('righttexture').text == 'ui/tick.png'
     assert not chapters.find('lefttexture').text
 
