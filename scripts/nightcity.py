@@ -869,6 +869,16 @@ def info(mediatype, dbid):
     xbmcgui.Dialog().info(item)
 
 
+def plot(item='ListItem'):
+    """The whole plot of the info page in Kodi's text viewer (PlotFocus, Includes_Info.xml), under
+    the title, a person's name. ITEM is the info prefix: Container(5100).ListItem on an episode's
+    page, whose head follows its episode list."""
+    import xbmc
+    import xbmcgui
+    heading = xbmc.getInfoLabel(item + '.Title') or xbmc.getInfoLabel(item + '.Label')
+    xbmcgui.Dialog().textviewer(heading, xbmc.getInfoLabel(item + '.Plot'))
+
+
 def _language_name(code):
     import xbmc
     return xbmc.convertLanguage(code, xbmc.ENGLISH_NAME) if code else ''
@@ -1751,7 +1761,7 @@ def hero_watch(monitor, stop):
 
 COMMANDS = {'next_episode': next_episode, 'startup': startup, 'genres': genres, 'genre_pick': genre_pick,
             'info_select': info_select, 'info_leave': info_leave, 'info_back': info_back,
-            'osd_back': osd_back, 'play': play, 'info': info,
+            'osd_back': osd_back, 'play': play, 'info': info, 'plot': plot,
             'streams': streams, 'row': row, 'search': search, 'search_recent': search_recent,
             'search_init': search_init, 'search_clear': search_clear, 'search_forget': search_forget, 'colours': colours,
             'streams_watch': streams_watch, 'section_pick': section_pick,

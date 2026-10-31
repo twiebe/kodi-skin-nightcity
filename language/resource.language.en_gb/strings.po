@@ -1092,3 +1092,11 @@ msgstr ""
 msgctxt "#31467"
 msgid "MDbList score: an average of the other sources, 0 to 100. Needs an MDbList key in TMDb Helper."
 msgstr ""
+
+msgctxt "#31468"
+msgid "[COLOR state_text]OK[/COLOR] read more"
+msgstr ""
+
+msgctxt "#31469"
+msgid "No description"
+msgstr ""
