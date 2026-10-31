@@ -2,7 +2,9 @@
 
 A Kodi 21 skin with a calm cyberpunk look ("Netrunner"): dark backgrounds, cyan with pink accents, cut corners instead of framed boxes, and the artwork of your movies and shows in front.
 
-Video only: home with a spotlight and widget rows, video library, info page, playback and the dialogs Kodi needs. Ratings come from [TMDb Helper](https://github.com/jurialmunkey/plugin.video.themoviedb.helper), which is a required dependency.
+Movies, shows and music: home with a spotlight and widget rows, the video and music libraries, info pages, playback and the dialogs Kodi needs. Ratings come from [TMDb Helper](https://github.com/jurialmunkey/plugin.video.themoviedb.helper), which is a required dependency.
+
+The look is only half of it. The other half is easy use with a remote: few key presses to everything, pages and tabs that switch as the cursor moves, Back that returns to where you came from, and the same key doing the same thing on every page.
 
 ## Screenshots
 
@@ -26,6 +28,7 @@ More in Kodi's add-on browser: movies, music, settings and the quick menu. `tool
 - Power page: device name, uptime, memory, address and temperature, tiles for power off, reboot, suspend, exit and restart (all but suspend ask first)
 - Info page instead of a play/resume prompt: episodes show season tabs and the episode list with the clicked episode selected, resume and from start; movies show details, cast with photos and similar movies (TMDb Helper)
 - Player: thin seek bar with buffer, chapter ticks and a time bubble while seeking; OSD with play controls and stop, chapters, video settings, and track panels for subtitles and audio: move up from the button into the list, a click switches the track, the last row opens the full settings
+- Music: a Music page on Home with an album spotlight and rows, album and artist pages, a player screen and a music OSD with the queue
 - After an episode started from its info page stops, the info page comes back on the episode that played last
 - Palettes: Netrunner (default), Tokyo Night, Catppuccin (Mocha)
 - Fonts: Rajdhani for text, Share Tech Mono for numbers and times
