@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Text viewer (changelogs, add-on text). Kodi ids: 1 heading, 5 text.
-     The scrollbar takes focus so up/down pages through long text. -->
+<!-- Text viewer (changelogs, add-on text, the plot of an info page). Kodi ids: 1 heading, 5 text.
+     A leaf: OK, Left and Right close it, Up closes it on the first page (Up at the top goes back)
+     and pages up on a later one, Down pages down. A scrollbar handles no OK, so an invisible
+     button takes the keys and pages the scrollbar. -->
 <window>
     <depth>DepthDialog</depth>
-    <defaultcontrol always="true">60</defaultcontrol>
+    <defaultcontrol always="true">61</defaultcontrol>
     <controls>
         <control type="group">
             <centerleft>50%</centerleft>
@@ -24,6 +26,21 @@
                 <textcolor>text</textcolor>
                 <pagecontrol>60</pagecontrol>
             </control>
+            <!-- over the text: a click on it closes too -->
+            <control type="button" id="61">
+                <left>40</left>
+                <top>84</top>
+                <width>1290</width>
+                <height>740</height>
+                <texturefocus/>
+                <texturenofocus/>
+                <onclick>Action(Back)</onclick>
+                <onup condition="Container(5).HasPrevious">PageUp(60)</onup>
+                <onup condition="!Container(5).HasPrevious">Action(Back)</onup>
+                <ondown>PageDown(60)</ondown>
+                <onleft>Action(Back)</onleft>
+                <onright>Action(Back)</onright>
+            </control>
             <control type="scrollbar" id="60">
                 <left>1350</left>
                 <top>84</top>
@@ -34,8 +51,10 @@
                 <texturesliderbackground colordiffuse="surface_alt">ui/white.png</texturesliderbackground>
                 <texturesliderbar colordiffuse="accent">ui/white.png</texturesliderbar>
                 <texturesliderbarfocus colordiffuse="focus">ui/white.png</texturesliderbarfocus>
-                <onleft>noop</onleft>
-                <onright>noop</onright>
+                <!-- the mouse can focus it; Up and Down page, Up at the top falls through to onup -->
+                <onup>Action(Back)</onup>
+                <onleft>Action(Back)</onleft>
+                <onright>Action(Back)</onright>
             </control>
         </control>
     </controls>
