@@ -263,12 +263,10 @@ def jellyfin_showcase(kdev, kodi):
         kodi.builtin('RunPlugin(plugin://plugin.video.jellyfin/?mode=repairlib&id={})'.format(folders[name]['ItemId']))
         time.sleep(5)
 
-    def synced():
-        movies = kodi.rpc('VideoLibrary.GetMovies', {'properties': ['art']}).get('movies', [])
-        shows = kodi.rpc('VideoLibrary.GetTVShows', {'properties': ['art']}).get('tvshows', [])
-        return (len(movies), len(shows)) == (len(MOVIES), len(SHOWS)) and all(
-            'poster' in m['art'] and 'fanart' in m['art'] for m in movies + shows)
-    wait_until(synced, 300, 'the Kodi library')
+    def gaps():
+        return library_gaps(kodi.rpc('VideoLibrary.GetMovies', {'properties': ['art']}).get('movies', []),
+                            kodi.rpc('VideoLibrary.GetTVShows', {'properties': ['art']}).get('tvshows', []))
+    wait_until(lambda: not gaps(), 300, 'the Kodi library', state=gaps)
     # then it works through the updates of the sync for a while, with a progress bar and a
     # notification per new title
     kodi.steady(QUIET, seconds=10, timeout=600)
@@ -279,13 +277,24 @@ def scan_idle(jf):
                if t['Key'] == 'RefreshLibrary')
 
 
-def wait_until(check, timeout, what):
+def library_gaps(movies, shows):
+    """What the Kodi library still lacks of the showcase, '' when it has it all."""
+    missing = ['{} ({})'.format(item['label'], ', '.join(art for art in ('poster', 'fanart') if art not in item['art']))
+               for item in movies + shows if not {'poster', 'fanart'} <= set(item['art'])]
+    if (len(movies), len(shows)) == (len(MOVIES), len(SHOWS)) and not missing:
+        return ''
+    return 'Kodi has {} of {} films and {} of {} shows{}'.format(
+        len(movies), len(MOVIES), len(shows), len(SHOWS), '; no ' + ', '.join(missing) if missing else '')
+
+
+def wait_until(check, timeout, what, state=None):
+    """Polls CHECK until it holds; a timeout names WHAT and, with STATE, what it saw last."""
     end = time.time() + timeout
     while time.time() < end:
         if check():
             return
         time.sleep(2)
-    raise RuntimeError('timed out waiting for ' + what)
+    raise RuntimeError('timed out waiting for ' + what + (': ' + state() if state else ''))
 
 
 # --- ratings keys -----------------------------------------------------------------------------

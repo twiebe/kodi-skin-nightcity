@@ -49,3 +49,21 @@ def test_the_pool_template_stays_as_it_was(tmp_path):
 def test_every_shot_is_in_addon_xml_in_order():
     listed = [s.text for s in ET.parse(ROOT / 'addon.xml').getroot().iter('screenshot')]
     assert listed == ['resources/screenshots/{}.jpg'.format(file) for file, _ in screenshots.SHOTS.values()]
+
+
+def test_a_library_that_does_not_sync_says_what_kodi_has():
+    movies = [{'label': 'Dune: Part Two', 'art': {'poster': 'p', 'fanart': 'f'}},
+              {'label': 'Blade Runner 2049', 'art': {'poster': 'p'}}]
+    shows = [{'label': 'Arcane', 'art': {}}]
+    gaps = screenshots.library_gaps(movies, shows)
+    assert gaps.startswith('Kodi has 2 of {} films and 1 of {} shows'.format(len(screenshots.MOVIES), len(screenshots.SHOWS)))
+    assert 'Blade Runner 2049 (fanart)' in gaps and 'Arcane (poster, fanart)' in gaps
+    assert 'Dune' not in gaps
+    assert screenshots.library_gaps(movies[:1] * len(screenshots.MOVIES),
+                                    [movies[0]] * len(screenshots.SHOWS)) == ''
+
+
+def test_a_timeout_names_the_state_it_saw_last():
+    import pytest
+    with pytest.raises(RuntimeError, match='the Kodi library: Kodi has 0 of'):
+        screenshots.wait_until(lambda: False, 0, 'the Kodi library', state=lambda: 'Kodi has 0 of 16 films')
