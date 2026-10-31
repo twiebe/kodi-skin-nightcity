@@ -102,3 +102,19 @@ def test_pause_opens_the_osd_once(tracks):
     action('pause')
     wait_for('!Player.Paused')
     wait_for('!Window.IsActive(videoosd)')
+
+
+def test_chapter_row_after_a_chain_focuses_the_chapters(tracks):
+    """A chain from the cast row ends with the chapter row reopened and the cast row over it
+    (nc.osd.ret and nc.osd.chain, set as the chain leaves them). Closing the cast row shows the
+    chapters with the focus on them; it used to stay on a stand-in out of sight. The clip has no
+    cast row, so the test opens and closes it itself."""
+    focus(602)
+    builtin('SetProperty(nc.osd.ret,1,home)')
+    builtin('SetProperty(nc.osd.chain,1,home)')
+    action('down')
+    wait_for('Window.IsActive(1141)', timeout=5)
+    builtin('Dialog.Close(1141)')
+    wait_for('Window.IsActive(videobookmarks) + !Window.IsActive(1141) + Control.HasFocus(11)', timeout=5)
+    action('up')
+    wait_for('Control.HasFocus(2)')

@@ -12,9 +12,6 @@
          picks it or, without chapters or bookmarks, add bookmark. Skin timers would take up to a
          second. -->
     <defaultcontrol always="true">93</defaultcontrol>
-    <!-- a chain from the cast row ended: back up on it at once (Custom_1141_OSDCast.xml), the
-         chapter row hidden meanwhile -->
-    <onload condition="!String.IsEmpty(Window(Home).Property(nc.osd.ret)) + !String.IsEmpty(Window(Home).Property(nc.osd.chain))">ActivateWindow(1141)</onload>
     <animation effect="fade" time="150">WindowOpen</animation>
     <animation effect="fade" time="150">WindowClose</animation>
     <controls>
@@ -89,6 +86,11 @@
                 <texturenofocus/>
                 <onfocus condition="Integer.IsGreater(Container(11).NumItems,0)">SetFocus(11)</onfocus>
                 <onfocus condition="!Integer.IsGreater(Container(11).NumItems,0)">SetFocus(2)</onfocus>
+                <!-- a chain from the cast row ended: back up on it at once (Custom_1141_OSDCast.xml),
+                     the chapter row hidden meanwhile. Only after the hop above: a queued SetFocus
+                     goes to the topmost dialog: with the cast row opened earlier it never reached
+                     this row, and the focus stayed on 93, out of sight. -->
+                <onfocus condition="!String.IsEmpty(Window(Home).Property(nc.osd.ret)) + !String.IsEmpty(Window(Home).Property(nc.osd.chain))">ActivateWindow(1141)</onfocus>
             </control>
             <control type="list" id="11">
                 <left>40</left>
