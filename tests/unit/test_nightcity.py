@@ -1550,6 +1550,37 @@ def test_music_queue_notes_one_album(monkeypatch):
     assert 'nc.music.queue.album' not in home.props
 
 
+def test_music_queue_never_writes_a_stale_read_last(monkeypatch):
+    """The service runs music_queue in several threads (the queue's notices, the music OSD): one
+    that read the queue between Clear and Add and wrote late cleared the mark another had set
+    for the filled queue."""
+    import threading
+    home = FakeHome()
+    monkeypatch.setattr(nightcity, '_home', lambda: home)
+    reading, go = threading.Event(), threading.Event()
+    queue = {'items': []}
+
+    def rpc(method, **params):
+        if threading.current_thread().name == 'stale':
+            reading.set()
+            go.wait(5)  # its answer comes late
+            return {'items': []}
+        return queue
+
+    monkeypatch.setattr(nightcity, '_rpc', rpc)
+    stale = threading.Thread(target=nightcity.music_queue, name='stale')
+    stale.start()
+    reading.wait(5)
+    queue['items'] = [{'albumid': 7}, {'albumid': 7}]  # Add: the album is in
+    fresh = threading.Thread(target=nightcity.music_queue, name='fresh')
+    fresh.start()
+    fresh.join(0.5)
+    go.set()
+    stale.join(5)
+    fresh.join(5)
+    assert home.props.get('nc.music.queue.album') == '1'
+
+
 def test_debounce_runs_once_after_a_burst():
     import time
     runs = []
