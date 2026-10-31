@@ -1202,6 +1202,21 @@ def test_info_leave_keeps_the_way_back_by_chain_position(monkeypatch):
     assert home.props['nc.ret.top'] == '1'
 
 
+def test_info_leave_forgets_the_ways_back_past_the_page(monkeypatch):
+    """A way back past the page left belongs to a chain that ended there without coming back:
+    the next chain through that page took the focus to the item left then."""
+    home = FakeHome()
+    home.props.update({'nc.ret.1': 'old', 'nc.ret.2': 'old', 'nc.ret.3': 'old'})
+    monkeypatch.setattr(nightcity, '_home', lambda: home)
+    nightcity.info_leave('5500', '1', '', '', '', '1003')
+    assert home.props['nc.ret.1'] != 'old'
+    assert 'nc.ret.2' not in home.props and 'nc.ret.3' not in home.props
+    home.props.update({'nc.ret.3': 'old', 'nc.ret.4': 'old'})
+    nightcity.info_leave('5510', '1', '', '2', '6384', '')
+    assert home.props['nc.ret.top'] == '2' and 'nc.ret.1' in home.props
+    assert 'nc.ret.3' not in home.props and 'nc.ret.4' not in home.props
+
+
 def _back_env(monkeypatch, true, labels, record):
     fake = FakeXbmc(true, labels)
     home = FakeHome()
