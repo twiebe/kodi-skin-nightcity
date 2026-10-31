@@ -72,7 +72,7 @@ def info_page():
 
 @pytest.mark.parametrize('label', sorted(INFO_STATES))
 def test_info_page_has_no_dead_end(info_page, label):
-    assert info_page.report(INFO_STATES[label], offscreen={'5901', '9098'}) == []
+    assert info_page.report(INFO_STATES[label], offscreen={'5901', '9098', '9099'}) == []
 
 
 def test_up_on_the_top_row_leaves_the_page(info_page):

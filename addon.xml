@@ -2,7 +2,7 @@
 <addon id="skin.nightcity" name="Nightcity" version="0.4.80" provider-name="twiebe">
     <requires>
         <import addon="xbmc.gui" version="5.17.0"/>
-        <import addon="plugin.video.themoviedb.helper" version="6.17.9"/>
+        <import addon="plugin.video.themoviedb.helper" version="1:6.20.0-4"/>
     </requires>
     <extension point="xbmc.gui.skin" debugging="false">
         <res width="1920" height="1080" aspect="16:9" default="true" folder="1080i"/>

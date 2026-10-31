@@ -23,7 +23,9 @@ def _version(text):
 def test_imports():
     imports = {i.get('addon'): i.get('version') for i in parse(ROOT / 'addon.xml').iter('import')}
     assert imports['xbmc.gui'] == '5.17.0'
-    assert _version(imports['plugin.video.themoviedb.helper']) <= (6, 18, 3)
+    # the twiebe fork: its window manager goes back to the first page of a chain (TMDbHelper.Command
+    # first, scripts/nightcity.py back_to_start); the epoch puts it above every upstream release
+    assert imports['plugin.video.themoviedb.helper'] == '1:6.20.0-4'
 
 
 @pytest.mark.parametrize('path', all_xml_files(), ids=lambda p: str(p.relative_to(ROOT)))

@@ -377,6 +377,19 @@
                 <onclick condition="[String.IsEmpty(ListItem.DBID) | ![String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow)]] + String.IsEmpty(ListItem.Property(tmdb_type))">PlayMedia($ESCINFO[ListItem.FileNameAndPath])</onclick>
                 <include>ChainBackGuard</include>
             </include>
+            <!-- the trailer of a movie, a library one or a TMDb title in a chain (TMDb Helper's
+                 is a YouTube link). It plays in full screen over this page (9095, keys on 9099,
+                 scripts/nightcity.py trailer), so the page and a chain under it stay; Back ends
+                 it here. Never over a video that plays: it would end it. -->
+            <include content="PillButton">
+                <param name="id" value="9008"/>
+                <param name="label" value="$LOCALIZE[31041]"/>
+                <param name="visible" value="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.Trailer) + [!String.StartsWith(ListItem.Trailer,plugin://plugin.video.youtube/) | System.AddonIsEnabled(plugin.video.youtube)] + [!Player.HasVideo | !String.IsEmpty(Window(Home).Property(nc.trailer))]"/>
+                <param name="onclick" value="SetProperty(nc.trailer,1,home)"/>
+                <param name="onclick2" value="SetFocus(9099)"/>
+                <onclick>NotifyAll(nightcity,trailer)</onclick>
+                <include>ChainBackGuard</include>
+            </include>
             <include content="PillButton">
                 <param name="id" value="9002"/>
                 <param name="label" value="« $LOCALIZE[31123]"/>
@@ -855,5 +868,84 @@
             <param name="id" value="5901"/>
             <param name="content1" value="$VAR[InfoTwinPath]"/>
         </include>
+        <!-- the keys while the trailer plays (button 9008): Back ends it on the button (by its id:
+             only a move keeps the page open, CGUIWindow::OnMove), OK pauses, Left and Right
+             seek. Off-screen and always there, so it takes the focus in the frame of the click. -->
+        <control type="button" id="9099">
+            <left>-100</left>
+            <top>-100</top>
+            <width>1</width>
+            <height>1</height>
+            <texturefocus/>
+            <texturenofocus/>
+            <onback>ClearProperty(nc.trailer,home)</onback>
+            <onback condition="Player.HasVideo + String.IsEmpty(VideoPlayer.DBID)">PlayerControl(Stop)</onback>
+            <onback>9008</onback>
+            <onclick condition="Player.HasVideo">PlayerControl(Play)</onclick>
+            <onleft condition="Player.HasVideo">Seek(-10)</onleft>
+            <onright condition="Player.HasVideo">Seek(10)</onright>
+            <onup>noop</onup>
+            <ondown>noop</ondown>
+        </control>
+        <!-- the trailer in full screen over the page: it plays without the player window
+             (PlayMedia(...,1)), the page draws it. Dark while it loads; its title and the seek
+             line while it loads, pauses or seeks. -->
+        <control type="group" id="9095">
+            <visible>!String.IsEmpty(Window(Home).Property(nc.trailer))</visible>
+            <animation effect="fade" time="150">VisibleChange</animation>
+            <control type="image">
+                <left>0</left>
+                <top>0</top>
+                <width>1920</width>
+                <height>1080</height>
+                <texture colordiffuse="bg">ui/white.png</texture>
+            </control>
+            <control type="videowindow">
+                <left>0</left>
+                <top>0</top>
+                <width>1920</width>
+                <height>1080</height>
+            </control>
+            <control type="group">
+                <visible>!Player.HasVideo | Player.Paused | Player.Seeking | Player.HasPerformedSeek(3)</visible>
+                <animation effect="fade" time="150">VisibleChange</animation>
+                <control type="image">
+                    <left>0</left>
+                    <top>340</top>
+                    <width>1920</width>
+                    <height>740</height>
+                    <texture colordiffuse="scrim">ui/fade_b.png</texture>
+                </control>
+                <include content="Kicker">
+                    <param name="label" value="$LOCALIZE[31041]"/>
+                    <param name="left" value="64"/>
+                    <param name="top" value="880"/>
+                    <param name="width" value="1792"/>
+                </include>
+                <control type="label">
+                    <left>64</left>
+                    <top>916</top>
+                    <width>1792</width>
+                    <height>60</height>
+                    <font>font_title</font>
+                    <textcolor>text</textcolor>
+                    <label>$INFO[ListItem.Title]</label>
+                </control>
+                <control type="group">
+                    <left>64</left>
+                    <top>1000</top>
+                    <visible>Player.HasVideo</visible>
+                    <include content="PlayerBar"/>
+                    <control type="label">
+                        <top>16</top>
+                        <width>900</width>
+                        <height>40</height>
+                        <font>font_num</font>
+                        <textcolor>text_dim</textcolor>
+                        <label>[COLOR accent]$VAR[PlayerTime][/COLOR] / $INFO[Player.Duration]</label>
+                    </control>
+                </control>
+            </control>
+        </control>
     </controls>
 </window>

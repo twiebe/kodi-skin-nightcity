@@ -27,6 +27,8 @@ More in Kodi's add-on browser: movies, music, settings and the quick menu. `tool
 - Settings console: the system page has one tile per group (playback and media, look and profiles, add-ons and content, system and network, tools). OK opens a rail with all settings entries under their group headings; the focused entry shows its categories on the right, and OK on one opens Kodi's page right at that category. Live TV shows up with a PVR client. Event log page
 - Power page: device name, uptime, memory, address and temperature, tiles for power off, reboot, suspend, exit and restart (all but suspend ask first)
 - Info page instead of a play/resume prompt: episodes show season tabs and the episode list with the clicked episode selected, resume and from start; movies show details, cast with photos and similar movies (TMDb Helper)
+- Trailer on a movie's info page, also on a TMDb title in a chain: it plays in full screen over the page; Back ends it on its button, OK pauses, Left and Right seek. TMDb's trailers are YouTube links and need the YouTube add-on
+- Back held on an info page goes back to where the browsing started, however deep the chain of people and titles is: the movie or episode page it started from (on the person it went on from), or the player's controls on the cast row. Kodi knows long presses only from keyboards and remotes that send keyboard keys (most IR and Bluetooth remotes); CEC and MCE remotes have none
 - Player: thin seek bar with buffer, chapter ticks and a time bubble while seeking; OSD with play controls and stop, chapters, video settings, and track panels for subtitles and audio: move up from the button into the list, a click switches the track, the last row opens the full settings
 - Music: a Music page on Home with an album spotlight and rows, album and artist pages, a player screen and a music OSD with the queue
 - After an episode started from its info page stops, the info page comes back on the episode that played last
@@ -41,11 +43,11 @@ More in Kodi's add-on browser: movies, music, settings and the quick menu. `tool
 
 ## Install
 
-Nightcity comes from the twiebe repository (https://github.com/twiebe/kodi-repo), which also keeps it up to date. It needs TMDb Helper 6.17.9 or newer, which only jurialmunkey's repository carries (the official Kodi repository has an older one), so that one goes in first.
+Nightcity comes from the twiebe repository (https://github.com/twiebe/kodi-repo), which also keeps it up to date. It needs the TMDb Helper fork from the same repository (1:6.20.0-4 or newer): its window manager can go back to the first page of a chain, which Back held needs. That fork in turn needs modules that only jurialmunkey's repository carries in recent enough versions (the official Kodi repository has older ones), so that one goes in first.
 
 1. Settings > File manager > Add source: `https://jurialmunkey.github.io/repository.jurialmunkey/`, and another one: `https://twiebe.github.io/kodi-repo/`
 2. Settings > Add-ons > Install from zip file: `repository.jurialmunkey-<version>.zip` from the first source, then `repository.twiebe-<version>.zip` from the second
-3. Add-ons > Install from repository > twiebe Repository > Look and feel > Skin > Nightcity > Install. Kodi installs TMDb Helper with it and offers to switch to the skin; later under Settings > Interface > Skin.
+3. Add-ons > Install from repository > twiebe Repository > Look and feel > Skin > Nightcity > Install. Kodi installs the TMDb Helper fork with it (if jurialmunkey's TMDb Helper is installed, it asks to replace it: Yes, and keep its data) and offers to switch to the skin; later under Settings > Interface > Skin.
 
 To try a build of your own, install its zip (`python tools/build.py`, see Development) with Install from zip file instead of step 3. Kodi updates an add-on only from where it was installed from: to get updates again, install Nightcity from the repository once more.
 

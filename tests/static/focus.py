@@ -67,6 +67,12 @@ class State:
             (r'Control\.HasFocus\((\d+)\)$', lambda m: self.focus == m.group(1)),
             # $EXP[TmdbFresh<id>] (Includes_Tmdb.xml): the list shows items of this page
             (r'TmdbFresh(\d+)$', lambda m: self.containers.get(m.group(1), 'empty') == 'items'),
+            # the trailer button (DialogVideoInfo.xml 9005): every page has one it can play, and
+            # no video plays under it; `extra` says otherwise
+            (r'String\.IsEmpty\(ListItem\.Trailer\)$', lambda m: False),
+            (r'String\.StartsWith\(ListItem\.Trailer,plugin://plugin\.video\.youtube/\)$', lambda m: True),
+            (r'System\.AddonIsEnabled\(plugin\.video\.youtube\)$', lambda m: True),
+            (r'Player\.HasVideo$', lambda m: False),
         )
         if text in self.extra:
             return self.extra[text]

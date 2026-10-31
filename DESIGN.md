@@ -13,6 +13,9 @@ The remote moves through levels, not through confirmations.
   element that opened it: the same item, the same tab. A TMDb chain reopens the page before as a
   new page, so the click keeps the way back (`info_leave`, `info_back`, `osd_back` in
   `scripts/nightcity.py`); a chain from the player's cast row ends on that row, on that person.
+- **Back held goes back to where the browsing started**, past every page of a chain: to the
+  page the chain started from, on the element that started it, or to the player's cast row.
+  Outside a chain, and on its first page, it is a Back.
 
 ### Selectors are skipped from above
 

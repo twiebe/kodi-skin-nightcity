@@ -717,10 +717,23 @@ def test_back_keymap_turns_previous_menu_into_back_on_info_pages():
     import xml.etree.ElementTree as ET
     root = ET.fromstring(nightcity.BACK_KEYMAP)
     assert [w.tag for w in root] == ['movieinformation']
-    keys = {(device.tag, key.tag): key.text for device in root.find('movieinformation') for key in device}
-    assert keys == {('keyboard', 'escape'): 'Back', ('gamepad', 'back'): 'Back', ('mouse', 'rightclick'): 'Back'}
+    keys = {(device.tag, key.tag, key.get('mod')): key.text for device in root.find('movieinformation') for key in device}
+    assert {k: v for k, v in keys.items() if not k[2]} == {
+        ('keyboard', 'escape', None): 'Back', ('gamepad', 'back', None): 'Back', ('mouse', 'rightclick', None): 'Back'}
     name = nightcity.BACK_KEYMAP_NAME
     assert name < 'gen.xml' and name < 'keyboard.xml' and name != nightcity.HOME_KEYMAP_NAME
+
+
+def test_back_keymap_long_back_goes_back_to_where_the_browsing_started():
+    """Back held on an info page: back to where a TMDb chain started (back_to_start). Kodi knows
+    long presses only in the keyboard section: backspace (keyboards, IR remotes on Linux),
+    browser_back (remotes), escape."""
+    import xml.etree.ElementTree as ET
+    root = ET.fromstring(nightcity.BACK_KEYMAP)
+    held = {(device.tag, key.tag): key.text for device in root.find('movieinformation') for key in device
+            if key.get('mod') == 'longpress'}
+    assert held == {('keyboard', k): 'NotifyAll(nightcity,back_to_start)' for k in ('backspace', 'browser_back', 'escape')}
+    assert nightcity.COMMANDS['back_to_start'] is nightcity.back_to_start
 
 
 @pytest.mark.parametrize('off', [False, True])
@@ -1916,3 +1929,142 @@ def test_plot_reads_the_page_item_by_default(monkeypatch):
         Dialog=lambda: types.SimpleNamespace(textviewer=lambda h, t: shown.append((h, t)))))
     nightcity.COMMANDS['plot']()
     assert shown == [('y', 'x')]
+
+
+# --- Back held: back to where the browsing started ---------------------------------------------
+
+def _start_env(monkeypatch, labels, props):
+    fake = FakeXbmc(set(), labels)
+    home = FakeHome()
+    home.props.update(props)
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    monkeypatch.setattr(nightcity, '_home', lambda: home)
+    return fake, home
+
+
+def test_back_to_start_outside_a_chain_is_a_back(monkeypatch):
+    fake, home = _start_env(monkeypatch, {}, {})
+    nightcity.back_to_start()
+    assert fake.builtins == ['Action(Back)'] and home.props == {}
+
+
+def test_back_to_start_returns_to_the_page_the_chain_started_from(monkeypatch):
+    """A chain from a movie or episode page has that page first (TMDb Helper's origin): its
+    manager goes back to it at once (TMDbHelper.Command first, the fork); the page parks its focus
+    and info_back takes it to the person the chain went on from. The ways back into the pages
+    in between are gone with them."""
+    fake, home = _start_env(monkeypatch, {'Window(Home).Property(TMDbHelper.Position)': '4'}, {
+        'TMDbHelper.Instance': 'True', 'nc.ret.1': 'first', 'nc.ret.2': 'x', 'nc.ret.3': 'y', 'nc.ret.top': '3'})
+    nightcity.back_to_start()
+    assert fake.builtins == []
+    assert home.props == {'TMDbHelper.Instance': 'True', 'nc.ret.1': 'first', 'nc.ret.top': '1',
+                          'TMDbHelper.Command': 'first'}
+
+
+def test_back_to_start_ends_a_chain_from_the_player(monkeypatch):
+    """A chain from the OSD cast row has no page before its first: it ends, and the player comes
+    back with its controls on the cast row (nc.osd.ret, Custom_1141_OSDCast.xml)."""
+    fake, home = _start_env(monkeypatch, {'Window(Home).Property(TMDbHelper.Position)': '3'}, {
+        'TMDbHelper.Instance': 'True', 'nc.osd.ret': '2', 'nc.ret.2': 'x'})
+    nightcity.back_to_start()
+    assert fake.builtins == []
+    assert home.props['TMDbHelper.Command'] == 'exit' and home.props['nc.osd.ret'] == '2'
+
+
+def test_back_to_start_on_the_first_page_is_a_back(monkeypatch):
+    fake, home = _start_env(monkeypatch, {'Window(Home).Property(TMDbHelper.Position)': '1'}, {
+        'TMDbHelper.Instance': 'True', 'nc.ret.1': 'first'})
+    nightcity.back_to_start()
+    assert fake.builtins == ['Action(Back)'] and 'TMDbHelper.Command' not in home.props
+
+
+# --- trailer ------------------------------------------------------------------------------------
+
+@pytest.mark.parametrize('wanted, video, info_open, started, seconds, state', [
+    (True, False, True, False, 0.0, 'wait'),
+    (True, True, True, False, 1.0, 'play'),
+    (True, True, True, True, 90.0, 'play'),
+    # it ended, Back or the stop key stopped it
+    (True, False, True, True, 90.0, 'over'),
+    (False, True, True, True, 9.0, 'over'),
+    # the page closed (a chain page left, Info pressed)
+    (True, True, False, True, 9.0, 'over'),
+    # the plugin never started it
+    (True, False, True, False, nightcity.TRAILER_START, 'over'),
+])
+def test_trailer_state(wanted, video, info_open, started, seconds, state):
+    assert nightcity.trailer_state(wanted, video, info_open, started, seconds) == state
+
+
+def test_play_windowed_quotes_the_path():
+    """The trailer plays without the switch to the player (,1): over its page, which shows it in
+    full screen; no question to resume a trailer file."""
+    assert nightcity.play_windowed('plugin://plugin.video.youtube/play/?video_id=a,b"c') == \
+        'PlayMedia("plugin://plugin.video.youtube/play/?video_id=a,b\\"c",1,noresume)'
+
+
+class TrailerXbmc(FakeXbmc):
+    """The trailer starts after `start` polls and ends after `end` more."""
+
+    def __init__(self, labels, start=2, end=3, true=()):
+        super().__init__(set(true) | {'Window.IsActive(movieinformation)', 'Control.HasFocus(9099)'}, labels)
+        self.polls, self.start, self.end = 0, start, end
+
+    def getCondVisibility(self, condition):
+        if condition == 'Player.HasVideo':
+            return self.start <= self.polls < self.start + self.end
+        return super().getCondVisibility(condition)
+
+
+def _trailer_env(monkeypatch, fake, props=None):
+    home = FakeHome()
+    home.props.update(props or {'nc.trailer': '1'})
+
+    class Monitor:
+        def waitForAbort(self, timeout):
+            fake.polls += 1
+            return False
+
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    monkeypatch.setattr(nightcity, '_home', lambda: home)
+    monkeypatch.setattr(nightcity, '_monitor', lambda *a: Monitor())
+    return home
+
+
+def test_trailer_plays_over_the_page_and_hands_the_focus_back(monkeypatch):
+    fake = TrailerXbmc({'ListItem.Trailer': 'plugin://plugin.video.youtube/play/?video_id=x'})
+    home = _trailer_env(monkeypatch, fake)
+    nightcity.trailer()
+    assert fake.builtins == ['PlayMedia("plugin://plugin.video.youtube/play/?video_id=x",1,noresume)', 'SetFocus(9008)']
+    assert 'nc.trailer' not in home.props
+    assert nightcity.COMMANDS['trailer'] is nightcity.trailer
+
+
+def test_trailer_that_comes_after_back_is_stopped(monkeypatch):
+    """Back while the plugin still resolves the trailer: once it starts, under a page that no
+    longer shows it, it stops. A library title started meanwhile (it has a database id) plays."""
+    fake = TrailerXbmc({'ListItem.Trailer': 'x'}, start=3, end=50)
+    home = _trailer_env(monkeypatch, fake)
+    original = fake.getCondVisibility
+
+    def visible(condition):
+        if fake.polls == 1:
+            home.clearProperty('nc.trailer')  # Back
+        if condition == 'Player.HasVideo + String.IsEmpty(VideoPlayer.DBID)':
+            return original('Player.HasVideo')
+        return original(condition)
+    fake.getCondVisibility = visible
+    nightcity.trailer()
+    assert fake.builtins[-1] == 'PlayerControl(Stop)'
+
+
+def test_trailer_needs_a_trailer_and_no_video(monkeypatch):
+    fake = TrailerXbmc({'ListItem.Trailer': 'x'}, true={'Player.HasVideo'})
+    fake.getCondVisibility = FakeXbmc.getCondVisibility.__get__(fake)
+    home = _trailer_env(monkeypatch, fake)
+    nightcity.trailer()
+    fake2 = TrailerXbmc({})
+    home2 = _trailer_env(monkeypatch, fake2)
+    nightcity.trailer()
+    assert fake.builtins == fake2.builtins == ["SetFocus(9008)"]
+    assert 'nc.trailer' not in home.props and 'nc.trailer' not in home2.props
