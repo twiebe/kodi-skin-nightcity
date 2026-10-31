@@ -46,6 +46,19 @@ def test_build_zip(tmp_path):
     assert 'skin.nightcity/CLAUDE.md' not in names
 
 
+def test_prerelease_zip_counts_up_below_the_next_release(tmp_path):
+    from build import build
+    version = parse(ROOT / 'addon.xml').get('version')
+    major, minor, patch = version.split('.')
+    nxt = '{}.{}.{}'.format(major, minor, int(patch) + 1)
+    first = build(tmp_path, pre=True)
+    assert first.name == 'skin.nightcity-{}~beta1.zip'.format(nxt)
+    assert 'version="{}~beta1"'.format(nxt) in zipfile.ZipFile(first).read('skin.nightcity/addon.xml').decode()
+    assert build(tmp_path, pre=True).name == 'skin.nightcity-{}~beta2.zip'.format(nxt)
+    # the checkout itself keeps its release version
+    assert parse(ROOT / 'addon.xml').get('version') == version
+
+
 def test_news_names_version():
     addon = parse(ROOT / 'addon.xml')
     news = addon.find('.//news')
