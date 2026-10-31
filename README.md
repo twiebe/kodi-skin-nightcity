@@ -62,12 +62,16 @@ The e2e suite runs in parallel on a kodi-dev pool (several environments, each wi
 KDEV_POOL=1 .venv/bin/python -m pytest tests/e2e -q -m e2e -n auto --dist loadfile
 ```
 
-`tools/screenshots.py` takes the screenshots in `resources/screenshots/` (listed in `addon.xml`, four of them above) on a kodi-dev instance of its own at 1920x1080, made from the pool template: its library gets films and shows with their artwork from TMDb. It needs ffmpeg and internet access, and takes about seven minutes. TMDb Helper fetches IMDb, Rotten Tomatoes and Metacritic ratings only with an API key: put yours in `MDBLIST_API_KEY` or `OMDB_API_KEY` for the run, without them the pages show TMDb's rating.
+`make screenshots` takes the screenshots in `resources/screenshots/` (listed in `addon.xml`, four of them above). It runs `tools/screenshots.py` in a container, so it needs only Docker and a kodi-dev checkout next to this one (`KODI_DEV`, default `../kodi-dev`) with its pool template (`tools/kodidev_setup.py`, then `kdev pool up` once). The script starts a kodi-dev instance of its own at 1920x1080 from the pool template, gives its library films and shows with their artwork from TMDb (internet access needed), opens each view and removes the instance again; about ten minutes. TMDb Helper fetches IMDb, Rotten Tomatoes and Metacritic ratings only with an API key: export yours as `MDBLIST_API_KEY` or `OMDB_API_KEY` for the run, the container gets them from the environment. Without them the pages show TMDb's rating.
 
 ```
-.venv/bin/python tools/screenshots.py              # all eight; --keep keeps the instance
-.venv/bin/python tools/screenshots.py --instance shots info player   # some of them again on a kept one
+make screenshots                                       # all eight
+make screenshots KODI_DEV=/workspaces/kodi-dev SHOTS="info player" SCREENSHOTS_ARGS=--keep
+MDBLIST_API_KEY=... make screenshots                   # with IMDb and the other ratings
+.venv/bin/python tools/screenshots.py --instance shots info   # without the container (needs ffmpeg), on a kept instance
 ```
+
+The container runs on the host network, since kdev publishes the instance's ports on 127.0.0.1 of the Docker host, and mounts both checkouts at their own paths, since kdev hands them to the same Docker daemon.
 
 The player tests write a clip with two audio tracks, two subtitles and three chapters with `tools/make_tracks_clip.py` (needs ffmpeg).
 
