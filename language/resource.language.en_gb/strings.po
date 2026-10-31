@@ -1100,3 +1100,7 @@ msgstr ""
 msgctxt "#31469"
 msgid "No description"
 msgstr ""
+
+msgctxt "#31470"
+msgid "back"
+msgstr ""
