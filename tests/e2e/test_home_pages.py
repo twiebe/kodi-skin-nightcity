@@ -44,7 +44,9 @@ def test_focus_switches_page(home_page):
 
 def test_fast_switching(home_page):
     focus(9101)
-    action('right', 'right', 'right', delay=0.15)
+    # Movies, Shows, Music (only with music in the library), Search
+    tabs = [9102, 9103] + ([9107] if visible(9107) else []) + [9104]
+    action(*['right'] * len(tabs), delay=0.15)
     wait_for('Control.HasFocus(9104)')
     assert page() == 'search'
     assert visible(9710)
