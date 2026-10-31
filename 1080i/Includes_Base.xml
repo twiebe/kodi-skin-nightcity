@@ -9,6 +9,17 @@
     <!-- Full screen page: base colour and the petrol glow top right. Never a hole, with or
          without fanart (FanartBackdrop goes on top of this). -->
     <include name="Background">
+        <!-- A playing video under the page: Kodi takes the next frame only once the last one was
+             rendered. A page over the player (Home, a TMDb chain from the OSD) without it left
+             the frames waiting, and every 10 s the audio stalled and the player resynced (a
+             black flash and a gap in the sound). The base colour covers it. -->
+        <control type="videowindow">
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>1080</height>
+            <visible>Player.HasVideo + !Window.IsVisible(fullscreenvideo)</visible>
+        </control>
         <control type="image">
             <left>0</left>
             <top>0</top>
