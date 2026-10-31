@@ -321,9 +321,21 @@ def test_chapter_row_starts_no_python():
     # focus actions wait in Kodi's queue: one hop still runs before the list is filled, the
     # second sees it
     assert hop('93') == [('', 'SetFocus(94)')]
-    assert hop('94') == [('Integer.IsGreater(Container(11).NumItems,0)', 'SetFocus(11)'),
-                         ('!Integer.IsGreater(Container(11).NumItems,0)', 'SetFocus(2)')]
+    assert hop('94')[:2] == [('Integer.IsGreater(Container(11).NumItems,0)', 'SetFocus(11)'),
+                             ('!Integer.IsGreater(Container(11).NumItems,0)', 'SetFocus(2)')]
     assert not any(t.findtext('name') == 'nc_chapters_focus' for t in parse(ROOT / '1080i' / 'Timers.xml').iter('timer'))
+
+
+def test_cast_row_after_a_chain_opens_after_the_focus_hops():
+    """Focus actions wait in Kodi's queue and go to the topmost dialog when they run. The cast row
+    (a dialog of its own) used to open in the chapter row's onload, before the hops ran: SetFocus(94)
+    then went to the cast row, and back on the chapter row the focus stayed on stand-in 93, out of
+    sight, where Up did nothing. The last hop opens the cast row, after its own SetFocus."""
+    controls = {c.get('id'): c for c in parse(ROOT / '1080i' / 'VideoOSDBookmarks.xml').iter('control')}
+    assert not any('ActivateWindow' in t for t in _onloads('VideoOSDBookmarks.xml'))
+    hops = [o.text for o in controls['94'].findall('onfocus')]
+    assert hops[-1] == 'ActivateWindow(1141)'
+    assert hops[:-1] == ['SetFocus(11)', 'SetFocus(2)']
 
 CAST_DIALOG = 'Custom_1141_OSDCast.xml'
 LISTS_IDLE = '!Container(6501).IsUpdating + !Container(6599).IsUpdating'
@@ -589,7 +601,7 @@ def test_osd_chain_ends_back_on_the_person_left():
     late = [o.text for o in _timer('nc_osd_click').iter('onstop')]
     assert all(k in late for k in keep)
     # at once over the chapter row, which hides meanwhile; the row's lists wait for the manager
-    reopen = [(o.get('condition'), o.text) for o in parse(SKIN / 'VideoOSDBookmarks.xml').iter('onload')]
+    reopen = [(o.get('condition'), o.text) for o in _control('VideoOSDBookmarks.xml', '94').iter('onfocus')]
     assert ('!String.IsEmpty(Window(Home).Property(nc.osd.ret)) + !String.IsEmpty(Window(Home).Property(nc.osd.chain))', 'ActivateWindow(1141)') in reopen
     assert all(o.text != 'ActivateWindow(1141)' for o in _timer('nc_osd_chain').iter('onstop'))
     onloads = [(o.get('condition'), o.text) for o in parse(SKIN / 'Custom_1141_OSDCast.xml').iter('onload')]
