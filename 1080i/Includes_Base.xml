@@ -170,13 +170,16 @@
         <animation effect="fade" start="0" end="100" time="WindowFadeTime" condition="!Player.HasVideo">WindowOpen</animation>
     </include>
 
-    <!-- Top line of a page: "FILME · METROPOLIS" on the left, a counter (dark blue) or the clock (white) right -->
+    <!-- Top line of a page: "FILME · METROPOLIS" on the left, a counter (dark blue) or the clock (white) right;
+         weather="false" with a counter: the weather stands only next to the clock -->
     <include name="PathLine">
         <param name="id" default="0"/>
         <param name="path"/>
         <param name="counter" default="[COLOR text]$INFO[System.Time][/COLOR]"/>
         <param name="counterid" default="0"/>
         <param name="counterfont" default="font_num"/>
+        <param name="weather" default="true"/>
+        <param name="weathericon" default="28"/>
         <param name="left" default="48"/>
         <param name="top" default="28"/>
         <param name="width" default="1824"/>
@@ -190,15 +193,65 @@
                 <textcolor>text_mute</textcolor>
                 <label>[UPPERCASE]$PARAM[path][/UPPERCASE]</label>
             </control>
-            <control type="label" id="$PARAM[counterid]">
+            <!-- the weather left of the clock, as on Home; not next to a counter (weather) -->
+            <control type="grouplist">
                 <left>$PARAM[left]</left>
                 <top>$PARAM[top]</top>
                 <width>$PARAM[width]</width>
                 <height>36</height>
+                <orientation>horizontal</orientation>
                 <align>right</align>
-                <font>$PARAM[counterfont]</font>
-                <textcolor>state_text</textcolor>
-                <label>$PARAM[counter]</label>
+                <itemgap>16</itemgap>
+                <usecontrolcoords>true</usecontrolcoords>
+                <include content="TopWeather">
+                    <param name="font" value="$PARAM[counterfont]"/>
+                    <param name="icon" value="$PARAM[weathericon]"/>
+                    <param name="icontop" value="3"/>
+                    <param name="height" value="36"/>
+                    <param name="aligny" value="top"/>
+                    <param name="visible" value="$PARAM[weather]"/>
+                </include>
+                <control type="label" id="$PARAM[counterid]">
+                    <width>auto</width>
+                    <height>36</height>
+                    <font>$PARAM[counterfont]</font>
+                    <textcolor>state_text</textcolor>
+                    <label>$PARAM[counter]</label>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- The weather left of a clock at the top right: icon and temperature, white, once a
+         weather service has fetched it. Two entries for a horizontal grouplist; font, icon (its
+         size) and aligny follow the clock beside it, height is the line's, icontop puts the
+         icon level with the digits. Fades with the Home top line while the quick menu shows
+         (QuickMenuFade, which no other window triggers). -->
+    <include name="TopWeather">
+        <param name="font" default="font_num"/>
+        <param name="icon" default="28"/>
+        <param name="icontop" default="8"/>
+        <param name="height" default="44"/>
+        <param name="aligny" default="center"/>
+        <param name="visible" default="true"/>
+        <definition>
+            <control type="image">
+                <top>$PARAM[icontop]</top>
+                <width>$PARAM[icon]</width>
+                <height>$PARAM[icon]</height>
+                <texture colordiffuse="text">ui/qm_weather.png</texture>
+                <visible>$PARAM[visible] + Weather.IsFetched</visible>
+                <include>QuickMenuFade</include>
+            </control>
+            <control type="label">
+                <width>auto</width>
+                <height>$PARAM[height]</height>
+                <aligny>$PARAM[aligny]</aligny>
+                <font>$PARAM[font]</font>
+                <textcolor>text</textcolor>
+                <label>$INFO[Weather.Temperature]</label>
+                <visible>$PARAM[visible] + Weather.IsFetched</visible>
+                <include>QuickMenuFade</include>
             </control>
         </definition>
     </include>
@@ -642,10 +695,12 @@
     </include>
 
     <!-- Top of a full window outside Home: the window title as path line (id 9026), a counter
-         such as 12/240 on the right (id 9028; the clock unless given) -->
+         such as 12/240 on the right (id 9028; the clock and the weather unless given; with a
+         counter weather="false") -->
     <include name="StatusBar">
         <param name="title"/>
         <param name="counter" default="[COLOR text]$INFO[System.Time][/COLOR]"/>
+        <param name="weather" default="true"/>
         <definition>
             <include content="PathLine">
                 <param name="id" value="9026"/>
@@ -653,6 +708,8 @@
                 <param name="counter" value="$PARAM[counter]"/>
                 <param name="counterid" value="9028"/>
                 <param name="counterfont" value="font_num_small"/>
+                <param name="weather" value="$PARAM[weather]"/>
+                <param name="weathericon" value="24"/>
                 <param name="left" value="64"/>
                 <param name="top" value="30"/>
                 <param name="width" value="1792"/>
