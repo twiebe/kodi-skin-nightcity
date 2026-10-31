@@ -156,25 +156,15 @@
                     <onback>9189</onback>
                 </control>
             </control>
-            <!-- the weather of the quick menu, when a weather service is set up -->
-            <control type="image">
-                <top>8</top>
-                <width>28</width>
-                <height>28</height>
-                <texture colordiffuse="text">ui/qm_weather.png</texture>
-                <visible>Weather.IsFetched</visible>
-                <include>QuickMenuFade</include>
-            </control>
-            <control type="label">
-                <width>auto</width>
-                <height>44</height>
-                <aligny>center</aligny>
-                <font>font_num</font>
-                <textcolor>text</textcolor>
-                <label>$INFO[Weather.Temperature]</label>
-                <visible>Weather.IsFetched</visible>
-                <include>QuickMenuFade</include>
-            </control>
+            <!-- the weather, when a weather service is set up; the same as next to the clock of
+                 the other windows (PathLine) -->
+            <include content="TopWeather">
+                <param name="font" value="font_num"/>
+                <param name="icon" value="28"/>
+                <param name="icontop" value="8"/>
+                <param name="height" value="44"/>
+                <param name="aligny" value="center"/>
+            </include>
             <control type="label">
                 <width>auto</width>
                 <height>44</height>
