@@ -42,6 +42,12 @@ Every zip that leaves the machine has its own version:
 3. Unit/static, then `.venv/bin/python tools/build.py <dir>`.
 4. Commit as "Release <version>". Push only when asked.
 
+Before the full e2e run of a release, build a prerelease for the user to try on their own Kodi
+while the run is on: `.venv/bin/python tools/build.py --pre /dist`. It needs no bump or commit:
+the zip carries the next version with a counter, `skin.nightcity-0.4.79~beta1.zip`, `~beta2`
+on the next build, which Kodi orders below the release. Build a new one after every change the
+user should see before the release.
+
 ## Writing
 
 - The skin is English only; strings go to `language/resource.language.en_gb/strings.po`.
