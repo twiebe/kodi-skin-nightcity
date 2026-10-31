@@ -118,6 +118,9 @@
             <!-- the way back: the chain ends on this row, on this person -->
             <onclick>SetProperty(nc.osd.ret,$INFO[Container(6501).CurrentItem],home)</onclick>
             <onclick>SetProperty(nc.osd.ret.tab,$INFO[Window(Home).Property(nc.osd.credits)],home)</onclick>
+            <!-- a chain from here has no info page before its first: the ways back into info
+                 pages are all from a chain before (scripts/nightcity.py info_forget) -->
+            <onclick>NotifyAll(nightcity,info_forget)</onclick>
             <include content="ChainClick">
                 <param name="type" value="person"/>
                 <param name="id" value="$INFO[ListItem.Property(tmdb_id)]"/>

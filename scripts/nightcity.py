@@ -568,20 +568,33 @@ def return_matches(point, tmdb_id, dbid):
     return bool((point['tmdb_id'] and point['tmdb_id'] == tmdb_id) or (point['dbid'] and point['dbid'] == dbid))
 
 
-def info_leave(list_id, item, tab, position, tmdb_id, dbid):
-    home = _home()
-    # a way back past this page is from a chain that ended without coming back to it; the next
-    # chain through that page would take the focus there
-    page = return_key(position)[len('nc.ret.'):]
-    later = int(page) + 1 if page.isdigit() else 0
-    while later and home.getProperty(return_key(str(later))):
+def _forget_ways_back(home, page):
+    """Drop the ways back past chain position PAGE: they are from a chain that ended without
+    coming back to them, and the next chain through such a page would take the focus there."""
+    later = page + 1
+    while home.getProperty(return_key(str(later))):
         home.clearProperty(return_key(str(later)))
         later += 1
+
+
+def info_leave(list_id, item, tab, position, tmdb_id, dbid):
+    home = _home()
+    page = return_key(position)[len('nc.ret.'):]
+    if page.isdigit():
+        _forget_ways_back(home, int(page))
     point = return_point(list_id, item, tab, tmdb_id, dbid)
     if point:
         home.setProperty(return_key(position), point)
         # the page parks its focus at once when it opens again (DialogVideoInfo.xml onload)
-        home.setProperty('nc.ret.top', return_key(position)[len('nc.ret.'):])
+        home.setProperty('nc.ret.top', page)
+
+
+def info_forget():
+    """A chain starts from the OSD cast row (Custom_1141_OSDCast.xml): no info page is left
+    before its first one, every way back is from a chain before."""
+    home = _home()
+    _forget_ways_back(home, 0)
+    home.clearProperty('nc.ret.top')
 
 
 def info_back():
@@ -1768,7 +1781,7 @@ def hero_watch(monitor, stop):
 
 
 COMMANDS = {'next_episode': next_episode, 'startup': startup, 'genres': genres, 'genre_pick': genre_pick,
-            'info_select': info_select, 'info_leave': info_leave, 'info_back': info_back,
+            'info_select': info_select, 'info_leave': info_leave, 'info_back': info_back, 'info_forget': info_forget,
             'osd_back': osd_back, 'play': play, 'info': info, 'plot': plot,
             'streams': streams, 'row': row, 'search': search, 'search_recent': search_recent,
             'search_init': search_init, 'search_clear': search_clear, 'search_forget': search_forget, 'colours': colours,
