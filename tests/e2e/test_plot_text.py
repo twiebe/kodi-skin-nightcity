@@ -29,7 +29,13 @@ def _label(name):
 
 
 def _focus_is(cid, timeout=10):
-    wait_for('Integer.IsEqual(System.CurrentControlId,{})'.format(cid), timeout=timeout)
+    try:
+        wait_for('Integer.IsEqual(System.CurrentControlId,{})'.format(cid), timeout=timeout)
+    except AssertionError:
+        # where the focus is instead: a full run lost this detail
+        raise AssertionError('focus not on {}: {}'.format(cid, info(
+            'System.CurrentWindow', 'System.CurrentControlId', 'ListItem.Label',
+            'Window(Home).Property(TMDbHelper.Position)')))
 
 
 @pytest.fixture
