@@ -106,7 +106,8 @@ def test_textures_exist():
     from PIL import Image
     ui = ROOT / 'media' / 'ui'
     for name in ('cut.png', 'cut_fill.png', 'cut_btn.png', 'cut_btn_fill.png', 'cut_glow.png', 'petrol_glow.png',
-                 'fade_b.png', 'fade_t.png', 'tick.png', 'seek_head.png', 'seek_track.png'):
+                 'fade_b.png', 'fade_t.png', 'tick.png', 'seek_head.png', 'seek_track.png',
+                 'clear.png'):
         assert (ui / name).is_file(), name
     assert Image.open(ui / 'cut.png').size == (64, 64)
     assert Image.open(ui / 'petrol_glow.png').size == (1920, 1080)

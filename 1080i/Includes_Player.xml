@@ -46,15 +46,17 @@
             <control type="progress" id="$PARAM[progressid]">
                 <width>1792</width>
                 <height>4</height>
-                <texturebg/>
+                <!-- an invisible track: Kodi sizes the fill by it -->
+                <texturebg>ui/clear.png</texturebg>
                 <midtexture colordiffuse="accent">ui/white.png</midtexture>
                 <info>Player.SeekBar</info>
             </control>
+            <!-- marks over and under the line, clear on it, drawn 1:1 on the head's track -->
             <control type="ranges">
-                <top>-4</top>
+                <top>-6</top>
                 <width>1792</width>
-                <height>12</height>
-                <texturebg/>
+                <height>16</height>
+                <texturebg>ui/seek_track.png</texturebg>
                 <!-- Kodi hands the chapters over as ranges from one chapter start to the
                      next, so a chapter starts where a range ends -->
                 <lefttexture/>
@@ -62,14 +64,15 @@
                 <righttexture colordiffuse="border_dim">ui/tick.png</righttexture>
                 <info>Player.Chapters</info>
             </control>
-            <!-- the head at the end of an invisible fill -->
+            <!-- the head at the end of an invisible fill, cyan as the played part: from 6 px over
+                 the line to its bottom edge -->
             <control type="progress">
                 <top>-6</top>
                 <width>1792</width>
                 <height>16</height>
                 <texturebg>ui/seek_track.png</texturebg>
                 <midtexture>ui/seek_track.png</midtexture>
-                <righttexture colordiffuse="text">ui/seek_head.png</righttexture>
+                <righttexture colordiffuse="accent">ui/seek_head.png</righttexture>
                 <info>Player.SeekBar</info>
             </control>
         </definition>

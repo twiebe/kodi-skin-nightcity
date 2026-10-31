@@ -49,6 +49,63 @@ def test_chapter_marks_have_a_colour():
     assert not chapters.find('lefttexture').text
 
 
+def _bar(info):
+    bar = next(i for i in parse(ROOT / '1080i' / 'Includes_Player.xml').iter('include') if i.get('name') == 'PlayerBar')
+    return [c for c in bar.iter('control') if c.findtext('info') == info]
+
+
+def _drawn(control, tag):
+    """The rows of the line (0 is its top) a texture of a progress or ranges control covers, with
+    their alpha, and its width, as Kodi lays it out (GUIProgressControl::UpdateLayout): scaled
+    by control size / track texture size and centred on the track. Without a track texture it
+    keeps its own height and moves down by half of it."""
+    from PIL import Image
+
+    def image(name):
+        path = control.findtext(name)
+        return Image.open(ROOT / 'media' / path).convert('RGBA') if path else None
+    track, texture = image('texturebg'), image(tag)
+    scale_y = int(control.findtext('height')) / track.height if track else 1.0
+    scale_x = int(control.findtext('width')) / track.width if track else 1.0
+    top = int(control.findtext('top') or 0) + abs(scale_y * 0.5 * (texture.height - (track.height if track else 0)))
+    rows = {}
+    for y in range(texture.height):
+        for row in range(int(top + scale_y * y), int(top + scale_y * (y + 1) + 0.999)):
+            if top + scale_y * y <= row + 0.5 < top + scale_y * (y + 1):
+                rows[row] = texture.getpixel((0, y))[3]
+    return rows, scale_x * texture.width
+
+
+def test_position_fills_the_line():
+    """The played part lies on the 4 px line. With an empty track texture Kodi drew the fill at
+    its texture's own 8 px, 4 px down: a thick bar under the line."""
+    base = next(c for c in _bar('Player.ProgressCache') if c.get('type') == 'progress')
+    played = next(c for c in _bar('Player.SeekBar') if c.findtext('midtexture') == 'ui/white.png')
+    assert _drawn(base, 'midtexture')[0] == _drawn(played, 'midtexture')[0] == {0: 255, 1: 255, 2: 255, 3: 255}
+
+
+def test_chapter_marks_leave_the_line_alone():
+    """A mark is the track's colour, 4 px above and below the line. Over the line it is clear:
+    there its dimmed blue stacked on the track (and on the buffer) and showed brighter than
+    the track, and on the played part it vanished anyway."""
+    chapters = _bar('Player.Chapters')[0]
+    rows, width = _drawn(chapters, 'righttexture')
+    assert {row for row, alpha in rows.items() if alpha} == {-4, -3, -2, -1, 4, 5, 6, 7}
+    assert set(rows.values()) <= {0, 255}
+    assert width == 2
+
+
+def test_seek_head_is_cyan_and_ends_with_the_line():
+    """The head is the cursor of the line: cyan as the played part. Its top stays 6 px over the
+    line, its foot is flush with the line's bottom edge, so head and played part form an L."""
+    head = next(c for c in _bar('Player.SeekBar') if c.findtext('righttexture'))
+    assert head.find('righttexture').get('colordiffuse') == 'accent'
+    rows, width = _drawn(head, 'righttexture')
+    assert {row for row, alpha in rows.items() if alpha} == set(range(-6, 4))
+    assert set(rows.values()) <= {0, 255}
+    assert width == 4
+
+
 def test_panels_step_along_the_button_row():
     """Left and right in a panel move to the neighbouring button of the row, whose panel then
     shows; the subtitle panel's left neighbour is the last button of the left row."""
