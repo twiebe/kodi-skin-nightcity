@@ -107,7 +107,7 @@ def test_only_the_text_of_the_page_shown_takes_the_focus(info_page, kind):
 def test_the_text_leaves_no_dead_end(info_page, kind, text, chain):
     if kind == 'person' and not chain:
         return  # a person page only opens in a chain
-    assert info_page.report(_state(kind, text, chain=chain), offscreen={'5901', '9098'}) == []
+    assert info_page.report(_state(kind, text, chain=chain), offscreen={'5901', '9098', '9099'}) == []
 
 
 @pytest.mark.parametrize('text', TEXTS)

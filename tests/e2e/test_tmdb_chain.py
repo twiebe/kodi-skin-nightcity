@@ -664,3 +664,61 @@ def test_a_new_osd_chain_opens_the_person_on_the_buttons(matrix):
     _list_in(5510)
     time.sleep(3)  # the way back would have taken the focus into the titles by now
     assert info('System.CurrentControlId')['System.CurrentControlId'] == '9004'
+
+
+# Back held: the keymap sends this (BACK_KEYMAP in scripts/nightcity.py); JSON-RPC sends no long
+# key presses
+BACK_HELD = 'NotifyAll(nightcity,back_to_start)'
+
+
+def test_back_held_returns_to_the_page_the_chain_started_from(matrix):
+    """The Matrix, a person, one of their films, Back held: The Matrix again in one step (the
+    fork's TMDbHelper.Command first), on the person the chain went on from; Back from there
+    leaves the chain like from its first page."""
+    builtin('NotifyAll(nightcity,info:movie:{})'.format(matrix))
+    wait_for('Window.IsActive(movieinformation)', timeout=20)
+    wait_for('Integer.IsGreater(Container(5500).NumItems,3) + !Container(5500).IsUpdating', timeout=30)
+    builtin('SetFocus(5500,2,absolute)')
+    wait_for('Integer.IsEqual(Container(5500).CurrentItem,3)')
+    person = info('Container(5500).ListItem.Label')['Container(5500).ListItem.Label']
+    action('select')
+    _page(2)
+    _list_in(5510)
+    builtin('SetFocus(5510,0,absolute)')
+    action('select')
+    _page(3)
+    builtin(BACK_HELD)
+    # no page in between: position 1 next, never 2
+    seen, end = set(), time.time() + 30
+    while time.time() < end:
+        now = info('Window(Home).Property(TMDbHelper.Position)', 'ListItem.DBID')
+        seen.add(now['Window(Home).Property(TMDbHelper.Position)'])
+        if now['Window(Home).Property(TMDbHelper.Position)'] == '1' and now['ListItem.DBID'] == str(matrix):
+            break
+        time.sleep(0.1)
+    assert '2' not in seen, seen
+    _back_in(5500)
+    assert info('Container(5500).ListItem.Label')['Container(5500).ListItem.Label'] == person
+    assert _true(RUNNING)
+
+
+def test_back_held_on_the_first_page_is_a_back(matrix):
+    _info_and_person(matrix)
+    action('back', delay=0)
+    _page(1)
+    _back_in(5500)
+    builtin(BACK_HELD)
+    wait_for(IDLE, timeout=20)
+
+
+def test_back_held_in_a_chain_from_the_player_returns_to_its_controls(matrix):
+    """A chain from the OSD cast row: Back held two pages deep ends it on the cast row, on the
+    person it started from."""
+    _osd_chain_from_the_second_person(matrix)
+    _list_in(5510)
+    builtin('SetFocus(5510,0,absolute)')
+    action('select')
+    _page(2)
+    builtin(BACK_HELD)
+    wait_for(IDLE, timeout=20)
+    wait_for('Window.IsActive(1141) + Control.HasFocus(6501) + Integer.IsEqual(Container(6501).CurrentItem,2)', timeout=20)

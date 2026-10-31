@@ -597,6 +597,35 @@ def info_forget():
     home.clearProperty('nc.ret.top')
 
 
+def back_to_start():
+    """Back held on an info page (BACK_KEYMAP): back to where the browsing started, however deep
+    the TMDb chain is. A chain from a movie or episode page has that page first (TMDb Helper's
+    origin): its manager goes back to it at once (TMDbHelper.Command first, a command of the
+    twiebe fork), and the page takes the focus to the item the chain went on from (nc.ret.1,
+    info_back). A chain from the OSD cast row (nc.osd.ret) has no page before its first: it
+    ends, and the player's controls come back on that row. Outside a chain, and on the page it
+    started from, it is a Back."""
+    import xbmc
+    home = _home()
+    position = xbmc.getInfoLabel('Window(Home).Property(TMDbHelper.Position)')
+    if not chain_running(home):
+        xbmc.executebuiltin('Action(Back)')
+    elif home.getProperty('nc.osd.ret'):
+        info_forget()
+        home.setProperty('TMDbHelper.Command', 'exit')
+    elif not position.isdigit() or int(position) < 2:
+        xbmc.executebuiltin('Action(Back)')
+    else:
+        # the pages in between close: their ways back with them
+        _forget_ways_back(home, 1)
+        if home.getProperty(return_key('1')):
+            # the first page parks its focus at once (DialogVideoInfo.xml onload)
+            home.setProperty('nc.ret.top', '1')
+        else:
+            home.clearProperty('nc.ret.top')
+        home.setProperty('TMDbHelper.Command', 'first')
+
+
 def info_back():
     """On a page reopened in a chain: back to the tab and item it was left from. The list may
     still load: nc_info_enter (Timers.xml) enters it once it is in, then the item. Meanwhile the
@@ -898,6 +927,71 @@ def plot(item='ListItem'):
     import xbmcgui
     heading = xbmc.getInfoLabel(item + '.Title') or xbmc.getInfoLabel(item + '.Label')
     xbmcgui.Dialog().textviewer(heading, xbmc.getInfoLabel(item + '.Plot'))
+
+
+# --- trailer: plays over its info page --------------------------------------------------------
+
+TRAILER_START = 30.0  # s a trailer has to start: a plugin (YouTube) resolves it first
+TRAILER_OURS = 'Player.HasVideo + String.IsEmpty(VideoPlayer.DBID)'  # a library title has an id
+
+
+def trailer_state(wanted, has_video, info_open, started, seconds):
+    """What the trailer over its info page does next: 'wait' for it to start, 'play', or 'over'
+    once it ended, Back cleared nc.trailer (`wanted`), the page closed, or it did not start
+    within TRAILER_START."""
+    if not wanted or not info_open:
+        return 'over'
+    if has_video:
+        return 'play'
+    if started or seconds >= TRAILER_START:
+        return 'over'
+    return 'wait'
+
+
+def play_windowed(path):
+    """PlayMedia without the switch to the player (,1), from the start."""
+    return 'PlayMedia("{}",1,noresume)'.format(path.replace('\\', '\\\\').replace('"', '\\"'))
+
+
+def trailer():
+    """The trailer of the movie on the info page (button 9008), in full screen over the page: it
+    plays without the player window, the page shows it (9095 in DialogVideoInfo.xml) and keeps
+    the keys (9099), so the page and a TMDb chain under it stay. The button has set nc.trailer
+    and moved the focus to 9099 already. Once the trailer is over the focus goes back to the
+    button. Never over a video that plays: it would end it."""
+    import xbmc
+    home = _home()
+    path = xbmc.getInfoLabel('ListItem.Trailer')
+    played = bool(path) and not xbmc.getCondVisibility('Player.HasVideo')
+    started, seconds = False, 0.0
+    try:
+        if played:
+            home.setProperty('nc.trailer', '1')
+            xbmc.executebuiltin(play_windowed(path))
+            started, seconds = _trailer_follow(home)
+    finally:
+        home.clearProperty('nc.trailer')
+        if xbmc.getCondVisibility('Control.HasFocus(9099)'):
+            _focus('SetFocus(9008)')
+    if not played:
+        return
+    # the page closed under it, or Back came while the plugin still resolved it: a trailer that
+    # plays (or starts late) without its page stops
+    if _wait(TRAILER_OURS, 0.1 if started else max(TRAILER_START - seconds, 0.1)):
+        xbmc.executebuiltin('PlayerControl(Stop)')
+
+
+def _trailer_follow(home):
+    """Follow the trailer until it is over (trailer_state); (started, seconds)."""
+    import xbmc
+    monitor, seconds, started, step = _monitor(), 0.0, False, 0.2
+    while True:
+        state = trailer_state(bool(home.getProperty('nc.trailer')), xbmc.getCondVisibility('Player.HasVideo'),
+                              xbmc.getCondVisibility('Window.IsActive(movieinformation)'), started, seconds)
+        if state == 'over' or monitor.waitForAbort(step):
+            return started, seconds
+        started = started or state == 'play'
+        seconds += step
 
 
 def _language_name(code):
@@ -1226,14 +1320,21 @@ HOME_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
 # Esc on keyboards, a gamepad's back button and a right click send PreviousMenu, not Back, and
 # <onback> sees only Back. On an info page in a TMDb chain the page must not close in its first
 # second (ChainBackGuard, Includes_Tmdb.xml), so on info pages these keys are Back too: for Kodi
-# both close the page. Written whatever the Home key setting.
+# both close the page. Back held on an info page goes back to
+# where the browsing started (back_to_start); Kodi knows long presses only in the keyboard
+# section (CEC and MCE remotes send theirs in the remote section). Written whatever the Home key
+# setting.
 BACK_KEYMAP_NAME = '0_skin.nightcity.back.xml'
 BACK_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
-<!-- Written by the Nightcity skin: on info pages the keys of PreviousMenu are Back. -->
+<!-- Written by the Nightcity skin: on info pages the keys of PreviousMenu are Back, Back held goes back to where the browsing started. -->
 <keymap>
   <movieinformation>
     <keyboard>
       <escape>Back</escape>
+      <!-- held: back to where the browsing started (back_to_start) -->
+      <backspace mod="longpress">NotifyAll(nightcity,back_to_start)</backspace>
+      <browser_back mod="longpress">NotifyAll(nightcity,back_to_start)</browser_back>
+      <escape mod="longpress">NotifyAll(nightcity,back_to_start)</escape>
     </keyboard>
     <gamepad>
       <back>Back</back>
@@ -1786,6 +1887,7 @@ def hero_watch(monitor, stop):
 
 COMMANDS = {'next_episode': next_episode, 'startup': startup, 'genres': genres, 'genre_pick': genre_pick,
             'info_select': info_select, 'info_leave': info_leave, 'info_back': info_back, 'info_forget': info_forget,
+            'back_to_start': back_to_start, 'trailer': trailer,
             'osd_back': osd_back, 'play': play, 'info': info, 'plot': plot,
             'streams': streams, 'row': row, 'search': search, 'search_recent': search_recent,
             'search_init': search_init, 'search_clear': search_clear, 'search_forget': search_forget, 'colours': colours,

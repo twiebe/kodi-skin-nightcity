@@ -480,7 +480,8 @@ def test_back_waits_until_the_manager_saw_the_page():
     assert [o.get('condition') for o in guards] == [RUNNING]
     page = Page('DialogVideoInfo.xml')
     for cid, c in page.controls.items():
-        if c.get('type') in FOCUSABLE | LISTS and cid != '5901':
+        # 5901 is off-screen; Back on the trailer's keys 9099 always moves the focus (test_trailer.py)
+        if c.get('type') in FOCUSABLE | LISTS and cid not in ('5901', '9099'):
             backs = [(o.get('condition') or '', o.text) for o in c.findall('onback')]
             # Back counts as handled only when it moves the focus (CGUIWindow::OnMove)
             assert backs == [(GUARD, 'SetProperty(nc.chain.back,1,home)'), (GUARD, '9000')], cid
