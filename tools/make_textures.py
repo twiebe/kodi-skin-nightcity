@@ -217,7 +217,12 @@ def main():
     fade(256, 4).save(UI / 'fade_r.png')
     fade(256, 4).transpose(Image.Transpose.ROTATE_270).save(UI / 'fade_b.png')
     fade(256, 4, reverse=True).transpose(Image.Transpose.ROTATE_270).save(UI / 'fade_t.png')
-    Image.new('RGBA', (2, 12), (255, 255, 255, 255)).save(UI / 'tick.png')  # chapter mark
+    # chapter mark on the seek track's 16 rows, 1:1: 4 px over and under the 4 px line (rows 6
+    # to 9), clear on the line itself, where its alpha would stack on the line's
+    tick = Image.new('RGBA', (2, 16), (255, 255, 255, 0))
+    tick.paste((255, 255, 255, 255), (0, 2, 2, 6))
+    tick.paste((255, 255, 255, 255), (0, 10, 2, 14))
+    tick.save(UI / 'tick.png')
     hamburger(64).save(UI / 'qm_menu.png')
     chevron(13, 30, 4).save(UI / 'spot_more.png')
     # Kodi's names, looked up in media/ itself: the notification tells a warning by its icon
@@ -228,10 +233,16 @@ def main():
     line = Image.new('RGBA', (20, 44), (255, 255, 255, 0))
     line.paste((255, 255, 255, 255), (8, 40, 12, 42))
     line.save(UI / 'tab_line.png')
-    Image.new('RGBA', (4, 16), (255, 255, 255, 255)).save(UI / 'seek_head.png')
+    # seek head on the seek track's 16 rows: from 6 px over the line to its bottom edge
+    head = Image.new('RGBA', (4, 16), (255, 255, 255, 0))
+    head.paste((255, 255, 255, 255), (0, 0, 4, 10))
+    head.save(UI / 'seek_head.png')
     # invisible track of the seek head: Kodi scales a progress control's end texture by
     # control width / track texture width, so the track is as wide as the seek line
     Image.new('RGBA', (1792, 16), (255, 255, 255, 0)).save(UI / 'seek_track.png')
+    # invisible track of the played part: without one Kodi draws the fill at its texture's own
+    # height and moves it down by half of it; white.png's size, so the fill is scaled like it
+    Image.new('RGBA', (8, 8), (255, 255, 255, 0)).save(UI / 'clear.png')
 
 
 if __name__ == '__main__':
