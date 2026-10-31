@@ -1,4 +1,7 @@
+import pytest
+
 from conftest import ROOT, parse
+from focus import Page, State
 
 REQUIRED = [
     # Tasks 1, 4, 6-8
@@ -36,13 +39,45 @@ def test_no_pvr_windows():
 
 
 def test_text_viewer_scrolls_with_remote():
-    """DialogTextViewer text is cut off unless a focusable scrollbar pages it."""
+    """DialogTextViewer text is cut off unless a scrollbar pages it."""
     window = parse(ROOT / '1080i' / 'DialogTextViewer.xml')
     textbox = next(c for c in window.iter('control') if c.get('id') == '5')
     page = textbox.findtext('pagecontrol')
     scrollbar = next((c for c in window.iter('control') if c.get('id') == page), None)
     assert scrollbar is not None and scrollbar.get('type') == 'scrollbar'
-    assert window.findtext('defaultcontrol') == page
+
+
+FIRST_PAGE = {'Container(5).HasPrevious': False}
+LATER_PAGE = {'Container(5).HasPrevious': True}
+
+
+@pytest.mark.parametrize('extra', [FIRST_PAGE, LATER_PAGE], ids=['first page', 'later page'])
+def test_text_viewer_keys(extra):
+    """The viewer is a leaf: OK, Left and Right close it, Up closes it on the first page (Up at
+    the top goes back) and pages up on a later one, Down pages down and never closes.
+
+    A scrollbar handles no OK, so the focus is on an invisible button that pages the scrollbar
+    with PageUp/PageDown (GUIScrollBarControl::OnMessage); Down at the end does nothing there."""
+    page = Page('DialogTextViewer.xml')
+    state = State(extra=extra)
+    start = page.start(state)
+    assert page.controls[start].get('type') == 'button'
+    assert page.clicks(start, state) == ['Action(Back)']
+    assert page.move(start, 'onup', state) == (None, ['PageUp(60)' if extra is LATER_PAGE else 'Action(Back)'])
+    assert page.move(start, 'ondown', state) == (None, ['PageDown(60)'])
+    assert page.move(start, 'onleft', state) == (None, ['Action(Back)'])
+    assert page.move(start, 'onright', state) == (None, ['Action(Back)'])
+
+
+def test_text_viewer_scrollbar_keys():
+    """The mouse can focus the scrollbar. Its own Up and Down page; Up at the top falls through
+    to onup (GUIScrollBarControl::Move fails there), so the keys match the button but OK."""
+    page = Page('DialogTextViewer.xml')
+    state = State()
+    assert page.move('60', 'onup', state) == (None, ['Action(Back)'])
+    assert page.move('60', 'onleft', state) == (None, ['Action(Back)'])
+    assert page.move('60', 'onright', state) == (None, ['Action(Back)'])
+    assert page.nav(page.controls['60'], 'ondown') == []
 
 
 def test_tmdbhelper_service_enabled():
