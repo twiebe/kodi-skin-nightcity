@@ -617,7 +617,7 @@ def test_after_an_osd_chain_up_from_the_cast_row_lands_on_the_chapter_row(matrix
     action('up')
     wait_for('Control.HasFocus(6521)')
     action('up')
-    wait_for('Window.IsActive(videobookmarks) + !Window.IsActive(1141) + Control.HasFocus(2)', timeout=5)
+    wait_for('Window.IsActive(videobookmarks) + !Window.IsVisible(1141) + Control.HasFocus(2)', timeout=5)
     action('up')
     wait_for('!Window.IsActive(videobookmarks) + Window.IsActive(videoosd)', timeout=5)
 
