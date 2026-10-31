@@ -42,7 +42,8 @@ def seek_hint_condition():
 def test_hints_lead_through_the_levels(tracks):
     """A clip outside the library: seek bar, bar, chapter row; no cast row."""
     action('back')
-    wait_for('!Window.IsActive(videoosd)')
+    # gone, not only closing: Kodi drops a key sent during the close animation
+    wait_for('!Window.IsVisible(videoosd)')
     key('right')
     hint = seek_hint_condition()
     wait_for(hint)
@@ -82,7 +83,7 @@ def test_cast_row_hints(playing):
     shot('hint-cast')
     # kodi-dev has no TMDb data: the row stays empty without focus, so Back instead of Up
     key('back')
-    wait_for('!Window.IsActive(1141)')
+    wait_for('!Window.IsVisible(1141)')
     wait_for('Control.IsVisible(91)')
     action('back')
     stop()

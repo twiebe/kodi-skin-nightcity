@@ -1217,6 +1217,17 @@ def test_info_leave_forgets_the_ways_back_past_the_page(monkeypatch):
     assert 'nc.ret.3' not in home.props and 'nc.ret.4' not in home.props
 
 
+def test_info_forget_drops_every_way_back(monkeypatch):
+    """A chain from the OSD cast row starts on a person page, with no info page left before it:
+    every way back is from a chain before."""
+    home = FakeHome()
+    home.props.update({'nc.ret.1': 'old', 'nc.ret.2': 'old', 'nc.ret.top': '2'})
+    monkeypatch.setattr(nightcity, '_home', lambda: home)
+    nightcity.info_forget()
+    assert home.props == {}
+    assert nightcity.COMMANDS['info_forget'] is nightcity.info_forget
+
+
 def _back_env(monkeypatch, true, labels, record):
     fake = FakeXbmc(true, labels)
     home = FakeHome()
