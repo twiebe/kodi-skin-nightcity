@@ -69,7 +69,7 @@ browser.
 | White (`text`, graded `text_dim`/`text_mute`) | content, what you read | titles, plot, values, clock, tags, rating stars and labels |
 | Cyan (`accent`) | the cursor, where you are | focus fill and line, latent cursor (next episode title), Play pill, mouse pointer |
 | Dimmed blue (`state`/`state_text`) | state and hints, quiet | active tab, selected value, counters 3/25, separators, progress background, scroll chevron |
-| Pink (`accent2`) | order and identity: names or numbers something, never changes with input | the kicker line over titles, dialog headings, the numbering in the settings (rail numbers), of the rows on the pages of Home and on the system page (tile numbers) |
+| Pink (`accent2`) | order and identity: names or numbers something, never changes with input | the kicker line over titles, dialog headings, the numbering in the settings (rail numbers), of the rows on the pages of Home and on the system page (tile numbers), the heading of a notification |
 | Yellow (`accent3`/`warn`) | warnings only | notifications that warn about something |
 
 - Pink never shows state or cursor; that is the dimmed blue. At most one pink element per area.
@@ -79,9 +79,9 @@ browser.
   the numbers are about rows. Each row is its own area for the one-pink rule.
 - Yellow only for warnings: the heading of a warning or error notification. `accent3` is not
   used. The skin tells such a notification by Kodi's icon for it (`media/DefaultIconWarning.png`,
-  `DefaultIconError.png`, drawn by `tools/make_textures.py`); every other one has a white
-  heading: a notification is content, not a dialog. One full white per notification: the text
-  under the heading is `text_dim`, and the skin's type icons (info, warning, error) are a hint in
+  `DefaultIconError.png`, drawn by `tools/make_textures.py`); every other one has a pink
+  heading, like the progress toasts. The text under the heading is `text_dim`, and the skin's
+  type icons (info, warning, error) are a hint in
   `state_text`. An add-on's own icon keeps its colours.
 - The keys in a hint line (OK open, Back close) are hints: dimmed blue.
 - `state` is border_dim made opaque over the page, so a thin line looks the same on any
