@@ -160,12 +160,12 @@ DIALOG_HEADINGS = [('DialogVideoManager.xml', '2'), ('DialogSlider.xml', '10'), 
 def test_pink_is_order_and_identity():
     """Pink (accent2) names or numbers something and never changes with input (DESIGN.md "What
     the colours say"): the kicker over a title, dialog headings, the settings rail numbers, the
-    system tile numbers, the row numbers on Home, the add-on news heading, the heading of a
-    notification."""
+    system tile numbers, the row numbers on Home, the add-on news heading. A notification heading
+    is content (white), not a dialog heading."""
     assert _uses('accent2') == {'Includes_Base.xml': 3, 'Includes_Settings.xml': 1, 'Includes_Home.xml': 1,
                                 'Variables.xml': 1, 'DialogVideoManager.xml': 1, 'DialogSlider.xml': 1,
                                 'DialogExtendedProgressBar.xml': 1, 'DialogKeyboard.xml': 1,
-                                'DialogSubtitles.xml': 1, 'DialogAddonInfo.xml': 1, 'DialogNotification.xml': 1}
+                                'DialogSubtitles.xml': 1, 'DialogAddonInfo.xml': 1}
     assert 'accent2' not in (ROOT / 'language' / 'resource.language.en_gb' / 'strings.po').read_text(encoding='utf-8')
     assert _include('Includes_Base.xml', 'Kicker').find('.//textcolor').text == 'accent2'
     rail = _include('Includes_Settings.xml', 'SettingsRailHeading').find('.//label').text
@@ -191,7 +191,7 @@ def test_system_tile_numbers_are_pink():
 def test_yellow_only_warns():
     """Yellow (warn) only on a notification that warns: Kodi gives a warning or an error toast
     without a picture of its own DefaultIconWarning.png or DefaultIconError.png (id 400), the
-    others are pink. A colour variable is evaluated outside the dialog and cannot see its icon,
+    others are white. A colour variable is evaluated outside the dialog and cannot see its icon,
     so a yellow copy of the heading shows instead. accent3 is not used any more."""
     assert _uses('accent3') == {}
     assert _uses('warn') == {'DialogNotification.xml': 1}
@@ -201,7 +201,7 @@ def test_yellow_only_warns():
     toast = parse(ROOT / '1080i' / 'DialogNotification.xml')
     headings = [c for c in toast.iter('control') if c.get('type') == 'label' and c.findtext('top') == '18']
     assert [(c.get('id'), c.findtext('textcolor'), c.findtext('label'), c.findtext('visible')) for c in headings] == [
-        ('401', 'accent2', None, '!$EXP[NotificationWarns]'),
+        ('401', 'text', None, '!$EXP[NotificationWarns]'),
         (None, 'warn', '$INFO[Control.GetLabel(401)]', '$EXP[NotificationWarns]')]
 
 
