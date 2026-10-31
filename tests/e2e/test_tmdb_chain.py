@@ -180,6 +180,23 @@ def test_osd_cast_row_to_person_and_close_all_returns_to_video(matrix):
     assert _true('Player.Playing')
 
 
+def test_osd_chain_keeps_the_video_playing_smoothly(matrix):
+    """A person page opened from the OSD cast row replaces the player screen. Without a
+    videowindow under it Kodi rendered no frame, and every 10 s the audio stalled and the
+    player resynced: a black flash and a gap in the sound while the page stayed open."""
+    _play(matrix)
+    _open_cast_row()
+    wait_for('String.IsEqual(Container(6599).ListItem.Property(tmdb_id),Container(6501).ListItem.Property(tmdb_id))', timeout=20)
+    action('select')
+    _page(1)
+    offset = _log().stat().st_size
+    time.sleep(15)
+    assert _true('Player.Playing')
+    text = _log_since(offset)
+    assert 'audio stream stalled' not in text
+    assert 'OutputPicture - timeout waiting for buffer' not in text
+
+
 def test_osd_cast_row_click_while_the_biography_loads(matrix):
     """OK in the second the focused person's biography loads used to do nothing: it waits for
     the biography and then opens the person."""

@@ -262,3 +262,21 @@ def test_player_plot_shows_whole_lines():
     plot = next(t for t in details.iter('control') if t.get('type') == 'textbox')
     assert int(plot.findtext('height')) == 5 * 38 + 2
     assert plot.findtext('autoscroll') == 'true'
+
+
+def test_windows_over_a_playing_video_keep_it_rendering():
+    """Kodi takes the next video frame only once the last one was rendered, by the player
+    screen or a videowindow control. A window that replaces the player screen while a video
+    plays (Home, the TMDb chain's 1190 from the OSD cast row) left the frames waiting: every
+    10 s the audio stalled and the player resynced, a black flash and a gap in the sound. The
+    page background renders the video under itself, so nothing shows of it."""
+    root = parse(ROOT / '1080i' / 'Includes_Base.xml')
+    background = next(i for i in root.iter('include') if i.get('name') == 'Background')
+    first = background[0]
+    assert first.get('type') == 'videowindow'
+    assert (first.findtext('left'), first.findtext('top'), first.findtext('width'),
+            first.findtext('height')) == ('0', '0', '1920', '1080')
+    assert first.findtext('visible') == 'Player.HasVideo + !Window.IsVisible(fullscreenvideo)'
+    for name in ('Home.xml', 'Custom_1190_TMDbHelper.xml'):
+        controls = parse(ROOT / '1080i' / name).find('controls')
+        assert controls[0].tag == 'include' and controls[0].text == 'Background', name
