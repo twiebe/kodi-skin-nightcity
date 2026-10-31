@@ -182,7 +182,8 @@
     </include>
 
     <!-- Top line of a page: "FILME · METROPOLIS" on the left, a counter (dark blue) or the clock (white) right;
-         weather="false" with a counter: the weather stands only next to the clock -->
+         weather="false" with a counter: the weather stands only next to the clock; pathwidth
+         keeps a long path left of a hint in the middle (LevelHint) -->
     <include name="PathLine">
         <param name="id" default="0"/>
         <param name="path"/>
@@ -194,11 +195,12 @@
         <param name="left" default="48"/>
         <param name="top" default="28"/>
         <param name="width" default="1824"/>
+        <param name="pathwidth" default="1400"/>
         <definition>
             <control type="label" id="$PARAM[id]">
                 <left>$PARAM[left]</left>
                 <top>$PARAM[top]</top>
-                <width>1400</width>
+                <width>$PARAM[pathwidth]</width>
                 <height>36</height>
                 <font>font_caps_small</font>
                 <textcolor>text_mute</textcolor>
@@ -228,6 +230,37 @@
                     <font>$PARAM[counterfont]</font>
                     <textcolor>state_text</textcolor>
                     <label>$PARAM[counter]</label>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Where the next level lies, quiet like the key hint under the episodes of an info page:
+         one line of muted small caps, centred on the bottom edge (top=1030, the key that leads
+         down) or the top edge (top=140 in the player, Up; an info page puts "Up: back" on its
+         path line). A shadow keeps it readable over bright video. It fades with its window and
+         its condition. -->
+    <include name="LevelHint">
+        <param name="id"/>
+        <param name="key" default="↓"/>
+        <param name="label"/>
+        <param name="top" default="1030"/>
+        <param name="visible" default="true"/>
+        <definition>
+            <control type="group" id="$PARAM[id]">
+                <left>0</left>
+                <top>$PARAM[top]</top>
+                <visible>$PARAM[visible]</visible>
+                <animation effect="fade" time="150">VisibleChange</animation>
+                <control type="label">
+                    <width>1920</width>
+                    <height>36</height>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <font>font_caps_small</font>
+                    <textcolor>text_mute</textcolor>
+                    <shadowcolor>bg</shadowcolor>
+                    <label>[UPPERCASE]$PARAM[key] $PARAM[label][/UPPERCASE]</label>
                 </control>
             </control>
         </definition>

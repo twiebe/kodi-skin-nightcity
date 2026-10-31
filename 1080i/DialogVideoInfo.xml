@@ -99,6 +99,16 @@
             <param name="left" value="64"/>
             <param name="top" value="30"/>
             <param name="width" value="1792"/>
+            <param name="pathwidth" value="780"/>
+        </include>
+        <!-- Up from the top of the page, the plot text (PlotFocus), leaves it; in a TMDb chain
+             it goes one page back. Shown all the time like the player's Up hints, in the
+             middle of the path line. -->
+        <include content="LevelHint">
+            <param name="id" value="9059"/>
+            <param name="key" value="↑"/>
+            <param name="label" value="$LOCALIZE[31470]"/>
+            <param name="top" value="30"/>
         </include>
 
         <!-- head: episode (follows the episode list), cast on the right -->
