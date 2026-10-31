@@ -551,3 +551,30 @@ def test_up_from_an_osd_chain_returns_to_the_person_left(matrix):
     wait_for('Window.IsActive(1141) + Control.HasFocus(6501) + Integer.IsEqual(Container(6501).CurrentItem,3)', timeout=20)
     assert info('Container(6501).ListItem.Label')['Container(6501).ListItem.Label'] == person
     screenshot('tmdb-osd-back-on-the-person')
+
+
+@pytest.mark.parametrize('leave', ['up', 'back'])
+def test_after_an_osd_chain_up_from_the_cast_row_lands_on_the_chapter_row(matrix, leave):
+    """Up (or Back) from the person page lands on the cast row, Up from there on the chapter row:
+    on add bookmark, The Matrix has no chapters. The cast row used to open over the chapter row
+    before the row's focus hops ran, so the focus stayed on a stand-in out of sight, where Up did
+    nothing."""
+    _play(matrix)
+    time.sleep(2)
+    _open_cast_row()
+    wait_for('Integer.IsGreater(Container(6501).NumItems,1) + !Container(6501).IsUpdating', timeout=20)
+    builtin('SetFocus(6501,1,absolute)')
+    wait_for('Integer.IsEqual(Container(6501).CurrentItem,2)')
+    wait_for('String.IsEqual(Container(6599).ListItem.Property(tmdb_id),Container(6501).ListItem.Property(tmdb_id))', timeout=20)
+    action('select')
+    _page(1)
+    action(leave, delay=1)
+    wait_for(IDLE, timeout=20)
+    # on the second person: the row is back and the script set the focus (osd_back)
+    wait_for('Window.IsActive(1141) + Control.HasFocus(6501) + Integer.IsEqual(Container(6501).CurrentItem,2)', timeout=20)
+    action('up')
+    wait_for('Control.HasFocus(6521)')
+    action('up')
+    wait_for('Window.IsActive(videobookmarks) + !Window.IsActive(1141) + Control.HasFocus(2)', timeout=5)
+    action('up')
+    wait_for('!Window.IsActive(videobookmarks) + Window.IsActive(videoosd)', timeout=5)
