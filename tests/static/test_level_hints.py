@@ -4,7 +4,12 @@ when its level does not exist (no cast row for a clip outside the library).
 
 Levels: the seek bar over the bare video (OK opens the OSD; Up and Down skip chapters there),
 the OSD bar (Down: the chapter row), the chapter row (Down: the cast row, Up: the bar), the cast
-row (Up: the chapter row)."""
+row (Up: the chapter row).
+
+The info pages (video: movie, show, episode, person, the pages of a TMDb chain; music: album,
+artist, song) leave by Up from their top, the plot text over the buttons, and show it with the
+same hint on the top edge, on their path line: "↑ Back"."""
+import re
 import xml.etree.ElementTree as ET
 
 from conftest import ROOT, parse
@@ -39,7 +44,7 @@ def test_hint_look():
     """Quiet like the key hint under the episodes of an info page: one line of muted small caps,
     the key in front, no chip; a shadow keeps it readable over bright video. Centred across the
     screen, it fades in and out."""
-    include = next(i for i in parse(ROOT / '1080i' / 'Includes_Player.xml').iter('include')
+    include = next(i for i in parse(ROOT / '1080i' / 'Includes_Base.xml').iter('include')
                    if i.get('name') == 'LevelHint')
     group = include.find('definition/control')
     assert group.get('type') == 'group'
@@ -103,3 +108,34 @@ def test_cast_row_hint():
     controls = _controls('Custom_1141_OSDCast.xml')
     assert controls['6520'].findtext('onup') == 'Dialog.Close(1141)'
     assert controls['6501'].findtext('ondown') == 'noop'
+
+
+BACK = '$LOCALIZE[31470]'
+INFO_PAGES = {'DialogVideoInfo.xml': ('9060', '9061', '9062'), 'DialogMusicInfo.xml': ('9000',)}
+
+
+def _string(num):
+    text = (ROOT / 'language' / 'resource.language.en_gb' / 'strings.po').read_text(encoding='utf-8')
+    return re.search(r'msgctxt "#{}"\nmsgid "([^"]*)"'.format(num), text).group(1)
+
+
+def test_info_page_hint():
+    """An info page leaves by Up from its top element (the plot text, on a music page the
+    buttons): the same LevelHint as the player's, "↑ Back", shown all the time like the player's
+    Up hints, centred on the row of the path line."""
+    assert _string(31470) == 'back'
+    for name, tops in INFO_PAGES.items():
+        controls = _controls(name)
+        key, label, top, visible = _hint(name, '9059')
+        assert (key, label, visible) == ('↑', BACK, 'true'), name
+        assert top == controls['9026'].findtext('top'), name
+        for cid in tops:
+            assert controls[cid].findtext('onup') == 'Action(Back)', (name, cid)
+
+
+def test_info_page_hint_room():
+    """The path on the left ends before the centre, so a long title never runs into the hint;
+    the clock and the weather sit right-aligned at the far end."""
+    for name in INFO_PAGES:
+        path = _controls(name)['9026']
+        assert int(path.findtext('left')) + int(path.findtext('width')) <= 860, name

@@ -30,6 +30,15 @@
             <param name="left" value="64"/>
             <param name="top" value="30"/>
             <param name="width" value="1792"/>
+            <param name="pathwidth" value="780"/>
+        </include>
+        <!-- Up from the buttons, the top of the page, leaves it: shown all the time like the
+             player's Up hints and the info page's, in the middle of the path line -->
+        <include content="LevelHint">
+            <param name="id" value="9059"/>
+            <param name="key" value="↑"/>
+            <param name="label" value="$LOCALIZE[31470]"/>
+            <param name="top" value="30"/>
         </include>
 
         <!-- head: cover (artist: photo), the text right of it, details on the right -->

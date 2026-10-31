@@ -1,35 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
-    <!-- Where the player's next level lies, quiet like the key hint under the episodes of an info
-         page: one line of muted small caps, centred on the bottom edge (top=1030, the key that
-         leads down) or the top edge (top=140, Up). A shadow keeps it readable over bright video.
-         It fades with its window and its condition. -->
-    <include name="LevelHint">
-        <param name="id"/>
-        <param name="key" default="↓"/>
-        <param name="label"/>
-        <param name="top" default="1030"/>
-        <param name="visible" default="true"/>
-        <definition>
-            <control type="group" id="$PARAM[id]">
-                <left>0</left>
-                <top>$PARAM[top]</top>
-                <visible>$PARAM[visible]</visible>
-                <animation effect="fade" time="150">VisibleChange</animation>
-                <control type="label">
-                    <width>1920</width>
-                    <height>36</height>
-                    <align>center</align>
-                    <aligny>center</aligny>
-                    <font>font_caps_small</font>
-                    <textcolor>text_mute</textcolor>
-                    <shadowcolor>bg</shadowcolor>
-                    <label>[UPPERCASE]$PARAM[key] $PARAM[label][/UPPERCASE]</label>
-                </control>
-            </control>
-        </definition>
-    </include>
-
     <!-- The seek line: track, buffer, position with a bright head, chapter marks. 1792 wide,
          placed by the caller. The position id is a param because the seek bar dialog needs
          Kodi's 401 there; Player.SeekBar follows the seek preview as well as playback. -->
