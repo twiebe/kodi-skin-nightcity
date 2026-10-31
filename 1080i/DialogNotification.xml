@@ -11,12 +11,24 @@
             <width>640</width>
             <height>130</height>
             <include>DialogFrame</include>
+            <!-- the icon: an add-on's own picture as it is; the skin's type icons (info,
+                 warning, error) as a dimmed blue hint, through a tinted copy -->
             <control type="image" id="400">
                 <left>20</left>
                 <top>25</top>
                 <width>80</width>
                 <height>80</height>
                 <aspectratio>keep</aspectratio>
+                <visible>!String.StartsWith(Control.GetLabel(400),DefaultIcon)</visible>
+            </control>
+            <control type="image">
+                <left>20</left>
+                <top>25</top>
+                <width>80</width>
+                <height>80</height>
+                <aspectratio>keep</aspectratio>
+                <texture colordiffuse="state_text">$INFO[Control.GetLabel(400)]</texture>
+                <visible>String.StartsWith(Control.GetLabel(400),DefaultIcon)</visible>
             </control>
             <!-- the heading white, yellow when it warns: Kodi sets 401, a copy shows it then (a
                  colour variable would not see this dialog's controls) -->
@@ -45,7 +57,7 @@
                 <width>500</width>
                 <height>40</height>
                 <font>font_small</font>
-                <textcolor>text</textcolor>
+                <textcolor>text_dim</textcolor>
                 <scroll>true</scroll>
                 <scrollout>false</scrollout>
                 <pauseatend>2000</pauseatend>
