@@ -284,7 +284,8 @@ def library_gaps(movies, shows):
     if (len(movies), len(shows)) == (len(MOVIES), len(SHOWS)) and not missing:
         return ''
     return 'Kodi has {} of {} films and {} of {} shows{}'.format(
-        len(movies), len(MOVIES), len(shows), len(SHOWS), '; no ' + ', '.join(missing) if missing else '')
+        len(movies), len(MOVIES), len(shows), len(SHOWS), '; no ' + ', '.join(missing[:5]) + (
+            ' and {} more'.format(len(missing) - 5) if len(missing) > 5 else '') if missing else '')
 
 
 def wait_until(check, timeout, what, state=None):
