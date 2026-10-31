@@ -1468,6 +1468,7 @@ class Debounce:
 
 MUSIC_QUEUE_ALBUM = 'nc.music.queue.album'  # set while the music queue holds one album
 MUSIC_QUEUE_LISTS = ('700', '701')  # the music OSD's queue: cards, lines
+_music_queue_lock = threading.Lock()  # music_queue runs in several threads
 
 
 def queue_one_album(items):
@@ -1479,15 +1480,18 @@ def queue_one_album(items):
 def music_queue():
     """Note whether the music queue holds one album (MUSIC_QUEUE_ALBUM): the OSD shows its
     tracks as lines then, else cards with covers. On every change of the queue (the service)."""
-    try:
-        items = _rpc('Playlist.GetItems', playlistid=0, properties=['albumid']).get('items') or []
-    except RuntimeError:
-        items = []
-    home = _home()
-    if queue_one_album(items):
-        home.setProperty(MUSIC_QUEUE_ALBUM, '1')
-    else:
-        home.clearProperty(MUSIC_QUEUE_ALBUM)
+    # one at a time: a thread that read the queue before a change must not write after one that
+    # read it since
+    with _music_queue_lock:
+        try:
+            items = _rpc('Playlist.GetItems', playlistid=0, properties=['albumid']).get('items') or []
+        except RuntimeError:
+            items = []
+        home = _home()
+        if queue_one_album(items):
+            home.setProperty(MUSIC_QUEUE_ALBUM, '1')
+        else:
+            home.clearProperty(MUSIC_QUEUE_ALBUM)
 
 
 def queue_move(playing, current):
