@@ -233,9 +233,8 @@ def main():
     line = Image.new('RGBA', (20, 44), (255, 255, 255, 0))
     line.paste((255, 255, 255, 255), (8, 40, 12, 42))
     line.save(UI / 'tab_line.png')
-    # seek head on the seek track's 16 rows: from 6 px over the line to its bottom edge
-    head = Image.new('RGBA', (4, 16), (255, 255, 255, 0))
-    head.paste((255, 255, 255, 255), (0, 0, 4, 10))
+    # seek head on the seek track's 16 rows: 6 px over the line, the line, 6 px under it
+    head = Image.new('RGBA', (4, 16), (255, 255, 255, 255))
     head.save(UI / 'seek_head.png')
     # invisible track of the seek head: Kodi scales a progress control's end texture by
     # control width / track texture width, so the track is as wide as the seek line

@@ -64,8 +64,8 @@
                 <righttexture colordiffuse="border_dim">ui/tick.png</righttexture>
                 <info>Player.Chapters</info>
             </control>
-            <!-- the head at the end of an invisible fill, cyan as the played part: from 6 px over
-                 the line to its bottom edge -->
+            <!-- the head at the end of an invisible fill, cyan as the played part: a block from
+                 6 px over the line to 6 px under it -->
             <control type="progress">
                 <top>-6</top>
                 <width>1792</width>
