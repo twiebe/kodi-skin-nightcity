@@ -11,6 +11,7 @@
         <include content="StatusBar">
             <param name="title" value="$INFO[Container.FolderName]"/>
             <param name="counter" value="$INFO[Container.CurrentItem]/$INFO[Container.NumItems]"/>
+            <param name="weather" value="false"/>
         </include>
         <control type="list" id="50">
             <left>120</left>
