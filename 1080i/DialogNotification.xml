@@ -18,7 +18,7 @@
                 <height>80</height>
                 <aspectratio>keep</aspectratio>
             </control>
-            <!-- the heading pink, yellow when it warns: Kodi sets 401, a copy shows it then (a
+            <!-- the heading white, yellow when it warns: Kodi sets 401, a copy shows it then (a
                  colour variable would not see this dialog's controls) -->
             <control type="label" id="401">
                 <left>120</left>
@@ -26,7 +26,7 @@
                 <width>500</width>
                 <height>40</height>
                 <font>font_label</font>
-                <textcolor>accent2</textcolor>
+                <textcolor>text</textcolor>
                 <visible>!$EXP[NotificationWarns]</visible>
             </control>
             <control type="label">
