@@ -1818,3 +1818,33 @@ def test_player_tick_keeps_an_episodes_own_ratings(monkeypatch):
     nightcity.player_tick(kept, nightcity.HERO_STABLE)
     assert home.props['nc.kept.player.TMDb_Rating'] == '8.4'
     assert 'nc.kept.player.Top250' not in home.props
+
+
+@pytest.mark.parametrize('item, labels, heading', [
+    ('ListItem', {'ListItem.Plot': 'Long text', 'ListItem.Title': 'The Matrix', 'ListItem.Label': 'The Matrix'},
+     'The Matrix'),
+    # a TMDb person has a name and no title
+    ('ListItem', {'ListItem.Plot': 'Long text', 'ListItem.Label': 'Keanu Reeves'}, 'Keanu Reeves'),
+    # an episode page reads the episode of its list
+    ('Container(5100).ListItem', {'Container(5100).ListItem.Plot': 'Long text',
+                                  'Container(5100).ListItem.Title': 'Pilot', 'ListItem.Title': 'Breaking Bad'},
+     'Pilot'),
+])
+def test_plot_opens_the_whole_text_in_the_viewer(monkeypatch, item, labels, heading):
+    import types
+    shown = []
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', FakeXbmc(set(), labels))
+    monkeypatch.setitem(__import__('sys').modules, 'xbmcgui', types.SimpleNamespace(
+        Dialog=lambda: types.SimpleNamespace(textviewer=lambda h, t: shown.append((h, t)))))
+    nightcity.COMMANDS['plot'](item)
+    assert shown == [(heading, 'Long text')]
+
+
+def test_plot_reads_the_page_item_by_default(monkeypatch):
+    import types
+    shown = []
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', FakeXbmc(set(), {'ListItem.Plot': 'x', 'ListItem.Label': 'y'}))
+    monkeypatch.setitem(__import__('sys').modules, 'xbmcgui', types.SimpleNamespace(
+        Dialog=lambda: types.SimpleNamespace(textviewer=lambda h, t: shown.append((h, t)))))
+    nightcity.COMMANDS['plot']()
+    assert shown == [('y', 'x')]
