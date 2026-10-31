@@ -80,7 +80,9 @@ browser.
 - Yellow only for warnings: the heading of a warning or error notification. `accent3` is not
   used. The skin tells such a notification by Kodi's icon for it (`media/DefaultIconWarning.png`,
   `DefaultIconError.png`, drawn by `tools/make_textures.py`); every other one has a white
-  heading: a notification is content, not a dialog.
+  heading: a notification is content, not a dialog. One full white per notification: the text
+  under the heading is `text_dim`, and the skin's type icons (info, warning, error) are a hint in
+  `state_text`. An add-on's own icon keeps its colours.
 - The keys in a hint line (OK open, Back close) are hints: dimmed blue.
 - `state` is border_dim made opaque over the page, so a thin line looks the same on any
   background; text and small marks take `state_text`, the same hue just light enough to read

@@ -280,3 +280,21 @@ def test_notification_icons_are_in_the_skin():
     for kind in ('Info', 'Warning', 'Error'):
         assert Image.open(ROOT / 'media' / 'DefaultIcon{}.png'.format(kind)).size == (80, 80), kind
     assert _control('DialogNotification.xml', '400').find('colordiffuse') is None
+
+
+def test_notification_reads_from_one_white():
+    """One full white per toast: the heading. The text under it is graded down (text_dim) and the
+    skin's own type icons (info, warning, error) are a hint in dimmed blue. Other pictures (an
+    add-on's icon) keep their colours: a tinted copy shows only for the skin's icons, whose name
+    Kodi gives as the label of 400."""
+    toast = parse(ROOT / '1080i' / 'DialogNotification.xml')
+    controls = list(toast.iter('control'))
+    assert next(c for c in controls if c.get('id') == '402').findtext('textcolor') == 'text_dim'
+    own = 'String.StartsWith(Control.GetLabel(400),DefaultIcon)'
+    icon = next(c for c in controls if c.get('id') == '400')
+    assert icon.findtext('visible') == '!' + own
+    copies = [c for c in controls if c.get('type') == 'image' and c.get('id') is None
+              and c.findtext('texture') == '$INFO[Control.GetLabel(400)]']
+    assert len(copies) == 1
+    assert copies[0].find('texture').get('colordiffuse') == 'state_text'
+    assert copies[0].findtext('visible') == own
