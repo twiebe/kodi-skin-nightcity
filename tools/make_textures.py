@@ -3,6 +3,7 @@
 
 python tools/make_textures.py
 """
+import math
 import pathlib
 
 from PIL import Image, ImageDraw, ImageFilter
@@ -152,22 +153,46 @@ def chevron(width, height, stroke):
     return image
 
 
-def notification_icon(size, corner, kind):
-    """Kodi's icons of a notification without a picture of its own (DefaultIcon<kind>.png): a
-    cut outline as the check box, inside an i (info), a ! (warning) or an x (error)."""
-    image = cut(size, corner, line=3, corners=('tr',))
-    big = Image.new('L', (size * SCALE, size * SCALE), 0)
+def notification_icon(size, kind):
+    """Kodi's icons of a notification without a picture of its own (DefaultIcon<kind>.png): thin
+    outlines in the classic shapes, a circle around an i (info), a triangle around a ! (warning),
+    an octagon around an x (error). No cut box: the toast's frame has the cut corner."""
+    s = size * SCALE
+    big = Image.new('L', (s, s), 0)
     draw = ImageDraw.Draw(big)
-    s, w = size * SCALE, 6 * SCALE
-    if kind == 'error':
-        for a, b in (((0.32, 0.32), (0.68, 0.68)), ((0.68, 0.32), (0.32, 0.68))):
-            draw.line([(a[0] * s, a[1] * s), (b[0] * s, b[1] * s)], fill=255, width=w)
+    line, stroke = round(0.035 * s), 0.075 * s
+    c = s / 2
+
+    def dot(x, y, r):
+        draw.ellipse((x - r, y - r, x + r, y + r), fill=255)
+
+    def bar(x0, y0, x1, y1):
+        draw.line([(x0, y0), (x1, y1)], fill=255, width=round(stroke))
+        dot(x0, y0, stroke / 2)
+        dot(x1, y1, stroke / 2)
+
+    if kind == 'info':
+        r = 0.46 * s
+        draw.ellipse((c - r, c - r, c + r, c + r), outline=255, width=line)
+        dot(c, c - 0.21 * s, stroke * 0.65)
+        bar(c, c - 0.06 * s, c, c + 0.21 * s)
+    elif kind == 'warning':
+        r = 0.5 * s
+        corners = [(c, c - 0.92 * r), (c + 0.98 * r, c + 0.78 * r), (c - 0.98 * r, c + 0.78 * r)]
+        draw.line(corners + corners[:2], fill=255, width=line, joint='curve')
+        top = c + 0.08 * s
+        bar(c, top - 0.18 * s, c, top + 0.05 * s)
+        dot(c, top + 0.18 * s, stroke * 0.65)
     else:
-        bar, dot = ((0.42, 0.72), 0.30) if kind == 'info' else ((0.26, 0.58), 0.72)
-        draw.rectangle((s / 2 - w / 2, bar[0] * s, s / 2 + w / 2, bar[1] * s), fill=255)
-        draw.ellipse((s / 2 - w * 0.6, dot * s - w * 0.6, s / 2 + w * 0.6, dot * s + w * 0.6), fill=255)
-    mark = big.resize((size, size), Image.LANCZOS)
-    image.putalpha(Image.composite(mark, image.getchannel('A'), mark))
+        r = 0.47 * s
+        corners = [(c + r * math.cos(math.radians(22.5 + 45 * k)), c + r * math.sin(math.radians(22.5 + 45 * k)))
+                   for k in range(8)]
+        draw.line(corners + corners[:2], fill=255, width=line, joint='curve')
+        a = 0.165 * s
+        bar(c - a, c - a, c + a, c + a)
+        bar(c - a, c + a, c + a, c - a)
+    image = Image.new('RGBA', (size, size), (255, 255, 255, 0))
+    image.putalpha(big.resize((size, size), Image.LANCZOS))
     return image
 
 
@@ -197,7 +222,7 @@ def main():
     chevron(13, 30, 4).save(UI / 'spot_more.png')
     # Kodi's names, looked up in media/ itself: the notification tells a warning by its icon
     for kind in ('Info', 'Warning', 'Error'):
-        notification_icon(80, 16, kind.lower()).save(UI.parent / 'DefaultIcon{}.png'.format(kind))
+        notification_icon(80, kind.lower()).save(UI.parent / 'DefaultIcon{}.png'.format(kind))
     # underline of tab entries: clear ends of 8 px, drawn unscaled with border="8,0,8,0", so the
     # line leaves out most of the button's padding and fits the text
     line = Image.new('RGBA', (20, 44), (255, 255, 255, 0))

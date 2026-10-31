@@ -298,3 +298,22 @@ def test_notification_reads_from_one_white():
     assert len(copies) == 1
     assert copies[0].find('texture').get('colordiffuse') == 'state_text'
     assert copies[0].findtext('visible') == own
+
+
+def test_notification_icons_are_classic_outlines():
+    """Thin outlines in the classic shapes: a circle for info, a triangle for a warning, an
+    octagon for an error, the sign inside. No box with a cut corner: the toast frame has that."""
+    from PIL import Image
+
+    def alpha(kind):
+        a = Image.open(ROOT / 'media' / 'DefaultIcon{}.png'.format(kind)).getchannel('A')
+        return lambda x, y: a.getpixel((x, y))
+
+    info, warning, error = alpha('Info'), alpha('Warning'), alpha('Error')
+    for icon in (info, warning, error):
+        assert icon(78, 2) == 0 and icon(2, 2) == 0  # no box corner
+    # thin outlines: inside, beside the sign, they are open
+    assert info(24, 50) == 0 and warning(30, 60) == 0 and error(40, 22) == 0
+    assert info(40, 3) > 128 and info(3, 40) > 128 and info(76, 40) > 128  # circle
+    assert warning(40, 4) > 128 and warning(6, 71) > 128 and warning(5, 20) == 0  # triangle
+    assert error(40, 5) > 128 and error(5, 40) > 128 and error(10, 10) == 0  # octagon, cut corners
