@@ -82,6 +82,15 @@ def _list_in(cid, timeout=30):
     wait_for('!Container({}).IsUpdating + Integer.IsGreater(Container({}).NumItems,0)'.format(cid, cid))
 
 
+def _back_in(cid):
+    """A page reopened on the way back in a chain is back in the list CID it was left from. The
+    list being in is not enough: then nc_info_enter moves the focus into it, and a moment later
+    the service puts it on the item left (info_back in scripts/nightcity.py); a SetFocus sent
+    before that ends is taken back to the list. nc.info.back is set until info_back is done."""
+    _list_in(cid)
+    wait_for('Control.HasFocus({}) + String.IsEmpty(Window(Home).Property(nc.info.back))'.format(cid))
+
+
 def _up_past_the_text():
     """Up from the button row of a person page, out of the page: the biography is a stop on the
     way (test_plot_text.py), Up from it leaves."""
@@ -268,7 +277,7 @@ def test_person_tabs_apply_on_focus_after_back_from_a_title(matrix):
     _page(3)
     action('back', delay=0)
     wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),person)', timeout=30)
-    _list_in(5510)
+    _back_in(5510)
     builtin('SetFocus(5523)')
     wait_for('Control.HasFocus(5523)')
     action('right', delay=0)
