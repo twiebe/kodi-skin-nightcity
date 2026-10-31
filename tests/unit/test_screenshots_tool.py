@@ -67,3 +67,9 @@ def test_a_timeout_names_the_state_it_saw_last():
     import pytest
     with pytest.raises(RuntimeError, match='the Kodi library: Kodi has 0 of'):
         screenshots.wait_until(lambda: False, 0, 'the Kodi library', state=lambda: 'Kodi has 0 of 16 films')
+
+
+def test_a_big_library_names_five_and_counts_the_rest():
+    movies = [{'label': 'Bulk {:04d}'.format(n), 'art': {}} for n in range(1000)]
+    gaps = screenshots.library_gaps(movies, [])
+    assert 'Bulk 0004 (poster, fanart) and 995 more' in gaps and 'Bulk 0005' not in gaps
