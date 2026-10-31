@@ -577,7 +577,10 @@ def test_after_an_osd_chain_up_from_the_cast_row_lands_on_the_chapter_row(matrix
     wait_for('String.IsEqual(Container(6599).ListItem.Property(tmdb_id),Container(6501).ListItem.Property(tmdb_id))', timeout=20)
     action('select')
     _page(1)
-    action(leave, delay=1)
+    if leave == 'up':
+        _up_past_the_text()
+    else:
+        action('back', delay=1)
     wait_for(IDLE, timeout=20)
     # on the second person: the row is back and the script set the focus (osd_back)
     wait_for('Window.IsActive(1141) + Control.HasFocus(6501) + Integer.IsEqual(Container(6501).CurrentItem,2)', timeout=20)
