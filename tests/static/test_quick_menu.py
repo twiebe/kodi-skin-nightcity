@@ -315,8 +315,8 @@ def test_weather_beside_the_clock():
     row = controls(load('Home.xml'))['9190']
     parts = row.findall('control')
     assert [(c.get('type'), c.findtext('visible')) for c in parts] == [
-        ('button', 'Player.HasAudio'), ('group', None), ('image', 'Weather.IsFetched'),
-        ('label', 'Weather.IsFetched'), ('label', None)]
+        ('button', 'Player.HasAudio'), ('group', None), ('image', 'true + Weather.IsFetched'),
+        ('label', 'true + Weather.IsFetched'), ('label', None)]
     icon, temperature, clock = parts[2:]
     assert icon.find('texture').text == 'ui/qm_weather.png'
     assert icon.find('texture').get('colordiffuse') == clock.findtext('textcolor')
