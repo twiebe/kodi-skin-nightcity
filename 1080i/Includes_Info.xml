@@ -178,6 +178,73 @@
         </definition>
     </include>
 
+    <!-- The plot of the page as a stop of the remote, always: leaving the page with Up takes the
+         same keys on every page, buttons, text, out. It does not scroll by itself: an
+         autoscrolling text redraws the whole screen all the time (a long TMDb biography, 458 %
+         CPU in kodi-dev).
+         Up from the button row (9000) lands here (`visible`: the head of this page shows), the
+         frame of a focused card is the cursor, OK opens the whole text in Kodi's text viewer
+         (scripts/nightcity.py plot, `item` the info prefix), Up leaves the page like Up from the
+         buttons once did, Down goes back to them. The frame lies 16 px out to the sides of the
+         text and 10 px above and below it.
+         `more` holds when the text has more than its box shows: Container(textbox).HasNext,
+         Kodi's "the textbox has a second page". Only then a key hint on the button row, flush
+         with the right edge of the text (hintleft, hintwidth), says OK reads on. Without a plot
+         a muted "No description" at the text's place (hintleft, texttop) gives the cursor
+         something to frame, and OK opens no empty viewer. -->
+    <include name="PlotFocus">
+        <param name="id"/>
+        <param name="visible"/>
+        <param name="more"/>
+        <param name="item"/>
+        <param name="left"/>
+        <param name="top"/>
+        <param name="width"/>
+        <param name="height"/>
+        <param name="hintleft"/>
+        <param name="hintwidth"/>
+        <param name="texttop"/>
+        <definition>
+            <control type="button" id="$PARAM[id]">
+                <left>$PARAM[left]</left>
+                <top>$PARAM[top]</top>
+                <width>$PARAM[width]</width>
+                <height>$PARAM[height]</height>
+                <visible>$PARAM[visible]</visible>
+                <texturefocus border="16" colordiffuse="focus">ui/cut.png</texturefocus>
+                <texturenofocus/>
+                <onup>Action(Back)</onup>
+                <ondown>9000</ondown>
+                <onleft>noop</onleft>
+                <onright>noop</onright>
+                <onclick condition="!String.IsEmpty($PARAM[item].Plot)">NotifyAll(nightcity,plot:$PARAM[item])</onclick>
+                <include>ChainBackGuard</include>
+            </control>
+            <control type="label">
+                <left>$PARAM[hintleft]</left>
+                <top>$PARAM[texttop]</top>
+                <width>$PARAM[hintwidth]</width>
+                <height>38</height>
+                <font>font_body</font>
+                <textcolor>text_mute</textcolor>
+                <label>$LOCALIZE[31469]</label>
+                <visible>$PARAM[visible] + String.IsEmpty($PARAM[item].Plot)</visible>
+            </control>
+            <control type="label">
+                <left>$PARAM[hintleft]</left>
+                <top>490</top>
+                <width>$PARAM[hintwidth]</width>
+                <height>54</height>
+                <align>right</align>
+                <aligny>center</aligny>
+                <font>font_caps_small</font>
+                <textcolor>text_mute</textcolor>
+                <label>[UPPERCASE]$LOCALIZE[31468][/UPPERCASE]</label>
+                <visible>$PARAM[more]</visible>
+            </control>
+        </definition>
+    </include>
+
     <!-- Every rating of a movie, show or episode in one line: the value in the text colour, the
          source muted. From TMDb Helper's service (docs/media-info-af3.md): IMDb with its Top 250
          rank, TMDb, Rotten Tomatoes critics and audience, Metacritic, Trakt, Letterboxd,

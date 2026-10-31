@@ -326,11 +326,11 @@
                     <top>192</top>
                     <width>900</width>
                     <!-- five whole lines of font_body (38 px each): a taller box shows
-                         the top of a sixth line; longer plots scroll -->
+                         the top of a sixth line; longer plots are cut off (an autoscrolling
+                         text redraws the whole screen all the time) -->
                     <height>192</height>
                     <font>font_body</font>
                     <textcolor>text_dim</textcolor>
-                    <autoscroll delay="6000" time="2000" repeat="8000">true</autoscroll>
                     <label>$VAR[PlayerPlot]</label>
                     <!-- skin settings, Player: the poster keeps the height, no gap to close -->
                     <visible>!Skin.HasSetting(nc.osd.plot.off)</visible>

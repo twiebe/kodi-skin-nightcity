@@ -40,8 +40,12 @@ def _onloads():
 
 
 def test_up_on_the_button_row_goes_back():
-    """The button row is the top of every info page (library, TMDb title, person)."""
-    assert _nav(9000, 'onup') == [('', 'Action(Back)')]
+    """The button row is the top of every info page (library, TMDb title, person): Up goes to the
+    plot of the page, Up from there back (test_plot_text.py)."""
+    assert _nav(9000, 'onup') == [
+        ('!String.IsEqual(ListItem.DBType,episode) + !String.IsEqual(ListItem.Property(tmdb_type),person)', '9060'),
+        ('String.IsEqual(ListItem.DBType,episode)', '9061'),
+        ('String.IsEqual(ListItem.Property(tmdb_type),person)', '9062')]
 
 
 def test_episode_rows_scroll_with_the_credits():
