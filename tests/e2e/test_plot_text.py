@@ -166,3 +166,89 @@ def test_no_plot_takes_the_same_keys(matrix):
     _focus_is(MOVIE_TEXT)
     action('up', delay=1)
     wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),2)', timeout=30)
+
+
+
+VIEWER = 'Window.IsActive(textviewer)'
+VIEWER_PAGE = 'Container(5).CurrentPage'
+
+
+@pytest.fixture
+def long_plot(matrix):
+    """The Matrix with a plot of several pages of the viewer: no TMDb biography is that long."""
+    plot = rpc('VideoLibrary.GetMovieDetails', {'movieid': matrix, 'properties': ['plot']})['moviedetails']['plot']
+    text = ' '.join('Paragraph {}: {}'.format(i, 'the long text of the viewer goes on. ' * 6) for i in range(40))
+    rpc('VideoLibrary.SetMovieDetails', {'movieid': matrix, 'plot': text})
+    yield matrix
+    rpc('VideoLibrary.SetMovieDetails', {'movieid': matrix, 'plot': plot})
+
+
+def _open_viewer(text):
+    action('up', delay=0.6)
+    _focus_is(text)
+    action('select')
+    wait_for(VIEWER, timeout=10)
+    time.sleep(0.5)
+
+
+def _closed_onto(text):
+    wait_for('!' + VIEWER, timeout=10)
+    _focus_is(text)
+
+
+def test_the_viewer_pages_and_up_on_the_first_page_closes_it(long_plot):
+    """Down pages down and never closes, Up pages back up and on the first page closes."""
+    _matrix_page(long_plot)
+    _open_viewer(MOVIE_TEXT)
+    pages = int(_label('Container(5).NumPages'))
+    assert pages >= 3
+    assert _label(VIEWER_PAGE) == '1'
+    action('down', delay=0.6)
+    wait_for('String.IsEqual({},2)'.format(VIEWER_PAGE), timeout=5)
+    # Down at the end does nothing
+    for _ in range(pages):
+        action('down', delay=0.4)
+    assert cond(VIEWER)[VIEWER]
+    assert _label(VIEWER_PAGE) == str(pages)
+    screenshot('plot-viewer-last-page')
+    # Up pages back (the last page ends with the text, so it may lie less than a page further)
+    for _ in range(pages):
+        if not cond('Container(5).HasPrevious')['Container(5).HasPrevious']:
+            break
+        before = _label(VIEWER_PAGE)
+        action('up', delay=0.6)
+        wait_for('Integer.IsLess({},{})'.format(VIEWER_PAGE, before), timeout=5)
+        assert cond(VIEWER)[VIEWER]
+    assert _label(VIEWER_PAGE) == '1'
+    action('up')
+    _closed_onto(MOVIE_TEXT)
+    assert cond('Window.IsActive(movieinformation)')['Window.IsActive(movieinformation)']
+
+
+@pytest.mark.parametrize('key', ['select', 'left', 'right'])
+def test_ok_left_and_right_close_the_viewer(long_plot, key):
+    _matrix_page(long_plot)
+    _open_viewer(MOVIE_TEXT)
+    action('down', delay=0.6)
+    wait_for('String.IsEqual({},2)'.format(VIEWER_PAGE), timeout=5)  # also from a later page
+    action(key)
+    _closed_onto(MOVIE_TEXT)
+
+
+def test_up_closes_a_biography_of_one_page_at_once(matrix):
+    person = _person_page(matrix)
+    _open_viewer(PERSON_TEXT)
+    assert _label('Container(5).NumPages') == '1'
+    action('up')
+    _closed_onto(PERSON_TEXT)
+    assert _label('ListItem.Label') == person
+    assert _label('Window(Home).Property(TMDbHelper.Position)') == '2'
+
+
+def test_up_closes_a_short_text_at_once(matrix):
+    _matrix_page(matrix)
+    _open_viewer(MOVIE_TEXT)
+    assert _label('Container(5).NumPages') == '1'
+    action('up')
+    _closed_onto(MOVIE_TEXT)
+    assert cond('Window.IsActive(movieinformation)')['Window.IsActive(movieinformation)']
