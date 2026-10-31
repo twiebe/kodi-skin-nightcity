@@ -117,6 +117,6 @@ def test_chapter_row_after_a_chain_focuses_the_chapters(tracks):
     action('down')
     wait_for('Window.IsActive(1141)', timeout=5)
     builtin('Dialog.Close(1141)')
-    wait_for('Window.IsActive(videobookmarks) + !Window.IsActive(1141) + Control.HasFocus(11)', timeout=5)
+    wait_for('Window.IsActive(videobookmarks) + !Window.IsVisible(1141) + Control.HasFocus(11)', timeout=5)
     action('up')
     wait_for('Control.HasFocus(2)')

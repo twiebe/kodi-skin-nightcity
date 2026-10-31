@@ -617,7 +617,7 @@ def test_after_an_osd_chain_up_from_the_cast_row_lands_on_the_chapter_row(matrix
     action('up')
     wait_for('Control.HasFocus(6521)')
     action('up')
-    wait_for('Window.IsActive(videobookmarks) + !Window.IsActive(1141) + Control.HasFocus(2)', timeout=5)
+    wait_for('Window.IsActive(videobookmarks) + !Window.IsVisible(1141) + Control.HasFocus(2)', timeout=5)
     action('up')
     wait_for('!Window.IsActive(videobookmarks) + Window.IsActive(videoosd)', timeout=5)
 
@@ -641,3 +641,26 @@ def test_up_right_after_an_osd_chain_stays_on_the_tabs(matrix):
     assert _true('Control.HasFocus(6521)'), info('System.CurrentControlId')
     action('up')
     wait_for('Window.IsActive(videobookmarks) + !Window.IsActive(1141) + Control.HasFocus(2)', timeout=5)
+
+
+def test_a_new_osd_chain_opens_the_person_on_the_buttons(matrix):
+    """Like test_a_new_chain_opens_the_person_on_the_buttons, for a chain from the OSD cast row:
+    its person page is the first of the chain, and nothing in the chain is left before it."""
+    _osd_chain_from_the_second_person(matrix)
+    _list_in(5510)
+    builtin('SetFocus(5510,0,absolute)')
+    action('select')
+    _page(2)
+    _leave_chain()
+    _settle()
+    # the chain ends back on the cast row
+    wait_for('Window.IsActive(1141) + Control.HasFocus(6501)', timeout=20)
+    wait_for('Integer.IsGreater(Container(6501).NumItems,1) + !Container(6501).IsUpdating', timeout=20)
+    builtin('SetFocus(6501,1,absolute)')
+    wait_for('Integer.IsEqual(Container(6501).CurrentItem,2)')
+    wait_for('String.IsEqual(Container(6599).ListItem.Property(tmdb_id),Container(6501).ListItem.Property(tmdb_id))', timeout=20)
+    action('select')
+    _page(1)
+    _list_in(5510)
+    time.sleep(3)  # the way back would have taken the focus into the titles by now
+    assert info('System.CurrentControlId')['System.CurrentControlId'] == '9004'
