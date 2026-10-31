@@ -184,7 +184,8 @@ def test_osd_stays_in_the_cast_row(autohide, playing):
     time.sleep(5)
     assert osd_up() and cond('Window.IsActive(1141)')['Window.IsActive(1141)']
     action('back')
-    wait_for('!Window.IsActive(1141)')
+    # gone, not only closing: Kodi drops a key sent during the close animation
+    wait_for('!Window.IsVisible(1141)')
     start = time.time()
     action('back')
     wait_for('!Window.IsActive(videobookmarks)')
@@ -224,7 +225,7 @@ def chapter_row_from(button, into_panel, fast=False):
     time.sleep(1)
     path = screenshot('rows-from-{}-{}'.format(button, into_panel))
     action('back')
-    wait_for('!Window.IsActive(videobookmarks)')
+    wait_for('!Window.IsVisible(videobookmarks)')  # the next builtin would be dropped while it closes
     return path
 
 
