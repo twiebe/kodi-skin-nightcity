@@ -44,6 +44,7 @@ def test_build_zip(tmp_path):
     for excluded in ('tests/', 'docs/', 'tools/', '.superpowers/', '.venv/'):
         assert not any(n.startswith('skin.nightcity/' + excluded) for n in names), excluded
     assert 'skin.nightcity/CLAUDE.md' not in names
+    assert 'skin.nightcity/Makefile' not in names
     # Kodi's add-on browser shows the screenshots of the installed add-on
     shots = {'skin.nightcity/' + s.text for s in parse(ROOT / 'addon.xml').iter('screenshot')}
     assert len(shots) == 8 and shots <= set(names)

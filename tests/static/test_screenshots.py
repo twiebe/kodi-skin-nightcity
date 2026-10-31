@@ -41,3 +41,12 @@ def test_screenshots_are_small_720p_jpegs():
         with Image.open(path) as image:
             assert (image.format, image.size) == ('JPEG', (1280, 720)), path.name
     assert sum(p.stat().st_size for p in SHOTS.iterdir()) < 1024 * 1024
+
+
+def test_make_target_passes_the_keys_by_name_only():
+    """`make screenshots` hands the API keys to the container from the environment, never as a
+    value on the command line or in the image."""
+    makefile = (ROOT / 'Makefile').read_text()
+    assert '-e MDBLIST_API_KEY -e OMDB_API_KEY' in makefile
+    assert not re.search(r'(MDBLIST|OMDB)_API_KEY\s*[:?]?=', makefile)
+    assert 'API_KEY' not in (ROOT / 'tools' / 'screenshots.Dockerfile').read_text()

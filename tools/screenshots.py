@@ -5,7 +5,8 @@ Starts its own kodi-dev instance `shots` at 1920x1080 as a copy of the kodi-dev 
 (run tools/kodidev_setup.py and `kdev pool up` once before) with this checkout as the skin. Its
 library becomes a showcase: films and shows TMDb knows, with their metadata and artwork from TMDb
 (see MOVIES and SHOWS). Then it opens each view and saves it as a 1280x720 JPEG in
-resources/screenshots/, and removes the instance again. Needs ffmpeg and internet access.
+resources/screenshots/, and removes the instance again. Needs ffmpeg and internet access;
+`make screenshots` runs it in a container with both (Makefile, tools/screenshots.Dockerfile).
 
   SHOT ...          only these shots (home movies info person player music settings quick)
   --keep            keep the instance for the next run or a look over VNC
