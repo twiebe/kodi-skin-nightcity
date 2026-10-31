@@ -569,9 +569,16 @@ def return_matches(point, tmdb_id, dbid):
 
 
 def info_leave(list_id, item, tab, position, tmdb_id, dbid):
+    home = _home()
+    # a way back past this page is from a chain that ended without coming back to it; the next
+    # chain through that page would take the focus there
+    page = return_key(position)[len('nc.ret.'):]
+    later = int(page) + 1 if page.isdigit() else 0
+    while later and home.getProperty(return_key(str(later))):
+        home.clearProperty(return_key(str(later)))
+        later += 1
     point = return_point(list_id, item, tab, tmdb_id, dbid)
     if point:
-        home = _home()
         home.setProperty(return_key(position), point)
         # the page parks its focus at once when it opens again (DialogVideoInfo.xml onload)
         home.setProperty('nc.ret.top', return_key(position)[len('nc.ret.'):])

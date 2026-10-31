@@ -532,6 +532,22 @@ def test_back_in_the_chain_returns_to_the_person_left(matrix):
     assert info('Container(5500).ListItem.Label')['Container(5500).ListItem.Label'] == person
 
 
+def test_a_new_chain_opens_the_person_on_the_buttons(matrix):
+    """A chain that ended on a title page kept the way back into the person page before it; the
+    next chain through that person opened the page on that title, not on its buttons."""
+    _info_and_person(matrix)
+    _list_in(5510)
+    builtin('SetFocus(5510,0,absolute)')
+    action('select')
+    _page(3)
+    _leave_chain()
+    _settle()
+    _info_and_person(matrix)
+    _list_in(5510)
+    time.sleep(3)  # the way back would have taken the focus into the titles by now
+    assert info('System.CurrentControlId')['System.CurrentControlId'] == '9004'
+
+
 def test_back_in_the_chain_returns_to_the_crew_tab(matrix):
     builtin('NotifyAll(nightcity,info:movie:{})'.format(matrix))
     wait_for('Window.IsActive(movieinformation)', timeout=20)
