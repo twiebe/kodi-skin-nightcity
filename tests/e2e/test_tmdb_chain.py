@@ -562,12 +562,8 @@ def test_up_from_an_osd_chain_returns_to_the_person_left(matrix):
     screenshot('tmdb-osd-back-on-the-person')
 
 
-@pytest.mark.parametrize('leave', ['up', 'back'])
-def test_after_an_osd_chain_up_from_the_cast_row_lands_on_the_chapter_row(matrix, leave):
-    """Up (or Back) from the person page lands on the cast row, Up from there on the chapter row:
-    on add bookmark, The Matrix has no chapters. The cast row used to open over the chapter row
-    before the row's focus hops ran, so the focus stayed on a stand-in out of sight, where Up did
-    nothing."""
+def _osd_chain_from_the_second_person(matrix):
+    """Play the movie and open the page of the second person of the OSD cast row."""
     _play(matrix)
     time.sleep(2)
     _open_cast_row()
@@ -577,6 +573,15 @@ def test_after_an_osd_chain_up_from_the_cast_row_lands_on_the_chapter_row(matrix
     wait_for('String.IsEqual(Container(6599).ListItem.Property(tmdb_id),Container(6501).ListItem.Property(tmdb_id))', timeout=20)
     action('select')
     _page(1)
+
+
+@pytest.mark.parametrize('leave', ['up', 'back'])
+def test_after_an_osd_chain_up_from_the_cast_row_lands_on_the_chapter_row(matrix, leave):
+    """Up (or Back) from the person page lands on the cast row, Up from there on the chapter row:
+    on add bookmark, The Matrix has no chapters. The cast row used to open over the chapter row
+    before the row's focus hops ran, so the focus stayed on a stand-in out of sight, where Up did
+    nothing."""
+    _osd_chain_from_the_second_person(matrix)
     if leave == 'up':
         _up_past_the_text()
     else:
@@ -590,3 +595,24 @@ def test_after_an_osd_chain_up_from_the_cast_row_lands_on_the_chapter_row(matrix
     wait_for('Window.IsActive(videobookmarks) + !Window.IsActive(1141) + Control.HasFocus(2)', timeout=5)
     action('up')
     wait_for('!Window.IsActive(videobookmarks) + Window.IsActive(videoosd)', timeout=5)
+
+
+def test_up_right_after_an_osd_chain_stays_on_the_tabs(matrix):
+    """The cast row is back at once, its list reloads a moment later and the script then puts the
+    focus on the person left (osd_back). An Up in that moment moves on to the tabs and stays there:
+    the script used to pull the focus back down to the list."""
+    _osd_chain_from_the_second_person(matrix)
+    action('up', delay=1)  # onto the biography (_up_past_the_text), then off the page at once
+    wait_for('Integer.IsEqual(System.CurrentControlId,9062)')
+    action('up', delay=0)
+    wait_for('Window.IsActive(1141) + Control.HasFocus(6501)', timeout=20)
+    assert not _true('String.IsEmpty(Window(Home).Property(nc.osd.chain))'), 'the list reloaded already'
+    action('up', delay=0)
+    wait_for('Control.HasFocus(6521)', timeout=5)
+    # the list reloads once the chain is gone; the script waits for that, then sets the focus
+    wait_for('String.IsEmpty(Window(Home).Property(nc.osd.chain)) + !Container(6501).IsUpdating + '
+             'Integer.IsGreater(Container(6501).NumItems,1)', timeout=20)
+    time.sleep(3)
+    assert _true('Control.HasFocus(6521)'), info('System.CurrentControlId')
+    action('up')
+    wait_for('Window.IsActive(videobookmarks) + !Window.IsActive(1141) + Control.HasFocus(2)', timeout=5)

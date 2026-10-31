@@ -1269,11 +1269,22 @@ def test_info_back_leaves_another_page_alone(monkeypatch):
 
 def test_osd_back_selects_the_person_left(monkeypatch):
     fake = FakeXbmc({'Window.IsActive(1141) + !Container(6501).IsUpdating + Integer.IsGreater(Container(6501).NumItems,2)'
-                     ' + String.IsEqual(Container(6501).ListItem(0).Property(param.info),cast)', 'Window.IsActive(1141)'}, {})
+                     ' + String.IsEqual(Container(6501).ListItem(0).Property(param.info),cast)',
+                     'Window.IsActive(1141) + Control.HasFocus(6501)'}, {})
     monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
     monkeypatch.setattr(nightcity, '_monitor', lambda *a: FakeXbmc.Monitor())
     nightcity.osd_back('3', '')
     assert fake.builtins == ['SetFocus(6501,2,absolute)']
+
+
+def test_osd_back_leaves_a_focus_moved_off_the_list_alone(monkeypatch):
+    """An Up while the row reloads goes to the tabs: the person left must not pull it back."""
+    fake = FakeXbmc({'Window.IsActive(1141) + !Container(6501).IsUpdating + Integer.IsGreater(Container(6501).NumItems,2)'
+                     ' + String.IsEqual(Container(6501).ListItem(0).Property(param.info),cast)', 'Window.IsActive(1141)'}, {})
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    monkeypatch.setattr(nightcity, '_monitor', lambda *a: FakeXbmc.Monitor())
+    nightcity.osd_back('3', '')
+    assert fake.builtins == []
 
 
 def test_info_show_fills_in_the_show_of_a_reopened_episode(monkeypatch):
