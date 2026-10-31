@@ -18,7 +18,9 @@ def focus(control):
 def close_osd():
     # Dialog.Close through kodi-send hung here while the OSD's track watcher ran; back closes it
     action('back')
-    wait_for('!Window.IsActive(videoosd)')
+    # IsActive is false once the close animation starts; a key sent before it ends is dropped
+    # ("ignoring action ... closing animation is running"), so wait until the OSD is gone
+    wait_for('!Window.IsVisible(videoosd)')
 
 
 def test_skip_forward_goes_to_the_next_chapter(tracks):
