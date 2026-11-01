@@ -21,6 +21,8 @@ REQUIRED = [
     'SmartPlaylistEditor.xml', 'SmartPlaylistRule.xml',
     # settings console
     'EventLog.xml',
+    # Settings > System > Display > Video calibration: without it the entry does nothing
+    'SettingsScreenCalibration.xml',
 ]
 
 

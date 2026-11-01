@@ -340,6 +340,55 @@ def icon_quit_app():
     return _icon_done(big)
 
 
+# --- video calibration (SettingsScreenCalibration.xml): white, coloured in the skin
+
+def _supersampled(width, height, draw_fn):
+    big = Image.new('L', (width * SCALE, height * SCALE), 0)
+    draw_fn(ImageDraw.Draw(big), SCALE)
+    image = Image.new('RGBA', (width, height), (255, 255, 255, 0))
+    image.putalpha(big.resize((width, height), Image.LANCZOS))
+    return image
+
+
+def cal_corner(size=128, arm=88, stroke=6, flip=False):
+    """A corner bracket in the top left (or, flipped, the bottom right) of the screen."""
+    def draw(d, s):
+        w, a = stroke * s, arm * s
+        d.rectangle([0, 0, a, w], fill=255)
+        d.rectangle([0, 0, w, a], fill=255)
+    image = _supersampled(size, size, draw)
+    return image.rotate(180) if flip else image
+
+
+def cal_ratio(size=500, stroke=6):
+    """The pixel ratio target: a square with a thin cross; right when it looks square (Kodi's help
+    asks for a square)."""
+    def draw(d, s):
+        w, n = stroke * s, size * s
+        d.rectangle([0, 0, n - 1, n - 1], outline=255, width=w)
+        t, c = 2 * s, n // 2
+        d.rectangle([c - t // 2, n // 4, c + t // 2, 3 * n // 4], fill=255)
+        d.rectangle([n // 4, c - t // 2, 3 * n // 4, c + t // 2], fill=255)
+    return _supersampled(size, size, draw)
+
+
+def cal_sub(width=380, height=90, bar=8, margin=40):
+    """The subtitle position: a bar with end ticks, 40 px clear above and below (Kodi's)."""
+    def draw(d, s):
+        top, bottom = margin * s, (height - margin) * s
+        mid = (top + bottom) // 2
+        d.rectangle([0, mid - bar * s // 2, width * s - 1, mid + bar * s // 2], fill=255)
+        # the ticks stop a pixel short of the clear margins (the scaling blurs a pixel out)
+        d.rectangle([0, top + s, 4 * s, bottom - s - 1], fill=255)
+        d.rectangle([width * s - 4 * s - 1, top + s, width * s - 1, bottom - s - 1], fill=255)
+    return _supersampled(width, height, draw)
+
+
+def cal_reset(size=100):
+    """Back to the defaults: the restart arrows of the quick menu, larger."""
+    return icon_restart_app().resize((size, size), Image.LANCZOS)
+
+
 def main():
     cut(64, 14, line=2).save(UI / 'cut.png')
     icon_power().save(UI / 'qm_power.png')
@@ -347,6 +396,11 @@ def main():
     icon_suspend().save(UI / 'qm_standby.png')
     icon_restart_app().save(UI / 'qm_restartapp.png')
     icon_quit_app().save(UI / 'qm_quit.png')
+    cal_corner().save(UI / 'cal_tl.png')
+    cal_corner(flip=True).save(UI / 'cal_br.png')
+    cal_ratio().save(UI / 'cal_ratio.png')
+    cal_sub().save(UI / 'cal_sub.png')
+    cal_reset().save(UI / 'cal_reset.png')
     cut(64, 14).save(UI / 'cut_fill.png')
     cut(48, 10, line=2, corners=('tr',)).save(UI / 'cut_btn.png')
     cut(48, 10, corners=('tr',)).save(UI / 'cut_btn_fill.png')
