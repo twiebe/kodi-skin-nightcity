@@ -71,6 +71,8 @@ class State:
             # video plays under it; `extra` says otherwise
             (r'String\.IsEmpty\(ListItem\.Trailer\)$', lambda m: False),
             (r'Player\.HasVideo$', lambda m: False),
+            # $EXP[InfoMoviePlaying] (Includes_Info.xml): the page is not the movie that plays
+            (r'InfoMoviePlaying$', lambda m: False),
         )
         if text in self.extra:
             return self.extra[text]

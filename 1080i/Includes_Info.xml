@@ -152,6 +152,9 @@
             </control>
         </definition>
     </include>
+    <!-- the info page shows the movie that plays (a chain from the OSD's cast row reaches it): the
+         same test as "ends at" (EndsAtTags), for the page's item -->
+    <expression name="InfoMoviePlaying">String.IsEqual(ListItem.DBType,movie) + [Player.HasVideo + !VideoPlayer.Content(livetv) + [[!String.IsEmpty(ListItem.FileNameAndPath) + String.IsEqual(ListItem.FileNameAndPath,Player.FileNameAndPath)] | [Integer.IsGreater(ListItem.DBID,0) + Integer.IsEqual(ListItem.DBID,VideoPlayer.DBID) + [[String.IsEqual(ListItem.DBType,movie) + VideoPlayer.Content(movies)] | [String.IsEqual(ListItem.DBType,episode) + VideoPlayer.Content(episodes)]] + !String.IsEmpty(ListItem.FileName) + String.IsEqual(ListItem.FileName,Player.Filename)] | [String.StartsWith(ListItem.FileNameAndPath,plugin://plugin.video.themoviedb.helper/) + [[String.IsEqual(ListItem.DBType,movie) + VideoPlayer.Content(movies) + [[!String.IsEmpty(ListItem.IMDBNumber) + String.IsEqual(ListItem.IMDBNumber,VideoPlayer.IMDBNumber)] | [!String.IsEmpty(ListItem.UniqueID(tmdb)) + String.IsEqual(ListItem.UniqueID(tmdb),Window(Home).Property(TMDbHelper.Player.TMDb_ID))]]] | [String.IsEqual(ListItem.DBType,episode) + VideoPlayer.Content(episodes) + !String.IsEmpty(ListItem.UniqueID(tvshow.tmdb)) + String.IsEqual(ListItem.UniqueID(tvshow.tmdb),Window(Home).Property(TMDbHelper.Player.TVShow.TMDb_ID)) + Integer.IsEqual(ListItem.Season,VideoPlayer.Season) + Integer.IsEqual(ListItem.Episode,VideoPlayer.Episode)]]]]]</expression>
     <!-- "Ends at" of a movie or episode with a runtime, as a tag in a row of tags: now plus the
          time left from the resume point (EndTimeResume); for the item that is playing the
          player's own finish time, the stored resume point is stale then and a TMDb Helper item
@@ -198,8 +201,8 @@
          buttons once did, Down goes back to them. The frame lies 16 px out to the sides of the
          text and 10 px above and below it.
          `more` holds when the text has more than its box shows: Container(textbox).HasNext,
-         Kodi's "the textbox has a second page". Only then a key hint on the button row, flush
-         with the right edge of the text (hintleft, hintwidth), says OK reads on. Without a plot
+         Kodi's "the textbox has a second page". Only then a key hint at the end of the button row
+         says OK reads on (DialogVideoInfo.xml 9063, after the last button). Without a plot
          a muted "No description" at the text's place (hintleft, texttop) gives the cursor
          something to frame, and OK opens no empty viewer. -->
     <include name="PlotFocus">
@@ -239,18 +242,6 @@
                 <textcolor>text_mute</textcolor>
                 <label>$LOCALIZE[31469]</label>
                 <visible>$PARAM[visible] + String.IsEmpty($PARAM[item].Plot)</visible>
-            </control>
-            <control type="label">
-                <left>$PARAM[hintleft]</left>
-                <top>490</top>
-                <width>$PARAM[hintwidth]</width>
-                <height>54</height>
-                <align>right</align>
-                <aligny>center</aligny>
-                <font>font_caps_small</font>
-                <textcolor>text_mute</textcolor>
-                <label>[UPPERCASE]$LOCALIZE[31468][/UPPERCASE]</label>
-                <visible>$PARAM[more]</visible>
             </control>
         </definition>
     </include>

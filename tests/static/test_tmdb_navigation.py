@@ -195,8 +195,9 @@ def test_back_button_leads_the_row():
     assert params['visible'] == RUNNING
     assert params['onclick'] == 'SetProperty(TMDbHelper.Command,exit,home)'
     # it never takes the focus when the page opens, only from within the row; a person page
-    # has no other button
-    assert params['enable'] == 'ControlGroup(9000).HasFocus() | String.IsEqual(ListItem.Property(tmdb_type),person)'
+    # has no other button, nor the page of the movie that plays (its play buttons hide,
+    # test_trailer.py)
+    assert params['enable'] == 'ControlGroup(9000).HasFocus() | String.IsEqual(ListItem.Property(tmdb_type),person) | $EXP[InfoMoviePlaying]'
 
 
 def test_back_button_names_the_place():
