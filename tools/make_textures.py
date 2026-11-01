@@ -47,8 +47,7 @@ def cut(size, corner, line=None, corners=('tr', 'bl'), height=None):
 
 
 def dogear(size):
-    """Triangle in the bottom right corner of a card (the unwatched mark), legs as long as the
-    frame's cut."""
+    """Triangle in the bottom right corner of a card (the unwatched mark)."""
     big = Image.new('L', (size * SCALE, size * SCALE), 0)
     s = size * SCALE
     ImageDraw.Draw(big).polygon([(s, 0), (s, s), (0, s)], fill=255)
@@ -207,7 +206,7 @@ def main():
     # frame's 14 px cut (a stretched mask would cut more or less than the frame)
     for width, height in CARD_SIZES:
         cut(width, 14, height=height).save(UI / 'mask_{}x{}.png'.format(width, height))
-    dogear(14).save(UI / 'dogear.png')
+    dogear(22).save(UI / 'dogear.png')
     cut(32, 8, line=2, corners=('tr',)).save(UI / 'check_off.png')
     check(32, 8).save(UI / 'check_on.png')
     sign(34, False).save(UI / 'spin_minus.png')

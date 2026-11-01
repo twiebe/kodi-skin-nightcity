@@ -109,17 +109,21 @@ def test_card_cut_only_when_focused():
     assert all(c.findtext('visible') == '!$PARAM[focused]' for c in plain)
 
 
+DOG_EAR = 22  # px, legs of the unwatched mark
+
+
 def test_unwatched_dog_ear():
     """Unwatched, never started movies and episodes get a dark blue (state) dog-ear in the bottom right
-    corner (like Plex marks unwatched), as big as the frame's cut; that corner has no cut, so one
-    ear serves focused and unfocused cards. No ✓ on episode stills."""
+    corner (like Plex marks unwatched), a good deal bigger than the frame's cut (DOG_EAR); that
+    corner has no cut, so one ear serves focused and unfocused cards. No ✓ on episode stills."""
     ears = [c for c in _card().iter('control') if c.get('type') == 'image' and
             'dogear' in (c.findtext('texture') or '')]
     assert [c.findtext('texture') for c in ears] == ['ui/dogear.png']
     ear = ears[0]
     assert ear.find('texture').get('colordiffuse') == 'state_text'
     assert ear.findtext('right') == '0' and ear.findtext('bottom') == '0'
-    frame = cut_length(ROOT / 'media' / 'ui' / 'cut.png')
+    assert cut_length(ROOT / 'media' / 'ui' / 'cut.png') < DOG_EAR
+    frame = DOG_EAR
     assert ear.findtext('width') == ear.findtext('height') == str(frame)
     visible = ear.findtext('visible')
     assert 'Integer.IsEqual(ListItem.PlayCount,0)' in visible and '!ListItem.IsResumable' in visible
