@@ -336,3 +336,17 @@ def test_dialog_list_reaches_past_its_rows():
         assert (params['rowwidth'], params['inset']) == (str(width), str(GLOW)), (name, cid)
         # the last row of a page and its glow still fit
         assert GLOW + (height // ROW) * ROW + GLOW <= grown, (name, cid)
+
+
+def test_card_glow_as_strong_as_the_buttons():
+    """The focused card's glow matches the buttons' (fill_glow): coloured with the full focus
+    colour, its strength in the texture, about as strong next to the card as a button's halo
+    next to the button (alpha ~130), fading out over the card's wider margin (24 px)."""
+    card = parse(ROOT / '1080i' / 'Includes_Base.xml')
+    inc = next(i for i in card.iter('include') if i.get('name') == 'CutCard')
+    glow = next(t for t in inc.iter('texture') if (t.text or '').strip() == 'ui/cut_glow.png')
+    assert glow.get('colordiffuse') == 'focus'
+    alpha = Image.open(ROOT / 'media' / 'ui' / 'cut_glow.png').getchannel('A')
+    mid = alpha.height // 2
+    assert 100 <= alpha.getpixel((24, mid)) <= 160  # at the card's edge
+    assert alpha.getpixel((0, mid)) < 16  # faded out at the margin's edge

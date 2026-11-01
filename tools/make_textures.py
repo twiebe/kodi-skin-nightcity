@@ -100,12 +100,13 @@ def sign_focus(size, plus, pad=0):
     return box
 
 
-def cut_glow(size, corner, pad, blur):
-    """Soft glow around a cut shape: the shape inset by `pad`, blurred by `blur` px."""
+def cut_glow(size, corner, pad, blur, strength=1.0):
+    """Soft glow around a cut shape: the shape inset by `pad`, blurred by `blur` px, `strength`
+    of full alpha (the skin colours it with the full focus colour)."""
     mask = Image.new('L', (size, size), 0)
     inner = cut(size - 2 * pad, corner).getchannel('A')
     mask.paste(inner, (pad, pad))
-    mask = mask.filter(ImageFilter.GaussianBlur(blur))
+    mask = mask.filter(ImageFilter.GaussianBlur(blur)).point(lambda a: round(a * strength))
     image = Image.new('RGBA', (size, size), (255, 255, 255, 0))
     image.putalpha(mask)
     return image
@@ -404,7 +405,8 @@ def main():
     cut(64, 14).save(UI / 'cut_fill.png')
     cut(48, 10, line=2, corners=('tr',)).save(UI / 'cut_btn.png')
     cut(48, 10, corners=('tr',)).save(UI / 'cut_btn_fill.png')
-    cut_glow(128, 14, 24, 10).save(UI / 'cut_glow.png')
+    # the focused card's glow, as strong next to the card as a button's (fill_glow)
+    cut_glow(128, 14, 24, 10, strength=0.9).save(UI / 'cut_glow.png')
     # the focused fills with their glow, and the outlines with the same margin, for buttons
     # that grow by GLOW_PAD on each side (border 12 + 10, 16 + 10)
     fill_glow(48, 10, GLOW_PAD, corners=('tr',)).save(UI / 'cut_btn_glow.png')
