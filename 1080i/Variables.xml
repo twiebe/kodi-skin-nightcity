@@ -736,9 +736,11 @@
         <value condition="!String.IsEmpty(Window(Home).Property(nc.osd.bio.id))">plugin://plugin.video.themoviedb.helper/?info=details&amp;tmdb_type=person&amp;tmdb_id=$INFO[Window(Home).Property(nc.osd.bio.id)]</value>
     </variable>
     <!-- similar movies, once the cast row has loaded (never two plugin lists starting together);
-         until then the cast row still holds the items of the page before -->
+         until then the cast row still holds the items of the page before. Not while a trailer
+         plays over the page: Kodi reloads the lists on its start and stop (nc.trailer.lists,
+         scripts/nightcity.py trailer) -->
     <variable name="InfoSimilarPath">
-        <value condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEqual(ListItem.Property(tmdb_type),person) + Integer.IsGreater(Container(5500).NumItems,0) + !Container(5500).IsUpdating">plugin://plugin.video.themoviedb.helper/?info=recommendations&amp;$VAR[InfoTmdbQuery]</value>
+        <value condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEqual(ListItem.Property(tmdb_type),person) + Integer.IsGreater(Container(5500).NumItems,0) + !Container(5500).IsUpdating + String.IsEmpty(Window(Home).Property(nc.trailer.lists))">plugin://plugin.video.themoviedb.helper/?info=recommendations&amp;$VAR[InfoTmdbQuery]</value>
     </variable>
     <!-- a TMDb title as TMDb Helper lists it, for … (DialogVideoInfo list 9006). Empty until OK
          (nc.info.more.load, Timers.xml nc_info_more): a list loads its path when the page opens,
