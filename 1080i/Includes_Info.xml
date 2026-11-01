@@ -67,8 +67,9 @@
                     <param name="dim" value="$PARAM[dim]"/>
                 </include>
                 <control type="label">
+                    <left>12</left>
                     <top>192</top>
-                    <width>320</width>
+                    <width>308</width>
                     <height>36</height>
                     <font>font_label</font>
                     <textcolor>text</textcolor>
@@ -76,8 +77,9 @@
                     <visible>!$PARAM[selected]</visible>
                 </control>
                 <control type="label">
+                    <left>12</left>
                     <top>192</top>
-                    <width>320</width>
+                    <width>308</width>
                     <height>36</height>
                     <font>font_label</font>
                     <textcolor>accent</textcolor>
@@ -85,12 +87,14 @@
                     <label>$VAR[EpisodeCardNum]  $INFO[ListItem.Title]</label>
                     <visible>$PARAM[selected]</visible>
                 </control>
-                <!-- the current episode (the head shows it): a dark blue line under its title, like
-                     the playing track of a music collection (MusicOSD.xml) -->
+                <!-- the current episode (the head shows it): a dark blue bar before its title, like
+                     the current value of a list (DialogList) and the playing track of the music
+                     queue; every title starts right of it, so none moves -->
                 <control type="image">
-                    <top>229</top>
-                    <width>320</width>
-                    <height>3</height>
+                    <left>0</left>
+                    <top>196</top>
+                    <width>3</width>
+                    <height>28</height>
                     <texture colordiffuse="state">ui/white.png</texture>
                     <visible>$PARAM[selected]</visible>
                 </control>
