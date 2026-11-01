@@ -107,3 +107,18 @@ def test_startup_says_online_one_second_before_home():
     minimum, _ = _secs(_timer().findtext('stop'))
     assert expressions['StartupOnline'] == (
         READY + ' + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_startup),{})'.format(minimum - 1))
+
+
+def test_startup_shows_the_skin_version():
+    """The version of the skin under the clock, quiet (a hint: state_text): which build is on the
+    box, a prerelease too (its addon.xml carries ~betaN)."""
+    labels = [c for c in parse(ROOT / '1080i' / 'Startup.xml').iter('control') if c.get('type') == 'label'
+              and 'System.AddonVersion(skin.nightcity)' in (c.findtext('label') or '')]
+    assert len(labels) == 1
+    version = labels[0]
+    assert version.findtext('label') == 'v$INFO[System.AddonVersion(skin.nightcity)]'
+    assert version.findtext('textcolor') == 'state_text'
+    assert version.findtext('align') == 'right' and version.findtext('font') == 'font_num_small'
+    clock = next(c for c in parse(ROOT / '1080i' / 'Startup.xml').iter('control')
+                 if c.findtext('label') == '$INFO[System.Time]')
+    assert int(version.findtext('top')) >= int(clock.findtext('top')) + int(clock.findtext('height'))
