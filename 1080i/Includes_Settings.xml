@@ -323,10 +323,6 @@
                         <label>$LOCALIZE[31222]</label>
                         <label2>$LOCALIZE[31225], $LOCALIZE[31224], $LOCALIZE[31232]</label2>
                     </item>
-                    <item>
-                        <label>$LOCALIZE[31007]</label>
-                        <label2>$VAR[GlowStateLabel]</label2>
-                    </item>
                 </content>
             </include>
         </include>
@@ -654,7 +650,7 @@
         <texturenofocus/>
     </include>
 
-    <!-- A check box row: on while the skin setting is not set (e.g. GlowOff, nc.menu.hide.x) -->
+    <!-- A check box row: on while the skin setting is not set (e.g. nc.menu.hide.x) -->
     <include name="SkinSettingsToggle">
         <param name="id"/>
         <param name="label"/>

@@ -189,18 +189,16 @@ def test_menu_entries_hide(settings):
 
 def test_categories_walk_like_kodis_settings(settings):
     """Up/down on the categories shows their rows, right enters them, left comes back. Main menu
-    comes first, the glow at the end of its rows; left on the categories goes back to the console."""
+    comes first, the colour scheme at the end of its rows; left on the categories goes back to the console."""
     builtin('SetFocus(9005)')
-    wait_for('Control.HasFocus(9005) + Control.IsVisible(500) + Control.IsVisible(601)')
+    wait_for('Control.HasFocus(9005) + Control.IsVisible(500) + Control.IsVisible(602)')
     assert not true('Control.IsVisible(200)')
     builtin('SetFocus(521)')
     wait_for('Control.HasFocus(521)')
     action('down')
     wait_for('Control.HasFocus(602)')
-    action('down')
-    wait_for('Control.HasFocus(601)')
     screenshot('hs-settings-menu')
-    action('up', 'up')
+    action('up')
     wait_for('Control.HasFocus(521)')
     action('left')
     wait_for('Control.HasFocus(9005)')
