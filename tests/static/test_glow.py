@@ -201,8 +201,9 @@ def test_padded_textures_are_the_plain_ones_inset(plain):
     edge = big.getchannel('A')
     mid = big.height // 2
     if 'fill' in plain:
-        # a halo next to the fill, fading out to the edge of the margin
-        assert 40 <= edge.getpixel((GLOW - 1, mid)) <= 128
+        # a halo next to the fill, fading out to the edge of the margin; about half the fill's
+        # alpha next to it (the user asked for a stronger glow than the first 0.45)
+        assert 100 <= edge.getpixel((GLOW - 1, mid)) <= 160
         assert edge.getpixel((0, mid)) < 16
     else:
         assert edge.getpixel((GLOW - 1, mid)) == 0
