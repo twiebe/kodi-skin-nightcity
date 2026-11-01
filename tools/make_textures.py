@@ -290,6 +290,26 @@ def icon_reboot():
     return _icon_done(big)
 
 
+def icon_suspend():
+    """Asleep: the outline of a crescent moon, a disc less one moved up and right."""
+    s, w = SCALE, round(ICON_STROKE * SCALE)
+    n, c = ICON * s, ICON * s / 2
+    moon = Image.new('L', (n, n), 0)
+    d = ImageDraw.Draw(moon)
+    r = 22 * s
+    d.ellipse([c - r, c - r, c + r, c + r], fill=255)
+    cx, cy, cr = c + 11 * s, c - 9 * s, 18 * s
+    d.ellipse([cx - cr, cy - cr, cx + cr, cy + cr], fill=0)
+    # the ring: the moon less the moon shrunk by the stroke (an odd filter size)
+    inner = moon.filter(ImageFilter.MinFilter(2 * (w // 2) + 1))
+    big = ImageChops.subtract(moon, inner)
+    # centred by what is drawn
+    left, top, right, bottom = big.getbbox()
+    shifted = Image.new('L', (n, n), 0)
+    shifted.paste(big.crop((left, top, right, bottom)), ((n - (right - left)) // 2, (n - (bottom - top)) // 2))
+    return _icon_done(shifted)
+
+
 def icon_restart_app():
     """Two arrows chasing round a circle: start again."""
     big, d = _icon_canvas()
@@ -324,6 +344,7 @@ def main():
     cut(64, 14, line=2).save(UI / 'cut.png')
     icon_power().save(UI / 'qm_power.png')
     icon_reboot().save(UI / 'qm_reboot.png')
+    icon_suspend().save(UI / 'qm_standby.png')
     icon_restart_app().save(UI / 'qm_restartapp.png')
     icon_quit_app().save(UI / 'qm_quit.png')
     cut(64, 14).save(UI / 'cut_fill.png')
