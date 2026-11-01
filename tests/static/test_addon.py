@@ -25,7 +25,7 @@ def test_imports():
     assert imports['xbmc.gui'] == '5.17.0'
     # the twiebe fork: its window manager goes back to the first page of a chain (TMDbHelper.Command
     # first, scripts/nightcity.py back_to_start); the epoch puts it above every upstream release
-    assert imports['plugin.video.themoviedb.helper'] == '1:6.20.0-4'
+    assert imports['plugin.video.themoviedb.helper'] == '1:6.20.2-1'
 
 
 @pytest.mark.parametrize('path', all_xml_files(), ids=lambda p: str(p.relative_to(ROOT)))
