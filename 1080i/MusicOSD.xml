@@ -84,14 +84,16 @@
         <control type="group" id="710">
             <top>664</top>
             <visible>Integer.IsGreater(Playlist.Length(music),1)</visible>
+            <!-- heading and counter 12 px above the row: the line over the playing card must
+                 not read as their underline -->
             <include content="RowHeader">
                 <param name="label" value="$LOCALIZE[31410]"/>
                 <param name="left" value="64"/>
-                <param name="top" value="0"/>
+                <param name="top" value="-12"/>
             </include>
             <control type="label">
                 <left>64</left>
-                <top>0</top>
+                <top>-12</top>
                 <width>1792</width>
                 <height>34</height>
                 <align>right</align>
@@ -122,13 +124,14 @@
                         <include content="MusicCard">
                             <param name="dim" value="Control.HasFocus(700)"/>
                         </include>
-                        <!-- the playing track: a dark blue line under its title -->
+                        <!-- the playing track: a dark blue line a little above its cover, like
+                             the current episode of an episode page (EpisodeCard) -->
                         <control type="image">
                             <left>0</left>
-                            <top>245</top>
+                            <top>-18</top>
                             <width>200</width>
                             <height>3</height>
-                            <texture colordiffuse="state">ui/white.png</texture>
+                            <texture colordiffuse="state_text">ui/white.png</texture>
                             <visible>ListItem.IsPlaying</visible>
                         </control>
                     </control>
@@ -141,13 +144,14 @@
                             <param name="focused" value="Control.HasFocus(700)"/>
                             <param name="titlecolor" value="accent"/>
                         </include>
-                        <!-- the playing track: a dark blue line under its title -->
+                        <!-- the playing track: a dark blue line a little above its cover, like
+                             the current episode of an episode page (EpisodeCard) -->
                         <control type="image">
                             <left>0</left>
-                            <top>245</top>
+                            <top>-18</top>
                             <width>200</width>
                             <height>3</height>
-                            <texture colordiffuse="state">ui/white.png</texture>
+                            <texture colordiffuse="state_text">ui/white.png</texture>
                             <visible>ListItem.IsPlaying</visible>
                         </control>
                     </control>

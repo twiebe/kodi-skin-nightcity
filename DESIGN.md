@@ -102,5 +102,5 @@ browser.
   episode or a card. It stays on its item when the cursor moves away. The music queue has none:
   Kodi redraws a list item only while the cursor is on it, so a live line elsewhere stood still.
   Its playing track has a dark blue mark instead, wherever the cursor is: the bar of a current
-  value before a track's number, a line under a card's title.
-  The current episode in the list of an episode page has a line over its still.
+  value before a track's number, a line a little above a card's cover. The current episode in
+  the list of an episode page has the same line over its still.

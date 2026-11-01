@@ -295,7 +295,8 @@ def test_music_queue_marks_the_playing_track():
     """The cursor, which opens on the playing track, shows its title in the accent colour also
     while the list has no focus. The playing track keeps a dark blue mark (state, DESIGN.md
     colours) wherever the cursor is: in the track list a bar before its number, like the current
-    value of a list dialog; on a card a line under its title, a bar would get lost by the cover.
+    value of a list dialog; on a card (a compilation, a playlist) a line a little above its
+    cover, like the current episode of an episode page, light enough to see (state_text).
     No progress line: Kodi redraws a list item only while the cursor is on it, so the line stood
     still elsewhere."""
     c = controls(load('MusicOSD.xml'))
@@ -309,9 +310,11 @@ def test_music_queue_marks_the_playing_track():
             width, height = int(bars[0].findtext('width')), int(bars[0].findtext('height'))
             if list_id == '701':
                 assert width == 3 and height > width  # the bar before the number
+                assert bars[0].find('texture').get('colordiffuse') == 'state'
             else:
-                assert height == 3 and width > height  # the line under the title
-            assert bars[0].find('texture').get('colordiffuse') == 'state'
+                assert height == 3 and width == 200  # the line over the cover
+                assert int(bars[0].findtext('top')) + 3 <= -15  # clear of the focused card's zoom
+                assert bars[0].find('texture').get('colordiffuse') == 'state_text'
             assert bars[0].findtext('texture') == 'ui/white.png'
         text = ET.tostring(c[list_id]).decode()
         assert '▶' not in text and 'accent2' not in text
@@ -338,3 +341,16 @@ def test_music_strings_without_long_dashes():
     for i, text in strings().items():
         if i >= 31400:
             assert '—' not in text and '–' not in text, i
+
+
+def test_up_next_heading_keeps_clear_of_the_playing_line():
+    """The line over the playing card (700) is a mark of the card: the heading and its counter sit
+    12 px higher than the rest of the row, so the line does not read as the heading's underline."""
+    root = parse(ROOT / '1080i' / 'MusicOSD.xml')
+    group = next(g for g in root.iter('control') if g.get('type') == 'group'
+                 and any(i.get('content') == 'RowHeader' and any(p.get('value') == '$LOCALIZE[31410]' for p in i.findall('param'))
+                         for i in g.findall('include')))
+    header = next(i for i in group.findall('include') if i.get('content') == 'RowHeader')
+    assert {p.get('name'): p.get('value') for p in header.findall('param')}['top'] == '-12'
+    counter = next(c for c in group.findall('control') if c.findtext('label') == '$VAR[MusicQueueCounter]')
+    assert counter.findtext('top') == '-12'
