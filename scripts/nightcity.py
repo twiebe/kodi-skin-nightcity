@@ -933,6 +933,16 @@ def plot(item='ListItem'):
 
 TRAILER_START = 30.0  # s a trailer has to start: a plugin (YouTube) resolves it first
 TRAILER_OURS = 'Player.HasVideo + String.IsEmpty(VideoPlayer.DBID)'  # a library title has an id
+YOUTUBE = 'plugin.video.youtube'
+
+
+def trailer_addon_builtin(path, installed, enabled):
+    """The builtin that offers the add-on a trailer needs, None when it can play: YouTube links
+    (Jellyfin for Kodi and TMDb Helper store trailers so) need the YouTube add-on. Kodi asks
+    before it installs or enables one."""
+    if not path.startswith('plugin://{}/'.format(YOUTUBE)) or (installed and enabled):
+        return None
+    return '{}({})'.format('EnableAddon' if installed else 'InstallAddon', YOUTUBE)
 
 
 def trailer_state(wanted, has_video, info_open, started, seconds):
@@ -958,13 +968,18 @@ def trailer():
     plays without the player window, the page shows it (9095 in DialogVideoInfo.xml) and keeps
     the keys (9099), so the page and a TMDb chain under it stay. The button has set nc.trailer
     and moved the focus to 9099 already. Once the trailer is over the focus goes back to the
-    button. Never over a video that plays: it would end it."""
+    button. Never over a video that plays: it would end it. Without the add-on the trailer
+    needs it offers that instead (trailer_addon_builtin)."""
     import xbmc
     home = _home()
     path = xbmc.getInfoLabel('ListItem.Trailer')
-    played = bool(path) and not xbmc.getCondVisibility('Player.HasVideo')
+    offer = trailer_addon_builtin(path, xbmc.getCondVisibility('System.HasAddon({})'.format(YOUTUBE)),
+                                  xbmc.getCondVisibility('System.AddonIsEnabled({})'.format(YOUTUBE)))
+    played = bool(path) and not offer and not xbmc.getCondVisibility('Player.HasVideo')
     started, seconds = False, 0.0
     try:
+        if offer:
+            xbmc.executebuiltin(offer)
         if played:
             home.setProperty('nc.trailer', '1')
             xbmc.executebuiltin(play_windowed(path))

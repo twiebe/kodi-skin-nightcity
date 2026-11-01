@@ -2032,7 +2032,8 @@ def _trailer_env(monkeypatch, fake, props=None):
 
 
 def test_trailer_plays_over_the_page_and_hands_the_focus_back(monkeypatch):
-    fake = TrailerXbmc({'ListItem.Trailer': 'plugin://plugin.video.youtube/play/?video_id=x'})
+    fake = TrailerXbmc({'ListItem.Trailer': 'plugin://plugin.video.youtube/play/?video_id=x'},
+                       true={'System.HasAddon(plugin.video.youtube)', 'System.AddonIsEnabled(plugin.video.youtube)'})
     home = _trailer_env(monkeypatch, fake)
     nightcity.trailer()
     assert fake.builtins == ['PlayMedia("plugin://plugin.video.youtube/play/?video_id=x",1,noresume)', 'SetFocus(9008)']
@@ -2068,3 +2069,29 @@ def test_trailer_needs_a_trailer_and_no_video(monkeypatch):
     nightcity.trailer()
     assert fake.builtins == fake2.builtins == ["SetFocus(9008)"]
     assert 'nc.trailer' not in home.props and 'nc.trailer' not in home2.props
+
+
+@pytest.mark.parametrize('true, asked', [
+    (set(), 'InstallAddon(plugin.video.youtube)'),
+    ({'System.HasAddon(plugin.video.youtube)'}, 'EnableAddon(plugin.video.youtube)'),
+])
+def test_trailer_without_the_youtube_add_on_offers_it(monkeypatch, true, asked):
+    """A YouTube trailer (Jellyfin for Kodi and TMDb Helper store them so) needs the YouTube
+    add-on: without it the click offers to install it (Kodi asks first), a disabled one to
+    enable it; nothing plays."""
+    fake = TrailerXbmc({'ListItem.Trailer': 'plugin://plugin.video.youtube/play/?video_id=x'}, true=true)
+    home = _trailer_env(monkeypatch, fake)
+    nightcity.trailer()
+    assert fake.builtins == [asked, 'SetFocus(9008)']
+    assert 'nc.trailer' not in home.props
+
+
+@pytest.mark.parametrize('path, installed, enabled, builtin', [
+    ('plugin://plugin.video.youtube/play/?video_id=x', False, False, 'InstallAddon(plugin.video.youtube)'),
+    ('plugin://plugin.video.youtube/play/?video_id=x', True, False, 'EnableAddon(plugin.video.youtube)'),
+    ('plugin://plugin.video.youtube/play/?video_id=x', True, True, None),
+    ('plugin://plugin.video.jellyfin/trailer?id=1&mode=play', False, False, None),
+    ('/movies/Alien-trailer.mkv', False, False, None),
+])
+def test_trailer_addon_builtin(path, installed, enabled, builtin):
+    assert nightcity.trailer_addon_builtin(path, installed, enabled) == builtin

@@ -377,8 +377,9 @@
                 <onclick condition="[String.IsEmpty(ListItem.DBID) | ![String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow)]] + String.IsEmpty(ListItem.Property(tmdb_type))">PlayMedia($ESCINFO[ListItem.FileNameAndPath])</onclick>
                 <include>ChainBackGuard</include>
             </include>
-            <!-- the trailer of a movie, a library one or a TMDb title in a chain (TMDb Helper's
-                 is a YouTube link). It plays in full screen over this page (9095, keys on 9099,
+            <!-- the trailer of a movie, a library one or a TMDb title in a chain (Jellyfin for
+                 Kodi and TMDb Helper store YouTube links: without the YouTube add-on the click
+                 offers it). It plays in full screen over this page (9095, keys on 9099,
                  scripts/nightcity.py trailer), so the page and a chain under it stay; Back ends
                  it here. Never over a video that plays: it would end it. It stays while it has the
                  focus: after Back the player takes a few frames to stop, and a hidden button lost
@@ -386,7 +387,7 @@
             <include content="PillButton">
                 <param name="id" value="9008"/>
                 <param name="label" value="$LOCALIZE[31041]"/>
-                <param name="visible" value="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.Trailer) + [!String.StartsWith(ListItem.Trailer,plugin://plugin.video.youtube/) | System.AddonIsEnabled(plugin.video.youtube)] + [!Player.HasVideo | !String.IsEmpty(Window(Home).Property(nc.trailer)) | Control.HasFocus(9008)]"/>
+                <param name="visible" value="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.Trailer) + [!Player.HasVideo | !String.IsEmpty(Window(Home).Property(nc.trailer)) | Control.HasFocus(9008)]"/>
                 <param name="onclick" value="SetProperty(nc.trailer,1,home)"/>
                 <param name="onclick2" value="SetFocus(9099)"/>
                 <onclick>NotifyAll(nightcity,trailer)</onclick>
