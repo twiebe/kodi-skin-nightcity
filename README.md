@@ -43,7 +43,7 @@ More in Kodi's add-on browser: movies, music, settings and the quick menu. `tool
 
 ## Install
 
-Nightcity comes from the twiebe repository (https://github.com/twiebe/kodi-repo), which also keeps it up to date. It needs the TMDb Helper fork from the same repository (1:6.20.0-4 or newer): its window manager can go back to the first page of a chain, which Back held needs. That fork in turn needs modules that only jurialmunkey's repository carries in recent enough versions (the official Kodi repository has older ones), so that one goes in first.
+Nightcity comes from the twiebe repository (https://github.com/twiebe/kodi-repo), which also keeps it up to date. It needs the TMDb Helper fork from the same repository (1:6.20.2-1 or newer): its window manager can go back to the first page of a chain, which Back held needs. That fork in turn needs modules that only jurialmunkey's repository carries in recent enough versions (the official Kodi repository has older ones), so that one goes in first.
 
 1. Settings > File manager > Add source: `https://jurialmunkey.github.io/repository.jurialmunkey/`, and another one: `https://twiebe.github.io/kodi-repo/`
 2. Settings > Add-ons > Install from zip file: `repository.jurialmunkey-<version>.zip` from the first source, then `repository.twiebe-<version>.zip` from the second
