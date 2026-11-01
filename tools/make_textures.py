@@ -219,8 +219,113 @@ def notification_icon(size, kind):
     return image
 
 
+# --- quick menu power icons (qm_*): white line drawings, one stroke, drawn SCALE times and
+# scaled down; 64 px, the tile shows them at 40
+
+ICON = 64
+ICON_STROKE = 3.6  # px at 64 (2.25 px as the tile shows it, 40 px)
+
+
+def _icon_canvas():
+    big = Image.new('L', (ICON * SCALE, ICON * SCALE), 0)
+    return big, ImageDraw.Draw(big)
+
+
+def _icon_done(big):
+    image = Image.new('RGBA', (ICON, ICON), (255, 255, 255, 0))
+    image.putalpha(big.resize((ICON, ICON), Image.LANCZOS))
+    return image
+
+
+def _round_line(draw, a, b, w):
+    draw.line([a, b], fill=255, width=w)
+    for x, y in (a, b):
+        draw.ellipse([x - w / 2, y - w / 2, x + w / 2, y + w / 2], fill=255)
+
+
+def _arc(draw, c, r, start, end, w, cy=None):
+    """A round-capped arc from START to END degrees (clockwise, 0 = right) round C (and CY)."""
+    cy = c if cy is None else cy
+    draw.arc([c - r, cy - r, c + r, cy + r], start, end, fill=255, width=w)
+    for angle in (start, end):
+        a = math.radians(angle)
+        x, y = c + (r - w / 2) * math.cos(a), cy + (r - w / 2) * math.sin(a)
+        draw.ellipse([x - w / 2, y - w / 2, x + w / 2, y + w / 2], fill=255)
+
+
+def _head(draw, c, r, angle, w, clockwise=True, cy=None):
+    """An arrow head on the arc of radius R at ANGLE, pointing along it."""
+    cy = c if cy is None else cy
+    a = math.radians(angle)
+    rm = r - w / 2
+    px, py = c + rm * math.cos(a), cy + rm * math.sin(a)
+    sign = 1 if clockwise else -1
+    tx, ty = -math.sin(a) * sign, math.cos(a) * sign  # along the arc
+    nx, ny = math.cos(a), math.sin(a)                 # out of the circle
+    length, half = 3.4 * w, 2.0 * w
+    tip = (px + tx * length * 0.75, py + ty * length * 0.75)
+    back = (px - tx * length * 0.25, py - ty * length * 0.25)
+    draw.polygon([tip, (back[0] + nx * half, back[1] + ny * half), (back[0] - nx * half, back[1] - ny * half)], fill=255)
+
+
+def icon_power():
+    """The power symbol: a ring open at the top, a bar down into it. The bar reaches above the
+    ring: the ring sits 2 px low, so the whole sign is centred."""
+    big, d = _icon_canvas()
+    s, w = SCALE, round(ICON_STROKE * SCALE)
+    c, r = ICON * s / 2, 22 * s
+    _arc(d, c, r, -50, 230, w, cy=c + 2 * s)
+    _round_line(d, (c, c - r - 1 * s), (c, c), w)
+    return _icon_done(big)
+
+
+def icon_reboot():
+    """The power symbol whose ring ends in an arrow: off and on again."""
+    big, d = _icon_canvas()
+    s, w = SCALE, round(ICON_STROKE * SCALE)
+    c, r = ICON * s / 2, 22 * s
+    _arc(d, c, r, -50, 205, w, cy=c + 2 * s)
+    _head(d, c, r, 212, w, cy=c + 2 * s)
+    _round_line(d, (c, c - r - 1 * s), (c, c), w)
+    return _icon_done(big)
+
+
+def icon_restart_app():
+    """Two arrows chasing round a circle: start again."""
+    big, d = _icon_canvas()
+    s, w = SCALE, round(ICON_STROKE * SCALE)
+    c, r = ICON * s / 2, 21 * s
+    for start in (200, 20):
+        _arc(d, c, r, start, start + 128, w)
+        _head(d, c, r, start + 136, w)
+    return _icon_done(big)
+
+
+def icon_quit_app():
+    """Leaving: a door frame open on the right, an arrow out of it."""
+    big, d = _icon_canvas()
+    s, w = SCALE, round(ICON_STROKE * SCALE)
+    left, top, bottom, right = 12 * s, 10 * s, 54 * s, 34 * s
+    # the frame: top and bottom stop short of the arrow's way out
+    _round_line(d, (right, top), (left, top), w)
+    _round_line(d, (left, top), (left, bottom), w)
+    _round_line(d, (left, bottom), (right, bottom), w)
+    _round_line(d, (right, top), (right, 22 * s), w)
+    _round_line(d, (right, bottom), (right, 42 * s), w)
+    y = 32 * s
+    _round_line(d, (24 * s, y), (52 * s, y), w)
+    head = 9 * s
+    _round_line(d, (54 * s - head, y - head), (54 * s, y), w)
+    _round_line(d, (54 * s - head, y + head), (54 * s, y), w)
+    return _icon_done(big)
+
+
 def main():
     cut(64, 14, line=2).save(UI / 'cut.png')
+    icon_power().save(UI / 'qm_power.png')
+    icon_reboot().save(UI / 'qm_reboot.png')
+    icon_restart_app().save(UI / 'qm_restartapp.png')
+    icon_quit_app().save(UI / 'qm_quit.png')
     cut(64, 14).save(UI / 'cut_fill.png')
     cut(48, 10, line=2, corners=('tr',)).save(UI / 'cut_btn.png')
     cut(48, 10, corners=('tr',)).save(UI / 'cut_btn_fill.png')
