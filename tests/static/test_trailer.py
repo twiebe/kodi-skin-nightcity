@@ -49,8 +49,9 @@ def test_trailer_shows_on_a_movie_with_a_trailer_it_can_play():
     assert 'String.IsEqual(ListItem.DBType,movie)' in visible
     assert '!String.IsEmpty(ListItem.Trailer)' in visible
     assert '[!String.StartsWith(ListItem.Trailer,plugin://plugin.video.youtube/) | System.AddonIsEnabled(plugin.video.youtube)]' in visible
-    # it stays while its own trailer plays: Back puts the focus back on it
-    assert '[!Player.HasVideo | {}]'.format(WANTED) in visible
+    # it stays while its own trailer plays, and while it has the focus: after Back the player
+    # takes a few frames to stop, a button hidden meanwhile lost the focus to play (9001)
+    assert '[!Player.HasVideo | {} | Control.HasFocus(9008)]'.format(WANTED) in visible
     assert '$LOCALIZE[31041]' in params['label']
 
 

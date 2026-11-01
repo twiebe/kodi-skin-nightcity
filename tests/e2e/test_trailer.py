@@ -37,6 +37,16 @@ def trailer(matrix):  # noqa: F811
     rpc('VideoLibrary.SetMovieDetails', {'movieid': matrix, 'trailer': before})
 
 
+def _back_on_the_button(timeout=10):
+    """The trailer is over and the focus on its button; else say where the focus is."""
+    try:
+        wait_for('Window.IsActive(movieinformation) + Control.HasFocus(9008) + !Control.IsVisible(9095)', timeout=timeout)
+    except AssertionError:
+        raise AssertionError('not back on the trailer button: {}'.format(info(
+            'System.CurrentWindow', 'System.CurrentControlId', 'Player.HasVideo', 'ListItem.Label',
+            'Window(Home).Property(nc.trailer)', 'Window(Home).Property(TMDbHelper.Position)')))
+
+
 def _open(movieid):
     builtin('NotifyAll(nightcity,info:movie:{})'.format(movieid))
     wait_for('Window.IsActive(movieinformation) + Control.IsVisible(9008)', timeout=20)
@@ -57,7 +67,7 @@ def test_trailer_plays_over_the_page_and_back_ends_it_on_its_button(trailer):
     wait_for('!Player.Paused + ' + OVER_THE_PAGE)
     action('back')
     wait_for('!Player.HasVideo + String.IsEmpty(Window(Home).Property(nc.trailer))', timeout=10)
-    wait_for('Window.IsActive(movieinformation) + Control.HasFocus(9008) + !Control.IsVisible(9095)')
+    _back_on_the_button()
     _settle()
 
 
@@ -67,7 +77,7 @@ def test_trailer_that_ends_hands_the_page_back(trailer):
     wait_for('Player.HasVideo + ' + OVER_THE_PAGE, timeout=20)
     # the stop key, or the end of the trailer: the same for the page
     rpc('Player.Stop', {'playerid': 1})
-    wait_for('Window.IsActive(movieinformation) + Control.HasFocus(9008) + !Control.IsVisible(9095)', timeout=10)
+    _back_on_the_button()
     _settle()
 
 
@@ -87,5 +97,6 @@ def test_trailer_in_a_chain_keeps_the_chain(trailer):
     action('select', delay=0)
     wait_for('Player.HasVideo + ' + OVER_THE_PAGE, timeout=20)
     action('back')
-    wait_for('!Player.HasVideo + Control.HasFocus(9008)', timeout=10)
+    wait_for('!Player.HasVideo', timeout=10)
+    _back_on_the_button()
     assert info('Window(Home).Property(TMDbHelper.Position)')['Window(Home).Property(TMDbHelper.Position)'] == '1'
