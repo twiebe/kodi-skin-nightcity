@@ -136,20 +136,26 @@ def test_the_text_shows_the_cursor_of_a_card(info_page, kind):
     assert frame == [text[0] + shift - 16, text[1] - 10, text[2] + 32, text[3] + 20]
 
 
-@pytest.mark.parametrize('kind', sorted(PLOTS))
-def test_a_hint_says_ok_reads_on_when_the_text_is_longer(info_page, kind):
-    _, box, _, head = PLOTS[kind]
-    [hint] = _labels(info_page, kind, '$LOCALIZE[31468]')
-    assert hint.findtext('visible') == '{} + Container({}).HasNext'.format(head, box)
+def test_a_hint_says_ok_reads_on_when_the_text_is_longer():
+    """When the text is longer than its box, a hint says OK reads on. It is the last entry of the
+    button row, so it stands right after the last button however many show (in a chain over the
+    player, back, resume, trailer, from start and ... reached past a hint at a fixed place). A
+    label, which keeps the key's colour (a disabled button draws its text in one colour); the
+    row uses the controls' own coordinates, so 10 px left of it make the gap between two pills."""
+    root = parse(ROOT / '1080i' / 'DialogVideoInfo.xml')
+    row = root.find('.//control[@id="9000"]')
+    assert row.findtext('usecontrolcoords') == 'true'
+    hint = list(row)[-1]
+    assert (hint.tag, hint.get('type'), hint.get('id')) == ('control', 'label', '9063')
+    assert (hint.findtext('left'), hint.findtext('top'), hint.findtext('width')) == ('10', '0', 'auto')
     assert hint.findtext('label') == '[UPPERCASE]$LOCALIZE[31468][/UPPERCASE]'
     assert (hint.findtext('font'), hint.findtext('textcolor')) == ('font_caps_small', 'text_mute')
-    # on the button row, flush with the right edge of the text
-    textbox = info_page.controls[box]
-    shift = -320 if kind == 'episode' else 0
-    assert hint.findtext('top') == '490' and hint.findtext('height') == '54'
-    assert hint.findtext('align') == 'right'
-    assert int(hint.findtext('left')) + int(hint.findtext('width')) == \
-        int(textbox.findtext('left')) + shift + int(textbox.findtext('width'))
+    for kind in PLOTS:
+        _, box, _, head = PLOTS[kind]
+        assert '[{} + Container({}).HasNext]'.format(head, box) in hint.findtext('visible'), kind
+    # no other hint at a fixed place, and no other control of the row placed by its own coordinates
+    assert [l for l in root.iter('control') if '31468' in (l.findtext('label') or '')] == [hint]
+    assert not [c for c in row if c is not hint and (c.find('left') is not None or c.find('top') is not None)]
 
 
 @pytest.mark.parametrize('kind', sorted(PLOTS))

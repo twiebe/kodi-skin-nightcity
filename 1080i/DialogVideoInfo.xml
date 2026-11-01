@@ -320,6 +320,8 @@
             <height>74</height>
             <orientation>horizontal</orientation>
             <itemgap>-4</itemgap>
+            <!-- only the plot hint at its end has coordinates of its own -->
+            <usecontrolcoords>true</usecontrolcoords>
             <onleft>noop</onleft>
             <onright>noop</onright>
             <!-- the top of the page: Up goes to the plot of the page (PlotFocus), Up from there
@@ -349,12 +351,14 @@
             <!-- inside a chain: back all the way, to where the chain started (ChainBackLabel names
                  it). At the left end, the way back: Left from the first button reaches it, but
                  it takes the focus only from within the row, never when the page opens; a
-                 person page has no other button. -->
+                 person page has no other button, nor the page of the movie that plays: resume
+                 and from start would start it from the beginning, they hide, and back to the
+                 video is the way (InfoMoviePlaying). -->
             <include content="PillButton">
                 <param name="id" value="9004"/>
                 <param name="label" value="‹ $VAR[ChainBackLabel]"/>
                 <param name="visible" value="!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))"/>
-                <param name="enable" value="ControlGroup(9000).HasFocus() | String.IsEqual(ListItem.Property(tmdb_type),person)"/>
+                <param name="enable" value="ControlGroup(9000).HasFocus() | String.IsEqual(ListItem.Property(tmdb_type),person) | $EXP[InfoMoviePlaying]"/>
                 <param name="onclick" value="SetProperty(TMDbHelper.Command,exit,home)"/>
                 <include>ChainBackGuard</include>
             </include>
@@ -365,7 +369,7 @@
                 <param name="textcolor" value="accent"/>
                 <!-- a TMDb page (person or title) has no file of its own; titles in the library
                      play their library copy -->
-                <param name="visible" value="String.IsEmpty(ListItem.Property(tmdb_type)) | !String.IsEmpty(ListItem.DBID) | Integer.IsGreater(Container(5901).NumItems,0)"/>
+                <param name="visible" value="[String.IsEmpty(ListItem.Property(tmdb_type)) | !String.IsEmpty(ListItem.DBID) | Integer.IsGreater(Container(5901).NumItems,0)] + !$EXP[InfoMoviePlaying]"/>
                 <onclick condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.DBID)">NotifyAll(nightcity,play:episode:$VAR[InfoEpisodeDBID]:resume)</onclick>
                 <onclick condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[ListItem.DBID]:resume)</onclick>
                 <onclick condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[ListItem.DBID])</onclick>
@@ -399,7 +403,7 @@
             <include content="PillButton">
                 <param name="id" value="9002"/>
                 <param name="label" value="« $LOCALIZE[31123]"/>
-                <param name="visible" value="[String.IsEqual(ListItem.DBType,episode) + Container(5100).ListItem.IsResumable] | [!String.IsEqual(ListItem.DBType,episode) + ListItem.IsResumable] | [String.IsEmpty(ListItem.DBID) + !String.IsEmpty(ListItem.Property(tmdb_type)) + String.IsEqual(ListItem.DBType,movie) + Container(5901).ListItem.IsResumable]"/>
+                <param name="visible" value="[[String.IsEqual(ListItem.DBType,episode) + Container(5100).ListItem.IsResumable] | [!String.IsEqual(ListItem.DBType,episode) + ListItem.IsResumable] | [String.IsEmpty(ListItem.DBID) + !String.IsEmpty(ListItem.Property(tmdb_type)) + String.IsEqual(ListItem.DBType,movie) + Container(5901).ListItem.IsResumable]] + !$EXP[InfoMoviePlaying]"/>
                 <onclick condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.DBID)">NotifyAll(nightcity,play:episode:$VAR[InfoEpisodeDBID]:noresume)</onclick>
                 <onclick condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[ListItem.DBID]:noresume)</onclick>
                 <onclick condition="String.IsEmpty(ListItem.DBID) + !String.IsEmpty(ListItem.Property(tmdb_type)) + String.IsEqual(ListItem.DBType,movie)">NotifyAll(nightcity,play:movie:$INFO[Container(5901).ListItem.DBID]:noresume)</onclick>
@@ -447,6 +451,20 @@
                 <param name="visible" value="!String.IsEmpty(ListItem.Property(tmdb_type)) + !String.IsEqual(ListItem.Property(tmdb_type),person) + String.IsEmpty(ListItem.DBID) + !Integer.IsGreater(Container(5901).NumItems,0)"/>
                 <include>ChainBackGuard</include>
             </include>
+            <!-- OK reads on (PlotFocus): when the text is longer than its box. The last entry of
+                 the row, so it stands right after the last button however many show; 10 px in
+                 (the row uses its controls' coordinates), the gap between two pills -->
+            <control type="label" id="9063">
+                <left>10</left>
+                <top>0</top>
+                <width>auto</width>
+                <height>74</height>
+                <font>font_caps_small</font>
+                <aligny>center</aligny>
+                <textcolor>text_mute</textcolor>
+                <label>[UPPERCASE]$LOCALIZE[31468][/UPPERCASE]</label>
+                <visible>[!String.IsEqual(ListItem.DBType,episode) + !String.IsEqual(ListItem.Property(tmdb_type),person) + Container(9050).HasNext] | [String.IsEqual(ListItem.DBType,episode) + Container(9051).HasNext] | [String.IsEqual(ListItem.Property(tmdb_type),person) + Container(9052).HasNext]</visible>
+            </control>
         </control>
 
         <!-- the title for … (9005) of a TMDb title without library copy, as TMDb Helper lists it:

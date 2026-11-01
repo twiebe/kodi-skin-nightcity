@@ -464,6 +464,9 @@
                     <align>center</align>
                     <aligny>center</aligny>
                     <textcolor>$PARAM[textcolor]</textcolor>
+                    <!-- Kodi marks the item that plays as selected: the page of the playing title
+                         would draw it in the default selected colour, white -->
+                    <selectedcolor>$PARAM[textcolor]</selectedcolor>
                     <label>…</label>
                 </control>
             </control>

@@ -110,3 +110,30 @@ def test_recommendations_wait_while_a_trailer_plays():
     variables = {v.get('name'): v for v in parse(SKIN / 'Variables.xml').iter('variable')}
     for value in variables['InfoSimilarPath'].findall('value'):
         assert 'String.IsEmpty(Window(Home).Property(nc.trailer.lists))' in value.get('condition')
+
+
+def test_the_playing_movie_offers_no_play():
+    """The page of the movie that plays (a chain from the OSD's cast row reaches it: a person, one
+    of their films): resume and from start would start it again from the beginning. They hide,
+    and back to the video (9004) is the way. The same test as "ends at" (EndsAtTags)."""
+    info = parse(SKIN / 'Includes_Info.xml')
+    tags = next(i for i in info.iter('include') if i.get('name') == 'EndsAtTags')
+    playing = next(p.get('value') for p in tags.iter('param') if p.get('name') == 'playing')
+    expressions = {e.get('name'): e.text for e in info.iter('expression')}
+    assert expressions['InfoMoviePlaying'] == 'String.IsEqual(ListItem.DBType,movie) + [{}]'.format(
+        playing.replace('$PARAM[item]', 'ListItem'))
+    for cid in ('9001', '9002'):
+        params, _ = _pill(cid)
+        assert params['visible'].endswith(' + !$EXP[InfoMoviePlaying]'), cid
+    params, _ = _pill('9004')
+    assert '$EXP[InfoMoviePlaying]' in params['enable']
+
+
+def test_more_pill_keeps_its_text_colour_on_the_playing_title():
+    """Kodi marks the item that plays as selected, and a label in a list draws a selected item in
+    its selectedcolor (white unless set): on the page of the playing movie the focused ... read
+    white on cyan. The pill's label keeps its colour either way."""
+    base = parse(SKIN / 'Includes_Base.xml')
+    pill = next(i for i in base.iter('include') if i.get('name') == 'MorePill')
+    label = next(c for c in pill.iter('control') if c.get('type') == 'label')
+    assert label.findtext('selectedcolor') == label.findtext('textcolor') == '$PARAM[textcolor]'
