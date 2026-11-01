@@ -85,6 +85,15 @@
                     <label>$VAR[EpisodeCardNum]  $INFO[ListItem.Title]</label>
                     <visible>$PARAM[selected]</visible>
                 </control>
+                <!-- the current episode (the head shows it): a dark blue line under its title, like
+                     the playing track of a music collection (MusicOSD.xml) -->
+                <control type="image">
+                    <top>229</top>
+                    <width>320</width>
+                    <height>3</height>
+                    <texture colordiffuse="state">ui/white.png</texture>
+                    <visible>$PARAM[selected]</visible>
+                </control>
                 <include content="ProgressLine">
                     <param name="top" value="234"/>
                     <param name="width" value="320"/>
