@@ -136,17 +136,6 @@
                     <textcolor>text</textcolor>
                     <label>$INFO[System.Time]</label>
                 </control>
-                <!-- the skin's version under the clock: which build is on the box (a prerelease
-                     carries ~betaN) -->
-                <control type="label">
-                    <top>54</top>
-                    <width>640</width>
-                    <height>32</height>
-                    <align>right</align>
-                    <font>font_num_small</font>
-                    <textcolor>state_text</textcolor>
-                    <label>v$INFO[System.AddonVersion(skin.nightcity)]</label>
-                </control>
             </control>
         </control>
     </controls>
