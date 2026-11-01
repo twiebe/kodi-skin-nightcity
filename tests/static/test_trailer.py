@@ -42,13 +42,15 @@ def test_trailer_sits_right_of_play():
 
 def test_trailer_shows_on_a_movie_with_a_trailer_it_can_play():
     """On a movie's page, a library movie or a TMDb title in a chain alike: both have
-    ListItem.Trailer (TMDb Helper's is a YouTube link, which needs the YouTube add-on). Never over
+    ListItem.Trailer (TMDb Helper's is a YouTube link; without the YouTube add-on the click offers
+    it). Never over
     a video that plays (a chain from the OSD): the trailer would end it."""
     params, clicks = _pill('9008')
     visible = params['visible']
     assert 'String.IsEqual(ListItem.DBType,movie)' in visible
     assert '!String.IsEmpty(ListItem.Trailer)' in visible
-    assert '[!String.StartsWith(ListItem.Trailer,plugin://plugin.video.youtube/) | System.AddonIsEnabled(plugin.video.youtube)]' in visible
+    # without the YouTube add-on too: the click offers it (scripts/nightcity.py trailer)
+    assert 'youtube' not in visible
     # it stays while its own trailer plays, and while it has the focus: after Back the player
     # takes a few frames to stop, a button hidden meanwhile lost the focus to play (9001)
     assert '[!Player.HasVideo | {} | Control.HasFocus(9008)]'.format(WANTED) in visible
