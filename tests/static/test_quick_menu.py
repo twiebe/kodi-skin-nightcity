@@ -372,3 +372,28 @@ def test_menu_icon_is_a_hamburger():
     assert len(spans) == 1, spans
     assert not (ROOT / 'media' / 'ui' / 'qm_anchor.png').exists()
     assert 'ui/qm_menu.png' in (ROOT / '1080i' / 'Includes_Home.xml').read_text(encoding='utf-8')
+
+
+def test_power_tiles_mirror_the_row_above():
+    """The second row mirrors the first, the system over Kodi: power off over exit Kodi, reboot
+    over restart Kodi; the timer last."""
+    items = list(controls(load(WINDOW))['1220'].iter('item'))
+    commands = [actions(i)[0][1].split('(')[0] for i in items]
+    assert commands == ['Powerdown', 'Reboot', 'Suspend', 'Quit', 'RestartApp', 'AlarmClock']
+    icons = [i.findtext('icon') for i in items]
+    assert icons == ['ui/qm_power.png', 'ui/qm_reboot.png', 'ui/qm_standby.png', 'ui/qm_quit.png',
+                     'ui/qm_restartapp.png', 'ui/qm_timer.png']
+
+
+def test_power_icons_come_from_the_texture_tool():
+    """Power off is the power symbol, reboot the same with an arrow at the end of its ring,
+    restart Kodi two arrows round a circle, exit Kodi an arrow out of a door frame: one stroke,
+    drawn by tools/make_textures.py, square and centred."""
+    from PIL import Image
+    tool = (ROOT / 'tools' / 'make_textures.py').read_text(encoding='utf-8')
+    for name in ('qm_power', 'qm_reboot', 'qm_restartapp', 'qm_quit'):
+        assert "'{}.png'".format(name) in tool, name
+        image = Image.open(ROOT / 'media' / 'ui' / (name + '.png')).convert('RGBA')
+        assert image.size == (64, 64), name
+        left, top, right, bottom = image.getchannel('A').getbbox()
+        assert abs((left + right) - 64) <= 3 and abs((top + bottom) - 64) <= 3, (name, left, top, right, bottom)

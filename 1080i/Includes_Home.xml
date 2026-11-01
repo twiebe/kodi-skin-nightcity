@@ -1736,17 +1736,17 @@
                     <onclick condition="!System.CanSuspend">Notification($LOCALIZE[31089],$LOCALIZE[31154])</onclick>
                 </item>
                 <item>
+                    <label>$LOCALIZE[31146]</label>
+                    <icon>ui/qm_quit.png</icon>
+                    <property name="can">1</property>
+                    <onclick>Quit</onclick>
+                </item>
+                <item>
                     <label>$LOCALIZE[31147]</label>
                     <icon>ui/qm_restartapp.png</icon>
                     <property name="can">$VAR[QuickCanRestartApp]</property>
                     <onclick condition="System.Platform.Windows | System.Platform.Linux">RestartApp</onclick>
                     <onclick condition="![System.Platform.Windows | System.Platform.Linux]">Notification($LOCALIZE[31089],$LOCALIZE[31154])</onclick>
-                </item>
-                <item>
-                    <label>$LOCALIZE[31146]</label>
-                    <icon>ui/qm_quit.png</icon>
-                    <property name="can">1</property>
-                    <onclick>Quit</onclick>
                 </item>
                 <!-- shutdown timer: Kodi asks for the minutes; a running one shows what is
                      left and OK cancels it -->
