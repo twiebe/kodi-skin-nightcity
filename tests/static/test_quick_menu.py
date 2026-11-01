@@ -387,11 +387,12 @@ def test_power_tiles_mirror_the_row_above():
 
 def test_power_icons_come_from_the_texture_tool():
     """Power off is the power symbol, reboot the same with an arrow at the end of its ring,
-    restart Kodi two arrows round a circle, exit Kodi an arrow out of a door frame: one stroke,
+    suspend the outline of a crescent moon, restart Kodi two arrows round a circle, exit Kodi an
+    arrow out of a door frame: one stroke,
     drawn by tools/make_textures.py, square and centred."""
     from PIL import Image
     tool = (ROOT / 'tools' / 'make_textures.py').read_text(encoding='utf-8')
-    for name in ('qm_power', 'qm_reboot', 'qm_restartapp', 'qm_quit'):
+    for name in ('qm_power', 'qm_reboot', 'qm_standby', 'qm_restartapp', 'qm_quit'):
         assert "'{}.png'".format(name) in tool, name
         image = Image.open(ROOT / 'media' / 'ui' / (name + '.png')).convert('RGBA')
         assert image.size == (64, 64), name
