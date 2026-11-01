@@ -18,9 +18,12 @@
                 <param name="id" value="10"/>
                 <onright>9000</onright>
                 <ondown>12</ondown>
-                <param name="top" value="84"/>
-                <param name="width" value="860"/>
-                <param name="height" value="400"/>
+                <param name="top" value="74"/>
+                <param name="width" value="880"/>
+                <param name="height" value="415"/>
+                <param name="left" value="30"/>
+                <param name="rowwidth" value="860"/>
+                <param name="inset" value="10"/>
             </include>
             <control type="grouplist" id="9000">
                 <onleft>10</onleft>

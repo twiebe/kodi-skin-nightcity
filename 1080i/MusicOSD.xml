@@ -154,10 +154,10 @@
                 </focusedlayout>
             </control>
             <control type="list" id="701">
-                <left>64</left>
-                <top>44</top>
-                <width>1792</width>
-                <height>336</height>
+                <left>54</left>
+                <top>34</top>
+                <width>1812</width>
+                <height>356</height>
                 <orientation>vertical</orientation>
                 <scrolltime tween="quadratic">200</scrolltime>
                 <visible>!String.IsEmpty(Window(Home).Property(nc.music.queue.album))</visible>
@@ -168,15 +168,25 @@
                 <onclick>NotifyAll(nightcity,music_goto:$INFO[Container(701).CurrentItem])</onclick>
                 <content>playlistmusic://</content>
                 <itemlayout width="1792" height="56">
-                    <include content="MusicQueueRow"/>
+                    <!-- the item 10 px in: its glow reaches past it -->
+                    <control type="group">
+                        <left>10</left>
+                        <top>10</top>
+                        <include content="MusicQueueRow"/>
+                    </control>
                 </itemlayout>
                 <focusedlayout width="1792" height="56">
-                    <include content="MusicQueueRow">
-                        <param name="focused" value="Control.HasFocus(701)"/>
-                        <param name="number" value="$VAR[MusicQueueCursor]"/>
-                        <param name="title" value="$VAR[MusicQueueCursor]"/>
-                        <param name="mute" value="$VAR[MusicQueueCursorMute]"/>
-                    </include>
+                    <!-- the item 10 px in: its glow reaches past it -->
+                    <control type="group">
+                        <left>10</left>
+                        <top>10</top>
+                        <include content="MusicQueueRow">
+                            <param name="focused" value="Control.HasFocus(701)"/>
+                            <param name="number" value="$VAR[MusicQueueCursor]"/>
+                            <param name="title" value="$VAR[MusicQueueCursor]"/>
+                            <param name="mute" value="$VAR[MusicQueueCursorMute]"/>
+                        </include>
+                    </control>
                 </focusedlayout>
             </control>
         </control>

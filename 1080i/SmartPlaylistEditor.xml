@@ -77,9 +77,12 @@
                 <param name="id" value="10"/>
                 <onup>9001</onup>
                 <onright>9002</onright>
-                <param name="top" value="520"/>
-                <param name="width" value="860"/>
-                <param name="height" value="320"/>
+                <param name="top" value="510"/>
+                <param name="width" value="880"/>
+                <param name="height" value="340"/>
+                <param name="left" value="30"/>
+                <param name="rowwidth" value="860"/>
+                <param name="inset" value="10"/>
             </include>
             <control type="grouplist" id="9002">
                 <left>930</left>

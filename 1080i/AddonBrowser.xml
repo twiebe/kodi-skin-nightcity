@@ -15,13 +15,15 @@
                 <param name="id" value="50"/>
                 <onleft>Action(Back)</onleft>
                 <onright>9000</onright>
-                <param name="left" value="120"/>
-                <param name="top" value="100"/>
-                <param name="width" value="1240"/>
-                <param name="height" value="920"/>
+                <param name="left" value="110"/>
+                <param name="top" value="90"/>
+                <param name="width" value="1260"/>
+                <param name="height" value="935"/>
                 <param name="label2" value="$INFO[ListItem.Label2]"/>
                 <!-- same size as the rows of the other settings pages -->
                 <param name="font" value="font_label"/>
+                <param name="rowwidth" value="1240"/>
+                <param name="inset" value="10"/>
             </include>
             <control type="grouplist" id="9000">
                 <left>1430</left>

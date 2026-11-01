@@ -20,43 +20,53 @@
                 <aligny>center</aligny>
             </control>
             <control type="list" id="50">
-                <left>40</left>
-                <top>84</top>
-                <width>960</width>
-                <height>560</height>
+                <left>30</left>
+                <top>74</top>
+                <width>980</width>
+                <height>580</height>
                 <onright>9000</onright>
                 <scrolltime>200</scrolltime>
                 <itemlayout width="960" height="56">
-                    <control type="label">
-                        <left>20</left>
-                        <width>920</width>
-                        <height>56</height>
-                        <aligny>center</aligny>
-                        <font>font_label</font>
-                        <textcolor>text_dim</textcolor>
-                        <selectedcolor>text_dim</selectedcolor>
-                        <label>$INFO[ListItem.Label]$INFO[ListItem.Label2,  [COLOR text_mute],[/COLOR]]</label>
+                    <!-- the item 10 px in: its glow reaches past it -->
+                    <control type="group">
+                        <left>10</left>
+                        <top>10</top>
+                        <control type="label">
+                            <left>20</left>
+                            <width>920</width>
+                            <height>56</height>
+                            <aligny>center</aligny>
+                            <font>font_label</font>
+                            <textcolor>text_dim</textcolor>
+                            <selectedcolor>text_dim</selectedcolor>
+                            <label>$INFO[ListItem.Label]$INFO[ListItem.Label2,  [COLOR text_mute],[/COLOR]]</label>
+                        </control>
                     </control>
                 </itemlayout>
                 <focusedlayout width="960" height="56">
-                    <control type="image">
-                        <left>-10</left>
-                        <top>-10</top>
-                        <width>980</width>
-                        <height>76</height>
-                        <texture border="22" colordiffuse="focus">ui/cut_btn_glow.png</texture>
-                        <visible>Control.HasFocus(50)</visible>
-                    </control>
-                    <control type="label">
-                        <left>20</left>
-                        <width>920</width>
-                        <height>56</height>
-                        <aligny>center</aligny>
-                        <font>font_label</font>
-                        <textcolor>text</textcolor>
-                        <selectedcolor>text</selectedcolor>
-                        <focusedcolor>focus_text</focusedcolor>
-                        <label>$INFO[ListItem.Label]$INFO[ListItem.Label2,  ,]</label>
+                    <!-- the item 10 px in: its glow reaches past it -->
+                    <control type="group">
+                        <left>10</left>
+                        <top>10</top>
+                        <control type="image">
+                            <left>-10</left>
+                            <top>-10</top>
+                            <width>980</width>
+                            <height>76</height>
+                            <texture border="22" colordiffuse="focus">ui/cut_btn_glow.png</texture>
+                            <visible>Control.HasFocus(50)</visible>
+                        </control>
+                        <control type="label">
+                            <left>20</left>
+                            <width>920</width>
+                            <height>56</height>
+                            <aligny>center</aligny>
+                            <font>font_label</font>
+                            <textcolor>text</textcolor>
+                            <selectedcolor>text</selectedcolor>
+                            <focusedcolor>focus_text</focusedcolor>
+                            <label>$INFO[ListItem.Label]$INFO[ListItem.Label2,  ,]</label>
+                        </control>
                     </control>
                 </focusedlayout>
             </control>

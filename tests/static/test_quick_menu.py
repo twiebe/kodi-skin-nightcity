@@ -102,8 +102,8 @@ def test_links_to_settings_and_files():
     assert (items[0].findtext('label'), items[0].findtext('icon')) == ('$LOCALIZE[5]', 'ui/qm_settings.png')
     assert (items[1].findtext('label'), items[1].findtext('icon')) == ('$LOCALIZE[744]', 'ui/qm_files.png')
     assert (ROOT / 'media' / 'ui' / 'qm_files.png').exists()
-    # the links fill the row
-    assert int(links.findtext('width')) == 192 * len(items)
+    # the links fill the row, and the list reaches 10 px past them for the glow (test_glow.py)
+    assert int(links.findtext('width')) == 192 * len(items) + 2 * 10
 
 
 def test_rows_lead_into_each_other():

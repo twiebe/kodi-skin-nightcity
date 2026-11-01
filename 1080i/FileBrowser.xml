@@ -27,9 +27,12 @@
             <include content="DialogList">
                 <param name="id" value="450"/>
                 <ondown>9000</ondown>
-                <param name="top" value="140"/>
-                <param name="width" value="1320"/>
-                <param name="height" value="624"/>
+                <param name="top" value="130"/>
+                <param name="width" value="1340"/>
+                <param name="height" value="644"/>
+                <param name="left" value="30"/>
+                <param name="rowwidth" value="1320"/>
+                <param name="inset" value="10"/>
             </include>
             <control type="panel" id="451">
                 <left>-4000</left>

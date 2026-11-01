@@ -386,146 +386,156 @@
                     <param name="width" value="552"/>
                 </include>
                 <control type="list" id="$PARAM[id]">
-                    <left>0</left>
-                    <top>56</top>
-                    <width>600</width>
-                    <height>416</height>
+                    <left>-10</left>
+                    <top>46</top>
+                    <width>620</width>
+                    <height>436</height>
                     <onup>noop</onup>
                     <ondown>$PARAM[button]</ondown>
                     <onleft>SetFocus($PARAM[left])</onleft>
                     <onright>SetFocus($PARAM[right])</onright>
                     <scrolltime>120</scrolltime>
                     <itemlayout width="600" height="52">
-                <!-- the playing track: a dark blue bar before the text, which stays in place -->
-                <control type="image">
-                    <left>15</left>
-                    <top>12</top>
-                    <width>3</width>
-                    <height>28</height>
-                    <texture colordiffuse="state">ui/white.png</texture>
-                    <visible>String.IsEqual(ListItem.Property(current),1)</visible>
-                </control>
-                <control type="label">
-                    <left>24</left>
-                    <width>440</width>
-                    <height>52</height>
-                    <aligny>center</aligny>
-                    <font>font_small</font>
-                    <textcolor>text_dim</textcolor>
-                    <selectedcolor>text_dim</selectedcolor>
-                    <label>$INFO[ListItem.Label]</label>
-                    <visible>!String.IsEqual(ListItem.Property(current),1)</visible>
-                </control>
-                <control type="label">
-                    <left>24</left>
-                    <width>440</width>
-                    <height>52</height>
-                    <aligny>center</aligny>
-                    <font>font_small</font>
-                    <textcolor>state_text</textcolor>
-                    <selectedcolor>state_text</selectedcolor>
-                    <label>$INFO[ListItem.Label]</label>
-                    <visible>String.IsEqual(ListItem.Property(current),1)</visible>
-                </control>
-                <control type="label">
-                    <left>456</left>
-                    <width>120</width>
-                    <height>52</height>
-                    <align>right</align>
-                    <aligny>center</aligny>
-                    <font>font_small</font>
-                    <textcolor>text_mute</textcolor>
-                    <selectedcolor>text_mute</selectedcolor>
-                    <label>$INFO[ListItem.Property(tag)]</label>
-                    <visible>true</visible>
-                </control>
+                        <!-- the item 10 px in: its glow reaches past it -->
+                        <control type="group">
+                            <left>10</left>
+                            <top>10</top>
+                    <!-- the playing track: a dark blue bar before the text, which stays in place -->
+                    <control type="image">
+                        <left>15</left>
+                        <top>12</top>
+                        <width>3</width>
+                        <height>28</height>
+                        <texture colordiffuse="state">ui/white.png</texture>
+                        <visible>String.IsEqual(ListItem.Property(current),1)</visible>
+                    </control>
+                    <control type="label">
+                        <left>24</left>
+                        <width>440</width>
+                        <height>52</height>
+                        <aligny>center</aligny>
+                        <font>font_small</font>
+                        <textcolor>text_dim</textcolor>
+                        <selectedcolor>text_dim</selectedcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>!String.IsEqual(ListItem.Property(current),1)</visible>
+                    </control>
+                    <control type="label">
+                        <left>24</left>
+                        <width>440</width>
+                        <height>52</height>
+                        <aligny>center</aligny>
+                        <font>font_small</font>
+                        <textcolor>state_text</textcolor>
+                        <selectedcolor>state_text</selectedcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>String.IsEqual(ListItem.Property(current),1)</visible>
+                    </control>
+                    <control type="label">
+                        <left>456</left>
+                        <width>120</width>
+                        <height>52</height>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <font>font_small</font>
+                        <textcolor>text_mute</textcolor>
+                        <selectedcolor>text_mute</selectedcolor>
+                        <label>$INFO[ListItem.Property(tag)]</label>
+                        <visible>true</visible>
+                    </control>
+                        </control>
                     </itemlayout>
                     <focusedlayout width="600" height="52">
-                <control type="image">
-                    <top>-10</top>
-                    <left>2</left>
-                    <width>596</width>
-                    <height>72</height>
-                    <texture border="22" colordiffuse="focus">ui/cut_btn_glow.png</texture>
-                    <visible>Control.HasFocus($PARAM[id])</visible>
-                </control>
-                <!-- the playing track's bar, dark blue also on the cursor's fill -->
-                <control type="image">
-                    <left>15</left>
-                    <top>12</top>
-                    <width>3</width>
-                    <height>28</height>
-                    <texture colordiffuse="state">ui/white.png</texture>
-                    <visible>String.IsEqual(ListItem.Property(current),1)</visible>
-                </control>
-                <control type="label">
-                    <left>24</left>
-                    <width>440</width>
-                    <height>52</height>
-                    <aligny>center</aligny>
-                    <font>font_small</font>
-                    <textcolor>focus_text</textcolor>
-                    <selectedcolor>focus_text</selectedcolor>
-                    <label>$INFO[ListItem.Label]</label>
-                    <visible>!String.IsEqual(ListItem.Property(current),1) + Control.HasFocus($PARAM[id])</visible>
-                </control>
-                <control type="label">
-                    <left>24</left>
-                    <width>440</width>
-                    <height>52</height>
-                    <aligny>center</aligny>
-                    <font>font_small</font>
-                    <textcolor>text_dim</textcolor>
-                    <selectedcolor>text_dim</selectedcolor>
-                    <label>$INFO[ListItem.Label]</label>
-                    <visible>!String.IsEqual(ListItem.Property(current),1) + !Control.HasFocus($PARAM[id])</visible>
-                </control>
-                <control type="label">
-                    <left>24</left>
-                    <width>440</width>
-                    <height>52</height>
-                    <aligny>center</aligny>
-                    <font>font_small</font>
-                    <textcolor>focus_text</textcolor>
-                    <selectedcolor>focus_text</selectedcolor>
-                    <label>$INFO[ListItem.Label]</label>
-                    <visible>String.IsEqual(ListItem.Property(current),1) + Control.HasFocus($PARAM[id])</visible>
-                </control>
-                <control type="label">
-                    <left>24</left>
-                    <width>440</width>
-                    <height>52</height>
-                    <aligny>center</aligny>
-                    <font>font_small</font>
-                    <textcolor>state_text</textcolor>
-                    <selectedcolor>state_text</selectedcolor>
-                    <label>$INFO[ListItem.Label]</label>
-                    <visible>String.IsEqual(ListItem.Property(current),1) + !Control.HasFocus($PARAM[id])</visible>
-                </control>
-                <control type="label">
-                    <left>456</left>
-                    <width>120</width>
-                    <height>52</height>
-                    <align>right</align>
-                    <aligny>center</aligny>
-                    <font>font_small</font>
-                    <textcolor>focus_text</textcolor>
-                    <selectedcolor>focus_text</selectedcolor>
-                    <label>$INFO[ListItem.Property(tag)]</label>
-                    <visible>Control.HasFocus($PARAM[id])</visible>
-                </control>
-                <control type="label">
-                    <left>456</left>
-                    <width>120</width>
-                    <height>52</height>
-                    <align>right</align>
-                    <aligny>center</aligny>
-                    <font>font_small</font>
-                    <textcolor>text_mute</textcolor>
-                    <selectedcolor>text_mute</selectedcolor>
-                    <label>$INFO[ListItem.Property(tag)]</label>
-                    <visible>!Control.HasFocus($PARAM[id])</visible>
-                </control>
+                        <!-- the item 10 px in: its glow reaches past it -->
+                        <control type="group">
+                            <left>10</left>
+                            <top>10</top>
+                    <control type="image">
+                        <top>-10</top>
+                        <left>2</left>
+                        <width>596</width>
+                        <height>72</height>
+                        <texture border="22" colordiffuse="focus">ui/cut_btn_glow.png</texture>
+                        <visible>Control.HasFocus($PARAM[id])</visible>
+                    </control>
+                    <!-- the playing track's bar, dark blue also on the cursor's fill -->
+                    <control type="image">
+                        <left>15</left>
+                        <top>12</top>
+                        <width>3</width>
+                        <height>28</height>
+                        <texture colordiffuse="state">ui/white.png</texture>
+                        <visible>String.IsEqual(ListItem.Property(current),1)</visible>
+                    </control>
+                    <control type="label">
+                        <left>24</left>
+                        <width>440</width>
+                        <height>52</height>
+                        <aligny>center</aligny>
+                        <font>font_small</font>
+                        <textcolor>focus_text</textcolor>
+                        <selectedcolor>focus_text</selectedcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>!String.IsEqual(ListItem.Property(current),1) + Control.HasFocus($PARAM[id])</visible>
+                    </control>
+                    <control type="label">
+                        <left>24</left>
+                        <width>440</width>
+                        <height>52</height>
+                        <aligny>center</aligny>
+                        <font>font_small</font>
+                        <textcolor>text_dim</textcolor>
+                        <selectedcolor>text_dim</selectedcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>!String.IsEqual(ListItem.Property(current),1) + !Control.HasFocus($PARAM[id])</visible>
+                    </control>
+                    <control type="label">
+                        <left>24</left>
+                        <width>440</width>
+                        <height>52</height>
+                        <aligny>center</aligny>
+                        <font>font_small</font>
+                        <textcolor>focus_text</textcolor>
+                        <selectedcolor>focus_text</selectedcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>String.IsEqual(ListItem.Property(current),1) + Control.HasFocus($PARAM[id])</visible>
+                    </control>
+                    <control type="label">
+                        <left>24</left>
+                        <width>440</width>
+                        <height>52</height>
+                        <aligny>center</aligny>
+                        <font>font_small</font>
+                        <textcolor>state_text</textcolor>
+                        <selectedcolor>state_text</selectedcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                        <visible>String.IsEqual(ListItem.Property(current),1) + !Control.HasFocus($PARAM[id])</visible>
+                    </control>
+                    <control type="label">
+                        <left>456</left>
+                        <width>120</width>
+                        <height>52</height>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <font>font_small</font>
+                        <textcolor>focus_text</textcolor>
+                        <selectedcolor>focus_text</selectedcolor>
+                        <label>$INFO[ListItem.Property(tag)]</label>
+                        <visible>Control.HasFocus($PARAM[id])</visible>
+                    </control>
+                    <control type="label">
+                        <left>456</left>
+                        <width>120</width>
+                        <height>52</height>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <font>font_small</font>
+                        <textcolor>text_mute</textcolor>
+                        <selectedcolor>text_mute</selectedcolor>
+                        <label>$INFO[ListItem.Property(tag)]</label>
+                        <visible>!Control.HasFocus($PARAM[id])</visible>
+                    </control>
+                        </control>
                     </focusedlayout>
                     <!-- rows come from the script, so no hidden row sits before a shown one (Kodi
                          clicks a static list by position) -->
