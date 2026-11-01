@@ -623,7 +623,7 @@
                     <top>-24</top>
                     <width>$PARAM[glowwidth]</width>
                     <height>$PARAM[glowheight]</height>
-                    <texture border="40" colordiffuse="glow">ui/cut_glow.png</texture>
+                    <texture border="40" colordiffuse="focus">ui/cut_glow.png</texture>
                     <visible>$PARAM[focused]</visible>
                 </control>
                 <!-- unfocused a plain rectangle, focused cut like the frame; scalediffuse="false" keeps
