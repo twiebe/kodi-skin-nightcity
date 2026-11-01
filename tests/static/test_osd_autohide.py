@@ -150,7 +150,7 @@ def test_player_category():
 def test_switches_are_on_by_default(cid, name):
     """Skin bools start unset: the switches store being off."""
     switch = controls(page())[cid]
-    assert switch.get('type') == 'radiobutton' and switch.findtext('width') == '1240'
+    assert switch.get('type') == 'radiobutton' and switch.findtext('width') == '1260'  # padded, test_glow.py
     assert switch.findtext('selected') == '!Skin.HasSetting(nc.osd.{}.off)'.format(name)
     assert [o.text for o in switch.findall('onclick')][0] == 'Skin.ToggleSetting(nc.osd.{}.off)'.format(name)
 
@@ -183,7 +183,8 @@ def test_delay_row_has_a_slider_like_kodis():
     button = row.find("control[@id='712']")
     assert button.findtext('label') == '$LOCALIZE[31362]'
     bar = row.find("control[@type='progress']")
-    assert [bar.findtext(k) for k in ('left', 'top', 'width', 'height')] == ['920', '20', '300', '12']
+    # 10 px in: the row's group is 10 px larger on each side for the glow (test_glow.py)
+    assert [bar.findtext(k) for k in ('left', 'top', 'width', 'height')] == ['930', '30', '300', '12']
     assert bar.findtext('info') == 'Skin.Numeric(nc.osd.hide.to)'
     assert bar.findtext('info2') == 'Skin.Numeric(nc.osd.hide.from)'
     assert bar.find('texturebg').get('colordiffuse') == 'surface_alt'

@@ -15,12 +15,12 @@
     <animation effect="fade" time="150">WindowClose</animation>
     <controls>
         <control type="grouplist" id="600">
-            <left>64</left>
-            <top>590</top>
-            <width>1000</width>
-            <height>54</height>
+            <left>54</left>
+            <top>580</top>
+            <width>1020</width>
+            <height>74</height>
             <orientation>horizontal</orientation>
-            <itemgap>12</itemgap>
+            <itemgap>-8</itemgap>
             <onup>noop</onup>
             <onleft>noop</onleft>
             <onright>620</onright>
@@ -51,13 +51,13 @@
             </include>
         </control>
         <control type="grouplist" id="620">
-            <left>1056</left>
-            <top>590</top>
-            <width>800</width>
-            <height>54</height>
+            <left>1046</left>
+            <top>580</top>
+            <width>820</width>
+            <height>74</height>
             <orientation>horizontal</orientation>
             <align>right</align>
-            <itemgap>12</itemgap>
+            <itemgap>-8</itemgap>
             <onup>noop</onup>
             <onleft>600</onleft>
             <onright>noop</onright>

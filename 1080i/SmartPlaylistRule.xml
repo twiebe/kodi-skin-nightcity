@@ -15,26 +15,26 @@
             </include>
             <control type="grouplist" id="9001">
                 <ondown>9000</ondown>
-                <left>40</left>
-                <top>84</top>
-                <width>920</width>
-                <height>200</height>
+                <left>30</left>
+                <top>74</top>
+                <width>940</width>
+                <height>220</height>
                 <orientation>vertical</orientation>
-                <itemgap>0</itemgap>
+                <itemgap>-20</itemgap>
                 <control type="button" id="15">
-                    <width>920</width>
+                    <width>940</width>
                     <include>SettingsRowLook</include>
                     <font>font_small</font>
                     <label>$LOCALIZE[21424]</label>
                 </control>
                 <control type="button" id="16">
-                    <width>920</width>
+                    <width>940</width>
                     <include>SettingsRowLook</include>
                     <font>font_small</font>
                     <label></label>
                 </control>
                 <control type="edit" id="17">
-                    <width>920</width>
+                    <width>940</width>
                     <include>SettingsRowLook</include>
                     <font>font_small</font>
                     <label></label>
@@ -42,27 +42,27 @@
             </control>
             <control type="grouplist" id="9000">
                 <onup>9001</onup>
-                <left>40</left>
-                <top>360</top>
-                <width>920</width>
-                <height>54</height>
+                <left>30</left>
+                <top>350</top>
+                <width>940</width>
+                <height>74</height>
                 <orientation>horizontal</orientation>
-                <itemgap>24</itemgap>
+                <itemgap>4</itemgap>
                 <align>right</align>
                 <include content="Button">
                     <param name="id" value="20"/>
                     <param name="label" value="$LOCALIZE[1024]"/>
-                    <param name="width" value="220"/>
+                    <param name="width" value="240"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="18"/>
                     <param name="label" value="$LOCALIZE[186]"/>
-                    <param name="width" value="200"/>
+                    <param name="width" value="220"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="19"/>
                     <param name="label" value="$LOCALIZE[222]"/>
-                    <param name="width" value="200"/>
+                    <param name="width" value="220"/>
                 </include>
             </control>
         </control>

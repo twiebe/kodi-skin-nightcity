@@ -25,11 +25,11 @@
         <control type="group">
             <include>WindowFade</include>
             <control type="grouplist" id="9000">
-                <left>120</left>
-                <top>100</top>
-                <width>400</width>
-                <height>840</height>
-                <itemgap>0</itemgap>
+                <left>110</left>
+                <top>90</top>
+                <width>420</width>
+                <height>860</height>
+                <itemgap>-20</itemgap>
                 <!-- Left leaves the page, back to the console -->
                 <onleft>Action(Back)</onleft>
                 <onright condition="String.IsEqual(Window.Property(nc.hp.tab),home)">200</onright>
@@ -76,7 +76,7 @@
                 <param name="id" value="200"/>
                 <param name="tab" value="home"/>
                 <param name="category" value="9002"/>
-                <param name="height" value="156"/>
+                <param name="height" value="176"/>
                 <param name="down" value="221"/>
                 <include content="SkinSettingsHeading">
                     <param name="label" value="$LOCALIZE[31225]"/>
@@ -88,7 +88,7 @@
                 <param name="id" value="300"/>
                 <param name="tab" value="movies"/>
                 <param name="category" value="9003"/>
-                <param name="height" value="156"/>
+                <param name="height" value="176"/>
                 <param name="down" value="321"/>
                 <include content="SkinSettingsHeading">
                     <param name="label" value="$LOCALIZE[31225]"/>
@@ -100,7 +100,7 @@
                 <param name="id" value="400"/>
                 <param name="tab" value="shows"/>
                 <param name="category" value="9004"/>
-                <param name="height" value="156"/>
+                <param name="height" value="176"/>
                 <param name="down" value="421"/>
                 <include content="SkinSettingsHeading">
                     <param name="label" value="$LOCALIZE[31225]"/>
@@ -141,7 +141,7 @@
                     <param name="onclick" value="NotifyAll(nightcity,search_forget)"/>
                 </include>
                 <control type="button" id="515">
-                    <width>1240</width>
+                    <width>1260</width>
                     <include>SettingsRowLook</include>
                     <label>$LOCALIZE[31338]</label>
                     <visible>!String.IsEmpty(Window(Home).Property(nc.search.recent.1))</visible>
@@ -156,11 +156,14 @@
                 </include>
                 <!-- the look: the colour scheme, no category of its own (the focus glow is always on). One group under a separator
                      and a heading: a grouplist stops at a label, the group takes the focus and
-                     hands it to the toggle -->
+                     hands it to the toggle. Like the padded rows in it the group is 10 px
+                     larger on each side; what does not glow stands 10 px in. -->
                 <control type="group" id="600">
-                    <width>1240</width>
-                    <height>105</height>
+                    <width>1260</width>
+                    <height>125</height>
                     <control type="image">
+                        <left>10</left>
+                        <top>10</top>
                         <width>1240</width>
                         <height>1</height>
                         <texture colordiffuse="border_dim">ui/white.png</texture>
@@ -173,7 +176,7 @@
                          Kodi keeps the colour scheme under Interface, the script picks it -->
                     <control type="button" id="602">
                         <top>53</top>
-                        <width>1240</width>
+                        <width>1260</width>
                         <include>SettingsRowLook</include>
                         <label>$LOCALIZE[14078]</label>
                         <label2>$VAR[ColourSchemeLabel]</label2>
@@ -206,9 +209,11 @@
                 </include>
                 <!-- a group under a separator and a heading, like the look of the main menu -->
                 <control type="group" id="630">
-                    <width>1240</width>
-                    <height>469</height>
+                    <width>1260</width>
+                    <height>489</height>
                     <control type="image">
+                        <left>10</left>
+                        <top>10</top>
                         <width>1240</width>
                         <height>1</height>
                         <texture colordiffuse="border_dim">ui/white.png</texture>
@@ -219,7 +224,7 @@
                     </include>
                     <control type="radiobutton" id="631">
                         <top>53</top>
-                        <width>1240</width>
+                        <width>1260</width>
                         <include>SettingsToggleLook</include>
                         <label>$LOCALIZE[31450]</label>
                         <selected>!Skin.HasSetting(nc.ratings.hide.imdb)</selected>
@@ -231,7 +236,7 @@
                     </control>
                     <control type="radiobutton" id="632">
                         <top>105</top>
-                        <width>1240</width>
+                        <width>1260</width>
                         <include>SettingsToggleLook</include>
                         <label>$LOCALIZE[31451]</label>
                         <selected>Skin.HasSetting(nc.ratings.show.tmdb)</selected>
@@ -243,7 +248,7 @@
                     </control>
                     <control type="radiobutton" id="633">
                         <top>157</top>
-                        <width>1240</width>
+                        <width>1260</width>
                         <include>SettingsToggleLook</include>
                         <label>$LOCALIZE[31452]</label>
                         <selected>!Skin.HasSetting(nc.ratings.hide.rt)</selected>
@@ -255,7 +260,7 @@
                     </control>
                     <control type="radiobutton" id="634">
                         <top>209</top>
-                        <width>1240</width>
+                        <width>1260</width>
                         <include>SettingsToggleLook</include>
                         <label>$LOCALIZE[31453]</label>
                         <selected>Skin.HasSetting(nc.ratings.show.rtu)</selected>
@@ -267,7 +272,7 @@
                     </control>
                     <control type="radiobutton" id="635">
                         <top>261</top>
-                        <width>1240</width>
+                        <width>1260</width>
                         <include>SettingsToggleLook</include>
                         <label>$LOCALIZE[31454]</label>
                         <selected>Skin.HasSetting(nc.ratings.show.mc)</selected>
@@ -279,7 +284,7 @@
                     </control>
                     <control type="radiobutton" id="636">
                         <top>313</top>
-                        <width>1240</width>
+                        <width>1260</width>
                         <include>SettingsToggleLook</include>
                         <label>$LOCALIZE[31455]</label>
                         <selected>Skin.HasSetting(nc.ratings.show.trakt)</selected>
@@ -291,7 +296,7 @@
                     </control>
                     <control type="radiobutton" id="637">
                         <top>365</top>
-                        <width>1240</width>
+                        <width>1260</width>
                         <include>SettingsToggleLook</include>
                         <label>$LOCALIZE[31456]</label>
                         <selected>Skin.HasSetting(nc.ratings.show.lb)</selected>
@@ -303,7 +308,7 @@
                     </control>
                     <control type="radiobutton" id="638">
                         <top>417</top>
-                        <width>1240</width>
+                        <width>1260</width>
                         <include>SettingsToggleLook</include>
                         <label>$LOCALIZE[31457]</label>
                         <selected>Skin.HasSetting(nc.ratings.show.mdb)</selected>
@@ -333,11 +338,11 @@
                      first id whose condition holds, after the actions. A group, so the slider bar
                      can sit on the row. -->
                 <control type="group" id="720">
-                    <width>1240</width>
-                    <height>52</height>
+                    <width>1260</width>
+                    <height>72</height>
                     <visible>!Skin.HasSetting(nc.osd.autohide.off)</visible>
                     <control type="button" id="712">
-                        <width>1240</width>
+                        <width>1260</width>
                         <include>SettingsRowLook</include>
                         <label>$LOCALIZE[31362]</label>
                         <onclick condition="String.IsEmpty(Window.Property(nc.hp.slide))">SetProperty(nc.hp.slide,1)</onclick>
@@ -352,6 +357,8 @@
                         <onunfocus>ClearProperty(nc.hp.slide)</onunfocus>
                     </control>
                     <control type="label">
+                        <left>10</left>
+                        <top>10</top>
                         <width>896</width>
                         <height>52</height>
                         <align>right</align>
@@ -363,8 +370,8 @@
                     <!-- the bar, its nib the fill between nib from and to (Kodi's slider
                          control draws a nib of a plain texture far too large) -->
                     <control type="progress">
-                        <left>920</left>
-                        <top>20</top>
+                        <left>930</left>
+                        <top>30</top>
                         <width>300</width>
                         <height>12</height>
                         <info>Skin.Numeric(nc.osd.hide.to)</info>

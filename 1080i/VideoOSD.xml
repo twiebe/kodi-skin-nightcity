@@ -62,12 +62,12 @@
             <visible>!Window.IsActive(1141) + !Window.IsActive(videobookmarks)</visible>
         </control>
         <control type="grouplist" id="600">
-            <left>64</left>
-            <top>952</top>
-            <width>760</width>
-            <height>54</height>
+            <left>54</left>
+            <top>942</top>
+            <width>780</width>
+            <height>74</height>
             <orientation>horizontal</orientation>
-            <itemgap>12</itemgap>
+            <itemgap>-8</itemgap>
             <onup>noop</onup>
             <!-- Down: the chapter row, Down again the cast and crew row -->
             <ondown>ActivateWindow(videobookmarks)</ondown>
@@ -105,13 +105,13 @@
             </include>
         </control>
         <control type="grouplist" id="620">
-            <left>856</left>
-            <top>952</top>
-            <width>1000</width>
-            <height>54</height>
+            <left>846</left>
+            <top>942</top>
+            <width>1020</width>
+            <height>74</height>
             <orientation>horizontal</orientation>
             <align>right</align>
-            <itemgap>12</itemgap>
+            <itemgap>-8</itemgap>
             <onup>noop</onup>
             <!-- Down: the chapter row, Down again the cast and crew row -->
             <ondown>ActivateWindow(videobookmarks)</ondown>

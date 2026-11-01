@@ -95,13 +95,17 @@
     </include>
 
     <!-- Top line of Home: the menu on the left, the clock on the right. Right of the menu, left
-         of the clock, an icon shows the quick menu while it has the focus (QuickMenuPanel). -->
+         of the clock, an icon shows the quick menu while it has the focus (QuickMenuPanel).
+         The grouplist reaches 10 px over and under its line for the glow of the focused entry;
+         its entries stand 10 px down (usecontrolcoords). What plays is a padded pill with left
+         -10 and the icon's group has left -10 too: the two cancel out, also without what plays,
+         where the right-aligned grouplist takes the group's 10 px back. -->
     <include name="HomeTop">
         <control type="grouplist" id="9190">
             <left>64</left>
-            <top>22</top>
+            <top>12</top>
             <width>1792</width>
-            <height>44</height>
+            <height>64</height>
             <orientation>horizontal</orientation>
             <align>right</align>
             <itemgap>16</itemgap>
@@ -116,14 +120,25 @@
                  is Right of what plays (9108), the grouplist's neighbour: the focus goes to the
                  icon in it -->
             <control type="group" id="9199">
+                <left>-10</left>
+                <top>10</top>
                 <width>56</width>
                 <height>44</height>
+                <!-- the focused fill with its glow, 10 px around the icon -->
+                <control type="image">
+                    <left>-10</left>
+                    <top>-10</top>
+                    <width>76</width>
+                    <height>64</height>
+                    <texture border="22" colordiffuse="accent">ui/cut_btn_glow.png</texture>
+                    <visible>Control.HasFocus(9109)</visible>
+                </control>
                 <!-- the icon is the radio texture: a button has no room for an icon -->
                 <control type="radiobutton" id="9109">
                     <width>56</width>
                     <height>44</height>
                     <label/>
-                    <texturefocus border="12" colordiffuse="accent">ui/cut_btn_fill.png</texturefocus>
+                    <texturefocus/>
                     <texturenofocus/>
                     <radioposx>12</radioposx>
                     <radioposy>6</radioposy>
@@ -161,13 +176,13 @@
             <include content="TopWeather">
                 <param name="font" value="font_num"/>
                 <param name="icon" value="28"/>
-                <param name="icontop" value="8"/>
-                <param name="height" value="44"/>
+                <param name="icontop" value="18"/>
+                <param name="height" value="64"/>
                 <param name="aligny" value="center"/>
             </include>
             <control type="label">
                 <width>auto</width>
-                <height>44</height>
+                <height>64</height>
                 <aligny>center</aligny>
                 <font>font_num</font>
                 <textcolor>text</textcolor>
@@ -369,7 +384,8 @@
     </include>
 
     <!-- The pill of a spotlight button (PillButton without id), filled while that button has
-         focus. A mouse click focuses the button and selects it. -->
+         focus, padded for the glow like PillButton. A mouse click focuses the button and
+         selects it. -->
     <include name="SpotlightPill">
         <param name="button"/>
         <param name="label"/>
@@ -383,7 +399,7 @@
                     <param name="label" value="$PARAM[label]"/>
                     <param name="textcolor" value="$PARAM[textcolor]"/>
                 </include>
-                <texturenofocus border="12" colordiffuse="$PARAM[color]">ui/cut_btn.png</texturenofocus>
+                <texturenofocus border="22" colordiffuse="$PARAM[color]">ui/cut_btn_pad.png</texturenofocus>
                 <onclick>SetFocus($PARAM[button])</onclick>
                 <onclick>Action(Select)</onclick>
             </control>
@@ -393,7 +409,7 @@
                     <param name="label" value="$PARAM[label]"/>
                     <param name="textcolor" value="focus_text"/>
                 </include>
-                <texturenofocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</texturenofocus>
+                <texturenofocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturenofocus>
                 <onclick>SetFocus($PARAM[button])</onclick>
                 <onclick>Action(Select)</onclick>
             </control>
@@ -403,30 +419,31 @@
          a direction hint in a racing game: Right on the last button moves the spotlight on to the
          next title. In a grouplist that takes focus give it an id: the grouplist sets Right of
          the last button to it, and Kodi passes a move to a control without focus on along its own
-         Right, which the grouplist set to the grouplist's onright (id 0 ends the move). -->
+         Right, which the grouplist set to the grouplist's onright (id 0 ends the move). 10 px
+         of margin around it, like the padded pills next to it. -->
     <include name="SpotlightMore">
         <param name="id" default="0"/>
         <definition>
             <control type="group" id="$PARAM[id]">
-                <width>35</width>
-                <height>54</height>
+                <width>55</width>
+                <height>74</height>
                 <control type="image">
-                    <left>0</left>
-                    <top>12</top>
+                    <left>10</left>
+                    <top>22</top>
                     <width>13</width>
                     <height>30</height>
                     <texture colordiffuse="state_text">ui/spot_more.png</texture>
                 </control>
                 <control type="image">
-                    <left>11</left>
-                    <top>12</top>
+                    <left>21</left>
+                    <top>22</top>
                     <width>13</width>
                     <height>30</height>
                     <texture colordiffuse="state_fade">ui/spot_more.png</texture>
                 </control>
                 <control type="image">
-                    <left>22</left>
-                    <top>12</top>
+                    <left>32</left>
+                    <top>22</top>
                     <width>13</width>
                     <height>30</height>
                     <texture colordiffuse="state_faint">ui/spot_more.png</texture>
@@ -439,15 +456,15 @@
         <param name="textcolor"/>
         <definition>
             <width>auto</width>
-            <height>54</height>
+            <height>74</height>
             <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
             <font>font_caps</font>
-            <textoffsetx>24</textoffsetx>
+            <textoffsetx>34</textoffsetx>
             <align>center</align>
             <aligny>center</aligny>
             <textcolor>$PARAM[textcolor]</textcolor>
             <focusedcolor>focus_text</focusedcolor>
-            <texturefocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</texturefocus>
+            <texturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturefocus>
         </definition>
     </include>
 
@@ -522,12 +539,12 @@
                 </include>
             </control>
             <control type="grouplist">
-                <left>384</left>
-                <top>490</top>
-                <width>1400</width>
-                <height>54</height>
+                <left>374</left>
+                <top>480</top>
+                <width>1420</width>
+                <height>74</height>
                 <orientation>horizontal</orientation>
-                <itemgap>16</itemgap>
+                <itemgap>-4</itemgap>
                 <include content="SpotlightPill">
                     <param name="button" value="9010"/>
                     <param name="label" value="$VAR[SpotlightPlayLabel]"/>
@@ -611,12 +628,12 @@
                 </include>
             </control>
             <control type="grouplist">
-                <left>384</left>
-                <top>490</top>
-                <width>1400</width>
-                <height>54</height>
+                <left>374</left>
+                <top>480</top>
+                <width>1420</width>
+                <height>74</height>
                 <orientation>horizontal</orientation>
-                <itemgap>16</itemgap>
+                <itemgap>-4</itemgap>
                 <include content="SpotlightPill">
                     <param name="button" value="9551"/>
                     <param name="label" value="▶ $LOCALIZE[31106]"/>
@@ -722,19 +739,20 @@
             <include content="PageFade">
                 <param name="delay" value="FadeStep1"/>
             </include>
+            <!-- 10 px larger on each side for the glow (padded textures) -->
             <control type="button" id="9750">
-                <left>64</left>
-                <top>290</top>
-                <width>960</width>
-                <height>64</height>
+                <left>54</left>
+                <top>280</top>
+                <width>980</width>
+                <height>84</height>
                 <font>font_label</font>
-                <textoffsetx>24</textoffsetx>
+                <textoffsetx>34</textoffsetx>
                 <aligny>center</aligny>
                 <label>$VAR[SearchFieldLabel]</label>
                 <textcolor>text</textcolor>
                 <focusedcolor>focus_text</focusedcolor>
-                <texturefocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</texturefocus>
-                <texturenofocus border="12" colordiffuse="accent">ui/cut_btn.png</texturenofocus>
+                <texturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturefocus>
+                <texturenofocus border="22" colordiffuse="accent">ui/cut_btn_pad.png</texturenofocus>
                 <onclick>NotifyAll(nightcity,search)</onclick>
                 <onup>9100</onup>
                 <!-- past the recent terms onto the results (DESIGN.md: a selector is skipped from
@@ -881,7 +899,8 @@
     </include>
 
     <!-- The menu in the top line: the focused entry a filled accent button, the shown page a
-         dark blue outline. Focus switches the page. -->
+         dark blue outline. Focus switches the page. Entries and gaps are padded for the glow
+         (MenuButton): 20 px larger, the grouplist puts them 20 px closer. -->
     <!-- Down from the top line (the menu, what plays) into the shown page; a page without
          spotlight starts with its rows -->
     <include name="HomePageDown">
@@ -897,12 +916,12 @@
 
     <include name="MainMenu">
         <control type="grouplist" id="9100">
-            <left>-18</left>
-            <top>22</top>
-            <width>1500</width>
-            <height>44</height>
+            <left>-28</left>
+            <top>12</top>
+            <width>1520</width>
+            <height>64</height>
             <orientation>horizontal</orientation>
-            <itemgap>0</itemgap>
+            <itemgap>-20</itemgap>
             <!-- the menu wraps around over the icon next to the clock, which remembers where the
                  focus came from (Back in the quick menu returns there) -->
             <onleft>SetProperty(nc.quick.from,$INFO[System.CurrentControlId],home)</onleft>
@@ -916,12 +935,18 @@
             <include>QuickMenuFade</include>
             <include content="TabGap">
                 <param name="id" value="9111"/>
+                <param name="width" value="44"/>
+                <param name="height" value="64"/>
             </include>
             <include content="TabGap">
                 <param name="id" value="9112"/>
+                <param name="width" value="44"/>
+                <param name="height" value="64"/>
             </include>
             <include content="TabGap">
                 <param name="id" value="9113"/>
+                <param name="width" value="44"/>
+                <param name="height" value="64"/>
             </include>
             <include content="MenuButton">
                 <param name="id" value="9101"/>
@@ -932,6 +957,8 @@
             </include>
             <include content="TabGap">
                 <param name="id" value="9115"/>
+                <param name="width" value="44"/>
+                <param name="height" value="64"/>
                 <param name="visible" value="!Skin.HasSetting(nc.menu.hide.movies)"/>
             </include>
             <include content="MenuButton">
@@ -944,6 +971,8 @@
             </include>
             <include content="TabGap">
                 <param name="id" value="9116"/>
+                <param name="width" value="44"/>
+                <param name="height" value="64"/>
                 <param name="visible" value="!Skin.HasSetting(nc.menu.hide.shows)"/>
             </include>
             <include content="MenuButton">
@@ -956,6 +985,8 @@
             </include>
             <include content="TabGap">
                 <param name="id" value="9119"/>
+                <param name="width" value="44"/>
+                <param name="height" value="64"/>
                 <param name="visible" value="!Skin.HasSetting(nc.menu.hide.music) + Library.HasContent(music)"/>
             </include>
             <!-- music: only with music in the library -->
@@ -969,6 +1000,8 @@
             </include>
             <include content="TabGap">
                 <param name="id" value="9117"/>
+                <param name="width" value="44"/>
+                <param name="height" value="64"/>
                 <param name="visible" value="!Skin.HasSetting(nc.menu.hide.search)"/>
             </include>
             <include content="MenuButton">
@@ -981,6 +1014,8 @@
             </include>
             <include content="TabGap">
                 <param name="id" value="9114"/>
+                <param name="width" value="44"/>
+                <param name="height" value="64"/>
             </include>
         </control>
     </include>
@@ -1274,6 +1309,8 @@
         <param name="width"/>
         <param name="focused"/>
         <param name="tilewidth"/>
+        <!-- tilewidth + 20: the focused fill with its glow, 10 px around the tile -->
+        <param name="glowwidth"/>
         <param name="textwidth"/>
         <param name="subwidth"/>
         <param name="numcolor" default="accent2"/>
@@ -1289,11 +1326,11 @@
                 <visible>![$PARAM[focused] + Control.HasFocus(9601)]</visible>
             </control>
             <control type="image">
-                <left>24</left>
-                <top>20</top>
-                <width>$PARAM[tilewidth]</width>
-                <height>170</height>
-                <texture border="16" colordiffuse="focus">ui/cut_fill.png</texture>
+                <left>14</left>
+                <top>10</top>
+                <width>$PARAM[glowwidth]</width>
+                <height>190</height>
+                <texture border="26" colordiffuse="focus">ui/cut_fill_glow.png</texture>
                 <visible>$PARAM[focused] + Control.HasFocus(9601)</visible>
             </control>
             <control type="label">
@@ -1360,6 +1397,7 @@
                         <param name="width" value="300"/>
                         <param name="focused" value="false"/>
                         <param name="tilewidth" value="276"/>
+                        <param name="glowwidth" value="296"/>
                         <param name="textwidth" value="230"/>
                         <param name="subwidth" value="236"/>
                     </include>
@@ -1369,6 +1407,7 @@
                         <param name="width" value="360"/>
                         <param name="focused" value="false"/>
                         <param name="tilewidth" value="336"/>
+                        <param name="glowwidth" value="356"/>
                         <param name="textwidth" value="290"/>
                         <param name="subwidth" value="296"/>
                     </include>
@@ -1378,6 +1417,7 @@
                         <param name="width" value="300"/>
                         <param name="focused" value="true"/>
                         <param name="tilewidth" value="276"/>
+                        <param name="glowwidth" value="296"/>
                         <param name="textwidth" value="230"/>
                         <param name="subwidth" value="236"/>
                         <param name="numcolor" value="$VAR[SystemTileNumColor]"/>
@@ -1390,6 +1430,7 @@
                         <param name="width" value="360"/>
                         <param name="focused" value="true"/>
                         <param name="tilewidth" value="336"/>
+                        <param name="glowwidth" value="356"/>
                         <param name="textwidth" value="290"/>
                         <param name="subwidth" value="296"/>
                         <param name="numcolor" value="$VAR[SystemTileNumColor]"/>
@@ -1536,13 +1577,14 @@
 
         <!-- weather: Kodi has it only with a weather add-on chosen in its settings -->
         <control type="button" id="1210">
-            <left>40</left>
-            <top>160</top>
-            <width>560</width>
-            <height>112</height>
+            <!-- 10 px larger on each side for the glow (padded textures) -->
+            <left>30</left>
+            <top>150</top>
+            <width>580</width>
+            <height>132</height>
             <label/>
-            <texturenofocus border="16" colordiffuse="border_dim">ui/cut.png</texturenofocus>
-            <texturefocus border="16" colordiffuse="focus">ui/cut_fill.png</texturefocus>
+            <texturenofocus border="26" colordiffuse="border_dim">ui/cut_pad.png</texturenofocus>
+            <texturefocus border="26" colordiffuse="focus">ui/cut_fill_glow.png</texturefocus>
             <!-- Kodi opens no window while a modal dialog is open -->
             <onclick>Dialog.Close(1170,true)</onclick>
             <!-- on Home first onto the icon: Back from the weather lands there, menu shown -->
@@ -1752,9 +1794,11 @@
                 <visible>![$PARAM[focused] + Control.HasFocus($PARAM[list])]</visible>
             </control>
             <control type="image">
-                <width>178</width>
-                <height>132</height>
-                <texture border="16" colordiffuse="focus">ui/cut_fill.png</texture>
+                <left>-10</left>
+                <top>-10</top>
+                <width>198</width>
+                <height>152</height>
+                <texture border="26" colordiffuse="focus">ui/cut_fill_glow.png</texture>
                 <visible>$PARAM[focused] + Control.HasFocus($PARAM[list])</visible>
             </control>
             <control type="group">
@@ -1835,9 +1879,11 @@
                 <visible>![$PARAM[focused] + Control.HasFocus($PARAM[list])]</visible>
             </control>
             <control type="image">
-                <width>178</width>
-                <height>72</height>
-                <texture border="16" colordiffuse="focus">ui/cut_fill.png</texture>
+                <left>-10</left>
+                <top>-10</top>
+                <width>198</width>
+                <height>92</height>
+                <texture border="26" colordiffuse="focus">ui/cut_fill_glow.png</texture>
                 <visible>$PARAM[focused] + Control.HasFocus($PARAM[list])</visible>
             </control>
             <control type="image">

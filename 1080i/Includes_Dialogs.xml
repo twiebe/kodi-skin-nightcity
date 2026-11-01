@@ -5,27 +5,28 @@
          400 (GUIDialogKaiToast.cpp); an image's label is its file. -->
     <expression name="NotificationWarns">String.IsEqual(Control.GetLabel(400),DefaultIconWarning.png) | String.IsEqual(Control.GetLabel(400),DefaultIconError.png)</expression>
     <!-- Left-aligned menu row: plain text, the focused row a cyan cut fill. For context and button
-         menus. -->
+         menus. Padded for the glow like PillButton: width is the row's + 20, the grouplist puts
+         the rows 20 px closer. -->
     <include name="ListButton">
         <param name="id"/>
         <param name="label" default=""/>
-        <param name="width" default="600"/>
+        <param name="width" default="620"/>
         <param name="onclick" default="noop"/>
         <param name="onclick2" default="noop"/>
         <param name="visible" default="true"/>
         <definition>
             <control type="button" id="$PARAM[id]">
                 <width>$PARAM[width]</width>
-                <height>52</height>
+                <height>72</height>
                 <label>$PARAM[label]</label>
                 <font>font_label</font>
-                <textoffsetx>20</textoffsetx>
+                <textoffsetx>30</textoffsetx>
                 <aligny>center</aligny>
                 <textcolor>text_dim</textcolor>
                 <focusedcolor>focus_text</focusedcolor>
                 <!-- e.g. clear in an empty event log -->
                 <disabledcolor>text_mute</disabledcolor>
-                <texturefocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</texturefocus>
+                <texturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturefocus>
                 <texturenofocus/>
                 <onclick>$PARAM[onclick]</onclick>
                 <onclick>$PARAM[onclick2]</onclick>
@@ -130,10 +131,14 @@
                     </control>
                 </itemlayout>
                 <focusedlayout width="$PARAM[width]" height="52">
+                    <!-- the fill with its glow, 10 px out on each side: left and right set the
+                         width, the row's + 20 -->
                     <control type="image">
-                        <width>$PARAM[width]</width>
-                        <height>52</height>
-                        <texture border="12" colordiffuse="focus">ui/cut_btn_fill.png</texture>
+                        <left>-10</left>
+                        <right>-10</right>
+                        <top>-10</top>
+                        <height>72</height>
+                        <texture border="22" colordiffuse="focus">ui/cut_btn_glow.png</texture>
                         <visible>Control.HasFocus($PARAM[id])</visible>
                     </control>
                     <!-- the current value's bar, dark blue also on the cursor's fill -->
@@ -223,7 +228,10 @@
         </definition>
     </include>
 
-    <!-- Default controls Kodi clones for every setting (ids 7-15). Hidden templates. -->
+    <!-- Default controls Kodi clones for every setting (ids 7-15). Hidden templates. Padded for
+         the glow of the focused row: Kodi sets their width to the grouplist's (id 5), which is
+         10 px larger on each side and puts its rows 20 px closer; a separator is the line in
+         the middle of 21 px. -->
     <include name="SettingsTemplates">
         <param name="width" default="1200"/>
         <definition>
@@ -239,10 +247,10 @@
             <control type="spincontrolex" id="9">
                 <width>$PARAM[width]</width>
                 <include>SettingsRowLook</include>
-                <spinposx>12</spinposx>
+                <spinposx>22</spinposx>
                 <spinwidth>34</spinwidth>
                 <spinheight>34</spinheight>
-                <texturefocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</texturefocus>
+                <texturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturefocus>
                 <texturenofocus/>
                 <texturedown colordiffuse="text_dim">ui/spin_minus.png</texturedown>
                 <texturedownfocus colordiffuse="focus_text">ui/spin_minus_focus.png</texturedownfocus>
@@ -253,8 +261,8 @@
             </control>
             <control type="image" id="11">
                 <width>$PARAM[width]</width>
-                <height>1</height>
-                <texture colordiffuse="border_dim">ui/white.png</texture>
+                <height>21</height>
+                <texture colordiffuse="border_dim">ui/line_pad.png</texture>
             </control>
             <control type="edit" id="12">
                 <width>$PARAM[width]</width>
@@ -271,18 +279,18 @@
             </control>
             <control type="label" id="14">
                 <width>$PARAM[width]</width>
-                <height>52</height>
+                <height>72</height>
                 <font>font_caps_small</font>
                 <textcolor>state_text</textcolor>
                 <aligny>center</aligny>
-                <textoffsetx>20</textoffsetx>
+                <textoffsetx>30</textoffsetx>
             </control>
             <control type="colorbutton" id="15">
                 <width>$PARAM[width]</width>
                 <include>SettingsRowLook</include>
                 <colorwidth>48</colorwidth>
                 <colorheight>24</colorheight>
-                <colorposx>-80</colorposx>
+                <colorposx>-70</colorposx>
             </control>
         </definition>
     </include>
@@ -295,41 +303,45 @@
         </control>
     </include>
 
-    <!-- A category button: the focused one a cyan cut fill, the shown one (alt texture) grey -->
+    <!-- A category button: the focused one a cyan cut fill, the shown one (alt texture) grey;
+         padded for the glow like the setting rows -->
     <include name="SettingsCategoryLook">
-        <width>400</width>
-        <height>52</height>
+        <width>420</width>
+        <height>72</height>
         <font>font_label</font>
-        <textoffsetx>20</textoffsetx>
+        <textoffsetx>30</textoffsetx>
         <aligny>center</aligny>
         <textcolor>text_dim</textcolor>
         <focusedcolor>focus_text</focusedcolor>
-        <texturefocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</texturefocus>
+        <texturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturefocus>
         <texturenofocus/>
-        <alttexturefocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</alttexturefocus>
-        <alttexturenofocus border="12" colordiffuse="surface_alt">ui/cut_btn_fill.png</alttexturenofocus>
+        <alttexturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</alttexturefocus>
+        <alttexturenofocus border="22" colordiffuse="surface_alt">ui/cut_btn_fill_pad.png</alttexturenofocus>
     </include>
 
+    <!-- A setting row, 10 px larger on each side than the row it shows for the glow of the
+         focused fill: in a grouplist 20 px wider than the row and 20 px closer to the next; a
+         row placed by left and top stands 10 px further out -->
     <include name="SettingsRowLook">
-        <height>52</height>
+        <height>72</height>
         <font>font_label</font>
-        <textoffsetx>20</textoffsetx>
+        <textoffsetx>30</textoffsetx>
         <aligny>center</aligny>
         <textcolor>text</textcolor>
         <focusedcolor>focus_text</focusedcolor>
         <disabledcolor>text_mute</disabledcolor>
-        <texturefocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</texturefocus>
+        <texturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturefocus>
         <texturenofocus/>
     </include>
 
     <!-- A settings row with a check box on the right -->
     <include name="SettingsToggleLook">
         <include>SettingsRowLook</include>
-        <radiowidth>32</radiowidth>
+        <radiowidth>42</radiowidth>
         <radioheight>32</radioheight>
-        <textureradioonfocus colordiffuse="focus_text">ui/check_on.png</textureradioonfocus>
-        <textureradioonnofocus colordiffuse="state_text">ui/check_on.png</textureradioonnofocus>
-        <textureradiooffnofocus colordiffuse="text_mute">ui/check_off.png</textureradiooffnofocus>
-        <textureradioofffocus colordiffuse="focus_text">ui/check_off.png</textureradioofffocus>
+        <textureradioonfocus colordiffuse="focus_text">ui/check_on_pad.png</textureradioonfocus>
+        <textureradioonnofocus colordiffuse="state_text">ui/check_on_pad.png</textureradioonnofocus>
+        <textureradiooffnofocus colordiffuse="text_mute">ui/check_off_pad.png</textureradiooffnofocus>
+        <textureradioofffocus colordiffuse="focus_text">ui/check_off_pad.png</textureradioofffocus>
     </include>
 </includes>

@@ -402,7 +402,9 @@
     </include>
 
     <!-- Button with a cut top-right corner. Only the focused button is filled; a primary button
-         passes color=accent and textcolor=accent so it stands out without fill. -->
+         passes color=accent and textcolor=accent so it stands out without fill. The focused
+         fill glows: the button is 10 px larger on each side than the pill it shows (padded
+         textures), so a fixed width is the pill's + 20 and its grouplist puts it 20 px closer. -->
     <include name="PillButton">
         <param name="id"/>
         <param name="label"/>
@@ -415,13 +417,13 @@
         <param name="enable" default="true"/>
         <param name="color" default="border_dim"/>
         <param name="textcolor" default="text_dim"/>
-        <param name="textoffsetx" default="24"/>
+        <param name="textoffsetx" default="34"/>
         <definition>
             <control type="button" id="$PARAM[id]">
                 <visible>$PARAM[visible]</visible>
                 <enable>$PARAM[enable]</enable>
                 <width>$PARAM[width]</width>
-                <height>54</height>
+                <height>74</height>
                 <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
                 <font>font_caps</font>
                 <textoffsetx>$PARAM[textoffsetx]</textoffsetx>
@@ -430,8 +432,8 @@
                 <textcolor>$PARAM[textcolor]</textcolor>
                 <focusedcolor>focus_text</focusedcolor>
                 <disabledcolor>$PARAM[textcolor]</disabledcolor>
-                <texturefocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</texturefocus>
-                <texturenofocus border="12" colordiffuse="$PARAM[color]">ui/cut_btn.png</texturenofocus>
+                <texturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturefocus>
+                <texturenofocus border="22" colordiffuse="$PARAM[color]">ui/cut_btn_pad.png</texturenofocus>
                 <onclick>$PARAM[onclick]</onclick>
                 <onclick>$PARAM[onclick2]</onclick>
                 <onfocus>$PARAM[onfocus]</onfocus>
@@ -451,13 +453,13 @@
             <control type="group">
                 <visible>$PARAM[visible]</visible>
                 <control type="image">
-                    <width>96</width>
-                    <height>54</height>
-                    <texture border="12" colordiffuse="$PARAM[color]">$PARAM[texture]</texture>
+                    <width>116</width>
+                    <height>74</height>
+                    <texture border="22" colordiffuse="$PARAM[color]">$PARAM[texture]</texture>
                 </control>
                 <control type="label">
-                    <width>96</width>
-                    <height>54</height>
+                    <width>116</width>
+                    <height>74</height>
                     <font>font_caps</font>
                     <align>center</align>
                     <aligny>center</aligny>
@@ -477,7 +479,7 @@
         <param name="onclick2" default="noop"/>
         <param name="onfocus" default="noop"/>
         <param name="visible" default="true"/>
-        <param name="textoffsetx" default="24"/>
+        <param name="textoffsetx" default="34"/>
         <definition>
             <include content="PillButton">
                 <param name="id" value="$PARAM[id]"/>
@@ -798,7 +800,7 @@
     </include>
 
     <!-- Entry of the top menu: the focused one a filled accent button with dark text, the shown
-         page a dark blue (state) outline -->
+         page a dark blue (state) outline; padded for the glow like PillButton -->
     <include name="MenuButton">
         <param name="id"/>
         <param name="label"/>
@@ -809,18 +811,18 @@
         <definition>
             <control type="togglebutton" id="$PARAM[id]">
                 <width>auto</width>
-                <height>44</height>
+                <height>64</height>
                 <font>font_caps</font>
-                <textoffsetx>16</textoffsetx>
+                <textoffsetx>26</textoffsetx>
                 <aligny>center</aligny>
                 <textcolor>text_mute</textcolor>
                 <focusedcolor>focus_text</focusedcolor>
                 <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
                 <altlabel>[UPPERCASE]$PARAM[label][/UPPERCASE]</altlabel>
-                <texturefocus border="12" colordiffuse="accent">ui/cut_btn_fill.png</texturefocus>
+                <texturefocus border="22" colordiffuse="accent">ui/cut_btn_glow.png</texturefocus>
                 <texturenofocus/>
-                <alttexturefocus border="12" colordiffuse="accent">ui/cut_btn_fill.png</alttexturefocus>
-                <alttexturenofocus border="12" colordiffuse="state">ui/cut_btn.png</alttexturenofocus>
+                <alttexturefocus border="22" colordiffuse="accent">ui/cut_btn_glow.png</alttexturefocus>
+                <alttexturenofocus border="22" colordiffuse="state">ui/cut_btn_pad.png</alttexturenofocus>
                 <usealttexture>$PARAM[active]</usealttexture>
                 <onfocus>$PARAM[onfocus]</onfocus>
                 <onclick>$PARAM[onclick]</onclick>
@@ -838,10 +840,13 @@
         <param name="color" default="border_dim"/>
         <param name="bg" default="bg"/>
         <param name="visible" default="true"/>
+        <!-- the top menu's gaps are 20 px wider and higher, like its padded entries -->
+        <param name="width" default="24"/>
+        <param name="height" default="44"/>
         <definition>
             <control type="button" id="$PARAM[id]">
-                <width>24</width>
-                <height>44</height>
+                <width>$PARAM[width]</width>
+                <height>$PARAM[height]</height>
                 <enable>false</enable>
                 <font>font_caps</font>
                 <textcolor>$PARAM[color]</textcolor>

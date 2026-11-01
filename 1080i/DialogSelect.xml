@@ -42,27 +42,27 @@
                 <onleft condition="Control.IsVisible(6)">6</onleft>
                 <onleft>3</onleft>
                 <onup>noop</onup>
-                <left>40</left>
-                <top>740</top>
-                <width>1020</width>
-                <height>54</height>
+                <left>30</left>
+                <top>730</top>
+                <width>1040</width>
+                <height>74</height>
                 <orientation>horizontal</orientation>
-                <itemgap>24</itemgap>
+                <itemgap>4</itemgap>
                 <align>right</align>
                 <include content="Button">
                     <param name="id" value="5"/>
                     <param name="label" value=""/>
-                    <param name="width" value="240"/>
+                    <param name="width" value="260"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="8"/>
                     <param name="label" value=""/>
-                    <param name="width" value="240"/>
+                    <param name="width" value="260"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="7"/>
                     <param name="label" value="$LOCALIZE[222]"/>
-                    <param name="width" value="240"/>
+                    <param name="width" value="260"/>
                 </include>
             </control>
         </control>

@@ -40,35 +40,35 @@
             </control>
             <control type="grouplist" id="9000">
                 <onup>450</onup>
-                <left>40</left>
-                <top>820</top>
-                <width>1320</width>
-                <height>54</height>
+                <left>30</left>
+                <top>810</top>
+                <width>1340</width>
+                <height>74</height>
                 <orientation>horizontal</orientation>
-                <itemgap>24</itemgap>
+                <itemgap>4</itemgap>
                 <align>right</align>
                 <include content="Button">
                     <param name="id" value="415"/>
                     <param name="visible" value="Control.IsEnabled(415)"/>
                     <param name="label" value="$LOCALIZE[119]"/>
-                    <param name="width" value="260"/>
+                    <param name="width" value="280"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="416"/>
                     <param name="visible" value="Control.IsEnabled(416)"/>
                     <param name="label" value="$LOCALIZE[31094]"/>
-                    <param name="width" value="200"/>
+                    <param name="width" value="220"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="413"/>
                     <param name="visible" value="Control.IsEnabled(413)"/>
                     <param name="label" value="$LOCALIZE[186]"/>
-                    <param name="width" value="200"/>
+                    <param name="width" value="220"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="414"/>
                     <param name="label" value="$LOCALIZE[222]"/>
-                    <param name="width" value="200"/>
+                    <param name="width" value="220"/>
                 </include>
             </control>
         </control>

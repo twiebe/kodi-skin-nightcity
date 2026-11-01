@@ -1334,11 +1334,12 @@
     <!-- Rows heading and slot rows of the home category: OK opens the section dialog (or
          drops a grabbed slot), right cycles the option, left goes back to the category, up/down
          carry a grabbed slot (a group, not a grouplist: a grouplist replaces the up/down
-         actions of its rows) -->
+         actions of its rows). The rows are 10 px larger on each side for their glow
+         (HomePagesRow), so the group stands 10 px further out -->
     <include name="HomePagesSlotsHome">
         <control type="group">
-            <left>560</left>
-            <top>256</top>
+            <left>550</left>
+            <top>246</top>
             <visible>String.IsEqual(Window.Property(nc.hp.tab),home)</visible>
             <!-- up into the place of the hidden interval row -->
             <animation effect="slide" start="0,0" end="0,-52" time="0" condition="String.IsEqual(Skin.String(SpotlightSource),off)">Conditional</animation>
@@ -1753,11 +1754,12 @@
     <!-- Rows heading and slot rows of the movies category: OK opens the section dialog (or
          drops a grabbed slot), right cycles the option, left goes back to the category, up/down
          carry a grabbed slot (a group, not a grouplist: a grouplist replaces the up/down
-         actions of its rows) -->
+         actions of its rows). The rows are 10 px larger on each side for their glow
+         (HomePagesRow), so the group stands 10 px further out -->
     <include name="HomePagesSlotsMovies">
         <control type="group">
-            <left>560</left>
-            <top>256</top>
+            <left>550</left>
+            <top>246</top>
             <visible>String.IsEqual(Window.Property(nc.hp.tab),movies)</visible>
             <!-- up into the place of the hidden interval row -->
             <animation effect="slide" start="0,0" end="0,-52" time="0" condition="String.IsEqual(Skin.String(nc.movies.spotlight),off)">Conditional</animation>
@@ -2036,11 +2038,12 @@
     <!-- Rows heading and slot rows of the shows category: OK opens the section dialog (or
          drops a grabbed slot), right cycles the option, left goes back to the category, up/down
          carry a grabbed slot (a group, not a grouplist: a grouplist replaces the up/down
-         actions of its rows) -->
+         actions of its rows). The rows are 10 px larger on each side for their glow
+         (HomePagesRow), so the group stands 10 px further out -->
     <include name="HomePagesSlotsShows">
         <control type="group">
-            <left>560</left>
-            <top>256</top>
+            <left>550</left>
+            <top>246</top>
             <visible>String.IsEqual(Window.Property(nc.hp.tab),shows)</visible>
             <!-- up into the place of the hidden interval row -->
             <animation effect="slide" start="0,0" end="0,-52" time="0" condition="String.IsEqual(Skin.String(nc.shows.spotlight),off)">Conditional</animation>

@@ -175,7 +175,7 @@ def test_icon_next_to_the_clock_shows_it():
     row = home['9190']
     assert row.get('type') == 'grouplist' and row.findtext('align') == 'right'
     # first entry: what plays while music plays (test_music.py), then the icon
-    assert row.findall('control')[1].find('control').get('id') == '9109'
+    assert row.findall('control')[1].find("control[@type='radiobutton']").get('id') == '9109'
     panel = home['9180']
     assert panel.findtext('visible') == 'Control.HasFocus(9109) | ControlGroup(9180).HasFocus'
     # inside the menu the icon stays marked in the accent colour: Up and Back lead there

@@ -40,9 +40,11 @@
                 </itemlayout>
                 <focusedlayout width="960" height="56">
                     <control type="image">
-                        <width>960</width>
-                        <height>56</height>
-                        <texture border="12" colordiffuse="focus">ui/cut_btn_fill.png</texture>
+                        <left>-10</left>
+                        <top>-10</top>
+                        <width>980</width>
+                        <height>76</height>
+                        <texture border="22" colordiffuse="focus">ui/cut_btn_glow.png</texture>
                         <visible>Control.HasFocus(50)</visible>
                     </control>
                     <control type="label">
@@ -68,55 +70,55 @@
                 <label>$INFO[Container(50).ListItem.FileNameAndPath]</label>
             </control>
             <control type="grouplist" id="9000">
-                <left>1040</left>
-                <top>84</top>
-                <width>320</width>
-                <height>600</height>
-                <itemgap>12</itemgap>
+                <left>1030</left>
+                <top>74</top>
+                <width>340</width>
+                <height>620</height>
+                <itemgap>-8</itemgap>
                 <onleft>50</onleft>
                 <include content="Button">
                     <param name="id" value="21"/>
                     <param name="label" value="$LOCALIZE[208]"/>
-                    <param name="width" value="320"/>
+                    <param name="width" value="340"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="22"/>
                     <param name="label" value="$LOCALIZE[40014]"/>
-                    <param name="width" value="320"/>
+                    <param name="width" value="340"/>
                     <param name="visible" value="Window.IsVisible(managevideoversions)"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="23"/>
                     <param name="label" value="$LOCALIZE[40015]"/>
-                    <param name="width" value="320"/>
+                    <param name="width" value="340"/>
                     <param name="visible" value="Window.IsVisible(managevideoextras)"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="27"/>
                     <param name="label" value="$LOCALIZE[13511]"/>
-                    <param name="width" value="320"/>
+                    <param name="width" value="340"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="24"/>
                     <param name="label" value="$LOCALIZE[40004]"/>
-                    <param name="width" value="320"/>
+                    <param name="width" value="340"/>
                     <param name="visible" value="Window.IsVisible(managevideoversions)"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="28"/>
                     <param name="label" value="$LOCALIZE[118]"/>
-                    <param name="width" value="320"/>
+                    <param name="width" value="340"/>
                     <param name="visible" value="Window.IsVisible(managevideoextras)"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="26"/>
                     <param name="label" value="$LOCALIZE[15015]"/>
-                    <param name="width" value="320"/>
+                    <param name="width" value="340"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="25"/>
                     <param name="label" value="$LOCALIZE[40023]"/>
-                    <param name="width" value="320"/>
+                    <param name="width" value="340"/>
                     <param name="visible" value="Window.IsVisible(managevideoversions)"/>
                 </include>
             </control>

@@ -56,9 +56,11 @@
                 </itemlayout>
                 <focusedlayout width="420" height="52">
                     <control type="image">
-                        <width>420</width>
-                        <height>52</height>
-                        <texture border="12" colordiffuse="focus">ui/cut_btn_fill.png</texture>
+                        <left>-10</left>
+                        <top>-10</top>
+                        <width>440</width>
+                        <height>72</height>
+                        <texture border="22" colordiffuse="focus">ui/cut_btn_glow.png</texture>
                         <visible>Control.HasFocus(150)</visible>
                     </control>
                     <control type="label">
@@ -95,9 +97,11 @@
                 </itemlayout>
                 <focusedlayout width="1060" height="52">
                     <control type="image">
-                        <width>1060</width>
-                        <height>52</height>
-                        <texture border="12" colordiffuse="focus">ui/cut_btn_fill.png</texture>
+                        <left>-10</left>
+                        <top>-10</top>
+                        <width>1080</width>
+                        <height>72</height>
+                        <texture border="22" colordiffuse="focus">ui/cut_btn_glow.png</texture>
                         <visible>Control.HasFocus(120)</visible>
                     </control>
                     <control type="label">
@@ -123,16 +127,16 @@
                 <label>$LOCALIZE[31058]</label>
             </control>
             <control type="grouplist" id="9003">
-                <left>40</left>
-                <top>712</top>
-                <width>420</width>
-                <height>52</height>
+                <left>30</left>
+                <top>702</top>
+                <width>440</width>
+                <height>72</height>
                 <onup>150</onup>
                 <onright>120</onright>
                 <include content="Button">
                     <param name="id" value="160"/>
                     <param name="label" value="$LOCALIZE[24121]"/>
-                    <param name="width" value="420"/>
+                    <param name="width" value="440"/>
                     <param name="onclick" value="noop"/>
                 </include>
             </control>

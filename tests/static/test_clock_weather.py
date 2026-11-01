@@ -46,8 +46,10 @@ def test_home_clock_has_the_weather_left_of_it_at_its_size():
     use = re.search(r'<include content="TopWeather">.*?</include>', top, re.S).group(0)
     assert '<param name="font" value="font_num"/>' in use
     assert '<param name="icon" value="28"/>' in use
-    assert '<param name="height" value="44"/>' in use
-    assert '<param name="icontop" value="8"/>' in use
+    # the top line is 10 px higher over and under its 44 px for the glow of the focused entry
+    # (test_glow.py): the clock's 44 px line, its icon 8 px down in it
+    assert '<param name="height" value="64"/>' in use
+    assert '<param name="icontop" value="18"/>' in use
     assert '<param name="aligny" value="center"/>' in use
     # no second weather of its own any more
     assert top.count('Weather.Temperature') == 0

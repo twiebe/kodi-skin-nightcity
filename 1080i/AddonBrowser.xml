@@ -24,32 +24,32 @@
                 <param name="font" value="font_label"/>
             </include>
             <control type="grouplist" id="9000">
-                <left>1440</left>
-                <top>100</top>
-                <width>400</width>
-                <height>600</height>
+                <left>1430</left>
+                <top>90</top>
+                <width>420</width>
+                <height>620</height>
                 <orientation>vertical</orientation>
-                <itemgap>0</itemgap>
+                <itemgap>-20</itemgap>
                 <onleft>50</onleft>
                 <control type="radiobutton" id="7">
-                    <width>400</width>
+                    <width>420</width>
                     <include>SettingsRowLook</include>
                     <label>$LOCALIZE[31090]</label>
                 </control>
                 <control type="radiobutton" id="8">
-                    <width>400</width>
+                    <width>420</width>
                     <include>SettingsRowLook</include>
                     <label>$LOCALIZE[31091]</label>
                 </control>
                 <include content="ListButton">
                     <param name="id" value="9"/>
                     <param name="label" value="$LOCALIZE[24034]"/>
-                    <param name="width" value="400"/>
+                    <param name="width" value="420"/>
                 </include>
                 <include content="ListButton">
                     <param name="id" value="5"/>
                     <param name="label" value="$LOCALIZE[5]"/>
-                    <param name="width" value="400"/>
+                    <param name="width" value="420"/>
                 </include>
             </control>
         </control>

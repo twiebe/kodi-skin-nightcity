@@ -17,17 +17,18 @@ def _include(name):
 
 def test_spotlight_more_is_three_chevrons_fading_to_the_right():
     """Three small drawn chevrons close together, like a direction hint in a racing game, each a
-    step darker to the right, centred on the buttons, the usual button gap before them."""
+    step darker to the right, centred on the buttons, the usual button gap before them. 10 px of
+    margin around them, like the buttons padded for their glow (test_glow.py)."""
     body = _include('SpotlightMore')
     images = re.findall(r'<control type="image">(.*?)</control>', body, re.S)
     assert len(images) == 3
     colours = [re.search(r'colordiffuse="(\w+)">ui/spot_more.png<', i).group(1) for i in images]
     assert colours == ['state_text', 'state_fade', 'state_faint']
     lefts = [int(re.search(r'<left>(\d+)</left>', i).group(1)) for i in images]
-    assert lefts[0] == 0 and lefts[1] - lefts[0] == lefts[2] - lefts[1] == 11
+    assert lefts[0] == 10 and lefts[1] - lefts[0] == lefts[2] - lefts[1] == 11
     for image in images:
-        assert '<top>12</top>' in image and '<height>30</height>' in image
-    assert '<height>54</height>' in body  # the group, as tall as the buttons
+        assert '<top>22</top>' in image and '<height>30</height>' in image
+    assert '<height>74</height>' in body  # the group, as tall as the padded buttons
 
 
 def test_chevron_fades_are_state_text_with_less_alpha():
@@ -55,7 +56,7 @@ def test_every_spotlight_button_row_ends_with_the_arrow():
     for name in ('Includes_Home.xml', 'Includes_Music.xml'):
         root = ET.parse(SKIN / name).getroot()
         rows += [c for c in root.iter('control') if c.get('type') == 'grouplist'
-                 and c.findtext('left') == '384' and c.findtext('top') == '490']
+                 and c.findtext('left') == '374' and c.findtext('top') == '480']  # padded, test_glow.py
     assert len(rows) == 3, len(rows)
     for row in rows:
         last = [c for c in row if c.tag in ('include', 'control')][-1]

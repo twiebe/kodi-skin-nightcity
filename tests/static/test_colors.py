@@ -246,7 +246,7 @@ def test_on_marks_and_shown_page_are_state():
             if el.tag in ('textureradioonnofocus', 'alttexturenofocus', 'texturenofocus')
             and el.get('colordiffuse') == 'accent']
     assert cyan == [('Includes_Home.xml', 'textureradioonnofocus', 'ui/qm_menu.png'),
-                    ('Includes_Home.xml', 'texturenofocus', 'ui/cut_btn.png')]
+                    ('Includes_Home.xml', 'texturenofocus', 'ui/cut_btn_pad.png')]
     menu = parse(ROOT / '1080i' / 'DialogContextMenu.xml')
     assert 'accent' not in {t.get('colordiffuse') for t in menu.iter('texture')}
 def counters(path):
