@@ -122,11 +122,11 @@ def padded(image, pad):
     return out
 
 
-def fill_glow(size, corner, pad, corners=('tr', 'bl'), strength=0.45, blur=4):
+def fill_glow(size, corner, pad, corners=('tr', 'bl'), strength=0.8, blur=4):
     """A cut fill inset by `pad` with a soft halo in the margin, the glow of a focused button.
     Kodi draws a button's textures only inside the button, so a button that glows is `pad` px
     larger on each side and its texture border `pad` px wider. One colordiffuse colours fill
-    and halo: the halo has `strength` of the fill's alpha, about the glow colour's."""
+    and halo: the halo has `strength` of the fill's alpha, a little stronger than the cards' glow."""
     fill = padded(cut(size, corner, corners=corners), pad)
     alpha = fill.getchannel('A')
     halo = alpha.filter(ImageFilter.MaxFilter(5)).filter(ImageFilter.GaussianBlur(blur))
