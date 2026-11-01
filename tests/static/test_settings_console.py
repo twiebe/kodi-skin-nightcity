@@ -108,7 +108,10 @@ def test_system_page_tiles_fit_the_row():
         six, five = (int(lay.get('width')) for lay in layouts)
         assert 6 * six == 5 * five <= width, tag  # six end where five end
         for lay in layouts:
-            calls = lay.findall('include')
+            # the tiles 10 px in: the list reaches past them for the glow (test_glow.py)
+            inset = lay.findall('control')
+            assert len(inset) == 1 and inset[0].findtext('left') == '10', tag
+            calls = inset[0].findall('include')
             assert [c.get('content') for c in calls] == ['SystemTile'], tag
             params = {q.get('name'): q.get('value') for q in calls[0].findall('param')}
             assert params['width'] == lay.get('width'), tag

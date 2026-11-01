@@ -35,85 +35,105 @@
                 <visible>false</visible>
             </control>
             <control type="list" id="150">
-                <left>40</left>
-                <top>84</top>
-                <width>420</width>
-                <height>600</height>
+                <left>30</left>
+                <top>74</top>
+                <width>440</width>
+                <height>620</height>
                 <scrolltime>200</scrolltime>
                 <onright>120</onright>
                 <ondown>160</ondown>
                 <itemlayout width="420" height="52">
-                    <control type="label">
-                        <left>16</left>
-                        <width>388</width>
-                        <height>52</height>
-                        <aligny>center</aligny>
-                        <font>font_small</font>
-                        <textcolor>text_dim</textcolor>
-                        <selectedcolor>text_dim</selectedcolor>
-                        <label>$INFO[ListItem.Label]</label>
+                    <!-- the item 10 px in: its glow reaches past it -->
+                    <control type="group">
+                        <left>10</left>
+                        <top>10</top>
+                        <control type="label">
+                            <left>16</left>
+                            <width>388</width>
+                            <height>52</height>
+                            <aligny>center</aligny>
+                            <font>font_small</font>
+                            <textcolor>text_dim</textcolor>
+                            <selectedcolor>text_dim</selectedcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                        </control>
                     </control>
                 </itemlayout>
                 <focusedlayout width="420" height="52">
-                    <control type="image">
-                        <left>-10</left>
-                        <top>-10</top>
-                        <width>440</width>
-                        <height>72</height>
-                        <texture border="22" colordiffuse="focus">ui/cut_btn_glow.png</texture>
-                        <visible>Control.HasFocus(150)</visible>
-                    </control>
-                    <control type="label">
-                        <left>16</left>
-                        <width>388</width>
-                        <height>52</height>
-                        <aligny>center</aligny>
-                        <font>font_small</font>
-                        <textcolor>text</textcolor>
-                        <selectedcolor>text</selectedcolor>
-                        <focusedcolor>focus_text</focusedcolor>
-                        <label>$INFO[ListItem.Label]</label>
+                    <!-- the item 10 px in: its glow reaches past it -->
+                    <control type="group">
+                        <left>10</left>
+                        <top>10</top>
+                        <control type="image">
+                            <left>-10</left>
+                            <top>-10</top>
+                            <width>440</width>
+                            <height>72</height>
+                            <texture border="22" colordiffuse="focus">ui/cut_btn_glow.png</texture>
+                            <visible>Control.HasFocus(150)</visible>
+                        </control>
+                        <control type="label">
+                            <left>16</left>
+                            <width>388</width>
+                            <height>52</height>
+                            <aligny>center</aligny>
+                            <font>font_small</font>
+                            <textcolor>text</textcolor>
+                            <selectedcolor>text</selectedcolor>
+                            <focusedcolor>focus_text</focusedcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                        </control>
                     </control>
                 </focusedlayout>
             </control>
             <control type="list" id="120">
-                <left>500</left>
-                <top>84</top>
-                <width>1060</width>
-                <height>680</height>
+                <left>490</left>
+                <top>74</top>
+                <width>1080</width>
+                <height>700</height>
                 <scrolltime>200</scrolltime>
                 <onleft>150</onleft>
                 <itemlayout width="1060" height="52">
-                    <control type="label">
-                        <left>16</left>
-                        <width>1028</width>
-                        <height>52</height>
-                        <aligny>center</aligny>
-                        <font>font_small</font>
-                        <textcolor>text_dim</textcolor>
-                        <selectedcolor>text_dim</selectedcolor>
-                        <label>[COLOR state_text]$INFO[ListItem.Label][/COLOR]  $INFO[ListItem.Label2]$INFO[ListItem.Property(sync), [COLOR text_mute]sync ,[/COLOR]]</label>
+                    <!-- the item 10 px in: its glow reaches past it -->
+                    <control type="group">
+                        <left>10</left>
+                        <top>10</top>
+                        <control type="label">
+                            <left>16</left>
+                            <width>1028</width>
+                            <height>52</height>
+                            <aligny>center</aligny>
+                            <font>font_small</font>
+                            <textcolor>text_dim</textcolor>
+                            <selectedcolor>text_dim</selectedcolor>
+                            <label>[COLOR state_text]$INFO[ListItem.Label][/COLOR]  $INFO[ListItem.Label2]$INFO[ListItem.Property(sync), [COLOR text_mute]sync ,[/COLOR]]</label>
+                        </control>
                     </control>
                 </itemlayout>
                 <focusedlayout width="1060" height="52">
-                    <control type="image">
-                        <left>-10</left>
-                        <top>-10</top>
-                        <width>1080</width>
-                        <height>72</height>
-                        <texture border="22" colordiffuse="focus">ui/cut_btn_glow.png</texture>
-                        <visible>Control.HasFocus(120)</visible>
-                    </control>
-                    <control type="label">
-                        <left>16</left>
-                        <width>1028</width>
-                        <height>52</height>
-                        <aligny>center</aligny>
-                        <font>font_small</font>
-                        <textcolor>text</textcolor>
-                        <selectedcolor>text</selectedcolor>
-                        <focusedcolor>focus_text</focusedcolor>
-                        <label>[COLOR state_text]$INFO[ListItem.Label][/COLOR]  $INFO[ListItem.Label2]$INFO[ListItem.Property(sync), [COLOR text_mute]sync ,[/COLOR]]</label>
+                    <!-- the item 10 px in: its glow reaches past it -->
+                    <control type="group">
+                        <left>10</left>
+                        <top>10</top>
+                        <control type="image">
+                            <left>-10</left>
+                            <top>-10</top>
+                            <width>1080</width>
+                            <height>72</height>
+                            <texture border="22" colordiffuse="focus">ui/cut_btn_glow.png</texture>
+                            <visible>Control.HasFocus(120)</visible>
+                        </control>
+                        <control type="label">
+                            <left>16</left>
+                            <width>1028</width>
+                            <height>52</height>
+                            <aligny>center</aligny>
+                            <font>font_small</font>
+                            <textcolor>text</textcolor>
+                            <selectedcolor>text</selectedcolor>
+                            <focusedcolor>focus_text</focusedcolor>
+                            <label>[COLOR state_text]$INFO[ListItem.Label][/COLOR]  $INFO[ListItem.Label2]$INFO[ListItem.Property(sync), [COLOR text_mute]sync ,[/COLOR]]</label>
+                        </control>
                     </control>
                 </focusedlayout>
             </control>

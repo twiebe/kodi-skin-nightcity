@@ -14,86 +14,96 @@
             <param name="weather" value="false"/>
         </include>
         <control type="list" id="50">
-            <left>120</left>
-            <top>128</top>
-            <width>1240</width>
-            <height>896</height>
+            <left>110</left>
+            <top>118</top>
+            <width>1260</width>
+            <height>916</height>
             <viewtype label="535">list</viewtype>
             <scrolltime tween="quadratic">200</scrolltime>
             <onright>9060</onright>
             <itemlayout width="1240" height="56">
-                <control type="label">
-                    <left>20</left>
-                    <width>40</width>
-                    <height>56</height>
-                    <aligny>center</aligny>
-                    <font>font_label</font>
-                    <textcolor>state_text</textcolor>
-                    <selectedcolor>state_text</selectedcolor>
-                    <label>$VAR[LibraryMark]</label>
-                </control>
-                <control type="label">
-                    <left>64</left>
-                    <width>880</width>
-                    <height>56</height>
-                    <aligny>center</aligny>
-                    <font>font_label</font>
-                    <textcolor>text_dim</textcolor>
-                    <selectedcolor>text_dim</selectedcolor>
-                    <label>$INFO[ListItem.Label]</label>
-                </control>
-                <control type="label">
-                    <left>960</left>
-                    <width>260</width>
-                    <height>56</height>
-                    <align>right</align>
-                    <aligny>center</aligny>
-                    <font>font_small</font>
-                    <textcolor>text_mute</textcolor>
-                    <selectedcolor>text_mute</selectedcolor>
-                    <label>$VAR[LibraryRight]</label>
+                <!-- the item 10 px in: its glow reaches past it -->
+                <control type="group">
+                    <left>10</left>
+                    <top>10</top>
+                    <control type="label">
+                        <left>20</left>
+                        <width>40</width>
+                        <height>56</height>
+                        <aligny>center</aligny>
+                        <font>font_label</font>
+                        <textcolor>state_text</textcolor>
+                        <selectedcolor>state_text</selectedcolor>
+                        <label>$VAR[LibraryMark]</label>
+                    </control>
+                    <control type="label">
+                        <left>64</left>
+                        <width>880</width>
+                        <height>56</height>
+                        <aligny>center</aligny>
+                        <font>font_label</font>
+                        <textcolor>text_dim</textcolor>
+                        <selectedcolor>text_dim</selectedcolor>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                    <control type="label">
+                        <left>960</left>
+                        <width>260</width>
+                        <height>56</height>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <font>font_small</font>
+                        <textcolor>text_mute</textcolor>
+                        <selectedcolor>text_mute</selectedcolor>
+                        <label>$VAR[LibraryRight]</label>
+                    </control>
                 </control>
             </itemlayout>
             <focusedlayout width="1240" height="56">
-                <control type="image">
-                    <left>-10</left>
-                    <top>-10</top>
-                    <width>1260</width>
-                    <height>76</height>
-                    <texture border="22" colordiffuse="focus">ui/cut_btn_glow.png</texture>
-                    <visible>Control.HasFocus(50)</visible>
-                </control>
-                <control type="label">
-                    <left>20</left>
-                    <width>40</width>
-                    <height>56</height>
-                    <aligny>center</aligny>
-                    <font>font_label</font>
-                    <textcolor>$VAR[LibraryFocusColor]</textcolor>
-                    <selectedcolor>$VAR[LibraryFocusColor]</selectedcolor>
-                    <label>$VAR[LibraryMark]</label>
-                </control>
-                <control type="label">
-                    <left>64</left>
-                    <width>880</width>
-                    <height>56</height>
-                    <aligny>center</aligny>
-                    <font>font_label</font>
-                    <textcolor>$VAR[LibraryFocusColor]</textcolor>
-                    <selectedcolor>$VAR[LibraryFocusColor]</selectedcolor>
-                    <scroll>Control.HasFocus(50)</scroll>
-                    <label>$INFO[ListItem.Label]</label>
-                </control>
-                <control type="label">
-                    <left>960</left>
-                    <width>260</width>
-                    <height>56</height>
-                    <align>right</align>
-                    <aligny>center</aligny>
-                    <font>font_small</font>
-                    <textcolor>$VAR[LibraryFocusColor]</textcolor>
-                    <selectedcolor>$VAR[LibraryFocusColor]</selectedcolor>
-                    <label>$VAR[LibraryRight]</label>
+                <!-- the item 10 px in: its glow reaches past it -->
+                <control type="group">
+                    <left>10</left>
+                    <top>10</top>
+                    <control type="image">
+                        <left>-10</left>
+                        <top>-10</top>
+                        <width>1260</width>
+                        <height>76</height>
+                        <texture border="22" colordiffuse="focus">ui/cut_btn_glow.png</texture>
+                        <visible>Control.HasFocus(50)</visible>
+                    </control>
+                    <control type="label">
+                        <left>20</left>
+                        <width>40</width>
+                        <height>56</height>
+                        <aligny>center</aligny>
+                        <font>font_label</font>
+                        <textcolor>$VAR[LibraryFocusColor]</textcolor>
+                        <selectedcolor>$VAR[LibraryFocusColor]</selectedcolor>
+                        <label>$VAR[LibraryMark]</label>
+                    </control>
+                    <control type="label">
+                        <left>64</left>
+                        <width>880</width>
+                        <height>56</height>
+                        <aligny>center</aligny>
+                        <font>font_label</font>
+                        <textcolor>$VAR[LibraryFocusColor]</textcolor>
+                        <selectedcolor>$VAR[LibraryFocusColor]</selectedcolor>
+                        <scroll>Control.HasFocus(50)</scroll>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                    <control type="label">
+                        <left>960</left>
+                        <width>260</width>
+                        <height>56</height>
+                        <align>right</align>
+                        <aligny>center</aligny>
+                        <font>font_small</font>
+                        <textcolor>$VAR[LibraryFocusColor]</textcolor>
+                        <selectedcolor>$VAR[LibraryFocusColor]</selectedcolor>
+                        <label>$VAR[LibraryRight]</label>
+                    </control>
                 </control>
             </focusedlayout>
         </control>

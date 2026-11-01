@@ -247,3 +247,92 @@ def test_more_pill_list_grows_by_the_margin():
     assert (more.findtext('width'), more.findtext('height')) == (str(96 + 2 * GLOW), str(54 + 2 * GLOW))
     for layout in more.findall('itemlayout') + more.findall('focusedlayout'):
         assert (layout.get('width'), layout.get('height')) == (str(96 + 2 * GLOW), str(54 + 2 * GLOW))
+
+
+# Lists and panels whose focused item glows clip it at their own rect: they reach GLOW px past
+# their items on every side, and their layouts draw their items GLOW px further in, so the items
+# stay where they were. Old rects (left, top, width, height):
+CONTAINERS = {
+    ('DialogMusicInfo.xml', '5050'): (40, 48, 1840, 420),
+    ('DialogSubtitles.xml', '150'): (40, 84, 420, 600),
+    ('DialogSubtitles.xml', '120'): (500, 84, 1060, 680),
+    ('DialogVideoManager.xml', '50'): (40, 84, 960, 560),
+    ('Includes_Home.xml', '9601'): (40, 44, 1880, 240),
+    ('Includes_Home.xml', '1220'): (40, 336, 576, 292),
+    ('Includes_Home.xml', '1230'): (40, 680, 384, 76),
+    ('Includes_Player.xml', '$PARAM[id]'): (0, 56, 600, 416),
+    ('MusicOSD.xml', '701'): (64, 44, 1792, 336),
+    ('MyMusicNav.xml', '50'): (120, 128, 1240, 896),
+    ('MyVideoNav.xml', '50'): (120, 128, 1240, 896),
+}
+
+
+def _container(name, cid):
+    return next(c for c in parse(ROOT / '1080i' / name).iter('control')
+                if c.get('id') == cid and c.get('type') in ('list', 'panel'))
+
+
+def _inset(layout):
+    """The layout holds one group, GLOW px in."""
+    kids = layout.findall('control')
+    return len(kids) == 1 and kids[0].get('type') == 'group' and \
+        (kids[0].findtext('left'), kids[0].findtext('top')) == (str(GLOW), str(GLOW))
+
+
+def test_glowing_containers_reach_past_their_items():
+    for (name, cid), (left, top, width, height) in CONTAINERS.items():
+        c = _container(name, cid)
+        rect = tuple(c.findtext(k) for k in ('left', 'top', 'width', 'height'))
+        assert rect == tuple(str(v) for v in (left - GLOW, top - GLOW, width + 2 * GLOW, height + 2 * GLOW)), (name, cid)
+        for tag in ('itemlayout', 'focusedlayout'):
+            assert _inset(c.find(tag)), (name, cid, tag)
+            # a grown container shows no more items than before (Kodi counts whole items)
+            size = int(c.find(tag).get('height' if (c.findtext('orientation') or 'vertical') == 'vertical' else 'width'))
+            span = height if (c.findtext('orientation') or 'vertical') == 'vertical' else width
+            assert (span + 2 * GLOW) // size == span // size, (name, cid)
+
+
+# DialogList callers whose list takes the focus, by old rect (left, top, width, height): the list
+# reaches past its rows (rowwidth is the row, inset draws it GLOW px in); where 20 px more would
+# fit one more row, only as much as keeps the rows per page.
+DIALOG_LISTS = {
+    ('AddonBrowser.xml', '50'): (120, 100, 1240, 920),
+    ('DialogMediaSource.xml', '10'): (40, 84, 860, 400),
+    ('DialogSelect.xml', '3'): (40, 84, 1020, 624),
+    ('DialogSelect.xml', '6'): (40, 84, 1020, 624),
+    ('EventLog.xml', '50'): (120, 100, 1240, 780),
+    ('FileBrowser.xml', '450'): (40, 140, 1320, 624),
+    ('FileManager.xml', '20'): (120, 140, 820, 780),
+    ('FileManager.xml', '21'): (980, 140, 820, 780),
+    ('SettingsProfile.xml', '2'): (120, 100, 1000, 800),
+    ('SmartPlaylistEditor.xml', '10'): (40, 520, 860, 320),
+}
+ROW = 52
+
+
+def _dialog_list_params(name, cid):
+    for inc in parse(ROOT / '1080i' / name).iter('include'):
+        params = {x.get('name'): x.get('value') for x in inc.findall('param')}
+        if inc.get('content') == 'DialogList' and params.get('id') == cid:
+            return params
+    raise AssertionError((name, cid))
+
+
+def test_dialog_list_reaches_past_its_rows():
+    inc = next(i for i in parse(ROOT / '1080i' / 'Includes_Dialogs.xml').iter('include') if i.get('name') == 'DialogList')
+    lst = inc.find('definition/control')
+    for tag in ('itemlayout', 'focusedlayout'):
+        layout = lst.find(tag)
+        assert layout.get('width') == '$PARAM[rowwidth]', tag
+        kids = layout.findall('control')
+        assert len(kids) == 1 and [kids[0].findtext('left'), kids[0].findtext('top')] == ['$PARAM[inset]'] * 2, tag
+    for (name, cid), (left, top, width, height) in DIALOG_LISTS.items():
+        params = _dialog_list_params(name, cid)
+        grown = height + 2 * GLOW
+        if grown // ROW != height // ROW:
+            grown = (height // ROW + 1) * ROW - 1
+        assert (params['left'], params['top'], params['width'], params['height']) == \
+            tuple(str(v) for v in (left - GLOW, top - GLOW, width + 2 * GLOW, grown)), (name, cid)
+        assert (params['rowwidth'], params['inset']) == (str(width), str(GLOW)), (name, cid)
+        # the last row of a page and its glow still fit
+        assert GLOW + (height // ROW) * ROW + GLOW <= grown, (name, cid)

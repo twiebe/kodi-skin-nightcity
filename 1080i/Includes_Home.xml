@@ -1385,58 +1385,78 @@
                 <onup>SetProperty(nc.quick.from,$INFO[System.CurrentControlId],home)</onup>
                 <onup>9109</onup>
                 <ondown>noop</ondown>
-                <left>40</left>
-                <top>44</top>
-                <width>1880</width>
-                <height>240</height>
+                <left>30</left>
+                <top>34</top>
+                <width>1900</width>
+                <height>260</height>
                 <orientation>horizontal</orientation>
                 <scrolltime tween="quadratic">200</scrolltime>
                 <!-- six tiles with the OS settings tile (the last), else five; both end at the same place -->
                 <itemlayout width="300" height="210" condition="$EXP[ElecSettings]">
-                    <include content="SystemTile">
-                        <param name="width" value="300"/>
-                        <param name="focused" value="false"/>
-                        <param name="tilewidth" value="276"/>
-                        <param name="glowwidth" value="296"/>
-                        <param name="textwidth" value="230"/>
-                        <param name="subwidth" value="236"/>
-                    </include>
+                    <!-- the item 10 px in: its glow reaches past it -->
+                    <control type="group">
+                        <left>10</left>
+                        <top>10</top>
+                        <include content="SystemTile">
+                            <param name="width" value="300"/>
+                            <param name="focused" value="false"/>
+                            <param name="tilewidth" value="276"/>
+                            <param name="glowwidth" value="296"/>
+                            <param name="textwidth" value="230"/>
+                            <param name="subwidth" value="236"/>
+                        </include>
+                    </control>
                 </itemlayout>
                 <itemlayout width="360" height="210">
-                    <include content="SystemTile">
-                        <param name="width" value="360"/>
-                        <param name="focused" value="false"/>
-                        <param name="tilewidth" value="336"/>
-                        <param name="glowwidth" value="356"/>
-                        <param name="textwidth" value="290"/>
-                        <param name="subwidth" value="296"/>
-                    </include>
+                    <!-- the item 10 px in: its glow reaches past it -->
+                    <control type="group">
+                        <left>10</left>
+                        <top>10</top>
+                        <include content="SystemTile">
+                            <param name="width" value="360"/>
+                            <param name="focused" value="false"/>
+                            <param name="tilewidth" value="336"/>
+                            <param name="glowwidth" value="356"/>
+                            <param name="textwidth" value="290"/>
+                            <param name="subwidth" value="296"/>
+                        </include>
+                    </control>
                 </itemlayout>
                 <focusedlayout width="300" height="210" condition="$EXP[ElecSettings]">
-                    <include content="SystemTile">
-                        <param name="width" value="300"/>
-                        <param name="focused" value="true"/>
-                        <param name="tilewidth" value="276"/>
-                        <param name="glowwidth" value="296"/>
-                        <param name="textwidth" value="230"/>
-                        <param name="subwidth" value="236"/>
-                        <param name="numcolor" value="$VAR[SystemTileNumColor]"/>
-                        <param name="color" value="$VAR[SystemTileColor]"/>
-                        <param name="subcolor" value="$VAR[SystemTileSubColor]"/>
-                    </include>
+                    <!-- the item 10 px in: its glow reaches past it -->
+                    <control type="group">
+                        <left>10</left>
+                        <top>10</top>
+                        <include content="SystemTile">
+                            <param name="width" value="300"/>
+                            <param name="focused" value="true"/>
+                            <param name="tilewidth" value="276"/>
+                            <param name="glowwidth" value="296"/>
+                            <param name="textwidth" value="230"/>
+                            <param name="subwidth" value="236"/>
+                            <param name="numcolor" value="$VAR[SystemTileNumColor]"/>
+                            <param name="color" value="$VAR[SystemTileColor]"/>
+                            <param name="subcolor" value="$VAR[SystemTileSubColor]"/>
+                        </include>
+                    </control>
                 </focusedlayout>
                 <focusedlayout width="360" height="210">
-                    <include content="SystemTile">
-                        <param name="width" value="360"/>
-                        <param name="focused" value="true"/>
-                        <param name="tilewidth" value="336"/>
-                        <param name="glowwidth" value="356"/>
-                        <param name="textwidth" value="290"/>
-                        <param name="subwidth" value="296"/>
-                        <param name="numcolor" value="$VAR[SystemTileNumColor]"/>
-                        <param name="color" value="$VAR[SystemTileColor]"/>
-                        <param name="subcolor" value="$VAR[SystemTileSubColor]"/>
-                    </include>
+                    <!-- the item 10 px in: its glow reaches past it -->
+                    <control type="group">
+                        <left>10</left>
+                        <top>10</top>
+                        <include content="SystemTile">
+                            <param name="width" value="360"/>
+                            <param name="focused" value="true"/>
+                            <param name="tilewidth" value="336"/>
+                            <param name="glowwidth" value="356"/>
+                            <param name="textwidth" value="290"/>
+                            <param name="subwidth" value="296"/>
+                            <param name="numcolor" value="$VAR[SystemTileNumColor]"/>
+                            <param name="color" value="$VAR[SystemTileColor]"/>
+                            <param name="subcolor" value="$VAR[SystemTileSubColor]"/>
+                        </include>
+                    </control>
                 </focusedlayout>
                 <!-- no visible conditions before the last item: Kodi clicks a static list by position -->
                 <content>
@@ -1660,10 +1680,10 @@
         <!-- no visible conditions: Kodi clicks a static list by position. Tiles the device
              cannot do are dimmed (property can empty). -->
         <control type="panel" id="1220">
-            <left>40</left>
-            <top>336</top>
-            <width>576</width>
-            <height>292</height>
+            <left>30</left>
+            <top>326</top>
+            <width>596</width>
+            <height>312</height>
             <orientation>vertical</orientation>
             <onup>1210</onup>
             <!-- Back on Home closes the menu (9189, QuickMenuPanel); in the dialog Kodi's own
@@ -1673,15 +1693,25 @@
             <onleft>noop</onleft>
             <onright>noop</onright>
             <itemlayout width="192" height="146">
-                <include content="QuickTile">
-                    <param name="list" value="1220"/>
-                    <param name="focused" value="false"/>
-                </include>
+                <!-- the item 10 px in: its glow reaches past it -->
+                <control type="group">
+                    <left>10</left>
+                    <top>10</top>
+                    <include content="QuickTile">
+                        <param name="list" value="1220"/>
+                        <param name="focused" value="false"/>
+                    </include>
+                </control>
             </itemlayout>
             <focusedlayout width="192" height="146">
-                <include content="QuickTile">
-                    <param name="list" value="1220"/>
-                </include>
+                <!-- the item 10 px in: its glow reaches past it -->
+                <control type="group">
+                    <left>10</left>
+                    <top>10</top>
+                    <include content="QuickTile">
+                        <param name="list" value="1220"/>
+                    </include>
+                </control>
             </focusedlayout>
             <content>
                 <item>
@@ -1738,10 +1768,10 @@
             <param name="width" value="560"/>
         </include>
         <control type="list" id="1230">
-            <left>40</left>
-            <top>680</top>
-            <width>384</width>
-            <height>76</height>
+            <left>30</left>
+            <top>670</top>
+            <width>404</width>
+            <height>96</height>
             <orientation>horizontal</orientation>
             <onup>1220</onup>
             <!-- Back on Home closes the menu (9189, QuickMenuPanel); in the dialog Kodi's own
@@ -1751,12 +1781,22 @@
             <onleft>noop</onleft>
             <onright>noop</onright>
             <itemlayout width="192" height="72">
-                <include content="QuickLink">
-                    <param name="focused" value="false"/>
-                </include>
+                <!-- the item 10 px in: its glow reaches past it -->
+                <control type="group">
+                    <left>10</left>
+                    <top>10</top>
+                    <include content="QuickLink">
+                        <param name="focused" value="false"/>
+                    </include>
+                </control>
             </itemlayout>
             <focusedlayout width="192" height="72">
-                <include content="QuickLink"/>
+                <!-- the item 10 px in: its glow reaches past it -->
+                <control type="group">
+                    <left>10</left>
+                    <top>10</top>
+                    <include content="QuickLink"/>
+                </control>
             </focusedlayout>
             <content>
                 <!-- the settings page of Home: the machine facts and Kodi's settings groups -->

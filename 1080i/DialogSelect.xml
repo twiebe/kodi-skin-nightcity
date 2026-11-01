@@ -28,15 +28,23 @@
             <include content="DialogList">
                 <param name="id" value="3"/>
                 <onright>9001</onright>
-                <param name="width" value="1020"/>
-                <param name="height" value="624"/>
+                <param name="width" value="1040"/>
+                <param name="height" value="644"/>
+                <param name="left" value="30"/>
+                <param name="top" value="74"/>
+                <param name="rowwidth" value="1020"/>
+                <param name="inset" value="10"/>
             </include>
             <include content="DialogList">
                 <param name="id" value="6"/>
                 <onright>9001</onright>
-                <param name="width" value="1020"/>
-                <param name="height" value="624"/>
+                <param name="width" value="1040"/>
+                <param name="height" value="644"/>
                 <param name="label2" value="$INFO[ListItem.Label2]"/>
+                <param name="left" value="30"/>
+                <param name="top" value="74"/>
+                <param name="rowwidth" value="1020"/>
+                <param name="inset" value="10"/>
             </include>
             <control type="grouplist" id="9001">
                 <onleft condition="Control.IsVisible(6)">6</onleft>

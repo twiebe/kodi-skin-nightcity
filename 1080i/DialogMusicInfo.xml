@@ -245,10 +245,10 @@
                     <label>$INFO[Container(5050).CurrentItem]/$INFO[Container(5050).NumItems]</label>
                 </control>
                 <control type="panel" id="5050">
-                    <left>40</left>
-                    <top>48</top>
-                    <width>1840</width>
-                    <height>420</height>
+                    <left>30</left>
+                    <top>38</top>
+                    <width>1860</width>
+                    <height>440</height>
                     <orientation>vertical</orientation>
                     <scrolltime tween="quadratic">200</scrolltime>
                     <onup>9000</onup>
@@ -262,15 +262,25 @@
                     <!-- play the album from this track (ListItem is the page's album here) -->
                     <onclick condition="String.IsEqual(Container(5050).ListItem.DBType,song) + !String.IsEmpty(Window(Home).Property(nc.music.album))">NotifyAll(nightcity,music_play:album:$INFO[Window(Home).Property(nc.music.album)]:$INFO[Container(5050).CurrentItem])</onclick>
                     <itemlayout width="920" height="60">
-                        <include content="MusicTrackRow"/>
+                        <!-- the item 10 px in: its glow reaches past it -->
+                        <control type="group">
+                            <left>10</left>
+                            <top>10</top>
+                            <include content="MusicTrackRow"/>
+                        </control>
                     </itemlayout>
                     <focusedlayout width="920" height="60">
-                        <include content="MusicTrackRow">
-                            <param name="focused" value="Control.HasFocus(5050)"/>
-                            <param name="accent" value="$VAR[MusicRowFocusAccent]"/>
-                            <param name="text" value="$VAR[MusicRowFocusText]"/>
-                            <param name="mute" value="$VAR[MusicRowFocusMute]"/>
-                        </include>
+                        <!-- the item 10 px in: its glow reaches past it -->
+                        <control type="group">
+                            <left>10</left>
+                            <top>10</top>
+                            <include content="MusicTrackRow">
+                                <param name="focused" value="Control.HasFocus(5050)"/>
+                                <param name="accent" value="$VAR[MusicRowFocusAccent]"/>
+                                <param name="text" value="$VAR[MusicRowFocusText]"/>
+                                <param name="mute" value="$VAR[MusicRowFocusMute]"/>
+                            </include>
+                        </control>
                     </focusedlayout>
                 </control>
             </control>

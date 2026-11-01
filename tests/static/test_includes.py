@@ -266,6 +266,9 @@ def check_current_mark(lst, selected):
     for tag in ('itemlayout', 'focusedlayout'):
         lay = layout(lst, tag)
         controls = lay.findall('control')
+        # a list whose focused row glows draws its rows in a group GLOW px in (test_glow.py)
+        if len(controls) == 1 and controls[0].get('type') == 'group':
+            controls = controls[0].findall('control')
         labels = [c for c in controls if c.get('type') == 'label' and c.findtext('align') != 'right']
         marked = [c for c in labels if (c.findtext('visible') or '').startswith(selected)]
         others = [c for c in labels if c not in marked]
@@ -677,7 +680,7 @@ def test_settings_rows_are_not_pink():
 def test_nothing_overlaps_a_dialog_heading():
     """The heading label of DialogHeading ends at 82 px. The path line of the file browser
     (install from zip) sat at 64 and nearly touched the heading. A grouplist of glowing
-    entries reaches 10 px above its entries (test_glow.py)."""
+    entries, or a list of them, reaches 10 px above its entries (test_glow.py)."""
     import xml.etree.ElementTree as ET
     from test_glow import BEFORE, GLOW
     for path in (ROOT / '1080i').glob('*.xml'):
@@ -698,6 +701,9 @@ def test_nothing_overlaps_a_dialog_heading():
                 if not (top or '').isdigit() or ((left or '0').isdigit() and int(left or 0) >= 40 + width):
                     continue
                 margin = GLOW if (path.name, k.get('id')) in BEFORE else 0
+                # a DialogList whose focused row glows reaches GLOW px above its rows too
+                if k.tag == 'include' and params.get('inset'):
+                    margin = int(params['inset'])
                 assert int(top) + margin >= 84, (path.name, k.get('id') or k.get('content'), top)
 
 

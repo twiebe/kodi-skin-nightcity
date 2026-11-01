@@ -107,6 +107,7 @@
                 <param name="left" value="0"/>
                 <param name="top" value="300"/>
                 <param name="width" value="1000"/>
+                <param name="rowwidth" value="1000"/>
                 <param name="height" value="312"/>
                 <param name="font" value="font_label"/>
                 <enable>false</enable>
@@ -151,6 +152,7 @@
                 <param name="left" value="0"/>
                 <param name="top" value="300"/>
                 <param name="width" value="1000"/>
+                <param name="rowwidth" value="1000"/>
                 <param name="height" value="260"/>
                 <param name="font" value="font_label"/>
                 <enable>false</enable>
@@ -191,6 +193,7 @@
                 <param name="left" value="0"/>
                 <param name="top" value="300"/>
                 <param name="width" value="1000"/>
+                <param name="rowwidth" value="1000"/>
                 <param name="height" value="468"/>
                 <param name="font" value="font_label"/>
                 <enable>false</enable>
@@ -276,6 +279,7 @@
                 <param name="left" value="0"/>
                 <param name="top" value="300"/>
                 <param name="width" value="1000"/>
+                <param name="rowwidth" value="1000"/>
                 <param name="height" value="260"/>
                 <param name="font" value="font_label"/>
                 <enable>false</enable>
@@ -316,6 +320,7 @@
                 <param name="left" value="0"/>
                 <param name="top" value="300"/>
                 <param name="width" value="1000"/>
+                <param name="rowwidth" value="1000"/>
                 <param name="height" value="104"/>
                 <param name="font" value="font_label"/>
                 <enable>false</enable>
@@ -371,6 +376,7 @@
                 <param name="left" value="0"/>
                 <param name="top" value="300"/>
                 <param name="width" value="1000"/>
+                <param name="rowwidth" value="1000"/>
                 <param name="height" value="260"/>
                 <param name="font" value="font_label"/>
                 <enable>false</enable>
@@ -437,6 +443,7 @@
                 <param name="left" value="0"/>
                 <param name="top" value="300"/>
                 <param name="width" value="1000"/>
+                <param name="rowwidth" value="1000"/>
                 <param name="height" value="364"/>
                 <param name="font" value="font_label"/>
                 <enable>false</enable>
@@ -485,6 +492,7 @@
                 <param name="left" value="0"/>
                 <param name="top" value="300"/>
                 <param name="width" value="1000"/>
+                <param name="rowwidth" value="1000"/>
                 <param name="height" value="416"/>
                 <param name="font" value="font_label"/>
                 <enable>false</enable>

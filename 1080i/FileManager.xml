@@ -34,20 +34,24 @@
                 <param name="id" value="20"/>
                 <onleft>Action(Back)</onleft>
                 <onright>21</onright>
-                <param name="left" value="120"/>
-                <param name="top" value="140"/>
-                <param name="width" value="820"/>
-                <param name="height" value="780"/>
+                <param name="left" value="110"/>
+                <param name="top" value="130"/>
+                <param name="width" value="840"/>
+                <param name="height" value="800"/>
                 <param name="label2" value="$INFO[ListItem.Label2]"/>
+                <param name="rowwidth" value="820"/>
+                <param name="inset" value="10"/>
             </include>
             <include content="DialogList">
                 <param name="id" value="21"/>
                 <onleft>20</onleft>
-                <param name="left" value="980"/>
-                <param name="top" value="140"/>
-                <param name="width" value="820"/>
-                <param name="height" value="780"/>
+                <param name="left" value="970"/>
+                <param name="top" value="130"/>
+                <param name="width" value="840"/>
+                <param name="height" value="800"/>
                 <param name="label2" value="$INFO[ListItem.Label2]"/>
+                <param name="rowwidth" value="820"/>
+                <param name="inset" value="10"/>
             </include>
             <control type="label" id="12">
                 <left>120</left>
