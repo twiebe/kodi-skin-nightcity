@@ -65,7 +65,8 @@ def test_trailer_click_covers_the_page_and_takes_the_keys():
     assert params['onclick2'] == 'SetFocus(9099)'
     button = _root().find('.//control[@id="9000"]')
     nested = [inc for inc in button.findall('include') if any(p.get('value') == '9008' for p in inc.findall('param'))][0]
-    assert [o.text for o in nested.findall('onclick')] == ['NotifyAll(nightcity,trailer)']
+    # the recommendations wait until the trailer is over (scripts/nightcity.py trailer)
+    assert [o.text for o in nested.findall('onclick')] == ['SetProperty(nc.trailer.lists,1,home)', 'NotifyAll(nightcity,trailer)']
     assert [i.text for i in nested.findall('include')] == ['ChainBackGuard']
 
 
@@ -100,3 +101,12 @@ def test_keys_while_the_trailer_plays():
 def test_trailer_label_is_english():
     po = (ROOT / 'language' / 'resource.language.en_gb' / 'strings.po').read_text(encoding='utf-8')
     assert 'msgctxt "#31041"\nmsgid "trailer"\n' in po
+
+
+def test_recommendations_wait_while_a_trailer_plays():
+    """Kodi reloads the page's plugin lists when playback starts and stops: with the trailer the
+    page stays open, so the recommendations hold off (nc.trailer.lists) and the cast reloads
+    alone; two plugins starting at once crash Kodi."""
+    variables = {v.get('name'): v for v in parse(SKIN / 'Variables.xml').iter('variable')}
+    for value in variables['InfoSimilarPath'].findall('value'):
+        assert 'String.IsEmpty(Window(Home).Property(nc.trailer.lists))' in value.get('condition')

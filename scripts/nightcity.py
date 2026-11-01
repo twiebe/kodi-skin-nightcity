@@ -988,12 +988,30 @@ def trailer():
         home.clearProperty('nc.trailer')
         if xbmc.getCondVisibility('Control.HasFocus(9099)'):
             _focus('SetFocus(9008)')
-    if not played:
-        return
-    # the page closed under it, or Back came while the plugin still resolved it: a trailer that
-    # plays (or starts late) without its page stops
-    if _wait(TRAILER_OURS, 0.1 if started else max(TRAILER_START - seconds, 0.1)):
-        xbmc.executebuiltin('PlayerControl(Stop)')
+    try:
+        if not played:
+            return
+        # the page closed under it, or Back came while the plugin still resolved it: a trailer
+        # that plays (or starts late) without its page stops
+        if _wait(TRAILER_OURS, 0.1 if started else max(TRAILER_START - seconds, 0.1)):
+            xbmc.executebuiltin('PlayerControl(Stop)')
+        _trailer_lists_rest()
+    finally:
+        home.clearProperty('nc.trailer.lists')
+
+
+TRAILER_RELOAD = 0.5  # s for Kodi to start reloading the page's lists after the stop
+
+
+def _trailer_lists_rest():
+    """Wait until the player stopped and the cast list's reload is over. Kodi reloads every list
+    without a sort order when playback starts or stops (CDirectoryProvider::Announce): the button
+    held the recommendations (nc.trailer.lists, InfoSimilarPath) so the cast reloads alone, and
+    they load after it as when the page opens; two plugins starting at once crash Kodi."""
+    import time
+    _wait('!Player.HasMedia', 5.0)
+    time.sleep(TRAILER_RELOAD)
+    _wait('!Container(5500).IsUpdating', 30.0)
 
 
 def _trailer_follow(home):

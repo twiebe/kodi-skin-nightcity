@@ -2095,3 +2095,31 @@ def test_trailer_without_the_youtube_add_on_offers_it(monkeypatch, true, asked):
 ])
 def test_trailer_addon_builtin(path, installed, enabled, builtin):
     assert nightcity.trailer_addon_builtin(path, installed, enabled) == builtin
+
+
+def test_trailer_frees_the_lists_once_the_cast_list_rests(monkeypatch):
+    """Kodi reloads every list without a sort order when playback starts or stops
+    (CDirectoryProvider::Announce): the cast and the recommendations of the page under the trailer
+    loaded at once, and two plugins starting at once crash Kodi. The click holds the
+    recommendations (nc.trailer.lists); they come back only once the player stopped and the cast
+    list's reload is over, one after the other as when the page opens."""
+    fake = TrailerXbmc({'ListItem.Trailer': 'x'}, true={'!Player.HasMedia', '!Container(5500).IsUpdating'})
+    home = _trailer_env(monkeypatch, fake, {'nc.trailer': '1', 'nc.trailer.lists': '1'})
+    seen = []
+    original = fake.getCondVisibility
+
+    def visible(condition):
+        seen.append((condition, 'nc.trailer.lists' in home.props))
+        return original(condition)
+    fake.getCondVisibility = visible
+    nightcity.trailer()
+    assert 'nc.trailer.lists' not in home.props
+    waits = [c for c, held in seen if c in ('!Player.HasMedia', '!Container(5500).IsUpdating') and held]
+    assert waits[-2:] == ['!Player.HasMedia', '!Container(5500).IsUpdating']
+
+
+def test_trailer_offered_frees_the_lists_at_once(monkeypatch):
+    fake = TrailerXbmc({'ListItem.Trailer': 'plugin://plugin.video.youtube/play/?video_id=x'})
+    home = _trailer_env(monkeypatch, fake, {'nc.trailer': '1', 'nc.trailer.lists': '1'})
+    nightcity.trailer()
+    assert 'nc.trailer.lists' not in home.props

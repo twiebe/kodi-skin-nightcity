@@ -390,6 +390,9 @@
                 <param name="visible" value="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.Trailer) + [!Player.HasVideo | !String.IsEmpty(Window(Home).Property(nc.trailer)) | Control.HasFocus(9008)]"/>
                 <param name="onclick" value="SetProperty(nc.trailer,1,home)"/>
                 <param name="onclick2" value="SetFocus(9099)"/>
+                <!-- the recommendations wait until the trailer is over: Kodi reloads the page's
+                     lists when it starts and stops (InfoSimilarPath) -->
+                <onclick>SetProperty(nc.trailer.lists,1,home)</onclick>
                 <onclick>NotifyAll(nightcity,trailer)</onclick>
                 <include>ChainBackGuard</include>
             </include>
