@@ -166,20 +166,18 @@ def test_card_nested_at_top_level():
                         assert deep.find('nested') is None, (p.name, inc.get('name'))
 
 
-def test_current_episode_has_a_bar_before_its_title():
+def test_current_episode_has_a_line_over_its_still():
     """The current episode of an episode page's list (the selected card: the head shows it) has a
-    dark blue bar before its number and title, like the current value of a list and the playing
-    track of the music queue. Every title starts right of the bar's place, so none moves."""
+    dark blue line over its still, a little above it: under the title it met the progress line,
+    a bar before the title was hardly seen. Light enough to see (state_text, a small mark)."""
     inc = next(i for i in parse(ROOT / '1080i' / 'Includes_Info.xml').iter('include') if i.get('name') == 'EpisodeCard')
-    bars = [c for c in inc.iter('control') if c.get('type') == 'image' and c.findtext('texture') == 'ui/white.png']
-    assert len(bars) == 1
-    bar = bars[0]
-    assert bar.find('texture').get('colordiffuse') == 'state'
-    assert bar.findtext('visible') == '$PARAM[selected]'
-    assert bar.findtext('width') == '3' and bar.findtext('left') == '0'
+    lines = [c for c in inc.iter('control') if c.get('type') == 'image' and c.findtext('texture') == 'ui/white.png']
+    assert len(lines) == 1
+    line = lines[0]
+    assert line.find('texture').get('colordiffuse') == 'state_text'
+    assert line.findtext('visible') == '$PARAM[selected]'
+    assert line.findtext('width') == '320' and line.findtext('height') == '3'
+    # above the still (which starts at 0), with a gap, and above the focused card's zoom (106 %)
+    assert int(line.findtext('top')) + 3 <= -15
     titles = [c for c in inc.iter('control') if c.get('type') == 'label']
-    assert len(titles) == 2 and {t.findtext('left') for t in titles} == {'12'}
-    assert {t.findtext('width') for t in titles} == {'308'}
-    top, height = int(titles[0].findtext('top')), int(titles[0].findtext('height'))
-    # beside the title, not under it: the progress line below stays alone
-    assert top <= int(bar.findtext('top')) and int(bar.findtext('top')) + int(bar.findtext('height')) <= top + height
+    assert {t.findtext('left') for t in titles} == {None} and {t.findtext('width') for t in titles} == {'320'}

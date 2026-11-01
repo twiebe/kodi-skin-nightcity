@@ -103,4 +103,4 @@ browser.
   Kodi redraws a list item only while the cursor is on it, so a live line elsewhere stood still.
   Its playing track has a dark blue mark instead, wherever the cursor is: the bar of a current
   value before a track's number, a line under a card's title.
-  The current episode in the list of an episode page has the bar before its title.
+  The current episode in the list of an episode page has a line over its still.

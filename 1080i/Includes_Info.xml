@@ -67,9 +67,8 @@
                     <param name="dim" value="$PARAM[dim]"/>
                 </include>
                 <control type="label">
-                    <left>12</left>
                     <top>192</top>
-                    <width>308</width>
+                    <width>320</width>
                     <height>36</height>
                     <font>font_label</font>
                     <textcolor>text</textcolor>
@@ -77,9 +76,8 @@
                     <visible>!$PARAM[selected]</visible>
                 </control>
                 <control type="label">
-                    <left>12</left>
                     <top>192</top>
-                    <width>308</width>
+                    <width>320</width>
                     <height>36</height>
                     <font>font_label</font>
                     <textcolor>accent</textcolor>
@@ -87,15 +85,14 @@
                     <label>$VAR[EpisodeCardNum]  $INFO[ListItem.Title]</label>
                     <visible>$PARAM[selected]</visible>
                 </control>
-                <!-- the current episode (the head shows it): a dark blue bar before its title, like
-                     the current value of a list (DialogList) and the playing track of the music
-                     queue; every title starts right of it, so none moves -->
+                <!-- the current episode (the head shows it): a dark blue line over its still, a
+                     little above it and above the focused card's zoom. Under the title it met the
+                     progress line, a bar before the title was hardly seen. -->
                 <control type="image">
-                    <left>0</left>
-                    <top>196</top>
-                    <width>3</width>
-                    <height>28</height>
-                    <texture colordiffuse="state">ui/white.png</texture>
+                    <top>-18</top>
+                    <width>320</width>
+                    <height>3</height>
+                    <texture colordiffuse="state_text">ui/white.png</texture>
                     <visible>$PARAM[selected]</visible>
                 </control>
                 <include content="ProgressLine">
