@@ -23,10 +23,6 @@ msgctxt "#31006"
 msgid "home"
 msgstr ""
 
-msgctxt "#31007"
-msgid "Glow"
-msgstr ""
-
 msgctxt "#31010"
 msgid "play"
 msgstr ""
@@ -420,7 +416,7 @@ msgid "How Kodi looks and starts: skin, language and region, screensaver, master
 msgstr ""
 
 msgctxt "#31168"
-msgid "The options of this skin: focus glow and the home pages."
+msgid "The options of this skin: the home pages and the look."
 msgstr ""
 
 msgctxt "#31169"
@@ -801,10 +797,6 @@ msgstr ""
 
 msgctxt "#31268"
 msgid "How the skin draws the focus."
-msgstr ""
-
-msgctxt "#31269"
-msgid "A soft glow around the focused entry."
 msgstr ""
 
 msgctxt "#31230"

@@ -34,7 +34,7 @@ More in Kodi's add-on browser: movies, music, settings and the quick menu. `tool
 - After an episode started from its info page stops, the info page comes back on the episode that played last
 - Palettes: Netrunner (default), Tokyo Night, Catppuccin (Mocha)
 - Fonts: Rajdhani for text, Share Tech Mono for numbers and times
-- Optional focus glow (skin settings)
+- Focus glow on cards and buttons
 
 ## Usage notes
 

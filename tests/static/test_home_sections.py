@@ -406,29 +406,34 @@ def test_opens_on_the_main_menu_category():
 
 
 def test_main_menu_category_holds_the_look_under_appearance():
-    """The look gets no category of its own: colour scheme and glow sit at the end of the main
-    menu category, under a separator and an Appearance heading."""
+    """The look gets no category of its own: the colour scheme sits at the end of the main menu
+    category, under a separator and an Appearance heading. The focus glow has no setting any
+    more, it is always on."""
     area = controls(page_window())['500']
     labels = [k.findtext('label') for k in area.iter('control') if k.get('type') == 'label']
     assert '$LOCALIZE[480]' in labels
     ids = [k.get('id') for k in area.iter('control') if k.get('id')]
-    assert ids[-1] == '601'
-    c = controls(page_window())
-    glow = c['601']
-    assert glow.get('type') == 'radiobutton' and glow.findtext('width') == '1240'
-    assert glow.findtext('onclick') == 'Skin.ToggleSetting(GlowOff)'
-    assert glow.findtext('selected') == '!Skin.HasSetting(GlowOff)'
+    assert ids[-1] == '602'
+    assert '601' not in controls(page_window())
+
+
+def test_glow_has_no_setting():
+    for path in list((ROOT / '1080i').glob('*.xml')) + [ROOT / 'scripts' / 'nightcity.py']:
+        assert 'GlowOff' not in path.read_text(encoding='utf-8'), path.name
+    for po in ROOT.glob('language/*/strings.po'):
+        text = po.read_text(encoding='utf-8')
+        assert 'msgctxt "#31007"' not in text and 'msgctxt "#31269"' not in text, po.parent.name
+        assert 'focus glow' not in text, po.parent.name
 
 
 def test_main_menu_category_picks_the_colour_scheme():
-    """Kodi keeps the colour scheme under Interface: a row above the glow picks it (script
-    colours) and shows the current one."""
+    """Kodi keeps the colour scheme under Interface: the last row picks it (script colours) and
+    shows the current one."""
     c = controls(page_window())
     row = c['602']
     assert row.findtext('onclick') == 'NotifyAll(nightcity,colours)'
     assert row.findtext('label2') == '$VAR[ColourSchemeLabel]'
-    assert [row.findtext(d) for d in ('onup', 'ondown', 'onleft')] == ['521', '601', '9005']
-    assert c['601'].findtext('onup') == '602'
+    assert [row.findtext(d) for d in ('onup', 'ondown', 'onleft')] == ['521', 'noop', '9005']
 
 
 def test_settings_page_fills_the_defaults_on_load():

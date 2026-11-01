@@ -65,7 +65,6 @@
         <value condition="Control.HasFocus(712)">$LOCALIZE[31363]</value>
         <value condition="Control.HasFocus(9006)">$LOCALIZE[31364]</value>
         <value condition="Control.HasFocus(713)">$LOCALIZE[31366]</value>
-        <value condition="Control.HasFocus(601)">$LOCALIZE[31269]</value>
         <value condition="Control.HasFocus(621)">$LOCALIZE[31442]</value>
         <value condition="Control.HasFocus(622)">$LOCALIZE[31444]</value>
         <value condition="Control.HasFocus(9007)">$LOCALIZE[31447]</value>
@@ -569,12 +568,6 @@
     <!-- live TV only counts with a PVR client, like its rail entry -->
     <variable name="SystemTilePvr">
         <value condition="System.HasPVRAddon">, $LOCALIZE[14204]</value>
-    </variable>
-
-    <!-- Settings console: keys for the focused side; entries with a list can move right -->
-    <variable name="GlowStateLabel">
-        <value condition="Skin.HasSetting(GlowOff)">$LOCALIZE[16039]</value>
-        <value>$LOCALIZE[16041]</value>
     </variable>
 
     <!-- Quick menu (Custom_1170_QuickMenu.xml): power tiles the device cannot do are dimmed (QuickTile) -->
