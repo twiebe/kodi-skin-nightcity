@@ -665,15 +665,15 @@
             <control type="group">
                 <animation effect="zoom" end="106" center="auto" time="150" condition="$PARAM[focused]">Conditional</animation>
                 <!-- unwatched, never started: a dark blue dog-ear in the bottom right corner (no cut
-                     there), as big as the frame's cut -->
+                     there), bigger than the frame's cut so it reads from the sofa -->
                 <control type="group">
                     <width>$PARAM[width]</width>
                     <height>$PARAM[height]</height>
                     <control type="image">
                         <right>0</right>
                         <bottom>0</bottom>
-                        <width>14</width>
-                        <height>14</height>
+                        <width>22</width>
+                        <height>22</height>
                         <texture colordiffuse="state_text">ui/dogear.png</texture>
                         <visible>[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,episode)] + !String.IsEmpty(ListItem.DBID) + Integer.IsEqual(ListItem.PlayCount,0) + !ListItem.IsResumable</visible>
                     </control>
