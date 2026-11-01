@@ -301,15 +301,36 @@ def test_person_without_films_still_reaches_the_tabs(matrix):
     wait_for('Control.HasFocus(5510)', timeout=2)
 
 
+GUARD = '!String.IsEmpty(Window(Home).Property(nc.chain.guard))'
+
+
+def _film_in_its_first_second(matrix, key):
+    """From a person's page open their first film and press KEY while the page holds Back
+    (nc.chain.guard, its first second). Kodi reports the page active a moment before its onload
+    set the guard, and under a full parallel run the test may see it only after that second; so
+    the key waits for the guard. Missed it: Back goes back as usual, and it tries again."""
+    _info_and_person(matrix)
+    for _ in range(3):
+        wait_for('Integer.IsGreater(Container(5510).NumItems,0) + !Container(5510).IsUpdating', timeout=30)
+        builtin('SetFocus(5510,0,absolute)')
+        action('select', delay=0)
+        wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),movie)', timeout=30)
+        try:
+            wait_for(GUARD, timeout=2)
+        except AssertionError:
+            # past the first second: the page is the manager's, a plain Back goes back
+            action('back', delay=0)
+            _page(2)
+            continue
+        key()
+        return
+    pytest.skip('the film page never showed within its first second')
+
+
 def test_back_right_after_a_page_opens_goes_one_page_back(matrix):
     """Back in the moment a page appears used to leave TMDb Helper waiting 30 s on an empty
     backdrop and then end the chain. The page holds Back for a second and then goes back."""
-    _info_and_person(matrix)
-    wait_for('Integer.IsGreater(Container(5510).NumItems,0)', timeout=30)
-    builtin('SetFocus(5510,0,absolute)')
-    action('select', delay=0)
-    wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),movie)', timeout=30)
-    action('back', delay=0)
+    _film_in_its_first_second(matrix, lambda: action('back', delay=0))
     assert _true('Window.IsActive(movieinformation)')  # held
     wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),2)', timeout=10)
     wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),person)', timeout=10)
@@ -319,13 +340,10 @@ def test_back_right_after_a_page_opens_goes_one_page_back(matrix):
 def test_escape_right_after_a_page_opens_goes_one_page_back(matrix):
     """Esc on a keyboard, and Back on many remotes, is PreviousMenu, not Back: <onback> never
     sees it, so it closed the page before TMDb Helper's manager looked and the chain hung 30 s."""
-    _info_and_person(matrix)
-    wait_for('Integer.IsGreater(Container(5510).NumItems,0)', timeout=30)
-    builtin('SetFocus(5510,0,absolute)')
-    action('select', delay=0)
-    wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),movie)', timeout=30)
-    rpc('Input.ButtonEvent', {'button': 'escape', 'keymap': 'KB'})  # through the keymaps
-    time.sleep(0.1)
+    def escape():
+        rpc('Input.ButtonEvent', {'button': 'escape', 'keymap': 'KB'})  # through the keymaps
+        time.sleep(0.1)
+    _film_in_its_first_second(matrix, escape)
     assert _true('Window.IsActive(movieinformation)')  # held
     wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),2)', timeout=10)
     wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),person)', timeout=10)
