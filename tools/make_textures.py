@@ -6,7 +6,7 @@ python tools/make_textures.py
 import math
 import pathlib
 
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
 UI = pathlib.Path(__file__).resolve().parents[1] / 'media' / 'ui'
 SCALE = 8
@@ -111,6 +111,30 @@ def cut_glow(size, corner, pad, blur):
     return image
 
 
+# px around a focused button for its glow (fill_glow)
+GLOW_PAD = 10
+
+
+def padded(image, pad):
+    """`image` with `pad` px of clear margin on every side."""
+    out = Image.new('RGBA', (image.width + 2 * pad, image.height + 2 * pad), (255, 255, 255, 0))
+    out.paste(image, (pad, pad))
+    return out
+
+
+def fill_glow(size, corner, pad, corners=('tr', 'bl'), strength=0.45, blur=4):
+    """A cut fill inset by `pad` with a soft halo in the margin, the glow of a focused button.
+    Kodi draws a button's textures only inside the button, so a button that glows is `pad` px
+    larger on each side and its texture border `pad` px wider. One colordiffuse colours fill
+    and halo: the halo has `strength` of the fill's alpha, about the glow colour's."""
+    fill = padded(cut(size, corner, corners=corners), pad)
+    alpha = fill.getchannel('A')
+    halo = alpha.filter(ImageFilter.MaxFilter(5)).filter(ImageFilter.GaussianBlur(blur))
+    halo = halo.point(lambda a: round(a * strength))
+    fill.putalpha(ImageChops.lighter(alpha, halo))
+    return fill
+
+
 def radial_glow(width, height, cx, cy, radius):
     """White radial glow (alpha falls off from the centre), rendered small and scaled up."""
     w, h = width // 10, height // 10
@@ -201,14 +225,31 @@ def main():
     cut(48, 10, line=2, corners=('tr',)).save(UI / 'cut_btn.png')
     cut(48, 10, corners=('tr',)).save(UI / 'cut_btn_fill.png')
     cut_glow(128, 14, 24, 10).save(UI / 'cut_glow.png')
+    # the focused fills with their glow, and the outlines with the same margin, for buttons
+    # that grow by GLOW_PAD on each side (border 12 + 10, 16 + 10)
+    fill_glow(48, 10, GLOW_PAD, corners=('tr',)).save(UI / 'cut_btn_glow.png')
+    padded(cut(48, 10, line=2, corners=('tr',)), GLOW_PAD).save(UI / 'cut_btn_pad.png')
+    fill_glow(64, 14, GLOW_PAD).save(UI / 'cut_fill_glow.png')
+    padded(cut(64, 14, line=2), GLOW_PAD).save(UI / 'cut_pad.png')
+    # a fill that does not glow (the shown settings category) in a padded control
+    padded(cut(48, 10, corners=('tr',)), GLOW_PAD).save(UI / 'cut_btn_fill_pad.png')
+    # separator of the padded settings rows: the 1 px line in the middle of GLOW_PAD px above
+    # and below
+    sep = Image.new('RGBA', (4, 2 * GLOW_PAD + 1), (255, 255, 255, 0))
+    sep.paste((255, 255, 255, 255), (0, GLOW_PAD, 4, GLOW_PAD + 1))
+    sep.save(UI / 'line_pad.png')
     radial_glow(1920, 1080, 0.75, 0.15, 0.6).save(UI / 'petrol_glow.png')
     # diffuse masks that cut the corners of artwork, one per card size: drawn 1:1 they keep the
     # frame's 14 px cut (a stretched mask would cut more or less than the frame)
     for width, height in CARD_SIZES:
         cut(width, 14, height=height).save(UI / 'mask_{}x{}.png'.format(width, height))
     dogear(22).save(UI / 'dogear.png')
-    cut(32, 8, line=2, corners=('tr',)).save(UI / 'check_off.png')
-    check(32, 8).save(UI / 'check_on.png')
+    # check boxes of a settings row, which is padded for its glow: Kodi puts the box 8 px from
+    # the control's right edge, GLOW_PAD further out; clear on the right, the box stays put
+    for name, box in (('check_off', cut(32, 8, line=2, corners=('tr',))), ('check_on', check(32, 8))):
+        wide = Image.new('RGBA', (box.width + GLOW_PAD, box.height), (255, 255, 255, 0))
+        wide.paste(box, (0, 0))
+        wide.save(UI / '{}_pad.png'.format(name))
     sign(34, False).save(UI / 'spin_minus.png')
     sign(34, True).save(UI / 'spin_plus.png')
     sign_focus(34, False, pad=3).save(UI / 'spin_minus_focus.png')

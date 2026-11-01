@@ -34,13 +34,13 @@
                 <info>System.Progressbar</info>
             </control>
             <control type="grouplist" id="9000">
-                <left>40</left>
-                <top>336</top>
-                <width>920</width>
-                <height>54</height>
+                <left>30</left>
+                <top>326</top>
+                <width>940</width>
+                <height>74</height>
                 <orientation>horizontal</orientation>
                 <align>center</align>
-                <itemgap>24</itemgap>
+                <itemgap>4</itemgap>
                 <include content="Button">
                     <param name="id" value="11"/>
                     <param name="label" value=""/>

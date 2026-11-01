@@ -29,16 +29,17 @@
             <texture colordiffuse="state">ui/white.png</texture>
         </control>
         <control type="grouplist" id="996">
-            <left>20</left>
-            <top>24</top>
-            <width>640</width>
-            <!-- 18 entries, then it scrolls -->
-            <height max="936">auto</height>
-            <itemgap>0</itemgap>
+            <left>10</left>
+            <top>14</top>
+            <width>660</width>
+            <!-- 18 entries, then it scrolls; entries and grouplist are 20 px larger for the glow
+                 of the focused entry (ListButton), so Kodi stretches 999 as before -->
+            <height max="956">auto</height>
+            <itemgap>-20</itemgap>
             <include content="ListButton">
                 <param name="id" value="1000"/>
                 <param name="label" value=""/>
-                <param name="width" value="640"/>
+                <param name="width" value="660"/>
             </include>
         </control>
     </controls>

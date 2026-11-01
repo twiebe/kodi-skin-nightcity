@@ -11,43 +11,43 @@
         <control type="group">
             <include>WindowFade</include>
             <control type="grouplist" id="9000">
-                <left>120</left>
-                <top>100</top>
-                <width>400</width>
-                <height>700</height>
+                <left>110</left>
+                <top>90</top>
+                <width>420</width>
+                <height>720</height>
                 <orientation>vertical</orientation>
-                <itemgap>0</itemgap>
+                <itemgap>-20</itemgap>
                 <onleft>Action(Back)</onleft>
                 <onright>noop</onright>
                 <include content="ListButton">
                     <param name="id" value="95"/>
                     <param name="label" value="$LOCALIZE[20154]"/>
-                    <param name="width" value="400"/>
+                    <param name="width" value="420"/>
                 </include>
                 <include content="ListButton">
                     <param name="id" value="94"/>
                     <param name="label" value="$LOCALIZE[20155]"/>
-                    <param name="width" value="400"/>
+                    <param name="width" value="420"/>
                 </include>
                 <include content="ListButton">
                     <param name="id" value="96"/>
                     <param name="label" value="$LOCALIZE[20158]"/>
-                    <param name="width" value="400"/>
+                    <param name="width" value="420"/>
                 </include>
                 <include content="ListButton">
                     <param name="id" value="97"/>
                     <param name="label" value="$LOCALIZE[20159]"/>
-                    <param name="width" value="400"/>
+                    <param name="width" value="420"/>
                 </include>
                 <include content="ListButton">
                     <param name="id" value="98"/>
                     <param name="label" value="$LOCALIZE[20160]"/>
-                    <param name="width" value="400"/>
+                    <param name="width" value="420"/>
                 </include>
                 <include content="ListButton">
                     <param name="id" value="100"/>
                     <param name="label" value="$LOCALIZE[12389]"/>
-                    <param name="width" value="400"/>
+                    <param name="width" value="420"/>
                 </include>
             </control>
             <control type="grouplist" id="9001">

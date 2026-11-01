@@ -56,9 +56,11 @@
             </itemlayout>
             <focusedlayout width="1240" height="56">
                 <control type="image">
-                    <width>1240</width>
-                    <height>56</height>
-                    <texture border="12" colordiffuse="focus">ui/cut_btn_fill.png</texture>
+                    <left>-10</left>
+                    <top>-10</top>
+                    <width>1260</width>
+                    <height>76</height>
+                    <texture border="22" colordiffuse="focus">ui/cut_btn_glow.png</texture>
                     <visible>Control.HasFocus(50)</visible>
                 </control>
                 <control type="label">
@@ -158,32 +160,32 @@
         </control>
         <!-- View and sort: Kodi ids 2 view (Kodi labels it), 3 sort by (Kodi labels it), 4 descending -->
         <control type="grouplist" id="9060">
-            <left>1440</left>
-            <top>880</top>
-            <width>400</width>
-            <height>176</height>
-            <itemgap>0</itemgap>
+            <left>1430</left>
+            <top>870</top>
+            <width>420</width>
+            <height>196</height>
+            <itemgap>-20</itemgap>
             <onleft condition="Control.IsVisible(51)">51</onleft>
             <onleft>50</onleft>
             <include content="ListButton">
                 <param name="id" value="2"/>
-                <param name="width" value="400"/>
+                <param name="width" value="420"/>
             </include>
             <include content="ListButton">
                 <param name="id" value="3"/>
-                <param name="width" value="400"/>
+                <param name="width" value="420"/>
             </include>
             <control type="radiobutton" id="4">
-                <width>400</width>
+                <width>420</width>
                 <include>SettingsRowLook</include>
                 <font>font_label</font>
                 <label>$LOCALIZE[31096]</label>
-                <radiowidth>32</radiowidth>
+                <radiowidth>42</radiowidth>
                 <radioheight>32</radioheight>
-                <textureradioonfocus colordiffuse="focus_text">ui/check_on.png</textureradioonfocus>
-                <textureradioonnofocus colordiffuse="state_text">ui/check_on.png</textureradioonnofocus>
-                <textureradiooffnofocus colordiffuse="text_mute">ui/check_off.png</textureradiooffnofocus>
-                <textureradioofffocus colordiffuse="focus_text">ui/check_off.png</textureradioofffocus>
+                <textureradioonfocus colordiffuse="focus_text">ui/check_on_pad.png</textureradioonfocus>
+                <textureradioonnofocus colordiffuse="state_text">ui/check_on_pad.png</textureradioonnofocus>
+                <textureradiooffnofocus colordiffuse="text_mute">ui/check_off_pad.png</textureradiooffnofocus>
+                <textureradioofffocus colordiffuse="focus_text">ui/check_off_pad.png</textureradioofffocus>
             </control>
         </control>
     </controls>

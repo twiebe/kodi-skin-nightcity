@@ -442,10 +442,11 @@
                     </itemlayout>
                     <focusedlayout width="600" height="52">
                 <control type="image">
-                    <left>12</left>
-                    <width>576</width>
-                    <height>52</height>
-                    <texture border="12" colordiffuse="focus">ui/cut_btn_fill.png</texture>
+                    <top>-10</top>
+                    <left>2</left>
+                    <width>596</width>
+                    <height>72</height>
+                    <texture border="22" colordiffuse="focus">ui/cut_btn_glow.png</texture>
                     <visible>Control.HasFocus($PARAM[id])</visible>
                 </control>
                 <!-- the playing track's bar, dark blue also on the cursor's fill -->
@@ -643,16 +644,17 @@
                     <param name="top" value="18"/>
                     <param name="width" value="552"/>
                 </include>
-                <!-- a grouplist ignores the left of its rows, so it is inset by the row margin; it
+                <!-- a grouplist ignores the left of its rows, so it is inset by the row margin, less
+                     the 10 px around each row for the glow of the button (rows 20 px closer); it
                      also replaces the up and down of its rows with its own, and without an id of
                      its own it takes a builtin (navigation 0) for wrapping around: a plain id -->
                 <control type="grouplist">
-                    <left>12</left>
-                    <top>56</top>
-                    <width>576</width>
-                    <height>364</height>
+                    <left>2</left>
+                    <top>46</top>
+                    <width>596</width>
+                    <height>384</height>
                     <orientation>vertical</orientation>
-                    <itemgap>0</itemgap>
+                    <itemgap>-20</itemgap>
                     <onup>noop</onup>
                     <ondown>$PARAM[button]</ondown>
                     <include content="VideoFact">
@@ -681,15 +683,15 @@
                         <param name="visible" value="!String.IsEmpty(VideoPlayer.VideoBitrate)"/>
                     </include>
                     <control type="button" id="$PARAM[id]">
-                        <width>576</width>
-                        <height>52</height>
+                        <width>596</width>
+                        <height>72</height>
                         <label>… $LOCALIZE[31139]</label>
                         <font>font_small</font>
-                        <textoffsetx>12</textoffsetx>
+                        <textoffsetx>22</textoffsetx>
                         <aligny>center</aligny>
                         <textcolor>text_dim</textcolor>
                         <focusedcolor>focus_text</focusedcolor>
-                        <texturefocus border="12" colordiffuse="focus">ui/cut_btn_fill.png</texturefocus>
+                        <texturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturefocus>
                         <texturenofocus/>
                         <onclick>ActivateWindow(osdvideosettings)</onclick>
                         <onleft>SetFocus($PARAM[left])</onleft>
@@ -700,18 +702,20 @@
         </definition>
     </include>
 
-    <!-- One fact row of the video panel: key left, value right, track row size -->
+    <!-- One fact row of the video panel: key left, value right, track row size with 10 px around
+         it like the padded button under the rows -->
     <include name="VideoFact">
         <param name="key"/>
         <param name="value"/>
         <param name="visible" default="true"/>
         <definition>
             <control type="group">
-                <width>576</width>
-                <height>52</height>
+                <width>596</width>
+                <height>72</height>
                 <visible>$PARAM[visible]</visible>
                 <control type="label">
-                    <left>12</left>
+                    <left>22</left>
+                    <top>10</top>
                     <width>240</width>
                     <height>52</height>
                     <aligny>center</aligny>
@@ -720,7 +724,8 @@
                     <label>[LOWERCASE]$PARAM[key][/LOWERCASE]</label>
                 </control>
                 <control type="label">
-                    <left>252</left>
+                    <left>262</left>
+                    <top>10</top>
                     <width>312</width>
                     <height>52</height>
                     <align>right</align>

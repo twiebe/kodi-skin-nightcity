@@ -35,13 +35,13 @@
                 <visible>Integer.IsGreater(Container(11).NumItems,0)</visible>
             </control>
             <control type="grouplist" id="9000">
-                <left>856</left>
-                <top>486</top>
-                <width>1000</width>
-                <height>54</height>
+                <left>846</left>
+                <top>476</top>
+                <width>1020</width>
+                <height>74</height>
                 <orientation>horizontal</orientation>
                 <align>right</align>
-                <itemgap>12</itemgap>
+                <itemgap>-8</itemgap>
                 <onup>Dialog.Close(videobookmarks)</onup>
                 <ondown condition="Integer.IsGreater(Container(11).NumItems,0)">11</ondown>
                 <ondown condition="!Integer.IsGreater(Container(11).NumItems,0) + [VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)]">ActivateWindow(1141)</ondown>

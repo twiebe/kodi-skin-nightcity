@@ -145,11 +145,12 @@ def test_migrated_files_have_no_framed_labels():
 
 
 def test_pill_button_fill_only_on_focus():
-    """Only the focused button is filled; an unfocused primary button is an accent outline."""
+    """Only the focused button is filled; an unfocused primary button is an accent outline. Both
+    padded for the glow of the fill (test_glow.py)."""
     button = include('PillButton').find('.//control')
     focus, nofocus = button.find('texturefocus'), button.find('texturenofocus')
-    assert focus.text == 'ui/cut_btn_fill.png' and focus.get('colordiffuse') == 'focus'
-    assert nofocus.text == 'ui/cut_btn.png' and nofocus.get('colordiffuse') == '$PARAM[color]'
+    assert focus.text == 'ui/cut_btn_glow.png' and focus.get('colordiffuse') == 'focus'
+    assert nofocus.text == 'ui/cut_btn_pad.png' and nofocus.get('colordiffuse') == '$PARAM[color]'
     assert button.findtext('textcolor') == '$PARAM[textcolor]'
     assert button.findtext('focusedcolor') == 'focus_text'
     assert params(include('PillButton'))['color'] == 'border_dim'
@@ -312,9 +313,11 @@ def test_toggle_settings_use_check():
     template = next(c for c in include('SettingsTemplates').iter('control') if c.get('id') == '8')
     assert template.findtext('include') == 'SettingsToggleLook'
     radio = include('SettingsToggleLook')
-    assert radio.findtext('textureradioonnofocus') == 'ui/check_on.png'
-    assert radio.findtext('textureradiooffnofocus') == 'ui/check_off.png'
-    assert (ROOT / 'media' / 'ui' / 'check_on.png').is_file()
+    # the box with clear room on its right: the padded row's edge is 10 px further out
+    # (test_glow.py)
+    assert radio.findtext('textureradioonnofocus') == 'ui/check_on_pad.png'
+    assert radio.findtext('textureradiooffnofocus') == 'ui/check_off_pad.png'
+    assert (ROOT / 'media' / 'ui' / 'check_on_pad.png').is_file()
 
 
 def test_dialog_heading_above_content():
@@ -557,13 +560,13 @@ def test_system_facts_in_columns():
 
 def test_main_menu_entries_are_buttons():
     """The top menu: the focused entry is a filled accent button with dark text, the shown page
-    a dark blue (state) outline; no underline, no ◢."""
+    a dark blue (state) outline; no underline, no ◢. Padded for the glow (test_glow.py)."""
     calls = [c for c in include('MainMenu').iter('include') if c.get('content') in ('TabButton', 'MenuButton')]
     assert calls and all(c.get('content') == 'MenuButton' for c in calls)
     button = include('MenuButton').find('.//control')
-    assert button.find('texturefocus').text == 'ui/cut_btn_fill.png' and button.find('texturefocus').get('colordiffuse') == 'accent'
-    assert button.find('alttexturefocus').text == 'ui/cut_btn_fill.png'
-    assert button.find('alttexturenofocus').text == 'ui/cut_btn.png' and button.find('alttexturenofocus').get('colordiffuse') == 'state'
+    assert button.find('texturefocus').text == 'ui/cut_btn_glow.png' and button.find('texturefocus').get('colordiffuse') == 'accent'
+    assert button.find('alttexturefocus').text == 'ui/cut_btn_glow.png'
+    assert button.find('alttexturenofocus').text == 'ui/cut_btn_pad.png' and button.find('alttexturenofocus').get('colordiffuse') == 'state'
     assert not button.find('texturenofocus').text
     assert button.findtext('focusedcolor') == 'focus_text'
     assert '◢' not in button.findtext('altlabel') and 'tab_line' not in ''.join(button.itertext())
@@ -673,8 +676,10 @@ def test_settings_rows_are_not_pink():
 
 def test_nothing_overlaps_a_dialog_heading():
     """The heading label of DialogHeading ends at 82 px. The path line of the file browser
-    (install from zip) sat at 64 and nearly touched the heading."""
+    (install from zip) sat at 64 and nearly touched the heading. A grouplist of glowing
+    entries reaches 10 px above its entries (test_glow.py)."""
     import xml.etree.ElementTree as ET
+    from test_glow import BEFORE, GLOW
     for path in (ROOT / '1080i').glob('*.xml'):
         for group in ET.parse(path).getroot().iter('control'):
             kids = list(group)
@@ -692,7 +697,8 @@ def test_nothing_overlaps_a_dialog_heading():
                     continue
                 if not (top or '').isdigit() or ((left or '0').isdigit() and int(left or 0) >= 40 + width):
                     continue
-                assert int(top) >= 84, (path.name, k.get('id') or k.get('content'), top)
+                margin = GLOW if (path.name, k.get('id')) in BEFORE else 0
+                assert int(top) + margin >= 84, (path.name, k.get('id') or k.get('content'), top)
 
 
 def test_file_browser_hides_disabled_buttons():
@@ -731,11 +737,11 @@ def test_keyboard_field_plain_with_inset_text():
 
 def test_keyboard_keys_fit_wide_letters():
     """A 68 px key with 24 px text offset on each side left 20 px for the letter: w and m showed
-    as an ellipsis."""
+    as an ellipsis. The keys are 88 px with the 10 px margin of their glow (test_glow.py)."""
     import xml.etree.ElementTree as ET
     from navigation import load
     keys = [c for c in load('DialogKeyboard.xml').iter('control')
-            if c.get('type') == 'button' and c.findtext('width') == '68']
+            if c.get('type') == 'button' and c.findtext('width') == '88']
     assert keys
     for key in keys:
         assert int(key.findtext('width')) - 2 * int(key.findtext('textoffsetx')) >= 44, key.get('id')

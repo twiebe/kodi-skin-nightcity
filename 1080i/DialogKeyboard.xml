@@ -66,89 +66,89 @@
                 <ondown condition="Control.IsVisible(120)">120</ondown>
                 <onup>312</onup>
                 <ondown>9002</ondown>
-                <left>40</left>
-                <top>150</top>
-                <width>1000</width>
-                <height>54</height>
+                <left>30</left>
+                <top>140</top>
+                <width>1020</width>
+                <height>74</height>
                 <orientation>horizontal</orientation>
-                <itemgap>8</itemgap>
+                <itemgap>-12</itemgap>
                 <include content="Button">
                     <param name="id" value="100"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="101"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="102"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="103"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="104"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="105"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="106"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="107"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="108"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="109"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="110"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="111"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="112"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
             </control>
             <control type="grouplist" id="9002">
@@ -208,89 +208,89 @@
                 <ondown condition="Control.IsVisible(140)">140</ondown>
                 <onup>9001</onup>
                 <ondown>9003</ondown>
-                <left>40</left>
-                <top>210</top>
-                <width>1000</width>
-                <height>54</height>
+                <left>30</left>
+                <top>200</top>
+                <width>1020</width>
+                <height>74</height>
                 <orientation>horizontal</orientation>
-                <itemgap>8</itemgap>
+                <itemgap>-12</itemgap>
                 <include content="Button">
                     <param name="id" value="120"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="121"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="122"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="123"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="124"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="125"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="126"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="127"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="128"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="129"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="130"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="131"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="132"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
             </control>
             <control type="grouplist" id="9003">
@@ -350,89 +350,89 @@
                 <ondown condition="Control.IsVisible(160)">160</ondown>
                 <onup>9002</onup>
                 <ondown>9004</ondown>
-                <left>40</left>
-                <top>270</top>
-                <width>1000</width>
-                <height>54</height>
+                <left>30</left>
+                <top>260</top>
+                <width>1020</width>
+                <height>74</height>
                 <orientation>horizontal</orientation>
-                <itemgap>8</itemgap>
+                <itemgap>-12</itemgap>
                 <include content="Button">
                     <param name="id" value="140"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="141"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="142"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="143"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="144"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="145"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="146"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="147"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="148"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="149"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="150"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="151"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="152"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
             </control>
             <control type="grouplist" id="9004">
@@ -466,155 +466,155 @@
                 <onup condition="Control.IsVisible(140)">140</onup>
                 <onup>9003</onup>
                 <ondown>9005</ondown>
-                <left>40</left>
-                <top>330</top>
-                <width>1000</width>
-                <height>54</height>
+                <left>30</left>
+                <top>320</top>
+                <width>1020</width>
+                <height>74</height>
                 <orientation>horizontal</orientation>
-                <itemgap>8</itemgap>
+                <itemgap>-12</itemgap>
                 <include content="Button">
                     <param name="id" value="160"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="161"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="162"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="163"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="164"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="165"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="166"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="167"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="168"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="169"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="170"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="171"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="172"/>
                     <param name="label" value=""/>
-                    <param name="width" value="68"/>
-                    <param name="textoffsetx" value="8"/>
+                    <param name="width" value="88"/>
+                    <param name="textoffsetx" value="18"/>
                 </include>
             </control>
             <control type="grouplist" id="9005">
                 <onup>9004</onup>
                 <ondown>9006</ondown>
-                <left>40</left>
-                <top>390</top>
-                <width>1000</width>
-                <height>54</height>
+                <left>30</left>
+                <top>380</top>
+                <width>1020</width>
+                <height>74</height>
                 <orientation>horizontal</orientation>
-                <itemgap>8</itemgap>
+                <itemgap>-12</itemgap>
                 <include content="Button">
                     <param name="id" value="302"/>
                     <param name="label" value="shift"/>
-                    <param name="width" value="140"/>
+                    <param name="width" value="160"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="304"/>
                     <param name="label" value="#+="/>
-                    <param name="width" value="120"/>
+                    <param name="width" value="140"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="32"/>
                     <param name="label" value="space"/>
-                    <param name="width" value="160"/>
+                    <param name="width" value="180"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="8"/>
                     <param name="label" value="del"/>
-                    <param name="width" value="100"/>
+                    <param name="width" value="120"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="305"/>
                     <param name="label" value="◄"/>
-                    <param name="width" value="60"/>
+                    <param name="width" value="80"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="306"/>
                     <param name="label" value="►"/>
-                    <param name="width" value="60"/>
+                    <param name="width" value="80"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="309"/>
                     <param name="label" value=""/>
-                    <param name="width" value="260"/>
+                    <param name="width" value="280"/>
                 </include>
             </control>
             <control type="grouplist" id="9006">
                 <onup>9005</onup>
                 <ondown>noop</ondown>
-                <left>40</left>
-                <top>460</top>
-                <width>1000</width>
-                <height>54</height>
+                <left>30</left>
+                <top>450</top>
+                <width>1020</width>
+                <height>74</height>
                 <orientation>horizontal</orientation>
                 <align>right</align>
-                <itemgap>24</itemgap>
+                <itemgap>4</itemgap>
                 <include content="Button">
                     <param name="id" value="300"/>
                     <param name="label" value="$LOCALIZE[20177]"/>
-                    <param name="width" value="220"/>
+                    <param name="width" value="240"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="301"/>
                     <param name="label" value="$LOCALIZE[222]"/>
-                    <param name="width" value="220"/>
+                    <param name="width" value="240"/>
                 </include>
             </control>
         </control>

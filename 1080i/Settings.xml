@@ -21,12 +21,12 @@
             <include>WindowFade</include>
             <!-- headings are labels: up/down only stop on entries -->
             <control type="grouplist" id="9200">
-                <left>64</left>
-                <top>90</top>
-                <width>520</width>
-                <height>900</height>
+                <left>54</left>
+                <top>80</top>
+                <width>540</width>
+                <height>920</height>
                 <orientation>vertical</orientation>
-                <itemgap>0</itemgap>
+                <itemgap>-20</itemgap>
                 <onup>noop</onup>
                 <ondown>noop</ondown>
                 <!-- Left goes back to the system page, Right opens the entry like OK -->

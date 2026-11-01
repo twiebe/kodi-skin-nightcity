@@ -349,12 +349,14 @@ def run(control, tag, state):
 
 def test_skin_settings_look_like_kodis_settings_pages():
     """As SettingsCategory.xml: categories on the left (x 120, w 400), the rows of the focused
-    category on the right (x 560, w 1240), the description at the bottom right; no window 1111."""
+    category on the right (x 560, w 1240), the description at the bottom right; no window 1111.
+    Categories, rows and their grouplists are 10 px larger on each side for the glow of the
+    focused row (test_glow.py): the visible columns are where they were."""
     assert not (ROOT / '1080i' / 'Custom_1111_HomePages.xml').exists()
     c = controls(page_window())
     cats = c['9000']
     assert cats.get('type') == 'grouplist'
-    assert [cats.findtext(t) for t in ('left', 'top', 'width', 'height')] == ['120', '100', '400', '840']
+    assert [cats.findtext(t) for t in ('left', 'top', 'width', 'height')] == ['110', '90', '420', '860']
     assert [b.get('id') for b in cats.findall('control')] == list(CATEGORIES)
     for cid, (label, tab, _) in CATEGORIES.items():
         button = c[cid]
@@ -364,12 +366,12 @@ def test_skin_settings_look_like_kodis_settings_pages():
         assert button.findtext('usealttexture') == 'String.IsEqual(Window.Property(nc.hp.tab),{})'.format(tab)
     assert '9001' not in c
     for area, tab in (('200', 'home'), ('300', 'movies'), ('400', 'shows'), ('500', 'menu')):
-        assert c[area].findtext('left') == '560' and c[area].findtext('width') == '1240', area
+        assert c[area].findtext('left') == '550' and c[area].findtext('width') == '1260', area
         assert c[area].findtext('visible') == 'String.IsEqual(Window.Property(nc.hp.tab),{})'.format(tab)
     desc = c['6']
     assert [desc.findtext(t) for t in ('left', 'top', 'width', 'height', 'font')] == ['560', '920', '1240', '120', 'font_tiny']
     for page in SETTINGS_BASE:
-        assert slot_button(page, 1).findtext('width') == '1240'
+        assert slot_button(page, 1).findtext('width') == '1260'
 
 
 def test_left_and_right_between_the_columns():
@@ -550,7 +552,7 @@ def test_header_rows():
 def test_menu_category_toggles_the_entries():
     c = controls(page_window())
     for cid, name in (('511', 'movies'), ('512', 'shows'), ('513', 'search')):
-        assert c[cid].get('type') == 'radiobutton' and c[cid].findtext('width') == '1240'
+        assert c[cid].get('type') == 'radiobutton' and c[cid].findtext('width') == '1260'  # padded, test_glow.py
         assert c[cid].findtext('onclick') == 'Skin.ToggleSetting(nc.menu.hide.{})'.format(name)
         assert c[cid].findtext('selected') == '!Skin.HasSetting(nc.menu.hide.{})'.format(name)
 
@@ -611,6 +613,6 @@ def test_menu_category_switches_search_history():
     assert [a.text for a in toggle.findall('onclick')] == ['Skin.ToggleSetting(nc.search.forget)',
                                                           'NotifyAll(nightcity,search_forget)']
     clear = c['515']
-    assert clear.get('type') == 'button' and clear.findtext('width') == '1240'
+    assert clear.get('type') == 'button' and clear.findtext('width') == '1260'  # padded, test_glow.py
     assert clear.findtext('onclick') == 'NotifyAll(nightcity,search_clear)'
     assert clear.findtext('visible') == '!String.IsEmpty(Window(Home).Property(nc.search.recent.1))'

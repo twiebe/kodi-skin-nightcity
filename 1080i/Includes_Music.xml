@@ -78,10 +78,11 @@
         <param name="mute" default="text_mute"/>
         <definition>
             <control type="image">
-                <left>24</left>
-                <width>896</width>
-                <height>56</height>
-                <texture border="12" colordiffuse="focus">ui/cut_btn_fill.png</texture>
+                <top>-10</top>
+                <left>14</left>
+                <width>916</width>
+                <height>76</height>
+                <texture border="22" colordiffuse="focus">ui/cut_btn_glow.png</texture>
                 <visible>$PARAM[focused]</visible>
             </control>
             <control type="label">
@@ -344,12 +345,12 @@
         <!-- 9850: Now playing while music plays, play, info, the library. Left on the first
              button the album before, right on the last the next one (like the movie spotlight). -->
         <control type="grouplist" id="9850">
-            <left>384</left>
-            <top>490</top>
-            <width>1400</width>
-            <height>54</height>
+            <left>374</left>
+            <top>480</top>
+            <width>1420</width>
+            <height>74</height>
             <orientation>horizontal</orientation>
-            <itemgap>16</itemgap>
+            <itemgap>-4</itemgap>
             <visible>String.IsEqual(Window(Home).Property(nc.page),music)</visible>
             <include content="PageFade">
                 <param name="delay" value="FadeStep2"/>
@@ -396,14 +397,16 @@
          and Right (the icon's group 9199). -->
     <include name="MusicNowPlaying">
         <control type="button" id="9108">
-            <width max="560">auto</width>
-            <height>44</height>
-            <textoffsetx>14</textoffsetx>
+            <!-- padded for the glow, 10 px left of its place (HomeTop) -->
+            <left>-10</left>
+            <width max="580">auto</width>
+            <height>64</height>
+            <textoffsetx>24</textoffsetx>
             <aligny>center</aligny>
             <font>font_caps_small</font>
             <textcolor>text_dim</textcolor>
             <focusedcolor>focus_text</focusedcolor>
-            <texturefocus border="12" colordiffuse="accent">ui/cut_btn_fill.png</texturefocus>
+            <texturefocus border="22" colordiffuse="accent">ui/cut_btn_glow.png</texturefocus>
             <texturenofocus/>
             <label>$VAR[MusicNowPlayingLabel]</label>
             <visible>Player.HasAudio</visible>
@@ -430,9 +433,11 @@
         <param name="mute" default="text_mute"/>
         <definition>
             <control type="image">
-                <width>1792</width>
-                <height>48</height>
-                <texture border="12" colordiffuse="focus">ui/cut_btn_fill.png</texture>
+                <left>-10</left>
+                <top>-10</top>
+                <width>1812</width>
+                <height>68</height>
+                <texture border="22" colordiffuse="focus">ui/cut_btn_glow.png</texture>
                 <visible>$PARAM[focused]</visible>
             </control>
             <control type="image">

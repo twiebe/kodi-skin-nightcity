@@ -5,16 +5,17 @@
      also show a single group. -->
 <includes>
     <!-- Group heading in the rail: pink number, caps label. Inside the grouplist it keeps an id:
-         Kodi moves over it by id, id 0 stops the move. -->
+         Kodi moves over it by id, id 0 stops the move. 10 px of margin around it like the
+         padded rows (ListButton). -->
     <include name="SettingsRailHeading">
         <param name="id"/>
         <param name="num"/>
         <param name="label"/>
         <definition>
             <control type="label" id="$PARAM[id]">
-                <width>520</width>
-                <height>60</height>
-                <textoffsetx>20</textoffsetx>
+                <width>540</width>
+                <height>80</height>
+                <textoffsetx>30</textoffsetx>
                 <aligny>center</aligny>
                 <font>font_caps_small</font>
                 <textcolor>text_mute</textcolor>
@@ -75,19 +76,19 @@
         <include content="ListButton">
             <param name="id" value="9211"/>
             <param name="label" value="$LOCALIZE[14200]"/>
-            <param name="width" value="520"/>
+            <param name="width" value="540"/>
             <param name="onclick" value="ActivateWindow(PlayerSettings)"/>
         </include>
         <include content="ListButton">
             <param name="id" value="9212"/>
             <param name="label" value="$LOCALIZE[14211]"/>
-            <param name="width" value="520"/>
+            <param name="width" value="540"/>
             <param name="onclick" value="ActivateWindow(MediaSettings)"/>
         </include>
         <include content="ListButton">
             <param name="id" value="9213"/>
             <param name="label" value="$LOCALIZE[14204]"/>
-            <param name="width" value="520"/>
+            <param name="width" value="540"/>
             <param name="onclick" value="ActivateWindow(PVRSettings)"/>
             <param name="visible" value="System.HasPVRAddon"/>
         </include>
@@ -245,19 +246,19 @@
         <include content="ListButton">
             <param name="id" value="9221"/>
             <param name="label" value="$LOCALIZE[14206]"/>
-            <param name="width" value="520"/>
+            <param name="width" value="540"/>
             <param name="onclick" value="ActivateWindow(InterfaceSettings)"/>
         </include>
         <include content="ListButton">
             <param name="id" value="9222"/>
             <param name="label" value="$LOCALIZE[166]"/>
-            <param name="width" value="520"/>
+            <param name="width" value="540"/>
             <param name="onclick" value="ActivateWindow(SkinSettings)"/>
         </include>
         <include content="ListButton">
             <param name="id" value="9223"/>
             <param name="label" value="$LOCALIZE[13200]"/>
-            <param name="width" value="520"/>
+            <param name="width" value="540"/>
             <param name="onclick" value="ActivateWindow(Profiles)"/>
         </include>
     </include>
@@ -346,13 +347,13 @@
         <include content="ListButton">
             <param name="id" value="9231"/>
             <param name="label" value="$LOCALIZE[24001]"/>
-            <param name="width" value="520"/>
+            <param name="width" value="540"/>
             <param name="onclick" value="ActivateWindow(AddonBrowser)"/>
         </include>
         <include content="ListButton">
             <param name="id" value="9232"/>
             <param name="label" value="$LOCALIZE[10003]"/>
-            <param name="width" value="520"/>
+            <param name="width" value="540"/>
             <param name="onclick" value="ActivateWindow(FileManager)"/>
         </include>
     </include>
@@ -412,13 +413,13 @@
         <include content="ListButton">
             <param name="id" value="9241"/>
             <param name="label" value="$LOCALIZE[13000]"/>
-            <param name="width" value="520"/>
+            <param name="width" value="540"/>
             <param name="onclick" value="ActivateWindow(SystemSettings)"/>
         </include>
         <include content="ListButton">
             <param name="id" value="9242"/>
             <param name="label" value="$LOCALIZE[14036]"/>
-            <param name="width" value="520"/>
+            <param name="width" value="540"/>
             <param name="onclick" value="ActivateWindow(ServiceSettings)"/>
         </include>
     </include>
@@ -535,13 +536,13 @@
         <include content="ListButton">
             <param name="id" value="9251"/>
             <param name="label" value="$LOCALIZE[10007]"/>
-            <param name="width" value="520"/>
+            <param name="width" value="540"/>
             <param name="onclick" value="ActivateWindow(SystemInfo)"/>
         </include>
         <include content="ListButton">
             <param name="id" value="9252"/>
             <param name="label" value="$LOCALIZE[14111]"/>
-            <param name="width" value="520"/>
+            <param name="width" value="540"/>
             <param name="onclick" value="ActivateWindow(EventLog)"/>
         </include>
     </include>
@@ -589,12 +590,12 @@
         <param name="down" default="noop"/>
         <definition>
             <control type="grouplist" id="$PARAM[id]">
-                <left>560</left>
-                <top>100</top>
-                <width>1240</width>
+                <left>550</left>
+                <top>90</top>
+                <width>1260</width>
                 <height>$PARAM[height]</height>
                 <orientation>vertical</orientation>
-                <itemgap>0</itemgap>
+                <itemgap>-20</itemgap>
                 <onup>noop</onup>
                 <ondown>$PARAM[down]</ondown>
                 <onleft>$PARAM[category]</onleft>
@@ -605,16 +606,16 @@
         </definition>
     </include>
 
-    <!-- Group heading in the rows, as Kodi's (settings template 14) -->
+    <!-- Group heading in the rows, as Kodi's (settings template 14), with the rows' margin -->
     <include name="SkinSettingsHeading">
         <param name="label"/>
         <param name="top" default="0"/>
         <definition>
             <control type="label">
                 <top>$PARAM[top]</top>
-                <width>1240</width>
-                <height>52</height>
-                <textoffsetx>20</textoffsetx>
+                <width>1260</width>
+                <height>72</height>
+                <textoffsetx>30</textoffsetx>
                 <aligny>center</aligny>
                 <font>font_caps_small</font>
                 <textcolor>state_text</textcolor>
@@ -623,9 +624,12 @@
         </definition>
     </include>
 
-    <!-- Top of the slot rows of a page category: a separator line, then the rows heading -->
+    <!-- Top of the slot rows of a page category: a separator line, then the rows heading; 10 px
+         in, the rows' group is 10 px out for their glow -->
     <include name="HomePagesRowsHeading">
         <control type="image">
+            <left>10</left>
+            <top>10</top>
             <width>1240</width>
             <height>1</height>
             <texture colordiffuse="border_dim">ui/white.png</texture>
@@ -636,17 +640,18 @@
         </include>
     </include>
 
-    <!-- A setting row: label left, value right, the focused row a cut fill (dark blue while grabbed) -->
+    <!-- A setting row: label left, value right, the focused row a cut fill (dark blue while grabbed),
+         padded for its glow like SettingsRowLook -->
     <include name="HomePagesRow">
-        <width>1240</width>
-        <height>52</height>
+        <width>1260</width>
+        <height>72</height>
         <font>font_label</font>
-        <textoffsetx>20</textoffsetx>
+        <textoffsetx>30</textoffsetx>
         <aligny>center</aligny>
         <textcolor>text</textcolor>
         <focusedcolor>focus_text</focusedcolor>
         <disabledcolor>text_mute</disabledcolor>
-        <texturefocus border="12" colordiffuse="$VAR[HomePagesFocusColor]">ui/cut_btn_fill.png</texturefocus>
+        <texturefocus border="22" colordiffuse="$VAR[HomePagesFocusColor]">ui/cut_btn_glow.png</texturefocus>
         <texturenofocus/>
     </include>
 
@@ -658,7 +663,7 @@
         <param name="onclick" default="noop"/>
         <definition>
             <control type="radiobutton" id="$PARAM[id]">
-                <width>1240</width>
+                <width>1260</width>
                 <include>SettingsToggleLook</include>
                 <label>$PARAM[label]</label>
                 <selected>!Skin.HasSetting($PARAM[setting])</selected>
@@ -674,7 +679,7 @@
         <param name="setting"/>
         <definition>
             <control type="radiobutton" id="$PARAM[id]">
-                <width>1240</width>
+                <width>1260</width>
                 <include>SettingsToggleLook</include>
                 <label>$PARAM[label]</label>
                 <selected>Skin.HasSetting($PARAM[setting])</selected>

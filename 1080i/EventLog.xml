@@ -33,32 +33,32 @@
                 <label>$INFO[Container(50).ListItem.Property(Event.Description)]</label>
             </control>
             <control type="grouplist" id="9000">
-                <left>1440</left>
-                <top>100</top>
-                <width>400</width>
-                <height>600</height>
+                <left>1430</left>
+                <top>90</top>
+                <width>420</width>
+                <height>620</height>
                 <orientation>vertical</orientation>
-                <itemgap>0</itemgap>
+                <itemgap>-20</itemgap>
                 <onleft>50</onleft>
                 <include content="ListButton">
                     <param name="id" value="21"/>
-                    <param name="width" value="400"/>
+                    <param name="width" value="420"/>
                 </include>
                 <control type="radiobutton" id="22">
-                    <width>400</width>
+                    <width>420</width>
                     <include>SettingsRowLook</include>
                     <label>$LOCALIZE[14120]</label>
                 </control>
                 <include content="ListButton">
                     <param name="id" value="20"/>
                     <param name="label" value="$LOCALIZE[192]"/>
-                    <param name="width" value="400"/>
+                    <param name="width" value="420"/>
                 </include>
                 <!-- Kodi's logging settings, as in Estuary -->
                 <include content="ListButton">
                     <param name="id" value="9001"/>
                     <param name="label" value="$LOCALIZE[14092]"/>
-                    <param name="width" value="400"/>
+                    <param name="width" value="420"/>
                     <param name="onclick" value="ActivateWindow(SystemSettings,logging)"/>
                 </include>
             </control>

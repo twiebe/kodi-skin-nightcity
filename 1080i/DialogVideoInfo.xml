@@ -314,12 +314,12 @@
         </control>
 
         <control type="grouplist" id="9000">
-            <left>384</left>
-            <top>490</top>
-            <width>1000</width>
-            <height>54</height>
+            <left>374</left>
+            <top>480</top>
+            <width>1020</width>
+            <height>74</height>
             <orientation>horizontal</orientation>
-            <itemgap>16</itemgap>
+            <itemgap>-4</itemgap>
             <onleft>noop</onleft>
             <onright>noop</onright>
             <!-- the top of the page: Up goes to the plot of the page (PlotFocus), Up from there
@@ -401,30 +401,30 @@
             </include>
             <!-- …: Kodi's context menu of the title, with what add-ons add to it. A one-item
                  list of the title (InfoItemPath), since a button has no list item; it draws its
-                 own pill. OK opens the menu too. -->
+                 own pill, padded for the glow like PillButton. OK opens the menu too. -->
             <control type="list" id="9003">
-                <width>96</width>
-                <height>54</height>
+                <width>116</width>
+                <height>74</height>
                 <orientation>horizontal</orientation>
                 <visible>!String.IsEqual(ListItem.Property(tmdb_type),person) + [!String.IsEmpty(ListItem.DBID) | Integer.IsGreater(Container(5901).NumItems,0)]</visible>
                 <onclick>Action(ContextMenu)</onclick>
                 <include>ChainBackGuard</include>
-                <itemlayout width="96" height="54">
+                <itemlayout width="116" height="74">
                     <include content="MorePill">
-                        <param name="texture" value="ui/cut_btn.png"/>
+                        <param name="texture" value="ui/cut_btn_pad.png"/>
                         <param name="color" value="border_dim"/>
                         <param name="textcolor" value="text_dim"/>
                     </include>
                 </itemlayout>
-                <focusedlayout width="96" height="54">
+                <focusedlayout width="116" height="74">
                     <include content="MorePill">
-                        <param name="texture" value="ui/cut_btn_fill.png"/>
+                        <param name="texture" value="ui/cut_btn_glow.png"/>
                         <param name="color" value="focus"/>
                         <param name="textcolor" value="focus_text"/>
                         <param name="visible" value="Control.HasFocus(9003)"/>
                     </include>
                     <include content="MorePill">
-                        <param name="texture" value="ui/cut_btn.png"/>
+                        <param name="texture" value="ui/cut_btn_pad.png"/>
                         <param name="color" value="border_dim"/>
                         <param name="textcolor" value="text_dim"/>
                         <param name="visible" value="!Control.HasFocus(9003)"/>
@@ -449,8 +449,8 @@
              button row, where Kodi opens the menu; every key goes back to the pill,
              nc_info_more_back too once the menu closed. -->
         <control type="list" id="9006">
-            <left>384</left>
-            <top>490</top>
+            <left>374</left>
+            <top>480</top>
             <width>96</width>
             <height>54</height>
             <visible>!String.IsEmpty(Window(Home).Property(nc.info.more.load))</visible>

@@ -23,22 +23,22 @@
                 <label></label>
             </control>
             <control type="grouplist" id="3">
-                <left>120</left>
-                <top>100</top>
-                <width>400</width>
-                <height>840</height>
-                <itemgap>0</itemgap>
+                <left>110</left>
+                <top>90</top>
+                <width>420</width>
+                <height>860</height>
+                <itemgap>-20</itemgap>
                 <!-- Left leaves the page, back to the console -->
                 <onleft>Action(Back)</onleft>
                 <onright>5</onright>
                 <ondown>20</ondown>
             </control>
             <control type="grouplist" id="5">
-                <left>560</left>
-                <top>100</top>
-                <width>1240</width>
-                <height>800</height>
-                <itemgap>0</itemgap>
+                <left>550</left>
+                <top>90</top>
+                <width>1260</width>
+                <height>820</height>
+                <itemgap>-20</itemgap>
                 <onleft>3</onleft>
             </control>
             <control type="label" id="6">
@@ -53,17 +53,17 @@
                 <label></label>
             </control>
             <control type="grouplist" id="9003">
-                <left>120</left>
-                <top>960</top>
-                <width>400</width>
-                <height>52</height>
+                <left>110</left>
+                <top>950</top>
+                <width>420</width>
+                <height>72</height>
                 <onup>3</onup>
                 <onleft>Action(Back)</onleft>
                 <onright>5</onright>
                 <include content="ListButton">
                     <param name="id" value="20"/>
                     <param name="label" value=""/>
-                    <param name="width" value="400"/>
+                    <param name="width" value="420"/>
                     <!-- Kodi cycles the level only on this action, not on a click -->
                     <param name="onclick" value="SettingsLevelChange"/>
                 </include>
@@ -71,7 +71,7 @@
             <control type="group">
                 <left>-4000</left>
                 <include content="SettingsTemplates">
-                    <param name="width" value="1240"/>
+                    <param name="width" value="1260"/>
                 </include>
                 <include>SettingsCategoryTemplate</include>
             </control>

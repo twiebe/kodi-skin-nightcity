@@ -51,19 +51,19 @@
             <content target="videos" sortby="$VAR[LibrarySortMethod]" sortorder="$VAR[LibrarySortDirection]">$VAR[LibraryPath]</content>
         </control>
         <control type="grouplist" id="5100">
-            <left>1480</left>
-            <top>108</top>
-            <width>380</width>
-            <height>200</height>
+            <left>1470</left>
+            <top>98</top>
+            <width>400</width>
+            <height>220</height>
             <orientation>vertical</orientation>
-            <itemgap>16</itemgap>
+            <itemgap>-4</itemgap>
             <onleft>5000</onleft>
             <onright>noop</onright>
             <onup>noop</onup>
             <ondown>noop</ondown>
             <include content="PillButton">
                 <param name="id" value="5101"/>
-                <param name="width" value="380"/>
+                <param name="width" value="400"/>
                 <param name="label" value="$LOCALIZE[31116]: $VAR[LibrarySortLabel]"/>
                 
                 <!-- title, year, added, rating, title... (conditions are all checked before any runs) -->
@@ -74,7 +74,7 @@
             </include>
             <include content="PillButton">
                 <param name="id" value="5102"/>
-                <param name="width" value="380"/>
+                <param name="width" value="400"/>
                 <param name="label" value="$VAR[LibraryDirectionLabel]"/>
                 <param name="onclick" value="Skin.ToggleSetting(nc.sortdesc)"/>
                 

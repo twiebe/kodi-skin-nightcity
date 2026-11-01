@@ -16,19 +16,19 @@
                 <param name="width" value="1520"/>
             </include>
             <control type="grouplist" id="3">
-                <left>40</left>
-                <top>84</top>
-                <width>400</width>
-                <height>720</height>
-                <itemgap>0</itemgap>
+                <left>30</left>
+                <top>74</top>
+                <width>420</width>
+                <height>740</height>
+                <itemgap>-20</itemgap>
                 <onright>5</onright>
             </control>
             <control type="grouplist" id="5">
-                <left>480</left>
-                <top>84</top>
-                <width>1080</width>
-                <height>720</height>
-                <itemgap>0</itemgap>
+                <left>470</left>
+                <top>74</top>
+                <width>1100</width>
+                <height>740</height>
+                <itemgap>-20</itemgap>
                 <onleft>3</onleft>
                 <ondown>9002</ondown>
             </control>
@@ -47,34 +47,34 @@
                 <top>860</top>
                 <control type="grouplist" id="9002">
                     <onup>5</onup>
-                    <left>40</left>
-                    <top>0</top>
-                    <width>1320</width>
-                    <height>54</height>
+                    <left>30</left>
+                    <top>-10</top>
+                    <width>1340</width>
+                    <height>74</height>
                     <orientation>horizontal</orientation>
-                    <itemgap>24</itemgap>
+                    <itemgap>4</itemgap>
                     <align>right</align>
                     <include content="Button">
                         <param name="id" value="28"/>
                         <param name="label" value="$LOCALIZE[186]"/>
-                        <param name="width" value="240"/>
+                        <param name="width" value="260"/>
                     </include>
                     <include content="Button">
                         <param name="id" value="29"/>
                         <param name="label" value="$LOCALIZE[222]"/>
-                        <param name="width" value="240"/>
+                        <param name="width" value="260"/>
                     </include>
                     <include content="Button">
                         <param name="id" value="30"/>
                         <param name="label" value=""/>
-                        <param name="width" value="240"/>
+                        <param name="width" value="260"/>
                     </include>
                 </control>
             </control>
             <control type="group">
                 <left>-4000</left>
                 <include content="SettingsTemplates">
-                    <param name="width" value="1080"/>
+                    <param name="width" value="1100"/>
                 </include>
                 <include>SettingsCategoryTemplate</include>
             </control>
