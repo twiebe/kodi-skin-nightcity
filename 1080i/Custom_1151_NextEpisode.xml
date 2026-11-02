@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Next episode prompt: in an episode's last 30 s, while another one follows in the video
+     playlist (scripts/nightcity.py play queues them, Kodi's library does too), a button comes up
+     over the video with the focus, without the OSD. Kodi opens the dialog by its condition and
+     closes it once that is false; modal, as only a modal dialog gets the keys. OK plays the next
+     episode, Back hides the prompt for this file (nc.next.hide), Left and Right seek. -->
+<window type="dialog" id="1151" modality="modal">
+    <visible>Window.IsActive(fullscreenvideo) + !Window.IsActive(videoosd) + VideoPlayer.Content(episodes) + Integer.IsLess(VideoPlayer.PlaylistPosition,VideoPlayer.PlaylistLength) + Integer.IsLess(Player.TimeRemaining(secs),31) + !String.IsEqual(Window(Home).Property(nc.next.hide),Player.FilenameAndPath)</visible>
+    <defaultcontrol always="true">1152</defaultcontrol>
+    <animation effect="fade" start="0" end="100" time="300">WindowOpen</animation>
+    <animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
+    <controls>
+        <!-- where the OSD's right row is (VideoOSD.xml 620) -->
+        <control type="grouplist" id="1153">
+            <left>846</left>
+            <top>942</top>
+            <width>1020</width>
+            <height>74</height>
+            <itemgap>-8</itemgap>
+            <orientation>horizontal</orientation>
+            <align>right</align>
+            <include content="PillButton">
+                <param name="id" value="1152"/>
+                <!-- the seconds until the next episode starts by itself -->
+                <param name="label" value="⏭ $LOCALIZE[31137]  $INFO[Player.TimeRemaining(secs)]"/>
+                <param name="onclick" value="Playlist.PlayOffset(video,1)"/>
+                <param name="width" value="420"/>
+                <param name="color" value="accent"/>
+                <param name="textcolor" value="accent"/>
+                <onback>SetProperty(nc.next.hide,$ESCINFO[Player.FilenameAndPath],home)</onback>
+                <onleft>Seek(-10)</onleft>
+                <onright>Seek(10)</onright>
+                <onup>noop</onup>
+                <ondown>noop</ondown>
+            </include>
+        </control>
+    </controls>
+</window>
