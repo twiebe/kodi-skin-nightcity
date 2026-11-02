@@ -249,8 +249,9 @@
                     <param name="value" value="ListItem.Mpaa"/>
                 </include>
                 <!-- budget and box office from TMDb Helper ($63,000,000): a TMDb page carries them on
-                     its item, for a library movie its service has them for the page (as the ratings
-                     line); not when TMDb has none ($0) -->
+                     its item, for a library movie its service has them, once they belong to the
+                     page (it follows a moment late: its library id, else its title); not when TMDb
+                     has none ($0) -->
                 <include content="InfoDetail">
                     <param name="key" value="$LOCALIZE[31471]"/>
                     <param name="value" value="ListItem.Property(budget)"/>
@@ -259,7 +260,7 @@
                 <include content="InfoDetail">
                     <param name="key" value="$LOCALIZE[31471]"/>
                     <param name="value" value="Window(Home).Property(TMDbHelper.ListItem.Budget)"/>
-                    <param name="visible" value="String.IsEmpty(ListItem.Property(budget)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Budget)) + !String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Budget),$0)"/>
+                    <param name="visible" value="String.IsEmpty(ListItem.Property(budget)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Budget)) + !String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Budget),$0) + [[Integer.IsGreater(ListItem.DBID,0) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_dbid),ListItem.DBID)] | [String.IsEmpty(ListItem.DBID) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_label),ListItem.Label)]]"/>
                 </include>
                 <include content="InfoDetail">
                     <param name="key" value="$LOCALIZE[31472]"/>
@@ -269,7 +270,7 @@
                 <include content="InfoDetail">
                     <param name="key" value="$LOCALIZE[31472]"/>
                     <param name="value" value="Window(Home).Property(TMDbHelper.ListItem.Revenue)"/>
-                    <param name="visible" value="String.IsEmpty(ListItem.Property(revenue)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Revenue)) + !String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Revenue),$0)"/>
+                    <param name="visible" value="String.IsEmpty(ListItem.Property(revenue)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Revenue)) + !String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Revenue),$0) + [[Integer.IsGreater(ListItem.DBID,0) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_dbid),ListItem.DBID)] | [String.IsEmpty(ListItem.DBID) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_label),ListItem.Label)]]"/>
                 </include>
             </control>
         </control>
@@ -378,15 +379,27 @@
             <!-- inside a chain: back all the way, to where the chain started (ChainBackLabel names
                  it). At the left end, the way back: Left from the first button reaches it, but
                  it takes the focus only from within the row, never when the page opens; a
-                 person page has no other button, nor the page of the movie that plays: resume
-                 and from start would start it from the beginning, they hide, and back to the
-                 video is the way (InfoMoviePlaying). -->
+                 person page has no other button, nor the page of the title that plays: resume,
+                 from start and ... would start it from the beginning, they hide, and back to the
+                 video is the way (InfoPlaying; 9009 outside a chain). -->
             <include content="PillButton">
                 <param name="id" value="9004"/>
                 <param name="label" value="‹ $VAR[ChainBackLabel]"/>
                 <param name="visible" value="!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))"/>
-                <param name="enable" value="ControlGroup(9000).HasFocus() | String.IsEqual(ListItem.Property(tmdb_type),person) | $EXP[InfoMoviePlaying]"/>
+                <param name="enable" value="ControlGroup(9000).HasFocus() | String.IsEqual(ListItem.Property(tmdb_type),person) | $EXP[InfoPlaying]"/>
                 <param name="onclick" value="SetProperty(TMDbHelper.Command,exit,home)"/>
+                <include>ChainBackGuard</include>
+            </include>
+            <!-- the title that plays, outside a chain (the OSD's info button, the library while it
+                 plays): nothing to play, one way back to the video; in a chain 9004 is it -->
+            <include content="PillButton">
+                <param name="id" value="9009"/>
+                <param name="label" value="‹ $LOCALIZE[31330]"/>
+                <param name="color" value="accent"/>
+                <param name="textcolor" value="accent"/>
+                <param name="visible" value="$EXP[InfoPlaying] + String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))"/>
+                <param name="onclick" value="Dialog.Close(movieinformation)"/>
+                <param name="onclick2" value="ActivateWindow(fullscreenvideo)"/>
                 <include>ChainBackGuard</include>
             </include>
             <include content="PillButton">
@@ -396,7 +409,7 @@
                 <param name="textcolor" value="accent"/>
                 <!-- a TMDb page (person or title) has no file of its own; titles in the library
                      play their library copy -->
-                <param name="visible" value="[String.IsEmpty(ListItem.Property(tmdb_type)) | !String.IsEmpty(ListItem.DBID) | Integer.IsGreater(Container(5901).NumItems,0)] + !$EXP[InfoMoviePlaying]"/>
+                <param name="visible" value="[String.IsEmpty(ListItem.Property(tmdb_type)) | !String.IsEmpty(ListItem.DBID) | Integer.IsGreater(Container(5901).NumItems,0)] + !$EXP[InfoPlaying]"/>
                 <onclick condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.DBID)">NotifyAll(nightcity,play:episode:$VAR[InfoEpisodeDBID]:resume)</onclick>
                 <onclick condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[ListItem.DBID]:resume)</onclick>
                 <onclick condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[ListItem.DBID])</onclick>
@@ -430,7 +443,7 @@
             <include content="PillButton">
                 <param name="id" value="9002"/>
                 <param name="label" value="« $LOCALIZE[31123]"/>
-                <param name="visible" value="[[String.IsEqual(ListItem.DBType,episode) + Container(5100).ListItem.IsResumable] | [!String.IsEqual(ListItem.DBType,episode) + ListItem.IsResumable] | [String.IsEmpty(ListItem.DBID) + !String.IsEmpty(ListItem.Property(tmdb_type)) + String.IsEqual(ListItem.DBType,movie) + Container(5901).ListItem.IsResumable]] + !$EXP[InfoMoviePlaying]"/>
+                <param name="visible" value="[[String.IsEqual(ListItem.DBType,episode) + Container(5100).ListItem.IsResumable] | [!String.IsEqual(ListItem.DBType,episode) + ListItem.IsResumable] | [String.IsEmpty(ListItem.DBID) + !String.IsEmpty(ListItem.Property(tmdb_type)) + String.IsEqual(ListItem.DBType,movie) + Container(5901).ListItem.IsResumable]] + !$EXP[InfoPlaying]"/>
                 <onclick condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.DBID)">NotifyAll(nightcity,play:episode:$VAR[InfoEpisodeDBID]:noresume)</onclick>
                 <onclick condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[ListItem.DBID]:noresume)</onclick>
                 <onclick condition="String.IsEmpty(ListItem.DBID) + !String.IsEmpty(ListItem.Property(tmdb_type)) + String.IsEqual(ListItem.DBType,movie)">NotifyAll(nightcity,play:movie:$INFO[Container(5901).ListItem.DBID]:noresume)</onclick>
@@ -443,7 +456,7 @@
                 <width>116</width>
                 <height>74</height>
                 <orientation>horizontal</orientation>
-                <visible>!String.IsEqual(ListItem.Property(tmdb_type),person) + [!String.IsEmpty(ListItem.DBID) | Integer.IsGreater(Container(5901).NumItems,0)]</visible>
+                <visible>[!String.IsEqual(ListItem.Property(tmdb_type),person) + [!String.IsEmpty(ListItem.DBID) | Integer.IsGreater(Container(5901).NumItems,0)]] + !$EXP[InfoPlaying]</visible>
                 <onclick>Action(ContextMenu)</onclick>
                 <include>ChainBackGuard</include>
                 <itemlayout width="116" height="74">
@@ -475,7 +488,7 @@
                 <param name="id" value="9005"/>
                 <param name="label" value="…"/>
                 <param name="onclick" value="SetProperty(nc.info.more,1,home)"/>
-                <param name="visible" value="!String.IsEmpty(ListItem.Property(tmdb_type)) + !String.IsEqual(ListItem.Property(tmdb_type),person) + String.IsEmpty(ListItem.DBID) + !Integer.IsGreater(Container(5901).NumItems,0)"/>
+                <param name="visible" value="[!String.IsEmpty(ListItem.Property(tmdb_type)) + !String.IsEqual(ListItem.Property(tmdb_type),person) + String.IsEmpty(ListItem.DBID) + !Integer.IsGreater(Container(5901).NumItems,0)] + !$EXP[InfoPlaying]"/>
                 <include>ChainBackGuard</include>
             </include>
         </control>
@@ -591,7 +604,9 @@
                     <ondown condition="Control.IsVisible(5403)">5520</ondown>
                     <ondown condition="!Control.IsVisible(5403) + Control.IsVisible(50)">50</ondown>
                     <ondown>noop</ondown>
-                    <onclick>SetFocus(9001)</onclick>
+                    <!-- OK on the episode that plays: the way back to the video, not play -->
+                    <onclick condition="!$EXP[InfoPlaying]">SetFocus(9001)</onclick>
+                    <onclick condition="$EXP[InfoPlaying]">SetFocus(9000)</onclick>
                     <itemlayout width="352" height="300">
                         <include content="EpisodeCard">
                             <param name="dim" value="Control.HasFocus(5100)"/>
