@@ -33,6 +33,21 @@ def test_all_xml_parses(path):
     parse(path)
 
 
+def test_build_into_the_source_tree_leaves_its_output_out():
+    """A zip written inside the skin's folder must not pack itself (or an earlier zip there):
+    it grew until the disk or a timeout stopped it."""
+    import shutil
+    from build import build
+    out_dir = ROOT / 'build-test-out'
+    try:
+        out_dir.mkdir()
+        (out_dir / 'old.zip').write_bytes(b'x' * 1000)
+        names = zipfile.ZipFile(build(out_dir)).namelist()
+        assert not [n for n in names if 'build-test-out' in n]
+    finally:
+        shutil.rmtree(out_dir, ignore_errors=True)
+
+
 def test_build_zip(tmp_path):
     from build import build
     out = build(tmp_path)
