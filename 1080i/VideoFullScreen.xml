@@ -8,6 +8,10 @@
     <onload condition="String.IsEqual(Window(Home).Property(nc.chain.return),osd)">ClearProperty(nc.chain.return,home)</onload>
     <onload condition="String.IsEqual(Window(Home).Property(nc.chain.return),osd)">SetProperty(nc.osd.chain,1,home)</onload>
     <onload condition="String.IsEqual(Window(Home).Property(nc.chain.return),osd)">ActivateWindow(videoosd)</onload>
+    <!-- Back held in such a chain (scripts/nightcity.py back_to_start): the OSD on its own first
+         button, play or resume, the quick way back to the video -->
+    <onload condition="String.IsEqual(Window(Home).Property(nc.chain.return),controls)">ClearProperty(nc.chain.return,home)</onload>
+    <onload condition="String.IsEqual(Window(Home).Property(nc.chain.return),controls)">ActivateWindow(videoosd)</onload>
     <controls>
         <control type="group">
             <left>64</left>

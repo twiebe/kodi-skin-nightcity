@@ -135,7 +135,7 @@
                 <param name="ratingswidth" value="1300"/>
                 <param name="shift" value="-320"/>
                 <param name="titlewidth" value="1250"/>
-                <param name="plotwidth" value="1200"/>
+                <param name="plotwidth" value="1176"/>
             </include>
             <include content="ProgressLine">
                 <param name="left" value="64"/>
@@ -156,6 +156,8 @@
                 <param name="hintleft" value="64"/>
                 <param name="hintwidth" value="1200"/>
                 <param name="texttop" value="360"/>
+                <param name="moreleft" value="1244"/>
+                <param name="moretop" value="444"/>
             </include>
             <control type="group">
                 <left>1400</left>
@@ -195,7 +197,7 @@
                 <param name="ratingswidth" value="1000"/>
                 <param name="titlewidth" value="960"/>
                 <param name="titlefont" value="font_title"/>
-                <param name="plotwidth" value="960"/>
+                <param name="plotwidth" value="936"/>
             </include>
             <include content="ProgressLine">
                 <param name="left" value="384"/>
@@ -216,6 +218,8 @@
                 <param name="hintleft" value="384"/>
                 <param name="hintwidth" value="960"/>
                 <param name="texttop" value="360"/>
+                <param name="moreleft" value="1324"/>
+                <param name="moretop" value="444"/>
             </include>
             <control type="grouplist">
                 <left>1400</left>
@@ -292,7 +296,7 @@
             <control type="textbox" id="9052">
                 <left>384</left>
                 <top>318</top>
-                <width>1472</width>
+                <width>1448</width>
                 <height>160</height>
                 <font>font_body</font>
                 <textcolor>text_dim</textcolor>
@@ -310,6 +314,8 @@
                 <param name="hintleft" value="384"/>
                 <param name="hintwidth" value="1472"/>
                 <param name="texttop" value="318"/>
+                <param name="moreleft" value="1836"/>
+                <param name="moretop" value="441"/>
             </include>
         </control>
 
@@ -320,8 +326,6 @@
             <height>74</height>
             <orientation>horizontal</orientation>
             <itemgap>-4</itemgap>
-            <!-- only the plot hint at its end has coordinates of its own -->
-            <usecontrolcoords>true</usecontrolcoords>
             <onleft>noop</onleft>
             <onright>noop</onright>
             <!-- the top of the page: Up goes to the plot of the page (PlotFocus), Up from there
@@ -451,20 +455,6 @@
                 <param name="visible" value="!String.IsEmpty(ListItem.Property(tmdb_type)) + !String.IsEqual(ListItem.Property(tmdb_type),person) + String.IsEmpty(ListItem.DBID) + !Integer.IsGreater(Container(5901).NumItems,0)"/>
                 <include>ChainBackGuard</include>
             </include>
-            <!-- OK reads on (PlotFocus): when the text is longer than its box. The last entry of
-                 the row, so it stands right after the last button however many show; 10 px in
-                 (the row uses its controls' coordinates), the gap between two pills -->
-            <control type="label" id="9063">
-                <left>10</left>
-                <top>0</top>
-                <width>auto</width>
-                <height>74</height>
-                <font>font_caps_small</font>
-                <aligny>center</aligny>
-                <textcolor>text_mute</textcolor>
-                <label>[UPPERCASE]$LOCALIZE[31468][/UPPERCASE]</label>
-                <visible>[!String.IsEqual(ListItem.DBType,episode) + !String.IsEqual(ListItem.Property(tmdb_type),person) + Container(9050).HasNext] | [String.IsEqual(ListItem.DBType,episode) + Container(9051).HasNext] | [String.IsEqual(ListItem.Property(tmdb_type),person) + Container(9052).HasNext]</visible>
-            </control>
         </control>
 
         <!-- the title for … (9005) of a TMDb title without library copy, as TMDb Helper lists it:

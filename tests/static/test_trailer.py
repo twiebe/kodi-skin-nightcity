@@ -137,3 +137,14 @@ def test_more_pill_keeps_its_text_colour_on_the_playing_title():
     pill = next(i for i in base.iter('include') if i.get('name') == 'MorePill')
     label = next(c for c in pill.iter('control') if c.get('type') == 'label')
     assert label.findtext('selectedcolor') == label.findtext('textcolor') == '$PARAM[textcolor]'
+
+
+def test_back_held_out_of_a_player_chain_opens_the_controls():
+    """Back held ends a chain from the OSD's cast row on the player's controls, their own first
+    button (nc.chain.return controls, scripts/nightcity.py back_to_start); a chain walked back
+    page by page returns to the cast row (nc.chain.return osd)."""
+    onloads = [(o.get('condition'), o.text) for o in parse(SKIN / 'VideoFullScreen.xml').findall('onload')]
+    held = 'String.IsEqual(Window(Home).Property(nc.chain.return),controls)'
+    assert (held, 'ClearProperty(nc.chain.return,home)') in onloads
+    assert (held, 'ActivateWindow(videoosd)') in onloads
+    assert not [text for cond, text in onloads if cond == held and 'nc.osd.chain' in text]

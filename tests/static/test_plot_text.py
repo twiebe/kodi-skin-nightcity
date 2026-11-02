@@ -19,6 +19,8 @@ INFO = 'DialogVideoInfo.xml'
 EPISODE = 'String.IsEqual(ListItem.DBType,episode)'
 PERSON = 'String.IsEqual(ListItem.Property(tmdb_type),person)'
 # page kind: (text button, its textbox, info prefix of the text, condition of that head)
+DOTS = 24  # px right of the text for the three dots, inside the frame
+
 PLOTS = {
     'movie': ('9060', '9050', 'ListItem', '!{} + !{}'.format(EPISODE, PERSON)),
     'episode': ('9061', '9051', 'Container(5100).ListItem', EPISODE),
@@ -133,29 +135,33 @@ def test_the_text_shows_the_cursor_of_a_card(info_page, kind):
     frame = [int(c.findtext(k)) for k in ('left', 'top', 'width', 'height')]
     text = [int(textbox.findtext(k)) for k in ('left', 'top', 'width', 'height')]
     shift = -320 if kind == 'episode' else 0  # HeroBody's shift: an episode has no poster
-    assert frame == [text[0] + shift - 16, text[1] - 10, text[2] + 32, text[3] + 20]
+    # the frame lies 16 px out from the text, and on the right 24 px more: room for the dots
+    assert frame == [text[0] + shift - 16, text[1] - 10, text[2] + 32 + DOTS, text[3] + 20]
 
 
-def test_a_hint_says_ok_reads_on_when_the_text_is_longer():
-    """When the text is longer than its box, a hint says OK reads on. It is the last entry of the
-    button row, so it stands right after the last button however many show (in a chain over the
-    player, back, resume, trailer, from start and ... reached past a hint at a fixed place). A
-    label, which keeps the key's colour (a disabled button draws its text in one colour); the
-    row uses the controls' own coordinates, so 10 px left of it make the gap between two pills."""
-    root = parse(ROOT / '1080i' / 'DialogVideoInfo.xml')
-    row = root.find('.//control[@id="9000"]')
-    assert row.findtext('usecontrolcoords') == 'true'
-    hint = list(row)[-1]
-    assert (hint.tag, hint.get('type'), hint.get('id')) == ('control', 'label', '9063')
-    assert (hint.findtext('left'), hint.findtext('top'), hint.findtext('width')) == ('10', '0', 'auto')
-    assert hint.findtext('label') == '[UPPERCASE]$LOCALIZE[31468][/UPPERCASE]'
-    assert (hint.findtext('font'), hint.findtext('textcolor')) == ('font_caps_small', 'text_mute')
-    for kind in PLOTS:
-        _, box, _, head = PLOTS[kind]
-        assert '[{} + Container({}).HasNext]'.format(head, box) in hint.findtext('visible'), kind
-    # no other hint at a fixed place, and no other control of the row placed by its own coordinates
-    assert [l for l in root.iter('control') if '31468' in (l.findtext('label') or '')] == [hint]
-    assert not [c for c in row if c is not hint and (c.find('left') is not None or c.find('top') is not None)]
+def test_dots_say_the_text_goes_on():
+    """When the text is longer than its box, three dots at its end say so: muted, and cyan while
+    the text has the focus (the cursor's colour; OK there reads on). They sit in the frame's margin
+    right of the text's last line. A hint "OK read more" on the button row read as if it were
+    about the focused button."""
+    root = parse(ROOT / '1080i' / 'Includes_Info.xml')
+    inc = next(i for i in root.iter('include') if i.get('name') == 'PlotFocus')
+    dots = [c for c in inc.iter('control') if c.get('type') == 'label' and c.findtext('label') == '…']
+    assert [(d.findtext('visible'), d.findtext('textcolor')) for d in dots] == [
+        ('$PARAM[more] + !Control.HasFocus($PARAM[id])', 'text_mute'),
+        ('$PARAM[more] + Control.HasFocus($PARAM[id])', 'accent')]
+    assert {(d.findtext('left'), d.findtext('top')) for d in dots} == {('$PARAM[moreleft]', '$PARAM[moretop]')}
+    page = parse(ROOT / '1080i' / 'DialogVideoInfo.xml')
+    for call in (i for i in page.iter('include') if i.get('content') == 'PlotFocus'):
+        params = {p.get('name'): p.get('value') for p in call.findall('param')}
+        # right of the text, in the frame's room for them (DOTS), clear of its line
+        frame_right = int(params['left']) + int(params['width'])
+        assert int(params['hintleft']) + int(params['hintwidth']) - DOTS <= int(params['moreleft']), params['id']
+        assert int(params['moreleft']) + 20 <= frame_right - 12, params['id']
+        assert int(params['moretop']) > int(params['texttop']), params['id']
+    # no hint on the button row any more, nor its string
+    for path in (ROOT / '1080i').glob('*.xml'):
+        assert '31468' not in path.read_text(encoding='utf-8'), path.name
 
 
 @pytest.mark.parametrize('kind', sorted(PLOTS))
@@ -172,7 +178,7 @@ def test_no_plot_shows_a_placeholder_for_the_cursor(info_page, kind):
 
 def test_strings():
     text = (ROOT / 'language' / 'resource.language.en_gb' / 'strings.po').read_text(encoding='utf-8')
-    assert 'msgctxt "#31468"\nmsgid "[COLOR state_text]OK[/COLOR] read more"\n' in text
+    assert 'msgctxt "#31468"' not in text  # the hint "OK read more" is gone (three dots instead)
     assert 'msgctxt "#31469"\nmsgid "No description"\n' in text
 
 
