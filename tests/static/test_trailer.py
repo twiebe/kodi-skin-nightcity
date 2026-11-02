@@ -35,9 +35,11 @@ def _actions(control, tag):
     return [(o.get('condition') or '', o.text) for o in control.findall(tag)]
 
 
-def test_trailer_sits_right_of_play():
+def test_trailer_sits_after_resume_and_from_start():
+    """Resume and from start belong together; the trailer follows them (right of play when the
+    movie was never started and from start is hidden)."""
     ids = _button_ids()
-    assert ids[ids.index('9001') + 1] == '9008'
+    assert ids.index('9001') + 1 == ids.index('9002') and ids.index('9002') + 1 == ids.index('9008')
 
 
 def test_trailer_shows_on_a_movie_with_a_trailer_it_can_play():
