@@ -603,8 +603,8 @@ def back_to_start():
     origin): its manager goes back to it at once (TMDbHelper.Command first, a command of the
     twiebe fork), and the page takes the focus to the item the chain went on from (nc.ret.1,
     info_back). A chain from the OSD cast row (nc.osd.ret) has no page before its first: it
-    ends, and the player's controls come back on that row. Outside a chain, and on the page it
-    started from, it is a Back."""
+    ends, and the player's controls come back on their first button. Outside a chain, and on the
+    page it started from, it is a Back."""
     import xbmc
     home = _home()
     position = xbmc.getInfoLabel('Window(Home).Property(TMDbHelper.Position)')
@@ -612,6 +612,11 @@ def back_to_start():
         xbmc.executebuiltin('Action(Back)')
     elif home.getProperty('nc.osd.ret'):
         info_forget()
+        # the quick way back: the player's controls on their own first button (play or resume,
+        # VideoFullScreen.xml), not on the cast row's person a plain Back walks back to
+        home.clearProperty('nc.osd.ret')
+        home.clearProperty('nc.osd.ret.tab')
+        home.setProperty('nc.chain.return', 'controls')
         home.setProperty('TMDbHelper.Command', 'exit')
     elif not position.isdigit() or int(position) < 2:
         xbmc.executebuiltin('Action(Back)')

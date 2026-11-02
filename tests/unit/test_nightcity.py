@@ -1963,12 +1963,15 @@ def test_back_to_start_returns_to_the_page_the_chain_started_from(monkeypatch):
 
 def test_back_to_start_ends_a_chain_from_the_player(monkeypatch):
     """A chain from the OSD cast row has no page before its first: it ends, and the player comes
-    back with its controls on the cast row (nc.osd.ret, Custom_1141_OSDCast.xml)."""
+    back with its controls on their own first button (play or resume), the quick way back to the
+    video; not on the cast row's person, where a plain Back walks back to (nc.osd.ret)."""
     fake, home = _start_env(monkeypatch, {'Window(Home).Property(TMDbHelper.Position)': '3'}, {
-        'TMDbHelper.Instance': 'True', 'nc.osd.ret': '2', 'nc.ret.2': 'x'})
+        'TMDbHelper.Instance': 'True', 'nc.osd.ret': '2', 'nc.osd.ret.tab': 'crew', 'nc.ret.2': 'x',
+        'nc.chain.return': 'osd'})
     nightcity.back_to_start()
     assert fake.builtins == []
-    assert home.props['TMDbHelper.Command'] == 'exit' and home.props['nc.osd.ret'] == '2'
+    assert home.props['TMDbHelper.Command'] == 'exit' and home.props['nc.chain.return'] == 'controls'
+    assert 'nc.osd.ret' not in home.props and 'nc.osd.ret.tab' not in home.props
 
 
 def test_back_to_start_on_the_first_page_is_a_back(monkeypatch):
