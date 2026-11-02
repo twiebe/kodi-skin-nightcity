@@ -99,7 +99,8 @@ def test_music_spotlight_buttons():
     # play goes to the player screen (scripts/nightcity.py music_play); Back there comes back
     assert c['9852'].findall('onclick')[0].text == \
         'NotifyAll(nightcity,music_play:album:$INFO[Container(9002).ListItem.DBID]:1)'
-    assert [a.text for a in c['9853'].findall('onclick')][:2] == ['SetFocus(9002)', 'Action(Info)']
+    # info remembers its button first, so Back from the page returns to it (test_spotlight_info.py)
+    assert [a.text for a in c['9853'].findall('onclick')][:3] == ['SetProperty(nc.spot.back,9853,home)', 'SetFocus(9002)', 'Action(Info)']
     assert c['9854'].findall('onclick')[0].text == 'ActivateWindow(Music,musicdb://albums/,return)'
     spot = c['9002']
     assert spot.find('content').get('target') == 'music'
