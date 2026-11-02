@@ -218,13 +218,6 @@ def test_osd_buttons():
     for action in ('PlayerControl(Previous)', 'PlayerControl(Play)', 'PlayerControl(Next)',
                    'PlayerControl(Stop)'):
         assert action in clicks, action
-    next_episode = next(b for b in buttons if '31137' in b['label'])
-    # Kodi 21 has no Playlist.HasNext (an unknown condition is false: the button never showed);
-    # the queued episodes behind one played from its page (scripts/nightcity.py play) bring it
-    assert next_episode['visible'] == ('VideoPlayer.Content(episodes) + '
-                                       'Integer.IsLess(VideoPlayer.PlaylistPosition,VideoPlayer.PlaylistLength)')
-    # PlayerControl(Next) moves to the next chapter of a file with chapters, not to the next episode
-    assert next_episode['onclicks'] == ['Playlist.PlayOffset(video,1)']
     assert any(b['label'] == '…' for b in buttons)
 
 

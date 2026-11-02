@@ -108,7 +108,8 @@ def _arg(call, name):
 def test_osd_button_rows():
     """Play controls, stop and skip forward left; info, subtitles, audio, video and "…" right. "…"
     swaps subtitles, audio and video for stats."""
-    assert list(_osd_buttons('600')) == ['601', '602', '603', '604', '611']
+    # next episode is a prompt of its own (Custom_1151_NextEpisode.xml)
+    assert list(_osd_buttons('600')) == ['601', '602', '604', '611']
     right = _osd_buttons('620')
     assert list(right) == ['612', '605', '606', '607', '609', '610']
     assert _arg(right['609'], 'visible') == '!String.IsEmpty(Window(Home).Property(nc.osd.more))'

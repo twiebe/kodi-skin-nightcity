@@ -32,6 +32,7 @@ TEXTURE_TAGS = ('texture', 'texturefocus', 'texturenofocus', 'alttexturefocus', 
 BEFORE = {
     ('AddonBrowser.xml', '9000'): ('1440', '100', '400', '600', '0'),
     ('Custom_1110_Library.xml', '5100'): ('1480', '108', '380', '200', '16'),
+    ('Custom_1151_NextEpisode.xml', '1153'): ('856', '952', '1000', '54', '12'),
     ('DialogAddonInfo.xml', '9000'): ('40', '760', '1520', '54', '16'),
     ('DialogAddonSettings.xml', '3'): ('40', '84', '400', '720', '0'),
     ('DialogAddonSettings.xml', '5'): ('480', '84', '1080', '720', '0'),

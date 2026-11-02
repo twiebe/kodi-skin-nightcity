@@ -87,13 +87,6 @@
                 <param name="onclick" value="PlayerControl(Play)"/>
             </include>
             <include content="PillButton">
-                <param name="id" value="603"/>
-                <param name="label" value="⏭ $LOCALIZE[31137]"/>
-                <!-- the next item even in a file with chapters, where PlayerControl(Next) moves on a chapter -->
-                <param name="onclick" value="Playlist.PlayOffset(video,1)"/>
-                <param name="visible" value="VideoPlayer.Content(episodes) + Integer.IsLess(VideoPlayer.PlaylistPosition,VideoPlayer.PlaylistLength)"/>
-            </include>
-            <include content="PillButton">
                 <param name="id" value="604"/>
                 <param name="label" value="■ $LOCALIZE[31052]"/>
                 <param name="onclick" value="PlayerControl(Stop)"/>
