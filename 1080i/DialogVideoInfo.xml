@@ -421,6 +421,15 @@
                 <onclick condition="[String.IsEmpty(ListItem.DBID) | ![String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow)]] + String.IsEmpty(ListItem.Property(tmdb_type))">PlayMedia($ESCINFO[ListItem.FileNameAndPath])</onclick>
                 <include>ChainBackGuard</include>
             </include>
+            <include content="PillButton">
+                <param name="id" value="9002"/>
+                <param name="label" value="« $LOCALIZE[31123]"/>
+                <param name="visible" value="[[String.IsEqual(ListItem.DBType,episode) + Container(5100).ListItem.IsResumable] | [!String.IsEqual(ListItem.DBType,episode) + ListItem.IsResumable] | [String.IsEmpty(ListItem.DBID) + !String.IsEmpty(ListItem.Property(tmdb_type)) + String.IsEqual(ListItem.DBType,movie) + Container(5901).ListItem.IsResumable]] + !$EXP[InfoPlaying]"/>
+                <onclick condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.DBID)">NotifyAll(nightcity,play:episode:$VAR[InfoEpisodeDBID]:noresume)</onclick>
+                <onclick condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[ListItem.DBID]:noresume)</onclick>
+                <onclick condition="String.IsEmpty(ListItem.DBID) + !String.IsEmpty(ListItem.Property(tmdb_type)) + String.IsEqual(ListItem.DBType,movie)">NotifyAll(nightcity,play:movie:$INFO[Container(5901).ListItem.DBID]:noresume)</onclick>
+                <include>ChainBackGuard</include>
+            </include>
             <!-- the trailer of a movie, a library one or a TMDb title in a chain (Jellyfin for
                  Kodi and TMDb Helper store YouTube links: without the YouTube add-on the click
                  offers it). It plays in full screen over this page (9095, keys on 9099,
@@ -438,15 +447,6 @@
                      lists when it starts and stops (InfoSimilarPath) -->
                 <onclick>SetProperty(nc.trailer.lists,1,home)</onclick>
                 <onclick>NotifyAll(nightcity,trailer)</onclick>
-                <include>ChainBackGuard</include>
-            </include>
-            <include content="PillButton">
-                <param name="id" value="9002"/>
-                <param name="label" value="« $LOCALIZE[31123]"/>
-                <param name="visible" value="[[String.IsEqual(ListItem.DBType,episode) + Container(5100).ListItem.IsResumable] | [!String.IsEqual(ListItem.DBType,episode) + ListItem.IsResumable] | [String.IsEmpty(ListItem.DBID) + !String.IsEmpty(ListItem.Property(tmdb_type)) + String.IsEqual(ListItem.DBType,movie) + Container(5901).ListItem.IsResumable]] + !$EXP[InfoPlaying]"/>
-                <onclick condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.DBID)">NotifyAll(nightcity,play:episode:$VAR[InfoEpisodeDBID]:noresume)</onclick>
-                <onclick condition="String.IsEqual(ListItem.DBType,movie) + !String.IsEmpty(ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[ListItem.DBID]:noresume)</onclick>
-                <onclick condition="String.IsEmpty(ListItem.DBID) + !String.IsEmpty(ListItem.Property(tmdb_type)) + String.IsEqual(ListItem.DBType,movie)">NotifyAll(nightcity,play:movie:$INFO[Container(5901).ListItem.DBID]:noresume)</onclick>
                 <include>ChainBackGuard</include>
             </include>
             <!-- …: Kodi's context menu of the title, with what add-ons add to it. A one-item
