@@ -669,7 +669,7 @@
             <!-- beside the card, not inside it: the card's dimming must not reach the dog-ear -->
             <control type="group">
                 <animation effect="zoom" end="106" center="auto" time="150" condition="$PARAM[focused]">Conditional</animation>
-                <!-- unwatched, never started: a dark blue dog-ear in the bottom right corner (no cut
+                <!-- unwatched, never started: a cyan dog-ear (the focus colour) in the bottom right corner (no cut
                      there), bigger than the frame's cut so it reads from the sofa -->
                 <control type="group">
                     <width>$PARAM[width]</width>
@@ -679,7 +679,7 @@
                         <bottom>0</bottom>
                         <width>22</width>
                         <height>22</height>
-                        <texture colordiffuse="state_text">ui/dogear.png</texture>
+                        <texture colordiffuse="focus">ui/dogear.png</texture>
                         <visible>[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,episode)] + !String.IsEmpty(ListItem.DBID) + Integer.IsEqual(ListItem.PlayCount,0) + !ListItem.IsResumable</visible>
                     </control>
                 </control>
