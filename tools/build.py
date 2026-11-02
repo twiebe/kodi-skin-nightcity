@@ -39,9 +39,12 @@ def build(out_dir=pathlib.Path('/dist'), pre=False):
         version = prerelease(addon_id, version, out_dir)
     target = out_dir / '{}-{}.zip'.format(addon_id, version)
     skip = unused_fonts()
+    out_dir = out_dir.resolve()
     with zipfile.ZipFile(target, 'w', zipfile.ZIP_DEFLATED) as zf:
         for path in sorted(ROOT.rglob('*')):
             rel = path.relative_to(ROOT)
+            if out_dir in path.resolve().parents:
+                continue  # an output folder inside the skin: the zip would pack itself
             if path.is_file() and not EXCLUDE & set(rel.parts) and not (rel.parts[0] == 'fonts' and path.name in skip):
                 name = '{}/{}'.format(addon_id, rel.as_posix())
                 if pre and rel.as_posix() == 'addon.xml':
