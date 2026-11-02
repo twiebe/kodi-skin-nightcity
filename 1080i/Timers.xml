@@ -95,6 +95,19 @@
         <onstop condition="!String.IsEmpty(Window(Home).Property(nc.chain.back)) + Window.IsActive(movieinformation)">Action(Back)</onstop>
         <onstop>ClearProperty(nc.chain.back,home)</onstop>
     </timer>
+    <!-- Info on a spotlight (movies 9011, shows 9552, music 9853) parks the focus on the spotlight's
+         data list, which shows nothing, and opens the info page there; the button remembers
+         itself (nc.spot.back). Once the page was open and Home is in front again (also after a
+         chain or a playback started from it), the focus goes back to the button: on the hidden
+         list left and right moved the spotlight, but no button showed the cursor. -->
+    <timer>
+        <name>nc_spot_back</name>
+        <description>Back from a spotlight's info page returns to its info button</description>
+        <start reset="true">!String.IsEmpty(Window(Home).Property(nc.spot.back)) + [Window.IsVisible(movieinformation) | Window.IsVisible(musicinformation)]</start>
+        <stop>Window.IsActive(home) + !Window.IsVisible(movieinformation) + !Window.IsVisible(musicinformation) + !System.HasActiveModalDialog</stop>
+        <onstop condition="[Control.HasFocus(9000) | Control.HasFocus(9001) | Control.HasFocus(9002)]">SetFocus($INFO[Window(Home).Property(nc.spot.back)])</onstop>
+        <onstop>ClearProperty(nc.spot.back,home)</onstop>
+    </timer>
     <!-- The play button of a TMDb page appears once the library copy is found (DialogVideoInfo
          list 5901), after the page has put the focus on the next button: move it to play, once
          per page (nc.info.twinfocus, set on load) and only while the focus is still on the

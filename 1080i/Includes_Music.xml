@@ -372,8 +372,11 @@
             <include content="PillButton">
                 <param name="id" value="9853"/>
                 <param name="label" value="$LOCALIZE[31011]"/>
-                <param name="onclick" value="SetFocus(9002)"/>
-                <param name="onclick2" value="Action(Info)"/>
+                <!-- back from the info page returns here (nc_spot_back, Timers.xml); first, Action(Info)
+                     opens the page modally and the click's later actions run once it closed -->
+                <param name="onclick" value="SetProperty(nc.spot.back,9853,home)"/>
+                <param name="onclick2" value="SetFocus(9002)"/>
+                <onclick>Action(Info)</onclick>
             </include>
             <include content="PillButton">
                 <param name="id" value="9854"/>

@@ -518,8 +518,11 @@
                 <include content="SpotlightButton">
                     <param name="id" value="9011"/>
                     <param name="content" value="$VAR[SpotlightItemPath]"/>
-                    <param name="onclick" value="SetFocus(9000)"/>
-                    <param name="onclick2" value="Action(Info)"/>
+                    <!-- back from the info page returns here (nc_spot_back, Timers.xml); first, Action(Info)
+                         opens the page modally and the click's later actions run once it closed -->
+                    <param name="onclick" value="SetProperty(nc.spot.back,9011,home)"/>
+                    <param name="onclick2" value="SetFocus(9000)"/>
+                    <onclick>Action(Info)</onclick>
                     <onleft>9010</onleft>
                     <onright condition="String.IsEqual(Window(Home).Property(nc.page),movies)">9012</onright>
                     <onright condition="!String.IsEqual(Window(Home).Property(nc.page),movies)">Skin.TimerStart(nc_spot_hold)</onright>
@@ -608,8 +611,11 @@
                 <include content="SpotlightButton">
                     <param name="id" value="9552"/>
                     <param name="content" value="$VAR[SpotlightShowItemPath]"/>
-                    <param name="onclick" value="SetFocus(9001)"/>
-                    <param name="onclick2" value="Action(Info)"/>
+                    <!-- back from the info page returns here (nc_spot_back, Timers.xml); first, Action(Info)
+                         opens the page modally and the click's later actions run once it closed -->
+                    <param name="onclick" value="SetProperty(nc.spot.back,9552,home)"/>
+                    <param name="onclick2" value="SetFocus(9001)"/>
+                    <onclick>Action(Info)</onclick>
                     <onleft>9551</onleft>
                     <onright>9553</onright>
                     <onup>9100</onup>
