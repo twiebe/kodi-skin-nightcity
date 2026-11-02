@@ -118,6 +118,14 @@
             <visible>!Window.IsActive(1141) + !Window.IsActive(videobookmarks)</visible>
             <onleft>600</onleft>
             <onright>noop</onright>
+            <!-- the page of what plays (scripts/nightcity.py player_info): a library title, else
+                 TMDb Helper's page of the title it recognised; none without either -->
+            <include content="PillButton">
+                <param name="id" value="612"/>
+                <param name="label" value="$LOCALIZE[31011]"/>
+                <param name="visible" value="String.IsEmpty(Window(Home).Property(nc.osd.more)) + [Integer.IsGreater(VideoPlayer.DBID,0) | !String.IsEmpty(Window(Home).Property(TMDbHelper.Player.TMDb_ID)) | !String.IsEmpty(Window(Home).Property(TMDbHelper.Player.TVShow.TMDb_ID))]"/>
+                <param name="onclick" value="NotifyAll(nightcity,player_info)"/>
+            </include>
             <include content="PillButton">
                 <param name="id" value="605"/>
                 <param name="label" value="$LOCALIZE[31053]"/>

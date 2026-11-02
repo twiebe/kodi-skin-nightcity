@@ -6,11 +6,13 @@
     <include name="InfoDetail">
         <param name="key"/>
         <param name="value"/>
+        <!-- more to hold than a value (a value of $0) -->
+        <param name="visible" default="true"/>
         <definition>
             <control type="group">
                 <width>456</width>
                 <height>40</height>
-                <visible>!String.IsEmpty($PARAM[value])</visible>
+                <visible>!String.IsEmpty($PARAM[value]) + $PARAM[visible]</visible>
                 <control type="label">
                     <width>150</width>
                     <height>40</height>

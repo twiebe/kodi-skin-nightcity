@@ -2126,3 +2126,33 @@ def test_trailer_offered_frees_the_lists_at_once(monkeypatch):
     home = _trailer_env(monkeypatch, fake, {'nc.trailer': '1', 'nc.trailer.lists': '1'})
     nightcity.trailer()
     assert 'nc.trailer.lists' not in home.props
+
+
+@pytest.mark.parametrize('true, labels, called', [
+    ({'VideoPlayer.Content(movies)'}, {'VideoPlayer.DBID': '7'}, ('info', 'movie', '7')),
+    ({'VideoPlayer.Content(episodes)'}, {'VideoPlayer.DBID': '9'}, ('episode', 9)),
+    ({'VideoPlayer.Content(movies)', 'CHAIN_FREE'}, {'VideoPlayer.DBID': '', 'Window(Home).Property(TMDbHelper.Player.TMDb_ID)': '603'},
+     ('chain', 'movie', '603')),
+    ({'VideoPlayer.Content(episodes)', 'CHAIN_FREE'}, {'VideoPlayer.DBID': '', 'Window(Home).Property(TMDbHelper.Player.TVShow.TMDb_ID)': '1396'},
+     ('chain', 'tv', '1396')),
+    # a chain starting already (a second OK): nothing more starts
+    ({'VideoPlayer.Content(movies)'}, {'VideoPlayer.DBID': '', 'Window(Home).Property(TMDbHelper.Player.TMDb_ID)': '603'}, None),
+    (set(), {'VideoPlayer.DBID': ''}, None),
+])
+def test_player_info_opens_the_page_of_what_plays(monkeypatch, true, labels, called):
+    """The OSD's info button: a library movie or episode opens its own page; anything else the
+    page TMDb Helper recognised it as (a chain over the player, as from the cast row)."""
+    fake = FakeXbmc({nightcity.CHAIN_FREE if t == 'CHAIN_FREE' else t for t in true}, labels)
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    seen = []
+    monkeypatch.setattr(nightcity, 'info', lambda kind, dbid: seen.append(('info', kind, dbid)))
+    monkeypatch.setattr(nightcity, '_episode_info', lambda dbid: seen.append(('episode', dbid)))
+    monkeypatch.setattr(nightcity, '_claim_info', lambda: None)
+    nightcity.player_info()
+    chain = [b for b in fake.builtins if b.startswith('RunScript(plugin.video.themoviedb.helper')]
+    if called and called[0] == 'chain':
+        assert chain == ['RunScript(plugin.video.themoviedb.helper,add_tmdb={},tmdb_type={},call_auto=1190)'.format(called[2], called[1])]
+        assert seen == []
+    else:
+        assert seen == ([called] if called else []) and chain == []
+    assert nightcity.COMMANDS['player_info'] is nightcity.player_info

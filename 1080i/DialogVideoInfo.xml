@@ -248,6 +248,29 @@
                     <param name="key" value="$LOCALIZE[31136]"/>
                     <param name="value" value="ListItem.Mpaa"/>
                 </include>
+                <!-- budget and box office from TMDb Helper ($63,000,000): a TMDb page carries them on
+                     its item, for a library movie its service has them for the page (as the ratings
+                     line); not when TMDb has none ($0) -->
+                <include content="InfoDetail">
+                    <param name="key" value="$LOCALIZE[31471]"/>
+                    <param name="value" value="ListItem.Property(budget)"/>
+                    <param name="visible" value="!String.IsEmpty(ListItem.Property(budget)) + !String.IsEqual(ListItem.Property(budget),$0)"/>
+                </include>
+                <include content="InfoDetail">
+                    <param name="key" value="$LOCALIZE[31471]"/>
+                    <param name="value" value="Window(Home).Property(TMDbHelper.ListItem.Budget)"/>
+                    <param name="visible" value="String.IsEmpty(ListItem.Property(budget)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Budget)) + !String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Budget),$0)"/>
+                </include>
+                <include content="InfoDetail">
+                    <param name="key" value="$LOCALIZE[31472]"/>
+                    <param name="value" value="ListItem.Property(revenue)"/>
+                    <param name="visible" value="!String.IsEmpty(ListItem.Property(revenue)) + !String.IsEqual(ListItem.Property(revenue),$0)"/>
+                </include>
+                <include content="InfoDetail">
+                    <param name="key" value="$LOCALIZE[31472]"/>
+                    <param name="value" value="Window(Home).Property(TMDbHelper.ListItem.Revenue)"/>
+                    <param name="visible" value="String.IsEmpty(ListItem.Property(revenue)) + !String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.Revenue)) + !String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.Revenue),$0)"/>
+                </include>
             </control>
         </control>
 

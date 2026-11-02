@@ -924,6 +924,35 @@ def info(mediatype, dbid):
     xbmcgui.Dialog().info(item)
 
 
+CHAIN_FREE = ('String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + '
+              'String.IsEmpty(Window(Home).Property(nc.chain.claim))')
+
+
+def player_info():
+    """The player's info button (VideoOSD.xml 612): the page of what plays. A library movie or
+    episode opens its own page; anything else the page TMDb Helper recognised it as, a chain over
+    the player as from the cast row (ChainClick: never while one starts, two interpreters
+    starting at once crash Kodi)."""
+    import xbmc
+    dbid = xbmc.getInfoLabel('VideoPlayer.DBID')
+    if dbid.isdigit() and int(dbid) > 0:
+        if xbmc.getCondVisibility('VideoPlayer.Content(movies)'):
+            info('movie', dbid)
+            return
+        if xbmc.getCondVisibility('VideoPlayer.Content(episodes)'):
+            _claim_info()
+            _episode_info(int(dbid))
+            return
+    if xbmc.getCondVisibility('VideoPlayer.Content(episodes)'):
+        kind, tmdb_id = 'tv', xbmc.getInfoLabel('Window(Home).Property(TMDbHelper.Player.TVShow.TMDb_ID)')
+    else:
+        kind, tmdb_id = 'movie', xbmc.getInfoLabel('Window(Home).Property(TMDbHelper.Player.TMDb_ID)')
+    if not tmdb_id or not xbmc.getCondVisibility(CHAIN_FREE):
+        return
+    xbmc.executebuiltin('RunScript(plugin.video.themoviedb.helper,add_tmdb={},tmdb_type={},call_auto=1190)'.format(tmdb_id, kind))
+    xbmc.executebuiltin('SetProperty(nc.chain.claim,1,home)')
+
+
 def plot(item='ListItem'):
     """The whole plot of the info page in Kodi's text viewer (PlotFocus, Includes_Info.xml), under
     the title, a person's name. ITEM is the info prefix: Container(5100).ListItem on an episode's
@@ -1926,7 +1955,7 @@ def hero_watch(monitor, stop):
 COMMANDS = {'next_episode': next_episode, 'startup': startup, 'genres': genres, 'genre_pick': genre_pick,
             'info_select': info_select, 'info_leave': info_leave, 'info_back': info_back, 'info_forget': info_forget,
             'back_to_start': back_to_start, 'trailer': trailer,
-            'osd_back': osd_back, 'play': play, 'info': info, 'plot': plot,
+            'osd_back': osd_back, 'play': play, 'info': info, 'plot': plot, 'player_info': player_info,
             'streams': streams, 'row': row, 'search': search, 'search_recent': search_recent,
             'search_init': search_init, 'search_clear': search_clear, 'search_forget': search_forget, 'colours': colours,
             'streams_watch': streams_watch, 'section_pick': section_pick,
