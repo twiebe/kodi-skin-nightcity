@@ -74,6 +74,26 @@ def player_open_params(mediatype, dbid, mode):
     return {'item': {'{}id'.format(mediatype): int(dbid)}, 'options': {'resume': mode == 'resume'}}
 
 
+def following_episodes(episodeid, episodes):
+    """The ids of the show's episodes after `episodeid` in season and episode order: after a
+    regular episode the regular ones, after a special (season 0) the specials."""
+    current = next((e for e in episodes if e['episodeid'] == episodeid), None)
+    if current is None:
+        return []
+    special = current['season'] == 0
+    key = (current['season'], current['episode'])
+    later = [e for e in episodes if (e['season'] == 0) == special and (e['season'], e['episode']) > key]
+    return [e['episodeid'] for e in sorted(later, key=lambda e: (e['season'], e['episode']))]
+
+
+AUTOPLAY_EPISODES = 2  # videoplayer.autoplaynextitem's value for episodes
+
+
+def autoplay_episodes(value):
+    """Whether Kodi's "Play next video automatically" holds for episodes."""
+    return AUTOPLAY_EPISODES in (value or [])
+
+
 CHANNELS = {1: 'mono', 2: 'stereo', 6: '5.1', 8: '7.1'}
 PANEL_ROWS = 8  # rows the track panels of the OSD show at once
 PANEL_SLOTS = 14  # rows a track panel has (TrackItem entries in Includes_Player.xml)
@@ -746,12 +766,43 @@ def play(mediatype, dbid, mode='resume'):
         # the manager would take the closing info dialog for Back and reopen the page below
         _chain_exit(home)
     _rpc('Player.Open', **params)
-    if not _wait_for_video():
+    started = _wait_for_video()
+    if started:
+        xbmc.executebuiltin('Dialog.Close(movieinformation,true)')
+    if mediatype == 'episode':
+        _queue_following(int(dbid))
+    if not started:
         _log('play: {} {} did not start, or the info page was closed'.format(mediatype, dbid))
         return
-    xbmc.executebuiltin('Dialog.Close(movieinformation,true)')
     if mediatype == 'episode':
         _return_to_episode(int(dbid))
+
+
+def _queue_following(episodeid):
+    """Put the show's following episodes behind the one Player.Open started: Kodi put that one
+    alone into the video playlist and plays the next item when a file ends, if its "Play next
+    video automatically" holds for episodes. Resume stays with the first one. Kodi empties the
+    playlist when that one starts, after Player.Open returned: added before, they are gone."""
+    import xbmc
+    monitor, seconds = _monitor(), 0.0
+    while not (xbmc.getCondVisibility('Player.HasVideo')
+               and xbmc.getInfoLabel('VideoPlayer.DBID') == str(episodeid)):
+        if seconds >= LOAD_TIMEOUT or monitor.waitForAbort(0.2):
+            return
+        seconds += 0.2
+    try:
+        setting = _rpc('Settings.GetSettingValue', setting='videoplayer.autoplaynextitem')['value']
+        if not autoplay_episodes(setting):
+            return
+        details = _rpc('VideoLibrary.GetEpisodeDetails', episodeid=episodeid, properties=['tvshowid'])
+        episodes = _rpc('VideoLibrary.GetEpisodes', tvshowid=details['episodedetails']['tvshowid'],
+                        properties=['season', 'episode']).get('episodes', [])
+        ids = following_episodes(episodeid, episodes)
+        if ids:
+            _rpc('Playlist.Add', playlistid=1, item=[{'episodeid': i} for i in ids])
+        _log('play: queued {} episodes after {}'.format(len(ids), episodeid))
+    except Exception as error:  # the episode plays anyway
+        _log('play: queueing after {} failed: {}'.format(episodeid, error))
 
 
 STOP_GRACE = 0.1  # s without media after a stop before the playback counts as over

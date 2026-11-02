@@ -2156,3 +2156,30 @@ def test_player_info_opens_the_page_of_what_plays(monkeypatch, true, labels, cal
     else:
         assert seen == ([called] if called else []) and chain == []
     assert nightcity.COMMANDS['player_info'] is nightcity.player_info
+
+
+SHOW = [{'episodeid': 20, 'season': 2, 'episode': 1}, {'episodeid': 1, 'season': 0, 'episode': 1},
+        {'episodeid': 11, 'season': 1, 'episode': 1}, {'episodeid': 13, 'season': 1, 'episode': 3},
+        {'episodeid': 12, 'season': 1, 'episode': 2}, {'episodeid': 2, 'season': 0, 'episode': 2}]
+
+
+def test_following_episodes_in_season_and_episode_order():
+    """An episode played from its page queues the rest of the show (Kodi plays a playlist's next
+    item on its own, Player.Open with one item plays only that one). Specials stay out."""
+    assert nightcity.following_episodes(12, SHOW) == [13, 20]
+    assert nightcity.following_episodes(20, SHOW) == []
+
+
+def test_following_episodes_after_a_special_are_specials():
+    assert nightcity.following_episodes(1, SHOW) == [2]
+
+
+def test_following_episodes_of_an_unknown_episode():
+    assert nightcity.following_episodes(99, SHOW) == []
+
+
+def test_autoplay_episodes_follows_kodis_setting():
+    """Kodi's "Play next video automatically" (videoplayer.autoplaynextitem): 2 is episodes."""
+    assert nightcity.autoplay_episodes([2, 3])
+    assert not nightcity.autoplay_episodes([0, 1, 3])
+    assert not nightcity.autoplay_episodes(None)
