@@ -99,24 +99,29 @@ def test_osd_cast_row_has_no_dead_end(label, state):
 
 
 def _playing_states():
-    """The page of the movie that plays (InfoMoviePlaying): its resume and from start hide. In a
+    """The page of the title that plays (InfoPlaying): resume, from start and ... hide. In a
     chain over the player (a person, one of their films) and outside one (the library while it
     plays), a library movie, a TMDb title with its library copy (5901) and one without, the cast
     loaded, loading or empty; a resumable movie too (from start would show)."""
     kinds = {'library movie': dict(dbtype='movie', dbid=True, copy='empty'),
              'tmdb movie with copy': dict(dbtype='movie', tmdb_type='movie', copy='items'),
-             'tmdb movie': dict(dbtype='movie', tmdb_type='movie', copy='empty')}
+             'tmdb movie': dict(dbtype='movie', tmdb_type='movie', copy='empty'),
+             'library episode': dict(dbtype='episode', dbid=True, copy='empty')}
     for (kind, item), cast, chain, resumable in itertools.product(
             kinds.items(), LOADS, ('', 'True'), (False, True)):
         item = dict(item)
         copy = item.pop('copy')
+        episode = item['dbtype'] == 'episode'
         containers = {'5500': cast, '5510': 'empty', '50': 'empty', '5300': 'empty', '5901': copy,
-                      '5100': 'empty', '5200': 'empty'}
-        extra = dict(EXTRA, **{'InfoMoviePlaying': True, 'ListItem.IsResumable': resumable,
-                               'Container(5901).ListItem.IsResumable': resumable})
+                      '5100': 'items' if episode else 'empty', '5200': 'items' if episode else 'empty'}
+        extra = dict(EXTRA, **{'InfoPlaying': True, 'ListItem.IsResumable': resumable,
+                               'Container(5901).ListItem.IsResumable': resumable,
+                               'Container(5100).ListItem.IsResumable': resumable})
         yield '{} cast {} {} {}'.format(kind, cast, 'chain' if chain else 'no chain',
                                         'resumable' if resumable else 'not started'), \
-            State(containers=containers, props={'TMDbHelper.Instance': chain}, extra=extra, **item)
+            State(containers=containers, props={'TMDbHelper.Instance': chain,
+                                                'nc.info.ep.query': 'season=1&episode=1' if episode else ''},
+                  extra=extra, **item)
 
 
 PLAYING_STATES = dict(_playing_states())
@@ -126,7 +131,8 @@ PLAYING_STATES = dict(_playing_states())
 def test_page_of_the_playing_movie_has_no_dead_end(info_page, label):
     state = PLAYING_STATES[label]
     assert info_page.report(state, offscreen={'5901', '9098', '9099'}) == []
-    # no way to play it again from the start; in a chain the way back to the video takes the focus
-    assert not info_page.can_focus('9001', state) and not info_page.can_focus('9002', state)
-    if state.props['TMDbHelper.Instance']:
-        assert info_page.start(state) == '9004', label
+    # no way to play it again from the start, no context menu that offers it; the way back to the
+    # video takes the focus (in a chain 9004, else 9009)
+    for cid in ('9001', '9002', '9003', '9005'):
+        assert not info_page.can_focus(cid, state), (label, cid)
+    assert info_page.start(state) == ('9004' if state.props['TMDbHelper.Instance'] else '9009'), label

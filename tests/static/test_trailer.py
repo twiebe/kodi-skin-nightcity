@@ -112,21 +112,31 @@ def test_recommendations_wait_while_a_trailer_plays():
         assert 'String.IsEmpty(Window(Home).Property(nc.trailer.lists))' in value.get('condition')
 
 
-def test_the_playing_movie_offers_no_play():
-    """The page of the movie that plays (a chain from the OSD's cast row reaches it: a person, one
-    of their films): resume and from start would start it again from the beginning. They hide,
-    and back to the video (9004) is the way. The same test as "ends at" (EndsAtTags)."""
+def test_the_playing_title_offers_no_play():
+    """The page of the title that plays: a movie, or an episode page on the episode that plays
+    (a chain from the OSD's cast row reaches it, the OSD's info button opens it). Resume and from
+    start would start it again from the beginning, ... (Kodi's context menu) offers the same:
+    they hide, and one button leads back to the video (9009; in a chain 9004 does). The same test
+    as "ends at" (EndsAtTags): the page's item, an episode page's episode in its list."""
     info = parse(SKIN / 'Includes_Info.xml')
     tags = next(i for i in info.iter('include') if i.get('name') == 'EndsAtTags')
     playing = next(p.get('value') for p in tags.iter('param') if p.get('name') == 'playing')
     expressions = {e.get('name'): e.text for e in info.iter('expression')}
-    assert expressions['InfoMoviePlaying'] == 'String.IsEqual(ListItem.DBType,movie) + [{}]'.format(
-        playing.replace('$PARAM[item]', 'ListItem'))
-    for cid in ('9001', '9002'):
+    movie = 'String.IsEqual(ListItem.DBType,movie) + [{}]'.format(playing.replace('$PARAM[item]', 'ListItem'))
+    episode = 'String.IsEqual(ListItem.DBType,episode) + [{}]'.format(playing.replace('$PARAM[item]', 'Container(5100).ListItem'))
+    assert expressions['InfoPlaying'] == '[{}] | [{}]'.format(movie, episode)
+    for cid in ('9001', '9002', '9005'):
         params, _ = _pill(cid)
-        assert params['visible'].endswith(' + !$EXP[InfoMoviePlaying]'), cid
+        assert params['visible'].endswith(' + !$EXP[InfoPlaying]'), cid
+    more = next(c for c in parse(SKIN / 'DialogVideoInfo.xml').iter('control') if c.get('id') == '9003')
+    assert more.findtext('visible').endswith(' + !$EXP[InfoPlaying]')
     params, _ = _pill('9004')
-    assert '$EXP[InfoMoviePlaying]' in params['enable']
+    assert '$EXP[InfoPlaying]' in params['enable']
+    params, clicks = _pill('9009')
+    assert params['label'] == '‹ $LOCALIZE[31330]'
+    assert params['visible'] == '$EXP[InfoPlaying] + String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))'
+    assert (params['onclick'], params['onclick2']) == ('Dialog.Close(movieinformation)', 'ActivateWindow(fullscreenvideo)')
+
 
 
 def test_more_pill_keeps_its_text_colour_on_the_playing_title():

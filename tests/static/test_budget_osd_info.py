@@ -27,8 +27,8 @@ def test_budget_and_box_office_after_the_age_rating():
         own, theirs = [r for r in rows if r['key'] == key]
         assert own['value'] == prop and theirs['value'] == service, key
         assert own['visible'] == '!String.IsEmpty({0}) + {1}'.format(prop, NOT_ZERO.format(prop)), key
-        assert theirs['visible'] == 'String.IsEmpty({0}) + !String.IsEmpty({1}) + {2}'.format(
-            prop, service, NOT_ZERO.format(service)), key
+        assert theirs['visible'].startswith('String.IsEmpty({0}) + !String.IsEmpty({1}) + {2}'.format(
+            prop, service, NOT_ZERO.format(service))), key
     assert keys[5:] == ['$LOCALIZE[31471]'] * 2 + ['$LOCALIZE[31472]'] * 2
 
 
@@ -50,3 +50,15 @@ def test_info_button_in_the_player_left_of_subtitles():
     assert info['visible'] == ('String.IsEmpty(Window(Home).Property(nc.osd.more)) + [Integer.IsGreater(VideoPlayer.DBID,0)'
                                ' | !String.IsEmpty(Window(Home).Property(TMDbHelper.Player.TMDb_ID))'
                                ' | !String.IsEmpty(Window(Home).Property(TMDbHelper.Player.TVShow.TMDb_ID))]')
+
+
+def test_service_values_only_for_the_page_they_belong_to():
+    """TMDb Helper's service follows the page a moment late: going from one film to the next its
+    values were the film's before for a while. They show once they belong to the page: its
+    library id (TMDbHelper.ListItem.base_dbid), or its title without one."""
+    rows = _details()
+    guard = ('[[Integer.IsGreater(ListItem.DBID,0) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_dbid),ListItem.DBID)]'
+             ' | [String.IsEmpty(ListItem.DBID) + String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.base_label),ListItem.Label)]]')
+    for row in rows:
+        if 'TMDbHelper.ListItem' in row['value']:
+            assert row['visible'].endswith(' + ' + guard), row['key']
