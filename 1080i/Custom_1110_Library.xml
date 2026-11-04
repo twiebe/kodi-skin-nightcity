@@ -4,6 +4,7 @@
      page of its next episode (MyVideoNav always opens the show's folder). -->
 <window type="window" id="1110">
     <defaultcontrol always="true">5000</defaultcontrol>
+    <onload>NotifyAll(nightcity,lib_bar:changed)</onload>
     <controls>
         <include>Background</include>
         <include content="FanartBackdrop">
@@ -16,6 +17,7 @@
         </include>
         <control type="panel" id="5000">
             <preloaditems>2</preloaditems>
+            <pagecontrol>5900</pagecontrol>
             <left>40</left>
             <top>84</top>
             <width>1368</width>
@@ -58,11 +60,12 @@
             <orientation>vertical</orientation>
             <itemgap>-4</itemgap>
             <onleft>5000</onleft>
-            <onright>noop</onright>
+            <onright condition="!String.IsEmpty(Window(Home).Property(nc.lib.bar))">5200</onright>
             <onup>noop</onup>
             <ondown>noop</ondown>
             <include content="PillButton">
                 <param name="id" value="5101"/>
+                <param name="onfocus" value="NotifyAll(nightcity,lib_bar:prepare)"/>
                 <param name="width" value="400"/>
                 <param name="label" value="$LOCALIZE[31116]: $VAR[LibrarySortLabel]"/>
                 
@@ -71,14 +74,42 @@
                 <onclick condition="String.IsEqual(Skin.String(nc.sort),year)">Skin.SetString(nc.sort,dateadded)</onclick>
                 <onclick condition="String.IsEqual(Skin.String(nc.sort),dateadded)">Skin.SetString(nc.sort,rating)</onclick>
                 <onclick condition="String.IsEqual(Skin.String(nc.sort),rating)">Skin.SetString(nc.sort,sorttitle)</onclick>
+                <onclick>NotifyAll(nightcity,lib_bar:changed)</onclick>
             </include>
             <include content="PillButton">
                 <param name="id" value="5102"/>
                 <param name="width" value="400"/>
                 <param name="label" value="$VAR[LibraryDirectionLabel]"/>
                 <param name="onclick" value="Skin.ToggleSetting(nc.sortdesc)"/>
-                
+                <param name="onfocus" value="NotifyAll(nightcity,lib_bar:prepare)"/>
+                <onclick>NotifyAll(nightcity,lib_bar:changed)</onclick>
             </include>
+        </control>
+        <!-- Where the grid stands, always: a faint rail, the grid's scrollbar as its mark. Right from
+             the menu above makes it a cursor that names the group, a letter, a year, a month or a
+             whole rating (scripts/nightcity.py LibBar moves it): Up and Down one group, evenly over
+             the rail, the grid follows; OK goes to the group's first title, Left too by way of the
+             menu, Back returns to the card it came from. -->
+        <control type="image">
+            <description>rail</description>
+            <left>1898</left>
+            <top>98</top>
+            <width>2</width>
+            <height>900</height>
+            <texture colordiffuse="border_dim">ui/white.png</texture>
+        </control>
+        <control type="scrollbar" id="5900">
+            <left>1896</left>
+            <top>98</top>
+            <width>6</width>
+            <height>900</height>
+            <orientation>vertical</orientation>
+            <showonepage>false</showonepage>
+            <enable>false</enable>
+            <visible>!Control.HasFocus(5200)</visible>
+            <texturesliderbackground/>
+            <texturesliderbar colordiffuse="text_mute">ui/white.png</texturesliderbar>
+            <texturesliderbarfocus colordiffuse="text_mute">ui/white.png</texturesliderbarfocus>
         </control>
         <!-- the focused title, large on the right -->
         <include content="Kicker">
@@ -105,5 +136,24 @@
             <textcolor>text_dim</textcolor>
             <label>$INFO[Container(5000).ListItem.Plot]</label>
         </control>
+        <include content="PillButton">
+            <param name="id" value="5200"/>
+            <param name="width" value="116"/>
+            <param name="label" value="$INFO[Window(Home).Property(nc.lib.label)]"/>
+            <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.lib.bar))"/>
+            <!-- nothing shows without the focus: it lies on the rail, waiting. Alpha 0, not colour 0: that
+                 is "no colour" to Kodi, which then draws the texture white -->
+            <param name="color" value="00FFFFFF"/>
+            <param name="textcolor" value="00FFFFFF"/>
+            <param name="onclick" value="NotifyAll(nightcity,lib_bar:ok)"/>
+            <param name="onfocus" value="NotifyAll(nightcity,lib_bar:enter)"/>
+            <onup>NotifyAll(nightcity,lib_bar:step:-1)</onup>
+            <ondown>NotifyAll(nightcity,lib_bar:step:1)</ondown>
+            <onleft>5100</onleft>
+            <onright>noop</onright>
+            <!-- the control keeps the window open: without one Kodi takes Back as unhandled -->
+            <onback>NotifyAll(nightcity,lib_bar:cancel)</onback>
+            <onback>5000</onback>
+        </include>
     </controls>
 </window>
