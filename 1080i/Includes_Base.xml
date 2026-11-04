@@ -5,7 +5,7 @@
 <includes>
     <!-- Startup.xml: online once the startup script is done, but not before a second ahead of
          the hand-over to Home (nc_startup in Timers.xml, 4 s minimum) -->
-    <expression name="StartupOnline">!String.IsEmpty(Window(Home).Property(nc.startup.ready)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_startup),3)</expression>
+    <expression name="StartupOnline">!String.IsEmpty(Window(Home).Property(nc.startup.ready)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_startup),2)</expression>
     <!-- Full screen page: base colour and the petrol glow top right. Never a hole, with or
          without fanart (FanartBackdrop goes on top of this). -->
     <include name="Background">
