@@ -1438,13 +1438,14 @@ HOME_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
 # Esc on keyboards, a gamepad's back button and a right click send PreviousMenu, not Back, and
 # <onback> sees only Back. On an info page in a TMDb chain the page must not close in its first
 # second (ChainBackGuard, Includes_Tmdb.xml), so on info pages these keys are Back too: for Kodi
-# both close the page. Back held on an info page goes back to
+# both close the page. On the library grid likewise: Back on its position bar returns to the card
+# it came from. Back held on an info page goes back to
 # where the browsing started (back_to_start); Kodi knows long presses only in the keyboard
 # section (CEC and MCE remotes send theirs in the remote section). Written whatever the Home key
 # setting.
 BACK_KEYMAP_NAME = '0_skin.nightcity.back.xml'
 BACK_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
-<!-- Written by the Nightcity skin: on info pages the keys of PreviousMenu are Back, Back held goes back to where the browsing started. -->
+<!-- Written by the Nightcity skin: on info pages and the library grid the keys of PreviousMenu are Back, Back held on an info page goes back to where the browsing started. -->
 <keymap>
   <movieinformation>
     <keyboard>
@@ -1461,6 +1462,17 @@ BACK_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
       <rightclick>Back</rightclick>
     </mouse>
   </movieinformation>
+  <window1110>
+    <keyboard>
+      <escape>Back</escape>
+    </keyboard>
+    <gamepad>
+      <back>Back</back>
+    </gamepad>
+    <mouse>
+      <rightclick>Back</rightclick>
+    </mouse>
+  </window1110>
 </keymap>
 """
 
@@ -2003,7 +2015,214 @@ def hero_watch(monitor, stop):
             stop.wait(5)
 
 
-COMMANDS = {'next_episode': next_episode, 'startup': startup, 'genres': genres, 'genre_pick': genre_pick,
+# --- the position bar of the library grid (Custom_1110_Library.xml) ------------------------------
+# Right from the grid's menu: a cursor on a rail at the far right that names where the grid stands,
+# one press a group: a letter, a year, a month or a whole rating, whichever the grid is sorted by.
+
+LIB_WINDOW = 1110
+LIB_WINDOW_PYTHON = 11110  # Kodi files a skin's custom windows 10000 up
+LIB_GRID = 5000
+LIB_MENU_BUTTON = 'SetFocus(5100)'
+BAR_BUTTON_ID = 5200
+BAR_TOP = 98  # px, the rail
+BAR_HEIGHT = 900
+BAR_RIGHT = 1912  # px, right edge of the cursor, padded for its glow like every pill
+BAR_BUTTON = 74  # px, height of a pill
+BAR_MIN_GROUPS = 3  # fewer and a jump is no use: Right stays on the menu
+BAR_FOLLOW = 0.15  # s after the last press the grid follows
+BAR_NONE = 'none'
+BAR_MONTHS = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
+
+
+def bar_letter(letter):
+    """A to Z, an accented letter under its base letter, all else under #."""
+    import unicodedata
+    base = unicodedata.normalize('NFKD', letter)[:1].upper()
+    return base if 'A' <= base <= 'Z' else '#'
+
+
+def bar_year(value):
+    return value if value and value != '0' else BAR_NONE
+
+
+def bar_month(value):
+    """Month of a database date (2026-11-04 21:50:00): Nov 26."""
+    match = re.match(r'(\d{2})(\d{2})-(\d{2})-', value or '')
+    if not match or not 1 <= int(match.group(3)) <= 12:
+        return BAR_NONE
+    return '{} {}'.format(BAR_MONTHS[int(match.group(3)) - 1], match.group(2))
+
+
+def bar_rating(value):
+    """Whole points; Kodi writes the decimal sign of the language. No rating is 0.0."""
+    try:
+        rating = float((value or '').replace(',', '.'))
+    except ValueError:
+        return BAR_NONE
+    return str(int(rating)) if rating > 0 else BAR_NONE
+
+
+# sort method: (the item's info label, what makes its group of it); added dates come from JSON-RPC,
+# ListItem.DateAdded is written in the language's format
+BAR_INFO = {'': ('SortLetter', bar_letter), 'sorttitle': ('SortLetter', bar_letter), 'year': ('Year', bar_year),
+            'rating': ('Rating', bar_rating)}
+
+
+def bar_groups(keys):
+    """[(key, index of its first title)] in list order. A key is one group wherever it comes back:
+    where Kodi sorts an umlaut is not ours to say."""
+    first = {}
+    for index, key in enumerate(keys):
+        first.setdefault(key, index)
+    return list(first.items())
+
+
+def bar_step(index, delta, count):
+    return max(0, min(count - 1, index + delta))
+
+
+def bar_y(index, count):
+    """Top of the cursor: the groups evenly over the rail, whatever their sizes."""
+    offset = BAR_HEIGHT * index // (count - 1) if count > 1 else 0
+    return BAR_TOP + offset - BAR_BUTTON // 2
+
+
+def bar_width(label):
+    return 96 + 20 * len(label)
+
+
+class LibBar:
+    """What the bar knows of the grid. Each press is a thread of its own, hence the lock."""
+
+    def __init__(self):
+        self.lock = threading.Lock()
+        self.keys, self.groups = [], []
+        self.index = 0
+        self.origin = 0
+        self.follow = Debounce(self._select, BAR_FOLLOW)
+
+    def _window(self):
+        import xbmcgui
+        return xbmcgui.Window(LIB_WINDOW_PYTHON)
+
+    def _to_top_row(self, position):
+        """Kodi puts an item of a later page on the page's last row and one of an earlier page on
+        its first, so by way of the end of the list. There the last page cannot scroll further."""
+        window = self._window()  # held: a window takes its controls with it when it goes
+        grid = window.getControl(LIB_GRID)
+        grid.selectItem(len(self.keys) - 1)
+        grid.selectItem(position)
+
+    def _select(self):
+        with self.lock:
+            if self.groups and _library_open():
+                self._to_top_row(self.groups[self.index][1])
+
+    def _show(self):
+        label = self.groups[self.index][0]
+        _home().setProperty('nc.lib.label', label)
+        window = self._window()  # held: a window takes its controls with it when it goes
+        button = window.getControl(BAR_BUTTON_ID)
+        width = bar_width(label)
+        button.setWidth(width)
+        button.setPosition(BAR_RIGHT - width, bar_y(self.index, len(self.groups)))
+
+    def prepare(self):
+        """The table of the grid as it stands: titles change while their number stays, and reading
+        them is cheap (5000 in 9 ms in kodi-dev)."""
+        self.keys = _library_keys()
+        self.groups = bar_groups(self.keys)
+        if len(self.groups) >= BAR_MIN_GROUPS:
+            _home().setProperty('nc.lib.bar', '1')
+        else:
+            _home().clearProperty('nc.lib.bar')
+
+    def enter(self):
+        import xbmc
+        self.prepare()
+        if len(self.groups) < BAR_MIN_GROUPS:
+            xbmc.executebuiltin(LIB_MENU_BUTTON)
+            return
+        self.origin = int(xbmc.getInfoLabel('Container({}).CurrentItem'.format(LIB_GRID)) or 1) - 1
+        key = self.keys[self.origin] if 0 <= self.origin < len(self.keys) else self.groups[0][0]
+        self.index = next(i for i, group in enumerate(self.groups) if group[0] == key)
+        self._show()
+
+    def step(self, delta):
+        if self.groups:
+            self.index = bar_step(self.index, delta, len(self.groups))
+            self._show()
+            self.follow.changed()
+
+    def go(self, position):
+        import xbmc
+        self.follow.count += 1  # a press still on its way does not move the grid any more
+        xbmc.executebuiltin('SetFocus({},{},absolute)'.format(LIB_GRID, position))
+
+    def ok(self):
+        if self.groups:
+            position = self.groups[self.index][1]
+            self._to_top_row(position)
+            self.go(position)
+
+    def cancel(self):
+        self.go(self.origin)
+
+
+_lib_bar = LibBar()
+
+
+def _library_open():
+    import xbmc
+    return xbmc.getCondVisibility('Window.IsActive({})'.format(LIB_WINDOW))
+
+
+def _library_added():
+    """Date added of every title of the grid's kind, by its database id."""
+    if _home().getProperty('nc.library') == 'tvshows':
+        method, result, key = 'VideoLibrary.GetTVShows', 'tvshows', 'tvshowid'
+    else:
+        method, result, key = 'VideoLibrary.GetMovies', 'movies', 'movieid'
+    return {str(item[key]): item.get('dateadded', '') for item in _rpc(method, properties=['dateadded']).get(result, [])}
+
+
+def _library_keys():
+    """The group of every title of the grid, in the grid's order."""
+    import xbmc
+    grid = 'Container({})'.format(LIB_GRID)
+    count = int(xbmc.getInfoLabel(grid + '.NumItems') or 0)
+    item = grid + '.ListItemAbsolute({}).'
+    sort = xbmc.getInfoLabel('Skin.String(nc.sort)')
+    if sort == 'dateadded':
+        added = _library_added()
+        return [bar_month(added.get(xbmc.getInfoLabel(item.format(i) + 'DBID'), '')) for i in range(count)]
+    label, group = BAR_INFO.get(sort, BAR_INFO[''])
+    return [group(xbmc.getInfoLabel(item.format(i) + label)) for i in range(count)]
+
+
+def lib_bar(action, *args):
+    """The bar's keys: changed (the window opened or the sort changed, the grid reloads), prepare
+    (the menu has the focus: at once, Right may come right after), enter, step:N, ok, cancel."""
+    import xbmc
+    if action == 'changed':
+        _home().clearProperty('nc.lib.bar')
+        monitor = _monitor()
+        if monitor.waitForAbort(0.4):  # the grid starts to reload
+            return
+        while xbmc.getCondVisibility('Container({}).IsUpdating'.format(LIB_GRID)):
+            if monitor.waitForAbort(0.1):
+                return
+    with _lib_bar.lock:
+        if not _library_open():
+            return
+        if action == 'step':
+            _lib_bar.step(int(args[0]))
+        else:
+            {'changed': _lib_bar.prepare, 'prepare': _lib_bar.prepare, 'enter': _lib_bar.enter, 'ok': _lib_bar.ok,
+             'cancel': _lib_bar.cancel}[action]()
+
+
+COMMANDS = {'lib_bar': lib_bar, 'next_episode': next_episode, 'startup': startup, 'genres': genres, 'genre_pick': genre_pick,
             'info_select': info_select, 'info_leave': info_leave, 'info_back': info_back, 'info_forget': info_forget,
             'back_to_start': back_to_start, 'trailer': trailer,
             'osd_back': osd_back, 'play': play, 'info': info, 'plot': plot, 'player_info': player_info,

@@ -17,6 +17,15 @@ The remote moves through levels, not through confirmations.
   page the chain started from, on the element that started it, or to the player's cast row.
   Outside a chain, and on its first page, it is a Back.
 
+### The position bar of the library grid
+
+All movies and all shows have a faint rail at the far right with a mark of where the grid stands.
+Right goes grid, menu, bar, Left comes back the same way. On the bar the mark becomes a cursor that
+names its group, whatever the sort: a letter, a year, a month or a whole rating. Up and Down move one
+group, evenly over the rail whatever the sizes of the groups, and the grid follows at once (focus
+applies). OK goes to the group's first title, Left stays there too, Back returns to the card it came
+from. With fewer than three groups there is no bar: Right stays on the menu.
+
 ### Selectors are skipped from above
 
 A selector is a row that chooses what the content below it shows: season tabs above the

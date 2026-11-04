@@ -716,7 +716,7 @@ def test_back_keymap_turns_previous_menu_into_back_on_info_pages():
     and the chain hung 30 s (ChainBackGuard, Includes_Tmdb.xml). On info pages they are Back."""
     import xml.etree.ElementTree as ET
     root = ET.fromstring(nightcity.BACK_KEYMAP)
-    assert [w.tag for w in root] == ['movieinformation']
+    assert [w.tag for w in root] == ['movieinformation', 'window1110']  # the library grid: test_library_bar.py
     keys = {(device.tag, key.tag, key.get('mod')): key.text for device in root.find('movieinformation') for key in device}
     assert {k: v for k, v in keys.items() if not k[2]} == {
         ('keyboard', 'escape', None): 'Back', ('gamepad', 'back', None): 'Back', ('mouse', 'rightclick', None): 'Back'}
@@ -2183,3 +2183,70 @@ def test_autoplay_episodes_follows_kodis_setting():
     assert nightcity.autoplay_episodes([2, 3])
     assert not nightcity.autoplay_episodes([0, 1, 3])
     assert not nightcity.autoplay_episodes(None)
+
+
+# --- the position bar of the library grid -------------------------------------------------------
+
+@pytest.mark.parametrize('letter,key', [('A', 'A'), ('z', 'Z'), ('Ä', 'A'), ('É', 'E'), ('1', '#'), ('', '#'), ('日', '#')])
+def test_bar_letter(letter, key):
+    assert nightcity.bar_letter(letter) == key
+
+
+@pytest.mark.parametrize('value,key', [('1994', '1994'), ('', 'none'), ('0', 'none')])
+def test_bar_year(value, key):
+    assert nightcity.bar_year(value) == key
+
+
+@pytest.mark.parametrize('value,key', [('2026-11-04 21:50:00', 'Nov 26'), ('2019-01-31', 'Jan 19'), ('', 'none'),
+                                       ('garbage', 'none'), ('2019-13-01', 'none')])
+def test_bar_month(value, key):
+    assert nightcity.bar_month(value) == key
+
+
+@pytest.mark.parametrize('value,key', [('8.3', '8'), ('8,3', '8'), ('10.0', '10'), ('0.5', '0'), ('0.0', 'none'),
+                                       ('', 'none'), ('n/a', 'none')])
+def test_bar_rating(value, key):
+    assert nightcity.bar_rating(value) == key
+
+
+def test_bar_groups_keep_the_first_title_of_each_key_in_list_order():
+    assert nightcity.bar_groups(['#', 'A', 'A', 'C', 'C', 'Z']) == [('#', 0), ('A', 1), ('C', 3), ('Z', 5)]
+
+
+def test_bar_groups_follow_a_descending_list():
+    assert nightcity.bar_groups(['Z', 'Z', 'B', 'A']) == [('Z', 0), ('B', 2), ('A', 3)]
+
+
+def test_bar_groups_merge_a_key_that_comes_back():
+    """Where Kodi sorts an umlaut is not ours to say: Ä after Z must not make a second A."""
+    assert nightcity.bar_groups(['A', 'B', 'A', 'C']) == [('A', 0), ('B', 1), ('C', 3)]
+
+
+def test_bar_groups_of_nothing():
+    assert nightcity.bar_groups([]) == []
+
+
+@pytest.mark.parametrize('index,delta,expected', [(0, 1, 1), (0, -1, 0), (3, 1, 3), (2, -1, 1), (1, 5, 3)])
+def test_bar_step_stops_at_the_ends(index, delta, expected):
+    assert nightcity.bar_step(index, delta, 4) == expected
+
+
+def test_bar_y_spaces_the_groups_evenly_over_the_rail():
+    ys = [nightcity.bar_y(i, 5) for i in range(5)]
+    assert ys[0] == nightcity.BAR_TOP - nightcity.BAR_BUTTON // 2
+    assert ys[-1] == nightcity.BAR_TOP + nightcity.BAR_HEIGHT - nightcity.BAR_BUTTON // 2
+    assert len({b - a for a, b in zip(ys, ys[1:])}) == 1
+
+
+def test_bar_y_of_one_group():
+    assert nightcity.bar_y(0, 1) == nightcity.BAR_TOP - nightcity.BAR_BUTTON // 2
+
+
+def test_bar_width_grows_with_the_label():
+    assert nightcity.bar_width('S') < nightcity.bar_width('1994') < nightcity.bar_width('Nov 26')
+
+
+@pytest.mark.parametrize('name,method', [('', 'bar_letter'), ('sorttitle', 'bar_letter'), ('year', 'bar_year'),
+                                         ('rating', 'bar_rating')])
+def test_bar_key_of_the_info_label_sorts(name, method):
+    assert nightcity.BAR_INFO[name][1] is getattr(nightcity, method)
