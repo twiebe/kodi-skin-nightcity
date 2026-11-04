@@ -243,6 +243,7 @@
                     <param name="mask" value="ui/mask_280x420.png"/>
                     <param name="image" value="$INFO[$PARAM[item].Art(poster)]"/>
                     <param name="fadetime" value="400"/>
+                    <param name="item" value="$PARAM[item]"/>
                     <control type="textbox">
                         <left>20</left>
                         <top>20</top>
