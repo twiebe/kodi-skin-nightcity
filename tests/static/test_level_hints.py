@@ -111,7 +111,7 @@ def test_cast_row_hint():
 
 
 BACK = '$LOCALIZE[31470]'
-INFO_PAGES = {'DialogVideoInfo.xml': ('9060', '9061', '9062'), 'DialogMusicInfo.xml': ('9000',)}
+INFO_PAGES = {'DialogVideoInfo.xml': ('9000',), 'DialogMusicInfo.xml': ('9000',)}
 
 
 def _string(num):
@@ -120,8 +120,7 @@ def _string(num):
 
 
 def test_info_page_hint():
-    """An info page leaves by Up from its top element (the plot text, on a music page the
-    buttons): the same LevelHint as the player's, "↑ Back", shown all the time like the player's
+    """An info page leaves by Up from its top element, the button row: the same LevelHint as the player's, "↑ Back", shown all the time like the player's
     Up hints, centred on the row of the path line."""
     assert _string(31470) == 'back'
     for name, tops in INFO_PAGES.items():

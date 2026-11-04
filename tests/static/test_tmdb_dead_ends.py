@@ -76,15 +76,12 @@ def test_info_page_has_no_dead_end(info_page, label):
 
 
 def test_up_on_the_top_row_leaves_the_page(info_page):
-    """Up on any button of the top row goes to the plot, Up there is Back: one page back in a
-    chain, else to the row the page was opened from (test_plot_text.py)."""
-    texts = ('9060', '9061', '9062')
+    """Up on any button of the top row is Back: one page back in a chain, else to the row the page
+    was opened from (test_plot_text.py)."""
     for label, state in INFO_STATES.items():
-        for cid in ('9001', '9002', '9003', '9004'):
+        for cid in ('9001', '9002', '9003', '9004', '9063'):
             if info_page.can_focus(cid, state):
-                text, ran = info_page.move(cid, 'onup', state)
-                assert text in texts and not ran, (label, cid)
-                assert 'Action(Back)' in info_page.move(text, 'onup', state)[1], (label, cid)
+                assert info_page.move(cid, 'onup', state) == (None, ['Action(Back)']), (label, cid)
 
 
 def _osd_states():
