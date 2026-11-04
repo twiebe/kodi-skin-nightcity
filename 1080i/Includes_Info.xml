@@ -194,52 +194,23 @@
         </definition>
     </include>
 
-    <!-- The plot of the page as a stop of the remote, always: leaving the page with Up takes the
-         same keys on every page, buttons, text, out. It does not scroll by itself: an
-         autoscrolling text redraws the whole screen all the time (a long TMDb biography, 458 %
-         CPU in kodi-dev).
-         Up from the button row (9000) lands here (`visible`: the head of this page shows), the
-         frame of a focused card is the cursor, OK opens the whole text in Kodi's text viewer
-         (scripts/nightcity.py plot, `item` the info prefix), Up leaves the page like Up from the
-         buttons once did, Down goes back to them. The frame lies 16 px out to the sides of the
-         text and 10 px above and below it.
+    <!-- What stands with the plot of a page besides the text, which takes no focus (the button in
+         the row opens it, DialogVideoInfo.xml). It does not scroll by itself: an autoscrolling
+         text redraws the whole screen all the time (a long TMDb biography, 458 % CPU in kodi-dev).
          `more` holds when the text has more than its box shows: Container(textbox).HasNext,
-         Kodi's "the textbox has a second page". Only then three dots at the end of the text say
-         it goes on (moreleft, moretop: right of the last line, in 24 px the frame keeps free for
-         them beyond the text), cyan while the text has the focus. Without a plot
-         a muted "No description" at the text's place (hintleft, texttop) gives the cursor
-         something to frame, and OK opens no empty viewer. -->
-    <include name="PlotFocus">
-        <param name="id"/>
+         Kodi's "the textbox has a second page". Only then three dots say it goes on (moreleft,
+         moretop: right of the last line). Without a plot a muted "No description" at the text's
+         place (hintleft, texttop). -->
+    <include name="PlotHints">
         <param name="visible"/>
         <param name="more"/>
         <param name="item"/>
-        <param name="left"/>
-        <param name="top"/>
-        <param name="width"/>
-        <param name="height"/>
         <param name="hintleft"/>
         <param name="hintwidth"/>
         <param name="texttop"/>
-        <!-- the three dots: right of the text's last line, inside the frame -->
         <param name="moreleft"/>
         <param name="moretop"/>
         <definition>
-            <control type="button" id="$PARAM[id]">
-                <left>$PARAM[left]</left>
-                <top>$PARAM[top]</top>
-                <width>$PARAM[width]</width>
-                <height>$PARAM[height]</height>
-                <visible>$PARAM[visible]</visible>
-                <texturefocus border="16" colordiffuse="focus">ui/cut.png</texturefocus>
-                <texturenofocus/>
-                <onup>Action(Back)</onup>
-                <ondown>9000</ondown>
-                <onleft>noop</onleft>
-                <onright>noop</onright>
-                <onclick condition="!String.IsEmpty($PARAM[item].Plot)">NotifyAll(nightcity,plot:$PARAM[item])</onclick>
-                <include>ChainBackGuard</include>
-            </control>
             <control type="label">
                 <left>$PARAM[hintleft]</left>
                 <top>$PARAM[texttop]</top>
@@ -259,18 +230,7 @@
                 <font>font_body</font>
                 <textcolor>text_mute</textcolor>
                 <label>…</label>
-                <visible>$PARAM[more] + !Control.HasFocus($PARAM[id])</visible>
-            </control>
-            <control type="label">
-                <left>$PARAM[moreleft]</left>
-                <top>$PARAM[moretop]</top>
-                <width>20</width>
-                <height>38</height>
-                <aligny>center</aligny>
-                <font>font_body</font>
-                <textcolor>accent</textcolor>
-                <label>…</label>
-                <visible>$PARAM[more] + Control.HasFocus($PARAM[id])</visible>
+                <visible>$PARAM[more]</visible>
             </control>
         </definition>
     </include>

@@ -1005,7 +1005,7 @@ def player_info():
 
 
 def plot(item='ListItem'):
-    """The whole plot of the info page in Kodi's text viewer (PlotFocus, Includes_Info.xml), under
+    """The whole plot of the info page in Kodi's text viewer (button 9063, DialogVideoInfo.xml), under
     the title, a person's name. ITEM is the info prefix: Container(5100).ListItem on an episode's
     page, whose head follows its episode list."""
     import xbmc

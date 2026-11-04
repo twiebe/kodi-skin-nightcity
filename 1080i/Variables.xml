@@ -636,6 +636,10 @@
     </variable>
 
     <!-- Info page (DialogVideoInfo): for an episode the head follows the episode list 5100 -->
+    <variable name="InfoPlotLabel">
+        <value condition="String.IsEqual(ListItem.Property(tmdb_type),person)">$LOCALIZE[31474]</value>
+        <value>$LOCALIZE[31473]</value>
+    </variable>
     <variable name="InfoPlayLabel">
         <value condition="String.IsEqual(ListItem.DBType,episode) + Container(5100).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(5100).ListItem.PercentPlayed]%</value>
         <value condition="String.IsEqual(ListItem.DBType,episode)">▶ $LOCALIZE[31010]</value>

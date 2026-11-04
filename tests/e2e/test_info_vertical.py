@@ -46,9 +46,7 @@ def _down(cid, timeout=10):
 
 
 def _up_past_the_text():
-    """Up from the button row of a person page, out of the page: the biography is a stop on the
-    way (test_plot_text.py), Up from it leaves."""
-    _up(9062)
+    """Up from the button row of a person page, out of the page."""
     action('up', delay=1)
 
 
@@ -145,7 +143,6 @@ def test_episode_walk_down_to_the_credits_and_up_to_the_menu(breaking_bad):
     _up(5200)
     _up(9001)
     screenshot('vertical-4-back-at-the-top')
-    _up(9061)  # the episode's plot (test_plot_text.py)
     action('up', delay=1)
     wait_for('!Window.IsActive(movieinformation)', timeout=10)
     _focus_is(row)
@@ -235,7 +232,6 @@ def test_movie_up_from_the_top_goes_back(matrix):
     _down(5500)
     _up(5521)  # the cast tab of the tab row 5520
     _up(9001)
-    _up(9060)  # the plot (test_plot_text.py)
     action('up', delay=1)
     wait_for('!Window.IsActive(movieinformation)', timeout=10)
     assert _true('Window.IsActive(home)')

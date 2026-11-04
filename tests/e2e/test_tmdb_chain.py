@@ -92,10 +92,7 @@ def _back_in(cid):
 
 
 def _up_past_the_text():
-    """Up from the button row of a person page, out of the page: the biography is a stop on the
-    way (test_plot_text.py), Up from it leaves."""
-    action('up', delay=1)
-    wait_for('Integer.IsEqual(System.CurrentControlId,9062)')
+    """Up from the button row of a person page, out of the page."""
     action('up', delay=1)
 
 
@@ -645,9 +642,7 @@ def test_up_right_after_an_osd_chain_stays_on_the_tabs(matrix):
     focus on the person left (osd_back). An Up in that moment moves on to the tabs and stays there:
     the script used to pull the focus back down to the list."""
     _osd_chain_from_the_second_person(matrix)
-    action('up', delay=1)  # onto the biography (_up_past_the_text), then off the page at once
-    wait_for('Integer.IsEqual(System.CurrentControlId,9062)')
-    action('up', delay=0)
+    action('up', delay=0)  # off the page
     wait_for('Window.IsActive(1141) + Control.HasFocus(6501)', timeout=20)
     assert not _true('String.IsEmpty(Window(Home).Property(nc.osd.chain))'), 'the list reloaded already'
     action('up', delay=0)

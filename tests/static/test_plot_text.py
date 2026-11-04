@@ -1,13 +1,12 @@
-"""The plot of an info page stands still and opens in full on OK.
+"""The plot of an info page stands still and opens in full from a button.
 
 A textbox that scrolls by itself (autoscroll) changes on screen every few seconds for as long as
 it shows, and Kodi's dirty-region solver then redraws the whole screen: a long TMDb biography kept
 kodi-dev at 458 % CPU with nothing playing, 2 % without the autoscroll. So no textbox scrolls by
-itself. The plot of the info page is a stop of the remote instead, on every page: Up from the
-button row lands on it, OK opens the whole text in Kodi's text viewer, Up leaves the page like Up
-from the buttons did. Leaving takes the same keys whether the text is long, short or missing.
-Kodi tells a textbox longer than its box by Container(id).HasNext (it has a second page): only
-then a hint says OK reads on.
+itself. The text takes no focus: a button in the row opens it whole in Kodi's text viewer, always
+at the same place, and Up from the row leaves the page at once, one key less on every level of a
+chain. Kodi tells a textbox longer than its box by Container(id).HasNext (it has a second page):
+only then three dots say it goes on.
 """
 import pytest
 
@@ -18,13 +17,13 @@ from test_tmdb_dead_ends import EXTRA
 INFO = 'DialogVideoInfo.xml'
 EPISODE = 'String.IsEqual(ListItem.DBType,episode)'
 PERSON = 'String.IsEqual(ListItem.Property(tmdb_type),person)'
-# page kind: (text button, its textbox, info prefix of the text, condition of that head)
-DOTS = 24  # px right of the text for the three dots, inside the frame
-
+BUTTON = '9063'
+DOTS = 24  # px right of the text for the three dots
+# page kind: (its textbox, info prefix of the text, condition of that head)
 PLOTS = {
-    'movie': ('9060', '9050', 'ListItem', '!{} + !{}'.format(EPISODE, PERSON)),
-    'episode': ('9061', '9051', 'Container(5100).ListItem', EPISODE),
-    'person': ('9062', '9052', 'ListItem', PERSON),
+    'movie': ('9050', 'ListItem', '!{} + !{}'.format(EPISODE, PERSON)),
+    'episode': ('9051', 'Container(5100).ListItem', EPISODE),
+    'person': ('9052', 'ListItem', PERSON),
 }
 KINDS = {
     'movie': dict(dbtype='movie', dbid=True),
@@ -44,8 +43,8 @@ def _plot(kind):
 
 def _state(kind, text, chain=''):
     extra = dict(EXTRA)
-    extra.update({'Container({}).HasNext'.format(box): text == 'long' for _, box, _, _ in PLOTS.values()})
-    extra.update({'String.IsEmpty({}.Plot)'.format(item): text == 'empty' for _, _, item, _ in PLOTS.values()})
+    extra.update({'Container({}).HasNext'.format(box): text == 'long' for box, _, _ in PLOTS.values()})
+    extra.update({'String.IsEmpty({}.Plot)'.format(item): text == 'empty' for _, item, _ in PLOTS.values()})
     containers = {'5500': 'items', '5510': 'items' if kind == 'person' else 'empty', '50': 'empty',
                   '5300': 'empty', '5901': 'empty', '5100': 'items' if kind == 'episode' else 'empty',
                   '5200': 'items' if kind == 'episode' else 'empty'}
@@ -59,12 +58,6 @@ def info_page():
     return Page(INFO)
 
 
-def _labels(info_page, kind, string):
-    button = info_page.controls[PLOTS[kind][0]]
-    return [c for c in info_page.parent[button].findall('control')
-            if c.get('type') == 'label' and string in (c.findtext('label') or '')]
-
-
 def test_no_textbox_scrolls_by_itself():
     scrolling = set()
     for path in layout_files():
@@ -76,7 +69,7 @@ def test_no_textbox_scrolls_by_itself():
 
 @pytest.mark.parametrize('kind', sorted(PLOTS))
 def test_each_head_names_its_text(info_page, kind):
-    _, box, item, _ = PLOTS[kind]
+    box, item, _ = PLOTS[kind]
     textbox = info_page.controls[box]
     assert textbox.get('type') == 'textbox'
     assert textbox.findtext('label') == '$INFO[{}.Plot]'.format(item)
@@ -84,91 +77,116 @@ def test_each_head_names_its_text(info_page, kind):
 
 @pytest.mark.parametrize('text', TEXTS)
 @pytest.mark.parametrize('kind', sorted(KINDS))
-def test_leaving_takes_the_same_keys_for_any_text(info_page, kind, text):
-    """Buttons, Up: the text, Up: out. Long, short or no text alike."""
-    button = _plot(kind)[0]
+def test_up_from_the_buttons_leaves_at_once(info_page, kind, text):
+    """No stop on the text: one level up, or one page back in a chain, with a long, short or no text."""
     state = _state(kind, text)
-    top = info_page.start(state)
-    assert info_page.move(top, 'onup', state) == (button, [])
-    # Up from the text is what Up from the buttons was: one level up, or one page back in a chain
-    assert info_page.move(button, 'onup', state) == (None, ['Action(Back)'])
-    assert info_page.move(button, 'ondown', state)[0] == top
-    assert info_page.move(button, 'onleft', state) == (None, ['noop'])
-    assert info_page.move(button, 'onright', state) == (None, ['noop'])
-
-
-@pytest.mark.parametrize('kind', sorted(KINDS))
-def test_only_the_text_of_the_page_shown_takes_the_focus(info_page, kind):
-    state = _state(kind, 'short')
-    assert [b for b, _, _, _ in PLOTS.values() if info_page.can_focus(b, state)] == [_plot(kind)[0]]
+    assert info_page.move(info_page.start(state), 'onup', state) == (None, ['Action(Back)'])
 
 
 @pytest.mark.parametrize('text', TEXTS)
 @pytest.mark.parametrize('kind', sorted(KINDS))
 @pytest.mark.parametrize('chain', ['', 'True'])
-def test_the_text_leaves_no_dead_end(info_page, kind, text, chain):
+def test_the_page_leaves_no_dead_end(info_page, kind, text, chain):
     if kind == 'person' and not chain:
         return  # a person page only opens in a chain
     assert info_page.report(_state(kind, text, chain=chain), offscreen={'5901', '9098', '9099'}) == []
 
 
-@pytest.mark.parametrize('text', TEXTS)
-@pytest.mark.parametrize('kind', sorted(PLOTS))
-def test_ok_opens_the_whole_text(info_page, kind, text):
-    button, _, item, _ = PLOTS[kind]
-    clicks = info_page.clicks(button, _state(kind, text))
-    # no empty viewer for a page without a plot
-    assert clicks == ([] if text == 'empty' else ['NotifyAll(nightcity,plot:{})'.format(item)])
+def test_the_text_takes_no_focus(info_page):
+    """The cursor frame around the text is gone with its stop, so are the stops themselves."""
+    for cid in ('9060', '9061', '9062'):
+        assert cid not in info_page.controls
+    page = (ROOT / '1080i' / INFO).read_text(encoding='utf-8')
+    assert 'PlotFocus' not in page and 'ui/cut.png' not in page
 
 
-@pytest.mark.parametrize('kind', sorted(PLOTS))
-def test_the_text_shows_the_cursor_of_a_card(info_page, kind):
-    button, box, _, head = PLOTS[kind]
-    c = info_page.controls[button]
-    assert c.get('type') == 'button'
-    assert c.findtext('visible') == head
-    focus = c.find('texturefocus')
-    assert (focus.text, focus.get('colordiffuse'), focus.get('border')) == ('ui/cut.png', 'focus', '16')
-    assert c.find('texturenofocus') is not None and not (c.findtext('texturenofocus') or '').strip()
-    # the frame lies around the text, 16 px out to the sides and 10 px above and below it
-    textbox = info_page.controls[box]
-    frame = [int(c.findtext(k)) for k in ('left', 'top', 'width', 'height')]
-    text = [int(textbox.findtext(k)) for k in ('left', 'top', 'width', 'height')]
-    shift = -320 if kind == 'episode' else 0  # HeroBody's shift: an episode has no poster
-    # the frame lies 16 px out from the text, and on the right 24 px more: room for the dots
-    assert frame == [text[0] + shift - 16, text[1] - 10, text[2] + 32 + DOTS, text[3] + 20]
+def _row():
+    return next(c for c in parse(ROOT / '1080i' / INFO).iter('control') if c.get('id') == '9000')
+
+
+def _in_row():
+    """The row's children in order, by id: an include names it in its id param."""
+    ids = []
+    for child in _row():
+        if child.tag == 'control' and child.get('id'):
+            ids.append(child.get('id'))
+        elif child.tag == 'include':
+            ids += [p.get('value') for p in child.findall('param') if p.get('name') == 'id']
+    return ids
+
+
+def test_the_row_starts_on_play_whatever_had_the_focus_last():
+    """A grouplist keeps its last focused child over closing the page: leaving by a button further
+    right opened the next page on that button."""
+    default = _row().find('defaultcontrol')
+    assert (default.text, default.get('always')) == ('9001', 'true')
+
+
+def test_the_button_stands_left_of_the_more_button():
+    ids = _in_row()
+    assert ids.index(BUTTON) == ids.index('9003') - 1
+    assert ids.index('9003') < ids.index('9005') == len(ids) - 1
+
+
+@pytest.mark.parametrize('kind', sorted(KINDS))
+@pytest.mark.parametrize('text', ['long', 'short'])
+def test_the_button_is_there_whenever_there_is_a_text(info_page, kind, text):
+    """Long or short alike: it is always in the same place, also when the box shows the whole text."""
+    assert info_page.can_focus(BUTTON, _state(kind, text))
+
+
+@pytest.mark.parametrize('kind', sorted(KINDS))
+def test_no_button_without_a_text(info_page, kind):
+    """Nothing to open: "No description" stands in the box."""
+    assert not info_page.can_focus(BUTTON, _state(kind, 'empty'))
+
+
+@pytest.mark.parametrize('kind', sorted(KINDS))
+def test_ok_opens_the_whole_text(info_page, kind):
+    clicks = [c for c in info_page.clicks(BUTTON, _state(kind, 'long')) if c != 'noop']
+    assert clicks == ['NotifyAll(nightcity,plot:{})'.format(_plot(kind)[1])]
+
+
+def test_the_button_names_what_it_opens(info_page):
+    assert '$VAR[InfoPlotLabel]' in info_page.controls[BUTTON].findtext('label')
+    var = next(v for v in parse(ROOT / '1080i' / 'Variables.xml').iter('variable')
+               if v.get('name') == 'InfoPlotLabel')
+    values = [(v.get('condition'), v.text) for v in var.findall('value')]
+    assert values == [(PERSON, '$LOCALIZE[31474]'), (None, '$LOCALIZE[31473]')]
+
+
+def test_the_button_guards_the_chain_like_its_row():
+    call = next(c for c in _row().findall('include') if any(
+        p.get('name') == 'id' and p.get('value') == BUTTON for p in c.findall('param')))
+    assert call.find('include').text == 'ChainBackGuard'
 
 
 def test_dots_say_the_text_goes_on():
-    """When the text is longer than its box, three dots at its end say so: muted, and cyan while
-    the text has the focus (the cursor's colour; OK there reads on). They sit in the frame's margin
-    right of the text's last line. A hint "OK read more" on the button row read as if it were
-    about the focused button."""
+    """When the text is longer than its box, three muted dots right of its last line say so.
+    A hint "OK read more" on the button row read as if it were about the focused button."""
     root = parse(ROOT / '1080i' / 'Includes_Info.xml')
-    inc = next(i for i in root.iter('include') if i.get('name') == 'PlotFocus')
-    dots = [c for c in inc.iter('control') if c.get('type') == 'label' and c.findtext('label') == '…']
-    assert [(d.findtext('visible'), d.findtext('textcolor')) for d in dots] == [
-        ('$PARAM[more] + !Control.HasFocus($PARAM[id])', 'text_mute'),
-        ('$PARAM[more] + Control.HasFocus($PARAM[id])', 'accent')]
-    assert {(d.findtext('left'), d.findtext('top')) for d in dots} == {('$PARAM[moreleft]', '$PARAM[moretop]')}
-    page = parse(ROOT / '1080i' / 'DialogVideoInfo.xml')
-    for call in (i for i in page.iter('include') if i.get('content') == 'PlotFocus'):
+    inc = next(i for i in root.iter('include') if i.get('name') == 'PlotHints')
+    [dots] = [c for c in inc.iter('control') if c.get('type') == 'label' and c.findtext('label') == '…']
+    assert (dots.findtext('visible'), dots.findtext('textcolor')) == ('$PARAM[more]', 'text_mute')
+    assert (dots.findtext('left'), dots.findtext('top')) == ('$PARAM[moreleft]', '$PARAM[moretop]')
+    page = parse(ROOT / '1080i' / INFO)
+    calls = [i for i in page.iter('include') if i.get('content') == 'PlotHints']
+    assert len(calls) == len(PLOTS)
+    for call in calls:
         params = {p.get('name'): p.get('value') for p in call.findall('param')}
-        # right of the text, in the frame's room for them (DOTS), clear of its line
-        frame_right = int(params['left']) + int(params['width'])
-        assert int(params['hintleft']) + int(params['hintwidth']) - DOTS <= int(params['moreleft']), params['id']
-        assert int(params['moreleft']) + 20 <= frame_right - 12, params['id']
-        assert int(params['moretop']) > int(params['texttop']), params['id']
+        assert int(params['hintleft']) + int(params['hintwidth']) - DOTS <= int(params['moreleft']), params
+        assert int(params['moretop']) > int(params['texttop']), params
     # no hint on the button row any more, nor its string
     for path in (ROOT / '1080i').glob('*.xml'):
         assert '31468' not in path.read_text(encoding='utf-8'), path.name
 
 
 @pytest.mark.parametrize('kind', sorted(PLOTS))
-def test_no_plot_shows_a_placeholder_for_the_cursor(info_page, kind):
-    _, box, item, head = PLOTS[kind]
-    [empty] = _labels(info_page, kind, '$LOCALIZE[31469]')
-    assert empty.findtext('visible') == '{} + String.IsEmpty({}.Plot)'.format(head, item)
+def test_no_plot_shows_a_placeholder(info_page, kind):
+    box, item, head = PLOTS[kind]
+    expected = '{} + String.IsEmpty({}.Plot)'.format(head, item)
+    [empty] = [c for c in info_page.window.iter('control') if c.get('type') == 'label'
+               and c.findtext('label') == '$LOCALIZE[31469]' and c.findtext('visible') == expected]
     assert (empty.findtext('font'), empty.findtext('textcolor')) == ('font_body', 'text_mute')
     textbox = info_page.controls[box]
     shift = -320 if kind == 'episode' else 0
@@ -180,6 +198,8 @@ def test_strings():
     text = (ROOT / 'language' / 'resource.language.en_gb' / 'strings.po').read_text(encoding='utf-8')
     assert 'msgctxt "#31468"' not in text  # the hint "OK read more" is gone (three dots instead)
     assert 'msgctxt "#31469"\nmsgid "No description"\n' in text
+    assert 'msgctxt "#31473"\nmsgid "description"\n' in text
+    assert 'msgctxt "#31474"\nmsgid "biography"\n' in text
 
 
 def test_player_plot_is_cut_off():

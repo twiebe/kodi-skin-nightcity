@@ -1,8 +1,8 @@
-"""The plot of an info page as a stop of the remote, end to end.
+"""The plot of an info page and its button, end to end.
 
-The plot takes the focus with Up from the button row on every page; OK opens it whole in Kodi's
-text viewer, Back closes the viewer onto the text, Up from the text goes one level up or one page
-back in a TMDb chain. Leaving takes two Ups whether the text is long, short or missing.
+The text takes no focus. A button in the row opens it whole in Kodi's text viewer, Back closes the
+viewer onto the button, and Up from the row goes one level up or one page back in a TMDb chain at
+once, whether the text is long, short or missing.
 
 Needs TMDb Helper, internet access for TMDb and The Matrix in the library (its plot is one short
 line, its cast has Keanu Reeves with a long biography and films without a plot); without them
@@ -21,7 +21,7 @@ pytestmark = pytest.mark.e2e
 
 RUNNING = '!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))'
 IDLE = 'String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))'
-PERSON_TEXT = 9062
+BUTTON = 9063
 
 
 def _label(name):
@@ -78,11 +78,19 @@ def _person_page(movieid):
     return _label('ListItem.Label')
 
 
+def _to_button():
+    """Right along the row, the way the remote gets there."""
+    for _ in range(6):
+        action('right', delay=0.4)
+        if _label('System.CurrentControlId') == str(BUTTON):
+            return
+    _focus_is(BUTTON, timeout=1)
+
+
 def test_a_long_biography_opens_in_the_viewer(matrix):
     person = _person_page(matrix)
-    action('up', delay=0.6)
-    _focus_is(PERSON_TEXT)
-    screenshot('plot-person-focused')
+    _to_button()
+    screenshot('plot-person-button')
     action('select')
     wait_for('Window.IsActive(textviewer)', timeout=10)
     screenshot('plot-viewer')
@@ -91,65 +99,54 @@ def test_a_long_biography_opens_in_the_viewer(matrix):
     assert cond('Window.IsActive(textviewer)')['Window.IsActive(textviewer)']
     action('back')
     wait_for('!Window.IsActive(textviewer)', timeout=10)
-    # back on the text, on the same person page
-    _focus_is(PERSON_TEXT)
+    # back on the button, on the same person page
+    _focus_is(BUTTON)
     assert _label('ListItem.Label') == person
     assert _label('Window(Home).Property(TMDbHelper.Position)') == '2'
 
 
-def test_up_from_the_text_steps_back_in_the_chain(matrix):
+def test_up_from_the_buttons_steps_back_in_the_chain(matrix):
     _person_page(matrix)
-    action('up', delay=0.6)
-    _focus_is(PERSON_TEXT)
     action('up', delay=1)
     wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),1)', timeout=30)
     wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.DBID,{})'.format(matrix), timeout=20)
 
 
-def test_down_from_the_text_returns_to_the_buttons(matrix):
+def test_up_from_the_text_button_leaves_too(matrix):
     _person_page(matrix)
-    action('up', delay=0.6)
-    _focus_is(PERSON_TEXT)
-    action('down', delay=0.6)
-    _focus_is(9004)
-
-
-MOVIE_TEXT = 9060
-
-
-def _two_ups_leave(text):
-    """Up from the buttons: the text; Up again: out of the page."""
-    action('up', delay=0.6)
-    _focus_is(text)
+    _to_button()
     action('up', delay=1)
+    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),1)', timeout=30)
 
 
-def test_a_short_plot_takes_the_same_keys(matrix):
+def test_a_short_plot_has_the_button_and_up_leaves(matrix):
     _matrix_page(matrix)
     assert len(_label('ListItem.Plot')) < 80  # one line
     screenshot('plot-movie-short')
-    action('up', delay=0.6)
-    _focus_is(MOVIE_TEXT)
-    screenshot('plot-movie-short-focused')
+    _to_button()
+    screenshot('plot-movie-short-button')
     # OK still shows it whole
     action('select')
     wait_for('Window.IsActive(textviewer)', timeout=10)
     action('back')
     wait_for('!Window.IsActive(textviewer)', timeout=10)
-    _focus_is(MOVIE_TEXT)
+    _focus_is(BUTTON)
     action('up', delay=1)
     wait_for('!Window.IsActive(movieinformation)', timeout=10)
     assert cond('Window.IsActive(home)')['Window.IsActive(home)']
 
 
-def test_a_long_biography_takes_the_same_keys(matrix):
-    _person_page(matrix)
-    _two_ups_leave(PERSON_TEXT)
-    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),1)', timeout=30)
+def test_the_next_page_opens_on_play_after_leaving_by_the_button(matrix):
+    """The row keeps its last focused button over closing the page unless told otherwise."""
+    _matrix_page(matrix)
+    _to_button()
+    action('up', delay=1)
+    wait_for('!Window.IsActive(movieinformation)', timeout=10)
+    _matrix_page(matrix)  # asserts the focus on play
 
 
-def test_no_plot_takes_the_same_keys(matrix):
-    """A TMDb title without a plot: a placeholder holds the cursor, OK opens no empty viewer."""
+def test_no_plot_has_no_button(matrix):
+    """A TMDb title without a plot: nothing to open, and Up leaves at once."""
     _person_page(matrix)
     builtin('SetFocus(5510)')
     wait_for('!Container(5510).IsUpdating + Integer.IsGreater(Container(5510).NumItems,0)', timeout=30)
@@ -164,15 +161,10 @@ def test_no_plot_takes_the_same_keys(matrix):
     wait_for('Window.IsActive(movieinformation) + !String.IsEqual(ListItem.Property(tmdb_type),person)', timeout=20)
     time.sleep(1.5)
     assert _label('ListItem.Plot') == ''
-    action('up', delay=0.6)
-    _focus_is(MOVIE_TEXT)
-    screenshot('plot-movie-empty-focused')
-    action('select', delay=1)
-    assert not cond('Window.IsActive(textviewer)')['Window.IsActive(textviewer)']
-    _focus_is(MOVIE_TEXT)
+    assert not cond('Control.IsVisible({})'.format(BUTTON))['Control.IsVisible({})'.format(BUTTON)]
+    screenshot('plot-movie-empty')
     action('up', delay=1)
     wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),2)', timeout=30)
-
 
 
 VIEWER = 'Window.IsActive(textviewer)'
@@ -189,23 +181,22 @@ def long_plot(matrix):
     rpc('VideoLibrary.SetMovieDetails', {'movieid': matrix, 'plot': plot})
 
 
-def _open_viewer(text):
-    action('up', delay=0.6)
-    _focus_is(text)
+def _open_viewer():
+    _to_button()
     action('select')
     wait_for(VIEWER, timeout=10)
     time.sleep(0.5)
 
 
-def _closed_onto(text):
+def _closed_onto_the_button():
     wait_for('!' + VIEWER, timeout=10)
-    _focus_is(text)
+    _focus_is(BUTTON)
 
 
 def test_the_viewer_pages_and_up_on_the_first_page_closes_it(long_plot):
     """Down pages down and never closes, Up pages back up and on the first page closes."""
     _matrix_page(long_plot)
-    _open_viewer(MOVIE_TEXT)
+    _open_viewer()
     pages = int(_label('Container(5).NumPages'))
     assert pages >= 3
     assert _label(VIEWER_PAGE) == '1'
@@ -227,34 +218,34 @@ def test_the_viewer_pages_and_up_on_the_first_page_closes_it(long_plot):
         assert cond(VIEWER)[VIEWER]
     assert _label(VIEWER_PAGE) == '1'
     action('up')
-    _closed_onto(MOVIE_TEXT)
+    _closed_onto_the_button()
     assert cond('Window.IsActive(movieinformation)')['Window.IsActive(movieinformation)']
 
 
 @pytest.mark.parametrize('key', ['select', 'left', 'right'])
 def test_ok_left_and_right_close_the_viewer(long_plot, key):
     _matrix_page(long_plot)
-    _open_viewer(MOVIE_TEXT)
+    _open_viewer()
     action('down', delay=0.6)
     wait_for('String.IsEqual({},2)'.format(VIEWER_PAGE), timeout=5)  # also from a later page
     action(key)
-    _closed_onto(MOVIE_TEXT)
+    _closed_onto_the_button()
 
 
 def test_up_closes_a_biography_of_one_page_at_once(matrix):
     person = _person_page(matrix)
-    _open_viewer(PERSON_TEXT)
+    _open_viewer()
     assert _label('Container(5).NumPages') == '1'
     action('up')
-    _closed_onto(PERSON_TEXT)
+    _closed_onto_the_button()
     assert _label('ListItem.Label') == person
     assert _label('Window(Home).Property(TMDbHelper.Position)') == '2'
 
 
 def test_up_closes_a_short_text_at_once(matrix):
     _matrix_page(matrix)
-    _open_viewer(MOVIE_TEXT)
+    _open_viewer()
     assert _label('Container(5).NumPages') == '1'
     action('up')
-    _closed_onto(MOVIE_TEXT)
+    _closed_onto_the_button()
     assert cond('Window.IsActive(movieinformation)')['Window.IsActive(movieinformation)']

@@ -101,7 +101,7 @@
             <param name="width" value="1792"/>
             <param name="pathwidth" value="780"/>
         </include>
-        <!-- Up from the top of the page, the plot text (PlotFocus), leaves it; in a TMDb chain
+        <!-- Up from the top of the page, the button row, leaves it; in a TMDb chain
              it goes one page back. Shown all the time like the player's Up hints, in the
              middle of the path line. -->
         <include content="LevelHint">
@@ -144,15 +144,10 @@
                 <param name="info" value="Container(5100).ListItem.PercentPlayed"/>
                 <param name="visible" value="Container(5100).ListItem.IsResumable"/>
             </include>
-            <include content="PlotFocus">
-                <param name="id" value="9061"/>
+            <include content="PlotHints">
                 <param name="visible" value="String.IsEqual(ListItem.DBType,episode)"/>
                 <param name="more" value="String.IsEqual(ListItem.DBType,episode) + Container(9051).HasNext"/>
                 <param name="item" value="Container(5100).ListItem"/>
-                <param name="left" value="48"/>
-                <param name="top" value="350"/>
-                <param name="width" value="1232"/>
-                <param name="height" value="136"/>
                 <param name="hintleft" value="64"/>
                 <param name="hintwidth" value="1200"/>
                 <param name="texttop" value="360"/>
@@ -206,15 +201,10 @@
                 <param name="info" value="ListItem.PercentPlayed"/>
                 <param name="visible" value="ListItem.IsResumable"/>
             </include>
-            <include content="PlotFocus">
-                <param name="id" value="9060"/>
+            <include content="PlotHints">
                 <param name="visible" value="!String.IsEqual(ListItem.DBType,episode) + !String.IsEqual(ListItem.Property(tmdb_type),person)"/>
                 <param name="more" value="!String.IsEqual(ListItem.DBType,episode) + !String.IsEqual(ListItem.Property(tmdb_type),person) + Container(9050).HasNext"/>
                 <param name="item" value="ListItem"/>
-                <param name="left" value="368"/>
-                <param name="top" value="350"/>
-                <param name="width" value="992"/>
-                <param name="height" value="136"/>
                 <param name="hintleft" value="384"/>
                 <param name="hintwidth" value="960"/>
                 <param name="texttop" value="360"/>
@@ -326,15 +316,10 @@
                 <textcolor>text_dim</textcolor>
                 <label>$INFO[ListItem.Plot]</label>
             </control>
-            <include content="PlotFocus">
-                <param name="id" value="9062"/>
+            <include content="PlotHints">
                 <param name="visible" value="String.IsEqual(ListItem.Property(tmdb_type),person)"/>
                 <param name="more" value="String.IsEqual(ListItem.Property(tmdb_type),person) + Container(9052).HasNext"/>
                 <param name="item" value="ListItem"/>
-                <param name="left" value="368"/>
-                <param name="top" value="308"/>
-                <param name="width" value="1504"/>
-                <param name="height" value="180"/>
                 <param name="hintleft" value="384"/>
                 <param name="hintwidth" value="1472"/>
                 <param name="texttop" value="318"/>
@@ -352,12 +337,12 @@
             <itemgap>-4</itemgap>
             <onleft>noop</onleft>
             <onright>noop</onright>
-            <!-- the top of the page: Up goes to the plot of the page (PlotFocus), Up from there
-                 leaves it one level up, to the row it was opened from or one page back in a
-                 TMDb chain -->
-            <onup condition="!String.IsEqual(ListItem.DBType,episode) + !String.IsEqual(ListItem.Property(tmdb_type),person)">9060</onup>
-            <onup condition="String.IsEqual(ListItem.DBType,episode)">9061</onup>
-            <onup condition="String.IsEqual(ListItem.Property(tmdb_type),person)">9062</onup>
+            <!-- the top of the page: Up leaves it one level up, to the row it was opened from or
+                 one page back in a TMDb chain -->
+            <onup>Action(Back)</onup>
+            <!-- a grouplist keeps its last focused child over closing the page: always play first,
+                 or without it the first button that can take the focus -->
+            <defaultcontrol always="true">9001</defaultcontrol>
             <!-- past the season tabs onto the episodes, like past the cast and crew tabs -->
             <ondown condition="String.IsEqual(ListItem.DBType,episode)">5100</ondown>
             <!-- past the cast and crew tabs into their list (DESIGN.md: a selector is skipped from
@@ -447,6 +432,17 @@
                      lists when it starts and stops (InfoSimilarPath) -->
                 <onclick>SetProperty(nc.trailer.lists,1,home)</onclick>
                 <onclick>NotifyAll(nightcity,trailer)</onclick>
+                <include>ChainBackGuard</include>
+            </include>
+            <!-- the whole text in Kodi's text viewer (scripts/nightcity.py plot, its info prefix):
+                 there whether the box shows all of it or not, so it is always in the same place;
+                 only a page without a text has nothing to open -->
+            <include content="PillButton">
+                <param name="id" value="9063"/>
+                <param name="label" value="$VAR[InfoPlotLabel]"/>
+                <param name="visible" value="[String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(Container(5100).ListItem.Plot)] | [!String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Plot)]"/>
+                <onclick condition="String.IsEqual(ListItem.DBType,episode)">NotifyAll(nightcity,plot:Container(5100).ListItem)</onclick>
+                <onclick condition="!String.IsEqual(ListItem.DBType,episode)">NotifyAll(nightcity,plot:ListItem)</onclick>
                 <include>ChainBackGuard</include>
             </include>
             <!-- …: Kodi's context menu of the title, with what add-ons add to it. A one-item

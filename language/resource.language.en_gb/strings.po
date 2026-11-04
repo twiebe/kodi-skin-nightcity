@@ -1100,3 +1100,11 @@ msgstr ""
 msgctxt "#31472"
 msgid "box office"
 msgstr ""
+
+msgctxt "#31473"
+msgid "description"
+msgstr ""
+
+msgctxt "#31474"
+msgid "biography"
+msgstr ""
