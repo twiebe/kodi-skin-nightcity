@@ -46,13 +46,13 @@
         <onstop condition="Window.IsActive(startup) + String.IsEmpty(Window(Home).Property(nc.service))">RunScript(special://skin/scripts/nightcity.py,service,startup)</onstop>
     </timer>
     <!-- Runs while the Startup screen is up. Hands over to Home once the startup script is done
-         (nc.startup.ready) and the screen was up for 4 s, after 10 s in any case. Waiting for the
+         (nc.startup.ready) and the screen was up for 3 s, after 10 s in any case. Waiting for the
          script also keeps its interpreter from starting next to Home's. -->
     <timer>
         <name>nc_startup</name>
         <description>Hand over from the Startup screen to Home</description>
         <start reset="true">Window.IsActive(startup)</start>
-        <stop>!Window.IsActive(startup) | [!String.IsEmpty(Window(Home).Property(nc.startup.ready)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_startup),4)] | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_startup),10)</stop>
+        <stop>!Window.IsActive(startup) | [!String.IsEmpty(Window(Home).Property(nc.startup.ready)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_startup),3)] | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_startup),10)</stop>
         <onstop condition="Window.IsActive(startup)">ReplaceWindow(Home)</onstop>
     </timer>
     <!-- The Home key in a TMDb chain (Custom_1160_HomeKey.xml): Home, whose rows start plugins,

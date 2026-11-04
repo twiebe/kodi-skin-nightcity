@@ -53,7 +53,7 @@ def test_startup_hands_over_to_home():
     assert '!Window.IsActive(startup)' in stop
     assert READY in stop
     minimum, timeout = _secs(stop)
-    assert minimum == 4  # the screen stays up 4 s, also when the script is done sooner
+    assert minimum == 3  # the screen stays up 3 s, also when the script is done sooner
     assert minimum < timeout <= 15
     onstop = timer.find('onstop')
     assert onstop.text == 'ReplaceWindow(Home)' and onstop.get('condition') == 'Window.IsActive(startup)'
