@@ -113,7 +113,7 @@ DOG_EAR = 22  # px, legs of the unwatched mark
 
 
 def test_unwatched_dog_ear():
-    """Unwatched, never started movies and episodes get a cyan (focus) dog-ear in the bottom right
+    """Unwatched, never started movies, episodes and shows get a cyan (focus) dog-ear in the bottom right
     corner (like Plex marks unwatched), a good deal bigger than the frame's cut (DOG_EAR); that
     corner has no cut, so one ear serves focused and unfocused cards. No ✓ on episode stills."""
     ears = [c for c in _card().iter('control') if c.get('type') == 'image' and
@@ -127,14 +127,32 @@ def test_unwatched_dog_ear():
     frame = DOG_EAR
     assert ear.findtext('width') == ear.findtext('height') == str(frame)
     visible = ear.findtext('visible')
-    assert 'Integer.IsEqual(ListItem.PlayCount,0)' in visible and '!ListItem.IsResumable' in visible
-    assert '!String.IsEmpty(ListItem.DBID)' in visible and 'focused' not in visible
+    assert 'Integer.IsEqual($PARAM[item].PlayCount,0)' in visible and '!$PARAM[item].IsResumable' in visible
+    # a show stays at PlayCount 0 until every episode is watched: its own count says "none yet",
+    # as a string so that an item without the count gets no ear
+    assert ('[String.IsEqual($PARAM[item].DBType,tvshow) + String.IsEqual($PARAM[item].Property(WatchedEpisodes),0)]'
+            in visible)
+    assert '!String.IsEmpty($PARAM[item].DBID)' in visible and 'focused' not in visible
     image = Image.open(ROOT / 'media' / 'ui' / 'dogear.png').convert('RGBA')
     assert image.size == (frame, frame)
     alpha = image.getchannel('A')
     assert alpha.getpixel((frame - 1, frame - 1)) > 200 and alpha.getpixel((0, 0)) < 50
     assert not (ROOT / 'media' / 'ui' / 'dogear_cut.png').exists()
     assert '✓' not in (ROOT / '1080i' / 'Includes_Info.xml').read_text(encoding='utf-8')
+
+
+def test_dog_ear_asks_the_cards_own_item():
+    """Inside a list layout ListItem is the card's item, by default too. The hero poster is in no
+    list: there a bare ListItem is whatever holds the focus (a card of a row, a spotlight button),
+    so the ear came and went with the focus. The hero hands in the item of its spotlight."""
+    card = _card()
+    assert next(p for p in card.findall('param') if p.get('name') == 'item').get('default') == 'ListItem'
+    ear = next(c for c in card.iter('control') if 'dogear' in (c.findtext('texture') or ''))
+    assert not re.search(r'(?<![\w.\]])ListItem\.', ear.findtext('visible'))
+    hero = next(el for p in layout_files() for el in parse(p).iter('include') if el.get('name') == 'HeroBody')
+    poster = next(el for el in hero.iter('include') if el.get('content') == 'CutCard')
+    assert {p.get('name'): p.get('value') for p in poster.findall('param')}['item'] == '$PARAM[item]'
+
 
 def _ancestors(root, target):
     parents = {c: p for p in root.iter() for c in p}

@@ -614,6 +614,9 @@
         <param name="glowheight" default="348"/>
         <param name="focused" default="false"/>
         <param name="dim" default="false"/>
+        <!-- the item of the dog-ear: a card outside a list names its container, there a bare
+             ListItem is whatever holds the focus -->
+        <param name="item" default="ListItem"/>
         <definition>
             <control type="group">
                 <animation effect="zoom" end="106" center="auto" time="150" condition="$PARAM[focused]">Conditional</animation>
@@ -670,7 +673,8 @@
             <control type="group">
                 <animation effect="zoom" end="106" center="auto" time="150" condition="$PARAM[focused]">Conditional</animation>
                 <!-- unwatched, never started: a cyan dog-ear (the focus colour) in the bottom right corner (no cut
-                     there), bigger than the frame's cut so it reads from the sofa -->
+                     there), bigger than the frame's cut so it reads from the sofa. A show: no episode
+                     watched or started; its PlayCount stays 0 until all are watched. -->
                 <control type="group">
                     <width>$PARAM[width]</width>
                     <height>$PARAM[height]</height>
@@ -680,7 +684,7 @@
                         <width>22</width>
                         <height>22</height>
                         <texture colordiffuse="focus">ui/dogear.png</texture>
-                        <visible>[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,episode)] + !String.IsEmpty(ListItem.DBID) + Integer.IsEqual(ListItem.PlayCount,0) + !ListItem.IsResumable</visible>
+                        <visible>[[[String.IsEqual($PARAM[item].DBType,movie) | String.IsEqual($PARAM[item].DBType,episode)] + Integer.IsEqual($PARAM[item].PlayCount,0)] | [String.IsEqual($PARAM[item].DBType,tvshow) + String.IsEqual($PARAM[item].Property(WatchedEpisodes),0)]] + !String.IsEmpty($PARAM[item].DBID) + !$PARAM[item].IsResumable</visible>
                     </control>
                 </control>
             </control>
