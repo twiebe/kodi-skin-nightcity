@@ -140,7 +140,7 @@ def test_info_cast_opens_person_then_movie_and_back(matrix):
     person = info('Container(5500).ListItem.Label')['Container(5500).ListItem.Label']
     action('select')
     _page(2)  # the library page is the chain's origin
-    assert info('ListItem.Label')['ListItem.Label'] == person
+    wait_for('String.IsEqual(ListItem.Label,{})'.format(person))  # the page fills a moment after it opened
     _list_in('5510')
     screenshot('tmdb-person')
     builtin('SetFocus(5510)')
@@ -305,9 +305,11 @@ def _film_in_its_first_second(matrix, key):
     """From a person's page open their first film and press KEY while the page holds Back
     (nc.chain.guard, its first second). Kodi reports the page active a moment before its onload
     set the guard, and under a full parallel run the test may see it only after that second; so
-    the key waits for the guard. Missed it: Back goes back as usual, and it tries again."""
+    the key waits for the guard. Missed it: Back goes back as usual, and it tries again. The key
+    counts only when the guard is still up once it is done (a loaded box can take the whole
+    second between the two); a later key went back as a plain Back, and it tries again too."""
     _info_and_person(matrix)
-    for _ in range(3):
+    for _ in range(4):
         wait_for('Integer.IsGreater(Container(5510).NumItems,0) + !Container(5510).IsUpdating', timeout=30)
         builtin('SetFocus(5510,0,absolute)')
         action('select', delay=0)
@@ -320,7 +322,9 @@ def _film_in_its_first_second(matrix, key):
             _page(2)
             continue
         key()
-        return
+        if _true(GUARD):
+            return
+        _page(2)
     pytest.skip('the film page never showed within its first second')
 
 
