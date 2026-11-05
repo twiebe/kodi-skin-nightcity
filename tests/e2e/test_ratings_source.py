@@ -9,7 +9,7 @@ import time
 
 import pytest
 
-from conftest import action, builtin, cond, info, rpc, screenshot, wait_for
+from conftest import action, builtin, cond, info, movie_rating, rpc, screenshot, wait_for
 from test_media_info import MOVIE_RATINGS, _open_info, _shown, _visible_of
 
 pytestmark = pytest.mark.e2e
@@ -116,7 +116,7 @@ def test_library_rating_only_with_the_setting(home):
     finally:
         builtin('Skin.Reset(nc.ratings.library)')
         builtin('Dialog.Close(all,true)')
-        rpc('VideoLibrary.SetMovieDetails', {'movieid': movieid, 'rating': 0.0})
+        movie_rating(movieid, None)
 
 
 def test_source_toggle_hides_its_rating(home, no_spotlight_setting):

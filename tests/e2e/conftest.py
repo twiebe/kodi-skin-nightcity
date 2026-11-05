@@ -8,6 +8,7 @@ import json
 import os
 import pathlib
 import re
+import sqlite3
 import subprocess
 import time
 import urllib.error
@@ -64,6 +65,34 @@ def rpc(method, params=None):
 
 def info(*labels):
     return rpc('XBMC.GetInfoLabels', {'labels': list(labels)})
+
+
+def movie_rating(movieid, rating):
+    """Set or (RATING 0 or None) remove a movie's rating: SetMovieDetails ignores a rating of
+    0.0, so a test that "restored" one with it left it behind for the next file on the Kodi."""
+    if rating:
+        rpc('VideoLibrary.SetMovieDetails', {'movieid': movieid, 'rating': rating})
+    else:
+        rpc('VideoLibrary.SetMovieDetails', {'movieid': movieid, 'ratings': {'default': None}})
+
+
+BULK_FROM = 1000  # ids of movie rows tests add to the video database and remove again
+
+
+def reset_library():
+    """What tests change in this Kodi's video library and a stopped run leaves behind: added
+    movie rows, ratings and genres. Fast (a few RPCs), run once per worker at session start."""
+    database = sorted((_data() / 'kodi' / 'userdata' / 'Database').glob('MyVideos*.db'))
+    if database:
+        with sqlite3.connect(str(database[-1]), timeout=30) as connection:
+            for table, key in (('videoversion', 'idFile'), ('movie', 'idMovie'), ('files', 'idFile')):
+                connection.execute('DELETE FROM {} WHERE {} >= ?'.format(table, key), (BULK_FROM,))
+        connection.close()
+    for movie in rpc('VideoLibrary.GetMovies', {'properties': ['rating', 'genre']}).get('movies', []):
+        if movie['rating']:
+            movie_rating(movie['movieid'], None)
+        if movie['genre']:
+            rpc('VideoLibrary.SetMovieDetails', {'movieid': movie['movieid'], 'genre': []})
 
 
 def cond(*conditions):
@@ -325,6 +354,7 @@ def reload_skin():
     if POOL and _kodi_up():
         kdev('restart')
         _wait_for_service()
+        reset_library()
     elif _kodi_up():
         builtin('Dialog.Close(all,true)')
         builtin('ReloadSkin()')
