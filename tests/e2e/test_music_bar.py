@@ -1,6 +1,7 @@
 """The position bar in the music library, end to end, on the seeded library: 3 artists, 7 albums,
 30 songs. Lists start with the parent folder, which belongs to no group and which CurrentItem does
 not count: on it CurrentItem is 0."""
+import sqlite3
 import time
 
 import pytest
@@ -165,8 +166,45 @@ def test_escape_on_the_bar_is_back_and_on_the_list_leaves_the_window(music):
     wait_for('!Window.IsActive(music)', timeout=5)
 
 
-def test_a_later_group_lands_on_the_top_of_a_long_list(music):
-    _open('musicdb://songs/', TITLE)
+BULK_FROM = 1000
+
+
+def _albums(change):
+    database = sorted((_data() / 'kodi' / 'userdata' / 'Database').glob('MyMusic*.db'))[-1]
+    with sqlite3.connect(str(database), timeout=30) as connection:
+        change(connection)
+    connection.close()
+
+
+def _remove_albums(connection):
+    connection.execute('DELETE FROM album_artist WHERE idAlbum >= ?', (BULK_FROM,))
+    connection.execute('DELETE FROM album WHERE idAlbum >= ?', (BULK_FROM,))
+
+
+@pytest.fixture
+def many_albums(music):
+    """Forty albums more, a list longer than its page: Bulk A00 .. Bulk D09."""
+    def add(connection):
+        _remove_albums(connection)  # a run stopped halfway leaves them behind
+        columns = [row[1] for row in connection.execute('PRAGMA table_info(album)')]
+        first = connection.execute('SELECT MIN(idAlbum) FROM album').fetchone()[0]
+        for number in range(40):
+            title = '{} Bulk {:02}'.format('ABCD'[number // 10], number % 10)
+            select = ', '.join('?' if c in ('idAlbum', 'strAlbum') else c for c in columns)
+            connection.execute('INSERT INTO album ({}) SELECT {} FROM album WHERE idAlbum = {}'.format(
+                ', '.join(columns), select, first), [BULK_FROM + number, title])
+            connection.execute('INSERT INTO album_artist (idArtist, idAlbum, iOrder, strArtist) '
+                               'SELECT idArtist, ?, iOrder, strArtist FROM album_artist WHERE idAlbum = ?',
+                               (BULK_FROM + number, first))
+    _albums(add)
+    yield
+    _albums(_remove_albums)
+
+
+def test_a_later_group_lands_on_the_top_of_a_long_list(many_albums):
+    _open('musicdb://albums/', ALBUM)
+    total = int(info('Container(50).NumAllItems')['Container(50).NumAllItems'])
+    assert total > 40
     _to_bar()
     first = info(LABEL)[LABEL]
     action('down', 'down', 'down', delay=0.3)
@@ -174,9 +212,19 @@ def test_a_later_group_lands_on_the_top_of_a_long_list(music):
     assert info(LABEL)[LABEL] != first
     index = _current()  # with the parent folder
     assert index > 0
-    # 31 rows, 16 on a page: the top row unless the end of the list is in the way
-    assert int(info('Container(50).Position')['Container(50).Position']) == max(0, index - 15)
-    screenshot('music-bar-songs')
+    # 16 lines on a page: the top line unless the end of the list is in the way
+    assert int(info('Container(50).Position')['Container(50).Position']) == max(0, index - (total - 16))
+    screenshot('music-bar-albums')
+
+
+def test_a_list_of_songs_has_no_bar(music):
+    """It would read every song of the library, for a list nobody jumps through."""
+    _open('musicdb://songs/', TITLE)
+    action('right', delay=0.2)
+    _focus_is(2)
+    time.sleep(1)
+    action('right', delay=0.5)
+    _focus_is(2)
 
 
 def test_year_sort_names_years(music):

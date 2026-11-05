@@ -1,3 +1,4 @@
+import sys
 import pytest
 import importlib.util
 import json
@@ -2583,6 +2584,16 @@ def test_bar_y_spaces_the_groups_evenly_over_the_rail():
 
 def test_bar_y_of_one_group():
     assert nightcity.bar_y(0, 1) == nightcity.BAR_TOP - nightcity.BAR_BUTTON // 2
+
+
+def test_music_keys_read_no_line_of_a_song_list(monkeypatch):
+    import types
+    asked = []
+    xbmc = types.SimpleNamespace(getCondVisibility=lambda c: c == 'Container.Content(songs)',
+                                 getInfoLabel=lambda l: asked.append(l) or '30')
+    monkeypatch.setitem(sys.modules, 'xbmc', xbmc)
+    assert nightcity._music_keys() == [None] * 30
+    assert not [line for line in asked if 'ListItemAbsolute' in line]
 
 
 def test_bar_groups_leave_out_what_belongs_to_no_group():

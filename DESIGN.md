@@ -31,8 +31,9 @@ The cursor glides from group to group. The column beside it (menu, title and plo
 edge and the same distance to the cards and to the rail; while the bar has the focus its right edge
 comes in as far as the widest label needs.
 
-The music library has the same bar in both views, on the levels sorted by title, artist, album, genre
-or year. Other sorts (an album's tracks, duration) have no groups to name, so no bar. The parent
+The music library has the same bar in both views, on the lists of albums, artists and genres sorted by
+title, artist, album, genre or year. Other sorts have no groups to name, and nobody jumps through a
+list of songs, so no bar there. The parent
 folder and "all albums" belong to no group. Esc and the like stay what they were off the bar: they
 leave the window.
 
