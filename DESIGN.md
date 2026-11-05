@@ -76,6 +76,10 @@ once (it shows whatever has the focus, there is nothing left to fade out) and th
 in, text and pills with it. Between two cards it is a title change as in the spotlight: text at
 once, poster and backdrop crossfade.
 
+Ratings are on everywhere by default: the spotlight has them wherever the cursor is, also in the top
+menu while it rotates. "Ratings only on title pages" (off by default) saves the requests: spotlight
+and rows then show none and fetch none, a title's page shows them as ever.
+
 The online ratings of the card come once the cursor stood still on it for 1.5 s (the service points
 TMDb Helper at the row, 2 s at worst until the request goes out): moving along a row costs no
 request, coming back to a card none either. Until they are there the line shows nothing, never the

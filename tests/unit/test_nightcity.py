@@ -1706,11 +1706,6 @@ def test_episode_ratings_are_the_episodes_own():
     assert nightcity.episode_ratings(props)['TMDb_Rating'] == ''
 
 
-def test_hero_widget_container_follows_focus_unless_loaded_without():
-    assert nightcity.hero_widget_container('9000', focused=True, without_focus=False) == '9000'
-    assert nightcity.hero_widget_container('9000', focused=False, without_focus=False) == ''
-    assert nightcity.hero_widget_container('9001', focused=False, without_focus=True) == '9001'
-    assert nightcity.hero_widget_container('', focused=False, without_focus=True) == ''
 
 
 def _hero_env(monkeypatch, true, labels, props=None):
@@ -1724,7 +1719,7 @@ def _hero_env(monkeypatch, true, labels, props=None):
 
 HOME = nightcity.HERO_ON_HOME
 MOVIE_HERO = nightcity.HERO_SHOWN.format('9300')
-MOVIE_FOCUS = nightcity.HERO_FOCUS.format('9050')
+MOVIE_FOCUS = 'ControlGroup(9050).HasFocus()'
 MATRIX_ITEM = {'Container(9000).ListItem.DBID': '5', 'Container(9000).ListItem.DBType': 'movie',
                'Container(9000).ListItem.Label': 'The Matrix'}
 TH_MATRIX = {'TMDbHelper.WidgetContainer': '9000', 'TMDbHelper.ListItem.base_dbid': '5',
@@ -1745,10 +1740,8 @@ TH_SHOW = {'TMDbHelper.ListItem.base_dbid': '7', 'TMDbHelper.ListItem.base_dbtyp
 
 
 def test_hero_tick_while_following_lets_tmdb_helper_watch_the_focused_card(monkeypatch):
-    """Also with "load without focus": the hero shows the card, TMDb Helper must not stay on the
-    spotlight."""
-    without = nightcity.HERO_WITHOUT_FOCUS
-    home = _hero_env(monkeypatch, {HOME, MOVIE_HERO, FOLLOW, without}, dict(MATRIX_ITEM, **SHOW_CARD),
+    """The hero shows the card, TMDb Helper must not stay on the spotlight."""
+    home = _hero_env(monkeypatch, {HOME, MOVIE_HERO, FOLLOW}, dict(MATRIX_ITEM, **SHOW_CARD),
                      {'TMDbHelper.WidgetContainer': '9000'})
     nightcity.hero_tick(nightcity.HeroRatings(), 0.0)
     assert 'TMDbHelper.WidgetContainer' not in home.props
@@ -1933,16 +1926,65 @@ def test_hero_tick_does_not_give_the_spotlight_the_cards_ratings(monkeypatch):
     assert 'nc.kept.9000.TMDb_Rating' not in home.props
 
 
-def test_hero_tick_lets_tmdb_helper_go_without_focus(monkeypatch):
-    home = _hero_env(monkeypatch, {HOME, MOVIE_HERO}, MATRIX_ITEM, {'TMDbHelper.WidgetContainer': '9000'})
+def test_hero_tick_points_tmdb_helper_at_the_spotlight_without_focus(monkeypatch):
+    """The cursor in the top menu, the spotlight rotates: it has ratings too."""
+    home = _hero_env(monkeypatch, {HOME, MOVIE_HERO}, MATRIX_ITEM)
+    nightcity.hero_tick(nightcity.HeroRatings(), 0.0)
+    assert home.props['TMDbHelper.WidgetContainer'] == '9000'
+
+
+TITLE_ONLY = nightcity.HERO_TITLE_ONLY
+
+
+def test_title_only_setting_leaves_tmdb_helper_alone_on_the_spotlight(monkeypatch):
+    """Also on its buttons."""
+    home = _hero_env(monkeypatch, {HOME, MOVIE_HERO, MOVIE_FOCUS, TITLE_ONLY}, MATRIX_ITEM,
+                     {'TMDbHelper.WidgetContainer': '9000'})
     nightcity.hero_tick(nightcity.HeroRatings(), 0.0)
     assert 'TMDbHelper.WidgetContainer' not in home.props
 
 
-def test_hero_tick_keeps_tmdb_helper_on_the_hero_with_the_setting(monkeypatch):
-    home = _hero_env(monkeypatch, {HOME, MOVIE_HERO, nightcity.HERO_WITHOUT_FOCUS}, MATRIX_ITEM)
-    nightcity.hero_tick(nightcity.HeroRatings(), 0.0)
-    assert home.props['TMDbHelper.WidgetContainer'] == '9000'
+def test_title_only_setting_leaves_tmdb_helper_alone_on_a_card(monkeypatch):
+    home, fake = _follow_env(monkeypatch, MOVIE_CARD)
+    fake.true.add(TITLE_ONLY)
+    kept = nightcity.HeroRatings()
+    for now in (0.0, SETTLE, SETTLE + 1.0):
+        nightcity.hero_tick(kept, now)
+    assert 'TMDbHelper.WidgetContainer' not in home.props
+
+
+def test_title_only_setting_takes_what_is_shown_and_keeps_nothing(monkeypatch):
+    """Switched on while ratings are up. TMDb Helper's properties of the title stay: nothing of
+    them may get kept."""
+    home = _hero_env(monkeypatch, {HOME, MOVIE_HERO}, MATRIX_ITEM, TH_MATRIX)
+    fake = __import__('sys').modules['xbmc']
+    kept = nightcity.HeroRatings()
+    for now in (0.0, 1.0, 2.0):
+        nightcity.hero_tick(kept, now)
+    assert home.props['nc.kept.9000.TMDb_Rating'] == '8.2'
+    fake.true.add(TITLE_ONLY)
+    cached = dict(kept.cache)
+    for now in (3.0, 4.0, 5.0):
+        nightcity.hero_tick(kept, now)
+    assert not [name for name in home.props if name.startswith('nc.kept.')]
+    assert kept.cache == cached
+    fake.true.discard(TITLE_ONLY)  # kept for the session: back at once when it goes off again
+    nightcity.hero_tick(kept, 6.0)
+    assert home.props['nc.kept.9000.TMDb_Rating'] == '8.2'
+
+
+def test_title_only_setting_leaves_the_episode_list_of_an_info_page_alone(monkeypatch):
+    """A title's page goes on as it was: TMDb Helper's, the episodes' kept ratings."""
+    fake_props = {'TMDbHelper.WidgetContainer': ''}
+    home = _hero_env(monkeypatch, {nightcity.INFO_EPISODES, TITLE_ONLY},
+                     {'Container(5100).ListItem.Label': 'Pilot', 'Container(5100).ListItem.Season': '1',
+                      'Container(5100).ListItem.Episode': '1', 'Container(5100).ListItem.DBType': 'episode'},
+                     dict(fake_props, **{'TMDbHelper.ListItem.base_dbtype': 'episode', 'TMDbHelper.ListItem.base_label': 'Pilot',
+                                         'TMDbHelper.ListItem.Rating': '8.5'}))
+    kept = nightcity.HeroRatings()
+    for now in (0.0, 1.0, 2.0):
+        nightcity.hero_tick(kept, now)
+    assert home.props['nc.kept.5100.TMDb_Rating'] == '8.5'
 
 
 def test_hero_tick_leaves_everything_alone_under_a_dialog(monkeypatch):

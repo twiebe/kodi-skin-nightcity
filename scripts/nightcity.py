@@ -1812,8 +1812,9 @@ def music_info(kind, dbid):
 
 # --- ratings kept per title -------------------------------------------------------------------
 # TMDb Helper fetches ratings for the item of TMDbHelper.WidgetContainer and lets go of it when
-# that goes. On Home the service points it at the hero's spotlight (9000 movies, 9001 shows)
-# while a hero button has focus, or always with "load without focus" (nc.ratings.spotlight); an
+# that goes. On Home the service points it at the hero's spotlight (9000 movies, 9001 shows),
+# wherever the cursor is, unless "Ratings only on title pages" (nc.ratings.titleonly) keeps it off
+# spotlight and rows; an
 # episode's info page points it at its episode list itself (DialogVideoInfo.xml, 5100). The
 # service keeps what TMDb Helper fetched per title for the session and shows the kept ratings of
 # the item on screen in nc.kept.<container>.*, which the ratings line reads: they stay once
@@ -1831,8 +1832,8 @@ EPISODE_SOURCES = ('IMDb_Rating', 'Trakt_Rating')
 HERO_STABLE = 0.8  # s TMDb Helper's ratings stay before they count: they lag behind its title
 HERO_POLL = 0.25  # s between two looks
 HERO_PROPS = 'nc.kept.{}.{}'
-# container of the spotlight, the group on screen with its hero, the group of its buttons
-HEROES = (('9000', '9300', '9050'), ('9001', '9301', '9550'))
+# container of the spotlight, the group on screen with its hero
+HEROES = (('9000', '9300'), ('9001', '9301'))
 # the group of the hero while it follows a row title, where its ratings go
 FOLLOW_GROUP = '9302'
 FOLLOW_KEPT = 'follow'
@@ -1846,8 +1847,7 @@ CARD_KEY = (('dbtype', 'DBType'), ('year', 'Year'), ('label', 'Label'))
 HERO_ON_HOME = 'Window.IsActive(home)'
 HERO_DIALOG = 'System.HasActiveModalDialog'
 HERO_SHOWN = 'Control.IsVisible({})'
-HERO_FOCUS = 'ControlGroup({}).HasFocus()'
-HERO_WITHOUT_FOCUS = 'Skin.HasSetting(nc.ratings.spotlight)'
+HERO_TITLE_ONLY = 'Skin.HasSetting(nc.ratings.titleonly)'
 INFO_EPISODES = ('Window.IsActive(movieinformation) + '
                  'String.IsEqual(Window(movieinformation).Property(TMDbHelper.WidgetContainer),5100)')
 # the player: TMDb Helper sets TMDbHelper.Player.* for a movie or an episode once it has started;
@@ -1856,12 +1856,6 @@ PLAYER_VIDEO = 'Player.HasVideo'
 PLAYER_KEY = (('title', 'VideoPlayer.Title'), ('file', 'Player.FilenameAndPath'))
 PLAYER_INFO = ('DBType', 'Title', 'TVShowTitle', 'Season', 'Episode', 'imdb_id')
 PLAYING_INFO = ('Title', 'TVShowTitle', 'Season', 'Episode', 'IMDBNumber')
-
-
-def hero_widget_container(container, focused, without_focus):
-    """What TMDbHelper.WidgetContainer should be: the hero's spotlight CONTAINER ('' none) while
-    a hero button has focus, or always WITHOUT_FOCUS."""
-    return container if container and (focused or without_focus) else ''
 
 
 def episode_ratings(props):
@@ -1950,7 +1944,11 @@ def _keep(kept, home, container, fields, watched, now, item=None):
                   {s: props[s] for s in HERO_SOURCES}, now)
     else:
         kept.seen(None, None, now)
-    for name, value in kept.changes(container, key):
+    _publish(home, kept.changes(container, key))
+
+
+def _publish(home, changes):
+    for name, value in changes:
         if value:
             home.setProperty(name, value)
         else:
@@ -2032,11 +2030,7 @@ def player_tick(kept, now):
             kept.seen(None, None, now)
     else:
         kept.seen(None, None, now)
-    for name, value in kept.changes('player', key):
-        if value:
-            home.setProperty(name, value)
-        else:
-            home.clearProperty(name)
+    _publish(home, kept.changes('player', key))
 
 
 def hero_tick(kept, now):
@@ -2054,6 +2048,14 @@ def hero_tick(kept, now):
     # the info page of a movie over Home watches its own item
     if xbmc.getCondVisibility(HERO_DIALOG):
         return
+    # no lookups for spotlight and rows, what stands there goes; what is kept stays for the session
+    if xbmc.getCondVisibility(HERO_TITLE_ONLY):
+        if home.getProperty('TMDbHelper.WidgetContainer'):
+            home.clearProperty('TMDbHelper.WidgetContainer')
+        kept.card = None
+        for container in (FOLLOW_KEPT,) + tuple(c for c, _ in HEROES):
+            _publish(home, kept.changes(container, None))
+        return
     if xbmc.getCondVisibility(HERO_SHOWN.format(FOLLOW_GROUP)):
         follow_tick(kept, home, now)
         return
@@ -2061,17 +2063,14 @@ def hero_tick(kept, now):
         if _helper_busy(home):
             _drop_helper_ratings(home)
         kept.card = None
-    container, buttons = next(((c, b) for c, group, b in HEROES if xbmc.getCondVisibility(HERO_SHOWN.format(group))),
-                              ('', ''))
-    widget = hero_widget_container(container, bool(buttons) and xbmc.getCondVisibility(HERO_FOCUS.format(buttons)),
-                                   xbmc.getCondVisibility(HERO_WITHOUT_FOCUS))
-    if home.getProperty('TMDbHelper.WidgetContainer') != widget:
-        if widget:
-            home.setProperty('TMDbHelper.WidgetContainer', widget)
+    container = next((c for c, group in HEROES if xbmc.getCondVisibility(HERO_SHOWN.format(group))), '')
+    if home.getProperty('TMDbHelper.WidgetContainer') != container:
+        if container:
+            home.setProperty('TMDbHelper.WidgetContainer', container)
         else:
             home.clearProperty('TMDbHelper.WidgetContainer')
     if container:
-        _keep(kept, home, container, HERO_KEY, bool(widget), now)
+        _keep(kept, home, container, HERO_KEY, True, now)
 
 
 def hero_watch(monitor, stop):

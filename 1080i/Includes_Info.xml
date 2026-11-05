@@ -254,6 +254,8 @@
              hero (nc.kept.<container>.), which only holds them once all are there -->
         <param name="prefix" default="TMDbHelper.ListItem."/>
         <param name="wait" default="String.IsEmpty(Window(Home).Property(TMDbHelper.IsUpdatingRatings))"/>
+        <!-- the library's own ratings may fill in -->
+        <param name="library" default="Skin.HasSetting(nc.ratings.library)"/>
         <!-- the library's IMDb and TMDb ratings by name: VideoPlayer.Rating(name) is Kodi's
              default rating whatever the name, so the player has only the unnamed one -->
         <param name="own" default="true"/>
@@ -269,7 +271,7 @@
                 <param name="prefix" value="$PARAM[prefix]"/>
                 <param name="tmdb" value="[$PARAM[tmdb]]"/>
                 <param name="online" value="[$PARAM[tmdb]] + [$PARAM[wait]]"/>
-                <param name="library" value="Skin.HasSetting(nc.ratings.library)"/>
+                <param name="library" value="$PARAM[library]"/>
                 <param name="own" value="$PARAM[own]"/>
                 <param name="fade" value="$PARAM[fade]"/>
             </include>
