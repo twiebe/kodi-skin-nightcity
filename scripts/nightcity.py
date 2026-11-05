@@ -1838,6 +1838,7 @@ HEROES = (('9000', '9300'), ('9001', '9301'))
 FOLLOW_GROUP = '9302'
 FOLLOW_KEPT = 'follow'
 FOLLOW_SETTLE = 1.5  # s the cursor stands on a card before TMDb Helper looks it up
+FOLLOW_EMPTY = 5.0  # s it stays pointed at a card without ratings: its poller may be in another lookup
 FOLLOW_ROW = 'System.CurrentControlId'
 # what names a title: (property name, ListItem info); the last one guards the line
 HERO_KEY = (('dbtype', 'DBType'), ('dbid', 'DBID'))
@@ -1879,7 +1880,8 @@ class HeroRatings:
         self.shown = {}  # container -> (key, what nc.kept.<container>.* hold now)
         self.card = None  # the card the hero follows: (row, dbtype, dbid, label)
         self.card_since = 0.0
-        self.card_asked = False  # TMDb Helper was pointed at it during this stand
+        self.card_asked = None  # when TMDb Helper was pointed at it during this stand
+        self.reloads = 0
 
     def seen(self, key, ratings, now):
         """TMDb Helper is done with title KEY and has RATINGS ({source: value}); None: busy or on
@@ -1966,9 +1968,22 @@ def _drop_helper_ratings(home):
         home.clearProperty('TMDbHelper.ListItem.' + source)
 
 
+def _point_helper(kept, home, container):
+    """Point TMDb Helper at CONTAINER and have it look up what it finds there anew. It checks
+    whether a result still belongs to its item through the container it was last pointed at, also
+    after WidgetContainer went: a lookup still running writes its ratings on whatever comes next,
+    the spotlight's on a card. Service.Reload is part of the name of its item: that lookup no longer
+    belongs, and a title it held from a lookup left in the middle is not taken for done."""
+    _drop_helper_ratings(home)
+    kept.reloads += 1
+    home.setProperty('TMDbHelper.Service.Reload', 'nc{}'.format(kept.reloads))
+    home.setProperty('TMDbHelper.WidgetContainer', container)
+
+
 def follow_tick(kept, home, now):
     """The hero follows the focused card: point TMDb Helper at its row once the cursor stood
-    still and the card has nothing kept, let go at the next move; keep and show its ratings."""
+    still and the card has nothing kept, let go when the ratings are kept or at the next move;
+    keep only what it found while it was pointed, and show that."""
     import xbmc
     row = xbmc.getInfoLabel(FOLLOW_ROW)
     dbtype, dbid, label = (xbmc.getInfoLabel('ListItem.' + info) for info in ('DBType', 'DBID', 'Label'))
@@ -1976,23 +1991,21 @@ def follow_tick(kept, home, now):
     key = tuple((name, xbmc.getInfoLabel('ListItem.' + info)) for name, info in fields)
     card = (row, dbtype, dbid, label)
     pointed = home.getProperty('TMDbHelper.WidgetContainer')
+    ratings = kept.cache.get(key, {})
     if card != kept.card:
         if _helper_busy(home):
             _drop_helper_ratings(home)
-        kept.card, kept.card_since, kept.card_asked = card, now, False
+        kept.card, kept.card_since, kept.card_asked = card, now, None
         if pointed:
             home.clearProperty('TMDbHelper.WidgetContainer')
     elif pointed:
-        if key in kept.cache:  # pointed, TMDb Helper would look up the next card by itself
+        # pointed, TMDb Helper would look up the next card by itself
+        if any(ratings.values()) or (key in kept.cache and now - (kept.card_asked or now) >= FOLLOW_EMPTY):
             home.clearProperty('TMDbHelper.WidgetContainer')
-    elif now - kept.card_since >= FOLLOW_SETTLE and row and not kept.card_asked \
-            and not any(kept.cache.get(key, {}).values()):
-        if not (home.getProperty('TMDbHelper.ListItem.base_dbtype') == dbtype and
-                _hero_same_title(home, dbid, label)):
-            _drop_helper_ratings(home)
-        home.setProperty('TMDbHelper.WidgetContainer', row)
-        kept.card_asked = True
-    _keep(kept, home, FOLLOW_KEPT, fields, True, now, item='ListItem.')
+    elif now - kept.card_since >= FOLLOW_SETTLE and row and kept.card_asked is None and not any(ratings.values()):
+        _point_helper(kept, home, row)
+        kept.card_asked = now
+    _keep(kept, home, FOLLOW_KEPT, fields, kept.card_asked is not None, now, item='ListItem.')
 
 
 def player_same_title(props, playing):
@@ -2066,7 +2079,7 @@ def hero_tick(kept, now):
     container = next((c for c, group in HEROES if xbmc.getCondVisibility(HERO_SHOWN.format(group))), '')
     if home.getProperty('TMDbHelper.WidgetContainer') != container:
         if container:
-            home.setProperty('TMDbHelper.WidgetContainer', container)
+            _point_helper(kept, home, container)
         else:
             home.clearProperty('TMDbHelper.WidgetContainer')
     if container:
