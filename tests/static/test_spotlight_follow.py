@@ -189,8 +189,24 @@ def test_music_buttons_stay_for_up_while_following():
 
 
 def test_hero_logo_keeps_its_distance_from_the_tags():
-    """Bottom aligned, a logo that fills its height ends at top + height; the tags stand at 272."""
+    """Bottom aligned, a logo that fills its height ends at top + height; the tags stand 18 px
+    below it. The genre's letters end at 143 (kicker at 116), 18 px above the logo."""
     body = _include('HeroBody')
     logo = re.search(r'<control type="image" id="\$PARAM\[logoid\]">(.*?)</control>', body, re.S).group(1)
-    assert '<top>154</top>' in logo and '<height>100</height>' in logo
-    assert re.search(r'<control type="grouplist" id="\$PARAM\[metaid\]">\s*<left>384</left>\s*<top>272</top>', body)
+    assert '<top>161</top>' in logo and '<height>100</height>' in logo
+    assert re.search(r'<control type="grouplist" id="\$PARAM\[metaid\]">\s*<left>394</left>\s*<top>279</top>', body)
+    assert re.search(r'<param name="left" value="394"/>\s*<param name="top" value="116"/>', body)
+
+
+def test_hero_poster_ends_with_the_buttons():
+    """The poster keeps 2:3 and ends where the button pills end: the padded row stands at 487,
+    its pills from 497 for 54 px. The text column keeps its 40 px from the poster."""
+    body = _include('HeroBody')
+    assert '<param name="width" value="290"/>' in body and '<param name="height" value="435"/>' in body
+    assert 'ui/mask_290x435.png' in body
+    assert 116 + 435 == 497 + 54 and 64 + 290 + 40 == 394
+    home = (ROOT / '1080i' / 'Includes_Home.xml').read_text(encoding='utf-8')
+    info = (ROOT / '1080i' / 'DialogVideoInfo.xml').read_text(encoding='utf-8')
+    assert len(re.findall(r'<left>384</left>\s*<top>487</top>', home)) == 2
+    assert 'mask_280x420' not in home and 'mask_280x420' not in info
+    assert re.search(r'<control type="grouplist" id="9000">\s*<left>384</left>\s*<top>487</top>\s*<width>1010</width>', info)
