@@ -5,6 +5,7 @@ Needs plugin.video.themoviedb.helper, internet access for TMDb, and a library mo
 """
 import re
 import time
+import urllib.parse
 
 import pytest
 
@@ -21,9 +22,40 @@ def _true(condition):
 
 
 def _page(position):
+    """The page at POSITION of the chain is open and the manager has seen it. Position alone is
+    set before the page before closes: a key sent then hit the closing page or the busy dialog
+    between the two and did nothing (a Back with no effect, the chain's Position never moving).
+    So wait for the page whose path the manager put at that position, then for the manager
+    (it polls every 0.5 s; a page closed before it looked hangs the chain 30 s)."""
     wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),{})'.format(position), timeout=30)
-    wait_for('Window.IsActive(movieinformation)', timeout=20)
-    time.sleep(1.5)
+    key = 'Window(Home).Property(TMDbHelper.Path.{})'.format(position)
+    query = urllib.parse.parse_qs(urllib.parse.urlsplit(info(key)[key]).query)
+    conditions = ['Window.IsActive(movieinformation)']
+    if query.get('dbid'):
+        conditions.append('String.IsEqual(ListItem.DBID,{})'.format(query['dbid'][0]))
+    elif query.get('tmdb_id'):
+        conditions.append('String.IsEqual(ListItem.Property(tmdb_id),{})'.format(query['tmdb_id'][0]))
+    if query.get('tmdb_type'):
+        conditions.append('String.IsEqual(ListItem.Property(tmdb_type),{})'.format(query['tmdb_type'][0]))
+    wait_for(' + '.join(conditions), timeout=20)
+    _manager_saw_the_page()
+    time.sleep(1.5)  # the page settles: its scripts park the focus on reopening (info_back)
+
+
+def _manager_saw_the_page(timeout=10):
+    """TMDb Helper's manager logs "direct.open() DONE!" once it saw the page it opened last; it
+    publishes no property for it. Without the line (another open mode) a poll's worth of time."""
+    end = time.time() + timeout
+    while time.time() < end:
+        text = _log_since(max(0, _log().stat().st_size - 400000))
+        opened = text.rfind('direct.open() [X]')
+        if opened < 0:
+            time.sleep(1.5)
+            return
+        if 'direct.open() DONE!' in text[opened:]:
+            return
+        time.sleep(0.1)
+    raise AssertionError('TMDb Helper\'s manager did not see the page in {} s'.format(timeout))
 
 
 PYTHON_RUN = re.compile(r'CPythonInvoker\((\d+), ([^)]*)\): start processing|onExecutionDone\((\d+), ')
@@ -333,14 +365,26 @@ def _film_in_its_first_second(matrix, key):
             end = time.time() + 30
             while seen not in _log_since(offset) and time.time() < end:
                 time.sleep(0.2)
-            action('back', delay=0)
-            _page(2)
+            _back_to_the_person()
             continue
         key()
-        if _true(GUARD):
+        # held: still the film page, the guard up. Else the key was late (the person's page
+        # again, whose own guard goes up), a plain Back: once more
+        if _true(GUARD + ' + Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),movie)'):
             return
         _page(2)
     pytest.skip('the film page never showed within its first second')
+
+
+def _back_to_the_person():
+    """A plain Back from the film page to the person's. A Back in the moment a page settles
+    (a busy dialog, a closing animation) is dropped by Kodi: one more after 3 s then."""
+    action('back', delay=0)
+    try:
+        wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),2)', timeout=3)
+    except AssertionError:
+        action('back', delay=0)
+    _page(2)
 
 
 def test_back_right_after_a_page_opens_goes_one_page_back(matrix):
