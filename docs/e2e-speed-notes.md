@@ -72,6 +72,7 @@ the session start (Kodi restart per worker).
 | f2 | 12 workers, c2f76f5 | killed at 280 s | 22 failed, 302 passed, 4 skipped in the 328 reported | peak load 17; no summary, no crash log, 8 of the failures in a row at the end, cause not found |
 | f3 | 12 workers, c2f76f5 | 218.0 s | 3 failed, 329 passed, 4 skipped | peak load 18; test_escape_on_the_bar..., test_a_long_biography_opens_in_the_viewer, test_back_in_the_chain_returns_to_the_crew_tab; these passed on their own |
 | f4 | 8 workers, c2f76f5 | 271.3 s | 0 failed, 332 passed, 4 skipped | |
+| f5 | 8 workers, dc73669, helper 1:6.20.8-1, Jellyfin fork release plus fix/skip-own-playback-scan, curl debug log and request wrapper on | 321.1 s | 0 failed, 338 passed, 4 skipped | peak load 12; another pool of the box was running |
 
 ## Findings
 
@@ -151,6 +152,54 @@ the session start (Kodi restart per worker).
   here. The skin cannot opt out, so _click_opens stays. What the skin could do is accept a
   click during such a reload (the items stay valid, TmdbFresh5510 says so), not tried: the
   guard also keeps a new page's plugin from starting while another runs, which crashed Kodi.
+- The Jellyfin fork's fix/skip-own-playback-scan removes the scan for the echo of our own
+  playback. Probe on one worker: Kodi announces VideoLibrary.OnUpdate on every stop, also for
+  the add-on's plugin paths with a dbid, so the lists reload without the scan. The server echoes
+  on start as well as on stop (0.6 to 0.7 s idle) and the add-on then scanned about 5 s later
+  each time; the start scan is the one that hits a person page over a playing video. The echo
+  holds the item plus its parent folders (library, season), never the item alone. So an echo is:
+  the item we played, others only with UnplayedItemCount, within 15 s (at most 4 s in the 7
+  stops measured under a full run; in f5 50 of 54 stops were followed by user data within 15 s,
+  median 0.7 s, slowest 9.8 s, the other 4 at 26 to 55 s may not be echoes), and Kodi already agreeing on watched and has a resume point.
+  The last rule matters: the server's thresholds differ from Kodi's, stopped at 2 of 10 minutes
+  only the server keeps a resume point and that still scans. Until the fork's release has this,
+  and because other scans remain (21 scans for 114 user data events in f5), _click_opens stays.
+
+- TMDb network, measured in f5. API: a temporary wrapper around requests' Session.send in TMDb
+  Helper. Images: Kodi's curl debug log.
+
+  | worker | api.themoviedb.org requests | sum s | slowest s | image.tmdb.org requests | to first response, sum s | slowest s |
+  |---|---|---|---|---|---|---|
+  | e2e-0 | 79 | 2.9 | 0.13 | 0 | | |
+  | e2e-1 | 21 | 1.0 | 0.24 | 0 | | |
+  | e2e-2 | 143 | 16.5 | 1.64 | 122 (111 timed) | 178.4 | 25.66 |
+  | e2e-3 | 81 | 3.4 | 0.24 | 0 | | |
+  | e2e-4 | 40 | 1.6 | 0.18 | 0 | | |
+  | e2e-5 | 33 | 1.3 | 0.14 | 0 | | |
+  | e2e-6 | 55 | 2.5 | 0.26 | 0 | | |
+  | e2e-7 | 38 | 2.4 | 0.13 | 0 | | |
+  | total | 490 | 31.5 | 1.64 | 122 (111 timed) | 178.4 | 25.66 |
+
+  Failures and timeouts: 0 on both hosts, all API answers were 200, no image answer was 400 or
+  above, no connection error or curl error in the logs.
+  How exact: API counts are exact for TMDb Helper's own interpreters inside the run; times are
+  wall clock under load, not pure network, and the wrapper added one requests import per
+  interpreter. Image counts are exact for curl (Host lines). Their times are only request to
+  first response, from log stamps per thread, body not included, 11 requests unpaired. Image
+  median 0.033 s, p90 4.0 s; 4 requests on 4 threads started in one second stalled about 25 s,
+  cause unknown (server or the box). The caches were warm, so 7 workers fetched no image at
+  all: a pool just after reset costs more, not measured here. Over all runs since the instance
+  folders were made the texture databases held 2,978 distinct image URLs.
+  Failures traced to the network: none. f5 had no failure and test_hero_keeps_its_ratings_once
+  _fetched passed. The saved failures of f1 and f3 show no network lines, but that output is
+  mostly tracebacks. f0 (the hero test) and f2 have no logs left, so neither is traced or cleared.
+  Verdict on record and replay of TMDb's HTTP traffic: not worth building now. Speed: the API is
+  31.5 s of 2568 worker seconds, 1.2 %, about 4 s of a run. Images run in the background on 4
+  threads; at most about 50 s of one worker in this run, roughly 2 % even if a test waited for all
+  of it. Stability: no failure comes from the network so far. Reconsider only if a failure is
+  traced to it (the 25 s image stall shows it could happen), or to data TMDb changes, or when
+  runs must work offline.
+
 - Kodi drops a key that lands between two chain pages (closing animation, DialogBusy) without
   a log line unless a modal dialog is closing. Tests that press a key right after a chain page
   opened must go through _page() (waits for the page at that position and for the manager).
