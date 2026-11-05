@@ -516,27 +516,54 @@ def _info_show():
     _home().setProperty('nc.info.show', str(details['episodedetails']['tvshowid']))
 
 
+# The lists wait for the show of the page. The page keeps the lists of the page before while its
+# own load (Kodi only swaps them once the new ones are there): an item count or a season number
+# can come from another show. In the tabs of a show without this season info_select found nothing
+# to select, and the page stayed on the first tab and the first card of the new lists.
+SEASONS_OF = 'String.IsEqual(Container(5200).ListItemAbsolute(0).TvShowDBID,{})'
 # the episode row (5100) lists the episodes of the season (format: its number). Its first path
 # lacks the season, before the season tabs (5200) chose one: it then lists the season folder,
 # whose Season matches and whose Episode is the count of its episodes. Right after Kodi started the
 # lists load slowly enough to catch it there, and the episode stayed unselected.
-EPISODES_IN = ('String.IsEqual(Container(5100).ListItemAbsolute(0).DBType,episode) + '
+EPISODES_IN = ('String.IsEqual(Container(5100).ListItemAbsolute(0).TvShowDBID,{}) + '
+               'String.IsEqual(Container(5100).ListItemAbsolute(0).DBType,episode) + '
                'String.IsEqual(Container(5100).ListItemAbsolute(0).Season,{})')
+PAGE_OF = 'Window.IsActive(movieinformation) + String.IsEqual(ListItem.DBID,{})'
+# s the lists of an episode's page may take: its first read of a big library, with all of Kodi's
+# job threads on the rows of Home, takes longer than a moment
+LISTS_LOAD = 60.0
+
+
+def _wait_on_page(condition, dbid):
+    """_wait for CONDITION as long as the page of episode DBID is open; a page opened after it
+    has a thread of its own."""
+    import xbmc
+    page = PAGE_OF.format(dbid)
+    _wait('[{}] | ![{}]'.format(condition, page), timeout=LISTS_LOAD)
+    return xbmc.getCondVisibility('[{}] + {}'.format(condition, page))
 
 
 def _select_episode():
     import xbmc
     season = xbmc.getInfoLabel('ListItem.Season')
     episode = xbmc.getInfoLabel('ListItem.Episode')
-    if not _wait('Integer.IsGreater(Container(5200).NumItems,0)'):
+    dbid = xbmc.getInfoLabel('ListItem.DBID')
+    show = xbmc.getInfoLabel('ListItem.TvShowDBID') or _home().getProperty('nc.info.show')
+    if not show or not dbid or not _wait_on_page(SEASONS_OF.format(show), dbid):
+        xbmc.log('nightcity: info_select: no season tabs for show {!r}, episode {!r}'.format(show, dbid), xbmc.LOGWARNING)
         return
     index = find_index(_labels(5200, 'Season'), season)
     if index is not None:
         _focus('SetFocus(5200,{},absolute)'.format(index))
-    if _wait(EPISODES_IN.format(season)):
+    if _wait_on_page(EPISODES_IN.format(show, season), dbid):
         index = find_index(_labels(5100, 'Episode'), episode)
         if index is not None:
             _focus('SetFocus(5100,{},absolute)'.format(index))
+    if not _wait('String.IsEqual(Container(5100).ListItem.Season,{}) + '
+                 'String.IsEqual(Container(5100).ListItem.Episode,{})'.format(season, episode), timeout=2.0):
+        xbmc.log('nightcity: info_select: S{}E{} of show {} not selected, the row is on S{}E{}'.format(
+            season, episode, show, xbmc.getInfoLabel('Container(5100).ListItem.Season'),
+            xbmc.getInfoLabel('Container(5100).ListItem.Episode')), xbmc.LOGWARNING)
     # on the way back in a chain the focus waits out of sight for the list (info_back)
     if xbmc.getCondVisibility('!String.IsEmpty(Window(Home).Property(nc.info.back))'):
         _focus('SetFocus({})'.format(INFO_STAND_IN))

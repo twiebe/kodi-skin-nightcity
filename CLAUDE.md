@@ -29,6 +29,8 @@ Full run (the pool mounts the main checkout, do not edit it while the run is on)
 KDEV_POOL=1 .venv/bin/python -m pytest tests/e2e -m e2e -n auto --dist loadfile -q -p no:cacheprovider -rfEs
 ```
 
+The chain tests need the fork's TMDb Helper. Each pool copies it from its own template: after a new helper release replace `instances/<pool>/data/kodi-template/addons/plugin.video.themoviedb.helper` in kodi-dev, then `kdev pool reset`. The Jellyfin add-on is mounted from the `/workspaces/jellyfin-kodi` checkout, which must stay on its `release` branch.
+
 A test that fails in the full run but passes when its file is run again on its own is a flake:
 say so in the report, do not hide it.
 
