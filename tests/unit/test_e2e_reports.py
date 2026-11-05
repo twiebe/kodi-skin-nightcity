@@ -45,7 +45,7 @@ def test_the_log_is_kept_once_a_file_has_failed_more_than_a_few_times():
 @pytest.mark.parametrize('condition,expected', [
     ('Integer.IsEqual(System.CurrentControlId,5200)', 'Integer.IsEqual(System.CurrentControlId,05200)'),
     ('Control.HasFocus(9010)', 'Control.HasFocus(09010)'),
-    ('Integer.IsEqual(Container(5000).CurrentItem,3) + !Container(5000).IsUpdating', 'Integer.IsEqual(Container(5000).CurrentItem,03) + !Container(5000).IsUpdating')])
+    ('Integer.IsEqual(Container(5000).CurrentItem,3) + !Container(5000).IsUpdating', 'Integer.IsEqual(Container(05000).CurrentItem,03) + !Container(05000).IsUpdating')])
 def test_a_number_can_be_written_anew_with_the_same_value(condition, expected):
     assert e2e.respelled(condition) == expected
 

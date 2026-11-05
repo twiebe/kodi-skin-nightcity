@@ -2308,7 +2308,8 @@ class LibBar:
 
     def prepare(self):
         """The table of the grid as it stands: titles change while their number stays, and reading
-        them is cheap (5000 in 9 ms in kodi-dev)."""
+        them takes 39 ms for 5000 titles (kodi-dev), and each new line stays in Kodi's table of info
+        strings until it ends."""
         self.keys = self.keys_now()
         self.groups = bar_groups(self.keys)
         if len(self.groups) >= BAR_MIN_GROUPS:
@@ -2382,10 +2383,13 @@ def _music_grid():
 
 def _music_keys():
     """The group of every line of the view; None for what is no title (the parent folder, "all
-    albums"), and for all of them in a sort without groups."""
+    albums"), and for all of them in a sort without groups and in a list of songs: every line read
+    is one more string in Kodi's table of info strings for good, and nobody jumps through songs."""
     import xbmc
     grid = 'Container({})'.format(_music_grid())
     count = int(xbmc.getInfoLabel(grid + '.NumAllItems') or 0)  # NumItems leaves out the parent folder
+    if xbmc.getCondVisibility('Container.Content(songs)'):
+        return [None] * count
     method = next((m for m in MUSIC_BAR_SORTS if xbmc.getCondVisibility('Container.SortMethod({})'.format(m))), None)
     if method is None:
         return [None] * count
