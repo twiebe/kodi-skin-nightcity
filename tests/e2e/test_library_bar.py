@@ -14,6 +14,7 @@ from conftest import _data, action, builtin, cond, info, rpc, screenshot, wait_f
 pytestmark = pytest.mark.e2e
 
 GRID, MENU, BAR = 5000, 5100, 5200
+BULK_FROM = 1000
 LABEL = 'Window(Home).Property(nc.lib.label)'
 CURRENT = 'Container({}).CurrentItem'.format(GRID)
 READY = '!String.IsEmpty(Window(Home).Property(nc.lib.bar))'
@@ -53,8 +54,22 @@ def _details(movies):
         rpc('VideoLibrary.SetMovieDetails', movie)
 
 
+def _bulk(change):
+    """Run CHANGE on the video database and let the grid load anew: a sort it did not show last."""
+    database = sorted((_data() / 'kodi' / 'userdata' / 'Database').glob('MyVideos*.db'))[-1]
+    with sqlite3.connect(str(database), timeout=30) as connection:
+        change(connection)
+    connection.close()
+
+
+def _remove_bulk(connection):
+    for table, key in (('videoversion', 'idFile'), ('movie', 'idMovie'), ('files', 'idFile')):
+        connection.execute('DELETE FROM {} WHERE {} >= ?'.format(table, key), (BULK_FROM,))
+
+
 @pytest.fixture
 def library(home):
+    _bulk(_remove_bulk)  # a run stopped halfway leaves them behind
     before = rpc('VideoLibrary.GetMovies', {'properties': FIELDS})['movies']
     assert len(before) == 3
     _details([{'movieid': m['movieid'], 'sorttitle': t[0], 'year': t[1], 'rating': t[2], 'dateadded': t[3]}
@@ -94,17 +109,8 @@ def _grid_on(item):
 
 # --- a library that scrolls: three rows of six cards on a page ------------------------------------
 
-BULK_FROM = 1000
 BULK = {'B': 20, 'C': 20, 'D': 20}  # sort titles B00..D19, between Alpha and Mike
 POSITION = 'Container({}).Position'.format(GRID)  # the cursor's place on the page
-
-
-def _bulk(change):
-    """Run CHANGE on the video database and let the grid load anew: a sort it did not show last."""
-    database = sorted((_data() / 'kodi' / 'userdata' / 'Database').glob('MyVideos*.db'))[-1]
-    with sqlite3.connect(str(database), timeout=30) as connection:
-        change(connection)
-    connection.close()
 
 
 def _reload(count):
@@ -141,10 +147,7 @@ def big_library(library):
     builtin('SetFocus({},0,absolute)'.format(GRID))
     _focus_is(GRID)
     yield
-    def remove(connection):
-        for table, key in (('videoversion', 'idFile'), ('movie', 'idMovie'), ('files', 'idFile')):
-            connection.execute('DELETE FROM {} WHERE {} >= ?'.format(table, key), (BULK_FROM,))
-    _bulk(remove)
+    _bulk(_remove_bulk)
     builtin('Dialog.Close(all,true)')
     _reload(3)
 
