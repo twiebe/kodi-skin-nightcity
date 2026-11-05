@@ -231,6 +231,7 @@
         <param name="ratingswidth" default="1400"/>
         <param name="ratingsprefix" default="TMDbHelper.ListItem."/>
         <param name="ratingswait" default="String.IsEmpty(Window(Home).Property(TMDbHelper.IsUpdatingRatings))"/>
+        <param name="library" default="Skin.HasSetting(nc.ratings.library)"/>
         <param name="page" default="true"/>
         <param name="fade" default="false"/>
         <param name="shared" default="false"/>
@@ -343,6 +344,7 @@
                     <param name="width" value="$PARAM[ratingswidth]"/>
                     <param name="prefix" value="$PARAM[ratingsprefix]"/>
                     <param name="wait" value="$PARAM[ratingswait]"/>
+                    <param name="library" value="$PARAM[library]"/>
                 </include>
                 <control type="textbox" id="$PARAM[plotid]">
                     <left>384</left>
@@ -502,6 +504,7 @@
                 <param name="tmdb" value="Integer.IsEqual(Container(9000).ListItem.DBID,Window(Home).Property(nc.kept.9000.dbid)) + String.IsEqual(Container(9000).ListItem.DBType,Window(Home).Property(nc.kept.9000.dbtype))"/>
                 <param name="ratingsprefix" value="nc.kept.9000."/>
                 <param name="ratingswait" value="true"/>
+                <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)"/>
                 <param name="page" value="[[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + !String.IsEqual(Skin.String(SpotlightSource),off)] | [String.IsEqual(Window(Home).Property(nc.page),movies) + !String.IsEqual(Skin.String(nc.movies.spotlight),off)]"/>
                 <param name="fade" value="true"/>
                 <param name="shared" value="true"/>
@@ -610,6 +613,7 @@
                 <param name="tmdb" value="Integer.IsEqual(Container(9001).ListItem.DBID,Window(Home).Property(nc.kept.9001.dbid)) + String.IsEqual(Container(9001).ListItem.DBType,Window(Home).Property(nc.kept.9001.dbtype))"/>
                 <param name="ratingsprefix" value="nc.kept.9001."/>
                 <param name="ratingswait" value="true"/>
+                <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)"/>
                 <param name="ratingid" value="9561"/>
                 <param name="page" value="String.IsEqual(Window(Home).Property(nc.page),shows)"/>
                 <param name="fade" value="true"/>
@@ -744,6 +748,7 @@
                 <param name="tmdb" value="$EXP[FollowKeptIsCard]"/>
                 <param name="ratingsprefix" value="nc.kept.follow."/>
                 <param name="ratingswait" value="true"/>
+                <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)"/>
             </include>
         </control>
     </include>

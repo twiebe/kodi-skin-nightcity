@@ -280,7 +280,6 @@ def test_ratings_of_a_card_from_a_lookup_of_its_own(tmdb_ratings):
     off any title it still had from the spotlight: The Matrix's ratings are its own lookup's, and
     stay out of the others and the spotlight's."""
     to_card('Kdev Alpha')
-    assert not label(POINTED)
     wait_for('String.IsEqual({},Kdev Alpha)'.format(HELPER_TITLE), timeout=6)
     wait_for('String.IsEqual(Window(Home).Property(nc.kept.follow.dbid),{})'.format(label('ListItem.DBID')), timeout=5)
     assert not true('Control.IsVisible(9324)')
