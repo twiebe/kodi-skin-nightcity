@@ -65,6 +65,8 @@ the session start (Kodi restart per worker).
 | r16 | 8 workers, 234c47a | 265.0 s | 2 failed, 314 passed | the same film-list click in test_stale_lists and test_more_on_a_title (now all film-list clicks go through _click_opens, f9b77b7) |
 | r17 | 8 workers, f9b77b7 | 275.4 s | 1 failed, 315 passed | test_home_sections::test_categories_walk_like_kodis_settings, Control.HasFocus(211) in the settings window, first time in 17 runs, open |
 | s1 | fc931af, -n auto after `pool up 8` on a pool that had 12 | 127.5 s | 146 passed, 174 skipped | not a result: -n auto counted the 12 instance folders, 4 workers had a stopped Kodi and conftest skipped their share silently. Now a worker without Kodi fails loudly (3919dd1) and -n auto counts the workers that answer |
+| s4 | 8 workers, 4fba6d0 (startup wait, loud missing Kodi, auto count) | 247.7 s | 0 failed, 316 passed, 4 skipped | peak load 11.5; 0 crashes |
+| s5 | 8 workers, 4fba6d0 | 258.3 s | 0 failed, 316 passed, 4 skipped | peak load 9.7; 0 crashes |
 ## Findings
 
 - A test could reach Home before the skin's startup script ran (the Startup screen starts it
