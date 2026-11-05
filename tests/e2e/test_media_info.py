@@ -84,7 +84,8 @@ def _resume_at(movieid, seconds):
 
 def _open_info(movieid):
     builtin('NotifyAll(nightcity,info:movie:{})'.format(movieid))
-    wait_for('Window.IsActive(movieinformation) + Integer.IsEqual(ListItem.DBID,{})'.format(movieid), timeout=10)
+    # 20 s as the other files give the service: a box with no idle CPU took more than 10 s once
+    wait_for('Window.IsActive(movieinformation) + Integer.IsEqual(ListItem.DBID,{})'.format(movieid), timeout=20)
 
 
 def _minutes(text):

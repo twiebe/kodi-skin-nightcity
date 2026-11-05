@@ -38,8 +38,15 @@ def test_logo_fallback(home):
 
 
 def test_rating_slot_hidden_without_data(home):
-    """Review focus 3: the kodi-dev movies have neither a library rating nor TMDb data."""
-    wait_for('Integer.IsGreater(Container(9000).NumItems,0)')
+    """Review focus 3: the Kdev movies have neither a library rating nor TMDb data. The spotlight
+    starts on a random one and The Matrix has TMDb data: step past it, and hold the rotation."""
+    wait_for('Integer.IsGreater(Container(9000).NumItems,2)')
+    hold_rotation()
+    if info('Container(9000).ListItem.Title')['Container(9000).ListItem.Title'] == 'The Matrix':
+        action('left')  # from the play button: the title before
+        wait_for('!String.IsEqual(Container(9000).ListItem.Title,The Matrix)')
+        hold_rotation()
+    wait_for('String.IsEmpty(Window(Home).Property(TMDbHelper.ListItem.tmdb_rating))')
     labels = info('Container(9000).ListItem.Rating', 'Window(Home).Property(TMDbHelper.ListItem.tmdb_rating)')
     assert labels['Container(9000).ListItem.Rating'] in ('', '0.0')
     assert not labels['Window(Home).Property(TMDbHelper.ListItem.tmdb_rating)']
@@ -144,7 +151,7 @@ def test_page_switch_keeps_the_movie_spotlight(home):
 
 
 def test_page_switch_keeps_the_show_spotlight(home):
-    wait_for('Integer.IsGreater(Container(9001).NumItems,2)')
+    wait_for('Integer.IsGreater(Container(9001).NumItems,1)')  # the library has two shows
     try:
         hold_rotation()
         before = spot(9001)

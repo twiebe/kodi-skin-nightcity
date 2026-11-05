@@ -9,7 +9,7 @@ import time
 import pytest
 from PIL import Image
 
-from conftest import _data, action, builtin, cond, info, rpc, screenshot, wait_for
+from conftest import _data, action, builtin, cond, info, movie_rating, rpc, screenshot, wait_for
 
 pytestmark = pytest.mark.e2e
 
@@ -79,8 +79,10 @@ def library(home):
     builtin('Dialog.Close(all,true)')
     builtin('ActivateWindow(home)')
     _sort()
-    _details([{'movieid': m['movieid'], 'sorttitle': m['sorttitle'], 'year': m['year'], 'rating': m['rating'],
-               'dateadded': m['dateadded']} for m in before])
+    _details([{'movieid': m['movieid'], 'sorttitle': m['sorttitle'], 'year': m['year'], 'dateadded': m['dateadded']}
+              for m in before])
+    for m in before:
+        movie_rating(m['movieid'], m['rating'])
 
 
 def _to_bar():

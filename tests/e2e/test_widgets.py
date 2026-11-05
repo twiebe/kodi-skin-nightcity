@@ -1,8 +1,9 @@
+import sqlite3
 import time
 
 import pytest
 
-from conftest import action, builtin, cond, info, rpc, screenshot, wait_for
+from conftest import _data, action, builtin, cond, info, rpc, screenshot, wait_for
 
 pytestmark = pytest.mark.e2e
 
@@ -61,8 +62,43 @@ def test_widgets_filled(home, progress):
     screenshot('home-widgets')
 
 
-def test_widget_limits(home):
-    """Review focus 5: the big kodi-dev library is cut to 25 items per row."""
+@pytest.fixture
+def big_library(home):
+    """The seeded library has three movies: 30 more rows, copies of the first, for the test."""
+    def copy(connection, table, key, values):
+        columns = [row[1] for row in connection.execute('PRAGMA table_info({})'.format(table))]
+        select = ', '.join('?' if c in values else c for c in columns)
+        connection.execute('INSERT INTO {} ({}) SELECT {} FROM {} WHERE {}'.format(
+            table, ', '.join(columns), select, table, key), [values[c] for c in columns if c in values])
+
+    def change(run):
+        database = sorted((_data() / 'kodi' / 'userdata' / 'Database').glob('MyVideos*.db'))[-1]
+        with sqlite3.connect(str(database), timeout=30) as connection:
+            run(connection)
+        connection.close()
+
+    def add(connection):
+        first = connection.execute('SELECT idFile FROM movie WHERE idMovie = 1').fetchone()[0]
+        for number in range(2000, 2030):
+            copy(connection, 'files', 'idFile = {}'.format(first), {'idFile': number, 'strFilename': '{}.mkv'.format(number)})
+            copy(connection, 'movie', 'idMovie = 1', {'idMovie': number, 'idFile': number, 'c00': 'Bulk {}'.format(number)})
+            copy(connection, 'videoversion', 'idFile = {}'.format(first), {'idFile': number, 'idMedia': number})
+
+    def remove(connection):
+        for table, key in (('videoversion', 'idFile'), ('movie', 'idMovie'), ('files', 'idFile')):
+            connection.execute('DELETE FROM {} WHERE {} >= 2000'.format(table, key))
+
+    change(remove)  # a stopped run may have left its rows
+    change(add)
+    try:
+        yield
+    finally:
+        change(remove)
+        reload_home()
+
+
+def test_widget_limits(big_library):
+    """Review focus 5: a big library is cut to 25 items per row."""
     reload_home()
     assert num_items(NEW_MOVIES) == 25
 

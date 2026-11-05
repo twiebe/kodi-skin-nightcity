@@ -15,6 +15,8 @@ import time
 
 import pytest
 
+from test_tmdb_chain import _click_opens  # noqa: E402
+
 from conftest import action, builtin, cond, info, rpc, screenshot, wait_for
 
 pytestmark = pytest.mark.e2e
@@ -156,7 +158,7 @@ def test_no_plot_has_no_button(matrix):
     if not empty:
         pytest.skip('every film of the person has a plot')
     builtin('SetFocus(5510,{},absolute)'.format(empty[0]))
-    action('select')
+    _click_opens(5510, 3)
     wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),3)', timeout=30)
     wait_for('Window.IsActive(movieinformation) + !String.IsEqual(ListItem.Property(tmdb_type),person)', timeout=20)
     time.sleep(1.5)
