@@ -287,7 +287,7 @@
                     <left>384</left>
                     <top>154</top>
                     <width>760</width>
-                    <height>110</height>
+                    <height>100</height>
                     <aspectratio aligny="bottom" align="left">keep</aspectratio>
                     <!-- a title change crossfades poster, logo and backdrop -->
                     <fadetime>400</fadetime>

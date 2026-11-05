@@ -186,3 +186,11 @@ def test_music_buttons_stay_for_up_while_following():
     assert '<visible>String.IsEqual(Window(Home).Property(nc.page),music)</visible>' in buttons
     assert re.search(r'<animation type="Conditional" condition="\$EXP\[MusicFollows\]">\s*'
                      r'<effect type="fade" start="100" end="0" time="HeroSwapTime"/>', buttons)
+
+
+def test_hero_logo_keeps_its_distance_from_the_tags():
+    """Bottom aligned, a logo that fills its height ends at top + height; the tags stand at 272."""
+    body = _include('HeroBody')
+    logo = re.search(r'<control type="image" id="\$PARAM\[logoid\]">(.*?)</control>', body, re.S).group(1)
+    assert '<top>154</top>' in logo and '<height>100</height>' in logo
+    assert re.search(r'<control type="grouplist" id="\$PARAM\[metaid\]">\s*<left>384</left>\s*<top>272</top>', body)
