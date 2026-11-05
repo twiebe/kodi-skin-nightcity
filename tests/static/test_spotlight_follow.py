@@ -143,3 +143,46 @@ def test_backdrop_of_hero_and_rows_fade_as_long_as_the_swap():
     assert re.search(r'<visible>!ControlGroup\(9210\)\.HasFocus\(\)[^<]*</visible>\s*<include>HeroSwapFade</include>', window)
     assert re.search(r'<visible>ControlGroup\(9210\)\.HasFocus\(\)[^<]*</visible>\s*<include>HeroSwapFade</include>', window)
 
+
+
+MUSIC = (SKIN / 'Includes_Music.xml').read_text(encoding='utf-8')
+
+
+def _music_include(name):
+    match = re.search(r'<include name="{}">(.*?)\n    </include>'.format(name), MUSIC, re.S)
+    assert match, name
+    return match.group(1)
+
+
+def test_music_follows_albums_and_artists_of_its_rows_only():
+    expression = re.search(r'<expression name="MusicFollows">(.*?)</expression>', MUSIC).group(1)
+    assert 'ControlGroup(9810).HasFocus()' in expression
+    assert 'String.IsEqual(ListItem.DBType,album)' in expression
+    assert 'String.IsEqual(ListItem.DBType,artist)' in expression
+    assert 'genre' not in expression
+
+
+def test_music_hero_makes_way_like_the_video_heroes():
+    autoscroll = re.search(r'<autoscroll[^>]*>(.*?)</autoscroll>', _include('SpotlightAutoscroll')).group(1)
+    assert '!Control.IsVisible(9303)' in autoscroll
+    assert re.search(r'<visible>!\$EXP\[MusicFollows\]</visible>\s*<include>HeroSwapFade</include>', _music_include('MusicHero'))
+    follow = _music_include('MusicFollowHero')
+    assert re.search(r'<control type="group" id="9303">\s*<visible>\$EXP\[MusicFollows\]</visible>\s*<include>HeroSwapIn</include>', follow)
+    assert '<include>MusicFollowHero</include>' in (SKIN / 'Home.xml').read_text(encoding='utf-8')
+
+
+def test_music_follow_shows_what_the_spotlight_shows():
+    follow = _music_include('MusicFollowHero')
+    for part in ('$INFO[ListItem.Art(thumb)]', '$VAR[MusicCardLine]', '$INFO[ListItem.Label]', '$INFO[ListItem.Year]',
+                 '$INFO[ListItem.Genre]', '$VAR[MusicFollowPlot]'):
+        assert part in follow, part
+    assert 'TMDbHelper' not in follow and 'nc.kept' not in follow  # local data only
+
+
+def test_music_buttons_stay_for_up_while_following():
+    """A hidden grouplist takes no focus and Up would go on to the top menu: it only fades out."""
+    hero = _music_include('MusicHero')
+    buttons = hero[hero.index('<control type="grouplist" id="9850">'):]
+    assert '<visible>String.IsEqual(Window(Home).Property(nc.page),music)</visible>' in buttons
+    assert re.search(r'<animation type="Conditional" condition="\$EXP\[MusicFollows\]">\s*'
+                     r'<effect type="fade" start="100" end="0" time="HeroSwapTime"/>', buttons)

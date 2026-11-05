@@ -58,14 +58,17 @@ Example: on an episode, Play, Down: the episodes. Up: the season tabs. Up: Play.
 Rule of thumb: if the screen around the focus stays and only its content changes, focus applies
 it. If the screen changes, OK does.
 
-The spotlight of Home follows it too (home, movies and shows pages; the Music page stays on its
-own): the cursor on a title card of a row (movie, show, episode, season) shows that title in the
+The spotlight of Home follows it too (home, movies, shows and music pages): the cursor on a title card of a row (movie, show, episode, season) shows that title in the
 hero with what the spotlight shows of a title, whatever kind the spotlight holds. An episode has
 its show and SxxEyy in the kicker and the poster of its show. The rotation stands meanwhile, and
 the pills, chevrons and progress line are hidden: they act on the spotlight's own title. Up from
 the top row still goes to the buttons. The hero is the spotlight again as soon as the cursor is
 anywhere else: on its buttons, in the top menu, on a card that is no title (a genre tab). The same
 title stands there and its interval starts anew.
+
+The Music page's album spotlight does the same on an album or an artist card, with what it shows of
+an album as far as the card has it; a genre leaves it alone. All of it from the library, no online
+lookups, and no ratings since that spotlight has none. Its buttons are out of sight meanwhile.
 
 Both swaps fade 400 ms, as long as the spotlight's own crossfade of poster, logo and backdrop. Onto
 a card the spotlight fades out under the card's hero fading in. Off a card the card's hero goes at
