@@ -40,3 +40,32 @@ def test_the_log_is_kept_once_a_file_has_failed_more_than_a_few_times():
     seen = {}
     assert [e2e.keep_log_now(seen, 'test_x.py') for _ in range(5)] == [False, False, True, False, False]
     assert e2e.keep_log_now(seen, 'test_y.py') is False
+
+
+@pytest.mark.parametrize('condition,expected', [
+    ('Integer.IsEqual(System.CurrentControlId,5200)', 'Integer.IsEqual(System.CurrentControlId,05200)'),
+    ('Control.HasFocus(9010)', 'Control.HasFocus(09010)'),
+    ('Integer.IsEqual(Container(5000).CurrentItem,3) + !Container(5000).IsUpdating', 'Integer.IsEqual(Container(5000).CurrentItem,03) + !Container(5000).IsUpdating')])
+def test_a_number_can_be_written_anew_with_the_same_value(condition, expected):
+    assert e2e.respelled(condition) == expected
+
+
+@pytest.mark.parametrize('condition', ['Window.IsActive(home)', '!String.IsEmpty(Window(Home).Property(nc.service))',
+                                       'String.IsEqual(Skin.String(nc.sort),year)', 'String.IsEqual(Window(Home).Property(a),12)'])
+def test_what_has_no_number_of_its_own_stays(condition):
+    """A string may not be touched: 012 is not 12 there, and "not equal" would hold by that."""
+    assert e2e.respelled(condition) == condition
+
+
+def test_a_stuck_condition_does_not_fail_the_test_and_is_said(monkeypatch):
+    def holds(condition):
+        return {condition: condition == 'Integer.IsEqual(A,05)'}
+    monkeypatch.setattr(e2e, 'cond', holds)
+    with pytest.warns(UserWarning, match='stuck'):
+        e2e.wait_for('Integer.IsEqual(A,5)', timeout=0.1)
+
+
+def test_a_condition_that_does_not_hold_still_fails(monkeypatch):
+    monkeypatch.setattr(e2e, 'cond', lambda condition: {condition: False})
+    with pytest.raises(AssertionError, match='timed out'):
+        e2e.wait_for('Integer.IsEqual(A,5)', timeout=0.1)

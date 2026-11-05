@@ -186,12 +186,29 @@ def builtins(*commands):
         wait_for(marker, timeout=15)
 
 
+def respelled(condition):
+    """CONDITION with a number written anew, 5200 as 05200; the same value to Kodi, a new string."""
+    def number(match):
+        return match.group(1) + '0' + match.group(2) + ')'
+    if 'String.' in condition:
+        return condition
+    return re.sub(r'([,(])(\d+)\)', number, condition)
+
+
 def wait_for(condition, timeout=10):
     end = time.time() + timeout
     while time.time() < end:
         if cond(condition)[condition]:
             return
         time.sleep(0.05)
+    # A condition Kodi first saw while another thread added an info string can be false for good:
+    # AddMultiInfo has no lock and its id can be the other thread's. A whole file fails on it, when
+    # its helper waits for the focus by the same words (reproduced: 3% of new conditions with three
+    # script threads adding strings, 0 of 4600 without; the same condition written anew holds).
+    other = respelled(condition)
+    if other != condition and cond(other)[other]:
+        warnings.warn('condition stuck false in Kodi {}: {}'.format(os.environ.get('KDEV_INSTANCE', 'kodi-dev'), condition))
+        return
     raise AssertionError('timed out waiting for {}'.format(condition))
 
 
