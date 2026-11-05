@@ -6,7 +6,7 @@ from conftest import _data, action, builtin, cond, info, rpc, screenshot, wait_f
 
 pytestmark = pytest.mark.e2e
 
-MOVIE_ID = 3  # "Bulk 0000", a 10 minute test clip
+MOVIE_ID = 2  # "Kdev Beta", a 10 minute test clip without TMDb data: no plugin, no internet
 
 
 def stop():
@@ -105,8 +105,11 @@ def tracks(home):
     clip = _data() / 'kodi' / 'media' / 'nc-tracks.mkv'  # this Kodi's, also on a pool worker
     if not clip.is_file():
         clip.parent.mkdir(parents=True, exist_ok=True)
+        # under another name first: a run that dies here must not leave half a clip for the next
+        part = clip.with_name('nc-tracks-part.mkv')
         subprocess.run([sys.executable, str(pathlib.Path(__file__).parents[2] / 'tools' / 'make_tracks_clip.py'),
-                        str(clip)], check=True)
+                        str(part)], check=True)
+        part.replace(clip)
     rpc('Player.Open', {'item': {'file': '/home/kodi/.kodi/media/nc-tracks.mkv'}})
     wait_for('Player.HasVideo', timeout=20)
     wait_for('Window.IsActive(fullscreenvideo)')

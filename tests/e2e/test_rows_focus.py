@@ -8,7 +8,7 @@ import time
 import pytest
 
 from conftest import action, builtin, info, wait_for
-from test_tmdb_chain import _page, _true, matrix  # noqa: F401 (fixture)
+from test_tmdb_chain import _click_opens, _page, _true, matrix  # noqa: F401 (fixture)
 
 pytestmark = pytest.mark.e2e
 
@@ -53,7 +53,7 @@ def _third_page(matrix):
             break
         action('right')
     title = info('Container(5510).ListItem.Label')['Container(5510).ListItem.Label']
-    action('select', delay=0)
+    _click_opens(5510, 3)
     wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),3)', timeout=30)
     wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),movie)', timeout=20)
     return title

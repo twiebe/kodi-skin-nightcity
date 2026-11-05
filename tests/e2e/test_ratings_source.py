@@ -9,7 +9,7 @@ import time
 
 import pytest
 
-from conftest import action, builtin, cond, info, rpc, screenshot, wait_for
+from conftest import action, builtin, cond, info, movie_rating, rpc, screenshot, wait_for
 from test_media_info import MOVIE_RATINGS, _open_info, _shown, _visible_of
 
 pytestmark = pytest.mark.e2e
@@ -102,10 +102,7 @@ def test_library_rating_only_with_the_setting(home):
     """Jellyfin's community rating (Kodi's default rating) shows only with "Ratings only from
     TMDb Helper" off. On the info page, which reads the movie afresh (Home keeps its spotlight
     items as loaded); the heroes share the line (tests/static/test_ratings_source.py)."""
-    movieid = rpc('VideoLibrary.GetMovies', {'filter': {'field': 'title', 'operator': 'is', 'value': 'Bulk 0001'}})
-    if not movieid.get('movies'):
-        pytest.skip('no Bulk 0001 in this Kodi')
-    movieid = movieid['movies'][0]['movieid']
+    movieid = rpc('VideoLibrary.GetMovies', {'filter': {'field': 'title', 'operator': 'is', 'value': 'Kdev Beta'}})['movies'][0]['movieid']
     rpc('VideoLibrary.SetMovieDetails', {'movieid': movieid, 'rating': 7.4})
     try:
         _open_info(movieid)
@@ -119,7 +116,7 @@ def test_library_rating_only_with_the_setting(home):
     finally:
         builtin('Skin.Reset(nc.ratings.library)')
         builtin('Dialog.Close(all,true)')
-        rpc('VideoLibrary.SetMovieDetails', {'movieid': movieid, 'rating': 0.0})
+        movie_rating(movieid, None)
 
 
 def test_source_toggle_hides_its_rating(home, no_spotlight_setting):

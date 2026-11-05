@@ -60,10 +60,10 @@ def test_menu_search(home):
 
 def test_search_page_finds_library_titles(home):
     focus_tab('search')
-    builtin('NotifyAll(nightcity,search:Bulk 09)')
-    wait_for('String.IsEqual(Window(Home).Property(nc.search),Bulk 09)')
+    builtin('NotifyAll(nightcity,search:Kdev Beta)')
+    wait_for('String.IsEqual(Window(Home).Property(nc.search),Kdev Beta)')
     wait_for('Integer.IsGreater(Container(9701).NumItems,0)', timeout=15)
-    assert info('Window(Home).Property(nc.search.recent.1)')['Window(Home).Property(nc.search.recent.1)'] == 'Bulk 09'
+    assert info('Window(Home).Property(nc.search.recent.1)')['Window(Home).Property(nc.search.recent.1)'] == 'Kdev Beta'
     builtin('SetFocus(9750)')
     # past the recent terms onto the results, up reaches the terms (DESIGN.md)
     action('down')
@@ -79,7 +79,7 @@ def test_search_page_finds_library_titles(home):
 def test_search_rows_load_only_on_search_page(home):
     """The last term stays, but its rows (TMDb runs a plugin each) only load on the search page."""
     focus_tab('search')
-    builtin('NotifyAll(nightcity,search:Bulk 09)')
+    builtin('NotifyAll(nightcity,search:Kdev Beta)')
     wait_for('Integer.IsGreater(Container(9701).NumItems,0)', timeout=15)
     focus_tab('movies')
     builtin('ReloadSkin()')
@@ -93,7 +93,9 @@ def test_search_rows_load_only_on_search_page(home):
 def test_search_recent_tab_searches_again(home):
     focus_tab('search')
     builtin('NotifyAll(nightcity,search:Kdev)')
-    builtin('NotifyAll(nightcity,search:Bulk 09)')
+    # each command runs in a thread of its own: not both on the history at once
+    wait_for('String.IsEqual(Window(Home).Property(nc.search.recent.1),Kdev)')
+    builtin('NotifyAll(nightcity,search:Kdev Beta)')
     wait_for('String.IsEqual(Window(Home).Property(nc.search.recent.2),Kdev)')
     builtin('SetFocus(9772)')
     wait_for('Control.HasFocus(9772)')

@@ -19,7 +19,8 @@ def make(out):
         (tmp / 'en.srt').write_text(SRT.format('English subtitle'))
         (tmp / 'chapters.txt').write_text(CHAPTERS)
         subprocess.run([
-            'ffmpeg', '-y', '-loglevel', 'error',
+            # few threads: eight pool workers build their clips at once on a loaded machine
+            'ffmpeg', '-y', '-loglevel', 'error', '-filter_threads', '1',
             '-f', 'lavfi', '-i', 'testsrc=size=640x360:rate=25:duration=60',
             '-f', 'lavfi', '-i', 'sine=frequency=440:duration=60',
             '-f', 'lavfi', '-i', 'sine=frequency=660:duration=60',
@@ -30,7 +31,7 @@ def make(out):
             '-metadata:s:a:0', 'language=ger', '-metadata:s:a:0', 'title=Deutsch',
             '-metadata:s:a:1', 'language=eng', '-metadata:s:a:1', 'title=English',
             '-metadata:s:s:0', 'language=ger', '-metadata:s:s:1', 'language=eng',
-            str(out)], check=True)
+            '-threads', '2', str(out)], check=True)
 
 
 if __name__ == '__main__':

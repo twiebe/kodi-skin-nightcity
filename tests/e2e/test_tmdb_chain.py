@@ -5,6 +5,7 @@ Needs plugin.video.themoviedb.helper, internet access for TMDb, and a library mo
 """
 import re
 import time
+import urllib.parse
 
 import pytest
 
@@ -21,9 +22,53 @@ def _true(condition):
 
 
 def _page(position):
+    """The page at POSITION of the chain is open and the manager has seen it. Position alone is
+    set before the page before closes: a key sent then hit the closing page or the busy dialog
+    between the two and did nothing (a Back with no effect, the chain's Position never moving).
+    So wait for the page whose path the manager put at that position, then for the manager
+    (it polls every 0.5 s; a page closed before it looked hangs the chain 30 s)."""
     wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),{})'.format(position), timeout=30)
-    wait_for('Window.IsActive(movieinformation)', timeout=20)
-    time.sleep(1.5)
+    key = 'Window(Home).Property(TMDbHelper.Path.{})'.format(position)
+    query = urllib.parse.parse_qs(urllib.parse.urlsplit(info(key)[key]).query)
+    conditions = ['Window.IsActive(movieinformation)']
+    if query.get('dbid'):
+        conditions.append('String.IsEqual(ListItem.DBID,{})'.format(query['dbid'][0]))
+    elif query.get('tmdb_id'):
+        conditions.append('String.IsEqual(ListItem.Property(tmdb_id),{})'.format(query['tmdb_id'][0]))
+    if query.get('tmdb_type'):
+        conditions.append('String.IsEqual(ListItem.Property(tmdb_type),{})'.format(query['tmdb_type'][0]))
+    wait_for(' + '.join(conditions), timeout=20)
+    _manager_saw_the_page()
+    time.sleep(1.5)  # the page settles: its scripts park the focus on reopening (info_back)
+
+
+def _click_opens(cid, position):
+    """OK on the focused item of list CID opens the chain's page POSITION. The list may just
+    be loading again (the person's films load twice, the second time about 2 s after the
+    page), and the skin ignores a click on a loading list (ChainClick): then once more, as a
+    user would."""
+    action('select', delay=0)
+    try:
+        wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),{})'.format(position), timeout=5)
+    except AssertionError:
+        wait_for('!Container({}).IsUpdating'.format(cid), timeout=30)
+        action('select', delay=0)
+
+
+def _manager_saw_the_page(timeout=10):
+    """TMDb Helper's manager logs "direct.open() DONE!" once it saw the page it opened last; it
+    publishes no property for it. Without the line (another open mode) a poll's worth of time."""
+    end = time.time() + timeout
+    while time.time() < end:
+        text = _log_since(max(0, _log().stat().st_size - 400000))
+        opened = text.rfind('direct.open() [X]')
+        if opened < 0:
+            time.sleep(1.5)
+            return
+        if 'direct.open() DONE!' in text[opened:]:
+            return
+        time.sleep(0.1)
+    raise AssertionError('TMDb Helper\'s manager did not see the page in {} s'.format(timeout))
 
 
 PYTHON_RUN = re.compile(r'CPythonInvoker\((\d+), ([^)]*)\): start processing|onExecutionDone\((\d+), ')
@@ -140,12 +185,12 @@ def test_info_cast_opens_person_then_movie_and_back(matrix):
     person = info('Container(5500).ListItem.Label')['Container(5500).ListItem.Label']
     action('select')
     _page(2)  # the library page is the chain's origin
-    assert info('ListItem.Label')['ListItem.Label'] == person
+    wait_for('String.IsEqual(ListItem.Label,{})'.format(person))  # the page fills a moment after it opened
     _list_in('5510')
     screenshot('tmdb-person')
     builtin('SetFocus(5510)')
     title = info('Container(5510).ListItem.Label')['Container(5510).ListItem.Label']
-    action('select')
+    _click_opens(5510, 3)
     _page(3)
     assert info('ListItem.Property(tmdb_type)')['ListItem.Property(tmdb_type)'] == 'movie'
     assert info('ListItem.Label')['ListItem.Label'] in title  # unreleased titles come coloured
@@ -270,7 +315,7 @@ def test_person_tabs_apply_on_focus_after_back_from_a_title(matrix):
     _info_and_person(matrix)
     _list_in(5510)
     builtin('SetFocus(5510,0,absolute)')
-    action('select')
+    _click_opens(5510, 3)
     _page(3)
     action('back', delay=0)
     wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),person)', timeout=30)
@@ -286,7 +331,7 @@ def test_person_without_films_still_reaches_the_tabs(matrix):
     """A crew member with no films (The Matrix's colour timer): Down from the buttons used to do
     nothing, the tabs with the crew jobs were out of reach."""
     _info_and_person(matrix, crew_index=43)
-    assert info('Container(5510).NumItems')['Container(5510).NumItems'] == '0'
+    assert info('Container(5510).NumItems')['Container(5510).NumItems'] in ('', '0')  # '': not filled at all
     action('down', delay=1)
     assert _true('ControlGroup(5520).HasFocus()')
     screenshot('tmdb-person-without-films')
@@ -305,23 +350,54 @@ def _film_in_its_first_second(matrix, key):
     """From a person's page open their first film and press KEY while the page holds Back
     (nc.chain.guard, its first second). Kodi reports the page active a moment before its onload
     set the guard, and under a full parallel run the test may see it only after that second; so
-    the key waits for the guard. Missed it: Back goes back as usual, and it tries again."""
+    the key waits for the guard. Missed it: Back goes back as usual, and it tries again.
+
+    The guard holds Back for a second so that TMDb Helper's manager has seen the page before
+    it closes (it polls every 0.5 s and publishes nothing when it has; its "direct.open() DONE"
+    goes to kodi.log). The key waits for that line too: on a loaded box the manager can take
+    more than the second, and the held Back then closed the page under its feet and the chain
+    hung 30 s (seen with 16 busy processes next to 6 Kodis). The key counts only when the guard
+    is still up once it is done; a later key went back as a plain Back, and it tries again."""
     _info_and_person(matrix)
-    for _ in range(3):
+    for _ in range(4):
         wait_for('Integer.IsGreater(Container(5510).NumItems,0) + !Container(5510).IsUpdating', timeout=30)
         builtin('SetFocus(5510,0,absolute)')
-        action('select', delay=0)
+        offset = _log().stat().st_size
+        _click_opens(5510, 3)
         wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),movie)', timeout=30)
+        seen = 'direct.open() DONE!'
         try:
             wait_for(GUARD, timeout=2)
+            while seen not in _log_since(offset):
+                if not _true(GUARD):
+                    raise AssertionError('the guard was over before the manager saw the page')
+                time.sleep(0.05)
         except AssertionError:
-            # past the first second: the page is the manager's, a plain Back goes back
-            action('back', delay=0)
-            _page(2)
+            # past the first second: the page is the manager's, a plain Back goes back, once
+            # the manager has seen the page (before that it would hang the chain)
+            end = time.time() + 30
+            while seen not in _log_since(offset) and time.time() < end:
+                time.sleep(0.2)
+            _back_to_the_person()
             continue
         key()
-        return
+        # held: still the film page, the guard up. Else the key was late (the person's page
+        # again, whose own guard goes up), a plain Back: once more
+        if _true(GUARD + ' + Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),movie)'):
+            return
+        _page(2)
     pytest.skip('the film page never showed within its first second')
+
+
+def _back_to_the_person():
+    """A plain Back from the film page to the person's. A Back in the moment a page settles
+    (a busy dialog, a closing animation) is dropped by Kodi: one more after 3 s then."""
+    action('back', delay=0)
+    try:
+        wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),2)', timeout=3)
+    except AssertionError:
+        action('back', delay=0)
+    _page(2)
 
 
 def test_back_right_after_a_page_opens_goes_one_page_back(matrix):
@@ -395,7 +471,7 @@ def test_title_page_starts_its_lists_one_after_another(matrix):
     # kdev log shows the last matches only: compare times, not counts
     before = max([t for t, _ in _plugin_starts()] or [0])
     builtin('SetFocus(5510,0,absolute)')
-    action('select')
+    _click_opens(5510, 3)
     _page(3)
     wait_for('Integer.IsGreater(Container(5300).NumItems,0) + !Container(5300).IsUpdating', timeout=45)
     starts = [(t, name) for t, name in _plugin_starts() if t > before]
@@ -439,7 +515,7 @@ def test_back_button_names_the_page_and_waits_at_the_left(matrix):
     assert 'back to movies' in info('Control.GetLabel(9004)')['Control.GetLabel(9004)'].lower()
     wait_for('Integer.IsGreater(Container(5510).NumItems,0)', timeout=30)
     builtin('SetFocus(5510,0,absolute)')
-    action('select')
+    _click_opens(5510, 3)
     _page(3)
     wait_for('Control.IsVisible(9004)')
     focused = info('System.CurrentControlId')['System.CurrentControlId']
@@ -497,7 +573,7 @@ def test_more_on_a_title_without_library_copy_opens_its_menu(matrix):
     wait_for('Integer.IsGreater(Container(5510).NumItems,3)', timeout=30)
     before = max([t for t, _ in _plugin_starts()] or [0])
     builtin('SetFocus(5510,3,absolute)')
-    action('select')
+    _click_opens(5510, 3)
     _page(3)
     wait_for('!String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEmpty(ListItem.DBID)')
     wait_for('!Container(5500).IsUpdating + !Container(5901).IsUpdating + Control.IsVisible(9005)', timeout=30)
@@ -553,7 +629,7 @@ def test_a_new_chain_opens_the_person_on_the_buttons(matrix):
     _info_and_person(matrix)
     _list_in(5510)
     builtin('SetFocus(5510,0,absolute)')
-    action('select')
+    _click_opens(5510, 3)
     _page(3)
     _leave_chain()
     _settle()
@@ -662,7 +738,7 @@ def test_a_new_osd_chain_opens_the_person_on_the_buttons(matrix):
     _osd_chain_from_the_second_person(matrix)
     _list_in(5510)
     builtin('SetFocus(5510,0,absolute)')
-    action('select')
+    _click_opens(5510, 2)
     _page(2)
     _leave_chain()
     _settle()
@@ -698,7 +774,7 @@ def test_back_held_returns_to_the_page_the_chain_started_from(matrix):
     _page(2)
     _list_in(5510)
     builtin('SetFocus(5510,0,absolute)')
-    action('select')
+    _click_opens(5510, 3)
     _page(3)
     builtin(BACK_HELD)
     # no page in between: position 1 next, never 2
@@ -725,13 +801,13 @@ def test_back_held_on_the_first_page_is_a_back(matrix):
 
 
 def test_back_held_in_a_chain_from_the_player_returns_to_its_controls(matrix):
-    """A chain from the OSD cast row: Back held two pages deep ends it on the cast row, on the
-    person it started from."""
+    """A chain from the OSD cast row: Back held two pages deep ends it on the player's controls,
+    on their own first button (play or resume), not on the cast row (back_to_start)."""
     _osd_chain_from_the_second_person(matrix)
     _list_in(5510)
     builtin('SetFocus(5510,0,absolute)')
-    action('select')
+    _click_opens(5510, 2)
     _page(2)
     builtin(BACK_HELD)
     wait_for(IDLE, timeout=20)
-    wait_for('Window.IsActive(1141) + Control.HasFocus(6501) + Integer.IsEqual(Container(6501).CurrentItem,2)', timeout=20)
+    wait_for('Window.IsActive(videoosd) + !Window.IsVisible(1141) + Integer.IsEqual(System.CurrentControlId,602)', timeout=20)
