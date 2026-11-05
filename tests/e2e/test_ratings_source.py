@@ -1,7 +1,7 @@
 """The ratings of the spotlight titles (docs/media-info-af3.md, "Ratings source").
 
 The service points TMDb Helper at the hero while a hero button has focus (or always with
-nc.ratings.spotlight) and keeps what it fetched per title in nc.kept.<container>.*: the hero's
+nc.ratings.titleonly keeps it off them) and keeps what it fetched per title in nc.kept.<container>.*: the hero's
 ratings line stays when focus leaves and when the spotlight comes back to the title. Only The
 Matrix resolves in TMDb Helper in kodi-dev (TMDb 8.2, no keys for the online ratings).
 """
@@ -45,12 +45,11 @@ def _move_to(title):
 
 @pytest.fixture
 def no_spotlight_setting():
-    """Spotlight ratings on focus only; the TMDb source on (off by default, the only one kodi-dev
-    has without keys)."""
-    builtin('Skin.Reset(nc.ratings.spotlight)')
+    """The TMDb source on (off by default, the only one kodi-dev has without keys)."""
+    builtin('Skin.Reset(nc.ratings.titleonly)')
     builtin('Skin.SetBool(nc.ratings.show.tmdb)')
     yield
-    builtin('Skin.Reset(nc.ratings.spotlight)')
+    builtin('Skin.Reset(nc.ratings.titleonly)')
     builtin('Skin.Reset(nc.ratings.show.tmdb)')
 
 
@@ -60,11 +59,12 @@ def test_hero_keeps_its_ratings_once_fetched(home, no_spotlight_setting):
     wait_for('String.IsEqual({},9000)'.format(WIDGET))
     wait_for('String.IsEqual({},8.2) + Control.IsVisible(9030)'.format(KEPT), timeout=20)
     screenshot('ratings-hero-focused')
-    # a row takes focus: TMDb Helper lets go of the hero, the line stays
-    builtin('SetFocus(9202)')
-    wait_for('Control.HasFocus(9202) + String.IsEmpty({})'.format(WIDGET))
+    # the top menu takes focus: TMDb Helper stays on the hero, the line too
+    builtin('SetFocus(9101)')
+    wait_for('Control.HasFocus(9101)')
+    assert _label(WIDGET) == '9000'
     assert _visible(9030)
-    screenshot('ratings-hero-row')
+    screenshot('ratings-hero-menu')
     # the spotlight moves on and comes back
     builtin('Control.Move(9000,1)')
     wait_for('!String.IsEqual(Container(9000).ListItem.Label,The Matrix)')
@@ -73,29 +73,49 @@ def test_hero_keeps_its_ratings_once_fetched(home, no_spotlight_setting):
     wait_for('String.IsEqual(Container(9000).ListItem.Label,The Matrix)')
     wait_for('Control.IsVisible(9030)', timeout=2)
     assert _label(KEPT) == '8.2'
-    assert not _label(WIDGET)
     screenshot('ratings-hero-back')
 
 
-def test_hero_ratings_load_on_focus_only_by_default(home, no_spotlight_setting):
+def test_hero_ratings_load_wherever_the_cursor_is(home, no_spotlight_setting):
     builtin('SetFocus(9101)')
-    wait_for('String.IsEmpty({})'.format(WIDGET))
+    wait_for('Control.HasFocus(9101)')
+    wait_for('String.IsEqual({},9000)'.format(WIDGET))
+    # on a row title the hero shows that card: TMDb Helper lets go of the spotlight until the cursor stands
     builtin('SetFocus(9202)')
-    time.sleep(0.6)
-    assert not _label(WIDGET)
+    wait_for('Control.HasFocus(9202) + String.IsEmpty({})'.format(WIDGET))
     builtin('SetFocus(9010)')
     wait_for('String.IsEqual({},9000)'.format(WIDGET))
 
 
-def test_hero_ratings_load_without_focus_with_the_setting(home, no_spotlight_setting):
-    builtin('Skin.SetBool(nc.ratings.spotlight)')
+def test_ratings_only_on_title_pages(home, no_spotlight_setting):
+    """No lookups and no ratings for spotlight and rows, a title's page has them."""
+    _move_to('The Matrix')
+    wait_for('String.IsEqual({},8.2) + Control.IsVisible(9030)'.format(KEPT), timeout=20)
+    builtin('Skin.SetBool(nc.ratings.titleonly)')
+    wait_for('!Control.IsVisible(9030) + String.IsEmpty({}) + String.IsEmpty({})'.format(KEPT, WIDGET))
+    builtin('SetFocus(9010)')
+    wait_for('Control.HasFocus(9010)')
+    time.sleep(0.6)
+    assert not _label(WIDGET)
     builtin('SetFocus(9202)')
     wait_for('Control.HasFocus(9202)')
-    time.sleep(0.6)
-    assert _label(WIDGET) == '9000'
-    builtin('SetFocus(9101)')
-    time.sleep(0.6)
-    assert _label(WIDGET) == '9000'
+    time.sleep(2.2)  # past the stand of a followed card
+    assert not _label(WIDGET)
+    assert not _visible(9324)
+    screenshot('ratings-title-only-row')
+    # the page of The Matrix: TMDb Helper's as ever
+    movieid = rpc('VideoLibrary.GetMovies', {'filter': {'field': 'title', 'operator': 'is', 'value': 'The Matrix'}})['movies'][0]['movieid']
+    _open_info(movieid)
+    try:
+        wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.TMDb_Rating),8.2)', timeout=20)
+        wait_for(_visible_of(MOVIE_RATINGS))
+        screenshot('ratings-title-only-info')
+    finally:
+        builtin('Dialog.Close(all,true)')
+        wait_for('!Window.IsActive(movieinformation)')
+    builtin('Skin.Reset(nc.ratings.titleonly)')
+    builtin('SetFocus(9010)')
+    wait_for('String.IsEqual({},9000)'.format(WIDGET))
 
 
 def test_library_rating_only_with_the_setting(home):
@@ -141,8 +161,8 @@ def test_rating_settings_have_their_category(home):
         wait_for('Control.HasFocus(621) + !Skin.HasSetting(nc.ratings.library)')
         assert 'Jellyfin' in _label('Control.GetLabel(6)')
         action('down')
-        wait_for('Control.HasFocus(622) + !Skin.HasSetting(nc.ratings.spotlight)')
-        assert 'online requests' in _label('Control.GetLabel(6)')
+        wait_for('Control.HasFocus(622) + !Skin.HasSetting(nc.ratings.titleonly)')
+        assert 'requests to TMDb' in _label('Control.GetLabel(6)')
         action('down')
         wait_for('Control.HasFocus(631)')
         assert 'Top 250' in _label('Control.GetLabel(6)')

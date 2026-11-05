@@ -177,13 +177,14 @@ def test_page_fades_rest_while_a_video_plays():
 
 def test_page_fades_are_cheap():
     """Fades and small slides only, nothing on single list items, no close animations (they
-    hold the next window back)."""
+    hold the next window back). Longer only the hero's swap between spotlight and card, a plain
+    fade as long as the spotlight's own crossfade (HeroSwapTime)."""
     for name, c, ancestors, kind, anim in home_and_settings_animations():
         assert kind != 'WindowClose', name
         assert not [a for a in ancestors if a.tag in ('itemlayout', 'focusedlayout')], (name, kind)
         for kind_, start, end, delay, time in effects(anim):
             assert kind_ in ('fade', 'slide'), (name, kind_)
-            assert time <= 200, (name, c.get('id'), time)
+            assert time <= 200 or (kind_ == 'fade' and time == 400), (name, c.get('id'), time)
             if kind_ == 'slide':
                 assert all(abs(int(v)) <= 16 for v in (start + ',' + end).split(',')), (name, start, end)
 

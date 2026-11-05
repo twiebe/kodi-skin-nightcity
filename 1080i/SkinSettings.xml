@@ -189,8 +189,8 @@
                 </control>
             </include>
             <!-- the ratings line of heroes and info pages (Includes_Info.xml RatingsLine): only
-                 TMDb Helper's ratings, on by default (the skin bool stores off); the spotlight's
-                 ratings fetched without focus, off by default (scripts/nightcity.py hero_tick);
+                 TMDb Helper's ratings, on by default (the skin bool stores off); no ratings on
+                 spotlight and rows, off by default (scripts/nightcity.py hero_tick);
                  then one toggle per source in the line's order. IMDb and Rotten Tomatoes critics
                  are on by default (nc.ratings.hide.*), the others off (nc.ratings.show.*). -->
             <include content="SkinSettingsArea">
@@ -205,7 +205,7 @@
                 <include content="SkinSettingsToggleOptIn">
                     <param name="id" value="622"/>
                     <param name="label" value="$LOCALIZE[31443]"/>
-                    <param name="setting" value="nc.ratings.spotlight"/>
+                    <param name="setting" value="nc.ratings.titleonly"/>
                 </include>
                 <!-- a group under a separator and a heading, like the look of the main menu -->
                 <control type="group" id="630">

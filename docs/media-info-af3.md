@@ -170,9 +170,10 @@ main menu category had no room):
   shows `ListItem.Rating`, `Rating(imdb)`, `Rating(themoviedb)` or `Rating(tmdb)`; with no
   TMDb Helper data it hides. On the info page and the heroes alike. Off is the behaviour
   before, with the fallbacks.
-- **Load spotlight ratings without focus** (off by default; `nc.ratings.spotlight`). "Fetch
-  the ratings of each spotlight title as it rotates, also without focus. Off saves online
-  requests: the ratings load once the title has focus and then stay."
+- **Ratings only on title pages** (off by default; `nc.ratings.titleonly`). "Spotlight and rows
+  show no ratings, which saves requests to TMDb. A title's page still shows them." By default the
+  spotlight has its ratings wherever the cursor is. It replaced "Load spotlight ratings without
+  focus" (`nc.ratings.spotlight`).
 - **Sources**, one toggle each in the line's order: IMDb (with the Top 250 rank), TMDb, Rotten
   Tomatoes critics, Rotten Tomatoes audience, Metacritic, Trakt, Letterboxd, MDbList. IMDb and
   Rotten Tomatoes critics are on by default (`nc.ratings.hide.imdb`, `nc.ratings.hide.rt` store
@@ -199,10 +200,8 @@ does nothing off Home and the episode info page:
   makes TMDb Helper do nothing in windows without that control.
 - **Home.** The service sets `Window(Home).Property(TMDbHelper.WidgetContainer)`, not the
   skin: the hero's spotlight (9000 on home and movies, 9001 on shows; `Control.IsVisible(9300)`
-  / `(9301)`) while a hero button has focus (`ControlGroup(9050)` / `(9550)`), or always with
-  "load without focus"; empty on rows, the main menu and off Home. The rows cleared the
-  property before, so TMDb Helper never watched a row card on Home: pointing it at the hero
-  takes nothing away.
+  / `(9301)`) wherever the cursor is; empty off Home and, with "Ratings only on title pages", on
+  all of it. A row card the hero follows gets it after the cursor stood still (`follow_tick`).
 - **Episode info page.** `DialogVideoInfo.xml` sets its own `TMDbHelper.WidgetContainer` to
   the episode list (5100) when it opens for an episode and clears it on any other page (the
   property stays on the window from one page to the next). TMDb Helper then fetches the
