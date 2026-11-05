@@ -84,13 +84,15 @@
         <stop>!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_chain_claim),5)</stop>
         <onstop>ClearProperty(nc.chain.claim,home)</onstop>
     </timer>
-    <!-- Back held in the first second of an info page in a chain (ChainBackGuard,
-         Includes_Tmdb.xml): the second over, the guard goes and the held Back is done -->
+    <!-- Back held on a new info page in a chain (ChainBackGuard, Includes_Tmdb.xml) until TMDb
+         Helper's manager has seen the page (it publishes the position, fork 1:6.20.8-1): then
+         the guard goes and the held Back is done. After 5 s it goes anyway: an older helper
+         publishes nothing, and a lost property must not block Back -->
     <timer>
         <name>nc_chain_guard</name>
         <description>Hold Back until TMDb Helper's window manager saw the new info page</description>
         <start reset="true">!String.IsEmpty(Window(Home).Property(nc.chain.guard))</start>
-        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_chain_guard),1)</stop>
+        <stop>String.IsEqual(Window(Home).Property(TMDbHelper.Position.Seen),Window(Home).Property(TMDbHelper.Position)) | Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_chain_guard),5)</stop>
         <onstop>ClearProperty(nc.chain.guard,home)</onstop>
         <onstop condition="!String.IsEmpty(Window(Home).Property(nc.chain.back)) + Window.IsActive(movieinformation)">Action(Back)</onstop>
         <onstop>ClearProperty(nc.chain.back,home)</onstop>

@@ -67,6 +67,12 @@ the session start (Kodi restart per worker).
 | s1 | fc931af, -n auto after `pool up 8` on a pool that had 12 | 127.5 s | 146 passed, 174 skipped | not a result: -n auto counted the 12 instance folders, 4 workers had a stopped Kodi and conftest skipped their share silently. Now a worker without Kodi fails loudly (3919dd1) and -n auto counts the workers that answer |
 | s4 | 8 workers, 4fba6d0 (startup wait, loud missing Kodi, auto count) | 247.7 s | 0 failed, 316 passed, 4 skipped | peak load 11.5; 0 crashes |
 | s5 | 8 workers, 4fba6d0 | 258.3 s | 0 failed, 316 passed, 4 skipped | peak load 9.7; 0 crashes |
+| f0 | 8 workers, helper 6.20.8-1, ec927e8 | 259.1 s | 1 failed, 330 passed, 4 skipped | test_hero_keeps_its_ratings_once_fetched, its file then passed 3 of 3 on its own |
+| f1 | 12 workers, c2f76f5 | 207.5 s | 1 failed, 330 passed, 4 skipped, 1 error | peak load 22; test_categories_walk_like_kodis_settings, test_fullscreen_after_play (setup, Player.HasVideo) |
+| f2 | 12 workers, c2f76f5 | killed at 280 s | 22 failed, 302 passed, 4 skipped in the 328 reported | peak load 17; no summary, no crash log, 8 of the failures in a row at the end, cause not found |
+| f3 | 12 workers, c2f76f5 | 218.0 s | 3 failed, 329 passed, 4 skipped | peak load 18; test_escape_on_the_bar..., test_a_long_biography_opens_in_the_viewer, test_back_in_the_chain_returns_to_the_crew_tab; these passed on their own |
+| f4 | 8 workers, c2f76f5 | 271.3 s | 0 failed, 332 passed, 4 skipped | |
+
 ## Findings
 
 - A test could reach Home before the skin's startup script ran (the Startup screen starts it
@@ -98,15 +104,14 @@ the session start (Kodi restart per worker).
   tests stopped failing.
 - The "Back right after a page opens" tests (test_back_right_after..., test_escape_right_after...)
   are timing tests by intent. Two races, both now handled in the helper `_film_in_its_first_second`:
-  (1) the key must be done while the guard (1 s from the page's onload) is still up, so the
-  helper checks the guard after the key and tries again otherwise; (2) the skin's guard is a
-  heuristic: TMDb Helper's window manager polls every 0.5 s for the page it opened and
-  publishes nothing once it has seen it, so a held Back done after the second can still close
-  the page before the manager looked, and the chain then hangs 30 s on an empty backdrop
-  (reproduced 1 in 24 with 16 busy processes next to 6 Kodis; the manager logs
-  "direct.open() DONE!" to kodi.log, which the helper now waits for before the key). This is a
-  skin limitation under heavy load, not reachable on a normal box; the clean fix is in the
-  TMDb Helper fork: publish a property once the page was seen, and let the guard wait on it.
+  the key must land while the guard is up, so the helper checks the guard after the key and
+  tries again otherwise. The guard itself was a 1 s heuristic and now waits for
+  TMDbHelper.Position.Seen (fork 1:6.20.8-1, the manager publishes the position it saw), at
+  most 5 s. Proof with the manager patched to look 2.5 s late: new guard 12 of 12 passed, the
+  old 1 s guard 12 of 12 failed. Under 16 busy processes next to 6 Kodis (load up to 32) 60 of
+  60 passed, but no page took over 0.59 s there, so that run alone does not separate the two.
+  The tests wait on the property as well, so a pool needs the fork's helper (--addon, or a new
+  template: the template still has 1:6.20.2-1).
 
 ## Tried and dropped
 
@@ -134,19 +139,24 @@ the session start (Kodi restart per worker).
   test_up_right_after_an_osd_chain_stays_on_the_tabs (r4, r11: the second Up after the chain
   ended did not reach the tabs in 5 s), test_categories_walk_like_kodis_settings (r17, a focus
   in Kodi's settings window). Every failure report carries the test's kodi.log slice now.
-- A person's films list (5510) loads twice, the second time about 2 s after the page with the
-  same plugin path (seen in every log slice of a person page). While it loads the skin ignores
-  clicks on it (ChainClick), which is why clicks in that window did nothing. The tests click
-  again (_click_opens); the double load itself is a skin inefficiency worth a look (a property
-  the content depends on is set after the page opened).
+- A person's films list (5510) can load a second time, but not on every person page as noted
+  before. 6 person pages opened without playback loaded once (3 each on helper 6.20.8 and
+  6.20.2), and repeats within one page open were rare in the logs of two run sets. With a video
+  playing it loaded twice 3 of 3 times. The cause is
+  outside the skin: the Jellyfin add-on syncs when playback changes its user data, about 2 s
+  later it runs UpdateLibrary(video) (jellyfin_kodi/library.py), and on OnScanFinished Kodi
+  invalidates every list holding video items (CDirectoryProvider::Announce). The list then
+  reads IsUpdating and ChainClick ignores clicks. UpdateLibrary(video) alone on an idle person
+  page reproduces it. sortby on the list only helps against player events and did not help
+  here. The skin cannot opt out, so _click_opens stays. What the skin could do is accept a
+  click during such a reload (the items stay valid, TmdbFresh5510 says so), not tried: the
+  guard also keeps a new page's plugin from starting while another runs, which crashed Kodi.
 - Kodi drops a key that lands between two chain pages (closing animation, DialogBusy) without
   a log line unless a modal dialog is closing. Tests that press a key right after a chain page
   opened must go through _page() (waits for the page at that position and for the manager).
-- Proposal for the TMDb Helper fork: publish a property once the manager has seen the page it
-  opened (today only a log line), so the skin's one second guard can wait on it and the tests
-  need not read kodi.log.
 - Speed beyond this: the sum of test times is about 1870 s, so 8 workers cannot go much below
   240 s. More workers would (the pool caps at cores / 2 = 8; with the GL cap a worker needs
   about 2 cores only while it plays video, load peaks at 13 on 16 cores). Measured: 12 workers
   183.5 s and 197.6 s (r14w12, r15w12) with peak load 20 to 28 and 13 GB memory free. kdev's
-  pool size rule (cores / 2, at most 8) is the place to change that; the user decides.
+  pool size rule (cores / 2, at most 8) is the place to change that. f1 to f3 at 12 workers were
+  not green, so the default stays 8; `pool up 12` still works when asked for.
