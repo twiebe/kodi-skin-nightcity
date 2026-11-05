@@ -59,6 +59,11 @@ the session start (Kodi restart per worker).
 | r10 | 8 workers | 249.6 s | 0 failed, 315 passed, 1 error | a builtin marker not seen in 30 s at a test's setup (UDP event server lost a datagram); the batch is sent again since e05ac55 |
 | r11 | 8 workers, e05ac55 | 253.2 s | 2 failed, 314 passed | crew_tab again (Back dropped between two pages, fixed in 12ce159) and test_up_right_after_an_osd_chain_stays_on_the_tabs (second time; Up after the chain's end did not reach the tabs within 5 s, open) |
 | r12 | 8 workers, 12ce159 | 264.3 s | 1 failed, 315 passed | test_rows_focus _third_page: the select on a person's film did not start a page (no manager _on_add in the log; ChainClick runs only with !Container(5510).IsUpdating), once, open |
+| r13 | 8 workers, 291ec37 | 264.6 s | 0 failed, 316 passed, 4 skipped | peak load 10.0; 0 crashes |
+| r14w12 | 12 workers (pool up 12) | 183.5 s | 0 failed, 316 passed, 4 skipped | peak load 19.6, mean idle 22 %, 13 GB free; 0 crashes |
+| r15w12 | 12 workers | 197.6 s | 1 failed, 315 passed | peak load 28.1; test_rows_focus select during the film list's second load (fixed: _click_opens, 234c47a) |
+| r16 | 8 workers, 234c47a | 265.0 s | 2 failed, 314 passed | the same film-list click in test_stale_lists and test_more_on_a_title (now all film-list clicks go through _click_opens, f9b77b7) |
+| r17 | 8 workers, f9b77b7 | 275.4 s | 1 failed, 315 passed | test_home_sections::test_categories_walk_like_kodis_settings, Control.HasFocus(211) in the settings window, first time in 17 runs, open |
 ## Findings
 
 - Baseline failures: 9 from missing data (the pool template has 3 movies, 2 shows, 0 genres,
@@ -108,11 +113,15 @@ the session start (Kodi restart per worker).
 
 ## Open points and next steps
 
-- Remaining flakes, each seen once or twice in 12 full runs, all around TMDb Helper's window
-  manager and dropped keys: test_up_right_after_an_osd_chain_stays_on_the_tabs (r4, r11), the
-  rows_focus select (r12), test_stale_lists Position 2 (r1, under load 44 before the GL cap).
-  Every failure report now carries the test's kodi.log slice; the next occurrence should be
-  readable from that.
+- Remaining flakes, each seen once or twice in 17 full runs:
+  test_up_right_after_an_osd_chain_stays_on_the_tabs (r4, r11: the second Up after the chain
+  ended did not reach the tabs in 5 s), test_categories_walk_like_kodis_settings (r17, a focus
+  in Kodi's settings window). Every failure report carries the test's kodi.log slice now.
+- A person's films list (5510) loads twice, the second time about 2 s after the page with the
+  same plugin path (seen in every log slice of a person page). While it loads the skin ignores
+  clicks on it (ChainClick), which is why clicks in that window did nothing. The tests click
+  again (_click_opens); the double load itself is a skin inefficiency worth a look (a property
+  the content depends on is set after the page opened).
 - Kodi drops a key that lands between two chain pages (closing animation, DialogBusy) without
   a log line unless a modal dialog is closing. Tests that press a key right after a chain page
   opened must go through _page() (waits for the page at that position and for the manager).
@@ -121,5 +130,6 @@ the session start (Kodi restart per worker).
   need not read kodi.log.
 - Speed beyond this: the sum of test times is about 1870 s, so 8 workers cannot go much below
   240 s. More workers would (the pool caps at cores / 2 = 8; with the GL cap a worker needs
-  about 2 cores only while it plays video, load peaks at 13 on 16 cores). See the measurement
-  with 12 workers below, if present.
+  about 2 cores only while it plays video, load peaks at 13 on 16 cores). Measured: 12 workers
+  183.5 s and 197.6 s (r14w12, r15w12) with peak load 20 to 28 and 13 GB memory free. kdev's
+  pool size rule (cores / 2, at most 8) is the place to change that; the user decides.
