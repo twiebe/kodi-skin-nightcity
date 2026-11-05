@@ -44,9 +44,10 @@ def _page(position):
 
 def _click_opens(cid, position):
     """OK on the focused item of list CID opens the chain's page POSITION. The list may just
-    be loading again (the person's films load twice, the second time about 2 s after the
-    page), and the skin ignores a click on a loading list (ChainClick): then once more, as a
-    user would."""
+    be loading again: a library scan makes Kodi reload every list with video items, and the
+    Jellyfin add-on starts one when playback changes its user data (about 2 s after, see
+    docs/e2e-speed-notes.md). The skin ignores a click on a loading list (ChainClick): then
+    once more, as a user would."""
     action('select', delay=0)
     try:
         wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),{})'.format(position), timeout=5)

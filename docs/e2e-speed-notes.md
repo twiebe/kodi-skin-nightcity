@@ -134,11 +134,18 @@ the session start (Kodi restart per worker).
   test_up_right_after_an_osd_chain_stays_on_the_tabs (r4, r11: the second Up after the chain
   ended did not reach the tabs in 5 s), test_categories_walk_like_kodis_settings (r17, a focus
   in Kodi's settings window). Every failure report carries the test's kodi.log slice now.
-- A person's films list (5510) loads twice, the second time about 2 s after the page with the
-  same plugin path (seen in every log slice of a person page). While it loads the skin ignores
-  clicks on it (ChainClick), which is why clicks in that window did nothing. The tests click
-  again (_click_opens); the double load itself is a skin inefficiency worth a look (a property
-  the content depends on is set after the page opened).
+- A person's films list (5510) can load a second time, but not on every person page as noted
+  before. 6 person pages opened without playback loaded once (3 each on helper 6.20.8 and
+  6.20.2), and repeats within one page open were rare in the logs of two run sets. With a video
+  playing it loaded twice 3 of 3 times. The cause is
+  outside the skin: the Jellyfin add-on syncs when playback changes its user data, about 2 s
+  later it runs UpdateLibrary(video) (jellyfin_kodi/library.py), and on OnScanFinished Kodi
+  invalidates every list holding video items (CDirectoryProvider::Announce). The list then
+  reads IsUpdating and ChainClick ignores clicks. UpdateLibrary(video) alone on an idle person
+  page reproduces it. sortby on the list only helps against player events and did not help
+  here. The skin cannot opt out, so _click_opens stays. What the skin could do is accept a
+  click during such a reload (the items stay valid, TmdbFresh5510 says so), not tried: the
+  guard also keeps a new page's plugin from starting while another runs, which crashed Kodi.
 - Kodi drops a key that lands between two chain pages (closing animation, DialogBusy) without
   a log line unless a modal dialog is closing. Tests that press a key right after a chain page
   opened must go through _page() (waits for the page at that position and for the manager).
