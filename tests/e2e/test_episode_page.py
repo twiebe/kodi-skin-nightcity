@@ -1,9 +1,10 @@
 """The page of an episode opens on that episode. The page keeps the lists of the page before while
 its own load, and the library holds its rows in no set order. The show here has them as a library
 gets them when seasons or episodes are added again later: season 2 before season 1, in season 2
-episode 14 before episode 1. Those two were the first tab and the first card, and the page stayed
-on them when info_select found the season missing in the tabs of the show before, or gave up on
-tabs that took too long: S02E14, 1 of 23."""
+episode 14 before episode 1. When info_select found the season missing in the tabs of the show
+before, or gave up on tabs that took too long, the page stayed where the new lists came up: the
+tabs on the place the page before left them (or the first), the row on its first card. So S02E14,
+1 of 23, also in a library with its seasons in order, after a page on its second tab."""
 import sqlite3
 import time
 
@@ -67,6 +68,8 @@ def _add(connection):
                 connection.execute("INSERT INTO bookmark (idFile, timeInSeconds, totalTimeInSeconds, player, type) "
                                    "VALUES (?, 600, 1800, 'VideoPlayer', 1)", (row,))
             row += 1
+    # the row Kodi keeps for all seasons of a show, the last one Jellyfin for Kodi adds
+    connection.execute('INSERT INTO seasons (idSeason, idShow, season) VALUES (?, ?, -1)', (FROM + len(SEASONS), FROM))
 
 
 def _restore_seasons(connection):
@@ -147,6 +150,7 @@ def test_the_page_opens_on_the_episode(season_order):
 def test_season_tabs_and_episodes_are_in_order(season_order):
     _open(season_order)
     _ready()
+    assert info('Container(5200).NumItems')['Container(5200).NumItems'] == '10'
     assert _absolute(5200, 'Season', 10) == [str(n) for n in range(1, 11)]
     builtin('SetFocus(5200,1,absolute)')
     wait_for('String.IsEqual(Container(5100).ListItem.Season,2) + Integer.IsEqual(Container(5100).NumItems,23)')
