@@ -133,13 +133,13 @@
                 <param name="plotid" value="9051"/>
                 <!-- up to the cast on the right -->
                 <param name="ratingswidth" value="1300"/>
-                <param name="shift" value="-320"/>
+                <param name="shift" value="-330"/>
                 <param name="titlewidth" value="1250"/>
                 <param name="plotwidth" value="1176"/>
             </include>
             <include content="ProgressLine">
                 <param name="left" value="64"/>
-                <param name="top" value="562"/>
+                <param name="top" value="569"/>
                 <param name="width" value="420"/>
                 <param name="info" value="Container(5100).ListItem.PercentPlayed"/>
                 <param name="visible" value="Container(5100).ListItem.IsResumable"/>
@@ -150,9 +150,9 @@
                 <param name="item" value="Container(5100).ListItem"/>
                 <param name="hintleft" value="64"/>
                 <param name="hintwidth" value="1200"/>
-                <param name="texttop" value="360"/>
+                <param name="texttop" value="367"/>
                 <param name="moreleft" value="1244"/>
-                <param name="moretop" value="444"/>
+                <param name="moretop" value="451"/>
             </include>
             <control type="group">
                 <left>1400</left>
@@ -189,14 +189,14 @@
                 <param name="ratingid" value="9046"/>
                 <param name="plotid" value="9050"/>
                 <!-- up to the details on the right -->
-                <param name="ratingswidth" value="1000"/>
+                <param name="ratingswidth" value="990"/>
                 <param name="titlewidth" value="960"/>
                 <param name="titlefont" value="font_title"/>
                 <param name="plotwidth" value="936"/>
             </include>
             <include content="ProgressLine">
-                <param name="left" value="384"/>
-                <param name="top" value="562"/>
+                <param name="left" value="394"/>
+                <param name="top" value="569"/>
                 <param name="width" value="420"/>
                 <param name="info" value="ListItem.PercentPlayed"/>
                 <param name="visible" value="ListItem.IsResumable"/>
@@ -205,11 +205,11 @@
                 <param name="visible" value="!String.IsEqual(ListItem.DBType,episode) + !String.IsEqual(ListItem.Property(tmdb_type),person)"/>
                 <param name="more" value="!String.IsEqual(ListItem.DBType,episode) + !String.IsEqual(ListItem.Property(tmdb_type),person) + Container(9050).HasNext"/>
                 <param name="item" value="ListItem"/>
-                <param name="hintleft" value="384"/>
+                <param name="hintleft" value="394"/>
                 <param name="hintwidth" value="960"/>
-                <param name="texttop" value="360"/>
-                <param name="moreleft" value="1324"/>
-                <param name="moretop" value="444"/>
+                <param name="texttop" value="367"/>
+                <param name="moreleft" value="1334"/>
+                <param name="moretop" value="451"/>
             </include>
             <control type="grouplist">
                 <left>1400</left>
@@ -272,28 +272,28 @@
                 <left>64</left>
                 <top>116</top>
                 <include content="CutCard">
-                    <param name="width" value="280"/>
-                    <param name="height" value="420"/>
-                    <param name="mask" value="ui/mask_280x420.png"/>
+                    <param name="width" value="290"/>
+                    <param name="height" value="435"/>
+                    <param name="mask" value="ui/mask_290x435.png"/>
                     <param name="image" value="$INFO[ListItem.Art(thumb)]"/>
                 </include>
             </control>
             <include content="Kicker">
                 <param name="label" value="$INFO[ListItem.Property(birthday),$LOCALIZE[31303] ,]$INFO[ListItem.Property(born),  ·  ,]$INFO[ListItem.Property(deathday),  ·  $LOCALIZE[31304] ,]"/>
-                <param name="left" value="384"/>
+                <param name="left" value="394"/>
                 <param name="top" value="116"/>
-                <param name="width" value="1472"/>
+                <param name="width" value="1462"/>
             </include>
             <include content="GlitchTitle">
                 <param name="id" value="9031"/>
                 <param name="label" value="$INFO[ListItem.Label]"/>
-                <param name="left" value="384"/>
-                <param name="top" value="160"/>
-                <param name="width" value="1472"/>
+                <param name="left" value="394"/>
+                <param name="top" value="167"/>
+                <param name="width" value="1462"/>
             </include>
             <control type="grouplist">
-                <left>384</left>
-                <top>272</top>
+                <left>394</left>
+                <top>279</top>
                 <width>1400</width>
                 <height>36</height>
                 <orientation>horizontal</orientation>
@@ -308,9 +308,9 @@
                 </include>
             </control>
             <control type="textbox" id="9052">
-                <left>384</left>
-                <top>318</top>
-                <width>1448</width>
+                <left>394</left>
+                <top>325</top>
+                <width>1438</width>
                 <height>160</height>
                 <font>font_body</font>
                 <textcolor>text_dim</textcolor>
@@ -320,18 +320,18 @@
                 <param name="visible" value="String.IsEqual(ListItem.Property(tmdb_type),person)"/>
                 <param name="more" value="String.IsEqual(ListItem.Property(tmdb_type),person) + Container(9052).HasNext"/>
                 <param name="item" value="ListItem"/>
-                <param name="hintleft" value="384"/>
-                <param name="hintwidth" value="1472"/>
-                <param name="texttop" value="318"/>
+                <param name="hintleft" value="394"/>
+                <param name="hintwidth" value="1462"/>
+                <param name="texttop" value="325"/>
                 <param name="moreleft" value="1836"/>
-                <param name="moretop" value="441"/>
+                <param name="moretop" value="448"/>
             </include>
         </control>
 
         <control type="grouplist" id="9000">
-            <left>374</left>
-            <top>480</top>
-            <width>1020</width>
+            <left>384</left>
+            <top>487</top>
+            <width>1010</width>
             <height>74</height>
             <orientation>horizontal</orientation>
             <itemgap>-4</itemgap>
@@ -360,7 +360,7 @@
             <ondown condition="!String.IsEqual(ListItem.Property(tmdb_type),person) + Control.IsVisible(5403)">5520</ondown>
             <ondown condition="!String.IsEqual(ListItem.Property(tmdb_type),person) + !Control.IsVisible(5403)">50</ondown>
             <!-- an episode has no poster: the buttons sit under its text at the left margin -->
-            <animation effect="slide" end="-320,0" time="0" condition="String.IsEqual(ListItem.DBType,episode)">Conditional</animation>
+            <animation effect="slide" end="-330,0" time="0" condition="String.IsEqual(ListItem.DBType,episode)">Conditional</animation>
             <!-- inside a chain: back all the way, to where the chain started (ChainBackLabel names
                  it). At the left end, the way back: Left from the first button reaches it, but
                  it takes the focus only from within the row, never when the page opens; a
@@ -495,8 +495,8 @@
              button row, where Kodi opens the menu; every key goes back to the pill,
              nc_info_more_back too once the menu closed. -->
         <control type="list" id="9006">
-            <left>374</left>
-            <top>480</top>
+            <left>384</left>
+            <top>487</top>
             <width>96</width>
             <height>54</height>
             <visible>!String.IsEmpty(Window(Home).Property(nc.info.more.load))</visible>
@@ -513,7 +513,7 @@
         <!-- bottom: episodes, TMDb credits, cast and similar movies, one row at a time -->
         <control type="grouplist" id="5400">
             <left>0</left>
-            <top>612</top>
+            <top>619</top>
             <width>1920</width>
             <height>468</height>
             <orientation>vertical</orientation>

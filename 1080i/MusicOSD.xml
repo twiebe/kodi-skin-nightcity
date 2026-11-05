@@ -22,8 +22,10 @@
             <orientation>horizontal</orientation>
             <itemgap>-8</itemgap>
             <onup>noop</onup>
-            <onleft>noop</onleft>
-            <onright>620</onright>
+            <!-- the two rows wrap around at their ends; between them onto the neighbour itself, the
+                 group's last focused child stays for Up from the queue (onup 600) -->
+            <onleft>622</onleft>
+            <onright>621</onright>
             <ondown condition="Control.IsVisible(701)">701</ondown>
             <ondown condition="Control.IsVisible(700)">700</ondown>
             <ondown>noop</ondown>
@@ -59,8 +61,8 @@
             <align>right</align>
             <itemgap>-8</itemgap>
             <onup>noop</onup>
-            <onleft>600</onleft>
-            <onright>noop</onright>
+            <onleft>604</onleft>
+            <onright>601</onright>
             <ondown condition="Control.IsVisible(701)">701</ondown>
             <ondown condition="Control.IsVisible(700)">700</ondown>
             <ondown>noop</ondown>

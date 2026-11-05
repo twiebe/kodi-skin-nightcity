@@ -265,6 +265,16 @@ def test_player_screen_makes_room_for_the_osd():
     assert c['2'].get('type') == 'visualisation' and c['2'].findtext('visible') == 'Visualisation.Enabled'
 
 
+def test_music_osd_rows_lead_to_each_other():
+    """Left and right wrap around at the ends. Between the rows onto the neighbour itself: a group
+    goes back to its last focused child, which Up from the queue (onup 600) keeps using."""
+    c = controls(load('MusicOSD.xml'))
+    assert c['600'].findtext('onleft') == '622' and c['600'].findtext('onright') == '621'
+    assert c['620'].findtext('onleft') == '604' and c['620'].findtext('onright') == '601'
+    assert c['701'].findtext('onup') == '600' and c['700'].findtext('onup') == '600'
+    assert c['600'].find('defaultcontrol') is None
+
+
 def test_music_osd_buttons_and_queue():
     c = controls(load('MusicOSD.xml'))
     assert parse(ROOT / '1080i' / 'MusicOSD.xml').findtext('defaultcontrol') == '602'

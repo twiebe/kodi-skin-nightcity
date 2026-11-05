@@ -68,11 +68,14 @@
             <height>74</height>
             <orientation>horizontal</orientation>
             <itemgap>-8</itemgap>
+            <!-- from the other row always onto the neighbour: a group keeps its last focused child -->
+            <defaultcontrol always="true">611</defaultcontrol>
             <onup>noop</onup>
             <!-- Down: the chapter row, Down again the cast and crew row -->
             <ondown>ActivateWindow(videobookmarks)</ondown>
             <visible>!Window.IsActive(1141) + !Window.IsActive(videobookmarks)</visible>
-            <onleft>noop</onleft>
+            <!-- the two rows wrap around: far left and far right lead to each other -->
+            <onleft>610</onleft>
             <onright>620</onright>
             <include content="PillButton">
                 <param name="id" value="601"/>
@@ -106,12 +109,14 @@
             <orientation>horizontal</orientation>
             <align>right</align>
             <itemgap>-8</itemgap>
+            <!-- the same; without info the first button that can take the focus -->
+            <defaultcontrol always="true">612</defaultcontrol>
             <onup>noop</onup>
             <!-- Down: the chapter row, Down again the cast and crew row -->
             <ondown>ActivateWindow(videobookmarks)</ondown>
             <visible>!Window.IsActive(1141) + !Window.IsActive(videobookmarks)</visible>
             <onleft>600</onleft>
-            <onright>noop</onright>
+            <onright>601</onright>
             <!-- the page of what plays (scripts/nightcity.py player_info): a library title, else
                  TMDb Helper's page of the title it recognised; none without either -->
             <include content="PillButton">
