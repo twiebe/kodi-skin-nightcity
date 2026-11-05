@@ -210,11 +210,25 @@ def _kodi_up():
         return False
 
 
+def _worker_answers(name):
+    try:
+        port = int(dict(line.split('=', 1) for line in (KODI_DEV / 'instances' / name / 'ports.env').read_text().split())['KODI_RPC_PORT'])
+        body = json.dumps({'jsonrpc': '2.0', 'id': 1, 'method': 'JSONRPC.Ping'}).encode()
+        req = urllib.request.Request('http://localhost:{}/jsonrpc'.format(port), body, {'Content-Type': 'application/json'})
+        return 'pong' in json.load(urllib.request.urlopen(req, timeout=3)).get('result', '')
+    except (OSError, ValueError, KeyError):
+        return False
+
+
 def pytest_xdist_auto_num_workers(config):
-    """-n auto on the pool: one xdist worker per pool Kodi."""
-    if POOL:
-        return len(list((KODI_DEV / 'instances').glob(POOL + '-[0-9]*/ports.env'))) or 1
-    return None
+    """-n auto on the pool: one xdist worker per pool Kodi that answers, counted from NAME-0 up
+    (a pool brought up smaller than before keeps the folders of the workers it stopped)."""
+    if not POOL:
+        return None
+    count = 0
+    while _worker_answers('{}-{}'.format(POOL, count)):
+        count += 1
+    return count or len(list((KODI_DEV / 'instances').glob(POOL + '-[0-9]*/ports.env'))) or 1
 
 
 _lock = [None]
