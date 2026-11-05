@@ -60,11 +60,11 @@ def test_hero_keeps_its_ratings_once_fetched(home, no_spotlight_setting):
     wait_for('String.IsEqual({},9000)'.format(WIDGET))
     wait_for('String.IsEqual({},8.2) + Control.IsVisible(9030)'.format(KEPT), timeout=20)
     screenshot('ratings-hero-focused')
-    # a row takes focus: TMDb Helper lets go of the hero, the line stays
-    builtin('SetFocus(9202)')
-    wait_for('Control.HasFocus(9202) + String.IsEmpty({})'.format(WIDGET))
+    # the top menu takes focus: TMDb Helper lets go of the hero, the line stays
+    builtin('SetFocus(9101)')
+    wait_for('Control.HasFocus(9101) + String.IsEmpty({})'.format(WIDGET))
     assert _visible(9030)
-    screenshot('ratings-hero-row')
+    screenshot('ratings-hero-menu')
     # the spotlight moves on and comes back
     builtin('Control.Move(9000,1)')
     wait_for('!String.IsEqual(Container(9000).ListItem.Label,The Matrix)')
@@ -89,10 +89,15 @@ def test_hero_ratings_load_on_focus_only_by_default(home, no_spotlight_setting):
 
 def test_hero_ratings_load_without_focus_with_the_setting(home, no_spotlight_setting):
     builtin('Skin.SetBool(nc.ratings.spotlight)')
+    builtin('SetFocus(9101)')
+    wait_for('Control.HasFocus(9101)')
+    time.sleep(0.6)
+    assert _label(WIDGET) == '9000'
+    # on a row title the hero shows that card: TMDb Helper watches the card, the spotlight stands
     builtin('SetFocus(9202)')
     wait_for('Control.HasFocus(9202)')
     time.sleep(0.6)
-    assert _label(WIDGET) == '9000'
+    assert not _label(WIDGET)
     builtin('SetFocus(9101)')
     time.sleep(0.6)
     assert _label(WIDGET) == '9000'

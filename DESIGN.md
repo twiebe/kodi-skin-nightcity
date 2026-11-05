@@ -58,6 +58,15 @@ Example: on an episode, Play, Down: the episodes. Up: the season tabs. Up: Play.
 Rule of thumb: if the screen around the focus stays and only its content changes, focus applies
 it. If the screen changes, OK does.
 
+The spotlight of Home follows it too (home, movies and shows pages; the Music page stays on its
+own): the cursor on a title card of a row (movie, show, episode, season) shows that title in the
+hero with what the spotlight shows of a title, whatever kind the spotlight holds. An episode has
+its show and SxxEyy in the kicker and the poster of its show. The rotation stands meanwhile, and
+the pills, chevrons and progress line are hidden: they act on the spotlight's own title. Up from
+the top row still goes to the buttons. The hero is the spotlight again, at once, as soon as the
+cursor is anywhere else: on its buttons, in the top menu, on a card that is no title (a genre tab).
+The same title stands there and its interval starts anew.
+
 The quick menu on Home follows it too: the cursor on the icon next to the clock shows the menu,
 Down or OK go into it, Up from its top comes out onto the icon with the menu still shown, Left
 or Right off the icon hide it. Back, in the menu or on the icon, closes it: the focus goes back

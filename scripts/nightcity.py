@@ -1817,7 +1817,9 @@ def music_info(kind, dbid):
 # episode's info page points it at its episode list itself (DialogVideoInfo.xml, 5100). The
 # service keeps what TMDb Helper fetched per title for the session and shows the kept ratings of
 # the item on screen in nc.kept.<container>.*, which the ratings line reads: they stay once
-# fetched, also when the spotlight or the list comes back to a title. While a video plays it
+# fetched, also when the spotlight or the list comes back to a title. While the hero follows a
+# row title (FollowHero, group 9302) TMDb Helper is on the focused card and the kept ratings of that
+# card go to nc.kept.follow.*. While a video plays it
 # keeps TMDb Helper's player ratings (TMDbHelper.Player.*) the same way in nc.kept.player.*.
 
 HERO_SOURCES = ('IMDb_Rating', 'Top250', 'TMDb_Rating', 'RottenTomatoes_Rating', 'RottenTomatoes_UserMeter',
@@ -1829,6 +1831,9 @@ HERO_POLL = 0.25  # s between two looks
 HERO_PROPS = 'nc.kept.{}.{}'
 # container of the spotlight, the group on screen with its hero, the group of its buttons
 HEROES = (('9000', '9300', '9050'), ('9001', '9301', '9550'))
+# the group of the hero while it follows a row title, where its ratings go
+FOLLOW_GROUP = '9302'
+FOLLOW_KEPT = 'follow'
 # what names a title: (property name, ListItem info); the last one guards the line
 HERO_KEY = (('dbtype', 'DBType'), ('dbid', 'DBID'))
 EPISODE_KEY = (('label', 'Label'), ('season', 'Season'), ('episode', 'Episode'))
@@ -1918,11 +1923,12 @@ def _hero_same_title(home, dbid, label):
     return base == dbid if base and dbid else home.getProperty('TMDbHelper.ListItem.base_label') == label
 
 
-def _keep(kept, home, container, fields, watched, now):
-    """Keep TMDb Helper's ratings of the item of CONTAINER (named by FIELDS) when it WATCHED that
-    item and is done with it; show the kept ratings of that item."""
+def _keep(kept, home, container, fields, watched, now, item=None):
+    """Keep TMDb Helper's ratings of the item of CONTAINER (named by FIELDS; ITEM: the info prefix
+    of another item, kept under the name CONTAINER) when it WATCHED that item and is done with it;
+    show the kept ratings of that item."""
     import xbmc
-    item = 'Container({}).ListItem.'.format(container)
+    item = item or 'Container({}).ListItem.'.format(container)
     values = tuple((name, xbmc.getInfoLabel(item + info)) for name, info in fields)
     key = values if all(v for _, v in values) else None
     dbtype = xbmc.getInfoLabel(item + 'DBType')
@@ -1998,6 +2004,12 @@ def hero_tick(kept, now):
         return
     # the info page of a movie over Home watches its own item
     if xbmc.getCondVisibility(HERO_DIALOG):
+        return
+    # the hero shows the focused row card: TMDb Helper watches that without a widget container
+    if xbmc.getCondVisibility(HERO_SHOWN.format(FOLLOW_GROUP)):
+        if home.getProperty('TMDbHelper.WidgetContainer'):
+            home.clearProperty('TMDbHelper.WidgetContainer')
+        _keep(kept, home, FOLLOW_KEPT, HERO_KEY, True, now, item='ListItem.')
         return
     container, buttons = next(((c, b) for c, group, b in HEROES if xbmc.getCondVisibility(HERO_SHOWN.format(group))),
                               ('', ''))
