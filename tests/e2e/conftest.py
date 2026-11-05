@@ -140,7 +140,9 @@ def builtins(*commands):
     so a long row of them takes no round trip each."""
     _sync[0] += 1
     _send_builtins(*commands, 'SetProperty(nc.test.sync,{},home)'.format(_sync[0]))
-    wait_for('String.IsEqual(Window(Home).Property(nc.test.sync),{})'.format(_sync[0]))
+    # 30 s: the marker waits behind the command and whatever blocks Kodi's main thread at the
+    # time (a window loading plugin content, a dialog closing); this is a sync, not a check
+    wait_for('String.IsEqual(Window(Home).Property(nc.test.sync),{})'.format(_sync[0]), timeout=30)
 
 
 def wait_for(condition, timeout=10):
