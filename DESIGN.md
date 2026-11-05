@@ -26,6 +26,14 @@ group, evenly over the rail whatever the sizes of the groups, and the grid follo
 applies). OK goes to the group's first title, Left stays there too, Back returns to the card it came
 from. With fewer than three groups there is no bar: Right stays on the menu.
 
+The cursor glides from group to group. While it has the focus the column beside it (menu, title and
+plot) zooms to 85 %, out of the way of the widest label, and comes back when the focus leaves.
+
+The music library has the same bar in both views, on the levels sorted by title, artist, album, genre
+or year. Other sorts (an album's tracks, duration) have no groups to name, so no bar. The parent
+folder and "all albums" belong to no group. Esc and the like stay what they were off the bar: they
+leave the window.
+
 ### Selectors are skipped from above
 
 A selector is a row that chooses what the content below it shows: season tabs above the

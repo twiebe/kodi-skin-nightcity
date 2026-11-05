@@ -52,39 +52,6 @@
             </focusedlayout>
             <content target="videos" sortby="$VAR[LibrarySortMethod]" sortorder="$VAR[LibrarySortDirection]">$VAR[LibraryPath]</content>
         </control>
-        <control type="grouplist" id="5100">
-            <left>1470</left>
-            <top>98</top>
-            <width>400</width>
-            <height>220</height>
-            <orientation>vertical</orientation>
-            <itemgap>-4</itemgap>
-            <onleft>5000</onleft>
-            <onright condition="!String.IsEmpty(Window(Home).Property(nc.lib.bar))">5200</onright>
-            <onup>noop</onup>
-            <ondown>noop</ondown>
-            <include content="PillButton">
-                <param name="id" value="5101"/>
-                <param name="onfocus" value="NotifyAll(nightcity,lib_bar:prepare)"/>
-                <param name="width" value="400"/>
-                <param name="label" value="$LOCALIZE[31116]: $VAR[LibrarySortLabel]"/>
-                
-                <!-- title, year, added, rating, title... (conditions are all checked before any runs) -->
-                <onclick condition="String.IsEmpty(Skin.String(nc.sort)) | String.IsEqual(Skin.String(nc.sort),sorttitle)">Skin.SetString(nc.sort,year)</onclick>
-                <onclick condition="String.IsEqual(Skin.String(nc.sort),year)">Skin.SetString(nc.sort,dateadded)</onclick>
-                <onclick condition="String.IsEqual(Skin.String(nc.sort),dateadded)">Skin.SetString(nc.sort,rating)</onclick>
-                <onclick condition="String.IsEqual(Skin.String(nc.sort),rating)">Skin.SetString(nc.sort,sorttitle)</onclick>
-                <onclick>NotifyAll(nightcity,lib_bar:changed)</onclick>
-            </include>
-            <include content="PillButton">
-                <param name="id" value="5102"/>
-                <param name="width" value="400"/>
-                <param name="label" value="$VAR[LibraryDirectionLabel]"/>
-                <param name="onclick" value="Skin.ToggleSetting(nc.sortdesc)"/>
-                <param name="onfocus" value="NotifyAll(nightcity,lib_bar:prepare)"/>
-                <onclick>NotifyAll(nightcity,lib_bar:changed)</onclick>
-            </include>
-        </control>
         <!-- Where the grid stands, always: a faint rail, the grid's scrollbar as its mark. Right from
              the menu above makes it a cursor that names the group, a letter, a year, a month or a
              whole rating (scripts/nightcity.py LibBar moves it): Up and Down one group, evenly over
@@ -111,34 +78,74 @@
             <texturesliderbar colordiffuse="text_mute">ui/white.png</texturesliderbar>
             <texturesliderbarfocus colordiffuse="text_mute">ui/white.png</texturesliderbarfocus>
         </control>
-        <!-- the focused title, large on the right -->
-        <include content="Kicker">
-            <param name="label" value="$INFO[Container(5000).ListItem.Year]$INFO[Container(5000).ListItem.Genre, · ,]"/>
-            <param name="left" value="1480"/>
-            <param name="top" value="260"/>
-            <param name="width" value="380"/>
-        </include>
-        <control type="textbox">
-            <left>1480</left>
-            <top>300</top>
-            <width>380</width>
-            <height>180</height>
-            <font>font_title</font>
-            <textcolor>text</textcolor>
-            <label>[UPPERCASE]$INFO[Container(5000).ListItem.Label][/UPPERCASE]</label>
-        </control>
-        <control type="textbox">
-            <left>1480</left>
-            <top>490</top>
-            <width>380</width>
-            <height>420</height>
-            <font>font_small</font>
-            <textcolor>text_dim</textcolor>
-            <label>$INFO[Container(5000).ListItem.Plot]</label>
+        <!-- The menu and the focused title. A text cannot change its width smoothly and a group can
+             zoom: while the bar has the focus the column shrinks out of the cursor's way. -->
+        <control type="group">
+            <description>column</description>
+            <animation effect="zoom" start="100" end="85" center="1203,98" time="180" tween="cubic" easing="out" condition="Control.HasFocus(5200)">Conditional</animation>
+            <control type="grouplist" id="5100">
+                <left>1470</left>
+                <top>98</top>
+                <width>400</width>
+                <height>220</height>
+                <orientation>vertical</orientation>
+                <itemgap>-4</itemgap>
+                <onleft>5000</onleft>
+                <onright condition="!String.IsEmpty(Window(Home).Property(nc.lib.bar))">5200</onright>
+                <onup>noop</onup>
+                <ondown>noop</ondown>
+                <include content="PillButton">
+                    <param name="id" value="5101"/>
+                    <param name="onfocus" value="NotifyAll(nightcity,lib_bar:prepare)"/>
+                    <param name="width" value="400"/>
+                    <param name="label" value="$LOCALIZE[31116]: $VAR[LibrarySortLabel]"/>
+                
+                    <!-- title, year, added, rating, title... (conditions are all checked before any runs) -->
+                    <onclick condition="String.IsEmpty(Skin.String(nc.sort)) | String.IsEqual(Skin.String(nc.sort),sorttitle)">Skin.SetString(nc.sort,year)</onclick>
+                    <onclick condition="String.IsEqual(Skin.String(nc.sort),year)">Skin.SetString(nc.sort,dateadded)</onclick>
+                    <onclick condition="String.IsEqual(Skin.String(nc.sort),dateadded)">Skin.SetString(nc.sort,rating)</onclick>
+                    <onclick condition="String.IsEqual(Skin.String(nc.sort),rating)">Skin.SetString(nc.sort,sorttitle)</onclick>
+                    <onclick>NotifyAll(nightcity,lib_bar:changed)</onclick>
+                </include>
+                <include content="PillButton">
+                    <param name="id" value="5102"/>
+                    <param name="width" value="400"/>
+                    <param name="label" value="$VAR[LibraryDirectionLabel]"/>
+                    <param name="onclick" value="Skin.ToggleSetting(nc.sortdesc)"/>
+                    <param name="onfocus" value="NotifyAll(nightcity,lib_bar:prepare)"/>
+                    <onclick>NotifyAll(nightcity,lib_bar:changed)</onclick>
+                </include>
+            </control>
+            <!-- the focused title, large on the right -->
+            <include content="Kicker">
+                <param name="label" value="$INFO[Container(5000).ListItem.Year]$INFO[Container(5000).ListItem.Genre, · ,]"/>
+                <param name="left" value="1480"/>
+                <param name="top" value="260"/>
+                <param name="width" value="380"/>
+            </include>
+            <control type="textbox">
+                <left>1480</left>
+                <top>300</top>
+                <width>380</width>
+                <height>180</height>
+                <font>font_title</font>
+                <textcolor>text</textcolor>
+                <label>[UPPERCASE]$INFO[Container(5000).ListItem.Label][/UPPERCASE]</label>
+            </control>
+            <control type="textbox">
+                <left>1480</left>
+                <top>490</top>
+                <width>380</width>
+                <height>420</height>
+                <font>font_small</font>
+                <textcolor>text_dim</textcolor>
+                <label>$INFO[Container(5000).ListItem.Plot]</label>
+            </control>
         </control>
         <include content="PillButton">
             <param name="id" value="5200"/>
-            <param name="width" value="116"/>
+            <param name="width" value="60"/>
+            <param name="textoffsetx" value="10"/>
             <param name="label" value="$INFO[Window(Home).Property(nc.lib.label)]"/>
             <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.lib.bar))"/>
             <!-- nothing shows without the focus: it lies on the rail, waiting. Alpha 0, not colour 0: that

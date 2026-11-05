@@ -382,6 +382,35 @@ def test_the_cursor_leaves_nothing_behind(library, key):
     assert _bright_beside_the_rail(screenshot('library-bar-left-' + key)) == 0
 
 
+def _edges_at_the_column_end(path):
+    """How much the rows differ at the right end of the menu's buttons: their frames or plain background."""
+    image = Image.open(path).convert('L')
+    scale = image.width / 1920
+    strip = image.crop((int(1800 * scale), int(100 * scale), int(1840 * scale), int(300 * scale)))
+    rows = [sum(strip.crop((0, y, strip.width, y + 1)).getdata()) / strip.width for y in range(strip.height)]
+    return max(rows) - min(rows)
+
+
+def test_the_column_makes_way_while_the_bar_has_the_focus(library):
+    """The middle stop: the cursor is far below the buttons, so only the column can be in this strip."""
+    _open()
+    time.sleep(0.5)
+    grid = _edges_at_the_column_end(screenshot('library-bar-column-wide'))
+    _to_bar()
+    action('down', delay=0.2)
+    _label_is('M')
+    time.sleep(0.5)
+    bar = _edges_at_the_column_end(screenshot('library-bar-column-narrow'))
+    assert bar < grid / 2, (grid, bar)
+    action('left', delay=0.2)
+    _focus_is(5101)
+    action('left', delay=0.2)
+    _focus_is(GRID)
+    time.sleep(0.5)
+    back = _edges_at_the_column_end(screenshot('library-bar-column-back'))
+    assert back > grid / 2, (grid, back)
+
+
 def test_the_rail_stands_without_the_focus(library):
     _open()
     assert cond('Control.IsVisible(5900)')['Control.IsVisible(5900)'] is not None
