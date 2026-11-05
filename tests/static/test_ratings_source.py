@@ -1,8 +1,8 @@
 """Where the ratings line takes its ratings from (docs/media-info-af3.md, "Ratings source").
 
 A Ratings category in the skin settings: only TMDb Helper's ratings (on by default, the skin
-bool nc.ratings.library stores off), the spotlight's ratings loaded without focus (off by
-default, nc.ratings.spotlight), and one toggle per source. The heroes on Home read the ratings the skin service kept for
+bool nc.ratings.library stores off), ratings only on title pages (off by default,
+nc.ratings.titleonly), and one toggle per source. The heroes on Home read the ratings the skin service kept for
 their current title (nc.kept.<container>.*), so they stay once fetched; the service also sets
 TMDbHelper.WidgetContainer, the skin no longer does.
 """
@@ -62,12 +62,33 @@ def test_only_tmdb_helper_ratings_is_a_toggle_on_by_default():
     assert 'Skin.ToggleSetting(nc.ratings.library)' in [a.text for a in toggle.findall('onclick')]
 
 
-def test_spotlight_ratings_without_focus_is_a_toggle_off_by_default():
+def test_ratings_only_on_title_pages_is_a_toggle_off_by_default():
     toggle = _toggle('622')
     assert toggle.get('type') == 'radiobutton'
     assert toggle.findtext('label') == '$LOCALIZE[31443]'
-    assert toggle.findtext('selected') == 'Skin.HasSetting(nc.ratings.spotlight)'
-    assert 'Skin.ToggleSetting(nc.ratings.spotlight)' in [a.text for a in toggle.findall('onclick')]
+    assert toggle.findtext('selected') == 'Skin.HasSetting(nc.ratings.titleonly)'
+    assert 'Skin.ToggleSetting(nc.ratings.titleonly)' in [a.text for a in toggle.findall('onclick')]
+    strings = (ROOT / 'language' / 'resource.language.en_gb' / 'strings.po').read_text(encoding='utf-8')
+    assert 'msgid "Ratings only on title pages"' in strings
+    assert ('msgid "Spotlight and rows show no ratings, which saves requests to TMDb. '
+            'A title\'s page still shows them."') in strings
+
+
+def test_old_spotlight_ratings_setting_is_gone():
+    for path in list(SKIN.glob('*.xml')) + [ROOT / 'scripts' / 'nightcity.py']:
+        assert 'nc.ratings.spotlight' not in path.read_text(encoding='utf-8'), path.name
+
+
+def test_heroes_show_no_library_rating_either_with_the_setting_but_the_info_page_does():
+    home = (SKIN / 'Includes_Home.xml').read_text(encoding='utf-8')
+    body = re.search(r'<include name="HeroBody">(.*?)\n    </include>', home, re.S).group(1)
+    assert '<param name="library" default="Skin.HasSetting(nc.ratings.library)"/>' in body
+    line = re.search(r'<include content="RatingsLine">(.*?)</include>', body, re.S).group(1)
+    assert '<param name="library" value="$PARAM[library]"/>' in line
+    for hero in ('MovieHero', 'ShowHero', 'FollowHero'):
+        hero_body = re.search(r'<include name="{}">(.*?)\n    </include>'.format(hero), home, re.S).group(1)
+        assert '<param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)"/>' in hero_body, hero
+    assert 'nc.ratings.titleonly' not in (SKIN / 'DialogVideoInfo.xml').read_text(encoding='utf-8')
 
 
 # (toggle id, label, skin bool, on by default: the bool stores off)
@@ -134,7 +155,7 @@ def test_sources_are_toggles_in_the_lines_order():
 
 
 def test_rating_toggles_explain_themselves():
-    """The description says what the spotlight setting costs, and where a source comes from."""
+    """The description says what ratings only on title pages saves, and where a source comes from."""
     values = dict(_descriptions())
     conditions = [c for c, _ in _descriptions()]
     for cid, desc in [('621', 31442), ('622', 31444), ('9007', 31447)] + [
@@ -142,8 +163,7 @@ def test_rating_toggles_explain_themselves():
         key = 'Control.HasFocus({})'.format(cid)
         assert values.get(key) == '$LOCALIZE[{}]'.format(desc), cid
         assert conditions.index(key) < next(i for i, c in enumerate(conditions) if c and 'ControlGroup(500)' in c)
-    assert 'online requests' in _string(31444)
-    assert 'focus' in _string(31444)
+    assert 'requests to TMDb' in _string(31444)
     trakt, metacritic, mdblist = _string(31465), _string(31464), _string(31467)
     assert 'Trakt account' in trakt and 'not MDbList' in trakt
     assert 'weighted average' in metacritic and 'critic' in metacritic
@@ -180,7 +200,7 @@ def test_library_ratings_only_when_the_setting_allows():
         for label, visible in own:
             assert LIBRARY in visible, label
         # the line itself: no library rating keeps it up with the setting on
-        assert 'ListItem.Rating,0.0) + {}]'.format(LIBRARY) in _visible(line), _visible(line)
+        assert 'ListItem.Rating,0.0) + {}'.format(LIBRARY) in _visible(line), _visible(line)
 
 
 @pytest.mark.parametrize('container, line', HEROES)
@@ -208,8 +228,8 @@ def test_info_page_still_reads_tmdb_helper():
 
 
 def test_skin_leaves_the_widget_container_of_home_to_the_service():
-    """The service points TMDb Helper at the hero (scripts/nightcity.py hero_tick): on focus, or
-    always with "load without focus". Only an info page sets its own (local) one."""
+    """The service points TMDb Helper at the hero (scripts/nightcity.py hero_tick). Only an info
+    page sets its own (local) one."""
     for path in SKIN.glob('*.xml'):
         text = re.sub(r'<!--.*?-->', '', path.read_text(encoding='utf-8'), flags=re.S)
         found = re.findall(r'[\w(),]*TMDbHelper\.WidgetContainer[^<"]*', text)

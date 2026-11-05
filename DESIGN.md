@@ -31,8 +31,9 @@ The cursor glides from group to group. The column beside it (menu, title and plo
 edge and the same distance to the cards and to the rail; while the bar has the focus its right edge
 comes in as far as the widest label needs.
 
-The music library has the same bar in both views, on the levels sorted by title, artist, album, genre
-or year. Other sorts (an album's tracks, duration) have no groups to name, so no bar. The parent
+The music library has the same bar in both views, on the lists of albums, artists and genres sorted by
+title, artist, album, genre or year. Other sorts have no groups to name, and nobody jumps through a
+list of songs, so no bar there. The parent
 folder and "all albums" belong to no group. Esc and the like stay what they were off the bar: they
 leave the window.
 
@@ -57,6 +58,33 @@ Example: on an episode, Play, Down: the episodes. Up: the season tabs. Up: Play.
 
 Rule of thumb: if the screen around the focus stays and only its content changes, focus applies
 it. If the screen changes, OK does.
+
+The spotlight of Home follows it too (home, movies, shows and music pages): the cursor on a title card of a row (movie, show, episode, season) shows that title in the
+hero with what the spotlight shows of a title, whatever kind the spotlight holds. An episode has
+its show and SxxEyy in the kicker and the poster of its show. The rotation stands meanwhile, and
+the pills, chevrons and progress line are hidden: they act on the spotlight's own title. Up from
+the top row still goes to the buttons. The hero is the spotlight again as soon as the cursor is
+anywhere else: on its buttons, in the top menu, on a card that is no title (a genre tab). The same
+title stands there and its interval starts anew.
+
+The Music page's album spotlight does the same on an album or an artist card, with what it shows of
+an album as far as the card has it; a genre leaves it alone. All of it from the library, no online
+lookups, and no ratings since that spotlight has none. Its buttons are out of sight meanwhile.
+
+Both swaps fade 400 ms, as long as the spotlight's own crossfade of poster, logo and backdrop. Onto
+a card the spotlight fades out under the card's hero fading in. Off a card the card's hero goes at
+once (it shows whatever has the focus, there is nothing left to fade out) and the spotlight fades
+in, text and pills with it. Between two cards it is a title change as in the spotlight: text at
+once, poster and backdrop crossfade.
+
+Ratings are on everywhere by default: the spotlight has them wherever the cursor is, also in the top
+menu while it rotates. "Ratings only on title pages" (off by default) saves the requests: spotlight
+and rows then show none and fetch none, a title's page shows them as ever.
+
+The online ratings of the card come once the cursor stood still on it for 1.5 s (the service points
+TMDb Helper at the row, 2 s at worst until the request goes out): moving along a row costs no
+request, coming back to a card none either. Until they are there the line shows nothing, never the
+ratings of another title. Cards without a library id (Trending) get them too.
 
 The quick menu on Home follows it too: the cursor on the icon next to the clock shows the menu,
 Down or OK go into it, Up from its top comes out onto the icon with the menu still shown, Left

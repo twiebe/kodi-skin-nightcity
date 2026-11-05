@@ -36,7 +36,7 @@
         <!-- the backdrops fade over to each other (BackdropFade) -->
         <control type="group">
             <visible>!ControlGroup(9210).HasFocus() + !ControlGroup(9410).HasFocus() + !ControlGroup(9510).HasFocus() + !ControlGroup(9710).HasFocus() + !ControlGroup(9810).HasFocus()</visible>
-            <include>BackdropFade</include>
+            <include>HeroSwapFade</include>
             <control type="group">
                 <visible>Control.IsVisible(9300)</visible>
                 <include content="SharedBackdropFade">
@@ -68,7 +68,7 @@
         </control>
         <control type="group">
             <visible>ControlGroup(9210).HasFocus() | ControlGroup(9410).HasFocus() | ControlGroup(9510).HasFocus() | ControlGroup(9710).HasFocus() | ControlGroup(9810).HasFocus()</visible>
-            <include>BackdropFade</include>
+            <include>HeroSwapFade</include>
             <include content="FanartBackdrop">
                 <param name="art" value="ListItem.Art(fanart)"/>
             </include>
@@ -99,9 +99,11 @@
         <include>SearchWidgetLoaders</include>
         <include condition="!String.IsEqual(Skin.String(SpotlightSource),off) | !String.IsEqual(Skin.String(nc.movies.spotlight),off)">MovieHero</include>
         <include condition="!String.IsEqual(Skin.String(nc.shows.spotlight),off)">ShowHero</include>
+        <include>FollowHero</include>
         <include>SystemHero</include>
         <include>SearchHero</include>
         <include>MusicHero</include>
+        <include>MusicFollowHero</include>
         <include content="PageRows" condition="!String.IsEqual(Skin.String(SpotlightSource),off)">
             <param name="id" value="9210"/>
             <param name="page" value="String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)"/>

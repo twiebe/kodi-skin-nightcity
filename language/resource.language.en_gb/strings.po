@@ -1002,11 +1002,11 @@ msgid "Show only the ratings TMDb Helper fetched for exactly this title. Off: th
 msgstr ""
 
 msgctxt "#31443"
-msgid "Load spotlight ratings without focus"
+msgid "Ratings only on title pages"
 msgstr ""
 
 msgctxt "#31444"
-msgid "Fetch the ratings of each spotlight title as it rotates, also without focus. Off saves online requests: the ratings load once the title has focus and then stay."
+msgid "Spotlight and rows show no ratings, which saves requests to TMDb. A title's page still shows them."
 msgstr ""
 
 msgctxt "#31445"

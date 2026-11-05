@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
+    <!-- The cursor is on a title card of a row, on a page with its spotlight on: the hero shows that
+         title (FollowHero) and the rotation stands. Everywhere else, also on a card that is no
+         title, the spotlight is its random self. The Music page has its own (MusicFollows). -->
+    <expression name="SpotlightFollows">[[[ControlGroup(9210).HasFocus() + !String.IsEqual(Skin.String(SpotlightSource),off)] | [ControlGroup(9410).HasFocus() + !String.IsEqual(Skin.String(nc.movies.spotlight),off)] | [ControlGroup(9510).HasFocus() + !String.IsEqual(Skin.String(nc.shows.spotlight),off)]] + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,season)]]</expression>
+    <!-- nc.kept.follow.* name the focused card: by library id, without one (Trending) by year and label -->
+    <expression name="FollowKeptIsCard">[[!String.IsEmpty(Window(Home).Property(nc.kept.follow.dbid)) + Integer.IsEqual(ListItem.DBID,Window(Home).Property(nc.kept.follow.dbid))] | [String.IsEmpty(ListItem.DBID) + !String.IsEmpty(Window(Home).Property(nc.kept.follow.label)) + String.IsEqual(ListItem.Label,Window(Home).Property(nc.kept.follow.label)) + String.IsEqual(ListItem.Year,Window(Home).Property(nc.kept.follow.year))]] + String.IsEqual(ListItem.DBType,Window(Home).Property(nc.kept.follow.dbtype))</expression>
     <!-- Off-screen list holding the spotlight items; autoscroll rotates the selection. The focused
          item sits at the left with the next three in view: their artwork loads before they come up. -->
     <include name="SpotlightList">
@@ -82,7 +88,10 @@
     <include name="SpotlightAutoscroll">
         <param name="time"/>
         <definition>
-            <autoscroll time="$PARAM[time]">!Skin.TimerIsRunning(nc_spot_hold) + !Window.IsActive(fullscreenvideo) + !Window.IsActive(movieinformation) + !Window.IsActive(musicinformation) + !System.HasActiveModalDialog</autoscroll>
+            <!-- Kodi starts the interval over whenever this turns true again. 9302, 9303 (Music): the
+                 hero follows a row title, the group holds the expression because $EXP is not
+                 resolved here -->
+            <autoscroll time="$PARAM[time]">!Control.IsVisible(9302) + !Control.IsVisible(9303) + !Skin.TimerIsRunning(nc_spot_hold) + !Window.IsActive(fullscreenvideo) + !Window.IsActive(movieinformation) + !Window.IsActive(musicinformation) + !System.HasActiveModalDialog</autoscroll>
         </definition>
     </include>
 
@@ -222,6 +231,7 @@
         <param name="ratingswidth" default="1400"/>
         <param name="ratingsprefix" default="TMDbHelper.ListItem."/>
         <param name="ratingswait" default="String.IsEmpty(Window(Home).Property(TMDbHelper.IsUpdatingRatings))"/>
+        <param name="library" default="Skin.HasSetting(nc.ratings.library)"/>
         <param name="page" default="true"/>
         <param name="fade" default="false"/>
         <param name="shared" default="false"/>
@@ -278,7 +288,7 @@
                     <left>384</left>
                     <top>154</top>
                     <width>760</width>
-                    <height>110</height>
+                    <height>100</height>
                     <aspectratio aligny="bottom" align="left">keep</aspectratio>
                     <!-- a title change crossfades poster, logo and backdrop -->
                     <fadetime>400</fadetime>
@@ -334,6 +344,7 @@
                     <param name="width" value="$PARAM[ratingswidth]"/>
                     <param name="prefix" value="$PARAM[ratingsprefix]"/>
                     <param name="wait" value="$PARAM[ratingswait]"/>
+                    <param name="library" value="$PARAM[library]"/>
                 </include>
                 <control type="textbox" id="$PARAM[plotid]">
                     <left>384</left>
@@ -474,26 +485,33 @@
          in one after the other: poster, text, then the buttons. They stay visible between home
          and movies, so they fade on each of the two pages (SharedPageFade). -->
     <include name="MovieHero">
-        <include content="HeroBody">
-            <param name="item" value="Container(9000).ListItem"/>
-            <param name="kicker" value="$INFO[Container(9000).ListItem.Genre]"/>
-            <param name="titleid" value="9020"/>
-            <param name="logoid" value="9021"/>
-            <param name="metaid" value="9040"/>
-            <param name="ratingid" value="9030"/>
-            <param name="plotid" value="9022"/>
-            <param name="tech" value="true"/>
-            <!-- the ratings the service kept for the title on screen (scripts/nightcity.py hero_tick),
-                 complete when they are there -->
-            <param name="tmdb" value="Integer.IsEqual(Container(9000).ListItem.DBID,Window(Home).Property(nc.kept.9000.dbid)) + String.IsEqual(Container(9000).ListItem.DBType,Window(Home).Property(nc.kept.9000.dbtype))"/>
-            <param name="ratingsprefix" value="nc.kept.9000."/>
-            <param name="ratingswait" value="true"/>
-            <param name="page" value="[[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + !String.IsEqual(Skin.String(SpotlightSource),off)] | [String.IsEqual(Window(Home).Property(nc.page),movies) + !String.IsEqual(Skin.String(nc.movies.spotlight),off)]"/>
-            <param name="fade" value="true"/>
-            <param name="shared" value="true"/>
-            <param name="page1" value="[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)]"/>
-            <param name="page2" value="String.IsEqual(Window(Home).Property(nc.page),movies)"/>
-        </include>
+        <!-- around HeroBody: Kodi does not update the children of a hidden group, so coming back
+             from a row runs no page fade, only the swap's -->
+        <control type="group">
+            <visible>!$EXP[SpotlightFollows]</visible>
+            <include>HeroSwapFade</include>
+            <include content="HeroBody">
+                <param name="item" value="Container(9000).ListItem"/>
+                <param name="kicker" value="$INFO[Container(9000).ListItem.Genre]"/>
+                <param name="titleid" value="9020"/>
+                <param name="logoid" value="9021"/>
+                <param name="metaid" value="9040"/>
+                <param name="ratingid" value="9030"/>
+                <param name="plotid" value="9022"/>
+                <param name="tech" value="true"/>
+                <!-- the ratings the service kept for the title on screen (scripts/nightcity.py hero_tick),
+                     complete when they are there -->
+                <param name="tmdb" value="Integer.IsEqual(Container(9000).ListItem.DBID,Window(Home).Property(nc.kept.9000.dbid)) + String.IsEqual(Container(9000).ListItem.DBType,Window(Home).Property(nc.kept.9000.dbtype))"/>
+                <param name="ratingsprefix" value="nc.kept.9000."/>
+                <param name="ratingswait" value="true"/>
+                <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)"/>
+                <param name="page" value="[[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + !String.IsEqual(Skin.String(SpotlightSource),off)] | [String.IsEqual(Window(Home).Property(nc.page),movies) + !String.IsEqual(Skin.String(nc.movies.spotlight),off)]"/>
+                <param name="fade" value="true"/>
+                <param name="shared" value="true"/>
+                <param name="page1" value="[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)]"/>
+                <param name="page2" value="String.IsEqual(Window(Home).Property(nc.page),movies)"/>
+            </include>
+        </control>
         <!-- 9300: the movie hero is on screen -->
         <control type="group" id="9300">
             <visible>[[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + !String.IsEqual(Skin.String(SpotlightSource),off)] | [String.IsEqual(Window(Home).Property(nc.page),movies) + !String.IsEqual(Skin.String(nc.movies.spotlight),off)]</visible>
@@ -542,53 +560,65 @@
                     <include>MovieSpotlightUpDown</include>
                 </include>
             </control>
-            <control type="grouplist">
-                <left>374</left>
-                <top>480</top>
-                <width>1420</width>
-                <height>74</height>
-                <orientation>horizontal</orientation>
-                <itemgap>-4</itemgap>
-                <include content="SpotlightPill">
-                    <param name="button" value="9010"/>
-                    <param name="label" value="$VAR[SpotlightPlayLabel]"/>
-                    <param name="color" value="accent"/>
-                    <param name="textcolor" value="accent"/>
+            <!-- they act on the spotlight's own title; the buttons they draw stay for Up -->
+            <control type="group">
+                <visible>!$EXP[SpotlightFollows]</visible>
+                <include>HeroSwapFade</include>
+                <control type="grouplist">
+                    <left>374</left>
+                    <top>480</top>
+                    <width>1420</width>
+                    <height>74</height>
+                    <orientation>horizontal</orientation>
+                    <itemgap>-4</itemgap>
+                    <include content="SpotlightPill">
+                        <param name="button" value="9010"/>
+                        <param name="label" value="$VAR[SpotlightPlayLabel]"/>
+                        <param name="color" value="accent"/>
+                        <param name="textcolor" value="accent"/>
+                    </include>
+                    <include content="SpotlightPill">
+                        <param name="button" value="9011"/>
+                        <param name="label" value="$LOCALIZE[31011]"/>
+                    </include>
+                    <include content="SpotlightPill">
+                        <param name="button" value="9012"/>
+                        <param name="label" value="$LOCALIZE[31101] »"/>
+                        <param name="visible" value="String.IsEqual(Window(Home).Property(nc.page),movies)"/>
+                    </include>
+                    <include>SpotlightMore</include>
+                </control>
+                <include content="ProgressLine">
+                    <param name="left" value="384"/>
+                    <param name="top" value="562"/>
+                    <param name="width" value="420"/>
+                    <param name="info" value="Container(9000).ListItem.PercentPlayed"/>
+                    <param name="visible" value="Container(9000).ListItem.IsResumable"/>
                 </include>
-                <include content="SpotlightPill">
-                    <param name="button" value="9011"/>
-                    <param name="label" value="$LOCALIZE[31011]"/>
-                </include>
-                <include content="SpotlightPill">
-                    <param name="button" value="9012"/>
-                    <param name="label" value="$LOCALIZE[31101] »"/>
-                    <param name="visible" value="String.IsEqual(Window(Home).Property(nc.page),movies)"/>
-                </include>
-                <include>SpotlightMore</include>
             </control>
-            <include content="ProgressLine">
-                <param name="left" value="384"/>
-                <param name="top" value="562"/>
-                <param name="width" value="420"/>
-                <param name="info" value="Container(9000).ListItem.PercentPlayed"/>
-                <param name="visible" value="Container(9000).ListItem.IsResumable"/>
-            </include>
         </control>
     </include>
 
     <!-- Hero of the shows page: the show spotlight -->
     <include name="ShowHero">
-        <include content="HeroBody">
-            <param name="item" value="Container(9001).ListItem"/>
-            <param name="kicker" value="$LOCALIZE[31100]"/>
-            <param name="titleid" value="9560"/>
-            <param name="tmdb" value="Integer.IsEqual(Container(9001).ListItem.DBID,Window(Home).Property(nc.kept.9001.dbid)) + String.IsEqual(Container(9001).ListItem.DBType,Window(Home).Property(nc.kept.9001.dbtype))"/>
-            <param name="ratingsprefix" value="nc.kept.9001."/>
-            <param name="ratingswait" value="true"/>
-            <param name="ratingid" value="9561"/>
-            <param name="page" value="String.IsEqual(Window(Home).Property(nc.page),shows)"/>
-            <param name="fade" value="true"/>
-        </include>
+        <!-- around HeroBody: Kodi does not update the children of a hidden group, so coming back
+             from a row runs no page fade, only the swap's -->
+        <control type="group">
+            <visible>!$EXP[SpotlightFollows]</visible>
+            <include>HeroSwapFade</include>
+            <include content="HeroBody">
+                <param name="item" value="Container(9001).ListItem"/>
+                <param name="kicker" value="$LOCALIZE[31100]"/>
+                <param name="titleid" value="9560"/>
+                <param name="tmdb" value="Integer.IsEqual(Container(9001).ListItem.DBID,Window(Home).Property(nc.kept.9001.dbid)) + String.IsEqual(Container(9001).ListItem.DBType,Window(Home).Property(nc.kept.9001.dbtype))"/>
+                <param name="ratingsprefix" value="nc.kept.9001."/>
+                <param name="ratingswait" value="true"/>
+                <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)"/>
+                <param name="ratingid" value="9561"/>
+                <param name="page" value="String.IsEqual(Window(Home).Property(nc.page),shows)"/>
+                <param name="fade" value="true"/>
+            </include>
+        </control>
         <!-- 9301: the show hero is on screen -->
         <control type="group" id="9301">
             <visible>String.IsEqual(Window(Home).Property(nc.page),shows)</visible>
@@ -634,29 +664,92 @@
                     <ondown>9510</ondown>
                 </include>
             </control>
-            <control type="grouplist">
-                <left>374</left>
-                <top>480</top>
-                <width>1420</width>
-                <height>74</height>
-                <orientation>horizontal</orientation>
-                <itemgap>-4</itemgap>
-                <include content="SpotlightPill">
-                    <param name="button" value="9551"/>
-                    <param name="label" value="▶ $LOCALIZE[31106]"/>
-                    <param name="color" value="accent"/>
-                    <param name="textcolor" value="accent"/>
-                </include>
-                <include content="SpotlightPill">
-                    <param name="button" value="9552"/>
-                    <param name="label" value="$LOCALIZE[31011]"/>
-                </include>
-                <include content="SpotlightPill">
-                    <param name="button" value="9553"/>
-                    <param name="label" value="$LOCALIZE[31102] »"/>
-                </include>
-                <include>SpotlightMore</include>
+            <!-- they act on the spotlight's own title; the buttons they draw stay for Up -->
+            <control type="group">
+                <visible>!$EXP[SpotlightFollows]</visible>
+                <include>HeroSwapFade</include>
+                <control type="grouplist">
+                    <left>374</left>
+                    <top>480</top>
+                    <width>1420</width>
+                    <height>74</height>
+                    <orientation>horizontal</orientation>
+                    <itemgap>-4</itemgap>
+                    <include content="SpotlightPill">
+                        <param name="button" value="9551"/>
+                        <param name="label" value="▶ $LOCALIZE[31106]"/>
+                        <param name="color" value="accent"/>
+                        <param name="textcolor" value="accent"/>
+                    </include>
+                    <include content="SpotlightPill">
+                        <param name="button" value="9552"/>
+                        <param name="label" value="$LOCALIZE[31011]"/>
+                    </include>
+                    <include content="SpotlightPill">
+                        <param name="button" value="9553"/>
+                        <param name="label" value="$LOCALIZE[31102] »"/>
+                    </include>
+                    <include>SpotlightMore</include>
+                </control>
             </control>
+        </control>
+    </include>
+
+    <!-- The hero while the cursor is on a row title (SpotlightFollows): the focused card with what
+         the spotlight shows of a title, whatever kind the spotlight holds. 9302 is what the
+         rotation and the service (hero_tick) read. No page fade: the rows come and go with their
+         page. The swap to and from a row fades (HeroSwapFade, HeroSwapIn), a move along a row is
+         what a title change is: labels at once, poster and backdrop crossfade. -->
+    <include name="FollowHero">
+        <control type="group" id="9302">
+            <visible>$EXP[SpotlightFollows]</visible>
+            <include>HeroSwapIn</include>
+            <animation type="WindowOpen" condition="!Player.HasVideo">
+                <effect type="fade" start="0" end="100" time="FadeTime"/>
+            </animation>
+            <!-- an episode has the poster of its show (CardArt) -->
+            <control type="group">
+                <left>64</left>
+                <top>116</top>
+                <include content="CutCard">
+                    <param name="width" value="280"/>
+                    <param name="height" value="420"/>
+                    <param name="mask" value="ui/mask_280x420.png"/>
+                    <param name="image" value="$VAR[CardArt]"/>
+                    <param name="fadetime" value="400"/>
+                    <param name="item" value="ListItem"/>
+                    <control type="textbox">
+                        <left>20</left>
+                        <top>20</top>
+                        <width>240</width>
+                        <height>380</height>
+                        <font>font_label</font>
+                        <textcolor>text_mute</textcolor>
+                        <label>$INFO[ListItem.Title]</label>
+                        <visible>String.IsEmpty(ListItem.Art(poster)) + String.IsEmpty(ListItem.Art(tvshow.poster))</visible>
+                    </control>
+                </include>
+            </control>
+            <include content="HeroBody">
+                <param name="item" value="ListItem"/>
+                <param name="kicker" value="$VAR[FollowKicker]"/>
+                <param name="poster" value="false"/>
+                <param name="titleid" value="9320"/>
+                <param name="logoid" value="9321"/>
+                <param name="kickerid" value="9322"/>
+                <param name="metaid" value="9323"/>
+                <param name="ratingid" value="9324"/>
+                <param name="plotid" value="9325"/>
+                <!-- the genre is the kicker -->
+                <param name="tech" value="true"/>
+                <param name="techlabel" value="$VAR[ItemResolution]$VAR[ItemHdr, ,]"/>
+                <param name="audiolabel" value="$VAR[ItemAudio]"/>
+                <!-- what the service kept for this card (scripts/nightcity.py hero_tick) -->
+                <param name="tmdb" value="$EXP[FollowKeptIsCard]"/>
+                <param name="ratingsprefix" value="nc.kept.follow."/>
+                <param name="ratingswait" value="true"/>
+                <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)"/>
+            </include>
         </control>
     </include>
 
