@@ -471,7 +471,7 @@ GUARD = '!String.IsEmpty(Window(Home).Property(nc.chain.guard))'
 def test_back_waits_until_the_manager_saw_the_page():
     """TMDb Helper's manager polls every 0.5 s for the page it opened; Back before it saw the page
     left the chain hanging on an empty backdrop for 30 s, then closed every page. In a chain the
-    first second of a page holds Back (nc.chain.back) and does it when the second is over."""
+    page holds Back (nc.chain.back) until the manager saw it and does it then."""
     from focus import LISTS, Page
     from navigation import FOCUSABLE
     onloads = _onloads('DialogVideoInfo.xml')
@@ -489,7 +489,11 @@ def test_back_waits_until_the_manager_saw_the_page():
     timer = _timer('nc_chain_guard')
     assert timer.findtext('start') == GUARD
     assert timer.find('start').get('reset') == 'true'
-    assert timer.findtext('stop') == 'Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_chain_guard),1)'
+    # the manager publishes the position it saw; an older helper publishes nothing, and a lost
+    # property must not block Back
+    assert timer.findtext('stop') == ('String.IsEqual(Window(Home).Property(TMDbHelper.Position.Seen),'
+                                      'Window(Home).Property(TMDbHelper.Position)) | '
+                                      'Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_chain_guard),5)')
     onstop = [(o.get('condition') or '', o.text) for o in timer.findall('onstop')]
     assert onstop == [('', 'ClearProperty(nc.chain.guard,home)'),
                       ('!String.IsEmpty(Window(Home).Property(nc.chain.back)) + Window.IsActive(movieinformation)', 'Action(Back)'),
