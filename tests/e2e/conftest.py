@@ -309,6 +309,15 @@ def pytest_runtest_makereport(item, call):
 def pytest_collection_modifyitems(config, items):
     if _kodi_up():
         return
+    if POOL:
+        # a pool worker's Kodi answers late after pool up or a crash: wait, and fail loudly
+        # rather than skip a worker's share of the suite (174 skips in one run, by load)
+        end = time.time() + 120
+        while time.time() < end and not _kodi_up():
+            time.sleep(2)
+        if not _kodi_up():
+            raise RuntimeError('Kodi of {} does not answer JSON-RPC'.format(os.environ.get('KDEV_INSTANCE')))
+        return
     skip = pytest.mark.skip(reason='kodi-dev not running (python tools/kodidev_setup.py)')
     for item in items:
         if 'e2e' in item.keywords:
