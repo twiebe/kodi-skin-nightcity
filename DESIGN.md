@@ -26,8 +26,9 @@ group, evenly over the rail whatever the sizes of the groups, and the grid follo
 applies). OK goes to the group's first title, Left stays there too, Back returns to the card it came
 from. With fewer than three groups there is no bar: Right stays on the menu.
 
-The cursor glides from group to group. While it has the focus the column beside it (menu, title and
-plot) zooms to 85 %, out of the way of the widest label, and comes back when the focus leaves.
+The cursor glides from group to group. The column beside it (menu, title and plot) keeps its left
+edge and the same distance to the cards and to the rail; while the bar has the focus its right edge
+comes in as far as the widest label needs.
 
 The music library has the same bar in both views, on the levels sorted by title, artist, album, genre
 or year. Other sorts (an album's tracks, duration) have no groups to name, so no bar. The parent

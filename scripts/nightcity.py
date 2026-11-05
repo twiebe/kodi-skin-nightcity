@@ -2044,7 +2044,9 @@ BAR_RIGHT = 1912  # px, right edge of the cursor, padded for its glow like every
 BAR_BUTTON = 74  # px, height of a pill
 BAR_MIN_GROUPS = 3  # fewer and a jump is no use: Right stays on the menu
 BAR_FOLLOW = 0.15  # s after the last press the grid follows
-BAR_GLIDE = 120  # ms, the cursor on its way to the next group
+BAR_MENU_BUTTONS = (5101, 5102)  # the library grid's menu: wide, narrow only while the bar has the focus
+BAR_MENU_WIDE, BAR_MENU_NARROW = 459, 380
+BAR_GLIDE_FRAME = 0.016  # s between the steps of the cursor on its way to the next group
 BAR_NONE = 'none'
 BAR_MONTHS = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
 
@@ -2109,22 +2111,30 @@ def bar_y(index, count):
 
 
 def bar_width(label):
-    return 44 + 16 * len(label)
+    return max(60, 34 + 15 * len(label))
 
 
-def bar_glide(old_y, new_y):
-    """The animation of a cursor that already stands at new_y: it starts from where it was."""
-    return [('conditional', 'effect=slide start=0,{} end=0,0 time={} tween=cubic easing=out condition=true'.format(
-        old_y - new_y, BAR_GLIDE))]
+def bar_glide_step(y, goal):
+    """The cursor's next place on its way: quick at first, slowing down, never past the goal. By
+    position alone: a new position and an animation from the old one are two calls, and Kodi can
+    draw between them, so that the cursor flashes at its goal before it sets off."""
+    distance = goal - y
+    if abs(distance) <= 4:
+        return goal
+    return y + int(distance * 0.45)
 
 
 class LibBar:
     """What the bar knows of the grid. Each press is a thread of its own, hence the lock.
     GRID and KEYS are functions: the music library has two views, whichever shows."""
 
-    def __init__(self, window, window_python, menu, grid, keys):
+    def __init__(self, window, window_python, menu, grid, keys, menu_buttons=()):
         self.window, self.window_python, self.menu, self.grid, self.keys_now = window, window_python, menu, grid, keys
+        self.menu_buttons = menu_buttons
         self.lock = threading.Lock()
+        self.glide_lock = threading.Lock()
+        self.gliding = False
+        self.x, self.y, self.goal = 0, 0, 0
         self.keys, self.groups = [], []
         self.index = 0
         self.origin = 0
@@ -2151,17 +2161,49 @@ class LibBar:
             if self.groups and self.is_open():
                 self._to_top_row(self.groups[self.index][1])
 
-    def _show(self, old_y=None):
+    def _show(self, glide=False):
         label = self.groups[self.index][0]
         _home().setProperty('nc.lib.label', label)
         window = self._window()  # held: a window takes its controls with it when it goes
         button = window.getControl(BAR_BUTTON_ID)
         width = bar_width(label)
         button.setWidth(width)
-        y = bar_y(self.index, len(self.groups))
-        button.setPosition(BAR_RIGHT - width, y)
-        if old_y is not None and old_y != y:
-            button.setAnimations(bar_glide(old_y, y))
+        self.x = BAR_RIGHT - width
+        self.goal = bar_y(self.index, len(self.groups))
+        if not glide:
+            self.y = self.goal
+        button.setPosition(self.x, self.y)
+        if glide:
+            with self.glide_lock:
+                if self.gliding:
+                    return  # on its way: it takes the new goal along
+                self.gliding = True
+            threading.Thread(target=self._glide, daemon=True).start()
+
+    def _glide(self):
+        """One at a time, whatever the number of presses: each step goes for the latest goal."""
+        window = self._window()  # held: a window takes its controls with it when it goes
+        button = window.getControl(BAR_BUTTON_ID)
+        monitor = _monitor()
+        while True:
+            with self.glide_lock:
+                if self.y == self.goal or not self.is_open():
+                    self.y = self.goal
+                    self.gliding = False
+                    return
+                self.y = bar_glide_step(self.y, self.goal)
+            button.setPosition(self.x, self.y)
+            if monitor.waitForAbort(BAR_GLIDE_FRAME):
+                self.gliding = False
+                return
+
+    def _menu_width(self, width):
+        window = self._window()  # held: a window takes its controls with it when it goes
+        for cid in self.menu_buttons:
+            window.getControl(cid).setWidth(width)
+
+    def leave(self):
+        self._menu_width(BAR_MENU_WIDE)
 
     def prepare(self):
         """The table of the grid as it stands: titles change while their number stays, and reading
@@ -2179,6 +2221,7 @@ class LibBar:
         if len(self.groups) < BAR_MIN_GROUPS:
             xbmc.executebuiltin(self.menu)
             return
+        self._menu_width(BAR_MENU_NARROW)
         grid = 'Container({})'.format(self.grid())
         # CurrentItem does not count a parent folder, ListItemAbsolute and SetFocus do
         parent = 1 if xbmc.getCondVisibility(grid + '.ListItemAbsolute(0).IsParentFolder') else 0
@@ -2189,9 +2232,8 @@ class LibBar:
 
     def step(self, delta):
         if self.groups:
-            old_y = bar_y(self.index, len(self.groups))
             self.index = bar_step(self.index, delta, len(self.groups))
-            self._show(old_y)
+            self._show(glide=True)
             self.follow.changed()
 
     def go(self, position):
@@ -2252,13 +2294,13 @@ def _music_keys():
             for i in range(count)]
 
 
-_lib_bar = LibBar(LIB_WINDOW, LIB_WINDOW_PYTHON, LIB_MENU_BUTTON, lambda: LIB_GRID, _library_keys)
+_lib_bar = LibBar(LIB_WINDOW, LIB_WINDOW_PYTHON, LIB_MENU_BUTTON, lambda: LIB_GRID, _library_keys, BAR_MENU_BUTTONS)
 _music_bar = LibBar(MUSIC_WINDOW, MUSIC_WINDOW, MUSIC_MENU_BUTTON, _music_grid, _music_keys)
 
 
 def _bar_command(bar, action, args):
     """The bar's keys: changed (the window opened or the sort changed, the grid reloads), prepare
-    (the menu has the focus: at once, Right may come right after), enter, step:N, ok, cancel."""
+    (the menu has the focus: at once, Right may come right after), enter, step:N, ok, cancel, leave."""
     import xbmc
     if action == 'changed':
         _home().clearProperty('nc.lib.bar')
@@ -2275,7 +2317,7 @@ def _bar_command(bar, action, args):
             bar.step(int(args[0]))
         else:
             {'changed': bar.prepare, 'prepare': bar.prepare, 'enter': bar.enter, 'ok': bar.ok,
-             'cancel': bar.cancel}[action]()
+             'cancel': bar.cancel, 'leave': bar.leave}[action]()
 
 
 def lib_bar(action, *args):

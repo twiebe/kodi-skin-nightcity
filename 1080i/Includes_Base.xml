@@ -302,6 +302,37 @@
 
 
     <!-- Small pink line above a title: genre, or show and episode -->
+    <!-- The focused title beside the library grid (Custom_1110_Library.xml) -->
+    <include name="LibraryTitle">
+        <param name="width"/>
+        <definition>
+            <include content="Kicker">
+                <param name="label" value="$INFO[Container(5000).ListItem.Year]$INFO[Container(5000).ListItem.Genre, · ,]"/>
+                <param name="left" value="1431"/>
+                <param name="top" value="260"/>
+                <param name="width" value="$PARAM[width]"/>
+            </include>
+            <control type="textbox">
+                <left>1431</left>
+                <top>300</top>
+                <width>$PARAM[width]</width>
+                <height>180</height>
+                <font>font_title</font>
+                <textcolor>text</textcolor>
+                <label>[UPPERCASE]$INFO[Container(5000).ListItem.Label][/UPPERCASE]</label>
+            </control>
+            <control type="textbox">
+                <left>1431</left>
+                <top>490</top>
+                <width>$PARAM[width]</width>
+                <height>420</height>
+                <font>font_small</font>
+                <textcolor>text_dim</textcolor>
+                <label>$INFO[Container(5000).ListItem.Plot]</label>
+            </control>
+        </definition>
+    </include>
+
     <include name="Kicker">
         <param name="id" default="0"/>
         <param name="label"/>

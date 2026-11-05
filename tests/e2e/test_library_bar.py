@@ -383,32 +383,63 @@ def test_the_cursor_leaves_nothing_behind(library, key):
 
 
 def _edges_at_the_column_end(path):
-    """How much the rows differ at the right end of the menu's buttons: their frames or plain background."""
+    """How much the rows differ at the right end of the wide menu: its frames, or background."""
     image = Image.open(path).convert('L')
     scale = image.width / 1920
-    strip = image.crop((int(1800 * scale), int(100 * scale), int(1840 * scale), int(300 * scale)))
+    strip = image.crop((int(1810 * scale), int(100 * scale), int(1850 * scale), int(250 * scale)))
     rows = [sum(strip.crop((0, y, strip.width, y + 1)).getdata()) / strip.width for y in range(strip.height)]
     return max(rows) - min(rows)
 
 
-def test_the_column_makes_way_while_the_bar_has_the_focus(library):
-    """The middle stop: the cursor is far below the buttons, so only the column can be in this strip."""
+def test_the_menu_is_narrow_only_while_the_bar_has_the_focus(library):
+    """The middle stop: the cursor is far below the buttons, so only the menu can be in this strip."""
     _open()
-    time.sleep(0.5)
-    grid = _edges_at_the_column_end(screenshot('library-bar-column-wide'))
+    time.sleep(0.3)
+    grid = _edges_at_the_column_end(screenshot('library-bar-menu-wide'))
     _to_bar()
     action('down', delay=0.2)
     _label_is('M')
     time.sleep(0.5)
-    bar = _edges_at_the_column_end(screenshot('library-bar-column-narrow'))
+    bar = _edges_at_the_column_end(screenshot('library-bar-menu-narrow'))
     assert bar < grid / 2, (grid, bar)
-    action('left', delay=0.2)
+    action('left', delay=0.3)
     _focus_is(5101)
-    action('left', delay=0.2)
+    action('left', delay=0.3)
     _focus_is(GRID)
-    time.sleep(0.5)
-    back = _edges_at_the_column_end(screenshot('library-bar-column-back'))
+    time.sleep(0.3)
+    back = _edges_at_the_column_end(screenshot('library-bar-menu-back'))
     assert back > grid / 2, (grid, back)
+
+
+def test_a_window_reopened_after_leaving_from_the_bar_has_the_wide_menu(library):
+    _open()
+    _to_bar()
+    time.sleep(0.3)
+    builtin('ActivateWindow(home)')
+    wait_for('!Window.IsActive(1110)')
+    _open()
+    time.sleep(0.5)
+    assert _edges_at_the_column_end(screenshot('library-bar-menu-reopened')) > 3
+
+
+def _cursor_row(path):
+    """The middle of the cursor's bright rows, in screen px of 1080 lines."""
+    image = Image.open(path).convert('RGB')
+    scale = image.width / 1920
+    strip = image.crop((int(1878 * scale), 0, int(1894 * scale), image.height))
+    rows = [y for y in range(strip.height) if max(strip.getpixel((strip.width // 2, y))) > 150]
+    assert rows
+    return (rows[0] + rows[-1]) / 2 / scale
+
+
+@pytest.mark.parametrize('keys,stop', [(['down'], 1), (['down', 'down', 'up'], 1), (['down', 'down'], 2)])
+def test_the_cursor_ends_on_its_stop_of_the_rail(library, keys, stop):
+    """Evenly over the rail: the first stop at its top, the last at its end."""
+    _open()
+    _to_bar()
+    action(*keys, delay=0.05)
+    time.sleep(0.6)
+    assert abs(_cursor_row(screenshot('library-bar-stop')) - (98 + 450 * stop)) < 12
 
 
 def test_the_rail_stands_without_the_focus(library):

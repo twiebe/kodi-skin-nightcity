@@ -129,35 +129,50 @@ def test_no_colour_of_the_skin_is_zero():
         assert '"00000000"' not in text and '>00000000<' not in text, path.name
 
 
-def _column():
-    return next(c for c in parse(ROOT / '1080i' / WINDOW).iter('control')
-                if c.get('type') == 'group' and c.findtext('description') == 'column')
+def _title(description):
+    group = next(c for c in parse(ROOT / '1080i' / WINDOW).iter('control')
+                 if c.get('type') == 'group' and c.findtext('description') == description)
+    call = next(i for i in group.iter('include') if i.get('content') == 'LibraryTitle')
+    return group.findtext('visible'), int(next(p.get('value') for p in call.findall('param') if p.get('name') == 'width'))
 
 
-def test_the_column_makes_way_for_the_widest_cursor_with_a_light_animation():
-    """A text cannot change its width smoothly, a group can zoom: the column shrinks while the bar
-    has the focus, clear of the widest cursor and of the grid, and comes back by itself."""
+def test_the_column_is_wide_until_the_bar_has_the_focus():
+    """The left edge stays: nothing moves when the bar gets the focus, the right edge only comes in
+    as far as the widest cursor needs. As wide it keeps the same distance to the rail as to the
+    cards. Pills and cursor are padded 10 px for their glow."""
     nc = _nightcity()
-    column = _column()
-    animation = next(a for a in column.findall('animation') if a.text == 'Conditional')
-    assert animation.get('condition') == 'Control.HasFocus({})'.format(BAR)
-    assert animation.get('effect') == 'zoom'
-    assert 0 < int(animation.get('time')) <= 250
-    scale = int(animation.get('end')) / 100
-    center = int(animation.get('center').split(',')[0])
-    menu = column.find('control')
-    left, right = int(menu.findtext('left')), int(menu.findtext('left')) + int(menu.findtext('width'))
-    assert center + (right - center) * scale <= nc.BAR_RIGHT - nc.bar_width('Nov 26')
-    grid = _controls()['5000']
-    assert center + (left - center) * scale >= int(grid.findtext('left')) + int(grid.findtext('width'))
+    controls = _controls()
+    root = parse(ROOT / '1080i' / WINDOW)
+    limit = nc.BAR_RIGHT - nc.bar_width('Nov 26') + 10
+    menu = controls['5100']
+    left = int(menu.findtext('left')) + 10
+    assert left - 1403 == 28  # the end of the last card
+    assert int(menu.findtext('left')) >= int(controls['5000'].findtext('left')) + int(controls['5000'].findtext('width'))
+    assert left + nc.BAR_MENU_WIDE - 20 == 1898 - 28  # the rail
+    assert int(menu.findtext('width')) == nc.BAR_MENU_WIDE
+    assert left + nc.BAR_MENU_NARROW - 20 <= limit
+    visible, wide = _title('title wide')
+    assert visible == '!Control.HasFocus({})'.format(BAR)
+    assert wide == nc.BAR_MENU_WIDE - 20
+    visible, narrow = _title('title narrow')
+    assert visible == 'Control.HasFocus({})'.format(BAR)
+    assert narrow == nc.BAR_MENU_NARROW - 20 and left + narrow <= limit
+    assert nc.BAR_MENU_BUTTONS == (5101, 5102)
+    for cid in ('5101', '5102'):
+        call = next(i for i in root.iter('include') if i.get('content') == 'PillButton'
+                    and any(p.get('name') == 'id' and p.get('value') == cid for p in i.findall('param')))
+        assert {p.get('name'): p.get('value') for p in call.findall('param')}['width'] == str(nc.BAR_MENU_WIDE)
+    assert not [a for a in root.iter('animation') if '5200' in (a.get('condition') or '')]
 
 
-def test_all_of_the_column_makes_way():
-    ids = {c.get('id') for c in _column().iter('control')}
-    assert '5100' in ids
-    assert len([c for c in _column().iter('control') if c.get('type') == 'textbox']) == 2
-    assert [i for i in _column().iter('include') if i.get('content') == 'Kicker']
-    assert '5200' not in ids
+def test_the_menu_grows_back_when_the_bar_loses_the_focus():
+    assert _actions(_call(), 'onunfocus') == [(None, 'NotifyAll(nightcity,lib_bar:leave)')]
+
+
+def test_the_cursor_moves_by_position_only():
+    """A new position and an animation that starts from the old one are two calls: Kodi can draw
+    between them, and the cursor flashes at its goal before it sets off."""
+    assert 'setAnimations' not in (ROOT / 'scripts' / 'nightcity.py').read_text(encoding='utf-8')
 
 
 def test_the_cursor_is_narrow_enough_for_its_text():
