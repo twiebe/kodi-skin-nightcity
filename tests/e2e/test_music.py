@@ -122,6 +122,49 @@ def test_a_track_plays_the_album_from_there(music):
     assert holds('Player.HasAudio')
 
 
+def test_osd_rows_wrap_and_land_on_the_neighbour(music):
+    open_album()
+    builtin('SetFocus(5050,0,absolute)')
+    wait_for('Control.HasFocus(5050)')
+    action('select')
+    wait_for('Window.IsActive(visualisation)')
+    wait_for('Integer.IsEqual(MusicPlayer.PlaylistPosition,1)')
+    wait_for('!Window.IsVisible(musicinformation)')
+    player_screen()
+    action('osd')
+    wait_for('Window.IsActive(musicosd)')
+    wait_for('Control.HasFocus(602)')
+    # the right row last on repeat, the left one on stop: neither counts from the other row
+    builtin('SetFocus(622)')
+    wait_for('Control.HasFocus(622)')
+    builtin('SetFocus(604)')
+    wait_for('Control.HasFocus(604)')
+    action('right')
+    wait_for('Control.HasFocus(621)')
+    builtin('SetFocus(603)')
+    wait_for('Control.HasFocus(603)')
+    builtin('SetFocus(621)')
+    wait_for('Control.HasFocus(621)')
+    action('left')
+    wait_for('Control.HasFocus(604)')
+    builtin('SetFocus(622)')
+    wait_for('Control.HasFocus(622)')
+    action('right')
+    wait_for('Control.HasFocus(601)')
+    action('left')
+    wait_for('Control.HasFocus(622)')
+    # Up from the queue still comes back to the button it left
+    builtin('SetFocus(603)')
+    wait_for('Control.HasFocus(603)')
+    wait_for('Control.IsVisible(701) | Control.IsVisible(700)')
+    action('down')
+    wait_for('Control.HasFocus(701) | Control.HasFocus(700)')
+    action('up')
+    wait_for('Control.HasFocus(603)')
+    action('back')
+    wait_for('!Window.IsActive(musicosd)')
+
+
 def test_osd_queue_plays_the_chosen_track(music):
     open_album()
     builtin('SetFocus(5050,0,absolute)')  # the page keeps the track chosen last on that album
