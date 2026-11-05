@@ -305,19 +305,34 @@ def _film_in_its_first_second(matrix, key):
     """From a person's page open their first film and press KEY while the page holds Back
     (nc.chain.guard, its first second). Kodi reports the page active a moment before its onload
     set the guard, and under a full parallel run the test may see it only after that second; so
-    the key waits for the guard. Missed it: Back goes back as usual, and it tries again. The key
-    counts only when the guard is still up once it is done (a loaded box can take the whole
-    second between the two); a later key went back as a plain Back, and it tries again too."""
+    the key waits for the guard. Missed it: Back goes back as usual, and it tries again.
+
+    The guard holds Back for a second so that TMDb Helper's manager has seen the page before
+    it closes (it polls every 0.5 s and publishes nothing when it has; its "direct.open() DONE"
+    goes to kodi.log). The key waits for that line too: on a loaded box the manager can take
+    more than the second, and the held Back then closed the page under its feet and the chain
+    hung 30 s (seen with 16 busy processes next to 6 Kodis). The key counts only when the guard
+    is still up once it is done; a later key went back as a plain Back, and it tries again."""
     _info_and_person(matrix)
     for _ in range(4):
         wait_for('Integer.IsGreater(Container(5510).NumItems,0) + !Container(5510).IsUpdating', timeout=30)
         builtin('SetFocus(5510,0,absolute)')
+        offset = _log().stat().st_size
         action('select', delay=0)
         wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),movie)', timeout=30)
+        seen = 'direct.open() DONE!'
         try:
             wait_for(GUARD, timeout=2)
+            while seen not in _log_since(offset):
+                if not _true(GUARD):
+                    raise AssertionError('the guard was over before the manager saw the page')
+                time.sleep(0.05)
         except AssertionError:
-            # past the first second: the page is the manager's, a plain Back goes back
+            # past the first second: the page is the manager's, a plain Back goes back, once
+            # the manager has seen the page (before that it would hang the chain)
+            end = time.time() + 30
+            while seen not in _log_since(offset) and time.time() < end:
+                time.sleep(0.2)
             action('back', delay=0)
             _page(2)
             continue
