@@ -316,8 +316,11 @@ def pytest_collection_modifyitems(config, items):
 
 
 def _wait_for_service():
-    """A Kodi just started: wait for the skin's service, a NotifyAll(nightcity,...) before it
-    listens gets lost."""
+    """A Kodi just started: wait for the skin's startup script (nc.startup.ready: keymaps,
+    one-off settings; the Startup screen starts it a second in, and a test that went Home
+    before that made Home start the service without it, so an older run's keymaps stayed),
+    then for the service, since a NotifyAll(nightcity,...) before it listens gets lost."""
+    wait_for('!String.IsEmpty(Window(Home).Property(nc.startup.ready))', timeout=60)
     wait_for('!String.IsEmpty(Window(Home).Property(nc.service))', timeout=60)
 
 
