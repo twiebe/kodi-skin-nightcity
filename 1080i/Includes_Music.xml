@@ -281,65 +281,76 @@
         </control>
     </include>
 
+    <!-- The cursor is on an album or artist of a row of the Music page: the hero shows that card
+         (MusicFollowHero) and the rotation stands. Anywhere else, also on a genre, the spotlight
+         is its random self. -->
+    <expression name="MusicFollows">ControlGroup(9810).HasFocus() + [String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,artist)]</expression>
+
     <!-- Hero of the Music page: the album spotlight (list 9002, random albums). Cover, text and
          buttons fade in one after the other like the other pages. -->
     <include name="MusicHero">
+        <!-- around the blocks: Kodi does not update the children of a hidden group, so coming back
+             from a row runs no page fade, only the swap's -->
         <control type="group">
-            <left>64</left>
-            <top>116</top>
-            <visible>String.IsEqual(Window(Home).Property(nc.page),music)</visible>
-            <include content="PageFade"/>
-            <include content="CutCard">
-                <param name="width" value="280"/>
-                <param name="height" value="280"/>
-                <param name="mask" value="ui/mask_280x280.png"/>
-                <param name="glowheight" value="328"/>
-                <param name="glowwidth" value="328"/>
-                <param name="image" value="$INFO[Container(9002).ListItem.Art(thumb)]"/>
-                <param name="fadetime" value="400"/>
-            </include>
-        </control>
-        <control type="group">
-            <visible>String.IsEqual(Window(Home).Property(nc.page),music)</visible>
-            <include content="PageFade">
-                <param name="delay" value="FadeStep1"/>
-            </include>
-            <include content="Kicker">
-                <param name="label" value="$INFO[Container(9002).ListItem.Artist]"/>
-                <param name="left" value="384"/>
-                <param name="top" value="116"/>
-            </include>
-            <include content="GlitchTitle">
-                <param name="id" value="9860"/>
-                <param name="label" value="$INFO[Container(9002).ListItem.Label]"/>
-                <param name="left" value="384"/>
-                <param name="top" value="160"/>
-                <param name="width" value="1440"/>
-            </include>
-            <control type="grouplist">
-                <left>384</left>
-                <top>272</top>
-                <width>1400</width>
-                <height>36</height>
-                <orientation>horizontal</orientation>
-                <itemgap>10</itemgap>
-                <include content="Tag">
-                    <param name="label" value="$INFO[Container(9002).ListItem.Year]"/>
-                    <param name="visible" value="!String.IsEmpty(Container(9002).ListItem.Year)"/>
-                </include>
-                <include content="Tag">
-                    <param name="label" value="$INFO[Container(9002).ListItem.Genre]"/>
-                    <param name="visible" value="!String.IsEmpty(Container(9002).ListItem.Genre)"/>
+            <visible>!$EXP[MusicFollows]</visible>
+            <include>HeroSwapFade</include>
+            <control type="group">
+                <left>64</left>
+                <top>116</top>
+                <visible>String.IsEqual(Window(Home).Property(nc.page),music)</visible>
+                <include content="PageFade"/>
+                <include content="CutCard">
+                    <param name="width" value="280"/>
+                    <param name="height" value="280"/>
+                    <param name="mask" value="ui/mask_280x280.png"/>
+                    <param name="glowheight" value="328"/>
+                    <param name="glowwidth" value="328"/>
+                    <param name="image" value="$INFO[Container(9002).ListItem.Art(thumb)]"/>
+                    <param name="fadetime" value="400"/>
                 </include>
             </control>
-            <control type="textbox">
-                <left>384</left>
-                <top>330</top>
-                <width>980</width>
-                <height>116</height>
-                <font>font_body</font>
-                <textcolor>text_dim</textcolor>
-                <label>$INFO[Container(9002).ListItem.Property(Album_Description)]</label>
+            <control type="group">
+                <visible>String.IsEqual(Window(Home).Property(nc.page),music)</visible>
+                <include content="PageFade">
+                    <param name="delay" value="FadeStep1"/>
+                </include>
+                <include content="Kicker">
+                    <param name="label" value="$INFO[Container(9002).ListItem.Artist]"/>
+                    <param name="left" value="384"/>
+                    <param name="top" value="116"/>
+                </include>
+                <include content="GlitchTitle">
+                    <param name="id" value="9860"/>
+                    <param name="label" value="$INFO[Container(9002).ListItem.Label]"/>
+                    <param name="left" value="384"/>
+                    <param name="top" value="160"/>
+                    <param name="width" value="1440"/>
+                </include>
+                <control type="grouplist">
+                    <left>384</left>
+                    <top>272</top>
+                    <width>1400</width>
+                    <height>36</height>
+                    <orientation>horizontal</orientation>
+                    <itemgap>10</itemgap>
+                    <include content="Tag">
+                        <param name="label" value="$INFO[Container(9002).ListItem.Year]"/>
+                        <param name="visible" value="!String.IsEmpty(Container(9002).ListItem.Year)"/>
+                    </include>
+                    <include content="Tag">
+                        <param name="label" value="$INFO[Container(9002).ListItem.Genre]"/>
+                        <param name="visible" value="!String.IsEmpty(Container(9002).ListItem.Genre)"/>
+                    </include>
+                </control>
+                <control type="textbox">
+                    <left>384</left>
+                    <top>330</top>
+                    <width>980</width>
+                    <height>116</height>
+                    <font>font_body</font>
+                    <textcolor>text_dim</textcolor>
+                    <label>$INFO[Container(9002).ListItem.Property(Album_Description)]</label>
+                </control>
             </control>
         </control>
         <!-- 9850: Now playing while music plays, play, info, the library. Left on the first
@@ -355,6 +366,11 @@
             <include content="PageFade">
                 <param name="delay" value="FadeStep2"/>
             </include>
+            <!-- they act on the spotlight's own album: out of sight while the hero follows a card,
+                 not hidden, Up from a row comes here -->
+            <animation type="Conditional" condition="$EXP[MusicFollows]">
+                <effect type="fade" start="100" end="0" time="HeroSwapTime"/>
+            </animation>
             <onup>9100</onup>
             <ondown>9810</ondown>
             <onleft>Skin.TimerStart(nc_spot_hold)</onleft>
@@ -387,6 +403,70 @@
             <include content="SpotlightMore">
                 <param name="id" value="9855"/>
             </include>
+        </control>
+    </include>
+
+    <!-- The hero while the cursor is on an album or artist card (MusicFollows): what MusicHero shows
+         as far as the card has it, from the library only. 9303 is what the rotation reads. It
+         fades like the video pages' (FollowHero). -->
+    <include name="MusicFollowHero">
+        <control type="group" id="9303">
+            <visible>$EXP[MusicFollows]</visible>
+            <include>HeroSwapIn</include>
+            <animation type="WindowOpen" condition="!Player.HasVideo">
+                <effect type="fade" start="0" end="100" time="FadeTime"/>
+            </animation>
+            <control type="group">
+                <left>64</left>
+                <top>116</top>
+                <include content="CutCard">
+                    <param name="width" value="280"/>
+                    <param name="height" value="280"/>
+                    <param name="mask" value="ui/mask_280x280.png"/>
+                    <param name="glowheight" value="328"/>
+                    <param name="glowwidth" value="328"/>
+                    <param name="image" value="$INFO[ListItem.Art(thumb)]"/>
+                    <param name="fadetime" value="400"/>
+                </include>
+            </control>
+            <include content="Kicker">
+                <param name="id" value="9332"/>
+                <param name="label" value="$VAR[MusicCardLine]"/>
+                <param name="left" value="384"/>
+                <param name="top" value="116"/>
+            </include>
+            <include content="GlitchTitle">
+                <param name="id" value="9330"/>
+                <param name="label" value="$INFO[ListItem.Label]"/>
+                <param name="left" value="384"/>
+                <param name="top" value="160"/>
+                <param name="width" value="1440"/>
+            </include>
+            <control type="grouplist">
+                <left>384</left>
+                <top>272</top>
+                <width>1400</width>
+                <height>36</height>
+                <orientation>horizontal</orientation>
+                <itemgap>10</itemgap>
+                <include content="Tag">
+                    <param name="label" value="$INFO[ListItem.Year]"/>
+                    <param name="visible" value="!String.IsEmpty(ListItem.Year)"/>
+                </include>
+                <include content="Tag">
+                    <param name="label" value="$INFO[ListItem.Genre]"/>
+                    <param name="visible" value="!String.IsEmpty(ListItem.Genre)"/>
+                </include>
+            </control>
+            <control type="textbox" id="9333">
+                <left>384</left>
+                <top>330</top>
+                <width>980</width>
+                <height>116</height>
+                <font>font_body</font>
+                <textcolor>text_dim</textcolor>
+                <label>$VAR[MusicFollowPlot]</label>
+            </control>
         </control>
     </include>
 

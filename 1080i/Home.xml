@@ -103,6 +103,7 @@
         <include>SystemHero</include>
         <include>SearchHero</include>
         <include>MusicHero</include>
+        <include>MusicFollowHero</include>
         <include content="PageRows" condition="!String.IsEqual(Skin.String(SpotlightSource),off)">
             <param name="id" value="9210"/>
             <param name="page" value="String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)"/>

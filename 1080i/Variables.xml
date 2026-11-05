@@ -263,6 +263,11 @@
         <value condition="Integer.IsLess(ListItem.Episode,10)">E0$INFO[ListItem.Episode]</value>
         <value>E$INFO[ListItem.Episode]</value>
     </variable>
+    <!-- the text of the Music page's hero while it follows a card (MusicFollowHero) -->
+    <variable name="MusicFollowPlot">
+        <value condition="String.IsEqual(ListItem.DBType,artist)">$INFO[ListItem.Property(Artist_Description)]</value>
+        <value>$INFO[ListItem.Property(Album_Description)]</value>
+    </variable>
     <variable name="CardArt">
         <value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
         <value>$INFO[ListItem.Art(poster)]</value>

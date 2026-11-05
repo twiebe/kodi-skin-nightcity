@@ -2,7 +2,7 @@
 <includes>
     <!-- The cursor is on a title card of a row, on a page with its spotlight on: the hero shows that
          title (FollowHero) and the rotation stands. Everywhere else, also on a card that is no
-         title, the spotlight is its random self. The Music page does not follow. -->
+         title, the spotlight is its random self. The Music page has its own (MusicFollows). -->
     <expression name="SpotlightFollows">[[[ControlGroup(9210).HasFocus() + !String.IsEqual(Skin.String(SpotlightSource),off)] | [ControlGroup(9410).HasFocus() + !String.IsEqual(Skin.String(nc.movies.spotlight),off)] | [ControlGroup(9510).HasFocus() + !String.IsEqual(Skin.String(nc.shows.spotlight),off)]] + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,season)]]</expression>
     <!-- nc.kept.follow.* name the focused card: by library id, without one (Trending) by year and label -->
     <expression name="FollowKeptIsCard">[[!String.IsEmpty(Window(Home).Property(nc.kept.follow.dbid)) + Integer.IsEqual(ListItem.DBID,Window(Home).Property(nc.kept.follow.dbid))] | [String.IsEmpty(ListItem.DBID) + !String.IsEmpty(Window(Home).Property(nc.kept.follow.label)) + String.IsEqual(ListItem.Label,Window(Home).Property(nc.kept.follow.label)) + String.IsEqual(ListItem.Year,Window(Home).Property(nc.kept.follow.year))]] + String.IsEqual(ListItem.DBType,Window(Home).Property(nc.kept.follow.dbtype))</expression>
@@ -88,9 +88,10 @@
     <include name="SpotlightAutoscroll">
         <param name="time"/>
         <definition>
-            <!-- Kodi starts the interval over whenever this turns true again. 9302: the hero follows
-                 a row title, the group holds the expression because $EXP is not resolved here -->
-            <autoscroll time="$PARAM[time]">!Control.IsVisible(9302) + !Skin.TimerIsRunning(nc_spot_hold) + !Window.IsActive(fullscreenvideo) + !Window.IsActive(movieinformation) + !Window.IsActive(musicinformation) + !System.HasActiveModalDialog</autoscroll>
+            <!-- Kodi starts the interval over whenever this turns true again. 9302, 9303 (Music): the
+                 hero follows a row title, the group holds the expression because $EXP is not
+                 resolved here -->
+            <autoscroll time="$PARAM[time]">!Control.IsVisible(9302) + !Control.IsVisible(9303) + !Skin.TimerIsRunning(nc_spot_hold) + !Window.IsActive(fullscreenvideo) + !Window.IsActive(movieinformation) + !Window.IsActive(musicinformation) + !System.HasActiveModalDialog</autoscroll>
         </definition>
     </include>
 
