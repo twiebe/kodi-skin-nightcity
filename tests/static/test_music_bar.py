@@ -67,21 +67,24 @@ def test_the_menu_tells_the_service_about_a_new_sort():
     assert changed in [e.text for e in _controls()['4'].findall('onclick')]
 
 
-def test_the_column_makes_way_for_the_widest_cursor():
+def test_the_column_stands_clear_of_the_widest_cursor_with_no_animation():
     nc = _nightcity()
-    column = next(c for c in _root().iter('control')
-                  if c.get('type') == 'group' and c.findtext('description') == 'column')
-    ids = {c.get('id') for c in column.iter('control')}
-    assert '9060' in ids and BAR not in ids and '50' not in ids
-    animation = next(a for a in column.findall('animation') if a.text == 'Conditional')
-    assert animation.get('condition') == 'Control.HasFocus({})'.format(BAR)
-    scale = int(animation.get('end')) / 100
-    center = int(animation.get('center').split(',')[0])
-    menu = _controls()['9060']
-    left, right = int(menu.findtext('left')), int(menu.findtext('left')) + int(menu.findtext('width'))
-    assert center + (right - center) * scale <= nc.BAR_RIGHT - nc.bar_width('2026')
-    panel = _controls()['51']
-    assert center + (left - center) * scale >= int(panel.findtext('left')) + int(panel.findtext('width'))
+    controls = _controls()
+    root = _root()
+    limit = nc.BAR_RIGHT - nc.bar_width('Nov 26') + 10
+    menu = controls['9060']
+    panel_end = int(controls['51'].findtext('left')) + int(controls['51'].findtext('width'))
+    assert int(menu.findtext('left')) >= panel_end
+    assert int(menu.findtext('left')) + int(menu.findtext('width')) - 10 <= limit
+    for row in menu.findall('control'):
+        assert int(row.findtext('width')) == int(menu.findtext('width'))
+    for call in menu.findall('include'):
+        width = next(p.get('value') for p in call.findall('param') if p.get('name') == 'width')
+        assert width == menu.findtext('width')
+    pane = next(c for c in root.iter('control') if c.get('type') == 'group' and c.find('left') is not None
+                and 'Control.IsVisible(50)' in (c.findtext('visible') or ''))
+    assert int(pane.findtext('left')) + 360 <= limit
+    assert not [a for a in root.iter('animation') if '5200' in (a.get('condition') or '')]
 
 
 def test_every_back_key_reaches_the_bar_and_leaves_the_window_elsewhere():

@@ -172,73 +172,68 @@
             <texturesliderbar colordiffuse="text_mute">ui/white.png</texturesliderbar>
             <texturesliderbarfocus colordiffuse="text_mute">ui/white.png</texturesliderbarfocus>
         </control>
-        <!-- The detail pane and the menu: a group can zoom, out of the way of the cursor -->
+        <!-- Detail pane next to the list: cover, artist and year, description -->
         <control type="group">
-            <description>column</description>
-            <animation effect="zoom" start="100" end="85" center="1297,128" time="180" tween="cubic" easing="out" condition="Control.HasFocus(5200)">Conditional</animation>
-            <!-- Detail pane next to the list: cover, artist and year, description -->
-            <control type="group">
-                <left>1440</left>
-                <top>128</top>
-                <visible>Control.IsVisible(50) + !ListItem.IsParentFolder</visible>
-                <include content="CutCard">
-                    <param name="width" value="360"/>
-                    <param name="height" value="360"/>
-                    <param name="mask" value="ui/mask_360x360.png"/>
-                    <param name="glowheight" value="408"/>
-                    <param name="glowwidth" value="408"/>
-                    <param name="image" value="$INFO[ListItem.Art(thumb)]"/>
-                </include>
-                <control type="label">
-                    <top>376</top>
-                    <width>360</width>
-                    <height>36</height>
-                    <font>font_small</font>
-                    <textcolor>state_text</textcolor>
-                    <label>$VAR[MusicNavMeta]</label>
-                </control>
-                <control type="textbox">
-                    <top>420</top>
-                    <width>360</width>
-                    <height>300</height>
-                    <font>font_tiny</font>
-                    <textcolor>text_dim</textcolor>
-                    <label>$INFO[ListItem.Property(Album_Description)]$INFO[ListItem.Property(Artist_Description)]</label>
-                </control>
+            <left>1431</left>
+            <top>128</top>
+            <visible>Control.IsVisible(50) + !ListItem.IsParentFolder</visible>
+            <include content="CutCard">
+                <param name="width" value="360"/>
+                <param name="height" value="360"/>
+                <param name="mask" value="ui/mask_360x360.png"/>
+                <param name="glowheight" value="408"/>
+                <param name="glowwidth" value="408"/>
+                <param name="image" value="$INFO[ListItem.Art(thumb)]"/>
+            </include>
+            <control type="label">
+                <top>376</top>
+                <width>360</width>
+                <height>36</height>
+                <font>font_small</font>
+                <textcolor>state_text</textcolor>
+                <label>$VAR[MusicNavMeta]</label>
             </control>
-            <!-- View and sort: Kodi ids 2 view (Kodi labels it), 3 sort by (Kodi labels it), 4 descending -->
-            <control type="grouplist" id="9060">
-                <left>1430</left>
-                <top>870</top>
-                <width>420</width>
-                <height>196</height>
-                <itemgap>-20</itemgap>
-                <onleft condition="Control.IsVisible(51)">51</onleft>
-                <onleft>50</onleft>
-                <onright condition="!String.IsEmpty(Window(Home).Property(nc.lib.bar))">5200</onright>
-                <include content="ListButton">
-                    <param name="id" value="2"/>
-                    <param name="width" value="420"/>
-                    <param name="onclick" value="NotifyAll(nightcity,music_bar:changed)"/>
-                </include>
-                <include content="ListButton">
-                    <param name="id" value="3"/>
-                    <param name="width" value="420"/>
-                    <param name="onclick" value="NotifyAll(nightcity,music_bar:changed)"/>
-                </include>
-                <control type="radiobutton" id="4">
-                    <width>420</width>
-                    <include>SettingsRowLook</include>
-                    <font>font_label</font>
-                    <label>$LOCALIZE[31096]</label>
-                    <onclick>NotifyAll(nightcity,music_bar:changed)</onclick>
-                    <radiowidth>42</radiowidth>
-                    <radioheight>32</radioheight>
-                    <textureradioonfocus colordiffuse="focus_text">ui/check_on_pad.png</textureradioonfocus>
-                    <textureradioonnofocus colordiffuse="state_text">ui/check_on_pad.png</textureradioonnofocus>
-                    <textureradiooffnofocus colordiffuse="text_mute">ui/check_off_pad.png</textureradiooffnofocus>
-                    <textureradioofffocus colordiffuse="focus_text">ui/check_off_pad.png</textureradioofffocus>
-                </control>
+            <control type="textbox">
+                <top>420</top>
+                <width>360</width>
+                <height>300</height>
+                <font>font_tiny</font>
+                <textcolor>text_dim</textcolor>
+                <label>$INFO[ListItem.Property(Album_Description)]$INFO[ListItem.Property(Artist_Description)]</label>
+            </control>
+        </control>
+        <!-- View and sort: Kodi ids 2 view (Kodi labels it), 3 sort by (Kodi labels it), 4 descending -->
+        <control type="grouplist" id="9060">
+            <left>1421</left>
+            <top>870</top>
+            <width>380</width>
+            <height>196</height>
+            <itemgap>-20</itemgap>
+            <onleft condition="Control.IsVisible(51)">51</onleft>
+            <onleft>50</onleft>
+            <onright condition="!String.IsEmpty(Window(Home).Property(nc.lib.bar))">5200</onright>
+            <include content="ListButton">
+                <param name="id" value="2"/>
+                <param name="width" value="380"/>
+                <param name="onclick" value="NotifyAll(nightcity,music_bar:changed)"/>
+            </include>
+            <include content="ListButton">
+                <param name="id" value="3"/>
+                <param name="width" value="380"/>
+                <param name="onclick" value="NotifyAll(nightcity,music_bar:changed)"/>
+            </include>
+            <control type="radiobutton" id="4">
+                <width>380</width>
+                <include>SettingsRowLook</include>
+                <font>font_label</font>
+                <label>$LOCALIZE[31096]</label>
+                <onclick>NotifyAll(nightcity,music_bar:changed)</onclick>
+                <radiowidth>42</radiowidth>
+                <radioheight>32</radioheight>
+                <textureradioonfocus colordiffuse="focus_text">ui/check_on_pad.png</textureradioonfocus>
+                <textureradioonnofocus colordiffuse="state_text">ui/check_on_pad.png</textureradioonnofocus>
+                <textureradiooffnofocus colordiffuse="text_mute">ui/check_off_pad.png</textureradiooffnofocus>
+                <textureradioofffocus colordiffuse="focus_text">ui/check_off_pad.png</textureradioofffocus>
             </control>
         </control>
         <include content="PillButton">

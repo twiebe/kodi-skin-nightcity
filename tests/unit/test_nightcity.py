@@ -2246,13 +2246,20 @@ def test_bar_groups_leave_out_what_belongs_to_no_group():
     assert nightcity.bar_groups([None, 'A', 'A', None, 'B']) == [('A', 1), ('B', 4)]
 
 
-def test_bar_glide_slides_in_from_where_the_cursor_was():
-    event, attributes = nightcity.bar_glide(300, 500)[0]
-    assert event == 'conditional'
-    assert 'effect=slide' in attributes and 'start=0,-200' in attributes and 'end=0,0' in attributes
-    assert 'condition=true' in attributes
-    assert 'time={}'.format(nightcity.BAR_GLIDE) in attributes
-    assert 'start=0,200' in nightcity.bar_glide(500, 300)[0][1]
+@pytest.mark.parametrize('start,goal', [(300, 800), (800, 300), (500, 503)])
+def test_bar_glide_reaches_the_goal_without_overshooting_within_a_few_frames(start, goal):
+    y, ys = start, []
+    while y != goal:
+        y = nightcity.bar_glide_step(y, goal)
+        ys.append(y)
+        assert len(ys) <= 10
+    assert ys == sorted(ys, reverse=goal < start)
+    assert all(min(start, goal) <= v <= max(start, goal) for v in ys)
+
+
+def test_bar_width_fits_every_label_and_stays_a_tab():
+    assert nightcity.bar_width('S') == 60
+    assert nightcity.bar_width('Nov 26') == 124
 
 
 def test_bar_width_grows_with_the_label():
