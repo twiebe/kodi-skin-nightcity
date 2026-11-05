@@ -7,6 +7,7 @@ import fcntl
 import json
 import os
 import pathlib
+import re
 import subprocess
 import time
 import urllib.error
@@ -217,6 +218,53 @@ def pytest_xdist_make_scheduler(config, log):
             return nodeid if path.rsplit('/', 1)[-1] in SPLIT_FILES else path
 
     return FileOrTestScheduling(config, log) if config.getvalue('dist') == 'loadfile' else None
+
+
+# What of kodi.log goes into a failure report: windows, the skin's service and TMDb Helper's
+# window manager, dropped actions, errors; not the plugin and texture chatter
+LOG_KEEP = re.compile(r'Window (Init|Deinit) \(|Window Manager \[|nightcity|ignoring action|error <general>|'
+                      r'EXCEPTION|Traceback|Error|Kodi exited|Segmentation|terminate called|Activating window|'
+                      r'CScriptRunner|onExecutionDone|Player:: |CVideoPlayer::(Open|Close)', re.I)
+LOG_DROP = re.compile(r'DEBUG::|Skipped \d+ duplicate|CWebserver|CheckIdle|GetImage|Texture|CurlFile|'
+                      r'VideoLibrary.GetMovies|XBMC.Get|JSONRPC')
+
+
+@pytest.fixture(autouse=True)
+def _kodi_log_slice(request):
+    """The lines of kodi.log a failed test ran against, as a section of its report: the
+    window and chain events that explain a timeout, which the assertion alone never does."""
+    log = _data() / 'kodi' / 'temp' / 'kodi.log'
+    start = log.stat().st_size if log.is_file() else 0
+    request.node._kodi_log_start = start
+    yield
+
+
+def _kodi_log_lines(start, limit=120):
+    log = _data() / 'kodi' / 'temp' / 'kodi.log'
+    if not log.is_file():
+        return ''
+    with open(log, 'rb') as f:
+        if log.stat().st_size < start:  # Kodi restarted: a new log
+            start = 0
+        f.seek(start)
+        text = f.read().decode(errors='replace')
+    lines = [line for line in text.splitlines() if LOG_KEEP.search(line) and not LOG_DROP.search(line)]
+    if len(lines) > limit:
+        lines = ['... {} earlier lines left out'.format(len(lines) - limit)] + lines[-limit:]
+    return '\n'.join(line.rstrip()[:220] for line in lines)
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    report = outcome.get_result()
+    if report.failed and getattr(item, '_kodi_log_start', None) is not None:
+        try:
+            text = _kodi_log_lines(item._kodi_log_start)
+        except OSError as e:
+            text = 'kodi.log not readable: {}'.format(e)
+        if text:
+            report.sections.append(('kodi.log of {} ({})'.format(os.environ.get('KDEV_INSTANCE', 'kodi-dev'), call.when), text))
 
 
 def pytest_collection_modifyitems(config, items):
