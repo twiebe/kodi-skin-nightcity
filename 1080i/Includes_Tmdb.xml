@@ -46,9 +46,9 @@
         </definition>
     </include>
 
-    <!-- Back on an info page in a chain waits for the first second of the page (nc.chain.guard,
-         set on load): TMDb Helper's manager polls every 0.5 s for the page it opened, and a page
-         closed before it looked leaves the chain on an empty backdrop for 30 s, then ends it.
+    <!-- Back on an info page in a chain waits until TMDb Helper's manager has seen the page
+         (nc.chain.guard, set on load): the manager polls every 0.5 s for the page it opened, and a
+         page closed before it looked leaves the chain on an empty backdrop for 30 s, then ends it.
          nc_chain_guard (Timers.xml) does the held Back once the second is over. Kodi runs onback
          like a move (CGUIWindow::OnMove) and closes the page anyway unless it moves the focus:
          to the button row, which keeps its focused button. Every control of the info page that

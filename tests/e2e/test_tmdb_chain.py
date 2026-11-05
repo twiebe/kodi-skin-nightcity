@@ -15,6 +15,8 @@ pytestmark = pytest.mark.e2e
 
 RUNNING = '!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))'
 IDLE = 'String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))'
+# TMDb Helper's manager has seen the page it opened at the chain's position (the fork's helper)
+SEEN = 'String.IsEqual(Window(Home).Property(TMDbHelper.Position.Seen),Window(Home).Property(TMDbHelper.Position))'
 
 
 def _true(condition):
@@ -38,7 +40,7 @@ def _page(position):
     if query.get('tmdb_type'):
         conditions.append('String.IsEqual(ListItem.Property(tmdb_type),{})'.format(query['tmdb_type'][0]))
     wait_for(' + '.join(conditions), timeout=20)
-    _manager_saw_the_page()
+    wait_for(SEEN, timeout=10)
     time.sleep(1.5)  # the page settles: its scripts park the focus on reopening (info_back)
 
 
@@ -54,22 +56,6 @@ def _click_opens(cid, position):
     except AssertionError:
         wait_for('!Container({}).IsUpdating'.format(cid), timeout=30)
         action('select', delay=0)
-
-
-def _manager_saw_the_page(timeout=10):
-    """TMDb Helper's manager logs "direct.open() DONE!" once it saw the page it opened last; it
-    publishes no property for it. Without the line (another open mode) a poll's worth of time."""
-    end = time.time() + timeout
-    while time.time() < end:
-        text = _log_since(max(0, _log().stat().st_size - 400000))
-        opened = text.rfind('direct.open() [X]')
-        if opened < 0:
-            time.sleep(1.5)
-            return
-        if 'direct.open() DONE!' in text[opened:]:
-            return
-        time.sleep(0.1)
-    raise AssertionError('TMDb Helper\'s manager did not see the page in {} s'.format(timeout))
 
 
 PYTHON_RUN = re.compile(r'CPythonInvoker\((\d+), ([^)]*)\): start processing|onExecutionDone\((\d+), ')
@@ -176,6 +162,19 @@ def matrix(home):
     # test that ends with them open would wait for nothing
     builtin('Dialog.Close(all,true)')
     _settle()
+
+
+def test_the_manager_says_when_it_saw_the_page(matrix):
+    """TMDb Helper publishes the position of the page it saw: not before it saw the page, again
+    after Back, and nothing once the chain ended."""
+    _info_and_person(matrix)
+    assert info('Window(Home).Property(TMDbHelper.Position.Seen)')['Window(Home).Property(TMDbHelper.Position.Seen)'] == '2'
+    action('back', delay=0)
+    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),1)', timeout=10)
+    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position.Seen),1)', timeout=10)
+    builtin('SetProperty(TMDbHelper.Command,exit,home)')
+    wait_for(IDLE, timeout=20)
+    wait_for('String.IsEmpty(Window(Home).Property(TMDbHelper.Position.Seen))', timeout=2)
 
 
 def test_info_cast_opens_person_then_movie_and_back(matrix):
@@ -349,36 +348,19 @@ GUARD = '!String.IsEmpty(Window(Home).Property(nc.chain.guard))'
 
 def _film_in_its_first_second(matrix, key):
     """From a person's page open their first film and press KEY while the page holds Back
-    (nc.chain.guard, its first second). Kodi reports the page active a moment before its onload
-    set the guard, and under a full parallel run the test may see it only after that second; so
-    the key waits for the guard. Missed it: Back goes back as usual, and it tries again.
-
-    The guard holds Back for a second so that TMDb Helper's manager has seen the page before
-    it closes (it polls every 0.5 s and publishes nothing when it has; its "direct.open() DONE"
-    goes to kodi.log). The key waits for that line too: on a loaded box the manager can take
-    more than the second, and the held Back then closed the page under its feet and the chain
-    hung 30 s (seen with 16 busy processes next to 6 Kodis). The key counts only when the guard
-    is still up once it is done; a later key went back as a plain Back, and it tries again."""
+    (nc.chain.guard, until TMDb Helper's manager has seen the page). Kodi reports the page
+    active a moment before its onload set the guard, so the key waits for the guard. A key that
+    comes after the guard is over goes back as a plain Back: then it tries again."""
     _info_and_person(matrix)
     for _ in range(4):
         wait_for('Integer.IsGreater(Container(5510).NumItems,0) + !Container(5510).IsUpdating', timeout=30)
         builtin('SetFocus(5510,0,absolute)')
-        offset = _log().stat().st_size
         _click_opens(5510, 3)
         wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),movie)', timeout=30)
-        seen = 'direct.open() DONE!'
         try:
             wait_for(GUARD, timeout=2)
-            while seen not in _log_since(offset):
-                if not _true(GUARD):
-                    raise AssertionError('the guard was over before the manager saw the page')
-                time.sleep(0.05)
         except AssertionError:
-            # past the first second: the page is the manager's, a plain Back goes back, once
-            # the manager has seen the page (before that it would hang the chain)
-            end = time.time() + 30
-            while seen not in _log_since(offset) and time.time() < end:
-                time.sleep(0.2)
+            wait_for(SEEN, timeout=30)  # before that a plain Back would hang the chain
             _back_to_the_person()
             continue
         key()
@@ -403,7 +385,8 @@ def _back_to_the_person():
 
 def test_back_right_after_a_page_opens_goes_one_page_back(matrix):
     """Back in the moment a page appears used to leave TMDb Helper waiting 30 s on an empty
-    backdrop and then end the chain. The page holds Back for a second and then goes back."""
+    backdrop and then end the chain. The page holds Back until the manager saw it, then goes
+    back."""
     _film_in_its_first_second(matrix, lambda: action('back', delay=0))
     assert _true('Window.IsActive(movieinformation)')  # held
     wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),2)', timeout=10)

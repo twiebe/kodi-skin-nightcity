@@ -98,15 +98,14 @@ the session start (Kodi restart per worker).
   tests stopped failing.
 - The "Back right after a page opens" tests (test_back_right_after..., test_escape_right_after...)
   are timing tests by intent. Two races, both now handled in the helper `_film_in_its_first_second`:
-  (1) the key must be done while the guard (1 s from the page's onload) is still up, so the
-  helper checks the guard after the key and tries again otherwise; (2) the skin's guard is a
-  heuristic: TMDb Helper's window manager polls every 0.5 s for the page it opened and
-  publishes nothing once it has seen it, so a held Back done after the second can still close
-  the page before the manager looked, and the chain then hangs 30 s on an empty backdrop
-  (reproduced 1 in 24 with 16 busy processes next to 6 Kodis; the manager logs
-  "direct.open() DONE!" to kodi.log, which the helper now waits for before the key). This is a
-  skin limitation under heavy load, not reachable on a normal box; the clean fix is in the
-  TMDb Helper fork: publish a property once the page was seen, and let the guard wait on it.
+  the key must land while the guard is up, so the helper checks the guard after the key and
+  tries again otherwise. The guard itself was a 1 s heuristic and now waits for
+  TMDbHelper.Position.Seen (fork 1:6.20.8-1, the manager publishes the position it saw), at
+  most 5 s. Proof with the manager patched to look 2.5 s late: new guard 12 of 12 passed, the
+  old 1 s guard 12 of 12 failed. Under 16 busy processes next to 6 Kodis (load up to 32) 60 of
+  60 passed, but no page took over 0.59 s there, so that run alone does not separate the two.
+  The tests wait on the property as well, so a pool needs the fork's helper (--addon, or a new
+  template: the template still has 1:6.20.2-1).
 
 ## Tried and dropped
 
@@ -149,9 +148,6 @@ the session start (Kodi restart per worker).
 - Kodi drops a key that lands between two chain pages (closing animation, DialogBusy) without
   a log line unless a modal dialog is closing. Tests that press a key right after a chain page
   opened must go through _page() (waits for the page at that position and for the manager).
-- Proposal for the TMDb Helper fork: publish a property once the manager has seen the page it
-  opened (today only a log line), so the skin's one second guard can wait on it and the tests
-  need not read kodi.log.
 - Speed beyond this: the sum of test times is about 1870 s, so 8 workers cannot go much below
   240 s. More workers would (the pool caps at cores / 2 = 8; with the GL cap a worker needs
   about 2 cores only while it plays video, load peaks at 13 on 16 cores). Measured: 12 workers
