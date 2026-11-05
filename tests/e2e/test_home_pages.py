@@ -2,7 +2,7 @@ import time
 
 import pytest
 
-from conftest import action, builtin, cond, info, screenshot, wait_for
+from conftest import action, builtin, cond, info, rpc, screenshot, wait_for
 
 pytestmark = pytest.mark.e2e
 
@@ -69,7 +69,7 @@ def test_down_from_menu(home_page, name):
 @pytest.mark.parametrize('spotlight,first,last,tab', [(9000, 9010, 9012, 9102), (9001, 9551, 9553, 9103)])
 def test_spotlight_prev_next(home_page, spotlight, first, last, tab):
     focus(tab)
-    wait_for('Integer.IsGreater(Container({}).NumItems,2)'.format(spotlight))
+    wait_for('Integer.IsGreater(Container({}).NumItems,1)'.format(spotlight))  # the library has two shows
     total = int(info('Container({}).NumItems'.format(spotlight))['Container({}).NumItems'.format(spotlight)])
     key = 'Container({}).CurrentItem'.format(spotlight)
     focus(first)
@@ -124,7 +124,31 @@ def prop(name):
     return info(key)[key]
 
 
-def test_genre_tabs_filled(home_page):
+def _recount_genres():
+    """The service counts the genres; Home's rows load the new library state when it opens again."""
+    builtin('NotifyAll(nightcity,genres)')
+    builtin('ActivateWindow(Settings)')
+    wait_for('Window.IsActive(settings)')
+    action('back')
+    wait_for('Window.IsActive(home)')
+
+
+@pytest.fixture
+def genres(home_page):
+    """The seeded movies have no genres: give them three and have the service count them."""
+    movies = rpc('VideoLibrary.GetMovies')['movies']
+    for movie, genre in zip(movies, ('Action', 'Comedy', 'Drama')):
+        rpc('VideoLibrary.SetMovieDetails', {'movieid': movie['movieid'], 'genre': [genre]})
+    _recount_genres()
+    yield
+    for movie in movies:
+        rpc('VideoLibrary.SetMovieDetails', {'movieid': movie['movieid'], 'genre': []})
+    builtin('ClearProperty(nc.genre.id,home)')
+    builtin('ClearProperty(nc.genre.label,home)')
+    _recount_genres()
+
+
+def test_genre_tabs_filled(genres):
     focus(9102)
     wait_for('!String.IsEmpty(Window(Home).Property(nc.genre.3.label))')
     for n in (1, 2, 3):
@@ -132,7 +156,7 @@ def test_genre_tabs_filled(home_page):
     wait_for('Integer.IsGreater(Container({}).NumItems,0)'.format(GENRE_ROW))
 
 
-def test_genre_tab_switches_row(home_page):
+def test_genre_tab_switches_row(genres):
     focus(9102)
     wait_for('!String.IsEmpty(Window(Home).Property(nc.genre.2.id))')
     focus(GENRE_TABS[1])
@@ -142,7 +166,7 @@ def test_genre_tab_switches_row(home_page):
     screenshot('genre-row')
 
 
-def test_genre_row_navigation(home_page):
+def test_genre_row_navigation(genres):
     focus(9102)
     wait_for('Integer.IsGreater(Container({}).NumItems,0)'.format(GENRE_ROW))
     focus(9403)
@@ -155,7 +179,7 @@ def test_genre_row_navigation(home_page):
     wait_for('Control.HasFocus(9403)')
 
 
-def test_genre_pick_dialog(home_page):
+def test_genre_pick_dialog(genres):
     focus(9102)
     wait_for('!String.IsEmpty(Window(Home).Property(nc.genre.id))')
     before = prop('nc.genre.id')
