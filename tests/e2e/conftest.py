@@ -13,6 +13,7 @@ import subprocess
 import time
 import urllib.error
 import urllib.request
+import warnings
 
 import pytest
 
@@ -169,10 +170,19 @@ def builtins(*commands):
     """Run several builtins in order and return once Kodi has run them all: one marker at the end,
     so a long row of them takes no round trip each."""
     _sync[0] += 1
+    marker = 'String.IsEqual(Window(Home).Property(nc.test.sync),{})'.format(_sync[0])
     _send_builtins(*commands, 'SetProperty(nc.test.sync,{},home)'.format(_sync[0]))
-    # 30 s: the marker waits behind the command and whatever blocks Kodi's main thread at the
-    # time (a window loading plugin content, a dialog closing); this is a sync, not a check
-    wait_for('String.IsEqual(Window(Home).Property(nc.test.sync),{})'.format(_sync[0]), timeout=30)
+    # 15 s: the marker waits behind the command and whatever blocks Kodi's main thread at the
+    # time (a window loading plugin content, a dialog closing); this is a sync, not a check.
+    # The event server is UDP: a datagram is lost now and then (one in a few thousand on a
+    # loaded box), so the batch goes once more; its builtins are set, clear, open and close
+    try:
+        wait_for(marker, timeout=15)
+    except AssertionError:
+        warnings.warn('builtin marker {} not seen in 15 s on {}, sending again: {}'.format(
+            _sync[0], os.environ.get('KDEV_INSTANCE', 'kodi-dev'), ' '.join(commands)))
+        _send_builtins(*commands, 'SetProperty(nc.test.sync,{},home)'.format(_sync[0]))
+        wait_for(marker, timeout=15)
 
 
 def wait_for(condition, timeout=10):
