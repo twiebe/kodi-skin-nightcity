@@ -240,7 +240,10 @@ def test_movie_up_from_the_top_goes_back(matrix):
 def test_tmdb_page_up_from_the_top_steps_back_in_the_chain(matrix):
     builtin('NotifyAll(nightcity,info:movie:{})'.format(matrix))
     wait_for('Window.IsActive(movieinformation)', timeout=20)
-    wait_for('Integer.IsGreater(Container(5500).NumItems,0)', timeout=45)
+    wait_for('Integer.IsGreater(Container(5500).NumItems,0) + !Container(5500).IsUpdating + '
+             '[String.IsEqual(Container(5500).ListItem(0).Property(param.imdb_id),ListItem.IMDBNumber) | '
+             'String.IsEqual(Container(5500).ListItem(0).Property(param.query),ListItem.Title)]', timeout=45)
+    _focus_is(9001)
     _down(5500)
     action('select')
     wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),2)', timeout=30)
