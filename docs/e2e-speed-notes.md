@@ -67,6 +67,12 @@ the session start (Kodi restart per worker).
 | s1 | fc931af, -n auto after `pool up 8` on a pool that had 12 | 127.5 s | 146 passed, 174 skipped | not a result: -n auto counted the 12 instance folders, 4 workers had a stopped Kodi and conftest skipped their share silently. Now a worker without Kodi fails loudly (3919dd1) and -n auto counts the workers that answer |
 | s4 | 8 workers, 4fba6d0 (startup wait, loud missing Kodi, auto count) | 247.7 s | 0 failed, 316 passed, 4 skipped | peak load 11.5; 0 crashes |
 | s5 | 8 workers, 4fba6d0 | 258.3 s | 0 failed, 316 passed, 4 skipped | peak load 9.7; 0 crashes |
+| f0 | 8 workers, helper 6.20.8-1, ec927e8 | 259.1 s | 1 failed, 330 passed, 4 skipped | test_hero_keeps_its_ratings_once_fetched, its file then passed 3 of 3 on its own |
+| f1 | 12 workers, c2f76f5 | 207.5 s | 1 failed, 330 passed, 4 skipped, 1 error | peak load 22; test_categories_walk_like_kodis_settings, test_fullscreen_after_play (setup, Player.HasVideo) |
+| f2 | 12 workers, c2f76f5 | killed at 280 s | 22 failed, 302 passed, 4 skipped in the 328 reported | peak load 17; no summary, no crash log, 8 of the failures in a row at the end, cause not found |
+| f3 | 12 workers, c2f76f5 | 218.0 s | 3 failed, 329 passed, 4 skipped | peak load 18; test_escape_on_the_bar..., test_a_long_biography_opens_in_the_viewer, test_back_in_the_chain_returns_to_the_crew_tab; these passed on their own |
+| f4 | 8 workers, c2f76f5 | 271.3 s | 0 failed, 332 passed, 4 skipped | |
+
 ## Findings
 
 - A test could reach Home before the skin's startup script ran (the Startup screen starts it
@@ -152,4 +158,5 @@ the session start (Kodi restart per worker).
   240 s. More workers would (the pool caps at cores / 2 = 8; with the GL cap a worker needs
   about 2 cores only while it plays video, load peaks at 13 on 16 cores). Measured: 12 workers
   183.5 s and 197.6 s (r14w12, r15w12) with peak load 20 to 28 and 13 GB memory free. kdev's
-  pool size rule (cores / 2, at most 8) is the place to change that; the user decides.
+  pool size rule (cores / 2, at most 8) is the place to change that. f1 to f3 at 12 workers were
+  not green, so the default stays 8; `pool up 12` still works when asked for.
