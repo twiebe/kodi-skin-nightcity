@@ -93,3 +93,12 @@ def test_pills_chevrons_and_progress_hide_while_following():
         assert '<visible>!$EXP[SpotlightFollows]</visible>' in pills, hero
     assert '<param name="visible" value="Container(9000).ListItem.IsResumable + !$EXP[SpotlightFollows]"/>' in _include('MovieHero')
     assert 'SpotlightFollows' not in re.search(r'<control type="group" id="9050">(.*?)</control>\s*<control type="grouplist">', _include('MovieHero'), re.S).group(1)
+
+
+def test_kept_ratings_guard_names_the_card_with_or_without_a_library_id():
+    home = (ROOT / '1080i' / 'Includes_Home.xml').read_text()
+    guard = re.search(r'<expression name="FollowKeptIsCard">(.*?)</expression>', home).group(1)
+    for part in ('nc.kept.follow.dbid', 'nc.kept.follow.dbtype', 'nc.kept.follow.label', 'nc.kept.follow.year',
+                 'String.IsEmpty(ListItem.DBID)'):
+        assert part in guard
+    assert '<param name="tmdb" value="$EXP[FollowKeptIsCard]"/>' in home

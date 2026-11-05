@@ -271,16 +271,69 @@ def to_card(title):
     pytest.skip('no {} in this Kodi'.format(title))
 
 
-def test_ratings_follow_the_card_and_stay_apart_from_the_spotlight(tmdb_ratings):
-    """The Matrix has TMDb data, Kdev Alpha none: TMDb Helper is on the focused card, its ratings
-    go to the card they belong to and stay out of the others and the spotlight's."""
+HELPER_TITLE = 'Window(Home).Property(TMDbHelper.ListItem.base_label)'
+POINTED = 'Window(Home).Property(TMDbHelper.WidgetContainer)'
+
+
+def test_ratings_of_a_card_from_a_lookup_of_its_own(tmdb_ratings):
+    """The Matrix has TMDb data, Kdev Alpha none. Standing on Kdev Alpha first takes TMDb Helper
+    off any title it still had from the spotlight: The Matrix's ratings are its own lookup's, and
+    stay out of the others and the spotlight's."""
+    to_card('Kdev Alpha')
+    assert not label(POINTED)
+    wait_for('String.IsEqual({},Kdev Alpha)'.format(HELPER_TITLE), timeout=6)
+    wait_for('String.IsEqual(Window(Home).Property(nc.kept.follow.dbid),{})'.format(label('ListItem.DBID')), timeout=5)
+    assert not true('Control.IsVisible(9324)')
     to_card('The Matrix')
-    wait_for('String.IsEmpty(Window(Home).Property(TMDbHelper.WidgetContainer))')
     wait_for('String.IsEqual(Window(Home).Property(nc.kept.follow.TMDb_Rating),8.2) + Control.IsVisible(9324)', timeout=20)
     screenshot('follow-ratings')
     to_card('Kdev Alpha')
     wait_for('!Control.IsVisible(9324)')
-    time.sleep(1.5)  # TMDb Helper stays on The Matrix: nothing of it may land on this card
-    assert not true('Control.IsVisible(9324)')
+    time.sleep(1.5)
+    assert not true('Control.IsVisible(9324)')  # nothing of The Matrix lands on this card
     if label('Container(9000).ListItem.Title') != 'The Matrix':
         assert not label('Window(Home).Property(nc.kept.9000.TMDb_Rating)')
+
+
+def test_tmdb_helper_only_looks_after_the_cursor_stood_still(tmdb_ratings):
+    focus_row(9202)
+    start = time.time()
+    wait_for('String.IsEqual({},9202)'.format(POINTED), timeout=5)
+    assert 1.2 <= time.time() - start <= 2.2
+    time.sleep(3)  # lets go once it is done with the card
+    wait_for('String.IsEmpty({})'.format(POINTED), timeout=20)
+    title = label(HELPER_TITLE)
+    for direction in ('right', 'left') * 4:
+        action(direction, delay=0.25)
+        assert not label(POINTED)
+    assert label(HELPER_TITLE) == title
+
+
+@pytest.fixture
+def trending_row(tmdb_ratings):
+    """TMDb Helper's own list: cards without a library id."""
+    builtin('Skin.SetString(nc.home.slot1,trending)')
+    builtin('ReloadSkin()')
+    wait_for('Window.IsActive(home)', timeout=20)
+    try:
+        wait_for('Integer.IsGreater(Container(9201).NumItems,2)', timeout=30)
+    except AssertionError:
+        pytest.skip('no trending list from TMDb')
+    yield
+    builtin('Skin.Reset(nc.home.slot1)')
+    builtin('ReloadSkin()')
+    wait_for('Window.IsActive(home)', timeout=20)
+
+
+def test_ratings_of_a_card_without_a_library_id(trending_row):
+    builtin('SetFocus(9201,2,absolute)')
+    wait_for('Control.HasFocus(9201)')
+    assert not label('ListItem.DBID')
+    assert_shows_card()
+    title = label('ListItem.Label')
+    wait_for('String.IsEqual(Window(Home).Property(nc.kept.follow.label),ListItem.Label) + '
+             '!String.IsEmpty(Window(Home).Property(nc.kept.follow.TMDb_Rating))', timeout=20)
+    wait_for('Control.IsVisible(9324)')
+    action('right')
+    wait_for('!String.IsEqual(ListItem.Label,{})'.format(title.replace(',', '')))
+    assert not true('Control.IsVisible(9324)')  # not those of the card before
