@@ -582,7 +582,7 @@
                             <visible>!Control.HasFocus(5200)</visible>
                         </control>
                     </focusedlayout>
-                    <content target="videos">$VAR[InfoSeasonsPath]</content>
+                    <content target="videos" sortby="season">$VAR[InfoSeasonsPath]</content>
                 </control>
                 <control type="list" id="5100">
                     <include>ChainBackGuard</include>
@@ -614,7 +614,7 @@
                             <param name="selected" value="true"/>
                         </include>
                     </focusedlayout>
-                    <content target="videos">$VAR[InfoEpisodesPath]</content>
+                    <content target="videos" sortby="episode">$VAR[InfoEpisodesPath]</content>
                 </control>
                 <control type="label">
                     <left>64</left>

@@ -94,9 +94,13 @@ def test_player_open_params_from_start_movie():
 
 class FakeXbmc:
     """Stands in for the xbmc module: conditions in `true` hold, labels come from `labels`."""
+    LOGWARNING = 2
 
     def __init__(self, true, labels):
         self.true, self.labels, self.builtins = true, labels, []
+
+    def log(self, message, level=0):
+        pass
 
     def getCondVisibility(self, condition):
         return condition in self.true
@@ -112,9 +116,21 @@ class FakeXbmc:
             return True
 
 
+# the page of episode 9 of show 7, for _select_episode
+EPISODE_PAGE = {'ListItem.TvShowDBID': '7', 'ListItem.DBID': '9'}
+ON_PAGE = nightcity.PAGE_OF.format(9)
+SEASONS_LOADED = nightcity.SEASONS_OF.format(7)
+EPISODES_LOADED = nightcity.EPISODES_IN.format(7, 1)
+
+
+def _on_page(*conditions):
+    """The conditions as _wait_on_page asks for them."""
+    return {form.format(c, ON_PAGE) for c in conditions for form in ('[{}] | ![{}]', '[{}] + {}')}
+
+
 def test_select_episode_leaves_focus_alone_after_close(monkeypatch):
-    fake = FakeXbmc({'Integer.IsGreater(Container(5200).NumItems,0)', nightcity.EPISODES_IN.format(1)},
-                    {'ListItem.Season': '1', 'ListItem.Episode': '2', 'Container(5200).NumItems': '1',
+    fake = FakeXbmc({'[{}] | ![{}]'.format(SEASONS_LOADED, ON_PAGE)},
+                    {**EPISODE_PAGE, 'ListItem.Season': '1', 'ListItem.Episode': '2', 'Container(5200).NumItems': '1',
                      'Container(5200).ListItemAbsolute(0).Season': '1', 'Container(5100).NumItems': '2',
                      'Container(5100).ListItemAbsolute(0).Episode': '1',
                      'Container(5100).ListItemAbsolute(1).Episode': '2'})
@@ -138,7 +154,7 @@ def test_select_episode_waits_for_the_episodes_not_the_season_folder(monkeypatch
         polls = 0
 
         def getCondVisibility(self, condition):
-            if condition == nightcity.EPISODES_IN.format(1):
+            if condition in _on_page(EPISODES_LOADED):
                 Rows.polls += 1
                 if Rows.polls == 3:
                     self.labels.update(episodes)
@@ -151,8 +167,8 @@ def test_select_episode_waits_for_the_episodes_not_the_season_folder(monkeypatch
             def waitForAbort(self, timeout):
                 return False
 
-    fake = Rows({'Window.IsActive(movieinformation)', 'Integer.IsGreater(Container(5200).NumItems,0)'},
-                dict(folder, **{'ListItem.Season': '1', 'ListItem.Episode': '2', 'Container(5200).NumItems': '1',
+    fake = Rows({'Window.IsActive(movieinformation)'} | _on_page(SEASONS_LOADED),
+                dict(folder, **EPISODE_PAGE, **{'ListItem.Season': '1', 'ListItem.Episode': '2', 'Container(5200).NumItems': '1',
                                 'Container(5200).ListItemAbsolute(0).Season': '1'}))
     monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
     nightcity._select_episode()
@@ -1272,9 +1288,9 @@ def test_info_back_gives_up_on_the_buttons(monkeypatch):
 
 
 def test_select_episode_parks_the_focus_on_a_page_on_its_way_back(monkeypatch):
-    fake = FakeXbmc({'Window.IsActive(movieinformation)', 'Integer.IsGreater(Container(5200).NumItems,0)',
-                     nightcity.EPISODES_IN.format(1), '!String.IsEmpty(Window(Home).Property(nc.info.back))'},
-                    {'ListItem.Season': '1', 'ListItem.Episode': '1', 'Container(5200).NumItems': '1',
+    fake = FakeXbmc({'Window.IsActive(movieinformation)', '!String.IsEmpty(Window(Home).Property(nc.info.back))'}
+                    | _on_page(SEASONS_LOADED, EPISODES_LOADED),
+                    {**EPISODE_PAGE, 'ListItem.Season': '1', 'ListItem.Episode': '1', 'Container(5200).NumItems': '1',
                      'Container(5200).ListItemAbsolute(0).Season': '1', 'Container(5100).NumItems': '1',
                      'Container(5100).ListItemAbsolute(0).Episode': '1'})
     monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
