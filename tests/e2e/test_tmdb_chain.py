@@ -725,8 +725,8 @@ def test_back_held_on_the_first_page_is_a_back(matrix):
 
 
 def test_back_held_in_a_chain_from_the_player_returns_to_its_controls(matrix):
-    """A chain from the OSD cast row: Back held two pages deep ends it on the cast row, on the
-    person it started from."""
+    """A chain from the OSD cast row: Back held two pages deep ends it on the player's controls,
+    on their own first button (play or resume), not on the cast row (back_to_start)."""
     _osd_chain_from_the_second_person(matrix)
     _list_in(5510)
     builtin('SetFocus(5510,0,absolute)')
@@ -734,4 +734,4 @@ def test_back_held_in_a_chain_from_the_player_returns_to_its_controls(matrix):
     _page(2)
     builtin(BACK_HELD)
     wait_for(IDLE, timeout=20)
-    wait_for('Window.IsActive(1141) + Control.HasFocus(6501) + Integer.IsEqual(Container(6501).CurrentItem,2)', timeout=20)
+    wait_for('Window.IsActive(videoosd) + !Window.IsVisible(1141) + Integer.IsEqual(System.CurrentControlId,602)', timeout=20)
