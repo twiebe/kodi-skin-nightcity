@@ -127,3 +127,39 @@ def test_no_colour_of_the_skin_is_zero():
     for path in (ROOT / '1080i').glob('*.xml'):
         text = path.read_text(encoding='utf-8')
         assert '"00000000"' not in text and '>00000000<' not in text, path.name
+
+
+def _column():
+    return next(c for c in parse(ROOT / '1080i' / WINDOW).iter('control')
+                if c.get('type') == 'group' and c.findtext('description') == 'column')
+
+
+def test_the_column_makes_way_for_the_widest_cursor_with_a_light_animation():
+    """A text cannot change its width smoothly, a group can zoom: the column shrinks while the bar
+    has the focus, clear of the widest cursor and of the grid, and comes back by itself."""
+    nc = _nightcity()
+    column = _column()
+    animation = next(a for a in column.findall('animation') if a.text == 'Conditional')
+    assert animation.get('condition') == 'Control.HasFocus({})'.format(BAR)
+    assert animation.get('effect') == 'zoom'
+    assert 0 < int(animation.get('time')) <= 250
+    scale = int(animation.get('end')) / 100
+    center = int(animation.get('center').split(',')[0])
+    menu = column.find('control')
+    left, right = int(menu.findtext('left')), int(menu.findtext('left')) + int(menu.findtext('width'))
+    assert center + (right - center) * scale <= nc.BAR_RIGHT - nc.bar_width('Nov 26')
+    grid = _controls()['5000']
+    assert center + (left - center) * scale >= int(grid.findtext('left')) + int(grid.findtext('width'))
+
+
+def test_all_of_the_column_makes_way():
+    ids = {c.get('id') for c in _column().iter('control')}
+    assert '5100' in ids
+    assert len([c for c in _column().iter('control') if c.get('type') == 'textbox']) == 2
+    assert [i for i in _column().iter('include') if i.get('content') == 'Kicker']
+    assert '5200' not in ids
+
+
+def test_the_cursor_is_narrow_enough_for_its_text():
+    params = {p.get('name'): p.get('value') for p in _call().findall('param')}
+    assert int(params['textoffsetx']) <= 10

@@ -716,7 +716,7 @@ def test_back_keymap_turns_previous_menu_into_back_on_info_pages():
     and the chain hung 30 s (ChainBackGuard, Includes_Tmdb.xml). On info pages they are Back."""
     import xml.etree.ElementTree as ET
     root = ET.fromstring(nightcity.BACK_KEYMAP)
-    assert [w.tag for w in root] == ['movieinformation', 'window1110']  # the library grid: test_library_bar.py
+    assert [w.tag for w in root] == ['movieinformation', 'window1110', 'music']  # the library grid: test_library_bar.py
     keys = {(device.tag, key.tag, key.get('mod')): key.text for device in root.find('movieinformation') for key in device}
     assert {k: v for k, v in keys.items() if not k[2]} == {
         ('keyboard', 'escape', None): 'Back', ('gamepad', 'back', None): 'Back', ('mouse', 'rightclick', None): 'Back'}
@@ -2240,6 +2240,19 @@ def test_bar_y_spaces_the_groups_evenly_over_the_rail():
 
 def test_bar_y_of_one_group():
     assert nightcity.bar_y(0, 1) == nightcity.BAR_TOP - nightcity.BAR_BUTTON // 2
+
+
+def test_bar_groups_leave_out_what_belongs_to_no_group():
+    assert nightcity.bar_groups([None, 'A', 'A', None, 'B']) == [('A', 1), ('B', 4)]
+
+
+def test_bar_glide_slides_in_from_where_the_cursor_was():
+    event, attributes = nightcity.bar_glide(300, 500)[0]
+    assert event == 'conditional'
+    assert 'effect=slide' in attributes and 'start=0,-200' in attributes and 'end=0,0' in attributes
+    assert 'condition=true' in attributes
+    assert 'time={}'.format(nightcity.BAR_GLIDE) in attributes
+    assert 'start=0,200' in nightcity.bar_glide(500, 300)[0][1]
 
 
 def test_bar_width_grows_with_the_label():

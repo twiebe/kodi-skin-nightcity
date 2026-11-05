@@ -1473,6 +1473,17 @@ BACK_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
       <rightclick>Back</rightclick>
     </mouse>
   </window1110>
+  <music>
+    <keyboard>
+      <escape>NotifyAll(nightcity,music_bar:escape)</escape>
+    </keyboard>
+    <gamepad>
+      <back>NotifyAll(nightcity,music_bar:escape)</back>
+    </gamepad>
+    <mouse>
+      <rightclick>NotifyAll(nightcity,music_bar:escape)</rightclick>
+    </mouse>
+  </music>
 </keymap>
 """
 
@@ -2023,6 +2034,9 @@ LIB_WINDOW = 1110
 LIB_WINDOW_PYTHON = 11110  # Kodi files a skin's custom windows 10000 up
 LIB_GRID = 5000
 LIB_MENU_BUTTON = 'SetFocus(5100)'
+MUSIC_WINDOW = 10502  # MyMusicNav.xml, one of Kodi's own: no offset
+MUSIC_LIST, MUSIC_WALL = 50, 51
+MUSIC_MENU_BUTTON = 'SetFocus(9060)'
 BAR_BUTTON_ID = 5200
 BAR_TOP = 98  # px, the rail
 BAR_HEIGHT = 900
@@ -2030,6 +2044,7 @@ BAR_RIGHT = 1912  # px, right edge of the cursor, padded for its glow like every
 BAR_BUTTON = 74  # px, height of a pill
 BAR_MIN_GROUPS = 3  # fewer and a jump is no use: Right stays on the menu
 BAR_FOLLOW = 0.15  # s after the last press the grid follows
+BAR_GLIDE = 120  # ms, the cursor on its way to the next group
 BAR_NONE = 'none'
 BAR_MONTHS = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
 
@@ -2062,6 +2077,11 @@ def bar_rating(value):
     return str(int(rating)) if rating > 0 else BAR_NONE
 
 
+# Container.SortMethod(id): (the item's info label, what makes its group of it). The letter follows
+# the sort: Kodi labels the items by it. Any other sort (track, duration...) has no groups to name.
+MUSIC_BAR_SORTS = {7: ('SortLetter', bar_letter), 10: ('SortLetter', bar_letter), 11: ('SortLetter', bar_letter),
+                   12: ('SortLetter', bar_letter), 14: ('SortLetter', bar_letter), 16: ('Year', bar_year)}
+
 # sort method: (the item's info label, what makes its group of it); added dates come from JSON-RPC,
 # ListItem.DateAdded is written in the language's format
 BAR_INFO = {'': ('SortLetter', bar_letter), 'sorttitle': ('SortLetter', bar_letter), 'year': ('Year', bar_year),
@@ -2073,7 +2093,8 @@ def bar_groups(keys):
     where Kodi sorts an umlaut is not ours to say."""
     first = {}
     for index, key in enumerate(keys):
-        first.setdefault(key, index)
+        if key is not None:  # the parent folder and the like: no group's
+            first.setdefault(key, index)
     return list(first.items())
 
 
@@ -2088,13 +2109,21 @@ def bar_y(index, count):
 
 
 def bar_width(label):
-    return 96 + 20 * len(label)
+    return 44 + 16 * len(label)
+
+
+def bar_glide(old_y, new_y):
+    """The animation of a cursor that already stands at new_y: it starts from where it was."""
+    return [('conditional', 'effect=slide start=0,{} end=0,0 time={} tween=cubic easing=out condition=true'.format(
+        old_y - new_y, BAR_GLIDE))]
 
 
 class LibBar:
-    """What the bar knows of the grid. Each press is a thread of its own, hence the lock."""
+    """What the bar knows of the grid. Each press is a thread of its own, hence the lock.
+    GRID and KEYS are functions: the music library has two views, whichever shows."""
 
-    def __init__(self):
+    def __init__(self, window, window_python, menu, grid, keys):
+        self.window, self.window_python, self.menu, self.grid, self.keys_now = window, window_python, menu, grid, keys
         self.lock = threading.Lock()
         self.keys, self.groups = [], []
         self.index = 0
@@ -2103,34 +2132,41 @@ class LibBar:
 
     def _window(self):
         import xbmcgui
-        return xbmcgui.Window(LIB_WINDOW_PYTHON)
+        return xbmcgui.Window(self.window_python)
+
+    def is_open(self):
+        import xbmc
+        return xbmc.getCondVisibility('Window.IsActive({})'.format(self.window))
 
     def _to_top_row(self, position):
         """Kodi puts an item of a later page on the page's last row and one of an earlier page on
         its first, so by way of the end of the list. There the last page cannot scroll further."""
         window = self._window()  # held: a window takes its controls with it when it goes
-        grid = window.getControl(LIB_GRID)
+        grid = window.getControl(self.grid())
         grid.selectItem(len(self.keys) - 1)
         grid.selectItem(position)
 
     def _select(self):
         with self.lock:
-            if self.groups and _library_open():
+            if self.groups and self.is_open():
                 self._to_top_row(self.groups[self.index][1])
 
-    def _show(self):
+    def _show(self, old_y=None):
         label = self.groups[self.index][0]
         _home().setProperty('nc.lib.label', label)
         window = self._window()  # held: a window takes its controls with it when it goes
         button = window.getControl(BAR_BUTTON_ID)
         width = bar_width(label)
         button.setWidth(width)
-        button.setPosition(BAR_RIGHT - width, bar_y(self.index, len(self.groups)))
+        y = bar_y(self.index, len(self.groups))
+        button.setPosition(BAR_RIGHT - width, y)
+        if old_y is not None and old_y != y:
+            button.setAnimations(bar_glide(old_y, y))
 
     def prepare(self):
         """The table of the grid as it stands: titles change while their number stays, and reading
         them is cheap (5000 in 9 ms in kodi-dev)."""
-        self.keys = _library_keys()
+        self.keys = self.keys_now()
         self.groups = bar_groups(self.keys)
         if len(self.groups) >= BAR_MIN_GROUPS:
             _home().setProperty('nc.lib.bar', '1')
@@ -2141,23 +2177,27 @@ class LibBar:
         import xbmc
         self.prepare()
         if len(self.groups) < BAR_MIN_GROUPS:
-            xbmc.executebuiltin(LIB_MENU_BUTTON)
+            xbmc.executebuiltin(self.menu)
             return
-        self.origin = int(xbmc.getInfoLabel('Container({}).CurrentItem'.format(LIB_GRID)) or 1) - 1
-        key = self.keys[self.origin] if 0 <= self.origin < len(self.keys) else self.groups[0][0]
-        self.index = next(i for i, group in enumerate(self.groups) if group[0] == key)
+        grid = 'Container({})'.format(self.grid())
+        # CurrentItem does not count a parent folder, ListItemAbsolute and SetFocus do
+        parent = 1 if xbmc.getCondVisibility(grid + '.ListItemAbsolute(0).IsParentFolder') else 0
+        self.origin = int(xbmc.getInfoLabel(grid + '.CurrentItem') or 1) - 1 + parent
+        key = self.keys[self.origin] if 0 <= self.origin < len(self.keys) else None
+        self.index = next((i for i, group in enumerate(self.groups) if group[0] == key), 0)
         self._show()
 
     def step(self, delta):
         if self.groups:
+            old_y = bar_y(self.index, len(self.groups))
             self.index = bar_step(self.index, delta, len(self.groups))
-            self._show()
+            self._show(old_y)
             self.follow.changed()
 
     def go(self, position):
         import xbmc
         self.follow.count += 1  # a press still on its way does not move the grid any more
-        xbmc.executebuiltin('SetFocus({},{},absolute)'.format(LIB_GRID, position))
+        xbmc.executebuiltin('SetFocus({},{},absolute)'.format(self.grid(), position))
 
     def ok(self):
         if self.groups:
@@ -2167,14 +2207,6 @@ class LibBar:
 
     def cancel(self):
         self.go(self.origin)
-
-
-_lib_bar = LibBar()
-
-
-def _library_open():
-    import xbmc
-    return xbmc.getCondVisibility('Window.IsActive({})'.format(LIB_WINDOW))
 
 
 def _library_added():
@@ -2200,7 +2232,31 @@ def _library_keys():
     return [group(xbmc.getInfoLabel(item.format(i) + label)) for i in range(count)]
 
 
-def lib_bar(action, *args):
+def _music_grid():
+    import xbmc
+    return MUSIC_WALL if xbmc.getCondVisibility('Control.IsVisible({})'.format(MUSIC_WALL)) else MUSIC_LIST
+
+
+def _music_keys():
+    """The group of every line of the view; None for what is no title (the parent folder, "all
+    albums"), and for all of them in a sort without groups."""
+    import xbmc
+    grid = 'Container({})'.format(_music_grid())
+    count = int(xbmc.getInfoLabel(grid + '.NumAllItems') or 0)  # NumItems leaves out the parent folder
+    method = next((m for m in MUSIC_BAR_SORTS if xbmc.getCondVisibility('Container.SortMethod({})'.format(m))), None)
+    if method is None:
+        return [None] * count
+    label, group = MUSIC_BAR_SORTS[method]
+    item = grid + '.ListItemAbsolute({}).'
+    return [group(xbmc.getInfoLabel(item.format(i) + label)) if xbmc.getInfoLabel(item.format(i) + 'DBType') else None
+            for i in range(count)]
+
+
+_lib_bar = LibBar(LIB_WINDOW, LIB_WINDOW_PYTHON, LIB_MENU_BUTTON, lambda: LIB_GRID, _library_keys)
+_music_bar = LibBar(MUSIC_WINDOW, MUSIC_WINDOW, MUSIC_MENU_BUTTON, _music_grid, _music_keys)
+
+
+def _bar_command(bar, action, args):
     """The bar's keys: changed (the window opened or the sort changed, the grid reloads), prepare
     (the menu has the focus: at once, Right may come right after), enter, step:N, ok, cancel."""
     import xbmc
@@ -2209,20 +2265,35 @@ def lib_bar(action, *args):
         monitor = _monitor()
         if monitor.waitForAbort(0.4):  # the grid starts to reload
             return
-        while xbmc.getCondVisibility('Container({}).IsUpdating'.format(LIB_GRID)):
+        while xbmc.getCondVisibility('Container({}).IsUpdating'.format(bar.grid())):
             if monitor.waitForAbort(0.1):
                 return
-    with _lib_bar.lock:
-        if not _library_open():
+    with bar.lock:
+        if not bar.is_open():
             return
         if action == 'step':
-            _lib_bar.step(int(args[0]))
+            bar.step(int(args[0]))
         else:
-            {'changed': _lib_bar.prepare, 'prepare': _lib_bar.prepare, 'enter': _lib_bar.enter, 'ok': _lib_bar.ok,
-             'cancel': _lib_bar.cancel}[action]()
+            {'changed': bar.prepare, 'prepare': bar.prepare, 'enter': bar.enter, 'ok': bar.ok,
+             'cancel': bar.cancel}[action]()
 
 
-COMMANDS = {'lib_bar': lib_bar, 'next_episode': next_episode, 'startup': startup, 'genres': genres, 'genre_pick': genre_pick,
+def lib_bar(action, *args):
+    _bar_command(_lib_bar, action, args)
+
+
+def music_bar(action, *args):
+    """escape: the keys of PreviousMenu (BACK_KEYMAP), which stay what they were off the bar."""
+    import xbmc
+    if action != 'escape':
+        _bar_command(_music_bar, action, args)
+    elif xbmc.getCondVisibility('Control.HasFocus({})'.format(BAR_BUTTON_ID)):
+        _bar_command(_music_bar, 'cancel', ())
+    else:
+        xbmc.executebuiltin('Action(PreviousMenu)')
+
+
+COMMANDS = {'lib_bar': lib_bar, 'music_bar': music_bar, 'next_episode': next_episode, 'startup': startup, 'genres': genres, 'genre_pick': genre_pick,
             'info_select': info_select, 'info_leave': info_leave, 'info_back': info_back, 'info_forget': info_forget,
             'back_to_start': back_to_start, 'trailer': trailer,
             'osd_back': osd_back, 'play': play, 'info': info, 'plot': plot, 'player_info': player_info,
