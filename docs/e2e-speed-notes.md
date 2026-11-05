@@ -54,6 +54,11 @@ the session start (Kodi restart per worker).
 | r5w4 | 4 workers, 66f5170 | 488.4 s | 1 failed, 315 passed, 4 skipped | peak load 7.0; 0 crashes; test_ratings_line_hides_without_ratings: a rating left on Kdev Alpha by test_library_bar on the same Kodi (SetMovieDetails ignores rating 0.0), fixed in 6bf1372 |
 | r6l8 | 8 workers + 8 busy processes, 6bf1372 | 285.7 s | 0 failed, 316 passed, 4 skipped | peak load 32.6, mean idle 4 %; 0 crashes |
 | r7l16 | 8 workers + 16 busy processes | 357.2 s | 1 failed, 315 passed, 4 skipped | peak load 48.4, mean idle 0 %; 0 crashes; test_ends_at_of_the_playing_movie_is_the_players: info page not open within 10 s |
+| r8w2 | 2 workers, 704edd1 | 871.2 s | 0 failed, 316 passed, 4 skipped | 0 crashes |
+| r9 | 8 workers, 704edd1 | 244.9 s | 0 failed, 316 passed, 4 skipped | peak load 13.1; 0 crashes |
+| r10 | 8 workers | 249.6 s | 0 failed, 315 passed, 1 error | a builtin marker not seen in 30 s at a test's setup (UDP event server lost a datagram); the batch is sent again since e05ac55 |
+| r11 | 8 workers, e05ac55 | 253.2 s | 2 failed, 314 passed | crew_tab again (Back dropped between two pages, fixed in 12ce159) and test_up_right_after_an_osd_chain_stays_on_the_tabs (second time; Up after the chain's end did not reach the tabs within 5 s, open) |
+| r12 | 8 workers, 12ce159 | 264.3 s | 1 failed, 315 passed | test_rows_focus _third_page: the select on a person's film did not start a page (no manager _on_add in the log; ChainClick runs only with !Container(5510).IsUpdating), once, open |
 ## Findings
 
 - Baseline failures: 9 from missing data (the pool template has 3 movies, 2 shows, 0 genres,
@@ -92,8 +97,29 @@ the session start (Kodi restart per worker).
 
 ## Tried and dropped
 
-(filled in as it happens)
+- Theory that Kodi's per-frame InfoBool cache loses a held Back when the test polls the guard
+  condition over JSON-RPC in the frame the guard timer stops: 0 of 6 lost with 100 Hz polling
+  versus 0 of 6 without (scratch guard2.py on e2e-5). Dropped.
+- A shorter default action() delay (the predecessor tried 0.1 s): its runs gained about 10 s
+  but grew new focus flakes; left at 0.3 s. Not retried here.
+- 640x360 displays (predecessor, r3/r4): about 20 s less wall, but pixel-based checks had to
+  be rescaled and screenshots get small; with the GL thread cap the display size no longer
+  matters much. Left at 1280x720.
 
 ## Open points and next steps
 
-(filled in as it happens)
+- Remaining flakes, each seen once or twice in 12 full runs, all around TMDb Helper's window
+  manager and dropped keys: test_up_right_after_an_osd_chain_stays_on_the_tabs (r4, r11), the
+  rows_focus select (r12), test_stale_lists Position 2 (r1, under load 44 before the GL cap).
+  Every failure report now carries the test's kodi.log slice; the next occurrence should be
+  readable from that.
+- Kodi drops a key that lands between two chain pages (closing animation, DialogBusy) without
+  a log line unless a modal dialog is closing. Tests that press a key right after a chain page
+  opened must go through _page() (waits for the page at that position and for the manager).
+- Proposal for the TMDb Helper fork: publish a property once the manager has seen the page it
+  opened (today only a log line), so the skin's one second guard can wait on it and the tests
+  need not read kodi.log.
+- Speed beyond this: the sum of test times is about 1870 s, so 8 workers cannot go much below
+  240 s. More workers would (the pool caps at cores / 2 = 8; with the GL cap a worker needs
+  about 2 cores only while it plays video, load peaks at 13 on 16 cores). See the measurement
+  with 12 workers below, if present.
