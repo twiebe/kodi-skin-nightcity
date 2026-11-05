@@ -51,6 +51,9 @@ the session start (Kodi restart per worker).
 | r3 | + 73c0013 (manager wait) | 281.0 s | 1 failed, 315 passed, 4 skipped | sum 1891 s; peak load 11.7; 0 Kodi crashes; test_back_in_the_chain_returns_to_the_crew_tab: Back on the person page had no effect, manager never saw the page close (cause open) |
 | r4 | same | 244.4 s | 1 failed, 315 passed, 4 skipped, 1 error | sum 1867 s; peak load 13.2; 0 crashes; test_up_right_after_an_osd_chain_stays_on_the_tabs (HasFocus 6521 within 5 s), test_script teardown: builtin marker not seen in 10 s (marker timeout now 30 s, 3dc75c3) |
 
+| r5w4 | 4 workers, 66f5170 | 488.4 s | 1 failed, 315 passed, 4 skipped | peak load 7.0; 0 crashes; test_ratings_line_hides_without_ratings: a rating left on Kdev Alpha by test_library_bar on the same Kodi (SetMovieDetails ignores rating 0.0), fixed in 6bf1372 |
+| r6l8 | 8 workers + 8 busy processes, 6bf1372 | 285.7 s | 0 failed, 316 passed, 4 skipped | peak load 32.6, mean idle 4 %; 0 crashes |
+| r7l16 | 8 workers + 16 busy processes | 357.2 s | 1 failed, 315 passed, 4 skipped | peak load 48.4, mean idle 0 %; 0 crashes; test_ends_at_of_the_playing_movie_is_the_players: info page not open within 10 s |
 ## Findings
 
 - Baseline failures: 9 from missing data (the pool template has 3 movies, 2 shows, 0 genres,
