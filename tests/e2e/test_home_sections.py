@@ -3,7 +3,7 @@ to end: defaults, picking, swapping, moving, options, spotlight off and empty sl
 on Home after the change; the page itself walks like Kodi's settings pages."""
 import pytest
 
-from conftest import action, builtin, cond, info, screenshot, wait_for
+from conftest import action, builtin, builtins, cond, info, screenshot, wait_for
 
 pytestmark = pytest.mark.e2e
 
@@ -25,8 +25,7 @@ def reset():
     names = ['SpotlightSource', 'SpotlightInterval', 'nc.movies.spotlight', 'nc.shows.spotlight',
              'nc.shows.interval', 'nc.search.forget']
     names += ['nc.{}.slot{}{}'.format(p, n, o) for p in PAGES for n in range(1, 9) for o in ('', '.opt')]
-    for name in names:
-        builtin('Skin.Reset({})'.format(name))
+    builtins(*('Skin.Reset({})'.format(name) for name in names))
 
 
 @pytest.fixture

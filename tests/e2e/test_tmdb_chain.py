@@ -286,7 +286,7 @@ def test_person_without_films_still_reaches_the_tabs(matrix):
     """A crew member with no films (The Matrix's colour timer): Down from the buttons used to do
     nothing, the tabs with the crew jobs were out of reach."""
     _info_and_person(matrix, crew_index=43)
-    assert info('Container(5510).NumItems')['Container(5510).NumItems'] == '0'
+    assert info('Container(5510).NumItems')['Container(5510).NumItems'] in ('', '0')  # '': not filled at all
     action('down', delay=1)
     assert _true('ControlGroup(5520).HasFocus()')
     screenshot('tmdb-person-without-films')

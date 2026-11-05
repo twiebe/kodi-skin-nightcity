@@ -102,10 +102,7 @@ def test_library_rating_only_with_the_setting(home):
     """Jellyfin's community rating (Kodi's default rating) shows only with "Ratings only from
     TMDb Helper" off. On the info page, which reads the movie afresh (Home keeps its spotlight
     items as loaded); the heroes share the line (tests/static/test_ratings_source.py)."""
-    movieid = rpc('VideoLibrary.GetMovies', {'filter': {'field': 'title', 'operator': 'is', 'value': 'Bulk 0001'}})
-    if not movieid.get('movies'):
-        pytest.skip('no Bulk 0001 in this Kodi')
-    movieid = movieid['movies'][0]['movieid']
+    movieid = rpc('VideoLibrary.GetMovies', {'filter': {'field': 'title', 'operator': 'is', 'value': 'Kdev Beta'}})['movies'][0]['movieid']
     rpc('VideoLibrary.SetMovieDetails', {'movieid': movieid, 'rating': 7.4})
     try:
         _open_info(movieid)

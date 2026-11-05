@@ -70,11 +70,13 @@ def test_osd_stays_while_switched_off(autohide_off, tracks):
 
 
 def changed_pixels(before, after, box):
-    """Pixels that differ clearly between two screenshots within BOX (1080p coordinates)."""
+    """Pixels that differ clearly between two screenshots within BOX (1080p coordinates), counted
+    as on a 1280 x 720 screen: the pool's Kodis may run smaller."""
     one, two = Image.open(before).convert('L'), Image.open(after).convert('L')
     scale = one.width / 1920
     box = [int(v * scale) for v in box]
-    return sum(1 for a, b in zip(one.crop(box).tobytes(), two.crop(box).tobytes()) if abs(a - b) > 40)
+    changed = sum(1 for a, b in zip(one.crop(box).tobytes(), two.crop(box).tobytes()) if abs(a - b) > 40)
+    return changed * (1280 / one.width) ** 2
 
 
 # with the OSD up: the plot (textbox 420 of the seek bar dialog, which JSON-RPC cannot ask
