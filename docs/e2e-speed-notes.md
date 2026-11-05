@@ -48,6 +48,8 @@ the session start (Kodi restart per worker).
 
 | r1 | f018995 + c5e36ef collected late (old back_held) | 280.6 s | 4 failed, 312 passed, 4 skipped, 1 error | sum 2043 s; load 44 at the end: all 8 Kodis in playback tests, each 1100 % CPU |
 | r2 | + 3c8900e, LP_NUM_THREADS=2 (kodi-dev 9cf3d98) | 260.3 s | 1 failed, 315 passed, 4 skipped, 1 error | sum 1871 s; peak load 13.5, mean idle 49 %; back_held passes; the one failure is the Back-right-after-open race below |
+| r3 | + 73c0013 (manager wait) | 281.0 s | 1 failed, 315 passed, 4 skipped | sum 1891 s; peak load 11.7; 0 Kodi crashes; test_back_in_the_chain_returns_to_the_crew_tab: Back on the person page had no effect, manager never saw the page close (cause open) |
+| r4 | same | 244.4 s | 1 failed, 315 passed, 4 skipped, 1 error | sum 1867 s; peak load 13.2; 0 crashes; test_up_right_after_an_osd_chain_stays_on_the_tabs (HasFocus 6521 within 5 s), test_script teardown: builtin marker not seen in 10 s (marker timeout now 30 s, 3dc75c3) |
 
 ## Findings
 
