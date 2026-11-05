@@ -11,7 +11,7 @@ import pytest
 from PIL import Image
 
 from conftest import action, builtin, cond, info, rpc, screenshot, wait_for
-from test_tmdb_chain import _leave_chain, _list_in, _page, matrix  # noqa: F401 (fixture)
+from test_tmdb_chain import _click_opens, _leave_chain, _list_in, _page, matrix  # noqa: F401 (fixture)
 
 pytestmark = pytest.mark.e2e
 
@@ -56,7 +56,7 @@ def _to_film(index):
     _list_in('5510')
     builtin('SetFocus(5510,{},absolute)'.format(index))
     time.sleep(0.5)
-    action('select')
+    _click_opens(5510, 3)
     wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),3)', timeout=30)
 
 
