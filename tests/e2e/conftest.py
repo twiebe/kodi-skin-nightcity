@@ -8,6 +8,7 @@ import json
 import os
 import pathlib
 import re
+import shutil
 import sqlite3
 import subprocess
 import time
@@ -232,6 +233,7 @@ def pytest_xdist_auto_num_workers(config):
 
 
 _lock = [None]
+_run_start = [None]
 
 
 def pytest_configure(config):
@@ -255,6 +257,50 @@ def pytest_configure(config):
     handle.write('pid {} since {}'.format(os.getpid(), time.strftime('%Y-%m-%d %H:%M:%S')))
     handle.flush()
     _lock[0] = handle
+    _run_start[0] = int(time.time())
+
+
+def crash_logs(listing, since):
+    """The crash logs of a listing of "mtime path" lines that were written since the time SINCE."""
+    logs = []
+    for line in listing.splitlines():
+        stamp, _, path = line.partition(' ')
+        if stamp.isdigit() and int(stamp) >= since:
+            logs.append(path.rsplit('/', 1)[-1])
+    return logs
+
+
+def crash_summary(crashes):
+    """Lines for the report; CRASHES is {instance: its crash logs, None if it could not be asked}."""
+    asked = {name: logs for name, logs in crashes.items() if logs is not None}
+    lines = ['Kodi crashes in this run: {} ({} workers looked at)'.format(sum(map(len, asked.values())), len(asked))]
+    for name, logs in crashes.items():
+        if logs is None:
+            lines.append('  {}: not running, its crash logs cannot be read'.format(name))
+        for log in logs or []:
+            lines.append('  {}: {}'.format(name, log))
+    return lines
+
+
+def _worker_crashes(name, since):
+    """Kodi's start script writes a crash log whenever Kodi dies of a signal that dumps core, also
+    while it quits. "Kodi exited" in the container's log cannot tell that apart: every kdev restart
+    prints it too, and the container's log says nothing of why."""
+    done = subprocess.run(['docker', 'exec', 'kodi-dev-{}-kodi-1'.format(name), 'sh', '-c',
+                           'stat -c "%Y %n" "$HOME"/kodi_crashlog-*.log 2>/dev/null; true'], capture_output=True, text=True)
+    return crash_logs(done.stdout, since) if done.returncode == 0 else None
+
+
+def pytest_terminal_summary(terminalreporter):
+    if not POOL or os.environ.get('PYTEST_XDIST_WORKER') or _run_start[0] is None:
+        return
+    names = sorted((path.parent.name for path in (KODI_DEV / 'instances').glob(POOL + '-[0-9]*/ports.env')),
+                   key=lambda name: int(name.rsplit('-', 1)[1]))
+    workers = terminalreporter.config.getoption('numprocesses', None) or 1
+    crashes = {name: _worker_crashes(name, _run_start[0]) for name in names[:workers]}
+    terminalreporter.write_sep('-', 'Kodi')
+    for line in crash_summary(crashes):
+        terminalreporter.write_line(line)
 
 
 # Files whose tests do not rely on each other: under --dist loadfile each of their tests is a work
@@ -307,6 +353,48 @@ def _kodi_log_lines(start, limit=120):
     return '\n'.join(line.rstrip()[:220] for line in lines)
 
 
+# What Kodi stands on when a test fails: a timeout alone says nothing of who has the focus.
+KODI_STATE = ['System.CurrentWindow', 'System.CurrentControl', 'System.CurrentControlId', 'Container.FolderPath',
+              'Window(Home).Property(nc.library)', 'Window(Home).Property(nc.lib.bar)', 'Skin.String(nc.sort)']
+KODI_CONDITIONS = ['System.HasActiveModalDialog', 'System.HasModalDialog', 'Window.IsActive(1110)', 'Window.IsVisible(1110)',
+                   'Window.IsActive(home)', 'Control.IsVisible(5100)', 'Control.IsVisible(5101)', 'Control.IsEnabled(5101)',
+                   'Control.HasFocus(5101)', 'Control.HasFocus(5000)', 'Container(5000).IsUpdating', 'Player.HasMedia']
+KEEP_LOG_AT = 3  # failures in a file: from here on it is not one test's fault
+
+
+def keep_log_now(seen, name):
+    """Whether this failure of the file NAME is the one to keep the whole kodi.log for."""
+    seen[name] = seen.get(name, 0) + 1
+    return seen[name] == KEEP_LOG_AT
+
+
+def _kodi_state():
+    try:
+        return '\n'.join('{} = {!r}'.format(k, v) for result in (info(*KODI_STATE), cond(*KODI_CONDITIONS)) for k, v in result.items())
+    except (OSError, RuntimeError, ValueError) as e:
+        return 'Kodi does not answer: {}'.format(e)
+
+
+def _keep_log(name):
+    """The whole of kodi.log, the run before it and a picture, by the time a file fails wholesale;
+    the next run on this Kodi overwrites them."""
+    instance = os.environ.get('KDEV_INSTANCE', 'kodi-dev')
+    folder = KODI_DEV / 'instances' / (POOL or instance) / 'kept-logs' / '{}-{}-{}'.format(instance, name, time.strftime('%H%M%S'))
+    folder.mkdir(parents=True, exist_ok=True)
+    for log in ('kodi.log', 'kodi.old.log'):
+        source = _data() / 'kodi' / 'temp' / log
+        if source.is_file():
+            shutil.copy(source, folder / log)
+    try:
+        shutil.copy(screenshot('kept-{}'.format(name)), folder / 'screen.png')
+    except (OSError, IndexError, subprocess.CalledProcessError):
+        pass
+    return folder
+
+
+_failed_in_file = {}
+
+
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     outcome = yield
@@ -318,6 +406,9 @@ def pytest_runtest_makereport(item, call):
             text = 'kodi.log not readable: {}'.format(e)
         if text:
             report.sections.append(('kodi.log of {} ({})'.format(os.environ.get('KDEV_INSTANCE', 'kodi-dev'), call.when), text))
+        report.sections.append(('Kodi at the failure ({})'.format(call.when), _kodi_state()))
+        if keep_log_now(_failed_in_file, item.path.name):
+            report.sections.append(('kept', 'the whole kodi.log is in {}'.format(_keep_log(item.path.stem))))
 
 
 def pytest_collection_modifyitems(config, items):
