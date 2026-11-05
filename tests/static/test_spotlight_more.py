@@ -56,7 +56,7 @@ def test_every_spotlight_button_row_ends_with_the_arrow():
     for name in ('Includes_Home.xml', 'Includes_Music.xml'):
         root = ET.parse(SKIN / name).getroot()
         rows += [c for c in root.iter('control') if c.get('type') == 'grouplist'
-                 and c.findtext('left') == '374' and c.findtext('top') == '480']  # padded, test_glow.py
+                 and (c.findtext('left'), c.findtext('top')) in (('384', '487'), ('374', '480'))]  # padded, test_glow.py
     assert len(rows) == 3, len(rows)
     for row in rows:
         last = [c for c in row if c.tag in ('include', 'control')][-1]

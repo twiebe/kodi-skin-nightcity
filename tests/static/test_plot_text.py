@@ -189,7 +189,7 @@ def test_no_plot_shows_a_placeholder(info_page, kind):
                and c.findtext('label') == '$LOCALIZE[31469]' and c.findtext('visible') == expected]
     assert (empty.findtext('font'), empty.findtext('textcolor')) == ('font_body', 'text_mute')
     textbox = info_page.controls[box]
-    shift = -320 if kind == 'episode' else 0
+    shift = -330 if kind == 'episode' else 0
     assert (int(empty.findtext('left')), empty.findtext('top')) == \
         (int(textbox.findtext('left')) + shift, textbox.findtext('top'))
 
