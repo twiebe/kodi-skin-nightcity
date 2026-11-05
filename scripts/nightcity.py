@@ -1818,8 +1818,10 @@ def music_info(kind, dbid):
 # service keeps what TMDb Helper fetched per title for the session and shows the kept ratings of
 # the item on screen in nc.kept.<container>.*, which the ratings line reads: they stay once
 # fetched, also when the spotlight or the list comes back to a title. While the hero follows a
-# row title (FollowHero, group 9302) TMDb Helper is on the focused card and the kept ratings of that
-# card go to nc.kept.follow.*. While a video plays it
+# row title (FollowHero, group 9302) the kept ratings of the focused card go to nc.kept.follow.*:
+# with an empty WidgetContainer TMDb Helper does not look at Home's items at all, so it is pointed
+# at the row once the cursor stood still on the card for FOLLOW_SETTLE s and let go of it when
+# the ratings are kept or the cursor moves on, so a move along the row costs no request. While a video plays it
 # keeps TMDb Helper's player ratings (TMDbHelper.Player.*) the same way in nc.kept.player.*.
 
 HERO_SOURCES = ('IMDb_Rating', 'Top250', 'TMDb_Rating', 'RottenTomatoes_Rating', 'RottenTomatoes_UserMeter',
@@ -1834,9 +1836,13 @@ HEROES = (('9000', '9300', '9050'), ('9001', '9301', '9550'))
 # the group of the hero while it follows a row title, where its ratings go
 FOLLOW_GROUP = '9302'
 FOLLOW_KEPT = 'follow'
+FOLLOW_SETTLE = 1.5  # s the cursor stands on a card before TMDb Helper looks it up
+FOLLOW_ROW = 'System.CurrentControlId'
 # what names a title: (property name, ListItem info); the last one guards the line
 HERO_KEY = (('dbtype', 'DBType'), ('dbid', 'DBID'))
 EPISODE_KEY = (('label', 'Label'), ('season', 'Season'), ('episode', 'Episode'))
+# a card without a library id (TMDb Helper's own lists, Trending)
+CARD_KEY = (('dbtype', 'DBType'), ('year', 'Year'), ('label', 'Label'))
 HERO_ON_HOME = 'Window.IsActive(home)'
 HERO_DIALOG = 'System.HasActiveModalDialog'
 HERO_SHOWN = 'Control.IsVisible({})'
@@ -1877,6 +1883,9 @@ class HeroRatings:
         self.cache = {}
         self.pending = None  # (key, ratings, since)
         self.shown = {}  # container -> (key, what nc.kept.<container>.* hold now)
+        self.card = None  # the card the hero follows: (row, dbtype, dbid, label)
+        self.card_since = 0.0
+        self.card_asked = False  # TMDb Helper was pointed at it during this stand
 
     def seen(self, key, ratings, now):
         """TMDb Helper is done with title KEY and has RATINGS ({source: value}); None: busy or on
@@ -1948,6 +1957,46 @@ def _keep(kept, home, container, fields, watched, now, item=None):
             home.clearProperty(name)
 
 
+def _helper_busy(home):
+    return bool(home.getProperty('TMDbHelper.IsUpdating') or home.getProperty('TMDbHelper.IsUpdatingRatings'))
+
+
+def _drop_helper_ratings(home):
+    """TMDb Helper changes base_* with the title, its ratings only when the new ones arrive, and
+    never when the cursor left before that: what stands there then is the title before's."""
+    for source in HERO_SOURCES:
+        home.clearProperty('TMDbHelper.ListItem.' + source)
+
+
+def follow_tick(kept, home, now):
+    """The hero follows the focused card: point TMDb Helper at its row once the cursor stood
+    still and the card has nothing kept, let go at the next move; keep and show its ratings."""
+    import xbmc
+    row = xbmc.getInfoLabel(FOLLOW_ROW)
+    dbtype, dbid, label = (xbmc.getInfoLabel('ListItem.' + info) for info in ('DBType', 'DBID', 'Label'))
+    fields = HERO_KEY if dbid else CARD_KEY
+    key = tuple((name, xbmc.getInfoLabel('ListItem.' + info)) for name, info in fields)
+    card = (row, dbtype, dbid, label)
+    pointed = home.getProperty('TMDbHelper.WidgetContainer')
+    if card != kept.card:
+        if _helper_busy(home):
+            _drop_helper_ratings(home)
+        kept.card, kept.card_since, kept.card_asked = card, now, False
+        if pointed:
+            home.clearProperty('TMDbHelper.WidgetContainer')
+    elif pointed:
+        if key in kept.cache:  # pointed, TMDb Helper would look up the next card by itself
+            home.clearProperty('TMDbHelper.WidgetContainer')
+    elif now - kept.card_since >= FOLLOW_SETTLE and row and not kept.card_asked \
+            and not any(kept.cache.get(key, {}).values()):
+        if not (home.getProperty('TMDbHelper.ListItem.base_dbtype') == dbtype and
+                _hero_same_title(home, dbid, label)):
+            _drop_helper_ratings(home)
+        home.setProperty('TMDbHelper.WidgetContainer', row)
+        kept.card_asked = True
+    _keep(kept, home, FOLLOW_KEPT, fields, True, now, item='ListItem.')
+
+
 def player_same_title(props, playing):
     """TMDb Helper's player properties PROPS ({name: value}) belong to what plays (PLAYING,
     VideoPlayer.* without the prefix): for a new item it sets them only once that has started,
@@ -2005,12 +2054,13 @@ def hero_tick(kept, now):
     # the info page of a movie over Home watches its own item
     if xbmc.getCondVisibility(HERO_DIALOG):
         return
-    # the hero shows the focused row card: TMDb Helper watches that without a widget container
     if xbmc.getCondVisibility(HERO_SHOWN.format(FOLLOW_GROUP)):
-        if home.getProperty('TMDbHelper.WidgetContainer'):
-            home.clearProperty('TMDbHelper.WidgetContainer')
-        _keep(kept, home, FOLLOW_KEPT, HERO_KEY, True, now, item='ListItem.')
+        follow_tick(kept, home, now)
         return
+    if kept.card:
+        if _helper_busy(home):
+            _drop_helper_ratings(home)
+        kept.card = None
     container, buttons = next(((c, b) for c, group, b in HEROES if xbmc.getCondVisibility(HERO_SHOWN.format(group))),
                               ('', ''))
     widget = hero_widget_container(container, bool(buttons) and xbmc.getCondVisibility(HERO_FOCUS.format(buttons)),

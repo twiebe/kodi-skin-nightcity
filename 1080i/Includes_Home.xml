@@ -4,6 +4,8 @@
          title (FollowHero) and the rotation stands. Everywhere else, also on a card that is no
          title, the spotlight is its random self. The Music page does not follow. -->
     <expression name="SpotlightFollows">[[[ControlGroup(9210).HasFocus() + !String.IsEqual(Skin.String(SpotlightSource),off)] | [ControlGroup(9410).HasFocus() + !String.IsEqual(Skin.String(nc.movies.spotlight),off)] | [ControlGroup(9510).HasFocus() + !String.IsEqual(Skin.String(nc.shows.spotlight),off)]] + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,season)]]</expression>
+    <!-- nc.kept.follow.* name the focused card: by library id, without one (Trending) by year and label -->
+    <expression name="FollowKeptIsCard">[[!String.IsEmpty(Window(Home).Property(nc.kept.follow.dbid)) + Integer.IsEqual(ListItem.DBID,Window(Home).Property(nc.kept.follow.dbid))] | [String.IsEmpty(ListItem.DBID) + !String.IsEmpty(Window(Home).Property(nc.kept.follow.label)) + String.IsEqual(ListItem.Label,Window(Home).Property(nc.kept.follow.label)) + String.IsEqual(ListItem.Year,Window(Home).Property(nc.kept.follow.year))]] + String.IsEqual(ListItem.DBType,Window(Home).Property(nc.kept.follow.dbtype))</expression>
     <!-- Off-screen list holding the spotlight items; autoscroll rotates the selection. The focused
          item sits at the left with the next three in view: their artwork loads before they come up. -->
     <include name="SpotlightList">
@@ -728,7 +730,7 @@
                 <param name="techlabel" value="$VAR[ItemResolution]$VAR[ItemHdr, ,]"/>
                 <param name="audiolabel" value="$VAR[ItemAudio]"/>
                 <!-- what the service kept for this card (scripts/nightcity.py hero_tick) -->
-                <param name="tmdb" value="Integer.IsEqual(ListItem.DBID,Window(Home).Property(nc.kept.follow.dbid)) + String.IsEqual(ListItem.DBType,Window(Home).Property(nc.kept.follow.dbtype))"/>
+                <param name="tmdb" value="$EXP[FollowKeptIsCard]"/>
                 <param name="ratingsprefix" value="nc.kept.follow."/>
                 <param name="ratingswait" value="true"/>
             </include>
