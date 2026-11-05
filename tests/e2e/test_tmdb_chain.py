@@ -42,6 +42,19 @@ def _page(position):
     time.sleep(1.5)  # the page settles: its scripts park the focus on reopening (info_back)
 
 
+def _click_opens(cid, position):
+    """OK on the focused item of list CID opens the chain's page POSITION. The list may just
+    be loading again (the person's films load twice, the second time about 2 s after the
+    page), and the skin ignores a click on a loading list (ChainClick): then once more, as a
+    user would."""
+    action('select', delay=0)
+    try:
+        wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),{})'.format(position), timeout=5)
+    except AssertionError:
+        wait_for('!Container({}).IsUpdating'.format(cid), timeout=30)
+        action('select', delay=0)
+
+
 def _manager_saw_the_page(timeout=10):
     """TMDb Helper's manager logs "direct.open() DONE!" once it saw the page it opened last; it
     publishes no property for it. Without the line (another open mode) a poll's worth of time."""
@@ -350,7 +363,7 @@ def _film_in_its_first_second(matrix, key):
         wait_for('Integer.IsGreater(Container(5510).NumItems,0) + !Container(5510).IsUpdating', timeout=30)
         builtin('SetFocus(5510,0,absolute)')
         offset = _log().stat().st_size
-        action('select', delay=0)
+        _click_opens(5510, 3)
         wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),movie)', timeout=30)
         seen = 'direct.open() DONE!'
         try:
