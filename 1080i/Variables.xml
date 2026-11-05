@@ -249,6 +249,20 @@
         <value condition="String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,song)">$INFO[ListItem.Artist]</value>
         <value condition="String.IsEqual(ListItem.DBType,artist)">$INFO[ListItem.Genre]</value>
     </variable>
+    <!-- the kicker of the hero while it follows a row title (FollowHero) -->
+    <variable name="FollowKicker">
+        <value condition="String.IsEqual(ListItem.DBType,episode)">$INFO[ListItem.TVShowTitle] · $VAR[FollowSeasonNum]$VAR[FollowEpisodeNum]</value>
+        <value condition="String.IsEqual(ListItem.DBType,season)">$INFO[ListItem.TVShowTitle]</value>
+        <value>$INFO[ListItem.Genre]</value>
+    </variable>
+    <variable name="FollowSeasonNum">
+        <value condition="Integer.IsLess(ListItem.Season,10)">S0$INFO[ListItem.Season]</value>
+        <value>S$INFO[ListItem.Season]</value>
+    </variable>
+    <variable name="FollowEpisodeNum">
+        <value condition="Integer.IsLess(ListItem.Episode,10)">E0$INFO[ListItem.Episode]</value>
+        <value>E$INFO[ListItem.Episode]</value>
+    </variable>
     <variable name="CardArt">
         <value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
         <value>$INFO[ListItem.Art(poster)]</value>

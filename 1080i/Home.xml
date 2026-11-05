@@ -99,6 +99,7 @@
         <include>SearchWidgetLoaders</include>
         <include condition="!String.IsEqual(Skin.String(SpotlightSource),off) | !String.IsEqual(Skin.String(nc.movies.spotlight),off)">MovieHero</include>
         <include condition="!String.IsEqual(Skin.String(nc.shows.spotlight),off)">ShowHero</include>
+        <include>FollowHero</include>
         <include>SystemHero</include>
         <include>SearchHero</include>
         <include>MusicHero</include>
