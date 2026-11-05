@@ -69,6 +69,9 @@
     <!-- the player's second step: what plays fades in once the OSD controls and the seek line
          are in (their windows fade 150 ms) -->
     <constant name="PlayerFadeStep">150</constant>
+    <!-- the hero swaps between the spotlight and the focused card as long as the spotlight's own
+         titles crossfade (fadetime of poster, logo and backdrop) -->
+    <constant name="HeroSwapTime">400</constant>
 
     <!-- A block of a Home page fades in and rises a few pixels `delay` ms after its page comes up
          or Home opens. The block needs the page condition itself: Kodi does not update the
@@ -89,6 +92,25 @@
                 <effect type="slide" start="0,10" end="0,0" time="FadeTime" delay="$PARAM[delay]" tween="cubic" easing="out"/>
             </animation>
         </definition>
+    </include>
+
+    <!-- The hero's spotlight when it makes way for the focused card and comes back. Hidden too: it
+         goes on showing its own title under that fade. Not while a video plays under Home. -->
+    <include name="HeroSwapFade">
+        <animation type="Visible" condition="!Player.HasVideo">
+            <effect type="fade" start="0" end="100" time="HeroSwapTime"/>
+        </animation>
+        <animation type="Hidden" condition="!Player.HasVideo">
+            <effect type="fade" start="100" end="0" time="HeroSwapTime"/>
+        </animation>
+    </include>
+    <!-- The focused card's hero when it comes up. It goes at once, also in the middle of this fade
+         (not reversible): it shows the unqualified ListItem, once the focus left the row that is
+         whatever has the focus now. -->
+    <include name="HeroSwapIn">
+        <animation type="Visible" condition="!Player.HasVideo" reversible="false">
+            <effect type="fade" start="0" end="100" time="HeroSwapTime"/>
+        </animation>
     </include>
 
     <!-- PageFade for what plays in the player (PlayerDetails): it fades in and rises `delay` ms

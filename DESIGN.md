@@ -63,9 +63,15 @@ own): the cursor on a title card of a row (movie, show, episode, season) shows t
 hero with what the spotlight shows of a title, whatever kind the spotlight holds. An episode has
 its show and SxxEyy in the kicker and the poster of its show. The rotation stands meanwhile, and
 the pills, chevrons and progress line are hidden: they act on the spotlight's own title. Up from
-the top row still goes to the buttons. The hero is the spotlight again, at once, as soon as the
-cursor is anywhere else: on its buttons, in the top menu, on a card that is no title (a genre tab).
-The same title stands there and its interval starts anew.
+the top row still goes to the buttons. The hero is the spotlight again as soon as the cursor is
+anywhere else: on its buttons, in the top menu, on a card that is no title (a genre tab). The same
+title stands there and its interval starts anew.
+
+Both swaps fade 400 ms, as long as the spotlight's own crossfade of poster, logo and backdrop. Onto
+a card the spotlight fades out under the card's hero fading in. Off a card the card's hero goes at
+once (it shows whatever has the focus, there is nothing left to fade out) and the spotlight fades
+in, text and pills with it. Between two cards it is a title change as in the spotlight: text at
+once, poster and backdrop crossfade.
 
 The online ratings of the card come once the cursor stood still on it for 1.5 s (the service points
 TMDb Helper at the row, 2 s at worst until the request goes out): moving along a row costs no

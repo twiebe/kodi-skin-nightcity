@@ -59,7 +59,7 @@ def test_followed_hero_reads_the_focused_card():
 
 
 def test_followed_hero_does_not_fade_on_every_move():
-    """Only with Home opening: the page fades run on a page change, the swap itself is instant."""
+    """The group fades when it comes up and with Home opening; a move along a row leaves it up."""
     body = _include('FollowHero')
     assert 'type="Visible"' not in body and 'PageFade' not in body
     assert '<param name="fade"' not in body
@@ -80,7 +80,7 @@ def test_own_heroes_hide_while_following_without_touching_their_fades():
     for hero, item in (('MovieHero', 'Container(9000)'), ('ShowHero', 'Container(9001)')):
         body = _include(hero)
         assert re.search(r'<control type="group">\s*<visible>!\$EXP\[SpotlightFollows\]</visible>\s*'
-                         r'<include content="HeroBody">\s*<param name="item" value="{}\.ListItem"/>'.format(re.escape(item)),
+                         r'<include>HeroSwapFade</include>\s*<include content="HeroBody">\s*<param name="item" value="{}\.ListItem"/>'.format(re.escape(item)),
                          body), hero
 
 
@@ -89,10 +89,12 @@ def test_pills_chevrons_and_progress_hide_while_following():
     reaches them."""
     for hero in ('MovieHero', 'ShowHero'):
         body = _include(hero)
-        pills = re.search(r'<control type="grouplist">(.*?)<include content="SpotlightPill">', body, re.S).group(1)
-        assert '<visible>!$EXP[SpotlightFollows]</visible>' in pills, hero
-    assert '<param name="visible" value="Container(9000).ListItem.IsResumable + !$EXP[SpotlightFollows]"/>' in _include('MovieHero')
-    assert 'SpotlightFollows' not in re.search(r'<control type="group" id="9050">(.*?)</control>\s*<control type="grouplist">', _include('MovieHero'), re.S).group(1)
+        assert re.search(r'<visible>!\$EXP\[SpotlightFollows\]</visible>\s*<include>HeroSwapFade</include>\s*'
+                         r'<control type="grouplist">', body), hero
+    assert re.search(r'<include>HeroSwapFade</include>\s*<control type="grouplist">.*?'
+                     r'<param name="info" value="Container\(9000\)\.ListItem\.PercentPlayed"/>',
+                     _include('MovieHero'), re.S)
+    assert 'SpotlightFollows' not in re.search(r'<control type="group" id="9050">(.*?)</control>\s*<!-- they act', _include('MovieHero'), re.S).group(1)
 
 
 def test_kept_ratings_guard_names_the_card_with_or_without_a_library_id():
@@ -102,3 +104,42 @@ def test_kept_ratings_guard_names_the_card_with_or_without_a_library_id():
                  'String.IsEmpty(ListItem.DBID)'):
         assert part in guard
     assert '<param name="tmdb" value="$EXP[FollowKeptIsCard]"/>' in home
+
+
+BASE = (SKIN / 'Includes_Base.xml').read_text(encoding='utf-8')
+
+
+def _base_include(name):
+    match = re.search(r'<include name="{}">(.*?)\n    </include>'.format(name), BASE, re.S)
+    assert match, name
+    return match.group(1)
+
+
+def test_swap_fades_take_as_long_as_the_spotlights_own_crossfade():
+    assert re.search(r'<constant name="HeroSwapTime">400</constant>', BASE)
+    both = _base_include('HeroSwapFade')
+    assert re.search(r'type="Visible"[^>]*>\s*<effect type="fade" start="0" end="100" time="HeroSwapTime"/>', both)
+    assert re.search(r'type="Hidden"[^>]*>\s*<effect type="fade" start="100" end="0" time="HeroSwapTime"/>', both)
+
+
+def test_spotlight_fades_out_and_in_around_a_card():
+    for hero in ('MovieHero', 'ShowHero'):
+        wrappers = re.findall(r'<visible>!\$EXP\[SpotlightFollows\]</visible>\s*<include>HeroSwapFade</include>', _include(hero))
+        assert len(wrappers) == 2, hero  # the hero's text and poster, its pills
+        assert '<visible>!$EXP[SpotlightFollows]</visible>\n                <include content="SpotlightPill">' not in _include(hero)
+
+
+def test_followed_hero_only_fades_in():
+    """Its content is the unqualified ListItem: once the focus left the row that is whatever has
+    the focus now, nothing to fade out with."""
+    body = _include('FollowHero')
+    head = body[:body.index('an episode has the poster')]
+    assert '<include>HeroSwapIn</include>' in head and 'Hidden' not in head
+    assert 'reversible="false"' in _base_include('HeroSwapIn')  # Kodi would run it backwards, with 9302 up
+
+
+def test_backdrop_of_hero_and_rows_fade_as_long_as_the_swap():
+    window = (SKIN / 'Home.xml').read_text(encoding='utf-8')
+    assert re.search(r'<visible>!ControlGroup\(9210\)\.HasFocus\(\)[^<]*</visible>\s*<include>HeroSwapFade</include>', window)
+    assert re.search(r'<visible>ControlGroup\(9210\)\.HasFocus\(\)[^<]*</visible>\s*<include>HeroSwapFade</include>', window)
+

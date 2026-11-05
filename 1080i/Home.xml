@@ -36,7 +36,7 @@
         <!-- the backdrops fade over to each other (BackdropFade) -->
         <control type="group">
             <visible>!ControlGroup(9210).HasFocus() + !ControlGroup(9410).HasFocus() + !ControlGroup(9510).HasFocus() + !ControlGroup(9710).HasFocus() + !ControlGroup(9810).HasFocus()</visible>
-            <include>BackdropFade</include>
+            <include>HeroSwapFade</include>
             <control type="group">
                 <visible>Control.IsVisible(9300)</visible>
                 <include content="SharedBackdropFade">
@@ -68,7 +68,7 @@
         </control>
         <control type="group">
             <visible>ControlGroup(9210).HasFocus() | ControlGroup(9410).HasFocus() | ControlGroup(9510).HasFocus() | ControlGroup(9710).HasFocus() | ControlGroup(9810).HasFocus()</visible>
-            <include>BackdropFade</include>
+            <include>HeroSwapFade</include>
             <include content="FanartBackdrop">
                 <param name="art" value="ListItem.Art(fanart)"/>
             </include>
