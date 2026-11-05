@@ -53,6 +53,29 @@ def test_panels_step_along_the_button_row(tracks):
     wait_for('Control.HasFocus(610)')  # no chapters button: the chapter row is Down from the bar
 
 
+def test_button_rows_wrap_around(tracks):
+    """Left on the far left control lands on the far right one, Right there back on the far left."""
+    focus(601)
+    action('left')
+    wait_for('Control.HasFocus(610)')
+    action('right')
+    wait_for('Control.HasFocus(601)')
+
+
+def test_moving_between_the_rows_lands_on_the_neighbour(tracks):
+    """Not on the button that had the focus last in the other row: Kodi's groups remember it."""
+    focus(607)
+    focus(611)
+    action('right')
+    # info shows only for a title it has a page of; then subtitles is the first of the row
+    first = 612 if cond('Control.IsVisible(612)')['Control.IsVisible(612)'] else 605
+    wait_for('Control.HasFocus({})'.format(first))
+    focus(602)
+    focus(first)
+    action('left')
+    wait_for('Control.HasFocus(611)')
+
+
 def test_video_panel_opens_video_settings(tracks):
     focus(607)
     wait_for('Control.IsVisible(653)')

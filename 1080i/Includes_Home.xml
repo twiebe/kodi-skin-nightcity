@@ -248,17 +248,17 @@
                     <param name="page2" value="$PARAM[page2]"/>
                 </include>
                 <include content="CutCard">
-                    <param name="width" value="280"/>
-                    <param name="height" value="420"/>
-                    <param name="mask" value="ui/mask_280x420.png"/>
+                    <param name="width" value="290"/>
+                    <param name="height" value="435"/>
+                    <param name="mask" value="ui/mask_290x435.png"/>
                     <param name="image" value="$INFO[$PARAM[item].Art(poster)]"/>
                     <param name="fadetime" value="400"/>
                     <param name="item" value="$PARAM[item]"/>
                     <control type="textbox">
                         <left>20</left>
                         <top>20</top>
-                        <width>240</width>
-                        <height>380</height>
+                        <width>250</width>
+                        <height>395</height>
                         <font>font_label</font>
                         <textcolor>text_mute</textcolor>
                         <label>$INFO[$PARAM[item].Title]</label>
@@ -281,12 +281,12 @@
                 <include content="Kicker">
                     <param name="id" value="$PARAM[kickerid]"/>
                     <param name="label" value="$PARAM[kicker]"/>
-                    <param name="left" value="384"/>
+                    <param name="left" value="394"/>
                     <param name="top" value="116"/>
                 </include>
                 <control type="image" id="$PARAM[logoid]">
-                    <left>384</left>
-                    <top>154</top>
+                    <left>394</left>
+                    <top>161</top>
                     <width>760</width>
                     <height>100</height>
                     <aspectratio aligny="bottom" align="left">keep</aspectratio>
@@ -298,15 +298,15 @@
                 <include content="GlitchTitle">
                     <param name="id" value="$PARAM[titleid]"/>
                     <param name="label" value="$INFO[$PARAM[item].Title]"/>
-                    <param name="left" value="384"/>
-                    <param name="top" value="160"/>
+                    <param name="left" value="394"/>
+                    <param name="top" value="167"/>
                     <param name="width" value="$PARAM[titlewidth]"/>
                     <param name="font" value="$PARAM[titlefont]"/>
                     <param name="visible" value="String.IsEmpty($PARAM[item].Art(clearlogo))"/>
                 </include>
                 <control type="grouplist" id="$PARAM[metaid]">
-                    <left>384</left>
-                    <top>272</top>
+                    <left>394</left>
+                    <top>279</top>
                     <width>1400</width>
                     <height>36</height>
                     <orientation>horizontal</orientation>
@@ -339,16 +339,16 @@
                     <param name="id" value="$PARAM[ratingid]"/>
                     <param name="item" value="$PARAM[item]"/>
                     <param name="tmdb" value="$PARAM[tmdb]"/>
-                    <param name="left" value="384"/>
-                    <param name="top" value="318"/>
+                    <param name="left" value="394"/>
+                    <param name="top" value="325"/>
                     <param name="width" value="$PARAM[ratingswidth]"/>
                     <param name="prefix" value="$PARAM[ratingsprefix]"/>
                     <param name="wait" value="$PARAM[ratingswait]"/>
                     <param name="library" value="$PARAM[library]"/>
                 </include>
                 <control type="textbox" id="$PARAM[plotid]">
-                    <left>384</left>
-                    <top>360</top>
+                    <left>394</left>
+                    <top>367</top>
                     <width>$PARAM[plotwidth]</width>
                     <height>116</height>
                     <font>font_body</font>
@@ -522,8 +522,8 @@
             </include>
             <!-- the buttons as Kodi sees them (SpotlightButton): one-item lists of the title -->
             <control type="group" id="9050">
-                <left>384</left>
-                <top>490</top>
+                <left>394</left>
+                <top>497</top>
                 <defaultcontrol>9010</defaultcontrol>
                 <include content="SpotlightButton">
                     <param name="id" value="9010"/>
@@ -565,8 +565,8 @@
                 <visible>!$EXP[SpotlightFollows]</visible>
                 <include>HeroSwapFade</include>
                 <control type="grouplist">
-                    <left>374</left>
-                    <top>480</top>
+                    <left>384</left>
+                    <top>487</top>
                     <width>1420</width>
                     <height>74</height>
                     <orientation>horizontal</orientation>
@@ -589,8 +589,8 @@
                     <include>SpotlightMore</include>
                 </control>
                 <include content="ProgressLine">
-                    <param name="left" value="384"/>
-                    <param name="top" value="562"/>
+                    <param name="left" value="394"/>
+                    <param name="top" value="569"/>
                     <param name="width" value="420"/>
                     <param name="info" value="Container(9000).ListItem.PercentPlayed"/>
                     <param name="visible" value="Container(9000).ListItem.IsResumable"/>
@@ -626,8 +626,8 @@
                 <param name="delay" value="FadeStep2"/>
             </include>
             <control type="group" id="9550">
-                <left>384</left>
-                <top>490</top>
+                <left>394</left>
+                <top>497</top>
                 <defaultcontrol>9551</defaultcontrol>
                 <include content="SpotlightButton">
                     <param name="id" value="9551"/>
@@ -669,8 +669,8 @@
                 <visible>!$EXP[SpotlightFollows]</visible>
                 <include>HeroSwapFade</include>
                 <control type="grouplist">
-                    <left>374</left>
-                    <top>480</top>
+                    <left>384</left>
+                    <top>487</top>
                     <width>1420</width>
                     <height>74</height>
                     <orientation>horizontal</orientation>
@@ -712,17 +712,17 @@
                 <left>64</left>
                 <top>116</top>
                 <include content="CutCard">
-                    <param name="width" value="280"/>
-                    <param name="height" value="420"/>
-                    <param name="mask" value="ui/mask_280x420.png"/>
+                    <param name="width" value="290"/>
+                    <param name="height" value="435"/>
+                    <param name="mask" value="ui/mask_290x435.png"/>
                     <param name="image" value="$VAR[CardArt]"/>
                     <param name="fadetime" value="400"/>
                     <param name="item" value="ListItem"/>
                     <control type="textbox">
                         <left>20</left>
                         <top>20</top>
-                        <width>240</width>
-                        <height>380</height>
+                        <width>250</width>
+                        <height>395</height>
                         <font>font_label</font>
                         <textcolor>text_mute</textcolor>
                         <label>$INFO[ListItem.Title]</label>
@@ -1261,7 +1261,7 @@
         <param name="id"/>
         <param name="page"/>
         <param name="up"/>
-        <param name="top" default="612"/>
+        <param name="top" default="619"/>
         <param name="height" default="468"/>
         <param name="delay" default="FadeStep3"/>
         <definition>

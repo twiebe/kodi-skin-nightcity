@@ -105,6 +105,23 @@ def _arg(call, name):
     return next((p.get('value') for p in call.findall('param') if p.get('name') == name), '')
 
 
+def test_osd_button_rows_wrap_around():
+    """Left on the far left control goes to the far right one and back: ⏮ and "…" always show."""
+    osd = {c.get('id'): c for c in parse(ROOT / '1080i' / 'VideoOSD.xml').iter('control')}
+    assert osd['600'].findtext('onleft') == '610'
+    assert osd['620'].findtext('onright') == '601'
+    assert _arg(_osd_buttons('600')['601'], 'visible') == ''
+    assert _arg(_osd_buttons('620')['610'], 'visible') == ''
+
+
+def test_osd_rows_enter_at_the_neighbour_not_at_the_last_focus():
+    """A group goes back to its last focused control unless its default is always."""
+    osd = {c.get('id'): c for c in parse(ROOT / '1080i' / 'VideoOSD.xml').iter('control')}
+    for row, neighbour in (('600', '611'), ('620', '612')):
+        default = osd[row].find('defaultcontrol')
+        assert (default.text, default.get('always')) == (neighbour, 'true'), row
+
+
 def test_osd_button_rows():
     """Play controls, stop and skip forward left; info, subtitles, audio, video and "…" right. "…"
     swaps subtitles, audio and video for stats."""

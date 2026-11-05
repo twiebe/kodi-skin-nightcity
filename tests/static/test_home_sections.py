@@ -202,7 +202,7 @@ def test_generated_includes_are_current():
 
 def test_spotlight_off_removes_the_hero_and_lifts_the_rows():
     on = controls(load('Home.xml'))
-    assert on['9210'].findtext('top') == '612' and on['9210'].findtext('onup') == '9050'
+    assert on['9210'].findtext('top') == '619' and on['9210'].findtext('onup') == '9050'
     off = controls(load('Home.xml', {'SpotlightSource': 'off', 'nc.movies.spotlight': 'off', 'nc.shows.spotlight': 'off'}))
     for gone in ('9000', '9001', '9050', '9550', '9300'):
         assert gone not in off
