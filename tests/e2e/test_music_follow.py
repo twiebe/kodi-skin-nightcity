@@ -144,6 +144,8 @@ def test_timer_stands_while_following_and_starts_over(short_interval):
 def test_no_online_lookup_for_music(music_page):
     focus_row(9801)
     wait_for(FOLLOWS)
+    # the service looks every 0.25 s: it may still be on the page before
+    wait_for('String.IsEmpty(Window(Home).Property(TMDbHelper.WidgetContainer))', timeout=2)
     for _ in range(12):  # longer than the video pages' 1.5 s
         assert not label('Window(Home).Property(TMDbHelper.WidgetContainer)')
         time.sleep(0.25)

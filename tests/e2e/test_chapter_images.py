@@ -39,8 +39,10 @@ def chapter_clip():
         subprocess.run([sys.executable, str(pathlib.Path(__file__).parents[2] / 'tools' / 'make_tracks_clip.py'),
                         str(clip)], check=True)
     for folder in _jf('GET', '/Library/VirtualFolders'):
+        if folder['Name'] != 'Movies':
+            continue  # an empty library (the pool's Bulk) comes without options
         options = folder['LibraryOptions']
-        if folder['Name'] == 'Movies' and not options.get('EnableChapterImageExtraction'):
+        if not options.get('EnableChapterImageExtraction'):
             options.update(EnableChapterImageExtraction=True, ExtractChapterImagesDuringLibraryScan=True)
             _jf('POST', '/Library/VirtualFolders/LibraryOptions', {'Id': folder['ItemId'], 'LibraryOptions': options})
             _jf('POST', '/Library/Refresh')
