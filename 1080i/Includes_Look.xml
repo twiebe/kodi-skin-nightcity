@@ -134,6 +134,30 @@
         <texturenofocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturenofocus>
     </include>
 
+    <!-- The focused row of a list: the fill as an image of the row, and as the textures of a row
+         that is a button -->
+    <include name="LookListFocus">
+        <texture border="22" colordiffuse="focus">ui/cut_btn_glow.png</texture>
+    </include>
+    <include name="LookListFocusButton">
+        <texturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturefocus>
+        <texturenofocus/>
+    </include>
+
+    <!-- The plate of the time bubble over the seek line, 260 x 50 px: fill and outline -->
+    <include name="LookSeekBubble">
+        <control type="image">
+            <width>260</width>
+            <height>50</height>
+            <texture border="12" colordiffuse="surface">ui/cut_btn_fill.png</texture>
+        </control>
+        <control type="image">
+            <width>260</width>
+            <height>50</height>
+            <texture border="12" colordiffuse="focus">ui/cut_btn.png</texture>
+        </control>
+    </include>
+
     <!-- The fill behind the quick menu's icon in the top line while it has the focus -->
     <include name="LookMenuIconFocus">
         <texture border="22" colordiffuse="accent">ui/cut_btn_glow.png</texture>
