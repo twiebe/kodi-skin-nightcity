@@ -1,22 +1,29 @@
 #!/usr/bin/env python3
 """Make kodi-dev (/workspaces/kodi-dev) run this skin. Idempotent.
 
-- mounts this checkout as skin.nightcity via compose.override.yaml (the add-on in .env stays untouched)
+- mounts this checkout as skin.nightcity and the assembled _build/confuse as skin.confuse via
+  compose.override.yaml (the add-on in .env stays untouched)
 - installs the TMDb Helper fork and its dependencies (kodi-dev/perf/setup_skin.py)
-- selects the skin in guisettings.xml while Kodi is stopped, then starts kodi-dev
+- selects the skin of --skin (default nightcity) in guisettings.xml while Kodi is stopped, then
+  starts kodi-dev
 - adds the titles the TMDb tests open (The Matrix, Breaking Bad) to Jellyfin's media
 
 A kdev pool copies data/ as its template, so run this before the first `kdev pool up`.
 """
+import argparse
 import pathlib
 import re
 import shutil
 import subprocess
 
+from build import assemble
+
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 KODI_DEV = pathlib.Path('/workspaces/kodi-dev')
 TMDB_HELPER = pathlib.Path('/workspaces/plugin-video-themoviedb-helper')
-MOUNT = '{}:/home/kodi/.kodi/addons/skin.nightcity'.format(ROOT)
+CONFUSE = ROOT / '_build' / 'confuse'
+MOUNTS = ('{}:/home/kodi/.kodi/addons/skin.nightcity'.format(ROOT),
+          '{}:/home/kodi/.kodi/addons/skin.confuse'.format(CONFUSE))
 GUISETTINGS = KODI_DEV / 'data' / 'kodi' / 'userdata' / 'guisettings.xml'
 
 
@@ -71,31 +78,44 @@ def run(*args, check=True):
     subprocess.run(args, cwd=KODI_DEV, check=check)
 
 
-def ensure_mount():
+def ensure_mounts():
     path = KODI_DEV / 'compose.override.yaml'
     text = path.read_text() if path.exists() else 'services:\n  kodi:\n    volumes:\n'
-    if MOUNT in text:
-        return
-    if 'volumes:' not in text:
-        raise SystemExit('unexpected compose.override.yaml, add this volume by hand: ' + MOUNT)
-    path.write_text(text.rstrip('\n') + '\n      - {}\n'.format(MOUNT))
-    print('mounted', MOUNT)
+    for mount in MOUNTS:
+        if mount in text:
+            continue
+        if 'volumes:' not in text:
+            raise SystemExit('unexpected compose.override.yaml, add this volume by hand: ' + mount)
+        text = text.rstrip('\n') + '\n      - {}\n'.format(mount)
+        path.write_text(text)
+        print('mounted', mount)
 
 
-def select_skin():
-    text = GUISETTINGS.read_text()
-    new = re.sub(r'<setting id="lookandfeel.skin"[^>]*>[^<]*</setting>',
-                 '<setting id="lookandfeel.skin">skin.nightcity</setting>', text)
+def select_skin(guisettings, skin):
+    text = guisettings.read_text()
+    new, found = re.subn(r'<setting id="lookandfeel.skin"[^>]*>[^<]*</setting>',
+                         '<setting id="lookandfeel.skin">skin.{}</setting>'.format(skin), text)
+    if not found:
+        raise SystemExit('no setting lookandfeel.skin in {}'.format(guisettings))
     if new != text:
-        GUISETTINGS.write_text(new)
-        print('selected skin.nightcity')
+        guisettings.write_text(new)
+        print('selected skin.{}'.format(skin))
+
+
+def parse_args(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__.split('\n\n')[0])
+    parser.add_argument('--skin', choices=('nightcity', 'confuse'), default='nightcity',
+                        help='the skin kodi-dev starts with; both are mounted either way')
+    return parser.parse_args(argv)
 
 
 def main():
-    ensure_mount()
+    args = parse_args()
+    assemble('confuse', CONFUSE)
+    ensure_mounts()
     run('docker', 'compose', 'stop', 'kodi')
     run('python3', str(KODI_DEV / 'perf' / 'setup_skin.py'), '--local', str(TMDB_HELPER))
-    select_skin()
+    select_skin(GUISETTINGS, args.skin)
     run('./kdev', 'up')
     if add_tmdb_titles(KODI_DEV / 'data' / 'media'):
         # Jellyfin for Kodi syncs them into Kodi's library when the scan reports them
@@ -103,7 +123,7 @@ def main():
     # A freshly mounted add-on is only enabled by kdev after Kodi has already tried (and failed) to
     # load it as skin, so restart once with the skin enabled.
     # jellyfin-kodi plays the synced library items (plugin://plugin.video.jellyfin/...)
-    for addon_id in ('skin.nightcity', 'plugin.video.jellyfin'):
+    for addon_id in ('skin.nightcity', 'skin.confuse', 'plugin.video.jellyfin'):
         run('./kdev', 'rpc', 'Addons.SetAddonEnabled', '{"addonid": "%s", "enabled": true}' % addon_id,
             check=False)  # fails when it is already enabled
     run('./kdev', 'restart')

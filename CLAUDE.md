@@ -34,6 +34,32 @@ The chain tests need the fork's TMDb Helper. Each pool copies it from its own te
 A test that fails in the full run but passes when its file is run again on its own is a flake:
 say so in the report, do not hide it.
 
+### The Confuse skin
+
+`tools/kodidev_setup.py` mounts both skins: this checkout as `skin.nightcity`, the assembled
+`_build/confuse` as `skin.confuse`. An e2e run assembles `_build/confuse` at its start and writes
+only what differs: with no change in the skin it touches nothing, so runs on two pools can overlap.
+A run started after a change of the skin does rewrite those files under a Confuse run, so do not
+start one then. `tests/e2e/test_skin_switch.py` switches between both skins on one Kodi.
+
+Confuse has a pool of its own, whose template starts on Confuse. Make it once, with the default
+kodi-dev stopped for the copy, then put kodi-dev back on Nightcity:
+
+```
+.venv/bin/python tools/kodidev_setup.py --skin confuse
+(cd /workspaces/kodi-dev && ./kdev down && KDEV_POOL=confuse ./kdev pool up 1)
+.venv/bin/python tools/kodidev_setup.py
+```
+
+Tests and screenshots on Confuse:
+
+```
+NC_SKIN=confuse KDEV_POOL=confuse .venv/bin/python -m pytest tests/e2e/test_skin_loads.py -m e2e -q -p no:cacheprovider
+.venv/bin/python tools/screenshots.py --skin confuse    # writes skins/confuse/resources/screenshots
+```
+
+Tests marked `nightcity_look` check Nightcity's colours or palettes and are skipped there.
+
 ## Releases
 
 Every zip that leaves the machine has its own version:

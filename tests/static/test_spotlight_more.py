@@ -9,7 +9,7 @@ SKIN = ROOT / '1080i'
 
 
 def _include(name):
-    text = (SKIN / 'Includes_Home.xml').read_text(encoding='utf-8')
+    text = '\n'.join((SKIN / f).read_text(encoding='utf-8') for f in ('Includes_Home.xml', 'Includes_Look.xml'))
     match = re.search(r'<include name="{}">(.*?)</include>'.format(name), text, re.S)
     assert match, name
     return match.group(1)
@@ -20,7 +20,8 @@ def test_spotlight_more_is_three_chevrons_fading_to_the_right():
     step darker to the right, centred on the buttons, the usual button gap before them. 10 px of
     margin around them, like the buttons padded for their glow (test_glow.py)."""
     body = _include('SpotlightMore')
-    images = re.findall(r'<control type="image">(.*?)</control>', body, re.S)
+    assert '<include>LookDecoration' in body
+    images = re.findall(r'<control type="image">(.*?)</control>', _include('LookDecoration'), re.S)
     assert len(images) == 3
     colours = [re.search(r'colordiffuse="(\w+)">ui/spot_more.png<', i).group(1) for i in images]
     assert colours == ['state_text', 'state_fade', 'state_faint']

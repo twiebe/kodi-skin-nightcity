@@ -4,6 +4,7 @@ Kodi has no spatial navigation: a control is reachable only through explicit onu
 onright actions, its grouplist neighbours, or the window's defaultcontrol/menucontrol. This module
 expands includes (params, defaults, <nested/>) and walks those links like a D-pad would.
 """
+import functools
 import re
 import xml.etree.ElementTree as ET
 
@@ -38,6 +39,26 @@ def evaluate(condition, skin):
     Skin.HasSetting names to values, 'Window.Property(name)' or 'Window(Home).Property(name)' for
     properties, missing ones empty):
     Kodi builds a window with the includes whose condition holds when it loads it."""
+    needed = _needed(condition)
+    return _evaluate(condition, tuple(sorted((k, v) for k, v in skin.items() if k in needed)))
+
+
+@functools.lru_cache(maxsize=None)
+def _needed(condition):
+    """Names of the skin settings `condition` reads: only they decide its value."""
+    names = set()
+    for m in ATOM.finditer(condition):
+        s, h = SKIN_STRING.match(m.group(0)), re.match(r'Skin\.HasSetting\(([^)]+)\)$', m.group(0))
+        if s:
+            names.add(s.group(3) if s.group(2) == 'Skin.String' else '{}({})'.format(s.group(2), s.group(3)))
+        elif h:
+            names.add(h.group(1))
+    return names
+
+
+@functools.lru_cache(maxsize=None)
+def _evaluate(condition, items):
+    skin = dict(items)
     expr, pos = [], 0
     for m in ATOM.finditer(condition):
         expr.append(condition[pos:m.start()])
@@ -48,9 +69,16 @@ def evaluate(condition, skin):
     return bool(eval(text, {}))
 
 
-def _definitions():
+def _definitions(layout=LAYOUT):
+    """Include definitions of `layout`; parsed once per state of its Includes files (a window built
+    for several skin settings would otherwise parse them for each build)."""
+    return _parsed(layout, tuple((p.name, p.stat().st_mtime_ns, p.stat().st_size) for p in sorted(layout.glob('Includes*.xml'))))
+
+
+@functools.lru_cache(maxsize=None)
+def _parsed(layout, stamp):
     defs = {}
-    for path in LAYOUT.glob('Includes*.xml'):
+    for path in layout.glob('Includes*.xml'):
         for el in ET.parse(path).getroot():
             if el.tag == 'include' and el.get('name'):
                 defs[el.get('name')] = el
@@ -58,7 +86,9 @@ def _definitions():
 
 
 def _subst(text, params):
-    return None if text is None else PARAM.sub(lambda m: params.get(m.group(1), ''), text)
+    if text is None or '$PARAM[' not in text:
+        return text
+    return PARAM.sub(lambda m: params.get(m.group(1), ''), text)
 
 
 def _expand(el, params, defs, skin):
@@ -87,7 +117,8 @@ def _expand(el, params, defs, skin):
                 if c.tag == 'nested':
                     out.extend(nested)
                     continue
-                _fill(c, nested)
+                if c.find('.//nested') is not None:
+                    _fill(c, nested)
                 out.append(c)
         else:
             node = ET.Element(child.tag, {k: _subst(v, params) for k, v in child.attrib.items()})
@@ -107,11 +138,37 @@ def _fill(el, nested):
             _fill(k, nested)
 
 
-def load(name, skin=None):
-    """The window as Kodi builds it for the skin settings in `skin` (default: none set)."""
-    root = ET.parse(LAYOUT / name).getroot()
+def with_look(el, layout=LAYOUT):
+    """A copy of `el` (an include definition or a whole file) with its Look* includes replaced by
+    their content, as Kodi builds them. The $PARAM of `el` itself stay as they are: a test reads a
+    building block with its look, wherever that lives."""
+    defs = _definitions(layout)
+    node = ET.Element(el.tag, el.attrib)
+    node.text, node.tail = el.text, el.tail
+    for child in el:
+        name = (child.get('content') or (child.text or '').strip()) if child.tag == 'include' and not child.get('name') else ''
+        if name.startswith('Look'):
+            holder = ET.Element('holder')
+            holder.append(child)
+            node.extend(_expand(holder, _KeepParams(), defs, {}))
+        else:
+            node.append(with_look(child, layout))
+    return node
+
+
+class _KeepParams(dict):
+    """Params for _expand that leave every $PARAM as it is."""
+
+    def get(self, key, default=None):
+        return '$PARAM[{}]'.format(key)
+
+
+def load(name, skin=None, layout=LAYOUT):
+    """The window as Kodi builds it for the skin settings in `skin` (default: none set), from the
+    1080i folder `layout` (default: this checkout's)."""
+    root = ET.parse(layout / name).getroot()
     window = ET.Element(root.tag, root.attrib)
-    window.extend(_expand(root, {}, _definitions(), skin or {}))
+    window.extend(_expand(root, {}, _definitions(layout), skin or {}))
     return window
 
 

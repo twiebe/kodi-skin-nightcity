@@ -17,8 +17,12 @@ import copy
 import pathlib
 
 from fontTools.ttLib import TTFont
+from fontTools.ttLib.tables import ttProgram
 
 FONTS = pathlib.Path(__file__).resolve().parents[1] / 'fonts'
+CONFUSE_FONTS = pathlib.Path(__file__).resolve().parents[1] / 'skins' / 'confuse' / 'fonts'
+MANROPE = 'Manrope[wght].ttf'
+CONFUSE_WEIGHTS = {'Medium': 500, 'SemiBold': 600, 'Bold': 700, 'ExtraBold': 800}
 SYMBOLS = ['NotoSansSymbols2-Regular.ttf', 'JetBrainsMono-Regular.ttf']  # first match wins
 # codepoints taken from the symbol font when Rajdhani has none
 RANGES = [(0x0180, 0x024F), (0x0300, 0x036F), (0x0370, 0x03FF), (0x0400, 0x04FF), (0x1E00, 0x1EFF),  # Latin Ext-B, accents, Greek, Cyrillic, Vietnamese
@@ -30,8 +34,9 @@ TRACKING = 100  # font units, UPM 1000
 LINE_TOP, LINE_BOTTOM, LINE_OVERHANG = -485, -562, 60
 
 
-def copy_glyph(src, dst, name, done):
-    """Copy glyph `name` (and the components it is built from) from src into dst."""
+def copy_glyph(src, dst, name, done, scale=1):
+    """Copy glyph `name` (and the components it is built from) from src into dst, `scale` times as large
+    (src and dst may differ in units per em)."""
     if name in done:
         return done[name]
     new, n = name, 0
@@ -42,12 +47,20 @@ def copy_glyph(src, dst, name, done):
     glyph = copy.deepcopy(src['glyf'][name])
     if glyph.isComposite():
         for comp in glyph.components:
-            comp.glyphName = copy_glyph(src, dst, comp.glyphName, done)
+            comp.glyphName = copy_glyph(src, dst, comp.glyphName, done, scale)
+            comp.x, comp.y = round(comp.x * scale), round(comp.y * scale)
+    elif scale != 1 and glyph.numberOfContours > 0:
+        glyph.coordinates.scale((scale, scale))
+        glyph.coordinates.toInt()
+    if scale != 1:
+        glyph.program = ttProgram.Program()  # the hints are for the old size
+        glyph.program.fromBytecode(b'')
     order = dst.getGlyphOrder() + [new]
     dst.setGlyphOrder(order)
     dst['glyf'].glyphOrder = order
     dst['glyf'][new] = glyph
-    dst['hmtx'][new] = src['hmtx'][name]
+    advance, lsb = src['hmtx'][name]
+    dst['hmtx'][new] = (round(advance * scale), round(lsb * scale))
     return new
 
 
@@ -56,11 +69,12 @@ def add_symbols(font, sources):
     added = {}
     for symbols in sources:
         sym_cmap = symbols.getBestCmap()
+        scale = font['head'].unitsPerEm / symbols['head'].unitsPerEm
         done = {}
         for lo, hi in RANGES:
             for cp in range(lo, hi + 1):
                 if cp not in cmap and cp not in added and cp in sym_cmap:
-                    added[cp] = copy_glyph(symbols, font, sym_cmap[cp], done)
+                    added[cp] = copy_glyph(symbols, font, sym_cmap[cp], done, scale)
     for table in font['cmap'].tables:
         if table.isUnicode():
             table.cmap.update({cp: g for cp, g in added.items() if table.format != 4 or cp <= 0xFFFF})
@@ -143,12 +157,47 @@ def build_line(source):
     return out
 
 
+def tabular_digits(font):
+    """Point the digits at the tabular glyphs (zero.tf ... nine.tf), one width each, so a clock or a
+    runtime does not jitter. Manrope's kerning pairs name the proportional digits only, so the
+    tabular ones are never kerned."""
+    words = 'zero one two three four five six seven eight nine'.split()
+    for table in font['cmap'].tables:
+        if table.isUnicode():
+            for digit, word in enumerate(words):
+                table.cmap[ord('0') + digit] = word + '.tf'
+    cmap = font.getBestCmap()
+    assert len({font['hmtx'][cmap[ord(d)]][0] for d in '0123456789'}) == 1
+
+
+def build_confuse():
+    """ConfuseUI-<weight>.ttf in skins/confuse/fonts: static cuts of Manrope (OFL, version 4.505, the
+    variable font beside them) with the symbols it lacks. The digits are tabular (tabular_digits).
+    GPOS goes: Kodi 21 shapes with HarfBuzz but uses only the x and y offsets of the result and the
+    advance of each glyph alone (GUIFontTTF.cpp:591, 657, 1058), and Manrope's kerning is x advance
+    only, so it never reaches the screen. GSUB goes too (Kodi asks for default features, never
+    tnum), and so do the variation tables."""
+    from fontTools.varLib import instancer
+    for weight, value in CONFUSE_WEIGHTS.items():
+        font = instancer.instantiateVariableFont(TTFont(CONFUSE_FONTS / MANROPE), {'wght': value})
+        add_symbols(font, [TTFont(FONTS / name) for name in SYMBOLS])
+        tabular_digits(font)
+        for tag in ('GSUB', 'GPOS', 'STAT', 'HVAR', 'MVAR', 'avar'):
+            if tag in font:
+                del font[tag]
+        rename(font, 'ConfuseUI', weight)
+        out = CONFUSE_FONTS / 'ConfuseUI-{}.ttf'.format(weight)
+        font.save(out)
+        print(out)
+
+
 def main():
     for weight in ('Medium', 'SemiBold', 'Bold'):
         print(build(weight, wide=False))
     for weight in ('SemiBold', 'Bold'):
         print(build(weight, wide=True))
     print(build_line(FONTS / 'RetroUIWide-SemiBold.ttf'))
+    build_confuse()
 
 
 if __name__ == '__main__':

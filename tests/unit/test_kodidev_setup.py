@@ -3,6 +3,8 @@ import pathlib
 import sys
 import xml.etree.ElementTree as ET
 
+import pytest
+
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2] / 'tools'))
 import kodidev_setup  # noqa: E402
 
@@ -44,3 +46,45 @@ def test_running_again_changes_nothing(tmp_path):
     before = {p: p.stat().st_mtime_ns for p in media.rglob('*')}
     assert kodidev_setup.add_tmdb_titles(media) is False
     assert {p: p.stat().st_mtime_ns for p in media.rglob('*')} == before
+
+
+def _folders(tmp_path, monkeypatch):
+    kodi_dev = tmp_path / 'kodi-dev'
+    kodi_dev.mkdir()
+    monkeypatch.setattr(kodidev_setup, 'KODI_DEV', kodi_dev)
+    settings = kodi_dev / 'guisettings.xml'
+    settings.write_text('<settings><setting id="lookandfeel.skin">skin.nightcity</setting></settings>')
+    monkeypatch.setattr(kodidev_setup, 'GUISETTINGS', settings)
+    return kodi_dev / 'compose.override.yaml', settings
+
+
+def test_both_skins_are_mounted_once(tmp_path, monkeypatch):
+    override, _ = _folders(tmp_path, monkeypatch)
+    kodidev_setup.ensure_mounts()
+    kodidev_setup.ensure_mounts()
+    text = override.read_text()
+    root = kodidev_setup.ROOT
+    assert text.count('{}:/home/kodi/.kodi/addons/skin.nightcity'.format(root)) == 1
+    assert text.count('{}:/home/kodi/.kodi/addons/skin.confuse'.format(root / '_build' / 'confuse')) == 1
+
+
+def test_a_mount_of_another_addon_stays(tmp_path, monkeypatch):
+    override, _ = _folders(tmp_path, monkeypatch)
+    override.write_text('services:\n  kodi:\n    volumes:\n      - /a:/home/kodi/.kodi/addons/plugin.a\n')
+    kodidev_setup.ensure_mounts()
+    assert '/a:/home/kodi/.kodi/addons/plugin.a' in override.read_text()
+
+
+def test_the_skin_in_guisettings_follows_the_option(tmp_path, monkeypatch):
+    _, settings = _folders(tmp_path, monkeypatch)
+    kodidev_setup.select_skin(settings, kodidev_setup.parse_args(['--skin', 'confuse']).skin)
+    assert '>skin.confuse</setting>' in settings.read_text()
+    kodidev_setup.select_skin(settings, kodidev_setup.parse_args([]).skin)
+    assert '>skin.nightcity</setting>' in settings.read_text()
+
+
+def test_a_guisettings_without_the_skin_setting_is_an_error(tmp_path, monkeypatch):
+    _, settings = _folders(tmp_path, monkeypatch)
+    settings.write_text('<settings></settings>')
+    with pytest.raises(SystemExit, match='lookandfeel.skin'):
+        kodidev_setup.select_skin(settings, 'confuse')

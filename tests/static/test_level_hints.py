@@ -13,7 +13,7 @@ import re
 import xml.etree.ElementTree as ET
 
 from conftest import ROOT, parse
-from navigation import load
+from navigation import load, with_look
 
 BOTTOM, TOP = '1030', '140'
 CAST = 'VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)'
@@ -46,7 +46,7 @@ def test_hint_look():
     screen, it fades in and out."""
     include = next(i for i in parse(ROOT / '1080i' / 'Includes_Base.xml').iter('include')
                    if i.get('name') == 'LevelHint')
-    group = include.find('definition/control')
+    group = with_look(include).find('definition/control')
     assert group.get('type') == 'group'
     assert [(a.get('effect'), a.text) for a in group.findall('animation')] == [('fade', 'VisibleChange')]
     (label,) = group.findall('control')

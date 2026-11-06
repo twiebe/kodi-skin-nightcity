@@ -39,8 +39,9 @@ PAGE_SHOWN = {
     'shows': 'String.IsEqual(Window(Home).Property(nc.page),shows)',
 }
 TMDB = 'plugin://plugin.video.themoviedb.helper/?info=trending_week&amp;tmdb_type={}'
-# a genre row's tabs start after its number, where a row's title starts after its number
-GENRE_TABS_LEFT = 73
+# a genre row's tabs start after its number, where a row's title starts after its number: a constant
+# of the look, since a look without numbers starts them over the cards
+GENRE_TABS_LEFT = 'LookGenreTabsLeft'
 GENRES = {'movies': ('movies', 'genre', 'GenrePickLabel', 'genre_pick'),
           'shows': ('tvshows', 'tvgenre', 'ShowGenrePickLabel', 'genre_pick:tvshow')}
 

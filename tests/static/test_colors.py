@@ -3,6 +3,7 @@ import re
 import pytest
 
 from conftest import ROOT, layout_files, parse
+from navigation import with_look
 
 NAMES = {'bg', 'bg_alt', 'petrol', 'surface', 'surface_alt', 'border', 'border_dim', 'text', 'text_dim',
          'text_mute', 'accent', 'accent2', 'accent3', 'focus', 'focus_text', 'glow', 'glitch_a', 'glitch_b',
@@ -145,7 +146,7 @@ def _uses(word):
 
 
 def _include(path, name):
-    return next(i for i in parse(ROOT / '1080i' / path).iter('include') if i.get('name') == name)
+    return with_look(next(i for i in parse(ROOT / '1080i' / path).iter('include') if i.get('name') == name))
 
 
 def _control(path, cid):
@@ -162,7 +163,7 @@ def test_pink_is_order_and_identity():
     the colours say"): the kicker over a title, dialog headings, the settings rail numbers, the
     system tile numbers, the row numbers on Home, the add-on news heading, the notification heading
     (the user liked it better than white, like the progress toasts)."""
-    assert _uses('accent2') == {'Includes_Base.xml': 3, 'Includes_Settings.xml': 1, 'Includes_Home.xml': 1,
+    assert _uses('accent2') == {'Includes_Look.xml': 3, 'Includes_Settings.xml': 1, 'Includes_Home.xml': 1,
                                 'Variables.xml': 1, 'DialogVideoManager.xml': 1, 'DialogSlider.xml': 1,
                                 'DialogExtendedProgressBar.xml': 1, 'DialogKeyboard.xml': 1,
                                 'DialogSubtitles.xml': 1, 'DialogAddonInfo.xml': 1,
@@ -242,7 +243,7 @@ def test_on_marks_and_shown_page_are_state():
     """A check box that is on, the shown page of the top menu and the context menu's top line:
     state, not the cursor. Cyan stays on the quick menu's icon (the latent cursor: Up and Back
     lead there) and on the search field's outline (the primary input, as the Play pill)."""
-    cyan = [(path.name, el.tag, el.text) for path in layout_files() for el in parse(path).iter()
+    cyan = [(path.name, el.tag, el.text) for path in layout_files() for el in with_look(parse(path)).iter()
             if el.tag in ('textureradioonnofocus', 'alttexturenofocus', 'texturenofocus')
             and el.get('colordiffuse') == 'accent']
     assert cyan == [('Includes_Home.xml', 'textureradioonnofocus', 'ui/qm_menu.png'),

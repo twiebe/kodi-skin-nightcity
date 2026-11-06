@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <!-- Replaces the Nightcity file of the same name: the one place that names the skin -->
+    <variable name="SkinTitle">
+        <value>Confuse</value>
+    </variable>
+    <variable name="SkinVersion">
+        <value>confuse $INFO[System.AddonVersion(skin.confuse)]</value>
+    </variable>
+
+    <!-- The first screen after boot. The name as a texture in two colours of the theme, con and fuse,
+         and under it the fuse itself: a spark runs along the line while the startup script works and
+         leaves a burning trail. Once the script is done the whole line burns, with the spark at its
+         end. The spark is a glow that flickers around a bright core. No status text: the fuse says it. The only endless animation of this skin: nothing else is on the screen then. -->
+    <include name="LookStartupWordmark">
+        <definition>
+            <control type="image">
+                <left>432</left>
+                <top>359</top>
+                <width>1056</width>
+                <height>528</height>
+                <texture colordiffuse="glow">ui/ember_glow.png</texture>
+            </control>
+            <control type="group">
+                <top>347</top>
+                <animation effect="slide" start="0,16" end="0,0" time="500" delay="100" tween="cubic" easing="out">WindowOpen</animation>
+                <control type="image">
+                    <left>486</left>
+                    <width>442</width>
+                    <height>215</height>
+                    <texture colordiffuse="text_mute">ui/word_con.png</texture>
+                </control>
+                <control type="image">
+                    <left>928</left>
+                    <width>506</width>
+                    <height>215</height>
+                    <texture colordiffuse="accent">ui/word_fuse.png</texture>
+                </control>
+            </control>
+        </definition>
+    </include>
+    <include name="LookStartupTrack">
+        <param name="waiting"/>
+        <param name="online"/>
+        <definition>
+            <control type="group">
+                <left>480</left>
+                <top>621</top>
+                <control type="image">
+                    <width>960</width>
+                    <height>4</height>
+                    <texture colordiffuse="border_dim">ui/white.png</texture>
+                </control>
+                <control type="image">
+                    <width>960</width>
+                    <height>4</height>
+                    <texture colordiffuse="accent">ui/fuse_trail.png</texture>
+                    <animation type="Conditional" condition="true" loop="true" reversible="false">
+                        <effect type="zoom" start="1,100" end="100,100" center="0,2" time="4200"/>
+                    </animation>
+                    <visible>$PARAM[waiting]</visible>
+                </control>
+                <control type="group">
+                    <animation type="Conditional" condition="true" loop="true" reversible="false">
+                        <effect type="slide" start="0,0" end="960,0" time="4200"/>
+                    </animation>
+                    <visible>$PARAM[waiting]</visible>
+                    <control type="image">
+                        <left>-32</left>
+                        <top>-30</top>
+                        <width>64</width>
+                        <height>64</height>
+                        <texture colordiffuse="accent">ui/spark_halo.png</texture>
+                        <animation effect="fade" start="100" end="65" time="180" pulse="true" condition="true">Conditional</animation>
+                    </control>
+                    <control type="image">
+                        <left>-8</left>
+                        <top>-6</top>
+                        <width>16</width>
+                        <height>16</height>
+                        <texture colordiffuse="spark">ui/spark_core.png</texture>
+                    </control>
+                </control>
+                <control type="image">
+                    <width>960</width>
+                    <height>4</height>
+                    <texture colordiffuse="accent">ui/white.png</texture>
+                    <animation effect="zoom" start="20,100" end="100,100" center="0,2" time="300" tween="cubic" easing="out">Visible</animation>
+                    <visible>$PARAM[online]</visible>
+                </control>
+                <control type="group">
+                    <left>960</left>
+                    <visible>$PARAM[online]</visible>
+                    <control type="image">
+                        <left>-32</left>
+                        <top>-30</top>
+                        <width>64</width>
+                        <height>64</height>
+                        <texture colordiffuse="accent">ui/spark_halo.png</texture>
+                        <animation effect="fade" start="100" end="65" time="180" pulse="true" condition="true">Conditional</animation>
+                    </control>
+                    <control type="image">
+                        <left>-8</left>
+                        <top>-6</top>
+                        <width>16</width>
+                        <height>16</height>
+                        <texture colordiffuse="spark">ui/spark_core.png</texture>
+                    </control>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- The look of the shared building blocks: texture tags, focus frames, decoration and
+         sizes. The names of 1080i/Includes_Look.xml, with values of this skin. No ids, no on*
+         actions, a visible only as a $PARAM: what a control does stays in the shared files. -->
+
+    <!-- how far a focused card grows and how long it takes -->
+    <constant name="LookCardFocusZoom">113.5</constant>
+    <constant name="LookCardFocusTime">120</constant>
+    <!-- the space between the rows of a page of Home -->
+    <constant name="LookRowGap">0</constant>
+    <!-- The list of a row and the room around a card in it, for what a focused card draws past its
+         edges; a list clips its items. A 200 x 300 card at 113.5 % grows 13.5 px to a side and 20.25
+         up and down, its glow is 24 px x 1.135 more: ItemTop at least 48, ItemLeft at least 41. The
+         list starts where the card before ends, so no strip of that card shows on a scrolled row:
+         ItemLeft is also the gap between the cards, 44.
+         In pairs, since a constant cannot add up: ListLeft + ItemLeft stays 64, ListTop + ItemTop
+         stays 78, ListLeft + ListWidth stays 1920, ListTop + ListHeight stays 468 (the height of a
+         row), which keeps the 90 px under the card. ItemWidth is the card and its space to the next.
+         tests/static/test_confuse_look.py checks the sums. -->
+    <constant name="LookRowListLeft">20</constant>
+    <constant name="LookRowItemLeft">44</constant>
+    <constant name="LookRowListTop">30</constant>
+    <constant name="LookRowItemTop">48</constant>
+    <constant name="LookRowListWidth">1900</constant>
+    <constant name="LookRowListHeight">438</constant>
+    <constant name="LookRowItemWidth">244</constant>
+
+    <!-- The genre tabs of a row: no number before them here, so the text of the first stands over
+         the first card (24 px gap, 10 px of padding) -->
+    <constant name="LookGenreTabsLeft">30</constant>
+
+    <!-- Full screen page: the base colour. The warm fade is in the mask of the fanart (ui/fade_r.png,
+         FanartBackdrop), so a page has one full screen layer with alpha -->
+    <include name="LookBackground">
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>1080</height>
+            <texture colordiffuse="bg">ui/white.png</texture>
+        </control>
+    </include>
+
+    <!-- The info page's fanart is quieter than Home's in the draft: over its mask a fade in the base
+         colour, the second and last full screen layer with alpha. Right column of the page stays
+         readable on a white picture. -->
+    <include name="LookInfoFade">
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>1080</height>
+            <texture colordiffuse="bg">ui/info_fade.png</texture>
+        </control>
+    </include>
+
+    <!-- The line of the current episode, over its still. A focused still reaches 18 px up at this
+         zoom, its ring included, so this stays clear of it. -->
+    <include name="LookEpisodeMark">
+        <param name="visible"/>
+        <definition>
+            <control type="image">
+                <top>-26</top>
+                <width>320</width>
+                <height>3</height>
+                <texture colordiffuse="state_text">ui/white.png</texture>
+                <visible>$PARAM[visible]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- The plate under a card's artwork, round like it: what shows of a card without artwork. A
+         9-slice with the radius of the masks, drawn without one -->
+    <include name="LookCardFrame">
+        <param name="width"/>
+        <param name="height"/>
+        <param name="mask"/>
+        <param name="focused"/>
+        <param name="unfocused"/>
+        <definition>
+            <control type="image">
+                <width>$PARAM[width]</width>
+                <height>$PARAM[height]</height>
+                <texture border="12" colordiffuse="surface">ui/cut_btn_fill.png</texture>
+            </control>
+        </definition>
+    </include>
+
+    <!-- A card's artwork, round in both states. scalediffuse="false" keeps the mask on the card when
+         scale crops artwork of another ratio -->
+    <include name="LookCardArt">
+        <param name="image"/>
+        <param name="mask"/>
+        <param name="fadetime"/>
+        <definition>
+            <aspectratio scalediffuse="false">scale</aspectratio>
+            <fadetime>$PARAM[fadetime]</fadetime>
+            <texture diffuse="$PARAM[mask]" background="true">$PARAM[image]</texture>
+        </definition>
+    </include>
+    <include name="LookCardArtFocused">
+        <param name="image"/>
+        <param name="mask"/>
+        <param name="fadetime"/>
+        <definition>
+            <aspectratio scalediffuse="false">scale</aspectratio>
+            <fadetime>$PARAM[fadetime]</fadetime>
+            <texture diffuse="$PARAM[mask]" background="true">$PARAM[image]</texture>
+        </definition>
+    </include>
+
+    <!-- A focused card's glow, under its artwork. Fixed at 24 px past the card since card_halo.png
+         has this margin: the callers pass card + 48 -->
+    <include name="LookCardFocus">
+        <param name="glowwidth"/>
+        <param name="glowheight"/>
+        <param name="focused"/>
+        <definition>
+            <control type="image">
+                <left>-24</left>
+                <top>-24</top>
+                <width>$PARAM[glowwidth]</width>
+                <height>$PARAM[glowheight]</height>
+                <texture border="40" colordiffuse="card_glow">ui/card_halo.png</texture>
+                <visible>$PARAM[focused]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- A focused card's amber ring, over its artwork and extras -->
+    <include name="LookCardFocusRing">
+        <param name="width"/>
+        <param name="height"/>
+        <param name="focused"/>
+        <definition>
+            <control type="image">
+                <width>$PARAM[width]</width>
+                <height>$PARAM[height]</height>
+                <texture border="16" colordiffuse="focus">ui/card_ring.png</texture>
+                <visible>$PARAM[focused]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- The mark of an unwatched title, in the bottom right corner of a group as large as the card:
+         a warm white dot, inside the round corner, on a soft dark spot that keeps it on bright
+         posters -->
+    <include name="LookCardUnwatched">
+        <param name="visible"/>
+        <definition>
+            <control type="image">
+                <right>4</right>
+                <bottom>4</bottom>
+                <width>28</width>
+                <height>28</height>
+                <texture colordiffuse="shadow">ui/dot_shade.png</texture>
+                <visible>$PARAM[visible]</visible>
+            </control>
+            <control type="image">
+                <right>10</right>
+                <bottom>10</bottom>
+                <width>16</width>
+                <height>16</height>
+                <texture colordiffuse="text">ui/dot.png</texture>
+                <visible>$PARAM[visible]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- A button, 74 px high with 10 px of padding: a pill of white at .15, focused filled amber.
+         Border 37 is the padding and the round end of the 54 px pill. A primary button looks like
+         the others here: `color` stays unused, `rest` is what a caller can still change (a cursor
+         that lies waiting, invisible, on its rail). -->
+    <include name="LookButtonTextures">
+        <param name="color" default="border_dim"/>
+        <param name="rest" default="border_dim"/>
+        <definition>
+            <include>LookButtonFill</include>
+            <texturenofocus border="37" colordiffuse="$PARAM[rest]">ui/pill_pad.png</texturenofocus>
+        </definition>
+    </include>
+    <include name="LookButtonFill">
+        <texturefocus border="37" colordiffuse="focus">ui/pill_pad.png</texturefocus>
+    </include>
+    <include name="LookButtonOutline">
+        <param name="color"/>
+        <definition>
+            <texturenofocus border="37" colordiffuse="border_dim">ui/pill_pad.png</texturenofocus>
+        </definition>
+    </include>
+    <!-- The fill for a button that shows another one's focus: it has no focus itself -->
+    <include name="LookButtonFillNoFocus">
+        <texturenofocus border="37" colordiffuse="focus">ui/pill_pad.png</texturenofocus>
+    </include>
+
+    <!-- The focused row of a list: the fill as an image of the row, and as the textures of a row
+         that is a button -->
+    <include name="LookListFocus">
+        <texture border="22" colordiffuse="focus">ui/cut_btn_glow.png</texture>
+    </include>
+    <include name="LookListFocusButton">
+        <texturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturefocus>
+        <texturenofocus/>
+    </include>
+
+    <!-- The plate of the time bubble over the seek line, 260 x 50 px: no outline in this look -->
+    <include name="LookSeekBubble">
+        <control type="image">
+            <width>260</width>
+            <height>50</height>
+            <texture border="12" colordiffuse="surface">ui/cut_btn_fill.png</texture>
+        </control>
+    </include>
+
+    <!-- The fill behind the quick menu's icon in the top line while it has the focus -->
+    <include name="LookMenuIconFocus">
+        <texture border="32" colordiffuse="accent">ui/pill_menu.png</texture>
+    </include>
+
+    <!-- A tile (settings groups, quick menu): the outline, the focused fill with its glow, and both
+         for a tile that is a button itself, padded for the glow -->
+    <include name="LookTileFrame">
+        <texture border="16" colordiffuse="border_dim">ui/cut.png</texture>
+    </include>
+    <include name="LookTileFocus">
+        <texture border="26" colordiffuse="focus">ui/cut_fill_glow.png</texture>
+    </include>
+    <include name="LookTileButtonTextures">
+        <texturenofocus border="26" colordiffuse="border_dim">ui/cut_pad.png</texturenofocus>
+        <texturefocus border="26" colordiffuse="focus">ui/cut_fill_glow.png</texturefocus>
+    </include>
+
+    <!-- Decoration without a task: none in this look -->
+    <include name="LookDecoration">
+        <definition/>
+    </include>
+
+    <!-- The pill of … on the info page, 116 x 74 px: unfocused and focused like a button. The caller
+         names a texture and a colour for each state, `focus` only when it has the focus. -->
+    <include name="LookMorePill">
+        <param name="texture"/>
+        <param name="color"/>
+        <definition>
+            <texture border="37" colordiffuse="$PARAM[color]">ui/pill_pad.png</texture>
+        </definition>
+    </include>
+
+    <!-- A tab: the shown one has the line under its label, with the focus that line glows. A tab takes
+         the focus and shows its page at once, so without the glow the two would look the same. The
+         line's clear ends leave out the padding but 2 px; border 11 holds them and the line's round
+         ends, border 18 the glow too. -->
+    <include name="LookTabTextures">
+        <texturefocus colordiffuse="accent" border="18,0,18,0">ui/tab_glow.png</texturefocus>
+        <texturenofocus/>
+        <alttexturefocus colordiffuse="accent" border="18,0,18,0">ui/tab_glow.png</alttexturefocus>
+        <alttexturenofocus colordiffuse="accent" border="11,0,11,0">ui/tab_line.png</alttexturenofocus>
+    </include>
+
+    <!-- The season tabs look like the other tabs. A list cuts what lies left of it, so here the list
+         starts 10 px further left and the label 10 px in: room for the glow, the text stays over
+         the cards. A list layout has no auto width for an image, so one length for all: as long as
+         "Season 1" and its padding. The glow lies under the text, the line of the shown season
+         without the focus over it. -->
+    <constant name="LookSeasonListLeft">54</constant>
+    <include name="LookSeasonTabInset">
+        <left>10</left>
+    </include>
+    <include name="LookSeasonTabShown">
+        <param name="focused"/>
+        <definition>
+            <control type="image">
+                <width>132</width>
+                <height>44</height>
+                <texture colordiffuse="accent" border="18,0,18,0">ui/tab_glow.png</texture>
+                <visible>$PARAM[focused]</visible>
+            </control>
+            <include content="SeasonTab">
+                <param name="color" value="text"/>
+            </include>
+        </definition>
+    </include>
+    <include name="LookSeasonTabLine">
+        <param name="unfocused"/>
+        <definition>
+            <control type="image">
+                <width>132</width>
+                <height>44</height>
+                <texture colordiffuse="accent" border="11,0,11,0">ui/tab_line.png</texture>
+                <visible>$PARAM[unfocused]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- An entry of the top menu, 64 px high: the shown page a line under its text, the focus the
+         same line with a glow. One shape, so nothing jumps when the focus moves. The textures are as
+         high as the entry since Kodi stretches a button's texture over the whole button. -->
+    <include name="LookMenuTextures">
+        <texturefocus border="30,0,30,0" colordiffuse="accent">ui/menu_glow.png</texturefocus>
+        <texturenofocus/>
+        <alttexturefocus border="30,0,30,0" colordiffuse="accent">ui/menu_glow.png</alttexturefocus>
+        <alttexturenofocus border="19,0,19,0" colordiffuse="accent">ui/menu_line.png</alttexturenofocus>
+    </include>
+
+    <!-- Dialog panel: opaque base (surface alone lets the window behind show through), cut-corner
+         surface and a thin outline, sized by the parent group -->
+    <include name="LookPanel">
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <texture border="16" colordiffuse="bg">ui/cut_fill.png</texture>
+        </control>
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <texture border="16" colordiffuse="surface">ui/cut_fill.png</texture>
+        </control>
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <texture border="16" colordiffuse="border_dim">ui/cut.png</texture>
+        </control>
+    </include>
+
+    <!-- The text of a button. tools/build.py strips [UPPERCASE]
+         from the assembled skin, so a text shows as written; it reads the tag first, to keep digits
+         passed as a label literal. [CAPITALIZE] gives a fixed label its capitals. It stays off
+         what can be a film's title, whose small words stay small. -->
+    <include name="LookPillText">
+        <param name="label"/>
+        <param name="textcolor"/>
+        <param name="textoffsetx"/>
+        <definition>
+            <label>[CAPITALIZE][UPPERCASE]$PARAM[label][/UPPERCASE][/CAPITALIZE]</label>
+            <font>font_caps</font>
+            <textoffsetx>$PARAM[textoffsetx]</textoffsetx>
+            <align>center</align>
+            <aligny>center</aligny>
+            <textcolor>$PARAM[textcolor]</textcolor>
+            <focusedcolor>focus_text</focusedcolor>
+        </definition>
+    </include>
+
+    <include name="LookPillDisabled">
+        <param name="color"/>
+        <definition>
+            <disabledcolor>$PARAM[color]</disabledcolor>
+        </definition>
+    </include>
+
+    <!-- altlabel is what the tab or menu entry of the shown page reads: the white of the text, in the
+         same font. Bold would change the letters and push the entries after it on every move of the
+         focus, as the focus shows a page at once. -->
+    <include name="LookTabText">
+        <param name="label"/>
+        <param name="font"/>
+        <definition>
+            <font>$PARAM[font]</font>
+            <textoffsetx>10</textoffsetx>
+            <aligny>center</aligny>
+            <textcolor>text_mute</textcolor>
+            <focusedcolor>text</focusedcolor>
+            <label>[CAPITALIZE][UPPERCASE]$PARAM[label][/UPPERCASE][/CAPITALIZE]</label>
+            <altlabel>[COLOR text][CAPITALIZE][UPPERCASE]$PARAM[label][/UPPERCASE][/CAPITALIZE][/COLOR]</altlabel>
+        </definition>
+    </include>
+
+    <include name="LookMenuText">
+        <param name="label"/>
+        <definition>
+            <font>font_caps</font>
+            <textoffsetx>26</textoffsetx>
+            <aligny>center</aligny>
+            <textcolor>text_dim</textcolor>
+            <focusedcolor>text</focusedcolor>
+            <label>[CAPITALIZE][UPPERCASE]$PARAM[label][/UPPERCASE][/CAPITALIZE]</label>
+            <altlabel>[COLOR text][CAPITALIZE][UPPERCASE]$PARAM[label][/UPPERCASE][/CAPITALIZE][/COLOR]</altlabel>
+        </definition>
+    </include>
+
+    <!-- A label as written, in this look: line of the path, row titles, tiles of the quick menu -->
+    <include name="LookLabelCase">
+        <param name="text"/>
+        <definition>
+            <label>[UPPERCASE]$PARAM[text][/UPPERCASE]</label>
+        </definition>
+    </include>
+
+    <!-- A quiet plate for one technical fact, no frame -->
+    <include name="LookTag">
+        <param name="label"/>
+        <definition>
+            <font>font_caps_small</font>
+            <texturenofocus border="8" colordiffuse="chip">ui/chip.png</texturenofocus>
+            <texturefocus border="8" colordiffuse="chip">ui/chip.png</texturefocus>
+            <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+        </definition>
+    </include>
+
+    <!-- The small amber line above a title -->
+    <include name="LookKicker">
+        <param name="label"/>
+        <definition>
+            <font>font_caps_small</font>
+            <textcolor>accent2</textcolor>
+            <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+        </definition>
+    </include>
+
+    <!-- The heading of a section of a page, in white -->
+    <include name="LookSectionHeading">
+        <param name="label"/>
+        <definition>
+            <font>font_caps</font>
+            <textcolor>text</textcolor>
+            <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+        </definition>
+    </include>
+
+    <!-- The number of a row whose top line holds tabs: rows have no numbers in this look -->
+    <include name="LookRowNumber">
+        <param name="num"/>
+        <definition/>
+    </include>
+
+    <!-- The heading of a row of a page of Home: no number, in bold white -->
+    <include name="LookNumberedRowLabel">
+        <param name="num"/>
+        <param name="label"/>
+        <definition>
+            <font>font_caps</font>
+            <textcolor>text</textcolor>
+            <label>[B][CAPITALIZE][UPPERCASE]$PARAM[label][/UPPERCASE][/CAPITALIZE][/B]</label>
+        </definition>
+    </include>
+
+    <!-- The copies of a page title that glitch in another look: none here -->
+    <include name="LookTitleGlitch">
+        <param name="label"/>
+        <param name="width"/>
+        <param name="height"/>
+        <param name="font"/>
+        <param name="align"/>
+        <definition/>
+    </include>
+</includes>
