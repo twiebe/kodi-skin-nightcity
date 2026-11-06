@@ -15,6 +15,8 @@
     <!-- how far a focused card grows and how long it takes -->
     <constant name="LookCardFocusZoom">106</constant>
     <constant name="LookCardFocusTime">150</constant>
+    <!-- the space between the rows of a page of Home -->
+    <constant name="LookRowGap">0</constant>
 
     <!-- Full screen page: base colour and the petrol glow top right -->
     <include name="LookBackground">
@@ -111,9 +113,68 @@
     <include name="LookButtonTextures">
         <param name="color" default="border_dim"/>
         <definition>
-            <texturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturefocus>
+            <include>LookButtonFill</include>
+            <include content="LookButtonOutline">
+                <param name="color" value="$PARAM[color]"/>
+            </include>
+        </definition>
+    </include>
+    <include name="LookButtonFill">
+        <texturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturefocus>
+    </include>
+    <include name="LookButtonOutline">
+        <param name="color"/>
+        <definition>
             <texturenofocus border="22" colordiffuse="$PARAM[color]">ui/cut_btn_pad.png</texturenofocus>
         </definition>
+    </include>
+    <!-- The fill for a button that shows another one's focus: it has no focus itself -->
+    <include name="LookButtonFillNoFocus">
+        <texturenofocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturenofocus>
+    </include>
+
+    <!-- The fill behind the quick menu's icon in the top line while it has the focus -->
+    <include name="LookMenuIconFocus">
+        <texture border="22" colordiffuse="accent">ui/cut_btn_glow.png</texture>
+    </include>
+
+    <!-- A tile (settings groups, quick menu): the outline, the focused fill with its glow, and both
+         for a tile that is a button itself, padded for the glow -->
+    <include name="LookTileFrame">
+        <texture border="16" colordiffuse="border_dim">ui/cut.png</texture>
+    </include>
+    <include name="LookTileFocus">
+        <texture border="26" colordiffuse="focus">ui/cut_fill_glow.png</texture>
+    </include>
+    <include name="LookTileButtonTextures">
+        <texturenofocus border="26" colordiffuse="border_dim">ui/cut_pad.png</texturenofocus>
+        <texturefocus border="26" colordiffuse="focus">ui/cut_fill_glow.png</texturefocus>
+    </include>
+
+    <!-- Decoration without a task: three small chevrons after the spotlight buttons, a step darker
+         each to the right, in a group of 55 x 74 px -->
+    <include name="LookDecoration">
+        <control type="image">
+            <left>10</left>
+            <top>22</top>
+            <width>13</width>
+            <height>30</height>
+            <texture colordiffuse="state_text">ui/spot_more.png</texture>
+        </control>
+        <control type="image">
+            <left>21</left>
+            <top>22</top>
+            <width>13</width>
+            <height>30</height>
+            <texture colordiffuse="state_fade">ui/spot_more.png</texture>
+        </control>
+        <control type="image">
+            <left>32</left>
+            <top>22</top>
+            <width>13</width>
+            <height>30</height>
+            <texture colordiffuse="state_faint">ui/spot_more.png</texture>
+        </control>
     </include>
 
     <!-- The pill of … on the info page: the caller names the texture and its colour -->

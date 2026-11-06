@@ -139,7 +139,7 @@
                     <top>-10</top>
                     <width>76</width>
                     <height>64</height>
-                    <texture border="22" colordiffuse="accent">ui/cut_btn_glow.png</texture>
+                    <include>LookMenuIconFocus</include>
                     <visible>Control.HasFocus(9109)</visible>
                 </control>
                 <!-- the icon is the radio texture: a button has no room for an icon -->
@@ -411,7 +411,9 @@
                     <param name="label" value="$PARAM[label]"/>
                     <param name="textcolor" value="$PARAM[textcolor]"/>
                 </include>
-                <texturenofocus border="22" colordiffuse="$PARAM[color]">ui/cut_btn_pad.png</texturenofocus>
+                <include content="LookButtonOutline">
+                    <param name="color" value="$PARAM[color]"/>
+                </include>
                 <onclick>SetFocus($PARAM[button])</onclick>
                 <onclick>Action(Select)</onclick>
             </control>
@@ -421,7 +423,7 @@
                     <param name="label" value="$PARAM[label]"/>
                     <param name="textcolor" value="focus_text"/>
                 </include>
-                <texturenofocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturenofocus>
+                <include>LookButtonFillNoFocus</include>
                 <onclick>SetFocus($PARAM[button])</onclick>
                 <onclick>Action(Select)</onclick>
             </control>
@@ -439,27 +441,7 @@
             <control type="group" id="$PARAM[id]">
                 <width>55</width>
                 <height>74</height>
-                <control type="image">
-                    <left>10</left>
-                    <top>22</top>
-                    <width>13</width>
-                    <height>30</height>
-                    <texture colordiffuse="state_text">ui/spot_more.png</texture>
-                </control>
-                <control type="image">
-                    <left>21</left>
-                    <top>22</top>
-                    <width>13</width>
-                    <height>30</height>
-                    <texture colordiffuse="state_fade">ui/spot_more.png</texture>
-                </control>
-                <control type="image">
-                    <left>32</left>
-                    <top>22</top>
-                    <width>13</width>
-                    <height>30</height>
-                    <texture colordiffuse="state_faint">ui/spot_more.png</texture>
-                </control>
+                <include>LookDecoration</include>
             </control>
         </definition>
     </include>
@@ -476,7 +458,7 @@
             <aligny>center</aligny>
             <textcolor>$PARAM[textcolor]</textcolor>
             <focusedcolor>focus_text</focusedcolor>
-            <texturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturefocus>
+            <include>LookButtonFill</include>
         </definition>
     </include>
 
@@ -851,8 +833,9 @@
                 <label>$VAR[SearchFieldLabel]</label>
                 <textcolor>text</textcolor>
                 <focusedcolor>focus_text</focusedcolor>
-                <texturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturefocus>
-                <texturenofocus border="22" colordiffuse="accent">ui/cut_btn_pad.png</texturenofocus>
+                <include content="LookButtonTextures">
+                    <param name="color" value="accent"/>
+                </include>
                 <onclick>NotifyAll(nightcity,search)</onclick>
                 <onup>9100</onup>
                 <!-- past the recent terms onto the results (DESIGN.md: a selector is skipped from
@@ -1271,7 +1254,7 @@
                 <width>1920</width>
                 <height>$PARAM[height]</height>
                 <orientation>vertical</orientation>
-                <itemgap>0</itemgap>
+                <itemgap>LookRowGap</itemgap>
                 <scrolltime tween="quadratic">200</scrolltime>
                 <onup>$PARAM[up]</onup>
                 <ondown>noop</ondown>
@@ -1422,7 +1405,7 @@
                 <top>20</top>
                 <width>$PARAM[tilewidth]</width>
                 <height>170</height>
-                <texture border="16" colordiffuse="border_dim">ui/cut.png</texture>
+                <include>LookTileFrame</include>
                 <visible>![$PARAM[focused] + Control.HasFocus(9601)]</visible>
             </control>
             <control type="image">
@@ -1430,7 +1413,7 @@
                 <top>10</top>
                 <width>$PARAM[glowwidth]</width>
                 <height>190</height>
-                <texture border="26" colordiffuse="focus">ui/cut_fill_glow.png</texture>
+                <include>LookTileFocus</include>
                 <visible>$PARAM[focused] + Control.HasFocus(9601)</visible>
             </control>
             <control type="label">
@@ -1703,8 +1686,7 @@
             <width>580</width>
             <height>132</height>
             <label/>
-            <texturenofocus border="26" colordiffuse="border_dim">ui/cut_pad.png</texturenofocus>
-            <texturefocus border="26" colordiffuse="focus">ui/cut_fill_glow.png</texturefocus>
+            <include>LookTileButtonTextures</include>
             <!-- Kodi opens no window while a modal dialog is open -->
             <onclick>Dialog.Close(1170,true)</onclick>
             <!-- on Home first onto the icon: Back from the weather lands there, menu shown -->
@@ -1930,7 +1912,7 @@
             <control type="image">
                 <width>178</width>
                 <height>132</height>
-                <texture border="16" colordiffuse="border_dim">ui/cut.png</texture>
+                <include>LookTileFrame</include>
                 <visible>![$PARAM[focused] + Control.HasFocus($PARAM[list])]</visible>
             </control>
             <control type="image">
@@ -1938,7 +1920,7 @@
                 <top>-10</top>
                 <width>198</width>
                 <height>152</height>
-                <texture border="26" colordiffuse="focus">ui/cut_fill_glow.png</texture>
+                <include>LookTileFocus</include>
                 <visible>$PARAM[focused] + Control.HasFocus($PARAM[list])</visible>
             </control>
             <control type="group">
@@ -2015,7 +1997,7 @@
             <control type="image">
                 <width>178</width>
                 <height>72</height>
-                <texture border="16" colordiffuse="border_dim">ui/cut.png</texture>
+                <include>LookTileFrame</include>
                 <visible>![$PARAM[focused] + Control.HasFocus($PARAM[list])]</visible>
             </control>
             <control type="image">
@@ -2023,7 +2005,7 @@
                 <top>-10</top>
                 <width>198</width>
                 <height>92</height>
-                <texture border="26" colordiffuse="focus">ui/cut_fill_glow.png</texture>
+                <include>LookTileFocus</include>
                 <visible>$PARAM[focused] + Control.HasFocus($PARAM[list])</visible>
             </control>
             <control type="image">
