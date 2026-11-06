@@ -374,7 +374,7 @@ def test_season_tab_active_line():
     layout has no auto width, so the line is the season's own label again in font_caps_line,
     whose letters are bars as wide as the letters of font_caps: as long as the text."""
     seasons = next(c for c in parse(ROOT / '1080i' / 'DialogVideoInfo.xml').iter('control') if c.get('id') == '5200')
-    controls = seasons.find('focusedlayout').findall('control')
+    controls = with_look(seasons).find('focusedlayout').findall('control')
     assert not [c for c in controls if c.get('type') == 'image']
     lines = [c for c in controls if c.get('type') == 'label']
     assert sorted((c.findtext('textcolor'), c.findtext('visible')) for c in lines) == [
