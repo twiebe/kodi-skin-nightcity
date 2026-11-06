@@ -243,7 +243,7 @@ def test_on_marks_and_shown_page_are_state():
     """A check box that is on, the shown page of the top menu and the context menu's top line:
     state, not the cursor. Cyan stays on the quick menu's icon (the latent cursor: Up and Back
     lead there) and on the search field's outline (the primary input, as the Play pill)."""
-    cyan = [(path.name, el.tag, el.text) for path in layout_files() for el in parse(path).iter()
+    cyan = [(path.name, el.tag, el.text) for path in layout_files() for el in with_look(parse(path)).iter()
             if el.tag in ('textureradioonnofocus', 'alttexturenofocus', 'texturenofocus')
             and el.get('colordiffuse') == 'accent']
     assert cyan == [('Includes_Home.xml', 'textureradioonnofocus', 'ui/qm_menu.png'),

@@ -831,10 +831,11 @@ def test_confuse_look_file_names_confuse(confuse_root):
 
 # the look of these files lives in Includes_Look.xml, which skins/confuse replaces; the dialogs,
 # settings and music follow with the rest of the windows
-LOOK_MOVED = ('Includes_Base.xml',)
+LOOK_MOVED = ('Includes_Base.xml', 'Includes_Home.xml')
 LOOK_INCLUDES = ('LookBackground', 'LookCardFocus', 'LookCardUnwatched', 'LookCardFrame', 'LookButtonTextures',
-                 'LookTabTextures', 'LookMenuTextures', 'LookPanel', 'LookTag', 'LookKicker', 'LookRowNumber')
-LOOK_CONSTANTS = ('LookCardFocusZoom',)
+                 'LookTabTextures', 'LookMenuTextures', 'LookPanel', 'LookTag', 'LookKicker', 'LookRowNumber',
+                 'LookDecoration')
+LOOK_CONSTANTS = ('LookCardFocusZoom', 'LookRowGap')
 
 
 def test_cut_textures_only_in_look_includes():
@@ -886,6 +887,11 @@ def test_card_zoom_is_a_constant():
     assert len(zooms) == 2 and {a.get('end') for a in zooms} == {'LookCardFocusZoom'}
     assert {a.get('time') for a in zooms} == {'LookCardFocusTime'}
     assert (look_constants()['LookCardFocusZoom'], look_constants()['LookCardFocusTime']) == ('106', '150')
+
+
+def test_row_gap_is_a_constant():
+    assert include('PageRows').find('.//itemgap').text == 'LookRowGap'
+    assert look_constants()['LookRowGap'] == '0'
 
 
 def test_skin_name_variables_exist():
