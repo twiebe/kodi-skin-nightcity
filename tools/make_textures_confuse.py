@@ -3,8 +3,10 @@
 with colordiffuse). Nightcity's textures in media/ui stay as they are.
 
 Same names as Nightcity's cut-corner textures (cut*.png) with the same sizes and padding, so a
-control that still names one gets the rounded twin: radius 12 where the border is 12 or 22 (buttons,
-card ring), 16 where it is 16 or 26 (panels). The check boxes and the selected spin signs have rounded twins too. The pill, chip, dot, menu line and warm fade are new.
+control that still names one gets the rounded twin: radius 12 where the border is 12 or 22 (buttons)
+and for cut.png, the card ring (border 16, radius 12 like the masks), 16 where it is 16 or 26
+(panels). The check boxes and the selected spin signs have rounded twins too. The pill, chip, dot,
+menu line and warm fade are new.
 Sizes are 1080 px grid pixels, drawn 1:1: a mask of a 290 x 435 card is shown at 290 x 435, so its
 radius is the radius on screen. The design gives cards 8 px at 1280 x 720, so 12 px here (x 1.5).
 
