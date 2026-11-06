@@ -7,4 +7,239 @@
     <variable name="SkinVersion">
         <value>confuse $INFO[System.AddonVersion(skin.confuse)]</value>
     </variable>
+
+    <!-- The look of the shared building blocks: texture tags, focus frames, decoration and sizes.
+         The names of 1080i/Includes_Look.xml, for now with its Nightcity values. No ids, no on*
+         actions, a visible only as a $PARAM: what a control does stays in the shared files. -->
+
+    <!-- how far a focused card grows and how long it takes -->
+    <constant name="LookCardFocusZoom">106</constant>
+    <constant name="LookCardFocusTime">150</constant>
+
+    <!-- Full screen page: base colour and the petrol glow top right -->
+    <include name="LookBackground">
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>1080</height>
+            <texture colordiffuse="bg">ui/white.png</texture>
+        </control>
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>1080</height>
+            <texture colordiffuse="petrol">ui/petrol_glow.png</texture>
+        </control>
+    </include>
+
+    <!-- The plate under a card's artwork: unfocused a plain rectangle, focused cut like the frame.
+         unfocused is the opposite of focused. -->
+    <include name="LookCardFrame">
+        <param name="width"/>
+        <param name="height"/>
+        <param name="mask"/>
+        <param name="focused"/>
+        <param name="unfocused"/>
+        <definition>
+            <control type="image">
+                <width>$PARAM[width]</width>
+                <height>$PARAM[height]</height>
+                <texture colordiffuse="surface">ui/white.png</texture>
+                <visible>$PARAM[unfocused]</visible>
+            </control>
+            <control type="image">
+                <width>$PARAM[width]</width>
+                <height>$PARAM[height]</height>
+                <texture colordiffuse="surface" diffuse="$PARAM[mask]">ui/white.png</texture>
+                <visible>$PARAM[focused]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- A focused card's glow, under its artwork, 24 px past it on each side -->
+    <include name="LookCardFocus">
+        <param name="glowwidth"/>
+        <param name="glowheight"/>
+        <param name="focused"/>
+        <definition>
+            <control type="image">
+                <left>-24</left>
+                <top>-24</top>
+                <width>$PARAM[glowwidth]</width>
+                <height>$PARAM[glowheight]</height>
+                <texture border="40" colordiffuse="focus">ui/cut_glow.png</texture>
+                <visible>$PARAM[focused]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- A focused card's frame, over its artwork and extras -->
+    <include name="LookCardFocusRing">
+        <param name="width"/>
+        <param name="height"/>
+        <param name="focused"/>
+        <definition>
+            <control type="image">
+                <width>$PARAM[width]</width>
+                <height>$PARAM[height]</height>
+                <texture border="16" colordiffuse="focus">ui/cut.png</texture>
+                <visible>$PARAM[focused]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- The mark of an unwatched title, in the bottom right corner of a group as large as the card:
+         a cyan dog-ear, the focus colour. There is no cut in that corner, so one ear serves focused
+         and unfocused cards. -->
+    <include name="LookCardUnwatched">
+        <param name="visible"/>
+        <definition>
+            <control type="image">
+                <right>0</right>
+                <bottom>0</bottom>
+                <width>22</width>
+                <height>22</height>
+                <texture colordiffuse="focus">ui/dogear.png</texture>
+                <visible>$PARAM[visible]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- A button: focused the filled pill with its glow, else an outline in `color`, both padded -->
+    <include name="LookButtonTextures">
+        <param name="color" default="border_dim"/>
+        <definition>
+            <texturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturefocus>
+            <texturenofocus border="22" colordiffuse="$PARAM[color]">ui/cut_btn_pad.png</texturenofocus>
+        </definition>
+    </include>
+
+    <!-- The pill of … on the info page: the caller names the texture and its colour -->
+    <include name="LookMorePill">
+        <param name="texture"/>
+        <param name="color"/>
+        <definition>
+            <texture border="22" colordiffuse="$PARAM[color]">$PARAM[texture]</texture>
+        </definition>
+    </include>
+
+    <!-- A tab: the line under the label, cyan with the focus, dark blue while active. tab_line.png's
+         clear ends (border 8) leave out the padding but 2 px. -->
+    <include name="LookTabTextures">
+        <texturefocus colordiffuse="accent" border="8,0,8,0">ui/tab_line.png</texturefocus>
+        <texturenofocus/>
+        <alttexturefocus colordiffuse="accent" border="8,0,8,0">ui/tab_line.png</alttexturefocus>
+        <alttexturenofocus colordiffuse="state" border="8,0,8,0">ui/tab_line.png</alttexturenofocus>
+    </include>
+
+    <!-- An entry of the top menu: focused a filled accent button, the shown page a dark blue outline -->
+    <include name="LookMenuTextures">
+        <texturefocus border="22" colordiffuse="accent">ui/cut_btn_glow.png</texturefocus>
+        <texturenofocus/>
+        <alttexturefocus border="22" colordiffuse="accent">ui/cut_btn_glow.png</alttexturefocus>
+        <alttexturenofocus border="22" colordiffuse="state">ui/cut_btn_pad.png</alttexturenofocus>
+    </include>
+
+    <!-- Dialog panel: opaque base (surface alone lets the window behind show through), cut-corner
+         surface and a thin outline, sized by the parent group -->
+    <include name="LookPanel">
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <texture border="16" colordiffuse="bg">ui/cut_fill.png</texture>
+        </control>
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <texture border="16" colordiffuse="surface">ui/cut_fill.png</texture>
+        </control>
+        <control type="image">
+            <left>0</left>
+            <top>0</top>
+            <texture border="16" colordiffuse="border_dim">ui/cut.png</texture>
+        </control>
+    </include>
+
+    <!-- A thin outlined tag for one technical fact -->
+    <include name="LookTag">
+        <param name="label"/>
+        <definition>
+            <font>font_caps_small</font>
+            <texturenofocus border="12" colordiffuse="border_dim">ui/cut_btn.png</texturenofocus>
+            <texturefocus border="12" colordiffuse="border_dim">ui/cut_btn.png</texturefocus>
+            <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+        </definition>
+    </include>
+
+    <!-- The small pink line above a title -->
+    <include name="LookKicker">
+        <param name="label"/>
+        <definition>
+            <font>font_caps_small</font>
+            <textcolor>accent2</textcolor>
+            <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+        </definition>
+    </include>
+
+    <!-- The heading of a section of a page, in white -->
+    <include name="LookSectionHeading">
+        <param name="label"/>
+        <definition>
+            <font>font_caps</font>
+            <textcolor>text</textcolor>
+            <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+        </definition>
+    </include>
+
+    <!-- Only the pink number of a row whose top line holds tabs -->
+    <include name="LookRowNumber">
+        <param name="num"/>
+        <definition>
+            <label>[COLOR accent2]$PARAM[num][/COLOR]</label>
+        </definition>
+    </include>
+
+    <!-- The heading of a row of a page of Home with its pink number in front -->
+    <include name="LookNumberedRowLabel">
+        <param name="num"/>
+        <param name="label"/>
+        <definition>
+            <label>[COLOR accent2]$PARAM[num][/COLOR]  [UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+        </definition>
+    </include>
+
+    <!-- The pink and cyan copies of a page title, 2 px to either side, under the title itself -->
+    <include name="LookTitleGlitch">
+        <param name="label"/>
+        <param name="width"/>
+        <param name="height"/>
+        <param name="font"/>
+        <param name="align"/>
+        <definition>
+            <control type="label">
+                <left>-2</left>
+                <width>$PARAM[width]</width>
+                <height>$PARAM[height]</height>
+                <font>$PARAM[font]</font>
+                <align>$PARAM[align]</align>
+                <scroll>false</scroll>
+                <wrapmultiline>false</wrapmultiline>
+                <textcolor>glitch_a</textcolor>
+                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+            </control>
+            <control type="label">
+                <left>2</left>
+                <width>$PARAM[width]</width>
+                <height>$PARAM[height]</height>
+                <font>$PARAM[font]</font>
+                <align>$PARAM[align]</align>
+                <scroll>false</scroll>
+                <wrapmultiline>false</wrapmultiline>
+                <textcolor>glitch_b</textcolor>
+                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+            </control>
+        </definition>
+    </include>
 </includes>

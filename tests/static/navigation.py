@@ -138,6 +138,31 @@ def _fill(el, nested):
             _fill(k, nested)
 
 
+def with_look(el, layout=LAYOUT):
+    """A copy of `el` (an include definition or a whole file) with its Look* includes replaced by
+    their content, as Kodi builds them. The $PARAM of `el` itself stay as they are: a test reads a
+    building block with its look, wherever that lives."""
+    defs = _definitions(layout)
+    node = ET.Element(el.tag, el.attrib)
+    node.text, node.tail = el.text, el.tail
+    for child in el:
+        name = (child.get('content') or (child.text or '').strip()) if child.tag == 'include' and not child.get('name') else ''
+        if name.startswith('Look'):
+            holder = ET.Element('holder')
+            holder.append(child)
+            node.extend(_expand(holder, _KeepParams(), defs, {}))
+        else:
+            node.append(with_look(child, layout))
+    return node
+
+
+class _KeepParams(dict):
+    """Params for _expand that leave every $PARAM as it is."""
+
+    def get(self, key, default=None):
+        return '$PARAM[{}]'.format(key)
+
+
 def load(name, skin=None, layout=LAYOUT):
     """The window as Kodi builds it for the skin settings in `skin` (default: none set), from the
     1080i folder `layout` (default: this checkout's)."""
