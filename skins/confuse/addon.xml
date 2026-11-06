@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="skin.confuse" name="Confuse" version="0.1.0" provider-name="twiebe">
+    <requires>
+        <import addon="xbmc.gui" version="5.17.0"/>
+        <import addon="plugin.video.themoviedb.helper" version="1:6.20.2-1"/>
+    </requires>
+    <extension point="xbmc.gui.skin" debugging="false">
+        <res width="1920" height="1080" aspect="16:9" default="true" folder="1080i"/>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Calm skin in warm dark tones with amber focus</summary>
+        <description lang="en_GB">The Nightcity skin in a quiet look: warm near-black, amber focus, rounded buttons and big artwork, with online movie and TV data from TMDb Helper.</description>
+        <platform>all</platform>
+        <license>Creative Commons Attribution Non-Commercial Share-Alike 4.0</license>
+        <news>0.1.0 - First version of Confuse: the Nightcity skin in a calm, warm look with amber focus.</news>
+        <assets>
+            <icon>resources/icon.png</icon>
+        </assets>
+    </extension>
+</addon>

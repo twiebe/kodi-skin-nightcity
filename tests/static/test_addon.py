@@ -58,7 +58,7 @@ def test_build_zip(tmp_path):
     fonts = {n.split('/')[-1] for n in names if '/fonts/' in n}
     assert {'Rajdhani-Medium.ttf', 'NotoSansSymbols2-Regular.ttf', 'JetBrainsMono-Regular.ttf'}.isdisjoint(fonts)
     assert {'RetroUI-Medium.ttf', 'ShareTechMono-Regular.ttf', 'Rajdhani-OFL.txt'} <= fonts
-    for excluded in ('tests/', 'docs/', 'tools/', '.superpowers/', '.venv/'):
+    for excluded in ('tests/', 'docs/', 'tools/', '.superpowers/', '.venv/', 'skins/', '_build/'):
         assert not any(n.startswith('skin.nightcity/' + excluded) for n in names), excluded
     assert 'skin.nightcity/CLAUDE.md' not in names
     assert 'skin.nightcity/Makefile' not in names
