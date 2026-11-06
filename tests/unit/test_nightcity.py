@@ -371,6 +371,9 @@ class FakeWindow:
     def __init__(self):
         self.props = {}
 
+    def getProperty(self, key):
+        return self.props.get(key, '')
+
     def setProperty(self, key, value):
         self.props[key] = value
 
@@ -2660,19 +2663,105 @@ def _switching_env(monkeypatch, script_exists=True):
     return window, ran, started
 
 
-def test_blur_is_switched_on_only_in_confuse(monkeypatch):
-    """A skin setting, so it stays with the skin: Nightcity keeps its sharp fanart and no work for PIL."""
-    for skin, wanted in (('skin.confuse', ['Skin.SetBool(TMDbHelper.EnableBlur)']), ('skin.nightcity', [])):
+def test_look_settings_set_the_strength_of_the_blur_only_in_confuse(monkeypatch):
+    """Skin settings, so they stay with the skin. The helper's own watch stays off: on Home it only
+    looks at an item while the ratings need it, so BlurWatch asks for each picture itself."""
+    wanted = ['Skin.Reset(TMDbHelper.EnableBlur)', 'Skin.SetString(TMDbHelper.Blur.Radius,8)',
+              'Skin.SetString(TMDbHelper.Blur.Size,320)']
+    for skin, builtins in (('skin.confuse', wanted), ('skin.nightcity', [])):
         fake = FakeXbmc(set(), {})
         fake.getSkinDir = lambda skin=skin: skin
-        window = FakeWindow()
         monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
-        monkeypatch.setattr(nightcity, '_home', lambda: window)
         nightcity.look_settings()
-        assert fake.builtins == wanted
-        # without a source the helper blurs the poster, not the fanart the backdrop shows
-        source = 'Art(fanart)|Art(artist.fanart)' if wanted else None
-        assert window.props.get('TMDbHelper.Blur.SourceImage') == source
+        assert fake.builtins == builtins
+
+
+def _blur_env(monkeypatch, tmp_path, labels=None, conds=()):
+    fake = FakeXbmc(set(conds), dict(labels or {}))
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    monkeypatch.setattr(nightcity, 'blur_path', lambda art: str(tmp_path / (art + '.jpg')))
+    return fake, FakeWindow()
+
+
+def test_blur_path_is_the_file_the_helper_writes(monkeypatch):
+    import hashlib
+    import types
+    vfs = types.SimpleNamespace(translatePath=lambda path: path.replace('special://profile/', '/p/'))
+    monkeypatch.setitem(__import__('sys').modules, 'xbmcvfs', vfs)
+    name = hashlib.md5(b'http://x/a.jpg').hexdigest()
+    assert nightcity.blur_path('http://x/a.jpg') == (
+        '/p/addon_data/plugin.video.themoviedb.helper/blur_v3/{}-8-320.jpg'.format(name))
+
+
+def test_blur_of_a_known_picture_shows_at_once(monkeypatch, tmp_path):
+    fake, home = _blur_env(monkeypatch, tmp_path, {'ListItem.Art(fanart)': 'a'})
+    (tmp_path / 'a.jpg').write_text('x')
+    nightcity.BlurWatch().tick(home, 0.0)
+    assert home.props['nc.blur.image'] == str(tmp_path / 'a.jpg')
+    assert home.props['nc.blur.original'] == 'a'
+    assert fake.builtins == []
+
+
+def test_blur_is_asked_for_only_once_the_cursor_stands(monkeypatch, tmp_path):
+    fake, home = _blur_env(monkeypatch, tmp_path, {'ListItem.Art(fanart)': 'a'})
+    watch = nightcity.BlurWatch()
+    watch.tick(home, 0.0)
+    watch.tick(home, nightcity.BLUR_SETTLE - 0.1)
+    assert fake.builtins == []
+    fake.labels['ListItem.Art(fanart)'] = 'b'  # moved on: the wait starts again
+    watch.tick(home, nightcity.BLUR_SETTLE + 0.1)
+    assert fake.builtins == []
+    watch.tick(home, 2 * nightcity.BLUR_SETTLE + 0.2)
+    assert fake.builtins == ['RunScript(plugin.video.themoviedb.helper,"blur_image=b")']
+    watch.tick(home, 2 * nightcity.BLUR_SETTLE + 0.3)
+    assert len(fake.builtins) == 1
+
+
+def test_blur_runs_one_script_at_a_time(monkeypatch, tmp_path):
+    fake, home = _blur_env(monkeypatch, tmp_path, {'ListItem.Art(fanart)': 'a'})
+    watch = nightcity.BlurWatch()
+    watch.tick(home, 0.0)
+    watch.tick(home, 1.0)
+    fake.labels['ListItem.Art(fanart)'] = 'b'
+    watch.tick(home, 1.1)
+    watch.tick(home, 2.0)
+    assert len(fake.builtins) == 1  # a is still being made
+    (tmp_path / 'a.jpg').write_text('x')
+    watch.tick(home, 2.1)
+    assert fake.builtins[-1].endswith('blur_image=b")')
+    assert len(fake.builtins) == 2
+
+
+def test_blur_does_not_wait_for_a_script_that_failed(monkeypatch, tmp_path):
+    fake, home = _blur_env(monkeypatch, tmp_path, {'ListItem.Art(fanart)': 'a'})
+    watch = nightcity.BlurWatch()
+    watch.tick(home, 0.0)
+    watch.tick(home, 1.0)
+    fake.labels['ListItem.Art(fanart)'] = 'b'
+    watch.tick(home, 1.1)
+    watch.tick(home, 1.0 + nightcity.BLUR_GIVE_UP + 0.1)
+    assert fake.builtins[-1].endswith('blur_image=b")')
+    fake.labels['ListItem.Art(fanart)'] = 'a'  # one try per picture
+    count = len(fake.builtins)
+    watch.tick(home, 100.0)
+    watch.tick(home, 101.0)
+    assert len(fake.builtins) == count
+
+
+def test_blur_follows_the_spotlight_without_an_item_in_focus(monkeypatch, tmp_path):
+    fake, home = _blur_env(monkeypatch, tmp_path, {'Container(9000).ListItem.Art(fanart)': 'spot'},
+                           ['Control.IsVisible(9300)'])
+    (tmp_path / 'spot.jpg').write_text('x')
+    nightcity.BlurWatch().tick(home, 0.0)
+    assert home.props['nc.blur.original'] == 'spot'
+
+
+def test_blur_rests_under_a_playing_video(monkeypatch, tmp_path):
+    fake, home = _blur_env(monkeypatch, tmp_path, {'ListItem.Art(fanart)': 'a'},
+                           ['Window.IsActive(fullscreenvideo)'])
+    (tmp_path / 'a.jpg').write_text('x')
+    nightcity.BlurWatch().tick(home, 0.0)
+    assert 'nc.blur.original' not in home.props
 
 
 def test_service_ends_when_the_skin_changes(monkeypatch):

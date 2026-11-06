@@ -35,7 +35,7 @@
                 <param name="art" value="$PARAM[art]"/>
                 <param name="fadetime" value="$PARAM[fadetime]"/>
                 <param name="shown" value="!String.IsEmpty($PARAM[art])"/>
-                <param name="blurred" value="String.IsEqual(Window(Home).Property(TMDbHelper.ListItem.BlurImage.Original),$PARAM[art])"/>
+                <param name="blurred" value="String.IsEqual(Window(Home).Property(nc.blur.original),$PARAM[art])"/>
             </include>
         </definition>
     </include>

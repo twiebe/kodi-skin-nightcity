@@ -112,10 +112,9 @@
         </control>
     </include>
 
-    <!-- The fanart, blurred as soon as TMDb Helper has made the picture from this art (it follows the
-         focused item, so its original tells whether it is this one), sharp until then. One of the two
-         shows, and they fade into each other. Written once per film by the helper, then from its cache:
-         drawing costs what any picture costs. look_settings() in nightcity.py switches it on. -->
+    <!-- The fanart, blurred as soon as the picture of this art is there, sharp until then. One of the
+         two shows, and they fade into each other. TMDb Helper makes a picture once, then it comes from
+         its folder: drawing costs what any picture costs. BlurWatch in nightcity.py runs this. -->
     <include name="LookFanartBackdrop">
         <param name="art"/>
         <param name="fadetime"/>
@@ -142,7 +141,7 @@
                 <height>1080</height>
                 <aspectratio>scale</aspectratio>
                 <fadetime>$PARAM[fadetime]</fadetime>
-                <texture colordiffuse="fanart" diffuse="ui/fade_r.png" background="true">$INFO[Window(Home).Property(TMDbHelper.ListItem.BlurImage)]</texture>
+                <texture colordiffuse="fanart" diffuse="ui/fade_r.png" background="true">$INFO[Window(Home).Property(nc.blur.image)]</texture>
                 <animation effect="fade" time="300">VisibleChange</animation>
                 <visible>$PARAM[shown] + $PARAM[blurred]</visible>
             </control>
