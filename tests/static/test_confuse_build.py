@@ -134,3 +134,23 @@ def test_a_stale_file_goes_and_the_others_stay_untouched(tmp_path, monkeypatch):
     before.pop('own.txt')
     assert _stamps(out) == before
     assert (out / MARKER).exists()
+
+
+def test_stripped_labels_never_become_bare_numbers(confuse_root):
+    """A label that is only digits is a string id to Kodi (GUIControlFactory.cpp:662): the number pad's
+    1 would show the text of string 1. Nightcity's [UPPERCASE]1[/UPPERCASE] is not numeric, the
+    stripped one is. So a number that went into a [UPPERCASE] label, as text or as the value of the
+    param that fills it, is written $NUMBER[n] in the assembled tree."""
+    import re
+    sources = ''.join(p.read_text(encoding='utf-8') for p in sorted((ROOT / '1080i').glob('*.xml')))
+    wrapped = set(re.findall(r'\[UPPERCASE\]\$PARAM\[(\w+)\]\[/UPPERCASE\]', sources))
+    assert 'label' in wrapped
+    found = 0
+    for path in sorted((confuse_root / '1080i').glob('*.xml')):
+        for el in parse(path).iter():
+            if el.tag == 'param' and el.get('name') in wrapped and el.get('value', '').isdigit():
+                raise AssertionError((path.name, el.get('name'), el.get('value')))
+            if el.tag in ('label', 'label2', 'altlabel') and (el.text or '').strip().isdigit():
+                raise AssertionError((path.name, el.tag, el.text))
+            found += el.tag == 'param' and (el.get('value') or '').startswith('$NUMBER[')
+    assert found >= 10  # the pad: 0 to 9
