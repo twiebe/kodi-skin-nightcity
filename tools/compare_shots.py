@@ -13,7 +13,7 @@ import argparse
 import pathlib
 import sys
 
-from PIL import Image, ImageChops, ImageDraw
+from PIL import Image, ImageChops, ImageDraw, ImageStat
 
 TILE = 64
 # file: boxes (left, top, right, bottom) that change with the time, not with the skin
@@ -45,17 +45,15 @@ def difference(a, b):
 
 
 def _mean(image):
-    # BOX down to one pixel is the mean; per channel, then over the channels
-    pixel = image.resize((1, 1), Image.BOX).getpixel((0, 0))
-    return sum(pixel) / len(pixel)
+    values = ImageStat.Stat(image).mean
+    return sum(values) / len(values)
 
 
 def worst_tile(diff):
     """Mean deviation of the worst TILE x TILE tile of a difference picture."""
     width, height = diff.size
-    columns, rows = max(width // TILE, 1), max(height // TILE, 1)
-    means = diff.resize((columns, rows), Image.BOX)
-    return max(sum(means.getpixel((x, y))) / 3 for x in range(columns) for y in range(rows))
+    return max(_mean(diff.crop((x, y, min(x + TILE, width), min(y + TILE, height))))
+               for x in range(0, width, TILE) for y in range(0, height, TILE))
 
 
 def deviation(a, b):
@@ -82,7 +80,7 @@ def compare(a, b, threshold):
         worst = worst_tile(diff)
         passed = worst < threshold
         ok = ok and passed
-        lines.append('{}: {:.1f} worst tile, {:.3f} whole picture{}'.format(name, worst, _mean(diff), '' if passed else '  DIFFERENT'))
+        lines.append('{}: {:.3f} worst tile, {:.4f} whole picture{}'.format(name, worst, _mean(diff), '' if passed else '  DIFFERENT'))
     return lines, ok
 
 

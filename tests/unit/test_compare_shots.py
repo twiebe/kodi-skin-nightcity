@@ -93,3 +93,11 @@ def test_another_size_fails(tmp_path, size):
     (tmp_path / 'b').mkdir()
     Image.new('RGB', size, (40, 40, 40)).save(tmp_path / 'b' / '01-home.png')
     assert run(tmp_path / 'a', tmp_path / 'b').returncode == 1
+
+
+def test_values_are_not_rounded_away(tmp_path):
+    """One changed pixel is a difference, however small the tile's mean."""
+    picture(tmp_path / 'a' / '02-movies.png')
+    picture(tmp_path / 'b' / '02-movies.png', box=(400, 500, 400, 500))
+    value = compare_shots.deviation(tmp_path / 'a' / '02-movies.png', tmp_path / 'b' / '02-movies.png')
+    assert 0 < value < 0.1
