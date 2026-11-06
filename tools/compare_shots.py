@@ -25,7 +25,7 @@ MASKS = {
     '03-info.png': [TOP_RIGHT, ENDS_AT],
     '04-person.png': [TOP_RIGHT],
     # "ends at" and how far the player has buffered ahead of the paused position
-    '05-player.png': [TOP_RIGHT, (1640, 885, 1920, 925), (782, 866, 1100, 880)],
+    '05-player.png': [TOP_RIGHT, (1640, 885, 1920, 925), (782, 866, 1920, 880)],
     '06-music.png': [TOP_RIGHT],
     '07-settings.png': [TOP_RIGHT],
     '08-quick-menu.png': [TOP_RIGHT, ENDS_AT, (1260, 130, 1600, 248)],  # clock and date of the panel
