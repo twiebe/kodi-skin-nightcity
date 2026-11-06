@@ -106,3 +106,12 @@ def test_the_instance_gets_the_skin_in_its_guisettings(tmp_path):
 def test_screenshots_select_the_skin_like_the_setup():
     import kodidev_setup
     assert screenshots.select_skin is kodidev_setup.select_skin
+
+
+def test_the_clip_is_the_same_on_every_run(monkeypatch, tmp_path):
+    """Its gradient shows behind the player: tools/compare_shots.py compares fresh instances."""
+    calls = []
+    monkeypatch.setattr(screenshots.subprocess, 'run', lambda args, **kw: calls.append(args))
+    screenshots.make_clip(tmp_path / 'clip.mkv', 60, 2)
+    source = next(a for a in calls[0] if a.startswith('gradients='))
+    assert ':seed=' in source

@@ -207,7 +207,7 @@ def make_clip(path, seconds, chapters):
                 n * step * 1000, min((n + 1) * step, seconds) * 1000, n + 1) for n in range(chapters)))
         subprocess.run([
             'ffmpeg', '-y', '-loglevel', 'error',
-            '-f', 'lavfi', '-i', 'gradients=s=1920x1080:r=1:speed=0.002:n=3:type=radial:'
+            '-f', 'lavfi', '-i', 'gradients=s=1920x1080:r=1:speed=0.002:n=3:type=radial:seed=1:'
                                  'c0=0x050812:c1=0x0b3a4f:c2=0x3b0b33,format=yuv420p',
             '-f', 'lavfi', '-i', 'anullsrc=cl=5.1:r=48000', '-i', str(meta),
             '-map', '0:v', '-map', '1:a', '-map_chapters', '2', '-t', str(seconds),
