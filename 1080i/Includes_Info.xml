@@ -90,13 +90,9 @@
                 <!-- the current episode (the head shows it): a dark blue line over its still, a
                      little above it and above the focused card's zoom. Under the title it met the
                      progress line, a bar before the title was hardly seen. -->
-                <control type="image">
-                    <top>-18</top>
-                    <width>320</width>
-                    <height>3</height>
-                    <texture colordiffuse="state_text">ui/white.png</texture>
-                    <visible>$PARAM[selected]</visible>
-                </control>
+                <include content="LookEpisodeMark">
+                    <param name="visible" value="$PARAM[selected]"/>
+                </include>
                 <include content="ProgressLine">
                     <param name="top" value="234"/>
                     <param name="width" value="320"/>

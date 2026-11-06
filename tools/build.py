@@ -20,6 +20,7 @@ import zipfile
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 EXCLUDE = {'.git', '.gitignore', '.superpowers', 'CLAUDE.md', 'Makefile', 'docs', 'tests', 'tools', 'requirements-dev.txt', 'pytest.ini',
            '__pycache__', '.venv', '.pytest_cache', 'skins', '_build', '.assembled'}
+LOWERCASE_STRINGS = {'31012'}  # min: a unit, after the number
 UPPER_PARAM = re.compile(r'\[UPPERCASE\]\$PARAM\[(\w+)\]\[/UPPERCASE\]')
 MARKER = '.assembled'  # written into a folder assemble filled: only such a folder gets wiped again
 
@@ -50,9 +51,10 @@ def assemble(skin, dest):
     """Lay skins/<skin> over the root tree into dest and return dest. A file of the overlay replaces
     the root file of the same path, remove.txt lists globs to drop, fonts Font.xml does not load stay
     out, and [UPPERCASE] markup goes from the windows (Confuse shows titles as written: a build rule,
-    so the shared files keep it). dest stays the same folder and only what differs is written or
-    removed: kodi-dev mounts it, and a Kodi may be running on it. A folder that is not empty and has no
-    marker from an earlier run, and the repo itself or a parent of it, are refused."""
+    so the shared files keep it), and the skin's strings start with a capital. dest stays the same
+    folder and only what differs is written or removed: kodi-dev mounts it, and a Kodi may be running
+    on it. A folder that is not empty and has no marker from an earlier run, and the repo itself or a
+    parent of it, are refused."""
     overlay = ROOT / 'skins' / skin
     dest = pathlib.Path(dest).resolve()
     if dest == ROOT or dest in ROOT.parents:
@@ -88,6 +90,9 @@ def _lay_out(overlay, dest):
     # so a number that went into [UPPERCASE] becomes $NUMBER[n]: as text, or as the value of the
     # param that fills such a label
     wrapped = {n for text in texts.values() for n in UPPER_PARAM.findall(text)}
+    strings = dest / 'language' / 'resource.language.en_gb' / 'strings.po'
+    if strings.exists():
+        strings.write_text(_sentence_case(strings.read_text(encoding='utf-8')), encoding='utf-8')
     for path, text in texts.items():
         fixed = text
         for name in sorted(wrapped):
@@ -96,6 +101,12 @@ def _lay_out(overlay, dest):
         fixed = fixed.replace('[UPPERCASE]', '').replace('[/UPPERCASE]', '')
         if fixed != text:
             path.write_text(fixed, encoding='utf-8')
+
+
+def _sentence_case(po):
+    """A skin string starts with a capital (Nightcity writes them small and shows most in capitals)."""
+    return re.sub(r'(msgctxt "#(\d+)"\nmsgid ")([a-z])',
+                  lambda m: m.group(0) if m.group(2) in LOWERCASE_STRINGS else m.group(1) + m.group(3).upper(), po)
 
 
 def _reconcile(stage, dest):

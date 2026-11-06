@@ -136,6 +136,7 @@
             <!-- nothing shows without the focus: it lies on the rail, waiting. Alpha 0, not colour 0: that
                  is "no colour" to Kodi, which then draws the texture white -->
             <param name="color" value="00FFFFFF"/>
+            <param name="rest" value="00FFFFFF"/>
             <param name="textcolor" value="00FFFFFF"/>
             <param name="onclick" value="NotifyAll(nightcity,lib_bar:ok)"/>
             <param name="onfocus" value="NotifyAll(nightcity,lib_bar:enter)"/>

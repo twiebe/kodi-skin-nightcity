@@ -48,6 +48,25 @@
         </control>
     </include>
 
+    <!-- Over the fanart of the info page: nothing here -->
+    <include name="LookInfoFade">
+        <definition/>
+    </include>
+
+    <!-- The line of the current episode, over its still and above the focused card's zoom -->
+    <include name="LookEpisodeMark">
+        <param name="visible"/>
+        <definition>
+            <control type="image">
+                <top>-18</top>
+                <width>320</width>
+                <height>3</height>
+                <texture colordiffuse="state_text">ui/white.png</texture>
+                <visible>$PARAM[visible]</visible>
+            </control>
+        </definition>
+    </include>
+
     <!-- The plate under a card's artwork: unfocused a plain rectangle, focused cut like the frame.
          unfocused is the opposite of focused. -->
     <include name="LookCardFrame">
@@ -150,6 +169,8 @@
     <!-- A button: focused the filled pill with its glow, else an outline in `color`, both padded -->
     <include name="LookButtonTextures">
         <param name="color" default="border_dim"/>
+        <!-- without the focus, in a look that gives a primary button no colour of its own -->
+        <param name="rest" default="border_dim"/>
         <definition>
             <include>LookButtonFill</include>
             <include content="LookButtonOutline">
@@ -316,7 +337,7 @@
         </control>
     </include>
 
-    <!-- The text of a button. Kodi has no way to undo [UPPERCASE], so the case lives here -->
+    <!-- The text of a button. The case lives here: tools/build.py strips [UPPERCASE] from an overlay -->
     <include name="LookPillText">
         <param name="label"/>
         <param name="textcolor"/>
@@ -419,6 +440,8 @@
         <param name="num"/>
         <param name="label"/>
         <definition>
+            <font>font_caps_small</font>
+            <textcolor>text_mute</textcolor>
             <label>[COLOR accent2]$PARAM[num][/COLOR]  [UPPERCASE]$PARAM[label][/UPPERCASE]</label>
         </definition>
     </include>

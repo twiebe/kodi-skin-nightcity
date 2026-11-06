@@ -244,6 +244,7 @@
             <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.lib.bar))"/>
             <!-- alpha 0, not colour 0: that is "no colour" to Kodi, which then draws the texture white -->
             <param name="color" value="00FFFFFF"/>
+            <param name="rest" value="00FFFFFF"/>
             <param name="textcolor" value="00FFFFFF"/>
             <param name="onclick" value="NotifyAll(nightcity,music_bar:ok)"/>
             <param name="onfocus" value="NotifyAll(nightcity,music_bar:enter)"/>

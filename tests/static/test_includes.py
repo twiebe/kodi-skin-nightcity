@@ -895,7 +895,8 @@ def test_card_artwork_is_look():
 
 
 def test_letter_case_lives_in_the_look():
-    """Kodi offers no way to undo [UPPERCASE]: an overlay can only choose it where the tag is."""
+    """The case stays in the Look: tools/build.py strips [UPPERCASE] from an overlay, and a window with
+    the tag in its own layout would read differently in the two skins until then."""
     for name in ('Includes_Base.xml', 'Includes_Home.xml'):
         assert '[UPPERCASE]' not in (ROOT / '1080i' / name).read_text(encoding='utf-8'), name
 
@@ -947,7 +948,7 @@ def test_row_padding_is_in_constants():
 def test_row_padding_constants_are_paired(look):
     """Kodi constants cannot add up, so each pair is two numbers: more padding, less list. The card
     stays where the rest of a row expects it (headers at 64, its number at the right edge)."""
-    c = {el.get('name'): int(el.text) for el in parse(look).findall('constant')}
+    c = {el.get('name'): float(el.text) for el in parse(look).findall('constant')}
     assert c['LookRowListLeft'] + c['LookRowItemLeft'] == 64
     assert c['LookRowListTop'] + c['LookRowItemTop'] == 78
     assert c['LookRowListLeft'] + c['LookRowListWidth'] == 1920

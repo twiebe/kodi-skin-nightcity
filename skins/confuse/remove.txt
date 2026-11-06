@@ -2,3 +2,5 @@ colors/catppuccin.xml
 colors/tokyonight.xml
 fonts/Rajdhani-OFL.txt
 fonts/ShareTechMono-OFL.txt
+media/ui/petrol_glow.png
+media/ui/dogear.png

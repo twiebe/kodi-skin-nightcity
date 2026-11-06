@@ -450,6 +450,8 @@
         <param name="color" default="border_dim"/>
         <param name="textcolor" default="text_dim"/>
         <param name="textoffsetx" default="34"/>
+        <!-- the colour without the focus in a look that ignores `color`: for a button that hides -->
+        <param name="rest" default="border_dim"/>
         <definition>
             <control type="button" id="$PARAM[id]">
                 <visible>$PARAM[visible]</visible>
@@ -466,6 +468,7 @@
                 </include>
                 <include content="LookButtonTextures">
                     <param name="color" value="$PARAM[color]"/>
+                    <param name="rest" value="$PARAM[rest]"/>
                 </include>
                 <onclick>$PARAM[onclick]</onclick>
                 <onclick>$PARAM[onclick2]</onclick>
@@ -593,8 +596,6 @@
                 <top>$PARAM[top]</top>
                 <width>1200</width>
                 <height>34</height>
-                <font>font_caps_small</font>
-                <textcolor>text_mute</textcolor>
                 <include content="LookNumberedRowLabel">
                     <param name="num" value="$PARAM[num]"/>
                     <param name="label" value="$PARAM[label]"/>
