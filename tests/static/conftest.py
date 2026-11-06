@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-SKIP_DIRS = {'.git', '.superpowers', '.venv', '.pytest_cache', '__pycache__'}
+SKIP_DIRS = {'.git', 'skins', '_build', '.superpowers', '.venv', '.pytest_cache', '__pycache__'}
 NON_WINDOW_FILES = {'Font.xml', 'Variables.xml'}
 
 sys.path.insert(0, str(ROOT / 'tools'))
@@ -31,3 +31,9 @@ def window_files():
 @pytest.fixture
 def skin_root():
     return ROOT
+
+
+@pytest.fixture(scope='session')
+def confuse_root(tmp_path_factory):
+    from build import assemble
+    return assemble('confuse', tmp_path_factory.mktemp('confuse') / 'skin.confuse')

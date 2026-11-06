@@ -1,0 +1,2 @@
+colors/catppuccin.xml
+colors/tokyonight.xml
