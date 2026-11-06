@@ -69,3 +69,54 @@ def test_a_condition_that_does_not_hold_still_fails(monkeypatch):
     monkeypatch.setattr(e2e, 'cond', lambda condition: {condition: False})
     with pytest.raises(AssertionError, match='timed out'):
         e2e.wait_for('Integer.IsEqual(A,5)', timeout=0.1)
+
+
+class _Item:
+    def __init__(self, *keywords):
+        self.keywords = keywords
+        self.marks = []
+
+    def add_marker(self, mark):
+        self.marks.append(mark)
+
+
+def test_the_nightcity_look_is_skipped_under_another_skin_with_a_reason():
+    look, plain = _Item('e2e', 'nightcity_look'), _Item('e2e')
+    e2e.skip_nightcity_look([look, plain], 'skin.confuse')
+    assert [mark.name for mark in look.marks] == ['skip']
+    assert 'skin.confuse' in look.marks[0].kwargs['reason']
+    assert plain.marks == []
+
+
+def test_the_nightcity_look_runs_under_nightcity():
+    look = _Item('e2e', 'nightcity_look')
+    e2e.skip_nightcity_look([look], 'skin.nightcity')
+    assert look.marks == []
+
+
+def test_the_skin_under_test_comes_from_nc_skin(monkeypatch):
+    def loaded():
+        module = importlib.util.module_from_spec(_spec)
+        _spec.loader.exec_module(module)
+        return module.SKIN_ID, module.OTHER_SKIN
+
+    monkeypatch.delenv('NC_SKIN', raising=False)
+    assert loaded() == ('skin.nightcity', 'skin.confuse')
+    monkeypatch.setenv('NC_SKIN', 'confuse')
+    assert loaded() == ('skin.confuse', 'skin.nightcity')
+
+
+def test_a_run_assembles_confuse_once_not_per_worker(monkeypatch):
+    """Kodi mounts _build/confuse: without this a run tests the overlay of the last assemble."""
+    import sys
+    sys.path.insert(0, str(ROOT / 'tools'))
+    import build
+    calls = []
+    monkeypatch.setattr(build, 'assemble', lambda skin, dest: calls.append((skin, dest)))
+    monkeypatch.setattr(e2e, 'POOL', None)
+    monkeypatch.setenv('PYTEST_XDIST_WORKER', 'gw1')
+    e2e.pytest_configure(None)
+    assert calls == []
+    monkeypatch.delenv('PYTEST_XDIST_WORKER')
+    e2e.pytest_configure(None)
+    assert calls == [('confuse', ROOT / '_build' / 'confuse')]

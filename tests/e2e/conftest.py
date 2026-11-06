@@ -11,6 +11,7 @@ import re
 import shutil
 import sqlite3
 import subprocess
+import sys
 import time
 import urllib.error
 import urllib.request
@@ -29,6 +30,10 @@ POOL = 'pool' if POOL == '1' else POOL
 if POOL:
     # Set before any kdev call: the kdev subprocesses read it too
     os.environ['KDEV_INSTANCE'] = '{}-{}'.format(POOL, os.environ.get('PYTEST_XDIST_WORKER', 'gw0')[2:])
+
+# The skin the Kodi under test runs: NC_SKIN=confuse, with KDEV_POOL=confuse (see CLAUDE.md)
+SKIN_ID = 'skin.' + os.environ.get('NC_SKIN', 'nightcity')
+OTHER_SKIN = 'skin.nightcity' if SKIN_ID == 'skin.confuse' else 'skin.confuse'
 
 
 def _data():
@@ -257,7 +262,13 @@ def pytest_configure(config):
     """One run per pool at a time: hold its run lock (kdev's pool commands check it too) for
     the whole run, so a second run on the same pool fails at once instead of two runs
     restarting each other's Kodis for minutes. The lock goes with the process, so a killed run
-    leaves nothing behind."""
+    leaves nothing behind.
+
+    Kodi mounts _build/confuse, not the overlay: assemble it first, or the run tests an old one."""
+    if not os.environ.get('PYTEST_XDIST_WORKER'):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        from build import assemble
+        assemble('confuse', ROOT / '_build' / 'confuse')
     if not POOL or os.environ.get('PYTEST_XDIST_WORKER'):
         return
     path = KODI_DEV / 'instances' / POOL / 'run.lock'
@@ -428,7 +439,18 @@ def pytest_runtest_makereport(item, call):
             report.sections.append(('kept', 'the whole kodi.log is in {}'.format(_keep_log(item.path.stem))))
 
 
+def skip_nightcity_look(items, skin):
+    """Checks of Nightcity's colours and palettes say nothing about another skin."""
+    if skin == 'skin.nightcity':
+        return
+    skip = pytest.mark.skip(reason='checks the look of Nightcity, this run is on {}'.format(skin))
+    for item in items:
+        if 'nightcity_look' in item.keywords:
+            item.add_marker(skip)
+
+
 def pytest_collection_modifyitems(config, items):
+    skip_nightcity_look(items, SKIN_ID)
     if _kodi_up():
         return
     if POOL:

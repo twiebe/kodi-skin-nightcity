@@ -2554,6 +2554,8 @@ def service(*first):
     home.setProperty('nc.service', '1')
     if first:
         _run(first[0], list(first[1:]))
+    # after a skin switch nothing runs startup, and each skin has its own Home key setting
+    _run('home_keymap', [])
     threading.Thread(target=hero_watch, args=(monitor, stop), daemon=True).start()
     while not monitor.waitForAbort(1):
         if skin_id() != started:
