@@ -3,8 +3,8 @@
 with colordiffuse). Nightcity's textures in media/ui stay as they are.
 
 Same names as Nightcity's cut-corner textures (cut*.png) with the same sizes and padding, so a
-control that still names one gets the rounded twin: radius 12 where the border is 12 or 22 (buttons),
-16 where it is 16 or 26 (panels, rings). The pill, ring, chip, dot, menu line and warm fade are new.
+control that still names one gets the rounded twin: radius 12 where the border is 12 or 22 (buttons,
+card ring), 16 where it is 16 or 26 (panels). The check boxes and the selected spin signs have rounded twins too. The pill, chip, dot, menu line and warm fade are new.
 Sizes are 1080 px grid pixels, drawn 1:1: a mask of a 290 x 435 card is shown at 290 x 435, so its
 radius is the radius on screen. The design gives cards 8 px at 1280 x 720, so 12 px here (x 1.5).
 
@@ -56,14 +56,45 @@ def card_mask(width, height):
 
 
 def fade(width, height):
-    """Alpha 255 on the left to 0 on the right, eased: the warm fade, one image for left and bottom."""
+    """The warm fade, one image for the left edge and the bottom edge: opaque at the bottom left,
+    clear at the top right. Each edge fades eased across the screen and the two combine like layers
+    (1 - (1 - left) * (1 - bottom)). Small, since Kodi scales it up smoothly to the full screen."""
     image = Image.new('RGBA', (width, height), (255, 255, 255, 0))
-    for x in range(width):
-        t = x / (width - 1)
-        a = round(255 * (1 - t) ** 1.6)
-        for y in range(height):
-            image.putpixel((x, y), (255, 255, 255, a))
+    for y in range(height):
+        bottom = (y / (height - 1)) ** 1.6
+        for x in range(width):
+            left = (1 - x / (width - 1)) ** 1.6
+            image.putpixel((x, y), (255, 255, 255, round(255 * (1 - (1 - left) * (1 - bottom)))))
     return image
+
+
+def check(size, radius, on):
+    """The box of a toggle: an outline with a check mark inside when on, 10 px clear to the right
+    (the row is padded for its glow, Kodi puts the box where it was)."""
+    box = shape(size, size, radius, line=2)
+    if on:
+        big = Image.new('L', (size * SCALE, size * SCALE), 0)
+        s = size * SCALE
+        ImageDraw.Draw(big).line([(0.24 * s, 0.52 * s), (0.42 * s, 0.70 * s), (0.76 * s, 0.30 * s)],
+                                 fill=255, width=3 * SCALE, joint='curve')
+        mark = big.resize((size, size), Image.LANCZOS)
+        box.putalpha(Image.composite(mark, box.getchannel('A'), mark))
+    wide = Image.new('RGBA', (size + GLOW_PAD, size), (255, 255, 255, 0))
+    wide.paste(box, (0, 0))
+    return wide
+
+
+def sign_focus(size, plus, pad=3, radius=6):
+    """The selected - or + of a spin control: a filled rounded box with the sign cut out."""
+    big = Image.new('L', (size * SCALE, size * SCALE), 0)
+    s = size * SCALE
+    draw = ImageDraw.Draw(big)
+    draw.line([(0.28 * s, 0.5 * s), (0.72 * s, 0.5 * s)], fill=255, width=3 * SCALE)
+    if plus:
+        draw.line([(0.5 * s, 0.28 * s), (0.5 * s, 0.72 * s)], fill=255, width=3 * SCALE)
+    box = shape(size, size, radius, pad=pad)
+    box.putalpha(Image.composite(Image.new('L', (size, size), 0), box.getchannel('A'), big.resize((size, size), Image.LANCZOS)))
+    return box
 
 
 def dot(size):
@@ -98,7 +129,12 @@ def textures():
         'chip.png': shape(24, 24, 8),  # 5 px at 1280 x 720 is 7.5; border 8
         'dot.png': dot(16),
         'menu_line.png': menu_line(20, 6),
-        'warm_fade.png': fade(1024, 4),
+        'warm_fade.png': fade(384, 216),  # 16:9, stretched over the screen
+        # twins of the check boxes and the selected spin signs, which Nightcity cuts at a corner
+        'check_off_pad.png': check(32, 8, on=False),
+        'check_on_pad.png': check(32, 8, on=True),
+        'spin_minus_focus.png': sign_focus(34, plus=False),
+        'spin_plus_focus.png': sign_focus(34, plus=True),
     }
     for width, height in CARD_SIZES:
         out['mask_{}x{}.png'.format(width, height)] = card_mask(width, height)

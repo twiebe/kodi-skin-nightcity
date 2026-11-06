@@ -160,14 +160,46 @@ def test_textures_are_white_and_small():
         assert colours <= {(255, 255, 255)}, path.name
 
 
+def has_cut_corner(path):
+    """A straight 45 degree cut at the top right of the opaque part: the transparent run at the right
+    end of the first rows grows by one pixel per row. (A round corner grows by 2 px, then 1.8, ...)"""
+    alpha = Image.open(path).convert('RGBA').getchannel('A')
+    box = alpha.point(lambda a: 255 if a >= 128 else 0).getbbox()
+    if not box or min(box[2] - box[0], box[3] - box[1]) < 16:
+        return False
+    runs = []
+    for y in range(box[1], box[1] + 4):
+        run = 0
+        while run < box[2] - box[0] and alpha.getpixel((box[2] - 1 - run, y)) < 128:
+            run += 1
+        runs.append(run)
+    diffs = [a - b for a, b in zip(runs, runs[1:])]
+    return runs[0] >= 4 and all(0.8 <= d <= 1.2 for d in diffs)
+
+
 def test_no_cut_corner_texture_left(confuse_root):
-    """A cut* texture of the tree is the overlay's rounded twin, never Nightcity's cut one."""
-    found = sorted((confuse_root / 'media' / 'ui').glob('cut*.png'))
-    assert found
-    for path in found:
-        assert (OVERLAY / 'media' / 'ui' / path.name).read_bytes() == path.read_bytes(), path.name
-    for path in (ROOT / 'media' / 'ui').glob('cut*.png'):
-        assert (OVERLAY / 'media' / 'ui' / path.name).is_file(), path.name
+    """Each texture of the tree with a cut corner (cut*, check boxes, spin signs, ...) is the overlay's
+    rounded twin, never Nightcity's: a root texture with a cut corner has a twin of its name."""
+    cut = sorted({p.name for p in (ROOT / 'media' / 'ui').glob('*.png') if has_cut_corner(p)}
+                 | {p.name for p in (ROOT / 'media' / 'ui').glob('cut*.png')})  # the glowing ones are blurred
+    assert {'cut.png', 'cut_btn.png', 'check_on_pad.png', 'spin_plus_focus.png'} <= set(cut)
+    for name in cut:
+        twin = OVERLAY / 'media' / 'ui' / name
+        assert twin.is_file(), name
+        assert not has_cut_corner(twin), name
+        assert (confuse_root / 'media' / 'ui' / name).read_bytes() == twin.read_bytes(), name
+
+
+def test_warm_fade_fades_left_and_bottom():
+    """One image for both edges: opaque at the bottom left, clear at the top right, alpha changing
+    along each axis."""
+    alpha = Image.open(OVERLAY / 'media' / 'ui' / 'warm_fade.png').convert('RGBA').getchannel('A')
+    w, h = alpha.size
+    assert alpha.getpixel((0, h - 1)) == 255 and alpha.getpixel((w - 1, 0)) == 0
+    along_x = [alpha.getpixel((x, h // 2)) for x in range(0, w, max(1, w // 8))]
+    along_y = [alpha.getpixel((w // 2, y)) for y in range(0, h, max(1, h // 8))]
+    assert along_x == sorted(along_x, reverse=True) and along_x[0] - along_x[-1] > 100
+    assert along_y == sorted(along_y) and along_y[-1] - along_y[0] > 100
 
 
 def test_masks_have_round_corners(confuse_root):
