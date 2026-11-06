@@ -157,3 +157,57 @@ def test_nightcity_keeps_its_startup():
 def test_wordmark_font_is_lexend_with_its_licence():
     """tools/fonts holds the font of the wordmark and its licence, nothing else."""
     assert sorted(p.name for p in (ROOT / 'tools' / 'fonts').iterdir()) == ['Lexend-OFL.txt', 'Lexend[wght].ttf']
+
+
+def test_a_focused_button_glows(confuse_root):
+    """The fill with a glow in its 10 px of padding, gone at the edge since a grouplist cuts there."""
+    for name, tag in (('LookButtonFill', 'texturefocus'), ('LookButtonFillNoFocus', 'texturenofocus')):
+        texture = look_includes()[name].find(tag)
+        assert texture.text == 'ui/pill_halo.png' and texture.get('colordiffuse') == 'focus', name
+        assert texture.get('border') == '37'
+    halo = alpha(confuse_root, 'pill_halo.png')
+    assert halo.size == alpha(confuse_root, 'pill_pad.png').size
+    middle = halo.height // 2
+    assert halo.getpixel((middle, 10)) == 255  # the fill starts where the plain pill does
+    assert halo.getpixel((middle, 7)) > 90  # against it
+    assert halo.getpixel((middle, 0)) < 12  # gone before the edge
+
+
+def test_the_more_pill_glows_like_the_buttons(confuse_root):
+    """Unfocused the plain pill, focused the one with the glow; the caller names the colour."""
+    from navigation import load
+    window = load('DialogVideoInfo.xml', layout=confuse_root / '1080i')
+    used = {(t.text, t.get('colordiffuse')) for t in window.iter('texture') if t.get('border') == '37' and (t.text or '').startswith('ui/more_')}
+    assert ('ui/more_focus.png', 'focus') in used and ('ui/more_border_dim.png', 'border_dim') in used
+    assert list(alpha(confuse_root, 'more_focus.png').getdata()) == list(alpha(confuse_root, 'pill_halo.png').getdata())
+    assert list(alpha(confuse_root, 'more_border_dim.png').getdata()) == list(alpha(confuse_root, 'pill_pad.png').getdata())
+
+
+BLUR = 'Window(Home).Property(TMDbHelper.ListItem.BlurImage'
+
+
+def test_backdrop_is_blurred_once_the_helper_has_that_picture(confuse_root):
+    """One of two shows: the helper's blurred picture when it was made from this art, the sharp one
+    until then and where the helper follows another item. The same mask and colour for both."""
+    from navigation import load
+    window = load('MyVideoNav.xml', layout=confuse_root / '1080i')
+    images = [c for c in window.iter('control') if c.findtext('description') == 'fanart backdrop']
+    assert len(images) == 2
+    match = 'String.IsEqual({}.Original),ListItem.Art(fanart))'.format(BLUR)
+    sharp, blurred = images
+    assert sharp.findtext('texture') == '$INFO[ListItem.Art(fanart)]'
+    assert blurred.findtext('texture') == '$INFO[{})]'.format(BLUR)
+    assert match in blurred.findtext('visible') and '!' + match in sharp.findtext('visible')
+    for image in images:
+        texture = image.find('texture')
+        assert (texture.get('colordiffuse'), texture.get('diffuse')) == ('fanart', 'ui/fade_r.png')
+        assert '!String.IsEmpty(ListItem.Art(fanart))' in image.findtext('visible')
+        assert image.find('animation') is not None
+
+
+def test_nightcity_backdrop_stays_sharp():
+    from navigation import load
+    window = load('MyVideoNav.xml', layout=ROOT / '1080i')
+    images = [c for c in window.iter('control') if c.findtext('description') == 'fanart backdrop']
+    assert [i.findtext('texture') for i in images] == ['$INFO[ListItem.Art(fanart)]']
+    assert images[0].findtext('visible') == '!String.IsEmpty(ListItem.Art(fanart))'

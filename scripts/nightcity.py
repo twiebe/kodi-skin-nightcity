@@ -1608,6 +1608,16 @@ def take_old_settings():
     xbmc.executebuiltin('Skin.SetBool(nc.migrated)')
 
 
+def look_settings():
+    """What a skin's look asks of TMDb Helper: Confuse draws its fanart blurred, so the helper makes
+    those pictures there. A skin setting, so Nightcity does not pay for it."""
+    import xbmc
+    if skin_id() == 'skin.confuse':
+        xbmc.executebuiltin('Skin.SetBool(TMDbHelper.EnableBlur)')
+        # without a source it blurs the poster
+        _home().setProperty('TMDbHelper.Blur.SourceImage', 'Art(fanart)|Art(artist.fanart)')
+
+
 def startup():
     """One-off settings, then nc.startup.ready: the Startup screen hands over to Home once it is
     set (nc_startup timer). The service runs this first, then listens for the skin."""
@@ -2556,6 +2566,7 @@ def service(*first):
         _run(first[0], list(first[1:]))
     # after a skin switch nothing runs startup, and each skin has its own Home key setting
     _run('home_keymap', [])
+    look_settings()
     threading.Thread(target=hero_watch, args=(monitor, stop), daemon=True).start()
     while not monitor.waitForAbort(1):
         if skin_id() != started:

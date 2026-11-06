@@ -556,7 +556,7 @@ def test_buttons_are_pills(confuse_root):
     fill = look_includes()['LookButtonFill'].find('texturefocus')
     outline = look_includes()['LookButtonOutline'].find('.//texturenofocus')
     assert fill.get('colordiffuse') == 'focus' and palette['focus'] == 'FFFF5B35'
-    assert fill.text == outline.text == 'ui/pill_pad.png'
+    assert (fill.text, outline.text) == ('ui/pill_halo.png', 'ui/pill_pad.png')
     assert fill.get('border') == outline.get('border') == '37'
     assert palette[outline.get('colordiffuse')] == '26FFFFFF'
     assert look_includes()['LookPillText'].findtext('.//focusedcolor') == 'focus_text'
