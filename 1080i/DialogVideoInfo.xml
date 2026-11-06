@@ -537,7 +537,7 @@
                 </control>
                 <control type="list" id="5200">
                     <include>ChainBackGuard</include>
-                    <left>64</left>
+                    <left>LookSeasonListLeft</left>
                     <top>0</top>
                     <width>1500</width>
                     <height>48</height>
@@ -556,8 +556,8 @@
                         </include>
                     </itemlayout>
                     <focusedlayout width="240" height="48">
-                        <include content="SeasonTab">
-                            <param name="color" value="accent"/>
+                        <include content="LookSeasonTabShown">
+                            <param name="focused" value="Control.HasFocus(5200)"/>
                         </include>
                         <!-- the line of the shown season, as long as its label -->
                         <include content="LookSeasonTabLine">

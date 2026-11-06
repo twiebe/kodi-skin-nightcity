@@ -197,7 +197,7 @@ def test_current_episode_has_a_line_over_its_still():
     assert line.find('texture').get('colordiffuse') == 'state_text'
     assert line.findtext('visible') == '$PARAM[selected]'
     assert line.findtext('width') == '320' and line.findtext('height') == '3'
-    # above the still (which starts at 0), with a gap, and above the focused card's zoom (106 %)
+    # above the still (which starts at 0), with a gap, and above the focused card's zoom (LookCardFocusZoom)
     assert int(line.findtext('top')) + 3 <= -15
     titles = [c for c in inc.iter('control') if c.get('type') == 'label']
     assert {t.findtext('left') for t in titles} == {None} and {t.findtext('width') for t in titles} == {'320'}

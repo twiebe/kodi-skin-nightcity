@@ -100,6 +100,10 @@ def test_numbers_count_the_shown_rows(page):
         assert got == ['{:02d}'.format(i) for i in range(1, len(shown) + 1)], (page, sorted(shown))
 
 
+GENRE_TABS_LEFT = next(int(c.text) for c in parse(ROOT / '1080i' / 'Includes_Look.xml').iter('constant')
+                       if c.get('name') == 'LookGenreTabsLeft')
+
+
 def test_genre_row_puts_its_number_before_the_tabs():
     """A genre row has tabs where the title would be: the number stands in front of them, the
     tabs start where the title of a row starts after its number. The number sits on the line
@@ -111,7 +115,8 @@ def test_genre_row_puts_its_number_before_the_tabs():
         label = next(c for c in group.iter('control') if NUMBER.match(c.findtext('label') or ''))
         assert label.findtext('label').endswith('[/COLOR]')
         assert int(label.findtext('left')) == 64
-        assert int(tabs.findtext('left')) > 64
+        assert tabs.findtext('left') == 'LookGenreTabsLeft'
+        assert GENRE_TABS_LEFT > 64
         tab = next(c for c in tabs.iter('control') if c.get('id') == base + '31')
         assert int(label.findtext('top')) == int(tabs.findtext('top')) + int(tab.findtext('top') or 0)
         for tag in ('height', 'font', 'aligny'):

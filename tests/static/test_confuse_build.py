@@ -165,3 +165,14 @@ def test_skin_strings_start_with_a_capital(confuse_root):
     assert 'msgid "home"' in root and 'msgid "Home"' in built and 'msgid "home"' not in built
     assert 'msgid "min"' in built
     assert len(re.findall(r'^msgid "', built, re.M)) == len(re.findall(r'^msgid "', root, re.M))
+
+
+def test_brand_words_keep_their_capitals(confuse_root):
+    """Sentence case gives the first letter only: names and acronyms inside a string are written as
+    the name is, in Confuse only."""
+    built = (confuse_root / 'language' / 'resource.language.en_gb' / 'strings.po').read_text(encoding='utf-8')
+    for text in ('Quit Kodi', 'Exit Kodi', 'Restart Kodi', 'Online: movies (TMDb)', 'Online: shows (TMDb)'):
+        assert 'msgid "{}"'.format(text) in built, text
+    assert not re.search(r'msgid ".*(kodi|tmdb)', built)
+    root = (ROOT / 'language' / 'resource.language.en_gb' / 'strings.po').read_text(encoding='utf-8')
+    assert 'msgid "quit kodi"' in root

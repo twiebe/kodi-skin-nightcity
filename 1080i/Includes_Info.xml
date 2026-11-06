@@ -43,6 +43,7 @@
                 <aligny>center</aligny>
                 <font>font_caps</font>
                 <textcolor>$PARAM[color]</textcolor>
+                <include>LookSeasonTabInset</include>
                 <label>[UPPERCASE]$VAR[SeasonTabLabel][/UPPERCASE]</label>
             </control>
         </definition>

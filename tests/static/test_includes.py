@@ -376,7 +376,7 @@ def test_season_tab_active_line():
     seasons = next(c for c in parse(ROOT / '1080i' / 'DialogVideoInfo.xml').iter('control') if c.get('id') == '5200')
     controls = with_look(seasons).find('focusedlayout').findall('control')
     assert not [c for c in controls if c.get('type') == 'image']
-    lines = [c for c in controls if c.get('type') == 'label']
+    lines = [c for c in controls if c.get('type') == 'label' and c.findtext('font') == 'font_caps_line']
     assert sorted((c.findtext('textcolor'), c.findtext('visible')) for c in lines) == [
         ('focus', 'Control.HasFocus(5200)'), ('state', '!Control.HasFocus(5200)')]
     text = [c for c in include('SeasonTab').iter('control') if c.get('type') == 'label']

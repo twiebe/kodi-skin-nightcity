@@ -21,6 +21,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 EXCLUDE = {'.git', '.gitignore', '.superpowers', 'CLAUDE.md', 'Makefile', 'docs', 'tests', 'tools', 'requirements-dev.txt', 'pytest.ini',
            '__pycache__', '.venv', '.pytest_cache', 'skins', '_build', '.assembled'}
 LOWERCASE_STRINGS = {'31012'}  # min: a unit, after the number
+BRAND_WORDS = {'kodi': 'Kodi', 'tmdb': 'TMDb'}
 UPPER_PARAM = re.compile(r'\[UPPERCASE\]\$PARAM\[(\w+)\]\[/UPPERCASE\]')
 MARKER = '.assembled'  # written into a folder assemble filled: only such a folder gets wiped again
 
@@ -104,9 +105,13 @@ def _lay_out(overlay, dest):
 
 
 def _sentence_case(po):
-    """A skin string starts with a capital (Nightcity writes them small and shows most in capitals)."""
-    return re.sub(r'(msgctxt "#(\d+)"\nmsgid ")([a-z])',
-                  lambda m: m.group(0) if m.group(2) in LOWERCASE_STRINGS else m.group(1) + m.group(3).upper(), po)
+    """A skin string starts with a capital (Nightcity writes them small and shows most in capitals),
+    and a name inside it is written as the name is."""
+    po = re.sub(r'(msgctxt "#(\d+)"\nmsgid ")([a-z])',
+                lambda m: m.group(0) if m.group(2) in LOWERCASE_STRINGS else m.group(1) + m.group(3).upper(), po)
+    return re.sub(r'^msgid ".*"$',
+                  lambda m: re.sub(r'\b(?:{})\b'.format('|'.join(BRAND_WORDS)), lambda w: BRAND_WORDS[w.group(0)], m.group(0)),
+                  po, flags=re.M)
 
 
 def _reconcile(stage, dest):
