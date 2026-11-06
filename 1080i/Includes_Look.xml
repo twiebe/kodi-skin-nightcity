@@ -494,4 +494,134 @@
             </control>
         </definition>
     </include>
+
+    <!-- The first screen after boot: the wordmark and what runs under it until Home comes. `waiting`
+         and `online` are the two states of the shared Startup.xml. -->
+    <include name="LookStartupWordmark">
+            <!-- wordmark: the static glitch of every title, plus a short burst of offset copies
+                 every few seconds -->
+            <control type="group">
+                <top>384</top>
+                <animation effect="slide" start="0,16" end="0,0" time="500" delay="100" tween="cubic" easing="out">WindowOpen</animation>
+                <control type="group">
+                    <animation type="Conditional" condition="true" loop="true" reversible="false">
+                        <effect type="fade" start="0" end="100" time="40" delay="900"/>
+                        <effect type="slide" start="0,0" end="-8,0" time="40" delay="900"/>
+                        <effect type="slide" start="0,0" end="12,0" time="40" delay="1000"/>
+                        <effect type="fade" start="100" end="0" time="140" delay="1060"/>
+                        <effect type="fade" start="100" end="100" time="1" delay="3600"/>
+                    </animation>
+                    <control type="label">
+                        <left>0</left>
+                        <width>1920</width>
+                        <height>180</height>
+                        <font>font_wordmark</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>glitch_a</textcolor>
+                        <label>[UPPERCASE]$VAR[SkinTitle][/UPPERCASE]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <animation type="Conditional" condition="true" loop="true" reversible="false">
+                        <effect type="fade" start="0" end="100" time="40" delay="940"/>
+                        <effect type="slide" start="0,0" end="6,0" time="40" delay="940"/>
+                        <effect type="slide" start="0,0" end="-10,0" time="40" delay="1040"/>
+                        <effect type="fade" start="100" end="0" time="140" delay="1100"/>
+                        <effect type="fade" start="100" end="100" time="1" delay="3600"/>
+                    </animation>
+                    <control type="label">
+                        <left>0</left>
+                        <width>1920</width>
+                        <height>180</height>
+                        <font>font_wordmark</font>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <textcolor>glitch_b</textcolor>
+                        <label>[UPPERCASE]$VAR[SkinTitle][/UPPERCASE]</label>
+                    </control>
+                </control>
+                <include content="GlitchTitle">
+                    <param name="label" value="$VAR[SkinTitle]"/>
+                    <param name="width" value="1920"/>
+                    <param name="height" value="180"/>
+                    <param name="font" value="font_wordmark"/>
+                    <param name="align" value="center"/>
+                </include>
+            </control>
+    </include>
+    <include name="LookStartupTrack">
+        <param name="waiting"/>
+        <param name="online"/>
+        <definition>
+            <!-- loading track: a ticker runs to and fro until the script is done, then the track
+                 fills; held back to a second before Home comes (StartupOnline), so the screen
+                 does not stand there online for seconds -->
+            <control type="group">
+                <left>640</left>
+                <top>600</top>
+                <control type="image">
+                    <width>640</width>
+                    <height>4</height>
+                    <texture colordiffuse="border_dim">ui/white.png</texture>
+                </control>
+                <control type="image">
+                    <width>128</width>
+                    <height>4</height>
+                    <texture colordiffuse="accent">ui/white.png</texture>
+                    <animation effect="slide" start="0,0" end="512,0" time="1100" tween="sine" easing="inout" pulse="true" condition="true">Conditional</animation>
+                    <visible>$PARAM[waiting]</visible>
+                </control>
+                <control type="image">
+                    <width>640</width>
+                    <height>4</height>
+                    <texture colordiffuse="accent">ui/white.png</texture>
+                    <animation effect="zoom" start="20,100" end="100,100" center="0,2" time="300" tween="cubic" easing="out">Visible</animation>
+                    <visible>$PARAM[online]</visible>
+                </control>
+                <!-- status: what the screen waits for and a blinking cursor, the clock right -->
+                <control type="grouplist">
+                    <top>22</top>
+                    <width>480</width>
+                    <height>32</height>
+                    <orientation>horizontal</orientation>
+                    <itemgap>0</itemgap>
+                    <usecontrolcoords>true</usecontrolcoords>
+                    <control type="label">
+                        <width>auto</width>
+                        <height>32</height>
+                        <font>font_num_small</font>
+                        <textcolor>text_mute</textcolor>
+                        <label>[UPPERCASE]$LOCALIZE[31157][/UPPERCASE]</label>
+                        <visible>$PARAM[waiting]</visible>
+                    </control>
+                    <control type="label">
+                        <width>auto</width>
+                        <height>32</height>
+                        <font>font_num_small</font>
+                        <textcolor>state_text</textcolor>
+                        <label>[UPPERCASE]$LOCALIZE[31158][/UPPERCASE]</label>
+                        <visible>$PARAM[online]</visible>
+                    </control>
+                    <control type="label">
+                        <width>auto</width>
+                        <height>32</height>
+                        <font>font_num_small</font>
+                        <textcolor>accent</textcolor>
+                        <label>_</label>
+                        <animation effect="fade" start="100" end="0" time="450" pulse="true" condition="true">Conditional</animation>
+                    </control>
+                </control>
+                <control type="label">
+                    <top>22</top>
+                    <width>640</width>
+                    <height>32</height>
+                    <align>right</align>
+                    <font>font_num_small</font>
+                    <textcolor>text</textcolor>
+                    <label>$INFO[System.Time]</label>
+                </control>
+            </control>
+        </definition>
+    </include>
 </includes>

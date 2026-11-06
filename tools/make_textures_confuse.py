@@ -12,11 +12,13 @@ radius is the radius on screen. The design gives cards 8 px at 1280 x 720, so 12
 
 python tools/make_textures_confuse.py
 """
+import math
 import pathlib
 
-from PIL import Image, ImageChops, ImageDraw, ImageFilter
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
 UI = pathlib.Path(__file__).resolve().parents[1] / 'skins' / 'confuse' / 'media' / 'ui'
+SYNE = pathlib.Path(__file__).resolve().parent / 'fonts' / 'Syne[wght].ttf'
 SCALE = 8
 CARD_RADIUS = 12  # 8 px at 1280 x 720
 CARD_SIZES = [(200, 300), (290, 435), (360, 540), (320, 180), (160, 220), (200, 200), (280, 280), (360, 360)]
@@ -156,11 +158,67 @@ def line_texture(width, height, thick, bottom, inset):
     return finish(big, (width, height))
 
 
-def tab_focus(width, height, thick, bottom, inset, plate=0.22, radius=8):
-    line = line_texture(width, height, thick, bottom, inset).getchannel('A')
-    soft = rrect((width, height), 0, radius).resize((width, height), Image.LANCZOS).point(lambda a: int(a * plate))
+def line_glow(width, height, thick, bottom, inset, blur, boost=2.2):
+    """The same line with the focus: the shape stays, a soft glow comes around it. The border of the
+    look has to hold the blur past the round ends too, or Kodi stretches a part that still changes."""
+    big = Image.new('L', (width * SCALE, height * SCALE), 0)
+    top = height - bottom - thick
+    ImageDraw.Draw(big).rounded_rectangle(
+        [inset * SCALE, top * SCALE, (width - inset) * SCALE - 1, (height - bottom) * SCALE - 1],
+        radius=thick / 2 * SCALE, fill=255)
+    halo = big.filter(ImageFilter.GaussianBlur(blur * SCALE)).point(lambda v: min(255, round(v * boost)))
+    return finish(ImageChops.lighter(big, halo), (width, height))
+
+
+def card_halo(size, pad, radius):
+    """The glow of a focused card, in `pad` px around it: strong against the card, gone at the edge
+    of the texture, since a list cuts what lies past it. The card covers the middle."""
+    fill = rrect((size, size), pad, radius)
+    near = fill.filter(ImageFilter.GaussianBlur(5 * SCALE)).point(lambda v: min(255, round(v * 2)))
+    far = fill.filter(ImageFilter.GaussianBlur(10 * SCALE)).point(lambda v: min(255, round(v * 1.8)))
+    return finish(ImageChops.lighter(near, far), (size, size))
+
+
+def wordmark(text, height=190, baseline=146):
+    """A part of the name, in the bold of Syne, the one place that font is used: as a texture it needs
+    no font file in the skin. Both parts have one height and baseline, and side by side they read as
+    one word. tools/fonts holds the font and its licence."""
+    font = ImageFont.truetype(str(SYNE), 144 * SCALE)
+    font.set_variation_by_axes([800])
+    width = math.ceil(font.getlength(text) / SCALE)
+    big = Image.new('L', (width * SCALE, height * SCALE), 0)
+    ImageDraw.Draw(big).text((0, baseline * SCALE), text, font=font, fill=255, anchor='ls')
+    return finish(big, (width, height))
+
+
+def soft_dot(size, core, blur, boost=1.0):
+    """A round spot: a solid core of `core` px, the rest a glow that ends inside the texture."""
+    s = size * SCALE
+    big = Image.new('L', (s, s), 0)
+    inset = (size - core) / 2 * SCALE
+    ImageDraw.Draw(big).ellipse([inset, inset, s - inset - 1, s - inset - 1], fill=255)
+    halo = big.filter(ImageFilter.GaussianBlur(blur * SCALE)).point(lambda v: min(255, round(v * boost)))
+    return finish(ImageChops.lighter(big, halo), (size, size))
+
+
+def trail(width, height, start=0.25):
+    """What a spark has burned: faint far behind it, whole at the spark."""
     image = Image.new('RGBA', (width, height), (255, 255, 255, 0))
-    image.putalpha(ImageChops.lighter(soft, line))
+    for x in range(width):
+        value = round(255 * (start + (1 - start) * x / (width - 1)))
+        for y in range(height):
+            image.putpixel((x, y), (255, 255, 255, value))
+    return image
+
+
+def ember_glow(width, height):
+    """The soft light around the fuse on the loading page. Small, Kodi scales it up smoothly."""
+    image = Image.new('RGBA', (width, height), (255, 255, 255, 0))
+    for y in range(height):
+        for x in range(width):
+            across, up = (x / (width - 1) - 0.5) * 2, (y / (height - 1) - 0.5) * 2
+            value = max(0.0, 1 - math.sqrt(across * across + up * up))
+            image.putpixel((x, y), (255, 255, 255, round(255 * value * value)))
     return image
 
 
@@ -183,24 +241,34 @@ def textures():
         'pill.png': shape(54, 54, 27),
         'pill_pad.png': shape(74, 74, 27, pad=GLOW_PAD),
         'pill_glow.png': shape(74, 74, 27, pad=GLOW_PAD, glow=4),
-        'pill_menu.png': shape(64, 64, 22, pad=GLOW_PAD),  # a menu entry, 44 px of pill; border 32
+        'pill_menu.png': shape(64, 64, 22, pad=GLOW_PAD),  # the menu icon with the focus, 44 px of pill; border 32
         'chip.png': shape(24, 24, 8),  # 5 px at 1280 x 720 is 7.5; border 8
         'dot.png': dot(16),
         'dot_shade.png': dot_shade(28),
-        # 4.5 px, the menu entry is 64 px and shows 44 of them; border 5,0,5,0
-        'menu_line.png': line_texture(24, 64, 4.5, 10, 2),
+        # 4.5 px, the menu entry is 64 px, 12 px clear below for the glow; border 19,0,19,0 holds the
+        # line's clear and round ends, 30,0,30,0 the glow of menu_glow.png as well
+        'menu_line.png': line_texture(64, 64, 4.5, 12, 14),
+        'menu_glow.png': line_glow(64, 64, 4.5, 12, 14, 5),
         # 4.5 px on the line of Nightcity's tab_line.png; border 11,0,11,0 holds the clear ends and
         # the round ends of the line, or Kodi stretches those into a lens
         'tab_line.png': line_texture(24, 44, 4.5, 2, 8),
-        # a tab with the focus: the same line on a soft plate as high as the tab
-        'tab_focus.png': tab_focus(24, 44, 4.5, 2, 8),
+        # a tab with the focus: the same line glows, upwards as a tab has 2 px below it; border 18,0,18,0
+        'tab_glow.png': line_glow(64, 44, 4.5, 2, 8, 3),
+        'card_halo.png': card_halo(128, 24, CARD_RADIUS),
+        # the loading page: the name, the fuse and its spark
+        'word_con.png': wordmark('con'),
+        'word_fuse.png': wordmark('fuse'),
+        'fuse_trail.png': trail(256, 4),
+        'spark_halo.png': ember_glow(64, 64),
+        'spark_core.png': dot(16),
+        'ember_glow.png': ember_glow(256, 128),
         'fade_r.png': fanart_mask(384, 216),  # 16:9, stretched over the screen
         'info_fade.png': info_fade(256, 4),
         # the player's scrim, in the colour scrim (.96): y 340 to 1080 and 0 to 220 of the screen.
         # The draft, stronger at the top of the text block, which starts at 440
         'fade_b.png': player_fade(256, [(0, 0), (0.135, 0.7), (0.445, 0.875), (1, 1)]),
         'fade_t.png': player_fade(256, [(0, 0.58), (1, 0)]),
-        'seek_head.png': dot(16),  # the head of the seek line, on its 16 px high track
+        'seek_head.png': soft_dot(16, 8, 2.2),  # the spark at the head of the seek line, on its 16 px high track
         # twins of the check boxes and the selected spin signs, which Nightcity cuts at a corner
         'check_off_pad.png': check(32, 8, on=False),
         'check_on_pad.png': check(32, 8, on=True),

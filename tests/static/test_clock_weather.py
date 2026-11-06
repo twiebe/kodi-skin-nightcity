@@ -103,5 +103,5 @@ def test_every_top_right_clock_has_the_weather():
         'Includes_Home.xml',   # QuickMenuBody: the weather tile is under it
         'Includes_Base.xml',   # PathLine: TopWeather
         'Includes_Base.xml',   # StatusBar, the same PathLine
-        'Startup.xml',         # before the weather is fetched
+        'Includes_Look.xml',   # LookStartupTrack: before the weather is fetched
     ])

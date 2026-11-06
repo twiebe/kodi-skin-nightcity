@@ -9,6 +9,15 @@ def _startup():
     return parse(ROOT / '1080i' / 'Startup.xml')
 
 
+def _expanded():
+    from navigation import load
+    return load('Startup.xml', layout=ROOT / '1080i')
+
+
+def _look(name):
+    return next(i for i in parse(ROOT / '1080i' / 'Includes_Look.xml').iter('include') if i.get('name') == name)
+
+
 def _timer(name='nc_startup'):
     timers = parse(ROOT / '1080i' / 'Timers.xml')
     return next(t for t in timers.iter('timer') if t.findtext('name') == name)
@@ -69,7 +78,7 @@ def test_startup_shows_wordmark():
     """A NIGHTCITY wordmark from the language file, set as a centred glitch title."""
     root = _startup()
     assert 'Background' in [i.text for i in root.iter('include')]
-    title = next(i for i in root.iter('include') if i.get('content') == 'GlitchTitle')
+    title = next(i for i in _look('LookStartupWordmark').iter('include') if i.get('content') == 'GlitchTitle')
     params = {p.get('name'): p.get('value') for p in title.findall('param')}
     assert params['label'] == '$VAR[SkinTitle]' and params['align'] == 'center'
     look = parse(ROOT / '1080i' / 'Includes_Look.xml')
@@ -80,7 +89,7 @@ def test_startup_shows_wordmark():
 def test_startup_loading_indicator():
     """A ticker runs along a thin track until the script is done, then the track fills; the
     status line says which of the two it is."""
-    root = _startup()
+    root = _expanded()
     loops = [a for a in root.iter('animation') if a.get('loop') == 'true']
     assert loops
     visibles = [v.text for v in root.iter('visible')]
