@@ -48,9 +48,9 @@ def evaluate(condition, skin):
     return bool(eval(text, {}))
 
 
-def _definitions():
+def _definitions(layout=LAYOUT):
     defs = {}
-    for path in LAYOUT.glob('Includes*.xml'):
+    for path in layout.glob('Includes*.xml'):
         for el in ET.parse(path).getroot():
             if el.tag == 'include' and el.get('name'):
                 defs[el.get('name')] = el
@@ -107,9 +107,10 @@ def _fill(el, nested):
             _fill(k, nested)
 
 
-def load(name, skin=None):
-    """The window as Kodi builds it for the skin settings in `skin` (default: none set)."""
-    root = ET.parse(LAYOUT / name).getroot()
+def load(name, skin=None, layout=LAYOUT):
+    """The window as Kodi builds it for the skin settings in `skin` (default: none set), from the
+    1080i folder `layout` (default: this checkout's)."""
+    root = ET.parse(layout / name).getroot()
     window = ET.Element(root.tag, root.attrib)
     window.extend(_expand(root, {}, _definitions(), skin or {}))
     return window
