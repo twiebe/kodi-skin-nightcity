@@ -16,7 +16,7 @@ pytestmark = pytest.mark.e2e
 
 FROM = 500000  # ids of the rows added here
 SEASONS = [2, 1] + list(range(3, 11))
-SHOW_LIKE = 2  # Kdev Show: the show and the path to copy
+SHOW_LIKE = 'Kdev Show'  # the show and the path to copy
 SLOW_FOR = 9.0  # s the seasons take to list
 ORIGINAL = 'nc_test_season_view'
 
@@ -43,12 +43,20 @@ def _remove(connection):
         connection.execute('DELETE FROM {} WHERE {} >= ?'.format(table, key), (FROM,))
 
 
+def _show_like():
+    connection = _database()
+    show = connection.execute('SELECT idShow FROM tvshow WHERE c00 = ?', (SHOW_LIKE,)).fetchone()[0]
+    connection.close()
+    return show
+
+
 def _add(connection):
+    like = connection.execute('SELECT idShow FROM tvshow WHERE c00 = ?', (SHOW_LIKE,)).fetchone()[0]
     columns = _columns(connection, 'tvshow')
     picked = {'idShow': str(FROM), 'c00': "'Nc Season Order'"}
     connection.execute('INSERT INTO tvshow ({}) SELECT {} FROM tvshow WHERE idShow = ?'.format(
-        ','.join(columns), ','.join(picked.get(c, c) for c in columns)), (SHOW_LIKE,))
-    path = connection.execute('SELECT idPath FROM tvshowlinkpath WHERE idShow = ?', (SHOW_LIKE,)).fetchone()[0]
+        ','.join(columns), ','.join(picked.get(c, c) for c in columns)), (like,))
+    path = connection.execute('SELECT idPath FROM tvshowlinkpath WHERE idShow = ?', (like,)).fetchone()[0]
     connection.execute('INSERT INTO tvshowlinkpath VALUES (?, ?)', (FROM, path))
     file_path = connection.execute('SELECT strPath FROM path WHERE idPath = ?', (path,)).fetchone()[0]
     columns = _columns(connection, 'episode')
@@ -159,7 +167,7 @@ def test_season_tabs_and_episodes_are_in_order(season_order):
 
 def test_the_page_after_another_show_opens_on_the_episode(season_order):
     """Kdev Show has one season: season 10 is not in the tabs the page still holds."""
-    _open(SHOW_LIKE)
+    _open(_show_like())
     _ready()
     builtin('Dialog.Close(all,true)')
     wait_for('!Window.IsActive(movieinformation)')
