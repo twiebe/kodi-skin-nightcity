@@ -21,7 +21,7 @@ def alpha(root, name):
 def test_ember_is_the_default(confuse_root):
     colours = palette(confuse_root, 'defaults')
     wanted = {'bg': 'FF0B0B10', 'surface': 'FF1A1A22', 'accent': 'FFFF5B35', 'focus': 'FFFF5B35',
-              'focus_text': 'FF160804', 'spark': 'FFFFD166', 'card_glow': 'CCFF5B35'}
+              'focus_text': 'FF160804', 'card_glow': 'CCFF5B35'}
     assert {k: colours[k] for k in wanted} == wanted
 
 
@@ -117,25 +117,25 @@ def test_loading_page_has_nothing_of_nightcity(confuse_root):
     assert not any(c.findtext('font') == 'font_num_small' for c in window.iter('control'))
 
 
-def test_fuse_burns_while_waiting_and_ends_when_online(confuse_root):
-    """The same two states as the shared track: a running spark, then the whole line."""
+def test_bar_fills_and_ends_when_online(confuse_root):
+    """A plain bar in the accent that fills once, slowing down, and stops short: the wait has no
+    measure. Online a second one fills the rest over it, so the bar never goes back. No spark."""
     from navigation import load
     window = load('Startup.xml', layout=confuse_root / '1080i')
-    waiting = [c for c in window.iter('control') if c.findtext('visible') == '!$EXP[StartupOnline]']
-    online = [c for c in window.iter('control') if c.findtext('visible') == '$EXP[StartupOnline]']
-    assert any(c.findtext('texture') == 'ui/fuse_trail.png' for c in waiting)
-    assert any(a.get('loop') == 'true' for c in waiting for a in c.iter('animation'))
-    assert any(c.findtext('texture') == 'ui/white.png' for c in online)
+    bars = [c for c in window.iter('control') if c.findtext('texture') == 'ui/white.png'
+            and c.findtext('width') == '960' and c.find('texture').get('colordiffuse') == 'accent']
+    assert len(bars) == 2
+    waiting, online = bars
+    assert waiting.findtext('visible') is None
+    animation = waiting.find('animation')
+    assert animation.get('loop') != 'true' and animation.get('pulse') != 'true'
+    effect = animation.find('effect')
+    assert effect.get('type') == 'zoom' and effect.get('easing') == 'out'
+    assert 80 <= int(effect.get('end').split(',')[0]) <= 95
+    assert online.findtext('visible') == '$EXP[StartupOnline]'
     used = {c.findtext('texture') for c in window.iter('control')}
-    assert {'ui/spark_halo.png', 'ui/spark_core.png'} <= used
-
-
-def test_spark_has_a_visible_halo(confuse_root):
-    halo = alpha(confuse_root, 'spark_halo.png')
-    middle = halo.width // 2
-    assert halo.getpixel((middle, middle)) > 200
-    assert halo.getpixel((middle - 12, middle)) > 60
-    assert halo.getpixel((0, 0)) == 0
+    assert not used & {'ui/spark_halo.png', 'ui/spark_core.png', 'ui/fuse_trail.png'}
+    assert not any(a.get('loop') == 'true' or a.get('pulse') == 'true' for a in window.iter('animation'))
 
 
 def test_seek_head_is_the_spark(confuse_root):

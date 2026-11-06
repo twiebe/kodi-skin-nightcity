@@ -14,4 +14,4 @@ must be listed too.
 
 ## Startup.xml
 
-- `-label | 0 | when visible: true`: the status line and its blinking cursor belong to the terminal look of Nightcity; the spark on the fuse shows the wait here
+- `-label | 0 | when visible: true`: the status line and its blinking cursor belong to the terminal look of Nightcity; the filling bar shows the wait here

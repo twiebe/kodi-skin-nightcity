@@ -214,18 +214,8 @@ def soft_dot(size, core, blur, boost=1.0):
     return finish(ImageChops.lighter(big, halo), (size, size))
 
 
-def trail(width, height, start=0.25):
-    """What a spark has burned: faint far behind it, whole at the spark."""
-    image = Image.new('RGBA', (width, height), (255, 255, 255, 0))
-    for x in range(width):
-        value = round(255 * (start + (1 - start) * x / (width - 1)))
-        for y in range(height):
-            image.putpixel((x, y), (255, 255, 255, value))
-    return image
-
-
 def ember_glow(width, height):
-    """The soft light around the fuse on the loading page. Small, Kodi scales it up smoothly."""
+    """The soft light around the bar of the loading page. Small, Kodi scales it up smoothly."""
     image = Image.new('RGBA', (width, height), (255, 255, 255, 0))
     for y in range(height):
         for x in range(width):
@@ -272,12 +262,9 @@ def textures():
         # a tab with the focus: the same line glows, upwards as a tab has 2 px below it; border 18,0,18,0
         'tab_glow.png': line_glow(64, 44, 4.5, 2, 8, 3),
         'card_halo.png': card_halo(128, 24, CARD_RADIUS),
-        # the loading page: the name, the fuse and its spark
+        # the loading page: the name and the light behind its bar
         'word_con.png': wordmark('con'),
         'word_fuse.png': wordmark('fuse'),
-        'fuse_trail.png': trail(256, 4),
-        'spark_halo.png': ember_glow(64, 64),
-        'spark_core.png': dot(16),
         'ember_glow.png': ember_glow(256, 128),
         'fade_r.png': fanart_mask(384, 216),  # 16:9, stretched over the screen
         'info_fade.png': info_fade(256, 4),

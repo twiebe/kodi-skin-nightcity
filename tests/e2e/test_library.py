@@ -3,7 +3,7 @@ import time
 
 import pytest
 
-from conftest import action, builtin, cond, info, rpc, screenshot, wait_for
+from conftest import action, builtin, cond, info, rpc, screenshot, seed, wait_for
 
 pytestmark = pytest.mark.e2e
 
@@ -89,3 +89,52 @@ def test_videonav_path_line(movies):
     assert re.sub(r'\[/?[A-Z]+[^\]]*\]', '', path).strip(), path
     assert re.fullmatch(r'\d+/\d+', counter), counter
     screenshot('videonav')
+
+
+@pytest.mark.parametrize('view, step', ((LIST, 'down'), (WALL, 'right')))
+def test_click_opens_the_info_page_of_an_item_of_the_jellyfin_addon(home, view, step):
+    """A listing of the add-on (a playlist, its dynamic views), with a show synced: its root is then
+    a tvshows path, and Kodi ignores the info action on anything below that. Play on the page plays
+    the file: an item outside the library has no database id."""
+    library = seed()['libraries']['Movies']
+    builtin('ActivateWindow(Videos,plugin://plugin.video.jellyfin/?mode=browse&type=movies&id={0}&folder={0},return)'.format(library))
+    wait_for('Window.IsActive(videos) + Integer.IsGreater(Container.NumItems,0)')
+    builtin('Container.SetViewMode({})'.format(view))
+    wait_for('Control.IsVisible({})'.format(view))
+    builtin('SetFocus({},0,absolute)'.format(view))
+    if cond('ListItem.IsParentFolder')['ListItem.IsParentFolder']:
+        action(step)
+    wait_for('String.IsEqual(ListItem.Property(IsPlayable),true)')
+    try:
+        action('select')
+        wait_for('Window.IsActive(movieinformation)')
+        wait_for('String.IsEmpty(ListItem.DBID)')
+        wait_for('Control.HasFocus(9001)')
+        action('select')
+        wait_for('Player.HasVideo', timeout=20)
+    finally:
+        if rpc('Player.GetActivePlayers'):
+            rpc('Player.Stop', {'playerid': 1})
+            time.sleep(1)
+        builtin('Dialog.Close(movieinformation,true)')
+        builtin('Container.SetViewMode({})'.format(LIST))
+
+
+def test_click_plays_a_track_of_the_jellyfin_addon(home):
+    """Kodi has no info page for a track in the Videos window, select would do nothing."""
+    album = seed()['items']['Blue Satellite']
+    builtin('ActivateWindow(Videos,plugin://plugin.video.jellyfin/?mode=browse&type=songs&folder={},return)'.format(album))
+    wait_for('Window.IsActive(videos) + Integer.IsGreater(Container.NumItems,0)')
+    builtin('Container.SetViewMode({})'.format(LIST))
+    wait_for('Control.IsVisible({})'.format(LIST))
+    builtin('SetFocus({},0,absolute)'.format(LIST))
+    if cond('ListItem.IsParentFolder')['ListItem.IsParentFolder']:
+        action('down')
+    wait_for('!ListItem.IsParentFolder')
+    try:
+        action('select')
+        wait_for('Player.HasAudio', timeout=20)
+    finally:
+        if rpc('Player.GetActivePlayers'):
+            rpc('Player.Stop', {'playerid': 0})
+            time.sleep(1)
