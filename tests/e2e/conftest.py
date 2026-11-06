@@ -11,6 +11,7 @@ import re
 import shutil
 import sqlite3
 import subprocess
+import sys
 import time
 import urllib.error
 import urllib.request
@@ -29,6 +30,10 @@ POOL = 'pool' if POOL == '1' else POOL
 if POOL:
     # Set before any kdev call: the kdev subprocesses read it too
     os.environ['KDEV_INSTANCE'] = '{}-{}'.format(POOL, os.environ.get('PYTEST_XDIST_WORKER', 'gw0')[2:])
+
+# The skin the Kodi under test runs: NC_SKIN=confuse, with KDEV_POOL=confuse (see CLAUDE.md)
+SKIN_ID = 'skin.' + os.environ.get('NC_SKIN', 'nightcity')
+OTHER_SKIN = 'skin.nightcity' if SKIN_ID == 'skin.confuse' else 'skin.confuse'
 
 
 def _data():
@@ -78,7 +83,9 @@ def movie_rating(movieid, rating):
         rpc('VideoLibrary.SetMovieDetails', {'movieid': movieid, 'ratings': {'default': None}})
 
 
-BULK_FROM = 1000  # ids of movie rows tests add to the video database and remove again
+# ids of movie rows tests add to the video database and remove again; above any real id, a
+# long-lived library has real files rows past 17000
+BULK_FROM = 1000000
 
 
 def reset_library():
@@ -89,6 +96,10 @@ def reset_library():
         with sqlite3.connect(str(database[-1]), timeout=30) as connection:
             for table, key in (('videoversion', 'idFile'), ('movie', 'idMovie'), ('files', 'idFile')):
                 connection.execute('DELETE FROM {} WHERE {} >= ?'.format(table, key), (BULK_FROM,))
+            # the performance data of a former kodi-dev seed, which a template may still hold
+            connection.execute("DELETE FROM movie WHERE c00 LIKE 'Bulk %'")
+            connection.execute("DELETE FROM episode WHERE idShow IN (SELECT idShow FROM tvshow WHERE c00 LIKE 'BulkShow %')")
+            connection.execute("DELETE FROM tvshow WHERE c00 LIKE 'BulkShow %'")
         connection.close()
     for movie in rpc('VideoLibrary.GetMovies', {'properties': ['rating', 'genre']}).get('movies', []):
         if movie['rating']:
@@ -257,7 +268,13 @@ def pytest_configure(config):
     """One run per pool at a time: hold its run lock (kdev's pool commands check it too) for
     the whole run, so a second run on the same pool fails at once instead of two runs
     restarting each other's Kodis for minutes. The lock goes with the process, so a killed run
-    leaves nothing behind."""
+    leaves nothing behind.
+
+    Kodi mounts _build/confuse, not the overlay: assemble it first, or the run tests an old one."""
+    if not os.environ.get('PYTEST_XDIST_WORKER'):
+        sys.path.insert(0, str(ROOT / 'tools'))
+        from build import assemble
+        assemble('confuse', ROOT / '_build' / 'confuse')
     if not POOL or os.environ.get('PYTEST_XDIST_WORKER'):
         return
     path = KODI_DEV / 'instances' / POOL / 'run.lock'
@@ -428,7 +445,18 @@ def pytest_runtest_makereport(item, call):
             report.sections.append(('kept', 'the whole kodi.log is in {}'.format(_keep_log(item.path.stem))))
 
 
+def skip_nightcity_look(items, skin):
+    """Checks of Nightcity's colours and palettes say nothing about another skin."""
+    if skin == 'skin.nightcity':
+        return
+    skip = pytest.mark.skip(reason='checks the look of Nightcity, this run is on {}'.format(skin))
+    for item in items:
+        if 'nightcity_look' in item.keywords:
+            item.add_marker(skip)
+
+
 def pytest_collection_modifyitems(config, items):
+    skip_nightcity_look(items, SKIN_ID)
     if _kodi_up():
         return
     if POOL:

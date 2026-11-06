@@ -20,20 +20,7 @@
             <height>1080</height>
             <visible>Player.HasVideo + !Window.IsVisible(fullscreenvideo)</visible>
         </control>
-        <control type="image">
-            <left>0</left>
-            <top>0</top>
-            <width>1920</width>
-            <height>1080</height>
-            <texture colordiffuse="bg">ui/white.png</texture>
-        </control>
-        <control type="image">
-            <left>0</left>
-            <top>0</top>
-            <width>1920</width>
-            <height>1080</height>
-            <texture colordiffuse="petrol">ui/petrol_glow.png</texture>
-        </control>
+        <include>LookBackground</include>
     </include>
 
     <!-- Fanart of the focused title behind the page: faint, tinted, fading out to the left.
@@ -226,7 +213,9 @@
                 <height>36</height>
                 <font>font_caps_small</font>
                 <textcolor>text_mute</textcolor>
-                <label>[UPPERCASE]$PARAM[path][/UPPERCASE]</label>
+                <include content="LookLabelCase">
+                    <param name="text" value="$PARAM[path]"/>
+                </include>
             </control>
             <!-- the weather left of the clock, as on Home; not next to a counter (weather) -->
             <control type="grouplist">
@@ -282,7 +271,9 @@
                     <font>font_caps_small</font>
                     <textcolor>text_mute</textcolor>
                     <shadowcolor>bg</shadowcolor>
-                    <label>[UPPERCASE]$PARAM[key] $PARAM[label][/UPPERCASE]</label>
+                    <include content="LookLabelCase">
+                        <param name="text" value="$PARAM[key] $PARAM[label]"/>
+                    </include>
                 </control>
             </control>
         </definition>
@@ -341,7 +332,9 @@
                 <height>180</height>
                 <font>font_title</font>
                 <textcolor>text</textcolor>
-                <label>[UPPERCASE]$INFO[Container(5000).ListItem.Label][/UPPERCASE]</label>
+                <include content="LookLabelCase">
+                    <param name="text" value="$INFO[Container(5000).ListItem.Label]"/>
+                </include>
             </control>
             <control type="textbox">
                 <left>1431</left>
@@ -368,9 +361,9 @@
                 <top>$PARAM[top]</top>
                 <width>$PARAM[width]</width>
                 <height>34</height>
-                <font>font_caps_small</font>
-                <textcolor>accent2</textcolor>
-                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                <include content="LookKicker">
+                    <param name="label" value="$PARAM[label]"/>
+                </include>
                 <visible>$PARAM[visible]</visible>
             </control>
         </definition>
@@ -393,28 +386,13 @@
                 <left>$PARAM[left]</left>
                 <top>$PARAM[top]</top>
                 <visible>$PARAM[visible]</visible>
-                <control type="label">
-                    <left>-2</left>
-                    <width>$PARAM[width]</width>
-                    <height>$PARAM[height]</height>
-                    <font>$PARAM[font]</font>
-                    <align>$PARAM[align]</align>
-                    <scroll>false</scroll>
-                    <wrapmultiline>false</wrapmultiline>
-                    <textcolor>glitch_a</textcolor>
-                    <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
-                </control>
-                <control type="label">
-                    <left>2</left>
-                    <width>$PARAM[width]</width>
-                    <height>$PARAM[height]</height>
-                    <font>$PARAM[font]</font>
-                    <align>$PARAM[align]</align>
-                    <scroll>false</scroll>
-                    <wrapmultiline>false</wrapmultiline>
-                    <textcolor>glitch_b</textcolor>
-                    <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
-                </control>
+                <include content="LookTitleGlitch">
+                    <param name="label" value="$PARAM[label]"/>
+                    <param name="width" value="$PARAM[width]"/>
+                    <param name="height" value="$PARAM[height]"/>
+                    <param name="font" value="$PARAM[font]"/>
+                    <param name="align" value="$PARAM[align]"/>
+                </include>
                 <control type="label" id="$PARAM[id]">
                     <left>0</left>
                     <width>$PARAM[width]</width>
@@ -424,7 +402,9 @@
                     <scroll>false</scroll>
                     <wrapmultiline>false</wrapmultiline>
                     <textcolor>text</textcolor>
-                    <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                    <include content="LookLabelCase">
+                        <param name="text" value="$PARAM[label]"/>
+                    </include>
                 </control>
             </control>
         </definition>
@@ -441,14 +421,13 @@
                 <width>auto</width>
                 <height>36</height>
                 <enable>false</enable>
-                <font>font_caps_small</font>
                 <textoffsetx>10</textoffsetx>
                 <aligny>center</aligny>
                 <textcolor>$PARAM[color]</textcolor>
                 <disabledcolor>$PARAM[color]</disabledcolor>
-                <texturenofocus border="12" colordiffuse="border_dim">ui/cut_btn.png</texturenofocus>
-                <texturefocus border="12" colordiffuse="border_dim">ui/cut_btn.png</texturefocus>
-                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                <include content="LookTag">
+                    <param name="label" value="$PARAM[label]"/>
+                </include>
                 <visible>$PARAM[visible]</visible>
             </control>
         </definition>
@@ -471,22 +450,26 @@
         <param name="color" default="border_dim"/>
         <param name="textcolor" default="text_dim"/>
         <param name="textoffsetx" default="34"/>
+        <!-- the colour without the focus in a look that ignores `color`: for a button that hides -->
+        <param name="rest" default="border_dim"/>
         <definition>
             <control type="button" id="$PARAM[id]">
                 <visible>$PARAM[visible]</visible>
                 <enable>$PARAM[enable]</enable>
                 <width>$PARAM[width]</width>
                 <height>74</height>
-                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
-                <font>font_caps</font>
-                <textoffsetx>$PARAM[textoffsetx]</textoffsetx>
-                <align>center</align>
-                <aligny>center</aligny>
-                <textcolor>$PARAM[textcolor]</textcolor>
-                <focusedcolor>focus_text</focusedcolor>
-                <disabledcolor>$PARAM[textcolor]</disabledcolor>
-                <texturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturefocus>
-                <texturenofocus border="22" colordiffuse="$PARAM[color]">ui/cut_btn_pad.png</texturenofocus>
+                <include content="LookPillText">
+                    <param name="label" value="$PARAM[label]"/>
+                    <param name="textcolor" value="$PARAM[textcolor]"/>
+                    <param name="textoffsetx" value="$PARAM[textoffsetx]"/>
+                </include>
+                <include content="LookPillDisabled">
+                    <param name="color" value="$PARAM[textcolor]"/>
+                </include>
+                <include content="LookButtonTextures">
+                    <param name="color" value="$PARAM[color]"/>
+                    <param name="rest" value="$PARAM[rest]"/>
+                </include>
                 <onclick>$PARAM[onclick]</onclick>
                 <onclick>$PARAM[onclick2]</onclick>
                 <onfocus>$PARAM[onfocus]</onfocus>
@@ -508,7 +491,10 @@
                 <control type="image">
                     <width>116</width>
                     <height>74</height>
-                    <texture border="22" colordiffuse="$PARAM[color]">$PARAM[texture]</texture>
+                    <include content="LookMorePill">
+                        <param name="texture" value="$PARAM[texture]"/>
+                        <param name="color" value="$PARAM[color]"/>
+                    </include>
                 </control>
                 <control type="label">
                     <width>116</width>
@@ -589,7 +575,9 @@
                 <height>34</height>
                 <font>font_caps_small</font>
                 <textcolor>text_mute</textcolor>
-                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                <include content="LookLabelCase">
+                    <param name="text" value="$PARAM[label]"/>
+                </include>
                 <visible>$PARAM[visible]</visible>
             </control>
         </definition>
@@ -608,9 +596,10 @@
                 <top>$PARAM[top]</top>
                 <width>1200</width>
                 <height>34</height>
-                <font>font_caps_small</font>
-                <textcolor>text_mute</textcolor>
-                <label>[COLOR accent2]$PARAM[num][/COLOR]  [UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                <include content="LookNumberedRowLabel">
+                    <param name="num" value="$PARAM[num]"/>
+                    <param name="label" value="$PARAM[label]"/>
+                </include>
             </control>
         </definition>
     </include>
@@ -630,7 +619,9 @@
                 <aligny>center</aligny>
                 <font>font_caps_small</font>
                 <textcolor>text_mute</textcolor>
-                <label>[COLOR accent2]$PARAM[num][/COLOR]</label>
+                <include content="LookRowNumber">
+                    <param name="num" value="$PARAM[num]"/>
+                </include>
             </control>
         </definition>
     </include>
@@ -647,9 +638,9 @@
                 <top>$PARAM[top]</top>
                 <width>$PARAM[width]</width>
                 <height>40</height>
-                <font>font_caps</font>
-                <textcolor>text</textcolor>
-                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                <include content="LookSectionHeading">
+                    <param name="label" value="$PARAM[label]"/>
+                </include>
             </control>
         </definition>
     </include>
@@ -672,73 +663,61 @@
         <param name="item" default="ListItem"/>
         <definition>
             <control type="group">
-                <animation effect="zoom" end="106" center="auto" time="150" condition="$PARAM[focused]">Conditional</animation>
+                <animation effect="zoom" end="LookCardFocusZoom" center="auto" time="LookCardFocusTime" condition="$PARAM[focused]">Conditional</animation>
                 <animation effect="fade" start="100" end="75" time="150" condition="$PARAM[dim]">Conditional</animation>
-                <control type="image">
-                    <left>-24</left>
-                    <top>-24</top>
-                    <width>$PARAM[glowwidth]</width>
-                    <height>$PARAM[glowheight]</height>
-                    <texture border="40" colordiffuse="focus">ui/cut_glow.png</texture>
-                    <visible>$PARAM[focused]</visible>
-                </control>
-                <!-- unfocused a plain rectangle, focused cut like the frame; scalediffuse="false" keeps
-                     the mask on the card when scale crops artwork of another ratio -->
+                <include content="LookCardFocus">
+                    <param name="glowwidth" value="$PARAM[glowwidth]"/>
+                    <param name="glowheight" value="$PARAM[glowheight]"/>
+                    <param name="focused" value="$PARAM[focused]"/>
+                </include>
+                <include content="LookCardFrame">
+                    <param name="width" value="$PARAM[width]"/>
+                    <param name="height" value="$PARAM[height]"/>
+                    <param name="mask" value="$PARAM[mask]"/>
+                    <param name="focused" value="$PARAM[focused]"/>
+                    <param name="unfocused" value="!$PARAM[focused]"/>
+                </include>
                 <control type="image">
                     <width>$PARAM[width]</width>
                     <height>$PARAM[height]</height>
-                    <texture colordiffuse="surface">ui/white.png</texture>
+                    <include content="LookCardArt">
+                        <param name="image" value="$PARAM[image]"/>
+                        <param name="mask" value="$PARAM[mask]"/>
+                        <param name="fadetime" value="$PARAM[fadetime]"/>
+                    </include>
                     <visible>!$PARAM[focused]</visible>
                 </control>
                 <control type="image">
                     <width>$PARAM[width]</width>
                     <height>$PARAM[height]</height>
-                    <texture colordiffuse="surface" diffuse="$PARAM[mask]">ui/white.png</texture>
-                    <visible>$PARAM[focused]</visible>
-                </control>
-                <control type="image">
-                    <width>$PARAM[width]</width>
-                    <height>$PARAM[height]</height>
-                    <aspectratio>scale</aspectratio>
-                    <fadetime>$PARAM[fadetime]</fadetime>
-                    <texture background="true">$PARAM[image]</texture>
-                    <visible>!$PARAM[focused]</visible>
-                </control>
-                <control type="image">
-                    <width>$PARAM[width]</width>
-                    <height>$PARAM[height]</height>
-                    <aspectratio scalediffuse="false">scale</aspectratio>
-                    <fadetime>$PARAM[fadetime]</fadetime>
-                    <texture diffuse="$PARAM[mask]" background="true">$PARAM[image]</texture>
+                    <include content="LookCardArtFocused">
+                        <param name="image" value="$PARAM[image]"/>
+                        <param name="mask" value="$PARAM[mask]"/>
+                        <param name="fadetime" value="$PARAM[fadetime]"/>
+                    </include>
                     <visible>$PARAM[focused]</visible>
                 </control>
                 <!-- extra layers on the artwork, e.g. a title fallback or a progress line. Kodi only
                      resolves <nested/> as a child of the include's top control. -->
                 <nested/>
-                <control type="image">
-                    <width>$PARAM[width]</width>
-                    <height>$PARAM[height]</height>
-                    <texture border="16" colordiffuse="focus">ui/cut.png</texture>
-                    <visible>$PARAM[focused]</visible>
-                </control>
+                <include content="LookCardFocusRing">
+                    <param name="width" value="$PARAM[width]"/>
+                    <param name="height" value="$PARAM[height]"/>
+                    <param name="focused" value="$PARAM[focused]"/>
+                </include>
             </control>
             <!-- beside the card, not inside it: the card's dimming must not reach the dog-ear -->
             <control type="group">
-                <animation effect="zoom" end="106" center="auto" time="150" condition="$PARAM[focused]">Conditional</animation>
+                <animation effect="zoom" end="LookCardFocusZoom" center="auto" time="LookCardFocusTime" condition="$PARAM[focused]">Conditional</animation>
                 <!-- unwatched, never started: a cyan dog-ear (the focus colour) in the bottom right corner (no cut
                      there), bigger than the frame's cut so it reads from the sofa. A show: no episode
                      watched or started; its PlayCount stays 0 until all are watched. -->
                 <control type="group">
                     <width>$PARAM[width]</width>
                     <height>$PARAM[height]</height>
-                    <control type="image">
-                        <right>0</right>
-                        <bottom>0</bottom>
-                        <width>22</width>
-                        <height>22</height>
-                        <texture colordiffuse="focus">ui/dogear.png</texture>
-                        <visible>[[[String.IsEqual($PARAM[item].DBType,movie) | String.IsEqual($PARAM[item].DBType,episode)] + Integer.IsEqual($PARAM[item].PlayCount,0)] | [String.IsEqual($PARAM[item].DBType,tvshow) + String.IsEqual($PARAM[item].Property(WatchedEpisodes),0)]] + !String.IsEmpty($PARAM[item].DBID) + !$PARAM[item].IsResumable</visible>
-                    </control>
+                    <include content="LookCardUnwatched">
+                        <param name="visible" value="[[[String.IsEqual($PARAM[item].DBType,movie) | String.IsEqual($PARAM[item].DBType,episode)] + Integer.IsEqual($PARAM[item].PlayCount,0)] | [String.IsEqual($PARAM[item].DBType,tvshow) + String.IsEqual($PARAM[item].Property(WatchedEpisodes),0)]] + !String.IsEmpty($PARAM[item].DBID) + !$PARAM[item].IsResumable"/>
+                    </include>
                 </control>
             </control>
         </definition>
@@ -782,22 +761,7 @@
 
     <!-- Dialog panel: cut-corner surface with a thin outline, sized by the parent group -->
     <include name="DialogFrame">
-        <!-- opaque base: surface alone lets the window behind show through -->
-        <control type="image">
-            <left>0</left>
-            <top>0</top>
-            <texture border="16" colordiffuse="bg">ui/cut_fill.png</texture>
-        </control>
-        <control type="image">
-            <left>0</left>
-            <top>0</top>
-            <texture border="16" colordiffuse="surface">ui/cut_fill.png</texture>
-        </control>
-        <control type="image">
-            <left>0</left>
-            <top>0</top>
-            <texture border="16" colordiffuse="border_dim">ui/cut.png</texture>
-        </control>
+        <include>LookPanel</include>
     </include>
 
     <!-- Top of a full window outside Home: the window title as path line (id 9026), a counter
@@ -839,17 +803,11 @@
             <control type="togglebutton" id="$PARAM[id]">
                 <width>auto</width>
                 <height>44</height>
-                <font>$PARAM[font]</font>
-                <textoffsetx>10</textoffsetx>
-                <aligny>center</aligny>
-                <textcolor>text_mute</textcolor>
-                <focusedcolor>accent</focusedcolor>
-                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
-                <altlabel>[UPPERCASE]$PARAM[label][/UPPERCASE]</altlabel>
-                <texturefocus colordiffuse="accent" border="8,0,8,0">ui/tab_line.png</texturefocus>
-                <texturenofocus/>
-                <alttexturefocus colordiffuse="accent" border="8,0,8,0">ui/tab_line.png</alttexturefocus>
-                <alttexturenofocus colordiffuse="state" border="8,0,8,0">ui/tab_line.png</alttexturenofocus>
+                <include content="LookTabText">
+                    <param name="label" value="$PARAM[label]"/>
+                    <param name="font" value="$PARAM[font]"/>
+                </include>
+                <include>LookTabTextures</include>
                 <usealttexture>$PARAM[active]</usealttexture>
                 <onfocus>$PARAM[onfocus]</onfocus>
                 <onclick>$PARAM[onclick]</onclick>
@@ -872,17 +830,10 @@
             <control type="togglebutton" id="$PARAM[id]">
                 <width>auto</width>
                 <height>64</height>
-                <font>font_caps</font>
-                <textoffsetx>26</textoffsetx>
-                <aligny>center</aligny>
-                <textcolor>text_mute</textcolor>
-                <focusedcolor>focus_text</focusedcolor>
-                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
-                <altlabel>[UPPERCASE]$PARAM[label][/UPPERCASE]</altlabel>
-                <texturefocus border="22" colordiffuse="accent">ui/cut_btn_glow.png</texturefocus>
-                <texturenofocus/>
-                <alttexturefocus border="22" colordiffuse="accent">ui/cut_btn_glow.png</alttexturefocus>
-                <alttexturenofocus border="22" colordiffuse="state">ui/cut_btn_pad.png</alttexturenofocus>
+                <include content="LookMenuText">
+                    <param name="label" value="$PARAM[label]"/>
+                </include>
+                <include>LookMenuTextures</include>
                 <usealttexture>$PARAM[active]</usealttexture>
                 <onfocus>$PARAM[onfocus]</onfocus>
                 <onclick>$PARAM[onclick]</onclick>

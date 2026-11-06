@@ -1289,9 +1289,15 @@ def row(kind, n):
     streams()
 
 
+def skin_id():
+    """The id of the active skin: Nightcity and Confuse share this script."""
+    import xbmc
+    return xbmc.getSkinDir()
+
+
 def _search_file():
     import xbmcvfs
-    folder = xbmcvfs.translatePath('special://profile/addon_data/skin.nightcity/')
+    folder = xbmcvfs.translatePath('special://profile/addon_data/{}/'.format(skin_id()))
     xbmcvfs.mkdirs(folder)
     return folder + 'search.json'
 
@@ -2460,7 +2466,6 @@ COMMANDS = {'lib_bar': lib_bar, 'music_bar': music_bar, 'next_episode': next_epi
 # threads of this one interpreter.
 
 SENDER = 'nightcity'
-ADDON_ID = 'skin.nightcity'
 _threads = []
 
 
@@ -2494,6 +2499,22 @@ def wait_for_commands():
         _threads.pop().join()
 
 
+def _skin_script_exists():
+    import os
+    import xbmcvfs
+    return os.path.exists(xbmcvfs.translatePath('special://skin/scripts/nightcity.py'))
+
+
+def _start_next(monitor, home):
+    """After a skin switch: wait a second so that Home of the new skin has had its chance (two
+    interpreters starting at once can crash Kodi), then start the service if nobody did and the
+    new skin has the script."""
+    import xbmc
+    if monitor.waitForAbort(1) or home.getProperty('nc.service') or not _skin_script_exists():
+        return
+    xbmc.executebuiltin('RunScript(special://skin/scripts/nightcity.py,service,home)')
+
+
 def service(*first):
     """Listen for the skin's commands until Kodi ends or another skin takes over; FIRST is a
     command to run before (startup)."""
@@ -2501,6 +2522,7 @@ def service(*first):
 
     music_start = MusicStart()
     queue_watch = Debounce(lambda: run_command('music_queue', []))
+    stop = threading.Event()
 
     class Listener(xbmc.Monitor):
         def onNotification(self, sender, method, data):
@@ -2518,7 +2540,7 @@ def service(*first):
                 if isinstance(details, dict) and (method == 'Player.OnPlay' or details.get('playlistid') == 0):
                     queue_watch.changed()
             message = parse_message(sender, method)
-            if message:
+            if message and not stop.is_set():
                 run_command(*message)
 
     home = _home()
@@ -2527,17 +2549,21 @@ def service(*first):
         if first:
             _run(first[0], list(first[1:]))
         return
+    started = skin_id()
     monitor = _monitor(Listener)
     home.setProperty('nc.service', '1')
     if first:
         _run(first[0], list(first[1:]))
-    stop = threading.Event()
+    # after a skin switch nothing runs startup, and each skin has its own Home key setting
+    _run('home_keymap', [])
     threading.Thread(target=hero_watch, args=(monitor, stop), daemon=True).start()
     while not monitor.waitForAbort(1):
-        if xbmc.getSkinDir() != ADDON_ID:
-            # back on this skin, Home starts a new one
+        if skin_id() != started:
+            # another skin is active: leave, and start the service of the new skin (Home of the new
+            # skin looked at nc.service too early to start it)
             stop.set()
             home.clearProperty('nc.service')
+            _start_next(monitor, home)
             return
     stop.set()
     # Kodi ends: it holds the GUI while it waits for this script, so no window calls here

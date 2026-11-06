@@ -73,3 +73,97 @@ def test_a_big_library_names_five_and_counts_the_rest():
     movies = [{'label': 'Bulk {:04d}'.format(n), 'art': {}} for n in range(1000)]
     gaps = screenshots.library_gaps(movies, [])
     assert 'Bulk 0004 (poster, fanart) and 995 more' in gaps and 'Bulk 0005' not in gaps
+
+
+def test_without_skin_the_screenshots_are_nightcitys():
+    args = screenshots.parse_args([])
+    assert args.skin == 'nightcity'
+    assert pathlib.Path(args.out) == screenshots.ROOT / 'resources' / 'screenshots'
+
+
+def test_the_screenshots_of_confuse_go_to_its_overlay():
+    args = screenshots.parse_args(['--skin', 'confuse'])
+    assert pathlib.Path(args.out) == screenshots.ROOT / 'skins' / 'confuse' / 'resources' / 'screenshots'
+
+
+def test_out_wins_over_the_folder_of_the_skin():
+    assert screenshots.parse_args(['--skin', 'confuse', '--out', '/x']).out == '/x'
+
+
+def test_the_mount_of_each_skin():
+    root = screenshots.ROOT
+    assert screenshots.skin_mount('nightcity') == '{}:/home/kodi/.kodi/addons/skin.nightcity'.format(root)
+    assert screenshots.skin_mount('confuse') == '{}:/home/kodi/.kodi/addons/skin.confuse'.format(root / '_build' / 'confuse')
+
+
+def test_the_instance_gets_the_skin_in_its_guisettings(tmp_path):
+    settings = tmp_path / 'guisettings.xml'
+    settings.write_text('<settings><setting id="lookandfeel.skin">skin.nightcity</setting></settings>')
+    screenshots.select_skin(settings, 'confuse')
+    assert '>skin.confuse</setting>' in settings.read_text()
+
+
+def test_screenshots_select_the_skin_like_the_setup():
+    import kodidev_setup
+    assert screenshots.select_skin is kodidev_setup.select_skin
+
+
+def test_the_clip_is_the_same_on_every_run(monkeypatch, tmp_path):
+    """Its gradient shows behind the player: tools/compare_shots.py compares fresh instances."""
+    calls = []
+    monkeypatch.setattr(screenshots.subprocess, 'run', lambda args, **kw: calls.append(args))
+    screenshots.make_clip(tmp_path / 'clip.mkv', 60, 2)
+    source = next(a for a in calls[0] if a.startswith('gradients='))
+    assert ':seed=' in source
+
+
+class _Recording:
+    """Stands in for Kodi in prepare(): records calls, answers just enough for the movies and episodes."""
+
+    def __init__(self, tmp_path):
+        self.data, self.calls = tmp_path, []
+        (tmp_path / 'kodi' / 'addons' / screenshots.WEATHER).mkdir(parents=True)
+
+    def rpc(self, method, params=None):
+        self.calls.append((method, params))
+        if method == 'VideoLibrary.GetMovies':
+            titles = ('Blade Runner 2049', 'Ghost in the Shell', 'Arrival')
+            return {'movies': [{'title': t, 'movieid': n, 'runtime': 100} for n, t in enumerate(titles)]}
+        if method == 'VideoLibrary.GetEpisodes':
+            return {'episodes': []}
+        if method == 'Addons.GetAddons':
+            return {'addons': [{'addonid': screenshots.WEATHER}]}
+        return {}
+
+    def builtin(self, command):
+        self.calls.append(('builtin', command))
+
+    def wait(self, *args, **kwargs):
+        pass
+
+
+def _prepared(monkeypatch, tmp_path):
+    kodi = _Recording(tmp_path)
+    monkeypatch.setattr(screenshots, 'home', lambda k, page='home': k.calls.append(('home', page)))
+    monkeypatch.setattr(screenshots, 'settle', lambda k, seconds=3: k.calls.append(('settle', seconds)))
+    monkeypatch.setattr(screenshots.time, 'sleep', lambda s: None)
+    screenshots.prepare(kodi)
+    return kodi.calls
+
+
+def test_continue_watching_keeps_its_order_on_a_second_run(monkeypatch, tmp_path):
+    """The player shot plays Blade Runner: without its own date it moves to the front of the row and
+    a second run on the instance differs from the first."""
+    dates = {params['movieid']: params['lastplayed'] for method, params in _prepared(monkeypatch, tmp_path)
+             if method == 'VideoLibrary.SetMovieDetails'}
+    assert len(dates) == 3
+    assert dates[1] > dates[0] > dates[2], 'Ghost in the Shell, Blade Runner 2049, Arrival'
+
+
+def test_album_art_is_in_the_texture_cache_before_the_shots(monkeypatch, tmp_path):
+    """Kodi draws new art from its source and later from a re-encoded copy in its cache: a first
+    run would differ from a second. The reload makes the shots load the copy."""
+    calls = _prepared(monkeypatch, tmp_path)
+    music = calls.index(('home', 'music'))
+    assert calls[music + 1][0] == 'settle'
+    assert calls.index(('builtin', 'ReloadSkin()')) > music

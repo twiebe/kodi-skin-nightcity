@@ -12,6 +12,7 @@ import pytest
 from PIL import Image
 
 from conftest import ROOT, layout_files, parse
+from navigation import with_look
 
 GLOW = 10
 UI = ROOT / 'media' / 'ui'
@@ -144,8 +145,8 @@ def grown(before):
 
 def textures(path):
     """(tag, texture, border) of every texture in a layout file, include params with a texture
-    and a colour as well."""
-    root = parse(path)
+    and a colour as well, with what the file takes from Includes_Look.xml in place."""
+    root = with_look(parse(path))
     for el in root.iter():
         if el.tag in TEXTURE_TAGS:
             yield el.tag, (el.text or '').strip(), el.get('border'), el.get('colordiffuse')
@@ -173,7 +174,7 @@ def test_padded_textures_have_a_wider_border():
     bad = [(path.name, texture, b) for path in layout_files() for tag, texture, b, _ in textures(path)
            if tag != 'param' and texture in border and b != border[texture]]
     assert bad == []
-    include = definitions()['MorePill']
+    include = with_look(definitions()['MorePill'])
     assert include.find('.//texture').get('border') == str(12 + GLOW)
 
 
@@ -182,7 +183,7 @@ def test_padded_controls_have_no_plain_texture():
     same margin: a plain outline would stand GLOW px off the fill."""
     bad = []
     for path in layout_files():
-        for control in parse(path).iter('control'):
+        for control in with_look(parse(path)).iter('control'):
             names = {(el.text or '').strip() for el in control if el.tag in TEXTURE_TAGS}
             if names & PADDED_NAMES and names & set(PADDED):
                 bad.append((path.name, control.get('id'), sorted(names)))
@@ -223,7 +224,7 @@ def test_grouplists_of_glowing_entries_keep_them_in_place():
 
 
 def control_of(name):
-    return definitions()[name].find('.//control')
+    return with_look(definitions()[name]).find('.//control')
 
 
 def test_pills_grow_by_the_margin():
@@ -231,13 +232,13 @@ def test_pills_grow_by_the_margin():
     margin around them."""
     pill = control_of('PillButton')
     assert pill.findtext('height') == str(54 + 2 * GLOW)
-    params = {p.get('name'): p.get('default') for p in definitions()['PillButton'].iter('param')}
+    params = {p.get('name'): p.get('default') for p in definitions()['PillButton'].findall('param')}
     assert params['textoffsetx'] == str(24 + GLOW)
     menu = control_of('MenuButton')
     assert (menu.findtext('height'), menu.findtext('textoffsetx')) == (str(44 + 2 * GLOW), str(16 + GLOW))
     row = control_of('ListButton')
     assert (row.findtext('height'), row.findtext('textoffsetx')) == (str(52 + 2 * GLOW), str(20 + GLOW))
-    look = definitions()['SpotlightPillLook'].find('definition')
+    look = with_look(definitions()['SpotlightPillLook']).find('definition')
     assert (look.findtext('height'), look.findtext('textoffsetx')) == (str(54 + 2 * GLOW), str(24 + GLOW))
 
 
@@ -343,8 +344,7 @@ def test_card_glow_as_strong_as_the_buttons():
     """The focused card's glow matches the buttons' (fill_glow): coloured with the full focus
     colour, its strength in the texture, about as strong next to the card as a button's halo
     next to the button (alpha ~130), fading out over the card's wider margin (24 px)."""
-    card = parse(ROOT / '1080i' / 'Includes_Base.xml')
-    inc = next(i for i in card.iter('include') if i.get('name') == 'CutCard')
+    inc = with_look(definitions()['CutCard'])
     glow = next(t for t in inc.iter('texture') if (t.text or '').strip() == 'ui/cut_glow.png')
     assert glow.get('colordiffuse') == 'focus'
     alpha = Image.open(ROOT / 'media' / 'ui' / 'cut_glow.png').getchannel('A')

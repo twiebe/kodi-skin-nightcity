@@ -58,16 +58,7 @@
                 <left>$PARAM[left]</left>
                 <top>-70</top>
                 <visible>$PARAM[visible]</visible>
-                <control type="image">
-                    <width>260</width>
-                    <height>50</height>
-                    <texture border="12" colordiffuse="surface">ui/cut_btn_fill.png</texture>
-                </control>
-                <control type="image">
-                    <width>260</width>
-                    <height>50</height>
-                    <texture border="12" colordiffuse="focus">ui/cut_btn.png</texture>
-                </control>
+                <include>LookSeekBubble</include>
                 <control type="label">
                     <width>260</width>
                     <height>50</height>
@@ -455,7 +446,7 @@
                         <left>2</left>
                         <width>596</width>
                         <height>72</height>
-                        <texture border="22" colordiffuse="focus">ui/cut_btn_glow.png</texture>
+                        <include>LookListFocus</include>
                         <visible>Control.HasFocus($PARAM[id])</visible>
                     </control>
                     <!-- the playing track's bar, dark blue also on the cursor's fill -->
@@ -701,8 +692,7 @@
                         <aligny>center</aligny>
                         <textcolor>text_dim</textcolor>
                         <focusedcolor>focus_text</focusedcolor>
-                        <texturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturefocus>
-                        <texturenofocus/>
+                        <include>LookListFocusButton</include>
                         <onclick>ActivateWindow(osdvideosettings)</onclick>
                         <onleft>SetFocus($PARAM[left])</onleft>
                         <onright>SetFocus($PARAM[right])</onright>

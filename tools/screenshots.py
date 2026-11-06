@@ -2,7 +2,8 @@
 """Take the screenshots for README.md and addon.xml: python tools/screenshots.py [options] [SHOT ...]
 
 Starts its own kodi-dev instance `shots` at 1920x1080 as a copy of the kodi-dev pool template
-(run tools/kodidev_setup.py and `kdev pool up` once before) with this checkout as the skin. Its
+(run tools/kodidev_setup.py and `kdev pool up` once before) with this checkout as the skin, or
+with --skin confuse the overlay assembled into _build/confuse. Its
 library becomes a showcase: films and shows TMDb knows, with their metadata and artwork from TMDb
 (see MOVIES and SHOWS). Then it opens each view and saves it as a 1280x720 JPEG in
 resources/screenshots/, and removes the instance again. Needs ffmpeg and internet access;
@@ -11,7 +12,9 @@ resources/screenshots/, and removes the instance again. Needs ffmpeg and interne
   SHOT ...          only these shots (home movies info person player music settings quick)
   --keep            keep the instance for the next run or a look over VNC
   --instance NAME   use the running instance a run with --keep left, as it is
-  --out DIR         where the JPEGs go (default resources/screenshots)
+  --skin NAME       nightcity (default) or confuse
+  --out DIR         where the JPEGs go (default resources/screenshots, for confuse
+                    skins/confuse/resources/screenshots)
   --png DIR         also save the 1920x1080 PNGs there
 
 Ratings: TMDb Helper fetches IMDb, Rotten Tomatoes, Metacritic and the like only with an API
@@ -34,6 +37,9 @@ import time
 import urllib.error
 import urllib.request
 import xml.etree.ElementTree as ET
+
+from build import assemble
+from kodidev_setup import select_skin
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 KODI_DEV = pathlib.Path(os.environ.get('KODI_DEV', '/workspaces/kodi-dev'))
@@ -137,15 +143,26 @@ class Kodi:
         return pathlib.Path(self.kdev('screenshot', name).strip().splitlines()[-1])
 
 
-def start_instance(name):
-    """A fresh copy of the pool template as instance NAME, this checkout as the skin, at SIZE."""
+def _skin_folder(skin):
+    return ROOT if skin == 'nightcity' else ROOT / '_build' / skin
+
+
+def skin_mount(skin):
+    return '{}:/home/kodi/.kodi/addons/skin.{}'.format(_skin_folder(skin), skin)
+
+
+def start_instance(name, skin='nightcity'):
+    """A fresh copy of the pool template as instance NAME, SKIN as its skin, at SIZE."""
     kdev = load_kdev()
     if not (KODI_DEV / 'instances' / 'pool' / 'data' / 'seed.json').exists():
         raise SystemExit('no kodi-dev pool template: run tools/kodidev_setup.py, then `kdev pool up` once')
     kdev.use_instance(name)
     folder = KODI_DEV / 'instances' / name
     (folder / '.env').write_text('KODI_RESOLUTION={}\n'.format(SIZE))
-    kdev.pool_worker(name, ['{}:/home/kodi/.kodi/addons/skin.nightcity'.format(ROOT)], fresh=True)
+    if skin != 'nightcity':
+        assemble(skin, _skin_folder(skin))
+    kdev.pool_worker(name, [skin_mount(skin)], fresh=True)
+    select_skin(folder / 'data' / 'kodi' / 'userdata' / 'guisettings.xml', skin)
     kdev.pool_start([name])
 
 
@@ -190,7 +207,7 @@ def make_clip(path, seconds, chapters):
                 n * step * 1000, min((n + 1) * step, seconds) * 1000, n + 1) for n in range(chapters)))
         subprocess.run([
             'ffmpeg', '-y', '-loglevel', 'error',
-            '-f', 'lavfi', '-i', 'gradients=s=1920x1080:r=1:speed=0.002:n=3:type=radial:'
+            '-f', 'lavfi', '-i', 'gradients=s=1920x1080:r=1:speed=0.002:n=3:type=radial:seed=1:'
                                  'c0=0x050812:c1=0x0b3a4f:c2=0x3b0b33,format=yuv420p',
             '-f', 'lavfi', '-i', 'anullsrc=cl=5.1:r=48000', '-i', str(meta),
             '-map', '0:v', '-map', '1:a', '-map_chapters', '2', '-t', str(seconds),
@@ -356,9 +373,12 @@ def prepare(kodi):
     # TMDb's own rating next to the ones the API keys bring
     kodi.builtin('Skin.SetBool(nc.ratings.show.tmdb)')
     movies = {m['title']: m for m in kodi.rpc('VideoLibrary.GetMovies', {'properties': ['title', 'runtime']})['movies']}
-    for title, part in (('Blade Runner 2049', 0.42), ('Ghost in the Shell', 0.68), ('Arrival', 0.25)):
+    # dates of their own: the player shot plays one of them, a second run must show the same row
+    for title, part, played in (('Blade Runner 2049', 0.42, '2020-01-02 12:00:00'),
+                                ('Ghost in the Shell', 0.68, '2020-01-03 12:00:00'),
+                                ('Arrival', 0.25, '2020-01-01 12:00:00')):
         movie = movies[title]
-        kodi.rpc('VideoLibrary.SetMovieDetails', {'movieid': movie['movieid'], 'resume': {
+        kodi.rpc('VideoLibrary.SetMovieDetails', {'movieid': movie['movieid'], 'lastplayed': played, 'resume': {
             'position': int(movie['runtime'] * part), 'total': movie['runtime']}})
     episodes = kodi.rpc('VideoLibrary.GetEpisodes', {'properties': ['showtitle', 'episode', 'runtime']})['episodes']
     for ep in episodes:
@@ -368,6 +388,10 @@ def prepare(kodi):
         if (ep['showtitle'], ep['episode']) == ('Severance', 2):
             kodi.rpc('VideoLibrary.SetEpisodeDetails', {'episodeid': ep['episodeid'], 'resume': {
                 'position': int(ep['runtime'] * 0.3), 'total': ep['runtime']}})
+    # new art comes from its source, later from a re-encoded copy in Kodi's cache: load it once, so
+    # the first run on an instance looks like the second
+    home(kodi, 'music')
+    settle(kodi)
     kodi.builtin('Dialog.Close(all,true)')
     kodi.builtin('ReloadSkin()')
     time.sleep(3)
@@ -547,24 +571,37 @@ def restart(kodi):
         time.sleep(0.5)
 
 
-def main():
+def parse_args(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.split('\n\n')[0])
     parser.add_argument('shots', nargs='*', metavar='SHOT', help='only these: ' + ' '.join(SHOTS))
     parser.add_argument('--instance', help='use this running instance (one a run with --keep left)')
     parser.add_argument('--keep', action='store_true', help='keep the instance this run starts')
-    parser.add_argument('--out', default=str(ROOT / 'resources' / 'screenshots'))
+    parser.add_argument('--skin', choices=('nightcity', 'confuse'), default='nightcity')
+    parser.add_argument('--out', help='default: the resources/screenshots of the skin')
     parser.add_argument('--png', help='also save the full PNGs in this folder')
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
+    if not args.out:
+        overlay = ROOT if args.skin == 'nightcity' else ROOT / 'skins' / args.skin
+        args.out = str(overlay / 'resources' / 'screenshots')
     unknown = set(args.shots) - set(SHOTS)
     if unknown:
         parser.error('unknown shots: {} (known: {})'.format(' '.join(sorted(unknown)), ' '.join(SHOTS)))
+    return args
+
+
+def main():
+    args = parse_args()
     own = not args.instance
     name = args.instance or 'shots'
     if own:
-        start_instance(name)
+        start_instance(name, args.skin)
     kodi = Kodi(name)
     if not kodi.up():
         raise SystemExit('kodi-dev instance {} is not running'.format(name))
+    if own and args.skin != 'nightcity':
+        # the template knows the overlay as disabled or not at all: Kodi has gone to Estuary
+        kodi.rpc('Addons.SetAddonEnabled', {'addonid': 'skin.' + args.skin, 'enabled': True})
+        restart(kodi)
     if own:
         kdev = load_kdev()
         kdev.use_instance(name)

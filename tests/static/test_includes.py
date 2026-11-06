@@ -2,6 +2,7 @@ import pytest
 import re
 
 from conftest import ROOT, layout_files, parse
+from navigation import with_look
 
 VAR = re.compile(r'\$VAR\[([^\],]+)')
 ART = re.compile(r'Art\(')
@@ -81,8 +82,10 @@ def test_widget_focus_frame_not_clipped():
     layout = row.find('.//focusedlayout')
     card = layout.find('control')
     assert card.get('type') == 'group'
-    assert int(card.findtext('left')) >= 24 and int(card.findtext('top')) >= 24
-    assert int(layout.get('height')) >= int(card.findtext('top')) + 276 + 24 + 14
+    constants = look_constants()
+    left, top, height = (int(constants[v]) for v in (card.findtext('left'), card.findtext('top'), layout.get('height')))
+    assert left >= 24 and top >= 24
+    assert height >= top + 276 + 24 + 14
 
 
 NETRUNNER = ('Background', 'FanartBackdrop', 'PathLine', 'Kicker', 'GlitchTitle', 'Tag', 'PillButton', 'ProgressLine',
@@ -93,10 +96,11 @@ MIGRATED = {p.name for p in (ROOT / '1080i').glob('*.xml')}
 
 
 def include(name):
+    """The definition of an include, with what it takes from Includes_Look.xml in place."""
     for p in layout_files():
         for el in parse(p).iter('include'):
             if el.get('name') == name:
-                return el
+                return with_look(el)
     return None
 
 
@@ -370,9 +374,9 @@ def test_season_tab_active_line():
     layout has no auto width, so the line is the season's own label again in font_caps_line,
     whose letters are bars as wide as the letters of font_caps: as long as the text."""
     seasons = next(c for c in parse(ROOT / '1080i' / 'DialogVideoInfo.xml').iter('control') if c.get('id') == '5200')
-    controls = seasons.find('focusedlayout').findall('control')
+    controls = with_look(seasons).find('focusedlayout').findall('control')
     assert not [c for c in controls if c.get('type') == 'image']
-    lines = [c for c in controls if c.get('type') == 'label']
+    lines = [c for c in controls if c.get('type') == 'label' and c.findtext('font') == 'font_caps_line']
     assert sorted((c.findtext('textcolor'), c.findtext('visible')) for c in lines) == [
         ('focus', 'Control.HasFocus(5200)'), ('state', '!Control.HasFocus(5200)')]
     text = [c for c in include('SeasonTab').iter('control') if c.get('type') == 'label']
@@ -811,3 +815,146 @@ def test_settings_page_has_a_system_and_a_settings_section():
     assert [h['label'] for h in headings] == ['$LOCALIZE[31033]', '$LOCALIZE[5]']
     label = include('SectionHeading').find('.//control')
     assert label.findtext('textcolor') == 'text'
+
+
+def test_only_the_look_file_names_the_skin():
+    """The skin id is Kodi's at run time: a layout names it only in Includes_Look.xml, which the
+    overlay replaces."""
+    assert not [p.name for p in layout_files()
+                if p.name != 'Includes_Look.xml' and 'skin.nightcity' in p.read_text(encoding='utf-8')]
+    assert 'skin.nightcity' in (ROOT / '1080i' / 'Includes_Look.xml').read_text(encoding='utf-8')
+
+
+def test_confuse_look_file_names_confuse(confuse_root):
+    text = (confuse_root / '1080i' / 'Includes_Look.xml').read_text(encoding='utf-8')
+    assert 'skin.confuse' in text and 'skin.nightcity' not in text
+    assert 'Includes_Look.xml' in (confuse_root / '1080i' / 'Includes.xml').read_text(encoding='utf-8')
+
+
+# the look of these files lives in Includes_Look.xml, which skins/confuse replaces; the dialogs,
+# settings and music follow with the rest of the windows
+LOOK_MOVED = ('Includes_Base.xml', 'Includes_Home.xml', 'Includes_Info.xml', 'Includes_Player.xml')
+LOOK_INCLUDES = ('LookBackground', 'LookCardFocus', 'LookCardUnwatched', 'LookCardFrame', 'LookButtonTextures',
+                 'LookTabTextures', 'LookMenuTextures', 'LookPanel', 'LookTag', 'LookKicker', 'LookRowNumber',
+                 'LookDecoration', 'LookListFocus', 'LookCardArt', 'LookCardArtFocused',
+                 'LookPillText', 'LookPillDisabled', 'LookTabText', 'LookMenuText', 'LookLabelCase')
+LOOK_CONSTANTS = ('LookCardFocusZoom', 'LookRowGap')
+
+
+def test_cut_textures_only_in_look_includes():
+    """border="..." and the cut textures stand in Includes_Look.xml, not in the files that move."""
+    found = []
+    for name in LOOK_MOVED:
+        for el in parse(ROOT / '1080i' / name).iter():
+            texts = [el.text or '', el.get('value') or '', el.get('default') or '']
+            if el.get('border') or any('ui/cut' in t for t in texts):
+                found.append((name, el.tag, el.get('border'), (el.text or el.get('value') or el.get('default') or '').strip()))
+    assert found == []
+
+
+@pytest.mark.parametrize('look', [ROOT / '1080i' / 'Includes_Look.xml', ROOT / 'skins' / 'confuse' / '1080i' / 'Includes_Look.xml'])
+def test_look_names_exist(look):
+    root = parse(look)
+    includes = {el.get('name') for el in root.findall('include')}
+    constants = {el.get('name') for el in root.findall('constant')}
+    assert set(LOOK_INCLUDES) - includes == set()
+    assert set(LOOK_CONSTANTS) - constants == set()
+
+
+def test_both_look_files_have_the_same_names():
+    """A name only one skin has would break the other as soon as a shared file asks for it."""
+    def names(path):
+        root = parse(path)
+        return {(el.tag, el.get('name')) for el in root if el.get('name')}
+    assert names(ROOT / '1080i' / 'Includes_Look.xml') == names(ROOT / 'skins' / 'confuse' / '1080i' / 'Includes_Look.xml')
+
+
+def test_every_look_name_is_used_outside_the_look_file():
+    text = '\n'.join(p.read_text(encoding='utf-8') for p in layout_files() if p.name != 'Includes_Look.xml')
+    look = (ROOT / '1080i' / 'Includes_Look.xml').read_text(encoding='utf-8')
+    root = parse(ROOT / '1080i' / 'Includes_Look.xml')
+    for el in root.findall('include'):
+        name = el.get('name')
+        assert 'content="{0}"'.format(name) in text + look or '>{0}<'.format(name) in text + look, name
+    for el in root.findall('constant'):
+        assert '>{0}<'.format(el.get('name')) in text or '"{0}"'.format(el.get('name')) in text, el.get('name')
+
+
+def look_constants():
+    return {el.get('name'): el.text for el in parse(ROOT / '1080i' / 'Includes_Look.xml').findall('constant')}
+
+
+def test_card_artwork_is_look():
+    """An overlay gives both artwork images its own corners over a mask, also the unfocused one:
+    CutCard itself keeps only the size and when each shows."""
+    raw = next(el for el in parse(ROOT / '1080i' / 'Includes_Base.xml').iter('include') if el.get('name') == 'CutCard')
+    assert not [t for t in raw.iter('texture') if '$PARAM[image]' in (t.text or '')]
+    uses = {i.get('content'): {x.get('name') for x in i.findall('param')} for i in raw.iter('include') if i.get('content')}
+    for name in ('LookCardArt', 'LookCardArtFocused'):
+        assert {'image', 'mask', 'fadetime'} <= uses[name], name
+
+
+def test_letter_case_lives_in_the_look():
+    """The case stays in the Look: tools/build.py strips [UPPERCASE] from an overlay, and a window with
+    the tag in its own layout would read differently in the two skins until then."""
+    for name in ('Includes_Base.xml', 'Includes_Home.xml'):
+        assert '[UPPERCASE]' not in (ROOT / '1080i' / name).read_text(encoding='utf-8'), name
+
+
+@pytest.mark.parametrize('name, look', [('PillButton', 'LookPillText'), ('SpotlightPillLook', 'LookPillText'),
+                                        ('TabButton', 'LookTabText'), ('MenuButton', 'LookMenuText')])
+def test_button_text_is_look(name, look):
+    """Label case, font and text colours of a button are the overlay's; id, on* and visible are not."""
+    raw = next(el for p in layout_files() for el in parse(p).iter('include') if el.get('name') == name)
+    holder = raw.find('definition')
+    holder = holder.find('control') if holder.find('control') is not None else holder
+    for tag in ('label', 'altlabel', 'font', 'textcolor', 'focusedcolor'):
+        assert holder.find(tag) is None, (name, tag)
+    assert look in [i.get('content') for i in holder.findall('include')], name
+    assert with_look(raw).find('.//focusedcolor') is not None, name
+
+
+def test_card_zoom_is_a_constant():
+    inc = include('CutCard')
+    zooms = [a for a in inc.iter('animation') if a.get('effect') == 'zoom']
+    assert len(zooms) == 2 and {a.get('end') for a in zooms} == {'LookCardFocusZoom'}
+    assert {a.get('time') for a in zooms} == {'LookCardFocusTime'}
+    assert (look_constants()['LookCardFocusZoom'], look_constants()['LookCardFocusTime']) == ('106', '150')
+
+
+def test_row_gap_is_a_constant():
+    assert include('PageRows').find('.//itemgap').text == 'LookRowGap'
+    assert look_constants()['LookRowGap'] == '0'
+
+
+ROW_CONSTANTS = {'LookRowListLeft': '40', 'LookRowListTop': '44', 'LookRowListWidth': '1880', 'LookRowListHeight': '424',
+                 'LookRowItemLeft': '24', 'LookRowItemTop': '34', 'LookRowItemWidth': '228'}
+
+
+def test_row_padding_is_in_constants():
+    """A list clips its items: what a look's zoom and shadow need around a card comes from these."""
+    assert {k: look_constants().get(k) for k in ROW_CONSTANTS} == ROW_CONSTANTS
+    row = next(el for el in parse(ROOT / '1080i' / 'Includes_Home.xml').iter('include') if el.get('name') == 'RowBox')
+    rows = next(c for c in row.iter('control') if c.get('type') == 'list')
+    assert (rows.findtext('left'), rows.findtext('top'), rows.findtext('width'), rows.findtext('height')) == (
+        'LookRowListLeft', 'LookRowListTop', 'LookRowListWidth', 'LookRowListHeight')
+    for layout in (rows.find('itemlayout'), rows.find('focusedlayout')):
+        assert (layout.get('width'), layout.get('height')) == ('LookRowItemWidth', 'LookRowListHeight')
+        card = layout.find('control')
+        assert (card.findtext('left'), card.findtext('top')) == ('LookRowItemLeft', 'LookRowItemTop')
+
+
+@pytest.mark.parametrize('look', [ROOT / '1080i' / 'Includes_Look.xml', ROOT / 'skins' / 'confuse' / '1080i' / 'Includes_Look.xml'])
+def test_row_padding_constants_are_paired(look):
+    """Kodi constants cannot add up, so each pair is two numbers: more padding, less list. The card
+    stays where the rest of a row expects it (headers at 64, its number at the right edge)."""
+    c = {el.get('name'): float(el.text) for el in parse(look).findall('constant')}
+    assert c['LookRowListLeft'] + c['LookRowItemLeft'] == 64
+    assert c['LookRowListTop'] + c['LookRowItemTop'] == 78
+    assert c['LookRowListLeft'] + c['LookRowListWidth'] == 1920
+
+
+def test_skin_name_variables_exist():
+    for look in (ROOT / '1080i' / 'Includes_Look.xml', ROOT / 'skins' / 'confuse' / '1080i' / 'Includes_Look.xml'):
+        names = {v.get('name') for v in parse(look).iter('variable')}
+        assert {'SkinTitle', 'SkinVersion'} <= names, look

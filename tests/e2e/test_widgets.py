@@ -3,7 +3,7 @@ import time
 
 import pytest
 
-from conftest import _data, action, builtin, cond, info, rpc, screenshot, wait_for
+from conftest import BULK_FROM, _data, action, builtin, cond, info, rpc, screenshot, wait_for
 
 pytestmark = pytest.mark.e2e
 
@@ -79,14 +79,14 @@ def big_library(home):
 
     def add(connection):
         first = connection.execute('SELECT idFile FROM movie WHERE idMovie = 1').fetchone()[0]
-        for number in range(2000, 2030):
+        for number in range(BULK_FROM, BULK_FROM + 30):
             copy(connection, 'files', 'idFile = {}'.format(first), {'idFile': number, 'strFilename': '{}.mkv'.format(number)})
             copy(connection, 'movie', 'idMovie = 1', {'idMovie': number, 'idFile': number, 'c00': 'Bulk {}'.format(number)})
             copy(connection, 'videoversion', 'idFile = {}'.format(first), {'idFile': number, 'idMedia': number})
 
     def remove(connection):
         for table, key in (('videoversion', 'idFile'), ('movie', 'idMovie'), ('files', 'idFile')):
-            connection.execute('DELETE FROM {} WHERE {} >= 2000'.format(table, key))
+            connection.execute('DELETE FROM {} WHERE {} >= ?'.format(table, key), (BULK_FROM,))
 
     change(remove)  # a stopped run may have left its rows
     change(add)

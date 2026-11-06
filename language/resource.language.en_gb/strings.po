@@ -367,10 +367,6 @@ msgctxt "#31155"
 msgid "stats"
 msgstr ""
 
-msgctxt "#31156"
-msgid "Nightcity"
-msgstr ""
-
 msgctxt "#31157"
 msgid "booting"
 msgstr ""

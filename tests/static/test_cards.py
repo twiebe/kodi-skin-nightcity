@@ -4,6 +4,7 @@ import re
 from PIL import Image
 
 from conftest import ROOT, layout_files, parse
+from navigation import with_look
 
 CONTAINERS = ('list', 'panel', 'fixedlist', 'wraplist')
 
@@ -85,7 +86,7 @@ def test_containers_preload_artwork():
 
 
 def _card():
-    return next(el for p in layout_files() for el in parse(p).iter('include') if el.get('name') == 'CutCard')
+    return with_look(next(el for p in layout_files() for el in parse(p).iter('include') if el.get('name') == 'CutCard'))
 
 
 def test_card_mask_fits_card_not_cropped_image():
@@ -189,14 +190,14 @@ def test_current_episode_has_a_line_over_its_still():
     """The current episode of an episode page's list (the selected card: the head shows it) has a
     dark blue line over its still, a little above it: under the title it met the progress line,
     a bar before the title was hardly seen. Light enough to see (state_text, a small mark)."""
-    inc = next(i for i in parse(ROOT / '1080i' / 'Includes_Info.xml').iter('include') if i.get('name') == 'EpisodeCard')
+    inc = with_look(next(i for i in parse(ROOT / '1080i' / 'Includes_Info.xml').iter('include') if i.get('name') == 'EpisodeCard'))
     lines = [c for c in inc.iter('control') if c.get('type') == 'image' and c.findtext('texture') == 'ui/white.png']
     assert len(lines) == 1
     line = lines[0]
     assert line.find('texture').get('colordiffuse') == 'state_text'
     assert line.findtext('visible') == '$PARAM[selected]'
     assert line.findtext('width') == '320' and line.findtext('height') == '3'
-    # above the still (which starts at 0), with a gap, and above the focused card's zoom (106 %)
+    # above the still (which starts at 0), with a gap, and above the focused card's zoom (LookCardFocusZoom)
     assert int(line.findtext('top')) + 3 <= -15
     titles = [c for c in inc.iter('control') if c.get('type') == 'label']
     assert {t.findtext('left') for t in titles} == {None} and {t.findtext('width') for t in titles} == {'320'}

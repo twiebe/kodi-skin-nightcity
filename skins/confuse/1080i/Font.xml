@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ConfuseUI is Manrope plus symbols (tools/make_fonts.py), four cuts: Medium for text, SemiBold for
+     labels, buttons and numbers, Bold for titles, ExtraBold for the wordmark. Digits are one width in every
+     cut, so the numbers need no mono font. -->
+<fonts>
+    <fontset id="Default" unicode="true">
+        <font>
+            <name>font_tiny</name>
+            <filename>ConfuseUI-Medium.ttf</filename>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_small</name>
+            <filename>ConfuseUI-Medium.ttf</filename>
+            <size>24</size>
+        </font>
+        <font>
+            <name>font_body</name>
+            <filename>ConfuseUI-Medium.ttf</filename>
+            <size>27</size>
+        </font>
+        <font>
+            <name>font_label</name>
+            <filename>ConfuseUI-SemiBold.ttf</filename>
+            <size>30</size>
+        </font>
+        <font>
+            <name>font_title</name>
+            <filename>ConfuseUI-Bold.ttf</filename>
+            <size>39</size>
+        </font>
+        <font>
+            <name>font_hero</name>
+            <filename>ConfuseUI-Bold.ttf</filename>
+            <size>69</size>
+        </font>
+        <!-- the CONFUSE wordmark on the Startup screen -->
+        <font>
+            <name>font_wordmark</name>
+            <filename>ConfuseUI-ExtraBold.ttf</filename>
+            <size>100</size>
+        </font>
+        <font>
+            <name>font_caps</name>
+            <filename>ConfuseUI-SemiBold.ttf</filename>
+            <size>26</size>
+        </font>
+        <!-- Nightcity underlines a text with a font of bars; Confuse draws its lines as textures, so
+             this is the text font, kept for the name -->
+        <font>
+            <name>font_caps_line</name>
+            <filename>ConfuseUI-SemiBold.ttf</filename>
+            <size>26</size>
+        </font>
+        <font>
+            <name>font_caps_small</name>
+            <filename>ConfuseUI-SemiBold.ttf</filename>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_num</name>
+            <filename>ConfuseUI-SemiBold.ttf</filename>
+            <size>26</size>
+        </font>
+        <font>
+            <name>font_num_small</name>
+            <filename>ConfuseUI-SemiBold.ttf</filename>
+            <size>22</size>
+        </font>
+        <!-- the clock of the quick menu, the temperature of its weather tile -->
+        <font>
+            <name>font_clock</name>
+            <filename>ConfuseUI-SemiBold.ttf</filename>
+            <size>58</size>
+        </font>
+        <!-- the temperature of the weather page: the title font, large and tight -->
+        <font>
+            <name>font_temp</name>
+            <filename>ConfuseUI-Bold.ttf</filename>
+            <size>126</size>
+        </font>
+        <!-- Estuary font names for add-on dialogs (jellyfin-kodi); Kodi only falls back to font13 -->
+        <font>
+            <name>font10</name>
+            <filename>ConfuseUI-Medium.ttf</filename>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font12</name>
+            <filename>ConfuseUI-Medium.ttf</filename>
+            <size>24</size>
+        </font>
+        <font>
+            <name>font13</name>
+            <filename>ConfuseUI-Medium.ttf</filename>
+            <size>27</size>
+        </font>
+        <font>
+            <name>font14</name>
+            <filename>ConfuseUI-SemiBold.ttf</filename>
+            <size>30</size>
+        </font>
+    </fontset>
+</fonts>

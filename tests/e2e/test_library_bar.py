@@ -9,12 +9,11 @@ import time
 import pytest
 from PIL import Image
 
-from conftest import _data, action, builtin, cond, info, movie_rating, rpc, screenshot, wait_for
+from conftest import BULK_FROM, _data, action, builtin, cond, info, movie_rating, rpc, screenshot, wait_for
 
 pytestmark = pytest.mark.e2e
 
 GRID, MENU, BAR = 5000, 5100, 5200
-BULK_FROM = 1000
 LABEL = 'Window(Home).Property(nc.lib.label)'
 CURRENT = 'Container({}).CurrentItem'.format(GRID)
 READY = '!String.IsEmpty(Window(Home).Property(nc.lib.bar))'

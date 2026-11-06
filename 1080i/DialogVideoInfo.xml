@@ -93,6 +93,7 @@
                 <param name="art" value="ListItem.Art(fanart)"/>
             </include>
         </control>
+        <include>LookInfoFade</include>
         <include content="PathLine">
             <param name="id" value="9026"/>
             <param name="path" value="$VAR[InfoPath]"/>
@@ -536,7 +537,7 @@
                 </control>
                 <control type="list" id="5200">
                     <include>ChainBackGuard</include>
-                    <left>64</left>
+                    <left>LookSeasonListLeft</left>
                     <top>0</top>
                     <width>1500</width>
                     <height>48</height>
@@ -555,32 +556,15 @@
                         </include>
                     </itemlayout>
                     <focusedlayout width="240" height="48">
-                        <include content="SeasonTab">
-                            <param name="color" value="accent"/>
+                        <include content="LookSeasonTabShown">
+                            <param name="focused" value="Control.HasFocus(5200)"/>
                         </include>
-                        <!-- the shown season: the focus line, without the focus the same line in
-                             dark blue; as long as the text: the label again in the line font (a
-                             list layout has no auto width for an image) -->
-                        <control type="label">
-                            <width>240</width>
-                            <height>44</height>
-                            <aligny>center</aligny>
-                            <font>font_caps_line</font>
-                            <textcolor>focus</textcolor>
-                            <selectedcolor>focus</selectedcolor>
-                            <label>[UPPERCASE]$VAR[SeasonTabLabel][/UPPERCASE]</label>
-                            <visible>Control.HasFocus(5200)</visible>
-                        </control>
-                        <control type="label">
-                            <width>240</width>
-                            <height>44</height>
-                            <aligny>center</aligny>
-                            <font>font_caps_line</font>
-                            <textcolor>state</textcolor>
-                            <selectedcolor>state</selectedcolor>
-                            <label>[UPPERCASE]$VAR[SeasonTabLabel][/UPPERCASE]</label>
-                            <visible>!Control.HasFocus(5200)</visible>
-                        </control>
+                        <!-- the line of the shown season, as long as its label -->
+                        <include content="LookSeasonTabLine">
+                            <param name="label" value="$VAR[SeasonTabLabel]"/>
+                            <param name="focused" value="Control.HasFocus(5200)"/>
+                            <param name="unfocused" value="!Control.HasFocus(5200)"/>
+                        </include>
                     </focusedlayout>
                     <content target="videos" sortby="season">$VAR[InfoSeasonsPath]</content>
                 </control>

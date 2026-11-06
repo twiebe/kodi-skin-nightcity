@@ -94,6 +94,7 @@ def assert_entries_on_screen(name):
     return labels
 
 
+@pytest.mark.nightcity_look
 def test_context_menu_on_card_shows_every_entry(home_page):
     focus(9102)
     # the first card row itself: the page brings back its last focus, which an earlier test may

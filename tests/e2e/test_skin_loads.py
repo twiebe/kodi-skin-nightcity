@@ -3,7 +3,7 @@ import time
 import pytest
 from PIL import Image
 
-from conftest import builtin, cond, kodi_log, rpc, screenshot, wait_for
+from conftest import SKIN_ID, cond, kodi_log, rpc, screenshot, wait_for
 
 pytestmark = pytest.mark.e2e
 
@@ -20,8 +20,8 @@ def set_setting(name, value):
 
 def test_active_skin(home):
     # The setting alone is not enough: when the skin is disabled at startup Kodi falls back to
-    # Estuary but keeps reporting skin.nightcity. The home rows viewport 9210 only exists in this skin.
-    assert setting('lookandfeel.skin') == 'skin.nightcity'
+    # Estuary but keeps reporting the skin. The home rows viewport 9210 only exists in our skins.
+    assert setting('lookandfeel.skin') == SKIN_ID
     wait_for('Control.IsVisible(9210)')
 
 
@@ -29,6 +29,7 @@ def test_home_active(home):
     assert cond('Window.IsActive(home)')['Window.IsActive(home)']
 
 
+@pytest.mark.nightcity_look
 def test_palette_switch(home):
     pixels = {}
     try:
