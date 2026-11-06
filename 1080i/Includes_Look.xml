@@ -18,6 +18,17 @@
     <constant name="LookCardFocusTime">150</constant>
     <!-- the space between the rows of a page of Home -->
     <constant name="LookRowGap">0</constant>
+    <!-- The list of a row and the room around a card in it, for what a focused card draws past its
+         edges; a list clips its items. In pairs, since a constant cannot add up: ListLeft + ItemLeft
+         stays 64, ListTop + ItemTop stays 78, ListLeft + ListWidth stays 1920. ItemWidth is the card
+         and its space to the next -->
+    <constant name="LookRowListLeft">40</constant>
+    <constant name="LookRowItemLeft">24</constant>
+    <constant name="LookRowListTop">44</constant>
+    <constant name="LookRowItemTop">34</constant>
+    <constant name="LookRowListWidth">1880</constant>
+    <constant name="LookRowListHeight">424</constant>
+    <constant name="LookRowItemWidth">228</constant>
 
     <!-- Full screen page: base colour and the petrol glow top right -->
     <include name="LookBackground">

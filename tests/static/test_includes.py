@@ -82,8 +82,10 @@ def test_widget_focus_frame_not_clipped():
     layout = row.find('.//focusedlayout')
     card = layout.find('control')
     assert card.get('type') == 'group'
-    assert int(card.findtext('left')) >= 24 and int(card.findtext('top')) >= 24
-    assert int(layout.get('height')) >= int(card.findtext('top')) + 276 + 24 + 14
+    constants = look_constants()
+    left, top, height = (int(constants[v]) for v in (card.findtext('left'), card.findtext('top'), layout.get('height')))
+    assert left >= 24 and top >= 24
+    assert height >= top + 276 + 24 + 14
 
 
 NETRUNNER = ('Background', 'FanartBackdrop', 'PathLine', 'Kicker', 'GlitchTitle', 'Tag', 'PillButton', 'ProgressLine',
@@ -922,6 +924,33 @@ def test_card_zoom_is_a_constant():
 def test_row_gap_is_a_constant():
     assert include('PageRows').find('.//itemgap').text == 'LookRowGap'
     assert look_constants()['LookRowGap'] == '0'
+
+
+ROW_CONSTANTS = {'LookRowListLeft': '40', 'LookRowListTop': '44', 'LookRowListWidth': '1880', 'LookRowListHeight': '424',
+                 'LookRowItemLeft': '24', 'LookRowItemTop': '34', 'LookRowItemWidth': '228'}
+
+
+def test_row_padding_is_in_constants():
+    """A list clips its items: what a look's zoom and shadow need around a card comes from these."""
+    assert {k: look_constants().get(k) for k in ROW_CONSTANTS} == ROW_CONSTANTS
+    row = next(el for el in parse(ROOT / '1080i' / 'Includes_Home.xml').iter('include') if el.get('name') == 'RowBox')
+    rows = next(c for c in row.iter('control') if c.get('type') == 'list')
+    assert (rows.findtext('left'), rows.findtext('top'), rows.findtext('width'), rows.findtext('height')) == (
+        'LookRowListLeft', 'LookRowListTop', 'LookRowListWidth', 'LookRowListHeight')
+    for layout in (rows.find('itemlayout'), rows.find('focusedlayout')):
+        assert (layout.get('width'), layout.get('height')) == ('LookRowItemWidth', 'LookRowListHeight')
+        card = layout.find('control')
+        assert (card.findtext('left'), card.findtext('top')) == ('LookRowItemLeft', 'LookRowItemTop')
+
+
+@pytest.mark.parametrize('look', [ROOT / '1080i' / 'Includes_Look.xml', ROOT / 'skins' / 'confuse' / '1080i' / 'Includes_Look.xml'])
+def test_row_padding_constants_are_paired(look):
+    """Kodi constants cannot add up, so each pair is two numbers: more padding, less list. The card
+    stays where the rest of a row expects it (headers at 64, its number at the right edge)."""
+    c = {el.get('name'): int(el.text) for el in parse(look).findall('constant')}
+    assert c['LookRowListLeft'] + c['LookRowItemLeft'] == 64
+    assert c['LookRowListTop'] + c['LookRowItemTop'] == 78
+    assert c['LookRowListLeft'] + c['LookRowListWidth'] == 1920
 
 
 def test_skin_name_variables_exist():
