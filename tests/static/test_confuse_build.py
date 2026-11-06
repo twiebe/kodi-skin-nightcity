@@ -30,7 +30,7 @@ def test_every_root_colour_token_exists(confuse_root):
 
 
 def test_glut_palette_values(confuse_root):
-    colours = {c.get('name'): c.text for c in parse(confuse_root / 'colors' / 'defaults.xml').iter('color')}
+    colours = {c.get('name'): c.text for c in parse(confuse_root / 'colors' / 'glut.xml').iter('color')}
     wanted = {'bg': 'FF0F0E0D', 'surface': 'FF1E1B18', 'text': 'FFF7F3EC', 'text_dim': 'FFD3CDC3', 'text_mute': 'FFABA498',
               'accent': 'FFEFAA47', 'focus': 'FFEFAA47', 'focus_text': 'FF1A1208', 'warn': 'FFE8C468', 'fanart': '94FFFFFF',
               'text_chip': 'FFDED8CE', 'focus_text_dim': 'FF4A3514', 'disabled': 'FF9A9388'}

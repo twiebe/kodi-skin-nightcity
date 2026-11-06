@@ -10,4 +10,8 @@ Format: one `## Window.xml` heading per window, below it one line per difference
     - `<line of the diff, with its leading + or ->`: why Confuse differs
 
 The reason after the colon is required. A window that skins/confuse/1080i replaces as a whole
-must be listed too. No difference is listed yet.
+must be listed too.
+
+## Startup.xml
+
+- `-label | 0 | when visible: true`: the status line and its blinking cursor belong to the terminal look of Nightcity; the spark on the fuse shows the wait here
