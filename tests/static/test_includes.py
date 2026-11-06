@@ -831,10 +831,10 @@ def test_confuse_look_file_names_confuse(confuse_root):
 
 # the look of these files lives in Includes_Look.xml, which skins/confuse replaces; the dialogs,
 # settings and music follow with the rest of the windows
-LOOK_MOVED = ('Includes_Base.xml', 'Includes_Home.xml')
+LOOK_MOVED = ('Includes_Base.xml', 'Includes_Home.xml', 'Includes_Info.xml', 'Includes_Player.xml')
 LOOK_INCLUDES = ('LookBackground', 'LookCardFocus', 'LookCardUnwatched', 'LookCardFrame', 'LookButtonTextures',
                  'LookTabTextures', 'LookMenuTextures', 'LookPanel', 'LookTag', 'LookKicker', 'LookRowNumber',
-                 'LookDecoration')
+                 'LookDecoration', 'LookListFocus')
 LOOK_CONSTANTS = ('LookCardFocusZoom', 'LookRowGap')
 
 
