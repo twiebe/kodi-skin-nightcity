@@ -562,11 +562,13 @@ def test_buttons_are_pills(confuse_root):
     assert look_includes()['LookPillText'].findtext('.//focusedcolor') == 'focus_text'
 
 
-def test_menu_shows_the_page_in_bold_on_a_line(confuse_root):
-    """A togglebutton has one font: the bold of the shown page goes through altlabel. The line stands
-    in a texture as high as the entry: Kodi draws a button's texture over the whole button."""
+def test_menu_shows_the_page_on_a_line_in_the_same_font(confuse_root):
+    """The focus shows a page at once: a bold shown entry would change its letters and push the
+    entries after it on every move. Only the colour differs. The line stands in a texture as high as
+    the entry: Kodi draws a button's texture over the whole button."""
     include = look_includes()['LookMenuText']
-    assert include.findtext('.//altlabel').startswith('[B]') and not include.findtext('.//label').startswith('[B]')
+    assert '[B]' not in include.findtext('.//altlabel') and '[B]' not in include.findtext('.//label')
+    assert '[COLOR text]' in include.findtext('.//altlabel')
     textures = look_includes()['LookMenuTextures']
     line = textures.find('alttexturenofocus')
     assert line.text == 'ui/menu_line.png' and line.get('colordiffuse') == 'accent'
@@ -600,7 +602,7 @@ def test_tab_text_with_the_focus_is_readable_white(confuse_root):
     under a row's tabs (x up to 900, y from 300)."""
     tab = look_includes()['LookTabText']
     assert tab.findtext('.//focusedcolor') == 'text'
-    assert '[COLOR text]' in tab.findtext('.//altlabel')
+    assert '[COLOR text]' in tab.findtext('.//altlabel') and '[B]' not in tab.findtext('.//altlabel')
     palette = colours(confuse_root)
     text, bg, amber = rgb(palette['text']), rgb(palette['bg']), rgb(palette['accent'])
     plate = Image.open(confuse_root / 'media' / 'ui' / 'tab_glow.png').convert('RGBA').getchannel('A')

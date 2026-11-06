@@ -8,11 +8,11 @@
         <res width="1920" height="1080" aspect="16:9" default="true" folder="1080i"/>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="en_GB">Calm skin in warm dark tones with amber focus</summary>
-        <description lang="en_GB">The Nightcity skin in a quiet look: warm near-black, amber focus, rounded buttons and big artwork, with online movie and TV data from TMDb Helper.</description>
+        <summary lang="en_GB">Calm skin with a glowing ember accent and colour themes</summary>
+        <description lang="en_GB">The Nightcity skin in a quiet look: near-black, a glowing ember focus, colour themes, rounded buttons and big artwork, with online movie and TV data from TMDb Helper.</description>
         <platform>all</platform>
         <license>Creative Commons Attribution Non-Commercial Share-Alike 4.0</license>
-        <news>0.1.0 - First version of Confuse: the Nightcity skin in a calm, warm look with amber focus.</news>
+        <news>0.1.0 - First version of Confuse: the Nightcity skin in a calm look with a glowing ember focus and colour themes.</news>
         <assets>
             <icon>resources/icon.png</icon>
         </assets>
