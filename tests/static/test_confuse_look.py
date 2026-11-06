@@ -260,3 +260,14 @@ def test_only_licences_of_fonts_used_ship(confuse_root):
     Nightcity-only ones (Rajdhani, Share Tech Mono) do not."""
     shipped = {p.name for p in (confuse_root / 'fonts').glob('*OFL.txt')}
     assert shipped == {'OFL.txt', 'JetBrainsMono-OFL.txt', 'NotoSansSymbols2-OFL.txt'}
+
+
+def test_confuse_never_draws_the_line_font_as_text(confuse_root):
+    """font_caps_line is Nightcity's font of bars: Nightcity draws a label in it over the same label in
+    font_caps to underline it. In Confuse it is the text font, so such a label would paint over the
+    text. No layout file draws it; the season tab's line is a texture."""
+    for path in sorted((confuse_root / '1080i').glob('*.xml')):
+        if path.name == 'Font.xml':
+            continue
+        used = [el for el in parse(path).iter() if (el.text or '').strip() == 'font_caps_line' or el.get('value') == 'font_caps_line']
+        assert not used, path.name
