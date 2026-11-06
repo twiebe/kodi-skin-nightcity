@@ -19,7 +19,8 @@ import zipfile
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 EXCLUDE = {'.git', '.gitignore', '.superpowers', 'CLAUDE.md', 'Makefile', 'docs', 'tests', 'tools', 'requirements-dev.txt', 'pytest.ini',
-           '__pycache__', '.venv', '.pytest_cache', 'skins', '_build'}
+           '__pycache__', '.venv', '.pytest_cache', 'skins', '_build', '.assembled'}
+MARKER = '.assembled'  # written into a folder assemble filled: only such a folder gets wiped again
 
 
 def unused_fonts(root=ROOT):
@@ -49,12 +50,18 @@ def assemble(skin, dest):
     the root file of the same path, remove.txt lists globs to drop, fonts Font.xml does not load stay
     out, and [UPPERCASE] markup goes from the windows (Confuse shows titles as written: a build rule,
     so the shared files keep it). dest stays the same folder, only its content is replaced: kodi-dev
-    mounts it."""
+    mounts it. A folder that is not empty and has no marker from an earlier run, and the repo itself or
+    a parent of it, are refused."""
     overlay = ROOT / 'skins' / skin
-    dest = pathlib.Path(dest)
+    dest = pathlib.Path(dest).resolve()
+    if dest == ROOT or dest in ROOT.parents:
+        raise ValueError('{} holds the skin sources, not an output folder'.format(dest))
+    if dest.exists() and any(dest.iterdir()) and not (dest / MARKER).exists():
+        raise ValueError('{} is not empty and was not made by assemble'.format(dest))
     dest.mkdir(parents=True, exist_ok=True)
     for child in dest.iterdir():
         shutil.rmtree(child) if child.is_dir() and not child.is_symlink() else child.unlink()
+    (dest / MARKER).write_text('made by tools/build.py assemble\n', encoding='utf-8')
     _copy_tree(ROOT, dest)
     _copy_tree(overlay, dest)
     (dest / 'remove.txt').unlink(missing_ok=True)

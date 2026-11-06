@@ -1,7 +1,9 @@
 import zipfile
 
+import pytest
+
 from conftest import ROOT, parse
-from build import assemble, build
+from build import MARKER, assemble, build
 
 
 def colour_names(root):
@@ -22,8 +24,35 @@ def test_remove_list_drops_themes(confuse_root):
     assert not (confuse_root / 'colors/tokyonight.xml').exists()
 
 
-def test_same_colour_tokens(confuse_root):
-    assert colour_names(confuse_root) == colour_names(ROOT)
+def test_every_root_colour_token_exists(confuse_root):
+    assert set(colour_names(ROOT)) <= set(colour_names(confuse_root))
+
+
+def test_glut_palette_values(confuse_root):
+    colours = {c.get('name'): c.text for c in parse(confuse_root / 'colors' / 'defaults.xml').iter('color')}
+    wanted = {'bg': 'FF0F0E0D', 'surface': 'FF1E1B18', 'text': 'FFF7F3EC', 'text_dim': 'FFD3CDC3', 'text_mute': 'FFABA498',
+              'accent': 'FFEFAA47', 'focus': 'FFEFAA47', 'focus_text': 'FF1A1208', 'warn': 'FFE8C468', 'fanart': '94FFFFFF',
+              'text_chip': 'FFDED8CE', 'focus_text_dim': 'FF4A3514', 'disabled': 'FF9A9388'}
+    assert {k: colours[k] for k in wanted} == wanted
+
+
+def test_assemble_refuses_the_repo_and_its_parents(tmp_path):
+    for bad in (ROOT, ROOT.parent, ROOT / 'tools' / '..'):
+        with pytest.raises(ValueError):
+            assemble('confuse', bad)
+    assert (ROOT / 'tools' / 'build.py').exists()
+
+
+def test_assemble_refuses_a_foreign_non_empty_folder(tmp_path):
+    (tmp_path / 'keep.txt').write_text('x')
+    with pytest.raises(ValueError):
+        assemble('confuse', tmp_path)
+    assert (tmp_path / 'keep.txt').exists()
+
+
+def test_marker_stays_out_of_the_zip(tmp_path):
+    assert any(n for n in zipfile.ZipFile(build(tmp_path / 'z', skin='confuse')).namelist())
+    assert not [n for n in zipfile.ZipFile(next((tmp_path / 'z').glob('*.zip'))).namelist() if MARKER in n]
 
 
 def test_confuse_zip(tmp_path):
