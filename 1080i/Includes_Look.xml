@@ -61,6 +61,32 @@
         </definition>
     </include>
 
+    <!-- A card's artwork, unfocused: a plain rectangle. `mask` is the card's mask, for a look with
+         corners of its own -->
+    <include name="LookCardArt">
+        <param name="image"/>
+        <param name="mask"/>
+        <param name="fadetime"/>
+        <definition>
+            <aspectratio>scale</aspectratio>
+            <fadetime>$PARAM[fadetime]</fadetime>
+            <texture background="true">$PARAM[image]</texture>
+        </definition>
+    </include>
+
+    <!-- A card's artwork, focused: cut like the frame. scalediffuse="false" keeps the mask on the
+         card when scale crops artwork of another ratio -->
+    <include name="LookCardArtFocused">
+        <param name="image"/>
+        <param name="mask"/>
+        <param name="fadetime"/>
+        <definition>
+            <aspectratio scalediffuse="false">scale</aspectratio>
+            <fadetime>$PARAM[fadetime]</fadetime>
+            <texture diffuse="$PARAM[mask]" background="true">$PARAM[image]</texture>
+        </definition>
+    </include>
+
     <!-- A focused card's glow, under its artwork, 24 px past it on each side -->
     <include name="LookCardFocus">
         <param name="glowwidth"/>
