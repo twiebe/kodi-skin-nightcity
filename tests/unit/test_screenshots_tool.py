@@ -115,3 +115,55 @@ def test_the_clip_is_the_same_on_every_run(monkeypatch, tmp_path):
     screenshots.make_clip(tmp_path / 'clip.mkv', 60, 2)
     source = next(a for a in calls[0] if a.startswith('gradients='))
     assert ':seed=' in source
+
+
+class _Recording:
+    """Stands in for Kodi in prepare(): records calls, answers just enough for the movies and episodes."""
+
+    def __init__(self, tmp_path):
+        self.data, self.calls = tmp_path, []
+        (tmp_path / 'kodi' / 'addons' / screenshots.WEATHER).mkdir(parents=True)
+
+    def rpc(self, method, params=None):
+        self.calls.append((method, params))
+        if method == 'VideoLibrary.GetMovies':
+            titles = ('Blade Runner 2049', 'Ghost in the Shell', 'Arrival')
+            return {'movies': [{'title': t, 'movieid': n, 'runtime': 100} for n, t in enumerate(titles)]}
+        if method == 'VideoLibrary.GetEpisodes':
+            return {'episodes': []}
+        if method == 'Addons.GetAddons':
+            return {'addons': [{'addonid': screenshots.WEATHER}]}
+        return {}
+
+    def builtin(self, command):
+        self.calls.append(('builtin', command))
+
+    def wait(self, *args, **kwargs):
+        pass
+
+
+def _prepared(monkeypatch, tmp_path):
+    kodi = _Recording(tmp_path)
+    monkeypatch.setattr(screenshots, 'home', lambda k, page='home': k.calls.append(('home', page)))
+    monkeypatch.setattr(screenshots, 'settle', lambda k, seconds=3: k.calls.append(('settle', seconds)))
+    monkeypatch.setattr(screenshots.time, 'sleep', lambda s: None)
+    screenshots.prepare(kodi)
+    return kodi.calls
+
+
+def test_continue_watching_keeps_its_order_on_a_second_run(monkeypatch, tmp_path):
+    """The player shot plays Blade Runner: without its own date it moves to the front of the row and
+    a second run on the instance differs from the first."""
+    dates = {params['movieid']: params['lastplayed'] for method, params in _prepared(monkeypatch, tmp_path)
+             if method == 'VideoLibrary.SetMovieDetails'}
+    assert len(dates) == 3
+    assert dates[1] > dates[0] > dates[2], 'Ghost in the Shell, Blade Runner 2049, Arrival'
+
+
+def test_album_art_is_in_the_texture_cache_before_the_shots(monkeypatch, tmp_path):
+    """Kodi draws new art from its source and later from a re-encoded copy in its cache: a first
+    run would differ from a second. The reload makes the shots load the copy."""
+    calls = _prepared(monkeypatch, tmp_path)
+    music = calls.index(('home', 'music'))
+    assert calls[music + 1][0] == 'settle'
+    assert calls.index(('builtin', 'ReloadSkin()')) > music

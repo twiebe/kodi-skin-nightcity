@@ -373,9 +373,12 @@ def prepare(kodi):
     # TMDb's own rating next to the ones the API keys bring
     kodi.builtin('Skin.SetBool(nc.ratings.show.tmdb)')
     movies = {m['title']: m for m in kodi.rpc('VideoLibrary.GetMovies', {'properties': ['title', 'runtime']})['movies']}
-    for title, part in (('Blade Runner 2049', 0.42), ('Ghost in the Shell', 0.68), ('Arrival', 0.25)):
+    # dates of their own: the player shot plays one of them, a second run must show the same row
+    for title, part, played in (('Blade Runner 2049', 0.42, '2020-01-02 12:00:00'),
+                                ('Ghost in the Shell', 0.68, '2020-01-03 12:00:00'),
+                                ('Arrival', 0.25, '2020-01-01 12:00:00')):
         movie = movies[title]
-        kodi.rpc('VideoLibrary.SetMovieDetails', {'movieid': movie['movieid'], 'resume': {
+        kodi.rpc('VideoLibrary.SetMovieDetails', {'movieid': movie['movieid'], 'lastplayed': played, 'resume': {
             'position': int(movie['runtime'] * part), 'total': movie['runtime']}})
     episodes = kodi.rpc('VideoLibrary.GetEpisodes', {'properties': ['showtitle', 'episode', 'runtime']})['episodes']
     for ep in episodes:
@@ -385,6 +388,10 @@ def prepare(kodi):
         if (ep['showtitle'], ep['episode']) == ('Severance', 2):
             kodi.rpc('VideoLibrary.SetEpisodeDetails', {'episodeid': ep['episodeid'], 'resume': {
                 'position': int(ep['runtime'] * 0.3), 'total': ep['runtime']}})
+    # new art comes from its source, later from a re-encoded copy in Kodi's cache: load it once, so
+    # the first run on an instance looks like the second
+    home(kodi, 'music')
+    settle(kodi)
     kodi.builtin('Dialog.Close(all,true)')
     kodi.builtin('ReloadSkin()')
     time.sleep(3)
