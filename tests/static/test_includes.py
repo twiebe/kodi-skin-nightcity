@@ -811,3 +811,23 @@ def test_settings_page_has_a_system_and_a_settings_section():
     assert [h['label'] for h in headings] == ['$LOCALIZE[31033]', '$LOCALIZE[5]']
     label = include('SectionHeading').find('.//control')
     assert label.findtext('textcolor') == 'text'
+
+
+def test_only_the_look_file_names_the_skin():
+    """The skin id is Kodi's at run time: a layout names it only in Includes_Look.xml, which the
+    overlay replaces."""
+    assert not [p.name for p in layout_files()
+                if p.name != 'Includes_Look.xml' and 'skin.nightcity' in p.read_text(encoding='utf-8')]
+    assert 'skin.nightcity' in (ROOT / '1080i' / 'Includes_Look.xml').read_text(encoding='utf-8')
+
+
+def test_confuse_look_file_names_confuse(confuse_root):
+    text = (confuse_root / '1080i' / 'Includes_Look.xml').read_text(encoding='utf-8')
+    assert 'skin.confuse' in text and 'skin.nightcity' not in text
+    assert 'Includes_Look.xml' in (confuse_root / '1080i' / 'Includes.xml').read_text(encoding='utf-8')
+
+
+def test_skin_name_variables_exist():
+    for look in (ROOT / '1080i' / 'Includes_Look.xml', ROOT / 'skins' / 'confuse' / '1080i' / 'Includes_Look.xml'):
+        names = {v.get('name') for v in parse(look).iter('variable')}
+        assert {'SkinTitle', 'SkinVersion'} <= names, look

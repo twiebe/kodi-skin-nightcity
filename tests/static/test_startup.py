@@ -71,10 +71,10 @@ def test_startup_shows_wordmark():
     assert 'Background' in [i.text for i in root.iter('include')]
     title = next(i for i in root.iter('include') if i.get('content') == 'GlitchTitle')
     params = {p.get('name'): p.get('value') for p in title.findall('param')}
-    assert params['label'] == '$LOCALIZE[31156]' and params['align'] == 'center'
-    for lang in ('en_gb',):
-        po = (ROOT / 'language' / 'resource.language.{}'.format(lang) / 'strings.po').read_text(encoding='utf-8')
-        assert 'msgctxt "#31156"\nmsgid "Nightcity"\n' in po, lang
+    assert params['label'] == '$VAR[SkinTitle]' and params['align'] == 'center'
+    look = parse(ROOT / '1080i' / 'Includes_Look.xml')
+    title_var = next(v for v in look.iter('variable') if v.get('name') == 'SkinTitle')
+    assert [v.text for v in title_var.findall('value')] == ['Nightcity']
 
 
 def test_startup_loading_indicator():
