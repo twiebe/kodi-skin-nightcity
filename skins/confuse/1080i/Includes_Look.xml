@@ -153,6 +153,43 @@
         </control>
     </include>
 
+    <!-- The fanart, blurred as soon as TMDb Helper has made the picture from this art (it follows the
+         focused item, so its original tells whether it is this one), sharp until then. One of the two
+         shows, and they fade into each other. Written once per film by the helper, then from its cache:
+         drawing costs what any picture costs. look_settings() in nightcity.py switches it on. -->
+    <include name="LookFanartBackdrop">
+        <param name="art"/>
+        <param name="fadetime"/>
+        <param name="shown"/>
+        <param name="blurred"/>
+        <definition>
+            <control type="image">
+                <description>fanart backdrop</description>
+                <left>0</left>
+                <top>0</top>
+                <width>1920</width>
+                <height>1080</height>
+                <aspectratio>scale</aspectratio>
+                <fadetime>$PARAM[fadetime]</fadetime>
+                <texture colordiffuse="fanart" diffuse="ui/fade_r.png" background="true">$INFO[$PARAM[art]]</texture>
+                <animation effect="fade" time="300">VisibleChange</animation>
+                <visible>$PARAM[shown] + !$PARAM[blurred]</visible>
+            </control>
+            <control type="image">
+                <description>fanart backdrop</description>
+                <left>0</left>
+                <top>0</top>
+                <width>1920</width>
+                <height>1080</height>
+                <aspectratio>scale</aspectratio>
+                <fadetime>$PARAM[fadetime]</fadetime>
+                <texture colordiffuse="fanart" diffuse="ui/fade_r.png" background="true">$INFO[Window(Home).Property(TMDbHelper.ListItem.BlurImage)]</texture>
+                <animation effect="fade" time="300">VisibleChange</animation>
+                <visible>$PARAM[shown] + $PARAM[blurred]</visible>
+            </control>
+        </definition>
+    </include>
+
     <!-- The info page's fanart is quieter than Home's in the draft: over its mask a fade in the base
          colour, the second and last full screen layer with alpha. Right column of the page stays
          readable on a white picture. -->
@@ -279,7 +316,8 @@
         </definition>
     </include>
 
-    <!-- A button, 74 px high with 10 px of padding: a pill of white at .15, focused filled amber.
+    <!-- A button, 74 px high with 10 px of padding: a pill of white at .15, focused filled with a glow
+         in the padding.
          Border 37 is the padding and the round end of the 54 px pill. A primary button looks like
          the others here: `color` stays unused, `rest` is what a caller can still change (a cursor
          that lies waiting, invisible, on its rail). -->
@@ -292,7 +330,7 @@
         </definition>
     </include>
     <include name="LookButtonFill">
-        <texturefocus border="37" colordiffuse="focus">ui/pill_pad.png</texturefocus>
+        <texturefocus border="37" colordiffuse="focus">ui/pill_halo.png</texturefocus>
     </include>
     <include name="LookButtonOutline">
         <param name="color"/>
@@ -302,7 +340,7 @@
     </include>
     <!-- The fill for a button that shows another one's focus: it has no focus itself -->
     <include name="LookButtonFillNoFocus">
-        <texturenofocus border="37" colordiffuse="focus">ui/pill_pad.png</texturenofocus>
+        <texturenofocus border="37" colordiffuse="focus">ui/pill_halo.png</texturenofocus>
     </include>
 
     <!-- The focused row of a list: the fill as an image of the row, and as the textures of a row
@@ -348,12 +386,12 @@
     </include>
 
     <!-- The pill of … on the info page, 116 x 74 px: unfocused and focused like a button. The caller
-         names a texture and a colour for each state, `focus` only when it has the focus. -->
+         names a colour for each state, `focus` only when it has the focus: the texture goes by it. -->
     <include name="LookMorePill">
         <param name="texture"/>
         <param name="color"/>
         <definition>
-            <texture border="37" colordiffuse="$PARAM[color]">ui/pill_pad.png</texture>
+            <texture border="37" colordiffuse="$PARAM[color]">ui/more_$PARAM[color].png</texture>
         </definition>
     </include>
 

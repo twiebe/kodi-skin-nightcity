@@ -1019,7 +1019,7 @@ class ServiceMonitor:
 def _service_env(monkeypatch, messages, skin='skin.nightcity'):
     import types
     ServiceMonitor.messages = messages
-    xbmc = types.SimpleNamespace(Monitor=ServiceMonitor, getSkinDir=lambda: skin, log=lambda *a: None,
+    xbmc = types.SimpleNamespace(executebuiltin=lambda _: None, Monitor=ServiceMonitor, getSkinDir=lambda: skin, log=lambda *a: None,
                                  LOGERROR=4)
     monkeypatch.setitem(__import__('sys').modules, 'xbmc', xbmc)
     monkeypatch.setattr(nightcity, 'QUIT', __import__('threading').Event())
@@ -2658,6 +2658,21 @@ def _switching_env(monkeypatch, script_exists=True):
     monkeypatch.setattr(ServiceMonitor, 'waitForAbort', wait)
     monkeypatch.setattr(nightcity, '_skin_script_exists', lambda: script_exists)
     return window, ran, started
+
+
+def test_blur_is_switched_on_only_in_confuse(monkeypatch):
+    """A skin setting, so it stays with the skin: Nightcity keeps its sharp fanart and no work for PIL."""
+    for skin, wanted in (('skin.confuse', ['Skin.SetBool(TMDbHelper.EnableBlur)']), ('skin.nightcity', [])):
+        fake = FakeXbmc(set(), {})
+        fake.getSkinDir = lambda skin=skin: skin
+        window = FakeWindow()
+        monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+        monkeypatch.setattr(nightcity, '_home', lambda: window)
+        nightcity.look_settings()
+        assert fake.builtins == wanted
+        # without a source the helper blurs the poster, not the fanart the backdrop shows
+        source = 'Art(fanart)|Art(artist.fanart)' if wanted else None
+        assert window.props.get('TMDbHelper.Blur.SourceImage') == source
 
 
 def test_service_ends_when_the_skin_changes(monkeypatch):

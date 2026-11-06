@@ -179,6 +179,13 @@ def card_halo(size, pad, radius):
     return finish(ImageChops.lighter(near, far), (size, size))
 
 
+def pill_halo(size, pad, radius):
+    """A filled pill with the glow of the focus in its padding, gone at the edge of the texture."""
+    fill = rrect((size, size), pad, radius)
+    near = fill.filter(ImageFilter.GaussianBlur(3.5 * SCALE)).point(lambda v: min(255, round(v * 2.2)))
+    return finish(ImageChops.lighter(fill, near), (size, size))
+
+
 def wordmark(text, size=250, height=215, baseline=198, tracking=-0.03):
     """A part of the name, in the extra bold of Lexend set a little tight, the one place that font is
     used: as a texture it needs no font file in the skin. Both parts have one height and baseline, and
@@ -247,6 +254,10 @@ def textures():
         'pill.png': shape(54, 54, 27),
         'pill_pad.png': shape(74, 74, 27, pad=GLOW_PAD),
         'pill_glow.png': shape(74, 74, 27, pad=GLOW_PAD, glow=4),
+        'pill_halo.png': pill_halo(74, GLOW_PAD, 27),  # a button with the focus; border 37
+        # the pill of ... on the info page, named by the colour its caller passes (LookMorePill)
+        'more_focus.png': pill_halo(74, GLOW_PAD, 27),
+        'more_border_dim.png': shape(74, 74, 27, pad=GLOW_PAD),
         'pill_menu.png': shape(64, 64, 22, pad=GLOW_PAD),  # the menu icon with the focus, 44 px of pill; border 32
         'chip.png': shape(24, 24, 8),  # 5 px at 1280 x 720 is 7.5; border 8
         'dot.png': dot(16),
