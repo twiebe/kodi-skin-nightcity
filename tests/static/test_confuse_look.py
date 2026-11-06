@@ -105,24 +105,44 @@ def test_font_budget(confuse_root):
     assert len(fonts) <= MAX_FONT_FILES
 
 
+# fixed-width keys that hold one arrow glyph: the glyph is centred in a pill 20 px narrower than the
+# control and has room there, the 34 px text offset of the generic rule is what it does not meet
+ARROW_KEYS = {('DialogKeyboard.xml', '◄'), ('DialogKeyboard.xml', '►')}
+
+
+def fixed_width_buttons(root):
+    """(file, label text, width, textoffsetx, font name) of every button of fixed width: a Button or
+    PillButton include (Button's width is 220 unless set), and a raw button or radiobutton control."""
+    texts = strings(root)
+    pill_font, _ = look_font(root, 'LookPillText')
+    for path in sorted((root / '1080i').glob('*.xml')):
+        tree = parse(path)
+        for inc in tree.iter('include'):
+            if inc.get('content') in ('Button', 'PillButton'):
+                p = params(inc)
+                width = p.get('width', '220' if inc.get('content') == 'Button' else 'auto')
+                if width.isdigit():
+                    for label in texts_of(p.get('label', ''), root, texts):
+                        yield path.name, label, int(width), int(p.get('textoffsetx', 34)), pill_font
+        for control in tree.iter('control'):
+            if control.get('type') in ('button', 'radiobutton') and (control.findtext('width') or '').isdigit():
+                offset = (control.findtext('textoffsetx') or '0').strip()
+                for label in texts_of(control.findtext('label') or '', root, texts):
+                    yield (path.name, label, int(control.findtext('width')),
+                           int(offset) if offset.isdigit() else 0, (control.findtext('font') or 'font13').strip())
+
+
 def test_fixed_width_labels_fit(confuse_root):
-    """A PillButton of fixed width: each text its label can show, plus both text offsets, fits in the width."""
-    font_name, _ = look_font(confuse_root, 'LookPillText')
-    texts = strings(confuse_root)
+    """A button of fixed width: each text its label can show, plus both text offsets, fits in the width."""
     checked = []
-    for path in sorted((confuse_root / '1080i').glob('*.xml')):
-        for inc in parse(path).iter('include'):
-            if inc.get('content') != 'PillButton':
-                continue
-            p = params(inc)
-            if not p.get('width', '').isdigit():
-                continue
-            offset = int(p.get('textoffsetx', 34))
-            for label in texts_of(p.get('label', ''), confuse_root, texts):
-                need = text_width(confuse_root, font_name, label) + 2 * offset
-                checked.append((path.name, label))
-                assert need <= int(p['width']), (path.name, label, round(need), p['width'])
-    assert checked
+    for name, label, width, offset, font in fixed_width_buttons(confuse_root):
+        if not label.strip() or (name, label) in ARROW_KEYS:
+            continue
+        need = text_width(confuse_root, font, label) + 2 * offset
+        checked.append((name, label))
+        assert need <= width, (name, label, round(need), width)
+    assert len(checked) >= 40
+    assert ('Custom_1110_Library.xml', 'sort: year') in checked and ('DialogKeyboard.xml', 'space') in checked
 
 
 def test_main_menu_fits(confuse_root):
