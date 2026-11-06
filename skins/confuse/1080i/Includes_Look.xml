@@ -403,7 +403,7 @@
         </definition>
     </include>
 
-    <!-- An entry of the top menu, 64 px high: the shown page a line under its bold text, the focus the
+    <!-- An entry of the top menu, 64 px high: the shown page a line under its text, the focus the
          same line with a glow. One shape, so nothing jumps when the focus moves. The textures are as
          high as the entry since Kodi stretches a button's texture over the whole button. -->
     <include name="LookMenuTextures">
@@ -459,8 +459,9 @@
         </definition>
     </include>
 
-    <!-- altlabel is what the tab or menu entry of the shown page reads: bold (a togglebutton has one
-         font). A tab's is the white of the text; a menu entry's stays in the colours of the button. -->
+    <!-- altlabel is what the tab or menu entry of the shown page reads: the white of the text, in the
+         same font. Bold would change the letters and push the entries after it on every move of the
+         focus, as the focus shows a page at once. -->
     <include name="LookTabText">
         <param name="label"/>
         <param name="font"/>
@@ -471,7 +472,7 @@
             <textcolor>text_mute</textcolor>
             <focusedcolor>text</focusedcolor>
             <label>[CAPITALIZE][UPPERCASE]$PARAM[label][/UPPERCASE][/CAPITALIZE]</label>
-            <altlabel>[B][COLOR text][CAPITALIZE][UPPERCASE]$PARAM[label][/UPPERCASE][/CAPITALIZE][/COLOR][/B]</altlabel>
+            <altlabel>[COLOR text][CAPITALIZE][UPPERCASE]$PARAM[label][/UPPERCASE][/CAPITALIZE][/COLOR]</altlabel>
         </definition>
     </include>
 
@@ -484,7 +485,7 @@
             <textcolor>text_dim</textcolor>
             <focusedcolor>text</focusedcolor>
             <label>[CAPITALIZE][UPPERCASE]$PARAM[label][/UPPERCASE][/CAPITALIZE]</label>
-            <altlabel>[B][CAPITALIZE][UPPERCASE]$PARAM[label][/UPPERCASE][/CAPITALIZE][/B]</altlabel>
+            <altlabel>[COLOR text][CAPITALIZE][UPPERCASE]$PARAM[label][/UPPERCASE][/CAPITALIZE][/COLOR]</altlabel>
         </definition>
     </include>
 
