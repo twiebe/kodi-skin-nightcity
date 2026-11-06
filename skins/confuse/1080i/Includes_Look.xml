@@ -19,18 +19,24 @@
     <constant name="LookRowGap">0</constant>
     <!-- The list of a row and the room around a card in it, for what a focused card draws past its
          edges; a list clips its items. A 200 x 300 card at 113.5 % grows 13.5 px to a side and 20.25
-         up and down, its shadow is 24 px x 1.135 more: ItemLeft at least 41, ItemTop at least 48.
+         up and down, its shadow is 24 px x 1.135 more: ItemTop at least 48. ItemLeft is smaller, 28: it
+         holds the ring, and the list then starts where the card before ends, so no strip of that
+         card shows on a scrolled row. It cuts the shadow where it is about 5 % black.
          In pairs, since a constant cannot add up: ListLeft + ItemLeft stays 64, ListTop + ItemTop
          stays 78, ListLeft + ListWidth stays 1920, ListTop + ListHeight stays 468 (the height of a
          row), which keeps the 90 px under the card. ItemWidth is the card and its space to the next.
          tests/static/test_confuse_look.py checks the sums. -->
-    <constant name="LookRowListLeft">22</constant>
-    <constant name="LookRowItemLeft">42</constant>
+    <constant name="LookRowListLeft">36</constant>
+    <constant name="LookRowItemLeft">28</constant>
     <constant name="LookRowListTop">30</constant>
     <constant name="LookRowItemTop">48</constant>
-    <constant name="LookRowListWidth">1898</constant>
+    <constant name="LookRowListWidth">1884</constant>
     <constant name="LookRowListHeight">438</constant>
     <constant name="LookRowItemWidth">228</constant>
+
+    <!-- The genre tabs of a row: no number before them here, so the text of the first stands over
+         the first card (24 px gap, 10 px of padding) -->
+    <constant name="LookGenreTabsLeft">30</constant>
 
     <!-- Full screen page: the base colour. The warm fade is in the mask of the fanart (ui/fade_r.png,
          FanartBackdrop), so a page has one full screen layer with alpha -->
@@ -72,8 +78,8 @@
         </definition>
     </include>
 
-    <!-- The plate under a card's artwork, round like it: what shows of a card without artwork.
-         Radius 12 on every size (make_textures_confuse.py) -->
+    <!-- The plate under a card's artwork, round like it: what shows of a card without artwork. A
+         9-slice with the radius of the masks, drawn without one -->
     <include name="LookCardFrame">
         <param name="width"/>
         <param name="height"/>
@@ -84,7 +90,7 @@
             <control type="image">
                 <width>$PARAM[width]</width>
                 <height>$PARAM[height]</height>
-                <texture colordiffuse="surface" diffuse="$PARAM[mask]">ui/white.png</texture>
+                <texture border="12" colordiffuse="surface">ui/cut_btn_fill.png</texture>
             </control>
         </definition>
     </include>
@@ -248,28 +254,48 @@
         </definition>
     </include>
 
-    <!-- A tab: the amber line under the label with the focus and on the shown tab. tab_line.png's
-         clear ends (border 8) leave out the padding but 2 px. -->
+    <!-- A tab: the shown one has the amber line under its label, with the focus a soft amber plate
+         lies behind that line. A tab takes the focus and shows its page at once, so without the plate
+         the two would look the same. The line's clear ends leave out the padding but 2 px; border 11
+         holds them and the line's round ends. -->
     <include name="LookTabTextures">
-        <texturefocus colordiffuse="accent" border="8,0,8,0">ui/tab_line.png</texturefocus>
+        <texturefocus colordiffuse="accent" border="11,0,11,0">ui/tab_focus.png</texturefocus>
         <texturenofocus/>
-        <alttexturefocus colordiffuse="accent" border="8,0,8,0">ui/tab_line.png</alttexturefocus>
-        <alttexturenofocus colordiffuse="accent" border="8,0,8,0">ui/tab_line.png</alttexturenofocus>
+        <alttexturefocus colordiffuse="accent" border="11,0,11,0">ui/tab_focus.png</alttexturefocus>
+        <alttexturenofocus colordiffuse="accent" border="11,0,11,0">ui/tab_line.png</alttexturenofocus>
     </include>
 
-    <!-- The line under the label of the shown season, in its 44 px label height: a list layout has
-         no auto width for an image, so one length for all, from the label's left edge (tab_line.png
-         keeps 8 px clear at each end). About as long as "Season 1". -->
-    <include name="LookSeasonTabLine">
-        <param name="label"/>
+    <!-- The season tabs look like the other tabs. A list cuts what lies left of it, so here the list
+         starts 10 px further left and the label 10 px in: room for the plate, the text stays over
+         the cards. A list layout has no auto width for an image, so one length for all: as long as
+         "Season 1" and its padding. The plate lies under the text, the line of the shown season
+         without the focus over it. -->
+    <constant name="LookSeasonListLeft">54</constant>
+    <include name="LookSeasonTabInset">
+        <left>10</left>
+    </include>
+    <include name="LookSeasonTabShown">
         <param name="focused"/>
+        <definition>
+            <control type="image">
+                <width>132</width>
+                <height>44</height>
+                <texture colordiffuse="accent" border="11,0,11,0">ui/tab_focus.png</texture>
+                <visible>$PARAM[focused]</visible>
+            </control>
+            <include content="SeasonTab">
+                <param name="color" value="text"/>
+            </include>
+        </definition>
+    </include>
+    <include name="LookSeasonTabLine">
         <param name="unfocused"/>
         <definition>
             <control type="image">
-                <left>-8</left>
-                <width>120</width>
+                <width>132</width>
                 <height>44</height>
-                <texture colordiffuse="accent" border="8,0,8,0">ui/tab_line.png</texture>
+                <texture colordiffuse="accent" border="11,0,11,0">ui/tab_line.png</texture>
+                <visible>$PARAM[unfocused]</visible>
             </control>
         </definition>
     </include>
@@ -341,7 +367,7 @@
             <textoffsetx>10</textoffsetx>
             <aligny>center</aligny>
             <textcolor>text_mute</textcolor>
-            <focusedcolor>accent</focusedcolor>
+            <focusedcolor>text</focusedcolor>
             <label>[CAPITALIZE][UPPERCASE]$PARAM[label][/UPPERCASE][/CAPITALIZE]</label>
             <altlabel>[B][COLOR text][CAPITALIZE][UPPERCASE]$PARAM[label][/UPPERCASE][/CAPITALIZE][/COLOR][/B]</altlabel>
         </definition>
@@ -360,7 +386,7 @@
         </definition>
     </include>
 
-    <!-- A label in the capitals of this look: line of the path, row titles, tiles of the quick menu -->
+    <!-- A label as written, in this look: line of the path, row titles, tiles of the quick menu -->
     <include name="LookLabelCase">
         <param name="text"/>
         <definition>

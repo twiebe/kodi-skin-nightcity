@@ -143,7 +143,7 @@
                     <param name="prop" value="genre"/>
                     <param name="picklabel" value="$VAR[GenrePickLabel]"/>
                     <param name="pick" value="genre_pick"/>
-                    <param name="left" value="73"/>
+                    <param name="left" value="LookGenreTabsLeft"/>
                     <param name="font" value="font_caps_small"/>
                 </include>
             </include>
@@ -168,7 +168,7 @@
                     <param name="prop" value="tvgenre"/>
                     <param name="picklabel" value="$VAR[ShowGenrePickLabel]"/>
                     <param name="pick" value="genre_pick:tvshow"/>
-                    <param name="left" value="73"/>
+                    <param name="left" value="LookGenreTabsLeft"/>
                     <param name="font" value="font_caps_small"/>
                 </include>
             </include>
@@ -585,7 +585,7 @@
                     <param name="prop" value="genre"/>
                     <param name="picklabel" value="$VAR[GenrePickLabel]"/>
                     <param name="pick" value="genre_pick"/>
-                    <param name="left" value="73"/>
+                    <param name="left" value="LookGenreTabsLeft"/>
                     <param name="font" value="font_caps_small"/>
                 </include>
             </include>
@@ -818,7 +818,7 @@
                     <param name="prop" value="tvgenre"/>
                     <param name="picklabel" value="$VAR[ShowGenrePickLabel]"/>
                     <param name="pick" value="genre_pick:tvshow"/>
-                    <param name="left" value="73"/>
+                    <param name="left" value="LookGenreTabsLeft"/>
                     <param name="font" value="font_caps_small"/>
                 </include>
             </include>

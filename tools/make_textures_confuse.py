@@ -156,6 +156,14 @@ def line_texture(width, height, thick, bottom, inset):
     return finish(big, (width, height))
 
 
+def tab_focus(width, height, thick, bottom, inset, plate=0.22, radius=8):
+    line = line_texture(width, height, thick, bottom, inset).getchannel('A')
+    soft = rrect((width, height), 0, radius).resize((width, height), Image.LANCZOS).point(lambda a: int(a * plate))
+    image = Image.new('RGBA', (width, height), (255, 255, 255, 0))
+    image.putalpha(ImageChops.lighter(soft, line))
+    return image
+
+
 def textures():
     r_btn, r_panel = 12, 16
     out = {
@@ -181,8 +189,11 @@ def textures():
         'dot_shade.png': dot_shade(28),
         # 4.5 px, the menu entry is 64 px and shows 44 of them; border 5,0,5,0
         'menu_line.png': line_texture(24, 64, 4.5, 10, 2),
-        # 4.5 px on the line of Nightcity's tab_line.png; border 8,0,8,0
-        'tab_line.png': line_texture(20, 44, 4.5, 2, 8),
+        # 4.5 px on the line of Nightcity's tab_line.png; border 11,0,11,0 holds the clear ends and
+        # the round ends of the line, or Kodi stretches those into a lens
+        'tab_line.png': line_texture(24, 44, 4.5, 2, 8),
+        # a tab with the focus: the same line on a soft plate as high as the tab
+        'tab_focus.png': tab_focus(24, 44, 4.5, 2, 8),
         'fade_r.png': fanart_mask(384, 216),  # 16:9, stretched over the screen
         'info_fade.png': info_fade(256, 4),
         # the player's scrim, in the colour scrim (.96): y 340 to 1080 and 0 to 220 of the screen.

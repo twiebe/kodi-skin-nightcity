@@ -387,15 +387,21 @@ def test_background_without_fanart_is_the_base_colour():
     assert images[0].findtext('texture') == 'ui/white.png'
 
 
-def test_card_has_a_placeholder():
-    """A round surface under the poster on either state: no artwork leaves a card, not a hole."""
-    frame = look_includes()['LookCardFrame']
-    images = list(frame.iter('control'))
-    assert images
-    for image in images:
-        assert image.find('texture').get('colordiffuse') == 'surface'
-        assert image.find('texture').get('diffuse') == '$PARAM[mask]'
+def test_card_has_a_placeholder(confuse_root):
+    """A round surface under the poster on either state: no artwork leaves a card, not a hole. A
+    9-slice and no mask, so an unfocused card has one masked quad, its artwork. Its corner is the
+    corner of the mask, so the plate does not show past the artwork."""
+    images = list(look_includes()['LookCardFrame'].iter('control'))
     assert [i.findtext('visible') for i in images] == [None]
+    texture = images[0].find('texture')
+    assert texture.get('colordiffuse') == 'surface'
+    assert texture.get('diffuse') is None
+    assert texture.get('border') == str(CARD_RADIUS)
+    plate = Image.open(confuse_root / 'media' / texture.text).convert('RGBA').getchannel('A')
+    mask = Image.open(confuse_root / 'media' / 'ui' / 'mask_200x300.png').convert('RGBA').getchannel('A')
+    for y in range(CARD_RADIUS):
+        for x in range(CARD_RADIUS):
+            assert abs(plate.getpixel((x, y)) - mask.getpixel((x, y))) <= 8, (x, y)
 
 
 def test_card_art_is_round_in_both_states():
@@ -455,8 +461,23 @@ def test_row_constants_add_up():
     assert c['LookRowListTop'] + c['LookRowListHeight'] == n['LookRowListTop'] + n['LookRowListHeight'] == 468
     assert c['LookRowListHeight'] - c['LookRowItemTop'] == n['LookRowListHeight'] - n['LookRowItemTop']
     zoom = c['LookCardFocusZoom'] / 100
-    assert c['LookRowItemLeft'] >= CARD[0] * (zoom - 1) / 2 + SHADOW_PAST_CARD * zoom
     assert c['LookRowItemTop'] >= CARD[1] * (zoom - 1) / 2 + SHADOW_PAST_CARD * zoom
+
+
+def test_row_shows_no_strip_of_the_card_before(confuse_root):
+    """The list starts where the card before ends: seen on the shot, a wider ItemLeft leaves a hard
+    cut strip of it 22 px from the edge of the screen. The ring stays whole, and of the shadow only
+    what is about 5 % black is cut."""
+    c = constants()
+    assert (c['LookRowListLeft'], c['LookRowItemLeft'], c['LookRowListWidth']) == (36, 28, 1884)
+    assert c['LookRowItemLeft'] + CARD[0] == c['LookRowItemWidth']
+    zoom = c['LookCardFocusZoom'] / 100
+    grown = CARD[0] * (zoom - 1) / 2
+    assert c['LookRowItemLeft'] >= grown
+    glow = Image.open(confuse_root / 'media' / 'ui' / 'cut_glow.png').convert('RGBA').getchannel('A')
+    past_card = (c['LookRowItemLeft'] - grown) / zoom
+    shadow = int(colours(confuse_root)['shadow'][:2], 16) / 255
+    assert glow.getpixel((int(SHADOW_PAST_CARD - past_card), glow.height // 2)) / 255 * shadow <= 0.06
 
 
 def test_shadow_margin_matches_its_texture(confuse_root):
@@ -560,13 +581,52 @@ def test_menu_shows_the_page_in_bold_on_a_line(confuse_root):
     assert not any(column[:40])
 
 
-def test_tab_line_is_amber_in_both_states(confuse_root):
-    """The line of a tab, focused or showing, 4 to 5 px and amber: state is a dark colour in this look."""
+def test_tab_focus_differs_from_the_shown_tab(confuse_root):
+    """A tab takes the focus and shows its page at once, so the alt state has to tell them apart: the
+    shown tab has the amber line, with the focus a soft plate lies behind the same line."""
     textures = look_includes()['LookTabTextures']
+    for tag in ('texturefocus', 'alttexturefocus'):
+        assert textures.findtext(tag) == 'ui/tab_focus.png', tag
+    assert textures.findtext('alttexturenofocus') == 'ui/tab_line.png'
     for tag in ('texturefocus', 'alttexturefocus', 'alttexturenofocus'):
         assert textures.find(tag).get('colordiffuse') == 'accent', tag
-    alpha = Image.open(confuse_root / 'media' / 'ui' / 'tab_line.png').convert('RGBA').getchannel('A')
-    assert 4 <= sum(alpha.getpixel((alpha.width // 2, y)) / 255 for y in range(alpha.height)) <= 5
+    line = Image.open(confuse_root / 'media' / 'ui' / 'tab_line.png').convert('RGBA').getchannel('A')
+    assert 4 <= sum(line.getpixel((line.width // 2, y)) / 255 for y in range(line.height)) <= 5
+    plate = Image.open(confuse_root / 'media' / 'ui' / 'tab_focus.png').convert('RGBA').getchannel('A')
+    assert plate.height == line.height
+    assert 0.15 <= plate.getpixel((plate.width // 2, plate.height // 2)) / 255 <= 0.3
+    assert plate.getpixel((plate.width // 2, line.height - 4)) == 255
+
+
+def test_tab_text_with_the_focus_is_readable_white(confuse_root):
+    """White on the plate, over the base colour and over the brightest a white fanart gets under a
+    row's tabs (x up to 900, y from 300)."""
+    tab = look_includes()['LookTabText']
+    assert tab.findtext('.//focusedcolor') == 'text'
+    assert '[COLOR text]' in tab.findtext('.//altlabel')
+    palette = colours(confuse_root)
+    text, bg, amber = rgb(palette['text']), rgb(palette['bg']), rgb(palette['accent'])
+    plate = Image.open(confuse_root / 'media' / 'ui' / 'tab_focus.png').convert('RGBA').getchannel('A')
+    cover = plate.getpixel((plate.width // 2, plate.height // 2)) / 255
+    mask = Image.open(confuse_root / 'media' / 'ui' / 'fade_r.png').convert('RGBA').getchannel('A')
+    alpha = int(palette['fanart'][:2], 16) / 255 * max(
+        mask.getpixel((x * mask.width // 1920, y * mask.height // 1080))
+        for x in range(0, 900, 20) for y in range(300, 1080, 20)) / 255
+    for back in (bg, tuple(255 * alpha + c * (1 - alpha) for c in bg)):
+        assert contrast(text, tuple(a * cover + b * (1 - cover) for a, b in zip(amber, back))) >= 4.5
+
+
+def test_tab_lines_keep_their_round_ends(confuse_root):
+    """Kodi stretches what lies between the borders: with a round end there, the line turns into a
+    lens, seen on the shot. Between the borders every column is the same."""
+    for name, include, tag in (('tab_line.png', 'LookTabTextures', 'alttexturenofocus'),
+                               ('tab_focus.png', 'LookTabTextures', 'alttexturefocus'),
+                               ('menu_line.png', 'LookMenuTextures', 'alttexturenofocus')):
+        border = int(look_includes()[include].find(tag).get('border').split(',')[0])
+        alpha = Image.open(confuse_root / 'media' / 'ui' / name).convert('RGBA').getchannel('A')
+        assert alpha.width > 2 * border, name
+        columns = [[alpha.getpixel((x, y)) for y in range(alpha.height)] for x in range(border, alpha.width - border)]
+        assert all(abs(a - b) <= 2 for column in columns for a, b in zip(column, columns[0])), name
 
 
 def test_every_tab_has_the_look_of_a_tab():
@@ -576,12 +636,39 @@ def test_every_tab_has_the_look_of_a_tab():
     assert {'LookTabText', 'LookTabTextures'} <= used
 
 
-def test_season_tab_has_an_amber_line():
-    """The focused layout of the season tabs: a texture in amber, not the label again."""
-    include = look_includes()['LookSeasonTabLine']
-    images = list(include.iter('control'))
-    assert images and all(i.get('type') == 'image' for i in images)
-    assert all(i.find('texture').get('colordiffuse') == 'accent' for i in images)
+def test_season_tab_tells_focus_from_shown(confuse_root):
+    """Like the other tabs: the shown season has the amber line and white text, with the focus the
+    plate behind the text and its line. Plate first, it must not lie over the text. The list starts
+    10 px further left and the text 10 px in, as a list cuts what lies left of it."""
+    from navigation import load
+    window = load('DialogVideoInfo.xml', layout=confuse_root / '1080i')
+    seasons = next(c for c in window.iter('control') if c.get('id') == '5200')
+    plate, text, line = seasons.find('focusedlayout').findall('control')
+    assert plate.findtext('texture') == 'ui/tab_focus.png' and plate.findtext('visible') == 'Control.HasFocus(5200)'
+    assert text.get('type') == 'label' and text.findtext('textcolor') == 'text'
+    assert line.findtext('texture') == 'ui/tab_line.png' and line.findtext('visible') == '!Control.HasFocus(5200)'
+    assert plate.find('texture').get('colordiffuse') == line.find('texture').get('colordiffuse') == 'accent'
+    assert (plate.findtext('width'), plate.findtext('left') or '0') == (line.findtext('width'), line.findtext('left') or '0')
+    assert text.findtext('left') == '10'
+    assert seasons.findtext('left') == 'LookSeasonListLeft'
+    assert constants()['LookSeasonListLeft'] + int(text.findtext('left')) == 64
+    unshown = seasons.find('itemlayout').find('control')
+    assert unshown.findtext('left') == '10' and unshown.findtext('textcolor') == 'text_mute'
+    assert constants(ROOT)['LookSeasonListLeft'] == 64
+
+
+def test_genre_tabs_start_over_the_cards(confuse_root):
+    """No row number in front of them in this look: the text of the first tab (behind its 24 px gap
+    and 10 px of padding) stands over the first card. Nightcity keeps its number's room."""
+    from navigation import load
+    assert constants(ROOT)['LookGenreTabsLeft'] == 73
+    window = load('Home.xml', layout=confuse_root / '1080i')
+    tabs = [c for c in window.iter('control') if c.get('type') == 'grouplist' and c.findtext('left') == 'LookGenreTabsLeft']
+    assert tabs
+    for grouplist in tabs:
+        gap, tab = grouplist.findall('control')[:2]
+        assert constants()['LookGenreTabsLeft'] + int(gap.findtext('width')) + int(tab.findtext('textoffsetx')) == 64
+    assert 'name="left" value="73"' not in (ROOT / '1080i' / 'Includes_Sections.xml').read_text(encoding='utf-8')
 
 
 def test_cut_decoration_textures_are_removed(confuse_root):
