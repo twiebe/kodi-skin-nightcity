@@ -263,6 +263,7 @@
         <param name="label"/>
         <param name="focused"/>
         <param name="unfocused"/>
+        <definition/>
     </include>
 
     <!-- An entry of the top menu: focused a filled accent button, the shown page a dark blue outline -->

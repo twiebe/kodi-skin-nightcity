@@ -271,3 +271,17 @@ def test_confuse_never_draws_the_line_font_as_text(confuse_root):
             continue
         used = [el for el in parse(path).iter() if (el.text or '').strip() == 'font_caps_line' or el.get('value') == 'font_caps_line']
         assert not used, path.name
+
+
+def test_look_includes_have_the_form_kodi_accepts():
+    """Kodi drops an include that has <param> but no <definition> (GUIIncludes.cpp:223-226) and logs
+    it at every call, and the test of the log fails on that. The tests' own expansion (navigation.py)
+    is more lenient. An include without content is written <definition/>."""
+    for path in (ROOT / '1080i' / 'Includes_Look.xml', OVERLAY / '1080i' / 'Includes_Look.xml'):
+        for inc in parse(path).iter('include'):
+            if not inc.get('name'):
+                continue
+            has_definition = inc.find('definition') is not None
+            assert has_definition or inc.find('param') is None, (path.parent.parent.name, inc.get('name'), 'param without definition')
+            if len(inc) == 0:
+                raise AssertionError((path.parent.parent.name, inc.get('name'), 'empty include, use <definition/>'))
