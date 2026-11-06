@@ -1,3 +1,4 @@
+import re
 import zipfile
 
 import pytest
@@ -154,3 +155,13 @@ def test_stripped_labels_never_become_bare_numbers(confuse_root):
                 raise AssertionError((path.name, el.tag, el.text))
             found += el.tag == 'param' and (el.get('value') or '').startswith('$NUMBER[')
     assert found >= 10  # the pad: 0 to 9
+
+
+def test_skin_strings_start_with_a_capital(confuse_root):
+    """Nightcity writes its strings small and shows most in capitals. In Confuse they show as written,
+    so they start with a capital, except a unit after a number."""
+    root = (ROOT / 'language' / 'resource.language.en_gb' / 'strings.po').read_text(encoding='utf-8')
+    built = (confuse_root / 'language' / 'resource.language.en_gb' / 'strings.po').read_text(encoding='utf-8')
+    assert 'msgid "home"' in root and 'msgid "Home"' in built and 'msgid "home"' not in built
+    assert 'msgid "min"' in built
+    assert len(re.findall(r'^msgid "', built, re.M)) == len(re.findall(r'^msgid "', root, re.M))

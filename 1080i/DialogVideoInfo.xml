@@ -93,6 +93,7 @@
                 <param name="art" value="ListItem.Art(fanart)"/>
             </include>
         </control>
+        <include>LookInfoFade</include>
         <include content="PathLine">
             <param name="id" value="9026"/>
             <param name="path" value="$VAR[InfoPath]"/>

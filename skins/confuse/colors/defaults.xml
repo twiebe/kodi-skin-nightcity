@@ -6,7 +6,7 @@
     <color name="surface">FF1E1B18</color>
     <color name="surface_alt">F0262220</color>
     <color name="border">FFEFAA47</color>
-    <color name="border_dim">40EFAA47</color>
+    <color name="border_dim">26FFFFFF</color>
     <color name="state">FF2E2A25</color>
     <color name="state_text">FFABA498</color>
     <color name="state_fade">A0ABA498</color>
@@ -26,9 +26,11 @@
     <color name="ok">FF9CC49A</color>
     <color name="warn">FFE8C468</color>
     <color name="error">FFD98A6B</color>
-    <color name="scrim">E00F0E0D</color>
+    <color name="scrim">F50F0E0D</color>
     <color name="text_chip">FFDED8CE</color>
     <color name="focus_text_dim">FF4A3514</color>
     <color name="disabled">FF9A9388</color>
     <color name="dim">8C0F0E0D</color>
+    <color name="chip">17FFFFFF</color>
+    <color name="shadow">B0000000</color>
 </colors>

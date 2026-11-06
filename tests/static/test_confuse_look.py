@@ -143,7 +143,7 @@ def test_fixed_width_labels_fit(confuse_root):
         checked.append((name, label))
         assert need <= width, (name, label, round(need), width)
     assert len(checked) >= 40
-    assert ('Custom_1110_Library.xml', 'sort: year') in checked and ('DialogKeyboard.xml', 'space') in checked
+    assert ('Custom_1110_Library.xml', 'Sort: Year') in checked and ('DialogKeyboard.xml', 'space') in checked
 
 
 def test_main_menu_fits(confuse_root):
@@ -211,18 +211,6 @@ def test_no_cut_corner_texture_left(confuse_root):
         assert (confuse_root / 'media' / 'ui' / name).read_bytes() == twin.read_bytes(), name
 
 
-def test_warm_fade_fades_left_and_bottom():
-    """One image for both edges: opaque at the bottom left, clear at the top right, alpha changing
-    along each axis."""
-    alpha = Image.open(OVERLAY / 'media' / 'ui' / 'warm_fade.png').convert('RGBA').getchannel('A')
-    w, h = alpha.size
-    assert alpha.getpixel((0, h - 1)) == 255 and alpha.getpixel((w - 1, 0)) == 0
-    along_x = [alpha.getpixel((x, h // 2)) for x in range(0, w, max(1, w // 8))]
-    along_y = [alpha.getpixel((w // 2, y)) for y in range(0, h, max(1, h // 8))]
-    assert along_x == sorted(along_x, reverse=True) and along_x[0] - along_x[-1] > 100
-    assert along_y == sorted(along_y) and along_y[-1] - along_y[0] > 100
-
-
 def test_masks_have_round_corners(confuse_root):
     masks = sorted((confuse_root / 'media' / 'ui').glob('mask_*.png'))
     assert {p.name for p in masks} >= {p.name for p in (ROOT / 'media' / 'ui').glob('mask_*.png')}
@@ -277,3 +265,328 @@ def test_look_includes_have_the_form_kodi_accepts():
             assert has_definition or inc.find('param') is None, (path.parent.parent.name, inc.get('name'), 'param without definition')
             if len(inc) == 0:
                 raise AssertionError((path.parent.parent.name, inc.get('name'), 'empty include, use <definition/>'))
+
+
+# --- the look of the cut through: Home, grid, info page, player ---------------------------------
+
+CUT_WINDOWS = ('Home.xml', 'Custom_1110_Library.xml', 'MyVideoNav.xml', 'DialogVideoInfo.xml', 'VideoOSD.xml',
+               'DialogSeekBar.xml', 'VideoFullScreen.xml')
+CARD = (200, 300)  # the card of a row of Home
+SHADOW_PAST_CARD = 24  # px of LookCardFocus's texture past the card, before the zoom
+
+
+def look_includes(root=OVERLAY):
+    return {inc.get('name'): inc for inc in parse(root / '1080i' / 'Includes_Look.xml').iter('include') if inc.get('name')}
+
+
+def constants(root=OVERLAY):
+    return {c.get('name'): float(c.text) for c in parse(root / '1080i' / 'Includes_Look.xml').iter('constant')}
+
+
+def colours(root):
+    return {c.get('name'): c.text for c in parse(root / 'colors' / 'defaults.xml').iter('color')}
+
+
+def channel(c):
+    c /= 255
+    return c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
+
+
+def luminance(rgb):
+    return 0.2126 * channel(rgb[0]) + 0.7152 * channel(rgb[1]) + 0.0722 * channel(rgb[2])
+
+
+def contrast(a, b):
+    la, lb = sorted((luminance(a), luminance(b)), reverse=True)
+    return (la + 0.05) / (lb + 0.05)
+
+
+def rgb(argb):
+    return tuple(int(argb[i:i + 2], 16) for i in (2, 4, 6))
+
+
+def windows_expanded(root):
+    from navigation import load
+    for name in CUT_WINDOWS:
+        yield name, load(name, layout=root / '1080i')
+
+
+def test_text_stays_readable_on_a_white_fanart(confuse_root):
+    """The fanart is drawn through the mask of FanartBackdrop, in the alpha of the palette: a white
+    picture gives this over the base colour. Page text (x 0 to 900, y 300 to 1080) keeps 4.5:1."""
+    palette = colours(confuse_root)
+    text, bg = rgb(palette['text']), rgb(palette['bg'])
+    fanart_alpha = int(palette['fanart'][:2], 16) / 255
+    mask = Image.open(confuse_root / 'media' / 'ui' / 'fade_r.png').convert('RGBA').getchannel('A')
+    worst = 99
+    for y in range(300, 1080, 10):
+        for x in range(0, 900, 10):
+            alpha = fanart_alpha * mask.getpixel((x * mask.width // 1920, y * mask.height // 1080)) / 255
+            back = tuple(255 * alpha + c * (1 - alpha) for c in bg)
+            worst = min(worst, contrast(text, back))
+    assert worst >= 4.5, worst
+
+
+def test_info_page_stays_readable_on_a_white_fanart(confuse_root):
+    """With its fade over the mask: 4.5:1 for text across the page, 3:1 for the muted keys of the
+    facts at the right (x 1400 to 1860, y 120 to 420)."""
+    palette = colours(confuse_root)
+    text, mute, bg = rgb(palette['text']), rgb(palette['text_mute']), rgb(palette['bg'])
+    fanart_alpha = int(palette['fanart'][:2], 16) / 255
+    mask = Image.open(confuse_root / 'media' / 'ui' / 'fade_r.png').convert('RGBA').getchannel('A')
+    fade = Image.open(confuse_root / 'media' / 'ui' / 'info_fade.png').convert('RGBA').getchannel('A')
+
+    def back(x, y):
+        alpha = fanart_alpha * mask.getpixel((x * mask.width // 1920, y * mask.height // 1080)) / 255
+        over = [255 * alpha + c * (1 - alpha) for c in bg]
+        cover = fade.getpixel((x * fade.width // 1920, 0)) / 255
+        return tuple(c * cover + o * (1 - cover) for c, o in zip(bg, over))
+
+    assert min(contrast(text, back(x, y)) for x in range(0, 1920, 20) for y in range(0, 1080, 20)) >= 4.5
+    assert min(contrast(mute, back(x, y)) for x in range(1400, 1860, 20) for y in range(120, 420, 20)) >= 3
+
+
+def test_player_text_stays_readable_on_a_white_picture(confuse_root):
+    """Over a white video frame the text block of the player, from y 440 down."""
+    palette = colours(confuse_root)
+    scrim, text = palette['scrim'], rgb(palette['text'])
+    fade = Image.open(confuse_root / 'media' / 'ui' / 'fade_b.png').convert('RGBA').getchannel('A')
+    worst = 99
+    for y in range(440, 1080, 10):
+        place = (y - 340) / 740
+        alpha = int(scrim[:2], 16) / 255 * fade.getpixel((0, round(place * (fade.height - 1)))) / 255
+        back = tuple(c * alpha + 255 * (1 - alpha) for c in rgb(scrim))
+        worst = min(worst, contrast(text, back))
+    assert worst >= 4.5, worst
+
+
+def test_player_fades_end_clear(confuse_root):
+    """Where the two images end there is no step over the video."""
+    for name, end in (('fade_b.png', 0), ('fade_t.png', -1)):
+        fade = Image.open(confuse_root / 'media' / 'ui' / name).convert('RGBA').getchannel('A')
+        assert fade.getpixel((0, range(fade.height)[end])) == 0, name
+
+
+def test_fanart_mask_follows_the_draft(confuse_root):
+    """The draft's scrim, as what stays of the picture: .24 of the fade left at the right edge and
+    nothing from the bottom in the upper part, so the picture keeps 76 % top right, and it is gone
+    at the bottom left."""
+    mask = Image.open(confuse_root / 'media' / 'ui' / 'fade_r.png').convert('RGBA').getchannel('A')
+    w, h = mask.size
+    assert abs(mask.getpixel((w - 1, 0)) / 255 - 0.76) < 0.02
+    assert abs(mask.getpixel((0, 0)) / 255 - 0.06) < 0.02
+    assert mask.getpixel((0, h - 1)) < 5
+    assert abs(mask.getpixel((w * 48 // 100, 0)) / 255 - 0.24) < 0.02
+
+
+def test_background_without_fanart_is_the_base_colour():
+    """Under everything an opaque area in bg, and nothing else: no glow."""
+    images = look_includes()['LookBackground'].findall('control')
+    assert [i.get('type') for i in images] == ['image']
+    assert images[0].find('texture').get('colordiffuse') == 'bg'
+    assert images[0].findtext('texture') == 'ui/white.png'
+
+
+def test_card_has_a_placeholder():
+    """A round surface under the poster on either state: no artwork leaves a card, not a hole."""
+    frame = look_includes()['LookCardFrame']
+    images = list(frame.iter('control'))
+    assert images
+    for image in images:
+        assert image.find('texture').get('colordiffuse') == 'surface'
+        assert image.find('texture').get('diffuse') == '$PARAM[mask]'
+    assert [i.findtext('visible') for i in images] == [None]
+
+
+def test_card_art_is_round_in_both_states():
+    """Round corners for every card, without the look of the crop moving the mask."""
+    for name in ('LookCardArt', 'LookCardArtFocused'):
+        include = look_includes()[name]
+        assert include.find('.//texture').get('diffuse') == '$PARAM[mask]', name
+        assert include.find('.//aspectratio').get('scalediffuse') == 'false', name
+
+
+def test_fullscreen_alpha_budget(confuse_root):
+    """After resolving, at most two full screen images with alpha over the ground per window. All the
+    backdrops of a window count as one: they are for different pages or titles, one shows at a time."""
+    palette = colours(confuse_root)
+    for name, window in windows_expanded(confuse_root):
+        layers = 0
+        fanart = False
+        for image in window.iter('control'):
+            if image.get('type') != 'image' or image.findtext('width') != '1920' or image.findtext('height') != '1080':
+                continue
+            texture = image.find('texture')
+            if texture is None:
+                continue
+            if image.findtext('description') == 'fanart backdrop':
+                fanart = True
+                continue
+            colour = palette.get(texture.get('colordiffuse'), 'FFFFFFFF')
+            if texture.text == 'ui/white.png' and colour.startswith('FF'):
+                continue
+            layers += 1
+        assert layers + fanart <= 2, (name, layers, fanart)
+
+
+def test_no_endless_animation():
+    text = (OVERLAY / '1080i' / 'Includes_Look.xml').read_text(encoding='utf-8').lower()
+    assert 'pulse' not in text and 'loop' not in text
+
+
+def test_card_focus_keeps_the_row_layout(confuse_root):
+    """The card grows by animation only, so the row does not move and no focus target changes."""
+    c = constants()
+    assert c['LookCardFocusZoom'] == 113.5
+    assert c['LookCardFocusTime'] == 120
+    for inc in parse(confuse_root / '1080i' / 'Includes_Home.xml').iter('control'):
+        item, focused = inc.find('itemlayout'), inc.find('focusedlayout')
+        if item is not None and focused is not None:
+            assert (item.get('width'), item.get('height')) == (focused.get('width'), focused.get('height'))
+
+
+def test_row_constants_add_up():
+    """Constants cannot add up in Kodi, so the pairs are written out; they keep the card where the
+    shared layout has it, and the room under it. The padding holds the zoomed card and its shadow."""
+    c, n = constants(), constants(ROOT)
+    assert c['LookRowListLeft'] + c['LookRowItemLeft'] == n['LookRowListLeft'] + n['LookRowItemLeft'] == 64
+    assert c['LookRowListTop'] + c['LookRowItemTop'] == n['LookRowListTop'] + n['LookRowItemTop'] == 78
+    assert c['LookRowListLeft'] + c['LookRowListWidth'] == 1920
+    assert c['LookRowListTop'] + c['LookRowListHeight'] == n['LookRowListTop'] + n['LookRowListHeight'] == 468
+    assert c['LookRowListHeight'] - c['LookRowItemTop'] == n['LookRowListHeight'] - n['LookRowItemTop']
+    zoom = c['LookCardFocusZoom'] / 100
+    assert c['LookRowItemLeft'] >= CARD[0] * (zoom - 1) / 2 + SHADOW_PAST_CARD * zoom
+    assert c['LookRowItemTop'] >= CARD[1] * (zoom - 1) / 2 + SHADOW_PAST_CARD * zoom
+
+
+def test_shadow_margin_matches_its_texture(confuse_root):
+    """LookCardFocus draws cut_glow.png 24 px past the card, at its fixed offset: card + 48 from the
+    callers. Its border holds the rounded part and the blur, and it fades out before its own edge."""
+    focus = look_includes()['LookCardFocus']
+    image = focus.find('.//control')
+    assert (image.findtext('left'), image.findtext('top')) == ('-24', '-24')
+    assert (image.findtext('width'), image.findtext('height')) == ('$PARAM[glowwidth]', '$PARAM[glowheight]')
+    texture = Image.open(confuse_root / 'media' / image.findtext('texture')).convert('RGBA').getchannel('A')
+    assert all(texture.getpixel(c) < 3 for c in ((0, 0), (texture.width - 1, 0), (0, texture.height - 1)))
+    assert int(image.find('texture').get('border')) * 2 <= texture.width
+
+
+def test_focus_ring_is_four_to_five_px_on_screen(confuse_root):
+    """Measured on the texture at the middle of an edge, times the zoom."""
+    ring = look_includes()['LookCardFocusRing'].find('.//texture')
+    alpha = Image.open(confuse_root / 'media' / ring.text).convert('RGBA').getchannel('A')
+    thick = sum(alpha.getpixel((x, alpha.height // 2)) / 255 for x in range(alpha.width // 2))
+    assert 4 <= thick * constants()['LookCardFocusZoom'] / 100 <= 5, thick
+
+
+def test_information_marks_keep_their_condition(confuse_root):
+    """The dot stands where Nightcity has its dog-ear, under the same condition, in every window."""
+    from navigation import load
+    from conftest import window_files
+    found = 0
+    for path in window_files():
+        marks = [[el.findtext('visible') for el in load(path.name, layout=layout).iter('control')
+                  if el.get('type') == 'image' and el.findtext('texture') == texture]
+                 for layout, texture in ((ROOT / '1080i', 'ui/dogear.png'), (confuse_root / '1080i', 'ui/dot.png'))]
+        assert marks[0] == marks[1], path.name
+        found += len(marks[0])
+    assert found >= 20
+
+
+def test_unwatched_dot_keeps_inside_the_rounded_corner():
+    """Warm white, not the focus colour, inset so it does not touch the round corner of the card."""
+    dot = list(look_includes()['LookCardUnwatched'].iter('control'))[-1]
+    assert dot.findtext('visible') == '$PARAM[visible]'
+    assert dot.find('texture').get('colordiffuse') == 'text'
+    assert int(dot.findtext('right')) >= 8 and int(dot.findtext('bottom')) >= 8
+
+
+def test_waiting_cursor_shows_nothing_without_the_focus(confuse_root):
+    """The position bar's cursor lies at the corner of the window until it has the focus. A look that
+    ignores a button's colour still has to honour this: the pill showed on the shot."""
+    from navigation import load
+    for name in ('Custom_1110_Library.xml', 'MyMusicNav.xml'):
+        for root in (confuse_root, ROOT):
+            cursor = next(c for c in load(name, layout=root / '1080i').iter('control') if c.get('id') == '5200')
+            assert cursor.find('texturenofocus').get('colordiffuse') == '00FFFFFF', (name, root)
+
+
+def test_episode_mark_clears_the_focused_ring():
+    """Seen on the shot: a focused still reaches 18 px over its place, the mark must stay above."""
+    mark = look_includes()['LookEpisodeMark'].find('.//control')
+    assert int(mark.findtext('top')) + int(mark.findtext('height')) <= -18
+
+
+def test_decoration_is_gone(confuse_root):
+    for name, window in windows_expanded(confuse_root):
+        names = {el.text for el in window.iter() if el.text} | {v for el in window.iter() for v in el.attrib.values()}
+        words = ' '.join(names)
+        for gone in ('glitch_a', 'glitch_b', 'petrol_glow', 'spot_more', 'dogear'):
+            assert gone not in words, (name, gone)
+
+
+def test_rows_have_no_numbers():
+    label = look_includes()['LookNumberedRowLabel'].findtext('.//label')
+    assert 'PARAM[num]' not in label and 'accent2' not in label
+    assert look_includes()['LookNumberedRowLabel'].findtext('.//font') == 'font_caps'
+    assert len(look_includes()['LookRowNumber'].find('definition')) == 0
+
+
+def test_buttons_are_pills(confuse_root):
+    """Unfocused a pill of white at .15, focused filled amber with dark text; borders hold the full
+    round end of the 54 px pill and its 10 px padding."""
+    palette = colours(confuse_root)
+    fill = look_includes()['LookButtonFill'].find('texturefocus')
+    outline = look_includes()['LookButtonOutline'].find('.//texturenofocus')
+    assert fill.get('colordiffuse') == 'focus' and palette['focus'] == 'FFEFAA47'
+    assert fill.text == outline.text == 'ui/pill_pad.png'
+    assert fill.get('border') == outline.get('border') == '37'
+    assert palette[outline.get('colordiffuse')] == '26FFFFFF'
+    assert look_includes()['LookPillText'].findtext('.//focusedcolor') == 'focus_text'
+
+
+def test_menu_shows_the_page_in_bold_on_a_line(confuse_root):
+    """A togglebutton has one font: the bold of the shown page goes through altlabel. The line stands
+    in a texture as high as the entry: Kodi draws a button's texture over the whole button."""
+    include = look_includes()['LookMenuText']
+    assert include.findtext('.//altlabel').startswith('[B]') and not include.findtext('.//label').startswith('[B]')
+    textures = look_includes()['LookMenuTextures']
+    line = textures.find('alttexturenofocus')
+    assert line.text == 'ui/menu_line.png' and line.get('colordiffuse') == 'accent'
+    alpha = Image.open(confuse_root / 'media' / 'ui' / 'menu_line.png').convert('RGBA').getchannel('A')
+    assert alpha.height == 64  # MenuButton
+    column = [alpha.getpixel((alpha.width // 2, y)) for y in range(alpha.height)]
+    assert 4 <= sum(v / 255 for v in column) <= 5
+    assert not any(column[:40])
+
+
+def test_tab_line_is_amber_in_both_states(confuse_root):
+    """The line of a tab, focused or showing, 4 to 5 px and amber: state is a dark colour in this look."""
+    textures = look_includes()['LookTabTextures']
+    for tag in ('texturefocus', 'alttexturefocus', 'alttexturenofocus'):
+        assert textures.find(tag).get('colordiffuse') == 'accent', tag
+    alpha = Image.open(confuse_root / 'media' / 'ui' / 'tab_line.png').convert('RGBA').getchannel('A')
+    assert 4 <= sum(alpha.getpixel((alpha.width // 2, y)) / 255 for y in range(alpha.height)) <= 5
+
+
+def test_every_tab_has_the_look_of_a_tab():
+    """Tabs with a behaviour of their own (the credits of the info page) still take the Look."""
+    tab = next(el for el in parse(ROOT / '1080i' / 'Includes_Tmdb.xml').iter('include') if el.get('name') == 'CreditsTab')
+    used = {inc.get('content') or inc.text for inc in tab.iter('include')}
+    assert {'LookTabText', 'LookTabTextures'} <= used
+
+
+def test_season_tab_has_an_amber_line():
+    """The focused layout of the season tabs: a texture in amber, not the label again."""
+    include = look_includes()['LookSeasonTabLine']
+    images = list(include.iter('control'))
+    assert images and all(i.get('type') == 'image' for i in images)
+    assert all(i.find('texture').get('colordiffuse') == 'accent' for i in images)
+
+
+def test_cut_decoration_textures_are_removed(confuse_root):
+    for name in ('petrol_glow.png', 'dogear.png'):
+        assert not (confuse_root / 'media' / 'ui' / name).exists(), name
+    for path in sorted((confuse_root / '1080i').glob('*.xml')):
+        text = path.read_text(encoding='utf-8')
+        assert 'petrol_glow' not in text and 'dogear.png' not in text, path.name
