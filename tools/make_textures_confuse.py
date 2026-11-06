@@ -18,7 +18,7 @@ import pathlib
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
 UI = pathlib.Path(__file__).resolve().parents[1] / 'skins' / 'confuse' / 'media' / 'ui'
-SYNE = pathlib.Path(__file__).resolve().parent / 'fonts' / 'Syne[wght].ttf'
+LEXEND = pathlib.Path(__file__).resolve().parent / 'fonts' / 'Lexend[wght].ttf'
 SCALE = 8
 CARD_RADIUS = 12  # 8 px at 1280 x 720
 CARD_SIZES = [(200, 300), (290, 435), (360, 540), (320, 180), (160, 220), (200, 200), (280, 280), (360, 360)]
@@ -179,15 +179,21 @@ def card_halo(size, pad, radius):
     return finish(ImageChops.lighter(near, far), (size, size))
 
 
-def wordmark(text, height=190, baseline=146):
-    """A part of the name, in the bold of Syne, the one place that font is used: as a texture it needs
-    no font file in the skin. Both parts have one height and baseline, and side by side they read as
-    one word. tools/fonts holds the font and its licence."""
-    font = ImageFont.truetype(str(SYNE), 144 * SCALE)
+def wordmark(text, size=250, height=215, baseline=198, tracking=-0.03):
+    """A part of the name, in the extra bold of Lexend set a little tight, the one place that font is
+    used: as a texture it needs no font file in the skin. Both parts have one height and baseline, and
+    side by side they read as one word. tools/fonts holds the font and its licence."""
+    font = ImageFont.truetype(str(LEXEND), size * SCALE)
     font.set_variation_by_axes([800])
-    width = math.ceil(font.getlength(text) / SCALE)
+    step = tracking * size * SCALE
+    width = math.ceil((sum(font.getlength(c) + step for c in text)) / SCALE)
+    width += width % 2  # even, so the two parts can stand exactly around the middle of the screen
     big = Image.new('L', (width * SCALE, height * SCALE), 0)
-    ImageDraw.Draw(big).text((0, baseline * SCALE), text, font=font, fill=255, anchor='ls')
+    draw = ImageDraw.Draw(big)
+    x = 0
+    for c in text:
+        draw.text((x, baseline * SCALE), c, font=font, fill=255, anchor='ls')
+        x += font.getlength(c) + step
     return finish(big, (width, height))
 
 

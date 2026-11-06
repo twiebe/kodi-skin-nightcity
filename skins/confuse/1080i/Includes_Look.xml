@@ -22,18 +22,18 @@
                 <texture colordiffuse="glow">ui/ember_glow.png</texture>
             </control>
             <control type="group">
-                <top>390</top>
+                <top>347</top>
                 <animation effect="slide" start="0,16" end="0,0" time="500" delay="100" tween="cubic" easing="out">WindowOpen</animation>
                 <control type="image">
-                    <left>490</left>
-                    <width>434</width>
-                    <height>190</height>
+                    <left>486</left>
+                    <width>442</width>
+                    <height>215</height>
                     <texture colordiffuse="text_mute">ui/word_con.png</texture>
                 </control>
                 <control type="image">
-                    <left>924</left>
+                    <left>928</left>
                     <width>506</width>
-                    <height>190</height>
+                    <height>215</height>
                     <texture colordiffuse="accent">ui/word_fuse.png</texture>
                 </control>
             </control>

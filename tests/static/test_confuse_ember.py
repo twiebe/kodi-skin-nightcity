@@ -152,3 +152,8 @@ def test_nightcity_keeps_its_startup():
     look = {i.get('name'): i for i in parse(ROOT / '1080i' / 'Includes_Look.xml').iter('include') if i.get('name')}
     assert any(i.get('content') == 'GlitchTitle' for i in look['LookStartupWordmark'].iter('include'))
     assert any(c.findtext('font') == 'font_num_small' for c in look['LookStartupTrack'].iter('control'))
+
+
+def test_wordmark_font_is_lexend_with_its_licence():
+    """tools/fonts holds the font of the wordmark and its licence, nothing else."""
+    assert sorted(p.name for p in (ROOT / 'tools' / 'fonts').iterdir()) == ['Lexend-OFL.txt', 'Lexend[wght].ttf']
