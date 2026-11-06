@@ -37,9 +37,10 @@ say so in the report, do not hide it.
 ### The Confuse skin
 
 `tools/kodidev_setup.py` mounts both skins: this checkout as `skin.nightcity`, the assembled
-`_build/confuse` as `skin.confuse`. An e2e run assembles `_build/confuse` at its start, so do not
-start one while another run on Confuse is on. `tests/e2e/test_skin_switch.py` switches between
-both skins on one Kodi.
+`_build/confuse` as `skin.confuse`. An e2e run assembles `_build/confuse` at its start and writes
+only what differs: with no change in the skin it touches nothing, so runs on two pools can overlap.
+A run started after a change of the skin does rewrite those files under a Confuse run, so do not
+start one then. `tests/e2e/test_skin_switch.py` switches between both skins on one Kodi.
 
 Confuse has a pool of its own, whose template starts on Confuse. Make it once, with the default
 kodi-dev stopped for the copy, then put kodi-dev back on Nightcity:

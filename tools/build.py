@@ -49,9 +49,9 @@ def assemble(skin, dest):
     """Lay skins/<skin> over the root tree into dest and return dest. A file of the overlay replaces
     the root file of the same path, remove.txt lists globs to drop, fonts Font.xml does not load stay
     out, and [UPPERCASE] markup goes from the windows (Confuse shows titles as written: a build rule,
-    so the shared files keep it). dest stays the same folder, only its content is replaced: kodi-dev
-    mounts it. A folder that is not empty and has no marker from an earlier run, and the repo itself or
-    a parent of it, are refused."""
+    so the shared files keep it). dest stays the same folder and only what differs is written or
+    removed: kodi-dev mounts it, and a Kodi may be running on it. A folder that is not empty and has no
+    marker from an earlier run, and the repo itself or a parent of it, are refused."""
     overlay = ROOT / 'skins' / skin
     dest = pathlib.Path(dest).resolve()
     if dest == ROOT or dest in ROOT.parents:
@@ -59,9 +59,18 @@ def assemble(skin, dest):
     if dest.exists() and any(dest.iterdir()) and not (dest / MARKER).exists():
         raise ValueError('{} is not empty and was not made by assemble'.format(dest))
     dest.mkdir(parents=True, exist_ok=True)
-    for child in dest.iterdir():
-        shutil.rmtree(child) if child.is_dir() and not child.is_symlink() else child.unlink()
-    (dest / MARKER).write_text('made by tools/build.py assemble\n', encoding='utf-8')
+    marker = 'made by tools/build.py assemble\n'
+    if not (dest / MARKER).exists():  # first, so that an assemble cut short can run again
+        (dest / MARKER).write_text(marker, encoding='utf-8')
+    with tempfile.TemporaryDirectory() as tmp:
+        stage = pathlib.Path(tmp)
+        _lay_out(overlay, stage)
+        (stage / MARKER).write_text(marker, encoding='utf-8')
+        _reconcile(stage, dest)
+    return dest
+
+
+def _lay_out(overlay, dest):
     _copy_tree(ROOT, dest)
     _copy_tree(overlay, dest)
     (dest / 'remove.txt').unlink(missing_ok=True)
@@ -76,7 +85,24 @@ def assemble(skin, dest):
         text = path.read_text(encoding='utf-8')
         if '[UPPERCASE]' in text or '[/UPPERCASE]' in text:
             path.write_text(text.replace('[UPPERCASE]', '').replace('[/UPPERCASE]', ''), encoding='utf-8')
-    return dest
+
+
+def _reconcile(stage, dest):
+    """Make dest hold what stage holds: stale files and folders go (deepest first, so a folder is
+    empty by its turn), a file is written only when its content differs."""
+    for path in sorted(dest.rglob('*'), reverse=True):
+        wanted = stage / path.relative_to(dest)
+        if path.is_dir() and not path.is_symlink():
+            if not wanted.is_dir():
+                path.rmdir()
+        elif path.is_symlink() or not wanted.is_file():
+            path.unlink()
+    for source in sorted(stage.rglob('*')):
+        if source.is_file():
+            target = dest / source.relative_to(stage)
+            if not target.is_file() or target.read_bytes() != source.read_bytes():
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(source, target)
 
 
 def build(out_dir=pathlib.Path('/dist'), pre=False, skin=None):

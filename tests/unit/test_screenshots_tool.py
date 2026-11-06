@@ -101,3 +101,8 @@ def test_the_instance_gets_the_skin_in_its_guisettings(tmp_path):
     settings.write_text('<settings><setting id="lookandfeel.skin">skin.nightcity</setting></settings>')
     screenshots.select_skin(settings, 'confuse')
     assert '>skin.confuse</setting>' in settings.read_text()
+
+
+def test_screenshots_select_the_skin_like_the_setup():
+    import kodidev_setup
+    assert screenshots.select_skin is kodidev_setup.select_skin
