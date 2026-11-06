@@ -9,7 +9,7 @@ from conftest import ROOT, all_xml_files, parse
 def test_addon_xml_identity():
     addon = parse(ROOT / 'addon.xml')
     assert addon.get('id') == 'skin.nightcity'
-    assert addon.get('version') == '0.4.87'
+    assert addon.get('version') == '0.4.88'
     res = addon.find(".//extension[@point='xbmc.gui.skin']/res")
     assert res is not None
     assert res.attrib == {'width': '1920', 'height': '1080', 'aspect': '16:9',
@@ -51,7 +51,7 @@ def test_build_into_the_source_tree_leaves_its_output_out():
 def test_build_zip(tmp_path):
     from build import build
     out = build(tmp_path)
-    assert out.name == 'skin.nightcity-0.4.87.zip'
+    assert out.name == 'skin.nightcity-0.4.88.zip'
     names = zipfile.ZipFile(out).namelist()
     assert 'skin.nightcity/addon.xml' in names
     assert 'skin.nightcity/scripts/nightcity.py' in names
