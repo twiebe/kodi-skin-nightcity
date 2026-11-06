@@ -253,3 +253,10 @@ def test_letters_kern_and_digits_do_not(confuse_root):
         assert kerned(confuse_root, path.name, 'AV') <= -40, path.name
         for pair in ('74', '1,', '7.', '47', '11'):
             assert kerned(confuse_root, path.name, pair) == 0, (path.name, pair)
+
+
+def test_only_licences_of_fonts_used_ship(confuse_root):
+    """ConfuseUI holds Manrope, Noto Sans Symbols 2 and JetBrains Mono glyphs: those licences ship, the
+    Nightcity-only ones (Rajdhani, Share Tech Mono) do not."""
+    shipped = {p.name for p in (confuse_root / 'fonts').glob('*OFL.txt')}
+    assert shipped == {'OFL.txt', 'JetBrainsMono-OFL.txt', 'NotoSansSymbols2-OFL.txt'}
