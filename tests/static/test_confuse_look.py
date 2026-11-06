@@ -238,21 +238,12 @@ def test_masks_have_round_corners(confuse_root):
         assert abs(first - expected) <= 1.5, (path.name, first)
 
 
-def kerned(root, name, pair):
-    """Width of the pair minus the widths of its two letters alone, in px at 1000 px: what the
-    layout engine (HarfBuzz through Raqm, as in Kodi) takes off or adds."""
-    font = ImageFont.truetype(str(root / 'fonts' / name), 1000, layout_engine=ImageFont.Layout.RAQM)
-    return font.getlength(pair) - font.getlength(pair[0]) - font.getlength(pair[1])
-
-
-def test_letters_kern_and_digits_do_not(confuse_root):
-    """Kodi shapes with HarfBuzz, so the fonts keep Manrope's kerning: To and AV close up. Digits stay
-    tabular: no pair of them moves, whatever it is followed by."""
+def test_fonts_carry_no_kerning_table(confuse_root):
+    """Kodi 21 takes only the offsets of HarfBuzz's result and the advance of each glyph alone
+    (GUIFontTTF.cpp:591, 657, 1058), and Manrope's kerning is advance only: GPOS never reaches the
+    screen, so it stays out of the fonts."""
     for path in used_fonts(confuse_root):
-        assert kerned(confuse_root, path.name, 'To') <= -40, path.name
-        assert kerned(confuse_root, path.name, 'AV') <= -40, path.name
-        for pair in ('74', '1,', '7.', '47', '11'):
-            assert kerned(confuse_root, path.name, pair) == 0, (path.name, pair)
+        assert 'GPOS' not in TTFont(path), path.name
 
 
 def test_only_licences_of_fonts_used_ship(confuse_root):
