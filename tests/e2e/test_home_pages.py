@@ -194,6 +194,7 @@ def test_genre_pick_dialog(genres):
 TITLES = {'home': 9020, 'movies': 9020, 'shows': 9560}
 
 
+@pytest.mark.nightcity_look
 @pytest.mark.parametrize('name', list(PAGES))
 def test_home_netrunner_look(home_page, name):
     tab = PAGES[name][0]
