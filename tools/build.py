@@ -20,6 +20,7 @@ import zipfile
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 EXCLUDE = {'.git', '.gitignore', '.superpowers', 'CLAUDE.md', 'Makefile', 'docs', 'tests', 'tools', 'requirements-dev.txt', 'pytest.ini',
            '__pycache__', '.venv', '.pytest_cache', 'skins', '_build', '.assembled'}
+UPPER_PARAM = re.compile(r'\[UPPERCASE\]\$PARAM\[(\w+)\]\[/UPPERCASE\]')
 MARKER = '.assembled'  # written into a folder assemble filled: only such a folder gets wiped again
 
 
@@ -81,10 +82,20 @@ def _lay_out(overlay, dest):
             path.unlink()
     for name in unused_fonts(dest):
         (dest / 'fonts' / name).unlink()
-    for path in (dest / '1080i').glob('*.xml'):
-        text = path.read_text(encoding='utf-8')
-        if '[UPPERCASE]' in text or '[/UPPERCASE]' in text:
-            path.write_text(text.replace('[UPPERCASE]', '').replace('[/UPPERCASE]', ''), encoding='utf-8')
+    files = sorted((dest / '1080i').glob('*.xml'))
+    texts = {path: path.read_text(encoding='utf-8') for path in files}
+    # a stripped label that is only digits would be a string id to Kodi (GUIControlFactory.cpp:662),
+    # so a number that went into [UPPERCASE] becomes $NUMBER[n]: as text, or as the value of the
+    # param that fills such a label
+    wrapped = {n for text in texts.values() for n in UPPER_PARAM.findall(text)}
+    for path, text in texts.items():
+        fixed = text
+        for name in sorted(wrapped):
+            fixed = re.sub(r'(<param name="{}" value=")(\d+)(")'.format(re.escape(name)), r'\1$NUMBER[\2]\3', fixed)
+        fixed = re.sub(r'\[UPPERCASE\](\d+)\[/UPPERCASE\]', r'$NUMBER[\1]', fixed)
+        fixed = fixed.replace('[UPPERCASE]', '').replace('[/UPPERCASE]', '')
+        if fixed != text:
+            path.write_text(fixed, encoding='utf-8')
 
 
 def _reconcile(stage, dest):

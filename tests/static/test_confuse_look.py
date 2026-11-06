@@ -47,6 +47,7 @@ def variables(root):
 def texts_of(label, root, texts):
     """Every fixed text a label can show: $LOCALIZE as the string, $VAR as each of its values. A label
     with an info ($INFO) shows what only the player knows: no fixed text, an empty list."""
+    label = re.sub(r'\$NUMBER\[(\d+)\]', r'\1', label)  # a number as text (tools/build.py)
     label = LOCALIZE.sub(lambda m: texts.get(int(m.group(1)), m.group(0)), label)
     match = re.search(r'\$VAR\[(\w+)\]', label)
     if match:
