@@ -73,3 +73,31 @@ def test_a_big_library_names_five_and_counts_the_rest():
     movies = [{'label': 'Bulk {:04d}'.format(n), 'art': {}} for n in range(1000)]
     gaps = screenshots.library_gaps(movies, [])
     assert 'Bulk 0004 (poster, fanart) and 995 more' in gaps and 'Bulk 0005' not in gaps
+
+
+def test_without_skin_the_screenshots_are_nightcitys():
+    args = screenshots.parse_args([])
+    assert args.skin == 'nightcity'
+    assert pathlib.Path(args.out) == screenshots.ROOT / 'resources' / 'screenshots'
+
+
+def test_the_screenshots_of_confuse_go_to_its_overlay():
+    args = screenshots.parse_args(['--skin', 'confuse'])
+    assert pathlib.Path(args.out) == screenshots.ROOT / 'skins' / 'confuse' / 'resources' / 'screenshots'
+
+
+def test_out_wins_over_the_folder_of_the_skin():
+    assert screenshots.parse_args(['--skin', 'confuse', '--out', '/x']).out == '/x'
+
+
+def test_the_mount_of_each_skin():
+    root = screenshots.ROOT
+    assert screenshots.skin_mount('nightcity') == '{}:/home/kodi/.kodi/addons/skin.nightcity'.format(root)
+    assert screenshots.skin_mount('confuse') == '{}:/home/kodi/.kodi/addons/skin.confuse'.format(root / '_build' / 'confuse')
+
+
+def test_the_instance_gets_the_skin_in_its_guisettings(tmp_path):
+    settings = tmp_path / 'guisettings.xml'
+    settings.write_text('<settings><setting id="lookandfeel.skin">skin.nightcity</setting></settings>')
+    screenshots.select_skin(settings, 'confuse')
+    assert '>skin.confuse</setting>' in settings.read_text()

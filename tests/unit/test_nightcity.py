@@ -1031,6 +1031,7 @@ def _service_env(monkeypatch, messages, skin='skin.nightcity'):
     monkeypatch.setitem(nightcity.COMMANDS, 'home', lambda *a: ran.append(('home',) + a))
     monkeypatch.setitem(nightcity.COMMANDS, 'play', lambda *a: ran.append(('play',) + a))
     monkeypatch.setitem(nightcity.COMMANDS, 'startup', lambda *a: ran.append(('startup',) + a))
+    monkeypatch.setitem(nightcity.COMMANDS, 'home_keymap', lambda *a: None)
     return window, ran
 
 
@@ -1052,6 +1053,16 @@ def test_service_runs_its_first_command_before_it_listens(monkeypatch):
     nightcity.service('startup')
     nightcity.wait_for_commands()
     assert ran == [('startup',), ('home',)]
+
+
+def test_service_applies_the_home_key_setting_of_its_skin(monkeypatch):
+    """After a skin switch Home starts the service, not the Startup screen, and skin settings are
+    per skin: without this the keymap stays as the skin before left it."""
+    _, ran = _service_env(monkeypatch, [])
+    monkeypatch.setitem(nightcity.COMMANDS, 'home_keymap', lambda *a: ran.append(('home_keymap',) + a))
+    nightcity.service('home')
+    nightcity.wait_for_commands()
+    assert ran == [('home',), ('home_keymap',)]
 
 
 def test_service_survives_a_failing_command(monkeypatch):
