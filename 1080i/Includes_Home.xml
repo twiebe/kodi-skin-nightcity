@@ -451,13 +451,11 @@
         <definition>
             <width>auto</width>
             <height>74</height>
-            <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
-            <font>font_caps</font>
-            <textoffsetx>34</textoffsetx>
-            <align>center</align>
-            <aligny>center</aligny>
-            <textcolor>$PARAM[textcolor]</textcolor>
-            <focusedcolor>focus_text</focusedcolor>
+            <include content="LookPillText">
+                <param name="label" value="$PARAM[label]"/>
+                <param name="textcolor" value="$PARAM[textcolor]"/>
+                <param name="textoffsetx" value="34"/>
+            </include>
             <include>LookButtonFill</include>
         </definition>
     </include>
@@ -1173,7 +1171,9 @@
                     <font>font_caps_small</font>
                     <textcolor>text_dim</textcolor>
                     <selectedcolor>text_dim</selectedcolor>
-                    <label>[UPPERCASE]$INFO[Container($PARAM[id]).ListItem.Label][/UPPERCASE]</label>
+                    <include content="LookLabelCase">
+                        <param name="text" value="$INFO[Container($PARAM[id]).ListItem.Label]"/>
+                    </include>
                     <visible>Control.HasFocus($PARAM[id])</visible>
                 </control>
                 <control type="label">
@@ -1435,7 +1435,9 @@
                 <wrapmultiline>true</wrapmultiline>
                 <textcolor>$PARAM[color]</textcolor>
                 <selectedcolor>$PARAM[color]</selectedcolor>
-                <label>[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</label>
+                <include content="LookLabelCase">
+                    <param name="text" value="$INFO[ListItem.Label]"/>
+                </include>
             </control>
             <control type="label">
                 <left>46</left>
@@ -1749,7 +1751,9 @@
             <aligny>center</aligny>
             <font>font_caps</font>
             <textcolor>$VAR[QuickWeatherText]</textcolor>
-            <label>[UPPERCASE]$LOCALIZE[31321][/UPPERCASE]</label>
+            <include content="LookLabelCase">
+                <param name="text" value="$LOCALIZE[31321]"/>
+            </include>
             <visible>!Weather.IsFetched</visible>
         </control>
 
@@ -1972,7 +1976,9 @@
                     <height>60</height>
                     <font>font_tiny</font>
                     <textcolor>text</textcolor>
-                    <label>[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</label>
+                    <include content="LookLabelCase">
+                        <param name="text" value="$INFO[ListItem.Label]"/>
+                    </include>
                     <visible>![$PARAM[focused] + Control.HasFocus($PARAM[list])]</visible>
                 </control>
                 <control type="textbox">
@@ -1982,7 +1988,9 @@
                     <height>60</height>
                     <font>font_tiny</font>
                     <textcolor>focus_text</textcolor>
-                    <label>[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</label>
+                    <include content="LookLabelCase">
+                        <param name="text" value="$INFO[ListItem.Label]"/>
+                    </include>
                     <visible>$PARAM[focused] + Control.HasFocus($PARAM[list])</visible>
                 </control>
             </control>
@@ -2032,7 +2040,9 @@
                 <font>font_tiny</font>
                 <textcolor>text</textcolor>
                 <selectedcolor>text</selectedcolor>
-                <label>[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</label>
+                <include content="LookLabelCase">
+                    <param name="text" value="$INFO[ListItem.Label]"/>
+                </include>
                 <visible>![$PARAM[focused] + Control.HasFocus($PARAM[list])]</visible>
             </control>
             <control type="label">
@@ -2043,7 +2053,9 @@
                 <font>font_tiny</font>
                 <textcolor>focus_text</textcolor>
                 <selectedcolor>focus_text</selectedcolor>
-                <label>[UPPERCASE]$INFO[ListItem.Label][/UPPERCASE]</label>
+                <include content="LookLabelCase">
+                    <param name="text" value="$INFO[ListItem.Label]"/>
+                </include>
                 <visible>$PARAM[focused] + Control.HasFocus($PARAM[list])</visible>
             </control>
         </definition>

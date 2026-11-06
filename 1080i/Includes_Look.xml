@@ -274,6 +274,65 @@
         </control>
     </include>
 
+    <!-- The text of a button. Kodi has no way to undo [UPPERCASE], so the case lives here -->
+    <include name="LookPillText">
+        <param name="label"/>
+        <param name="textcolor"/>
+        <param name="textoffsetx"/>
+        <definition>
+            <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+            <font>font_caps</font>
+            <textoffsetx>$PARAM[textoffsetx]</textoffsetx>
+            <align>center</align>
+            <aligny>center</aligny>
+            <textcolor>$PARAM[textcolor]</textcolor>
+            <focusedcolor>focus_text</focusedcolor>
+        </definition>
+    </include>
+
+    <include name="LookPillDisabled">
+        <param name="color"/>
+        <definition>
+            <disabledcolor>$PARAM[color]</disabledcolor>
+        </definition>
+    </include>
+
+    <!-- altlabel is what the tab or menu entry of the shown page reads -->
+    <include name="LookTabText">
+        <param name="label"/>
+        <param name="font"/>
+        <definition>
+            <font>$PARAM[font]</font>
+            <textoffsetx>10</textoffsetx>
+            <aligny>center</aligny>
+            <textcolor>text_mute</textcolor>
+            <focusedcolor>accent</focusedcolor>
+            <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+            <altlabel>[UPPERCASE]$PARAM[label][/UPPERCASE]</altlabel>
+        </definition>
+    </include>
+
+    <include name="LookMenuText">
+        <param name="label"/>
+        <definition>
+            <font>font_caps</font>
+            <textoffsetx>26</textoffsetx>
+            <aligny>center</aligny>
+            <textcolor>text_mute</textcolor>
+            <focusedcolor>focus_text</focusedcolor>
+            <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+            <altlabel>[UPPERCASE]$PARAM[label][/UPPERCASE]</altlabel>
+        </definition>
+    </include>
+
+    <!-- A label in the capitals of this look: line of the path, row titles, tiles of the quick menu -->
+    <include name="LookLabelCase">
+        <param name="text"/>
+        <definition>
+            <label>[UPPERCASE]$PARAM[text][/UPPERCASE]</label>
+        </definition>
+    </include>
+
     <!-- A thin outlined tag for one technical fact -->
     <include name="LookTag">
         <param name="label"/>

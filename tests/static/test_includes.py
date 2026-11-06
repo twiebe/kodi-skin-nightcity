@@ -834,7 +834,8 @@ def test_confuse_look_file_names_confuse(confuse_root):
 LOOK_MOVED = ('Includes_Base.xml', 'Includes_Home.xml', 'Includes_Info.xml', 'Includes_Player.xml')
 LOOK_INCLUDES = ('LookBackground', 'LookCardFocus', 'LookCardUnwatched', 'LookCardFrame', 'LookButtonTextures',
                  'LookTabTextures', 'LookMenuTextures', 'LookPanel', 'LookTag', 'LookKicker', 'LookRowNumber',
-                 'LookDecoration', 'LookListFocus', 'LookCardArt', 'LookCardArtFocused')
+                 'LookDecoration', 'LookListFocus', 'LookCardArt', 'LookCardArtFocused',
+                 'LookPillText', 'LookPillDisabled', 'LookTabText', 'LookMenuText', 'LookLabelCase')
 LOOK_CONSTANTS = ('LookCardFocusZoom', 'LookRowGap')
 
 
@@ -889,6 +890,25 @@ def test_card_artwork_is_look():
     uses = {i.get('content'): {x.get('name') for x in i.findall('param')} for i in raw.iter('include') if i.get('content')}
     for name in ('LookCardArt', 'LookCardArtFocused'):
         assert {'image', 'mask', 'fadetime'} <= uses[name], name
+
+
+def test_letter_case_lives_in_the_look():
+    """Kodi offers no way to undo [UPPERCASE]: an overlay can only choose it where the tag is."""
+    for name in ('Includes_Base.xml', 'Includes_Home.xml'):
+        assert '[UPPERCASE]' not in (ROOT / '1080i' / name).read_text(encoding='utf-8'), name
+
+
+@pytest.mark.parametrize('name, look', [('PillButton', 'LookPillText'), ('SpotlightPillLook', 'LookPillText'),
+                                        ('TabButton', 'LookTabText'), ('MenuButton', 'LookMenuText')])
+def test_button_text_is_look(name, look):
+    """Label case, font and text colours of a button are the overlay's; id, on* and visible are not."""
+    raw = next(el for p in layout_files() for el in parse(p).iter('include') if el.get('name') == name)
+    holder = raw.find('definition')
+    holder = holder.find('control') if holder.find('control') is not None else holder
+    for tag in ('label', 'altlabel', 'font', 'textcolor', 'focusedcolor'):
+        assert holder.find(tag) is None, (name, tag)
+    assert look in [i.get('content') for i in holder.findall('include')], name
+    assert with_look(raw).find('.//focusedcolor') is not None, name
 
 
 def test_card_zoom_is_a_constant():
