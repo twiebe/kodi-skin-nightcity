@@ -256,6 +256,15 @@
         <alttexturenofocus colordiffuse="state" border="8,0,8,0">ui/tab_line.png</alttexturenofocus>
     </include>
 
+    <!-- The line under the label of the shown season: none yet, the label draws itself in the focused
+         layout. Confuse has no font of bars (font_caps_line is the text font), so the label must
+         not be drawn again over itself. -->
+    <include name="LookSeasonTabLine">
+        <param name="label"/>
+        <param name="focused"/>
+        <param name="unfocused"/>
+    </include>
+
     <!-- An entry of the top menu: focused a filled accent button, the shown page a dark blue outline -->
     <include name="LookMenuTextures">
         <texturefocus border="22" colordiffuse="accent">ui/cut_btn_glow.png</texturefocus>

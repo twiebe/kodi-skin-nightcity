@@ -257,6 +257,37 @@
         <alttexturenofocus colordiffuse="state" border="8,0,8,0">ui/tab_line.png</alttexturenofocus>
     </include>
 
+    <!-- The line under the label of the shown season in the focused layout of the season tabs: the focus
+         line, without the focus the same line in dark blue; as long as the text: the label again in
+         the line font (a list layout has no auto width for an image) -->
+    <include name="LookSeasonTabLine">
+        <param name="label"/>
+        <param name="focused"/>
+        <param name="unfocused"/>
+        <definition>
+            <control type="label">
+                <width>240</width>
+                <height>44</height>
+                <aligny>center</aligny>
+                <font>font_caps_line</font>
+                <textcolor>focus</textcolor>
+                <selectedcolor>focus</selectedcolor>
+                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                <visible>$PARAM[focused]</visible>
+            </control>
+            <control type="label">
+                <width>240</width>
+                <height>44</height>
+                <aligny>center</aligny>
+                <font>font_caps_line</font>
+                <textcolor>state</textcolor>
+                <selectedcolor>state</selectedcolor>
+                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                <visible>$PARAM[unfocused]</visible>
+            </control>
+        </definition>
+    </include>
+
     <!-- An entry of the top menu: focused a filled accent button, the shown page a dark blue outline -->
     <include name="LookMenuTextures">
         <texturefocus border="22" colordiffuse="accent">ui/cut_btn_glow.png</texturefocus>

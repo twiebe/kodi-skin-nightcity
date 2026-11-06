@@ -558,29 +558,12 @@
                         <include content="SeasonTab">
                             <param name="color" value="accent"/>
                         </include>
-                        <!-- the shown season: the focus line, without the focus the same line in
-                             dark blue; as long as the text: the label again in the line font (a
-                             list layout has no auto width for an image) -->
-                        <control type="label">
-                            <width>240</width>
-                            <height>44</height>
-                            <aligny>center</aligny>
-                            <font>font_caps_line</font>
-                            <textcolor>focus</textcolor>
-                            <selectedcolor>focus</selectedcolor>
-                            <label>[UPPERCASE]$VAR[SeasonTabLabel][/UPPERCASE]</label>
-                            <visible>Control.HasFocus(5200)</visible>
-                        </control>
-                        <control type="label">
-                            <width>240</width>
-                            <height>44</height>
-                            <aligny>center</aligny>
-                            <font>font_caps_line</font>
-                            <textcolor>state</textcolor>
-                            <selectedcolor>state</selectedcolor>
-                            <label>[UPPERCASE]$VAR[SeasonTabLabel][/UPPERCASE]</label>
-                            <visible>!Control.HasFocus(5200)</visible>
-                        </control>
+                        <!-- the line of the shown season, as long as its label -->
+                        <include content="LookSeasonTabLine">
+                            <param name="label" value="$VAR[SeasonTabLabel]"/>
+                            <param name="focused" value="Control.HasFocus(5200)"/>
+                            <param name="unfocused" value="!Control.HasFocus(5200)"/>
+                        </include>
                     </focusedlayout>
                     <content target="videos" sortby="season">$VAR[InfoSeasonsPath]</content>
                 </control>
