@@ -83,7 +83,9 @@ def movie_rating(movieid, rating):
         rpc('VideoLibrary.SetMovieDetails', {'movieid': movieid, 'ratings': {'default': None}})
 
 
-BULK_FROM = 1000  # ids of movie rows tests add to the video database and remove again
+# ids of movie rows tests add to the video database and remove again; above any real id, a
+# long-lived library has real files rows past 17000
+BULK_FROM = 1000000
 
 
 def reset_library():
@@ -94,6 +96,10 @@ def reset_library():
         with sqlite3.connect(str(database[-1]), timeout=30) as connection:
             for table, key in (('videoversion', 'idFile'), ('movie', 'idMovie'), ('files', 'idFile')):
                 connection.execute('DELETE FROM {} WHERE {} >= ?'.format(table, key), (BULK_FROM,))
+            # the performance data of a former kodi-dev seed, which a template may still hold
+            connection.execute("DELETE FROM movie WHERE c00 LIKE 'Bulk %'")
+            connection.execute("DELETE FROM episode WHERE idShow IN (SELECT idShow FROM tvshow WHERE c00 LIKE 'BulkShow %')")
+            connection.execute("DELETE FROM tvshow WHERE c00 LIKE 'BulkShow %'")
         connection.close()
     for movie in rpc('VideoLibrary.GetMovies', {'properties': ['rating', 'genre']}).get('movies', []):
         if movie['rating']:
