@@ -9,9 +9,9 @@
     </variable>
 
     <!-- The first screen after boot. The name as a texture in two colours of the theme, con and fuse,
-         and under it the fuse itself: a spark runs along the line while the startup script works and
-         leaves a burning trail. Once the script is done the whole line burns, with the spark at its
-         end. The spark is a glow that flickers around a bright core. No status text: the fuse says it. The only endless animation of this skin: nothing else is on the screen then. -->
+         and under it a bar that fills. The wait has no measure, so it fills once, slowing down, and
+         stops short. Once the startup script is done a second bar fills over it, so it never goes
+         back. No status text: the bar says it. -->
     <include name="LookStartupWordmark">
         <definition>
             <control type="image">
@@ -54,58 +54,17 @@
                 <control type="image">
                     <width>960</width>
                     <height>4</height>
-                    <texture colordiffuse="accent">ui/fuse_trail.png</texture>
-                    <animation type="Conditional" condition="true" loop="true" reversible="false">
-                        <effect type="zoom" start="1,100" end="100,100" center="0,2" time="4200"/>
+                    <texture colordiffuse="accent">ui/white.png</texture>
+                    <animation type="Conditional" condition="true" reversible="false">
+                        <effect type="zoom" start="1,100" end="90,100" center="0,2" time="8000" tween="quadratic" easing="out"/>
                     </animation>
-                    <visible>$PARAM[waiting]</visible>
-                </control>
-                <control type="group">
-                    <animation type="Conditional" condition="true" loop="true" reversible="false">
-                        <effect type="slide" start="0,0" end="960,0" time="4200"/>
-                    </animation>
-                    <visible>$PARAM[waiting]</visible>
-                    <control type="image">
-                        <left>-32</left>
-                        <top>-30</top>
-                        <width>64</width>
-                        <height>64</height>
-                        <texture colordiffuse="accent">ui/spark_halo.png</texture>
-                        <animation effect="fade" start="100" end="65" time="180" pulse="true" condition="true">Conditional</animation>
-                    </control>
-                    <control type="image">
-                        <left>-8</left>
-                        <top>-6</top>
-                        <width>16</width>
-                        <height>16</height>
-                        <texture colordiffuse="spark">ui/spark_core.png</texture>
-                    </control>
                 </control>
                 <control type="image">
                     <width>960</width>
                     <height>4</height>
                     <texture colordiffuse="accent">ui/white.png</texture>
-                    <animation effect="zoom" start="20,100" end="100,100" center="0,2" time="300" tween="cubic" easing="out">Visible</animation>
+                    <animation effect="zoom" start="1,100" end="100,100" center="0,2" time="350" tween="cubic" easing="out">Visible</animation>
                     <visible>$PARAM[online]</visible>
-                </control>
-                <control type="group">
-                    <left>960</left>
-                    <visible>$PARAM[online]</visible>
-                    <control type="image">
-                        <left>-32</left>
-                        <top>-30</top>
-                        <width>64</width>
-                        <height>64</height>
-                        <texture colordiffuse="accent">ui/spark_halo.png</texture>
-                        <animation effect="fade" start="100" end="65" time="180" pulse="true" condition="true">Conditional</animation>
-                    </control>
-                    <control type="image">
-                        <left>-8</left>
-                        <top>-6</top>
-                        <width>16</width>
-                        <height>16</height>
-                        <texture colordiffuse="spark">ui/spark_core.png</texture>
-                    </control>
                 </control>
             </control>
         </definition>

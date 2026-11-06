@@ -436,10 +436,7 @@ def test_fullscreen_alpha_budget(confuse_root):
 
 
 def test_no_endless_animation():
-    """Only the loading page runs one, the spark: nothing else is on the screen then."""
     for name, include in look_includes().items():
-        if name.startswith('LookStartup'):
-            continue
         text = ET.tostring(include, encoding='unicode').lower()
         assert 'pulse' not in text and 'loop=' not in text, name
 
