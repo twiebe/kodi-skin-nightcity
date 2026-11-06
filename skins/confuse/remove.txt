@@ -1,2 +1,4 @@
 colors/catppuccin.xml
 colors/tokyonight.xml
+fonts/Rajdhani-OFL.txt
+fonts/ShareTechMono-OFL.txt
