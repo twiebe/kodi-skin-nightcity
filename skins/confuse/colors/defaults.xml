@@ -3,7 +3,7 @@
     <color name="bg">FF0F0E0D</color>
     <color name="bg_alt">FF191715</color>
     <color name="petrol">FF1C1A17</color>
-    <color name="surface">E01E1B18</color>
+    <color name="surface">FF1E1B18</color>
     <color name="surface_alt">F0262220</color>
     <color name="border">FFEFAA47</color>
     <color name="border_dim">40EFAA47</color>
@@ -27,5 +27,8 @@
     <color name="warn">FFE8C468</color>
     <color name="error">FFD98A6B</color>
     <color name="scrim">E00F0E0D</color>
+    <color name="text_chip">FFDED8CE</color>
+    <color name="focus_text_dim">FF4A3514</color>
+    <color name="disabled">FF9A9388</color>
     <color name="dim">8C0F0E0D</color>
 </colors>
