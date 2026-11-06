@@ -157,32 +157,30 @@ def build_line(source):
     return out
 
 
-def equalize_digits(font):
-    """Every digit as wide as the widest, centred: a clock or a runtime does not jitter."""
-    cmap, glyf = font.getBestCmap(), font['glyf']
-    names = [cmap[ord(d)] for d in '0123456789']
-    widest = max(font['hmtx'][n][0] for n in names)
-    for name in names:
-        advance, lsb = font['hmtx'][name]
-        shift = (widest - advance) // 2
-        glyph = glyf[name]
-        assert not glyph.isComposite(), name
-        if glyph.numberOfContours > 0:
-            glyph.coordinates.translate((shift, 0))
-            glyph.recalcBounds(glyf)
-            lsb = glyph.xMin
-        font['hmtx'][name] = (widest, lsb)
+def tabular_digits(font):
+    """Point the digits at the tabular glyphs (zero.tf ... nine.tf), one width each, so a clock or a
+    runtime does not jitter. Manrope's kerning pairs name the proportional digits only, so the
+    tabular ones are never kerned."""
+    words = 'zero one two three four five six seven eight nine'.split()
+    for table in font['cmap'].tables:
+        if table.isUnicode():
+            for digit, word in enumerate(words):
+                table.cmap[ord('0') + digit] = word + '.tf'
+    cmap = font.getBestCmap()
+    assert len({font['hmtx'][cmap[ord(d)]][0] for d in '0123456789'}) == 1
 
 
 def build_confuse():
-    """ConfuseUI-<weight>.ttf in skins/confuse/fonts: static cuts of Manrope with the symbols it lacks.
-    Kodi reads neither GSUB, GPOS nor the variation tables, so they go."""
+    """ConfuseUI-<weight>.ttf in skins/confuse/fonts: static cuts of Manrope (OFL, version 4.505, the
+    variable font beside them) with the symbols it lacks. Kodi shapes text with HarfBuzz, so GPOS stays
+    and the letters kern; digits are tabular and out of the kerning (tabular_digits). GSUB (Kodi asks
+    for default features only, never tnum) and the variation tables go."""
     from fontTools.varLib import instancer
     for weight, value in CONFUSE_WEIGHTS.items():
         font = instancer.instantiateVariableFont(TTFont(CONFUSE_FONTS / MANROPE), {'wght': value})
         add_symbols(font, [TTFont(FONTS / name) for name in SYMBOLS])
-        equalize_digits(font)
-        for tag in ('GSUB', 'GPOS', 'GDEF', 'STAT', 'HVAR', 'MVAR', 'avar'):
+        tabular_digits(font)
+        for tag in ('GSUB', 'STAT', 'HVAR', 'MVAR', 'avar'):
             if tag in font:
                 del font[tag]
         rename(font, 'ConfuseUI', weight)
