@@ -761,7 +761,7 @@
             <visible>String.IsEqual(Window(Home).Property(nc.page),system)</visible>
             <include content="PageFade"/>
             <include content="Kicker">
-                <param name="label" value="nightcity $INFO[System.AddonVersion(skin.nightcity)]"/>
+                <param name="label" value="$VAR[SkinVersion]"/>
                 <param name="left" value="64"/>
                 <param name="top" value="116"/>
             </include>

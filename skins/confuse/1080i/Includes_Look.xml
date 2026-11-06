@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <!-- Replaces the Nightcity file of the same name: the one place that names the skin -->
+    <variable name="SkinTitle">
+        <value>Confuse</value>
+    </variable>
+    <variable name="SkinVersion">
+        <value>confuse $INFO[System.AddonVersion(skin.confuse)]</value>
+    </variable>
+</includes>

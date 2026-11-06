@@ -1062,14 +1062,6 @@ def test_service_survives_a_failing_command(monkeypatch):
     assert ran == [('home',)]
 
 
-def test_service_ends_when_another_skin_is_active(monkeypatch):
-    window, ran = _service_env(monkeypatch, [('nightcity', 'Other.home')] * 3, skin='skin.estuary')
-    nightcity.service()
-    nightcity.wait_for_commands()
-    assert ran == [('home',)]  # the first wait already sees the other skin
-    assert 'nc.service' not in window.props
-
-
 def test_a_second_service_runs_its_command_and_leaves(monkeypatch):
     """Only one service listens: every one more would run each command once more (three
     keyboards at once closed each other)."""
@@ -2624,3 +2616,83 @@ def test_bar_width_grows_with_the_label():
                                          ('rating', 'bar_rating')])
 def test_bar_key_of_the_info_label_sorts(name, method):
     assert nightcity.BAR_INFO[name][1] is getattr(nightcity, method)
+
+
+def test_service_of_confuse_keeps_running_under_confuse(monkeypatch):
+    window, ran = _service_env(monkeypatch, [('nightcity', 'Other.play:movie:1:resume')], skin='skin.confuse')
+    nightcity.service()
+    nightcity.wait_for_commands()
+    assert ran == [('play', 'movie', '1', 'resume')]
+    assert window.props['nc.service'] == '1'
+
+
+def _switching_env(monkeypatch, script_exists=True):
+    """A service that starts under skin.nightcity; the skin is skin.confuse from the first wait on,
+    and a command arrives during the wait after the switch."""
+    window, ran = _service_env(monkeypatch, [])
+    skins = ['skin.nightcity']
+    xbmc = __import__('sys').modules['xbmc']
+    xbmc.getSkinDir = lambda: skins[0]
+    started = []
+    xbmc.executebuiltin = started.append
+
+    def wait(self, timeout):
+        self.waits += 1
+        if self.waits == 1:
+            skins[0] = 'skin.confuse'
+        else:
+            self.onNotification('nightcity', 'Other.play:x', 'null')
+        return False
+
+    monkeypatch.setattr(ServiceMonitor, 'waitForAbort', wait)
+    monkeypatch.setattr(nightcity, '_skin_script_exists', lambda: script_exists)
+    return window, ran, started
+
+
+def test_service_ends_when_the_skin_changes(monkeypatch):
+    window, ran, _ = _switching_env(monkeypatch)
+    nightcity.service()
+    nightcity.wait_for_commands()
+    assert 'nc.service' not in window.props
+    assert ran == []  # the commands after the switch do not run
+
+
+def test_ending_service_starts_the_next_one(monkeypatch):
+    _, _, started = _switching_env(monkeypatch)
+    nightcity.service()
+    assert started == ['RunScript(special://skin/scripts/nightcity.py,service,home)']
+
+
+def test_ending_service_leaves_a_started_one_alone(monkeypatch):
+    window, _, started = _switching_env(monkeypatch)
+    waits = ServiceMonitor.waitForAbort
+
+    def wait(self, timeout):
+        result = waits(self, timeout)
+        window.props['nc.service'] = '1'  # Home started the next service meanwhile
+        return result
+
+    monkeypatch.setattr(ServiceMonitor, 'waitForAbort', wait)
+    nightcity.service()
+    assert started == []
+
+
+def test_ending_service_starts_nothing_for_a_skin_without_the_script(monkeypatch):
+    _, _, started = _switching_env(monkeypatch, script_exists=False)
+    nightcity.service()
+    assert started == []
+
+
+def test_addon_data_follows_the_active_skin(monkeypatch):
+    import types
+    paths = []
+    xbmcvfs = types.SimpleNamespace(translatePath=lambda p: p, mkdirs=lambda p: paths.append(p))
+    monkeypatch.setitem(sys.modules, 'xbmcvfs', xbmcvfs)
+    for skin in ('skin.confuse', 'skin.nightcity'):
+        monkeypatch.setitem(sys.modules, 'xbmc', types.SimpleNamespace(getSkinDir=lambda skin=skin: skin))
+        assert nightcity._search_file() == 'special://profile/addon_data/{}/search.json'.format(skin)
+
+
+def test_keymap_names_stay_shared():
+    assert nightcity.HOME_KEYMAP_NAME == '0_skin.nightcity.xml'
+    assert nightcity.BACK_KEYMAP_NAME == '0_skin.nightcity.back.xml'

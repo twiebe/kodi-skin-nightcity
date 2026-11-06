@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+    <!-- The one place that names the skin; skins/confuse replaces this file. The service takes the
+         skin id from Kodi at run time (xbmc.getSkinDir) -->
+    <variable name="SkinTitle">
+        <value>Nightcity</value>
+    </variable>
+    <variable name="SkinVersion">
+        <value>nightcity $INFO[System.AddonVersion(skin.nightcity)]</value>
+    </variable>
+</includes>
