@@ -666,22 +666,24 @@
                     <param name="focused" value="$PARAM[focused]"/>
                     <param name="unfocused" value="!$PARAM[focused]"/>
                 </include>
-                <!-- unfocused a plain rectangle, focused cut like the frame; scalediffuse="false" keeps
-                     the mask on the card when scale crops artwork of another ratio -->
                 <control type="image">
                     <width>$PARAM[width]</width>
                     <height>$PARAM[height]</height>
-                    <aspectratio>scale</aspectratio>
-                    <fadetime>$PARAM[fadetime]</fadetime>
-                    <texture background="true">$PARAM[image]</texture>
+                    <include content="LookCardArt">
+                        <param name="image" value="$PARAM[image]"/>
+                        <param name="mask" value="$PARAM[mask]"/>
+                        <param name="fadetime" value="$PARAM[fadetime]"/>
+                    </include>
                     <visible>!$PARAM[focused]</visible>
                 </control>
                 <control type="image">
                     <width>$PARAM[width]</width>
                     <height>$PARAM[height]</height>
-                    <aspectratio scalediffuse="false">scale</aspectratio>
-                    <fadetime>$PARAM[fadetime]</fadetime>
-                    <texture diffuse="$PARAM[mask]" background="true">$PARAM[image]</texture>
+                    <include content="LookCardArtFocused">
+                        <param name="image" value="$PARAM[image]"/>
+                        <param name="mask" value="$PARAM[mask]"/>
+                        <param name="fadetime" value="$PARAM[fadetime]"/>
+                    </include>
                     <visible>$PARAM[focused]</visible>
                 </control>
                 <!-- extra layers on the artwork, e.g. a title fallback or a progress line. Kodi only

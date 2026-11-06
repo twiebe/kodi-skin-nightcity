@@ -834,7 +834,7 @@ def test_confuse_look_file_names_confuse(confuse_root):
 LOOK_MOVED = ('Includes_Base.xml', 'Includes_Home.xml', 'Includes_Info.xml', 'Includes_Player.xml')
 LOOK_INCLUDES = ('LookBackground', 'LookCardFocus', 'LookCardUnwatched', 'LookCardFrame', 'LookButtonTextures',
                  'LookTabTextures', 'LookMenuTextures', 'LookPanel', 'LookTag', 'LookKicker', 'LookRowNumber',
-                 'LookDecoration', 'LookListFocus')
+                 'LookDecoration', 'LookListFocus', 'LookCardArt', 'LookCardArtFocused')
 LOOK_CONSTANTS = ('LookCardFocusZoom', 'LookRowGap')
 
 
@@ -879,6 +879,16 @@ def test_every_look_name_is_used_outside_the_look_file():
 
 def look_constants():
     return {el.get('name'): el.text for el in parse(ROOT / '1080i' / 'Includes_Look.xml').findall('constant')}
+
+
+def test_card_artwork_is_look():
+    """An overlay gives both artwork images its own corners over a mask, also the unfocused one:
+    CutCard itself keeps only the size and when each shows."""
+    raw = next(el for el in parse(ROOT / '1080i' / 'Includes_Base.xml').iter('include') if el.get('name') == 'CutCard')
+    assert not [t for t in raw.iter('texture') if '$PARAM[image]' in (t.text or '')]
+    uses = {i.get('content'): {x.get('name') for x in i.findall('param')} for i in raw.iter('include') if i.get('content')}
+    for name in ('LookCardArt', 'LookCardArtFocused'):
+        assert {'image', 'mask', 'fadetime'} <= uses[name], name
 
 
 def test_card_zoom_is_a_constant():
