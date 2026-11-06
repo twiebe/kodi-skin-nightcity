@@ -172,15 +172,17 @@ def tabular_digits(font):
 
 def build_confuse():
     """ConfuseUI-<weight>.ttf in skins/confuse/fonts: static cuts of Manrope (OFL, version 4.505, the
-    variable font beside them) with the symbols it lacks. Kodi shapes text with HarfBuzz, so GPOS stays
-    and the letters kern; digits are tabular and out of the kerning (tabular_digits). GSUB (Kodi asks
-    for default features only, never tnum) and the variation tables go."""
+    variable font beside them) with the symbols it lacks. The digits are tabular (tabular_digits).
+    GPOS goes: Kodi 21 shapes with HarfBuzz but uses only the x and y offsets of the result and the
+    advance of each glyph alone (GUIFontTTF.cpp:591, 657, 1058), and Manrope's kerning is x advance
+    only, so it never reaches the screen. GSUB goes too (Kodi asks for default features, never
+    tnum), and so do the variation tables."""
     from fontTools.varLib import instancer
     for weight, value in CONFUSE_WEIGHTS.items():
         font = instancer.instantiateVariableFont(TTFont(CONFUSE_FONTS / MANROPE), {'wght': value})
         add_symbols(font, [TTFont(FONTS / name) for name in SYMBOLS])
         tabular_digits(font)
-        for tag in ('GSUB', 'STAT', 'HVAR', 'MVAR', 'avar'):
+        for tag in ('GSUB', 'GPOS', 'STAT', 'HVAR', 'MVAR', 'avar'):
             if tag in font:
                 del font[tag]
         rename(font, 'ConfuseUI', weight)
