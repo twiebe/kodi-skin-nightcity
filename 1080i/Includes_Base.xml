@@ -213,7 +213,9 @@
                 <height>36</height>
                 <font>font_caps_small</font>
                 <textcolor>text_mute</textcolor>
-                <label>[UPPERCASE]$PARAM[path][/UPPERCASE]</label>
+                <include content="LookLabelCase">
+                    <param name="text" value="$PARAM[path]"/>
+                </include>
             </control>
             <!-- the weather left of the clock, as on Home; not next to a counter (weather) -->
             <control type="grouplist">
@@ -269,7 +271,9 @@
                     <font>font_caps_small</font>
                     <textcolor>text_mute</textcolor>
                     <shadowcolor>bg</shadowcolor>
-                    <label>[UPPERCASE]$PARAM[key] $PARAM[label][/UPPERCASE]</label>
+                    <include content="LookLabelCase">
+                        <param name="text" value="$PARAM[key] $PARAM[label]"/>
+                    </include>
                 </control>
             </control>
         </definition>
@@ -328,7 +332,9 @@
                 <height>180</height>
                 <font>font_title</font>
                 <textcolor>text</textcolor>
-                <label>[UPPERCASE]$INFO[Container(5000).ListItem.Label][/UPPERCASE]</label>
+                <include content="LookLabelCase">
+                    <param name="text" value="$INFO[Container(5000).ListItem.Label]"/>
+                </include>
             </control>
             <control type="textbox">
                 <left>1431</left>
@@ -396,7 +402,9 @@
                     <scroll>false</scroll>
                     <wrapmultiline>false</wrapmultiline>
                     <textcolor>text</textcolor>
-                    <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                    <include content="LookLabelCase">
+                        <param name="text" value="$PARAM[label]"/>
+                    </include>
                 </control>
             </control>
         </definition>
@@ -448,14 +456,14 @@
                 <enable>$PARAM[enable]</enable>
                 <width>$PARAM[width]</width>
                 <height>74</height>
-                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
-                <font>font_caps</font>
-                <textoffsetx>$PARAM[textoffsetx]</textoffsetx>
-                <align>center</align>
-                <aligny>center</aligny>
-                <textcolor>$PARAM[textcolor]</textcolor>
-                <focusedcolor>focus_text</focusedcolor>
-                <disabledcolor>$PARAM[textcolor]</disabledcolor>
+                <include content="LookPillText">
+                    <param name="label" value="$PARAM[label]"/>
+                    <param name="textcolor" value="$PARAM[textcolor]"/>
+                    <param name="textoffsetx" value="$PARAM[textoffsetx]"/>
+                </include>
+                <include content="LookPillDisabled">
+                    <param name="color" value="$PARAM[textcolor]"/>
+                </include>
                 <include content="LookButtonTextures">
                     <param name="color" value="$PARAM[color]"/>
                 </include>
@@ -564,7 +572,9 @@
                 <height>34</height>
                 <font>font_caps_small</font>
                 <textcolor>text_mute</textcolor>
-                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
+                <include content="LookLabelCase">
+                    <param name="text" value="$PARAM[label]"/>
+                </include>
                 <visible>$PARAM[visible]</visible>
             </control>
         </definition>
@@ -792,13 +802,10 @@
             <control type="togglebutton" id="$PARAM[id]">
                 <width>auto</width>
                 <height>44</height>
-                <font>$PARAM[font]</font>
-                <textoffsetx>10</textoffsetx>
-                <aligny>center</aligny>
-                <textcolor>text_mute</textcolor>
-                <focusedcolor>accent</focusedcolor>
-                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
-                <altlabel>[UPPERCASE]$PARAM[label][/UPPERCASE]</altlabel>
+                <include content="LookTabText">
+                    <param name="label" value="$PARAM[label]"/>
+                    <param name="font" value="$PARAM[font]"/>
+                </include>
                 <include>LookTabTextures</include>
                 <usealttexture>$PARAM[active]</usealttexture>
                 <onfocus>$PARAM[onfocus]</onfocus>
@@ -822,13 +829,9 @@
             <control type="togglebutton" id="$PARAM[id]">
                 <width>auto</width>
                 <height>64</height>
-                <font>font_caps</font>
-                <textoffsetx>26</textoffsetx>
-                <aligny>center</aligny>
-                <textcolor>text_mute</textcolor>
-                <focusedcolor>focus_text</focusedcolor>
-                <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
-                <altlabel>[UPPERCASE]$PARAM[label][/UPPERCASE]</altlabel>
+                <include content="LookMenuText">
+                    <param name="label" value="$PARAM[label]"/>
+                </include>
                 <include>LookMenuTextures</include>
                 <usealttexture>$PARAM[active]</usealttexture>
                 <onfocus>$PARAM[onfocus]</onfocus>

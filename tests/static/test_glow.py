@@ -232,13 +232,13 @@ def test_pills_grow_by_the_margin():
     margin around them."""
     pill = control_of('PillButton')
     assert pill.findtext('height') == str(54 + 2 * GLOW)
-    params = {p.get('name'): p.get('default') for p in definitions()['PillButton'].iter('param')}
+    params = {p.get('name'): p.get('default') for p in definitions()['PillButton'].findall('param')}
     assert params['textoffsetx'] == str(24 + GLOW)
     menu = control_of('MenuButton')
     assert (menu.findtext('height'), menu.findtext('textoffsetx')) == (str(44 + 2 * GLOW), str(16 + GLOW))
     row = control_of('ListButton')
     assert (row.findtext('height'), row.findtext('textoffsetx')) == (str(52 + 2 * GLOW), str(20 + GLOW))
-    look = definitions()['SpotlightPillLook'].find('definition')
+    look = with_look(definitions()['SpotlightPillLook']).find('definition')
     assert (look.findtext('height'), look.findtext('textoffsetx')) == (str(54 + 2 * GLOW), str(24 + GLOW))
 
 
