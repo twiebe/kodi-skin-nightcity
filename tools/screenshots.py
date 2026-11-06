@@ -29,7 +29,6 @@ import importlib.util
 import json
 import os
 import pathlib
-import re
 import shutil
 import subprocess
 import sys
@@ -40,6 +39,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 
 from build import assemble
+from kodidev_setup import select_skin
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 KODI_DEV = pathlib.Path(os.environ.get('KODI_DEV', '/workspaces/kodi-dev'))
@@ -149,12 +149,6 @@ def _skin_folder(skin):
 
 def skin_mount(skin):
     return '{}:/home/kodi/.kodi/addons/skin.{}'.format(_skin_folder(skin), skin)
-
-
-def select_skin(guisettings, skin):
-    text = guisettings.read_text()
-    guisettings.write_text(re.sub(r'<setting id="lookandfeel.skin"[^>]*>[^<]*</setting>',
-                                  '<setting id="lookandfeel.skin">skin.{}</setting>'.format(skin), text))
 
 
 def start_instance(name, skin='nightcity'):

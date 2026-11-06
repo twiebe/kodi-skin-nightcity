@@ -68,7 +68,7 @@ def service_starts(skin):
 def service_answers():
     """A skin's NotifyAll reaches a service: home_keymap writes the back keymap again."""
     path = keymap(BACK_KEYMAP)
-    path.unlink()
+    path.unlink(missing_ok=True)
     builtin('NotifyAll(nightcity,home_keymap)')
     wait_for_file(path, True)
 

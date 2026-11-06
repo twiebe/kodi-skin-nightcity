@@ -3,6 +3,8 @@ import pathlib
 import sys
 import xml.etree.ElementTree as ET
 
+import pytest
+
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2] / 'tools'))
 import kodidev_setup  # noqa: E402
 
@@ -75,7 +77,14 @@ def test_a_mount_of_another_addon_stays(tmp_path, monkeypatch):
 
 def test_the_skin_in_guisettings_follows_the_option(tmp_path, monkeypatch):
     _, settings = _folders(tmp_path, monkeypatch)
-    kodidev_setup.select_skin(kodidev_setup.parse_args(['--skin', 'confuse']).skin)
+    kodidev_setup.select_skin(settings, kodidev_setup.parse_args(['--skin', 'confuse']).skin)
     assert '>skin.confuse</setting>' in settings.read_text()
-    kodidev_setup.select_skin(kodidev_setup.parse_args([]).skin)
+    kodidev_setup.select_skin(settings, kodidev_setup.parse_args([]).skin)
     assert '>skin.nightcity</setting>' in settings.read_text()
+
+
+def test_a_guisettings_without_the_skin_setting_is_an_error(tmp_path, monkeypatch):
+    _, settings = _folders(tmp_path, monkeypatch)
+    settings.write_text('<settings></settings>')
+    with pytest.raises(SystemExit, match='lookandfeel.skin'):
+        kodidev_setup.select_skin(settings, 'confuse')

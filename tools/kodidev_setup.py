@@ -91,12 +91,14 @@ def ensure_mounts():
         print('mounted', mount)
 
 
-def select_skin(skin):
-    text = GUISETTINGS.read_text()
-    new = re.sub(r'<setting id="lookandfeel.skin"[^>]*>[^<]*</setting>',
-                 '<setting id="lookandfeel.skin">skin.{}</setting>'.format(skin), text)
+def select_skin(guisettings, skin):
+    text = guisettings.read_text()
+    new, found = re.subn(r'<setting id="lookandfeel.skin"[^>]*>[^<]*</setting>',
+                         '<setting id="lookandfeel.skin">skin.{}</setting>'.format(skin), text)
+    if not found:
+        raise SystemExit('no setting lookandfeel.skin in {}'.format(guisettings))
     if new != text:
-        GUISETTINGS.write_text(new)
+        guisettings.write_text(new)
         print('selected skin.{}'.format(skin))
 
 
@@ -113,7 +115,7 @@ def main():
     ensure_mounts()
     run('docker', 'compose', 'stop', 'kodi')
     run('python3', str(KODI_DEV / 'perf' / 'setup_skin.py'), '--local', str(TMDB_HELPER))
-    select_skin(args.skin)
+    select_skin(GUISETTINGS, args.skin)
     run('./kdev', 'up')
     if add_tmdb_titles(KODI_DEV / 'data' / 'media'):
         # Jellyfin for Kodi syncs them into Kodi's library when the scan reports them
