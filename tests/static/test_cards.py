@@ -4,6 +4,7 @@ import re
 from PIL import Image
 
 from conftest import ROOT, layout_files, parse
+from navigation import with_look
 
 CONTAINERS = ('list', 'panel', 'fixedlist', 'wraplist')
 
@@ -85,7 +86,7 @@ def test_containers_preload_artwork():
 
 
 def _card():
-    return next(el for p in layout_files() for el in parse(p).iter('include') if el.get('name') == 'CutCard')
+    return with_look(next(el for p in layout_files() for el in parse(p).iter('include') if el.get('name') == 'CutCard'))
 
 
 def test_card_mask_fits_card_not_cropped_image():

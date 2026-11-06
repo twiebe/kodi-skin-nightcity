@@ -2,6 +2,7 @@ import pytest
 import re
 
 from conftest import ROOT, layout_files, parse
+from navigation import with_look
 
 VAR = re.compile(r'\$VAR\[([^\],]+)')
 ART = re.compile(r'Art\(')
@@ -93,10 +94,11 @@ MIGRATED = {p.name for p in (ROOT / '1080i').glob('*.xml')}
 
 
 def include(name):
+    """The definition of an include, with what it takes from Includes_Look.xml in place."""
     for p in layout_files():
         for el in parse(p).iter('include'):
             if el.get('name') == name:
-                return el
+                return with_look(el)
     return None
 
 
@@ -825,6 +827,65 @@ def test_confuse_look_file_names_confuse(confuse_root):
     text = (confuse_root / '1080i' / 'Includes_Look.xml').read_text(encoding='utf-8')
     assert 'skin.confuse' in text and 'skin.nightcity' not in text
     assert 'Includes_Look.xml' in (confuse_root / '1080i' / 'Includes.xml').read_text(encoding='utf-8')
+
+
+# the look of these files lives in Includes_Look.xml, which skins/confuse replaces; the dialogs,
+# settings and music follow with the rest of the windows
+LOOK_MOVED = ('Includes_Base.xml',)
+LOOK_INCLUDES = ('LookBackground', 'LookCardFocus', 'LookCardUnwatched', 'LookCardFrame', 'LookButtonTextures',
+                 'LookTabTextures', 'LookMenuTextures', 'LookPanel', 'LookTag', 'LookKicker', 'LookRowNumber')
+LOOK_CONSTANTS = ('LookCardFocusZoom',)
+
+
+def test_cut_textures_only_in_look_includes():
+    """border="..." and the cut textures stand in Includes_Look.xml, not in the files that move."""
+    found = []
+    for name in LOOK_MOVED:
+        for el in parse(ROOT / '1080i' / name).iter():
+            texts = [el.text or '', el.get('value') or '', el.get('default') or '']
+            if el.get('border') or any('ui/cut' in t for t in texts):
+                found.append((name, el.tag, el.get('border'), (el.text or el.get('value') or el.get('default') or '').strip()))
+    assert found == []
+
+
+@pytest.mark.parametrize('look', [ROOT / '1080i' / 'Includes_Look.xml', ROOT / 'skins' / 'confuse' / '1080i' / 'Includes_Look.xml'])
+def test_look_names_exist(look):
+    root = parse(look)
+    includes = {el.get('name') for el in root.findall('include')}
+    constants = {el.get('name') for el in root.findall('constant')}
+    assert set(LOOK_INCLUDES) - includes == set()
+    assert set(LOOK_CONSTANTS) - constants == set()
+
+
+def test_both_look_files_have_the_same_names():
+    """A name only one skin has would break the other as soon as a shared file asks for it."""
+    def names(path):
+        root = parse(path)
+        return {(el.tag, el.get('name')) for el in root if el.get('name')}
+    assert names(ROOT / '1080i' / 'Includes_Look.xml') == names(ROOT / 'skins' / 'confuse' / '1080i' / 'Includes_Look.xml')
+
+
+def test_every_look_name_is_used_outside_the_look_file():
+    text = '\n'.join(p.read_text(encoding='utf-8') for p in layout_files() if p.name != 'Includes_Look.xml')
+    look = (ROOT / '1080i' / 'Includes_Look.xml').read_text(encoding='utf-8')
+    root = parse(ROOT / '1080i' / 'Includes_Look.xml')
+    for el in root.findall('include'):
+        name = el.get('name')
+        assert 'content="{0}"'.format(name) in text + look or '>{0}<'.format(name) in text + look, name
+    for el in root.findall('constant'):
+        assert '>{0}<'.format(el.get('name')) in text or '"{0}"'.format(el.get('name')) in text, el.get('name')
+
+
+def look_constants():
+    return {el.get('name'): el.text for el in parse(ROOT / '1080i' / 'Includes_Look.xml').findall('constant')}
+
+
+def test_card_zoom_is_a_constant():
+    inc = include('CutCard')
+    zooms = [a for a in inc.iter('animation') if a.get('effect') == 'zoom']
+    assert len(zooms) == 2 and {a.get('end') for a in zooms} == {'LookCardFocusZoom'}
+    assert {a.get('time') for a in zooms} == {'LookCardFocusTime'}
+    assert (look_constants()['LookCardFocusZoom'], look_constants()['LookCardFocusTime']) == ('106', '150')
 
 
 def test_skin_name_variables_exist():
