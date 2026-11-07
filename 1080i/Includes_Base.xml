@@ -31,12 +31,17 @@
              rest of its hero -->
         <param name="fadetime" default="200"/>
         <definition>
-            <include content="LookFanartBackdrop">
-                <param name="art" value="$PARAM[art]"/>
-                <param name="fadetime" value="$PARAM[fadetime]"/>
-                <param name="shown" value="!String.IsEmpty($PARAM[art])"/>
-                <param name="blurred" value="String.IsEqual(Window(Home).Property(nc.blur.original),$PARAM[art])"/>
-            </include>
+            <control type="image">
+                <description>fanart backdrop</description>
+                <left>0</left>
+                <top>0</top>
+                <width>1920</width>
+                <height>1080</height>
+                <aspectratio>scale</aspectratio>
+                <fadetime>$PARAM[fadetime]</fadetime>
+                <texture colordiffuse="fanart" diffuse="ui/fade_r.png" background="true">$INFO[$PARAM[art]]</texture>
+                <visible>!String.IsEmpty($PARAM[art])</visible>
+            </control>
         </definition>
     </include>
 

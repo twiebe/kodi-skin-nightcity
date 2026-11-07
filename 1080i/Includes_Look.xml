@@ -625,24 +625,4 @@
         </definition>
     </include>
 
-    <!-- The fanart behind a page, sharp in this look. `blurred` is for a look that has the picture. -->
-    <include name="LookFanartBackdrop">
-        <param name="art"/>
-        <param name="fadetime"/>
-        <param name="shown"/>
-        <param name="blurred"/>
-        <definition>
-            <control type="image">
-                <description>fanart backdrop</description>
-                <left>0</left>
-                <top>0</top>
-                <width>1920</width>
-                <height>1080</height>
-                <aspectratio>scale</aspectratio>
-                <fadetime>$PARAM[fadetime]</fadetime>
-                <texture colordiffuse="fanart" diffuse="ui/fade_r.png" background="true">$INFO[$PARAM[art]]</texture>
-                <visible>$PARAM[shown]</visible>
-            </control>
-        </definition>
-    </include>
 </includes>

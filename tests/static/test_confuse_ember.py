@@ -1,6 +1,8 @@
 """Confuse after the TV check: Ember as default with the other palettes as colour themes, a burning
 fuse on the loading page, one line for shown and focused in the menu and tabs, a glow on the focused
 card. Read from the assembled skin (confuse_root) and the overlay."""
+import xml.etree.ElementTree as ET
+
 import pytest
 from PIL import Image
 
@@ -183,26 +185,13 @@ def test_the_more_pill_glows_like_the_buttons(confuse_root):
     assert list(alpha(confuse_root, 'more_border_dim.png').getdata()) == list(alpha(confuse_root, 'pill_pad.png').getdata())
 
 
-BLUR = 'Window(Home).Property(nc.blur.{})'
-
-
-def test_backdrop_is_blurred_once_the_helper_has_that_picture(confuse_root):
-    """One of two shows: the blurred picture when BlurWatch has it for this art, the sharp one until
-    then and for art it does not follow. The same mask and colour for both."""
+def test_confuse_backdrop_is_sharp(confuse_root):
+    """One picture, the art itself: the blur was struck after the test on the box."""
     from navigation import load
     window = load('MyVideoNav.xml', layout=confuse_root / '1080i')
     images = [c for c in window.iter('control') if c.findtext('description') == 'fanart backdrop']
-    assert len(images) == 2
-    match = 'String.IsEqual({},ListItem.Art(fanart))'.format(BLUR.format('original'))
-    sharp, blurred = images
-    assert sharp.findtext('texture') == '$INFO[ListItem.Art(fanart)]'
-    assert blurred.findtext('texture') == '$INFO[{}]'.format(BLUR.format('image'))
-    assert match in blurred.findtext('visible') and '!' + match in sharp.findtext('visible')
-    for image in images:
-        texture = image.find('texture')
-        assert (texture.get('colordiffuse'), texture.get('diffuse')) == ('fanart', 'ui/fade_r.png')
-        assert '!String.IsEmpty(ListItem.Art(fanart))' in image.findtext('visible')
-        assert image.find('animation') is not None
+    assert [i.findtext('texture') for i in images] == ['$INFO[ListItem.Art(fanart)]']
+    assert 'nc.blur' not in ET.tostring(window, encoding='unicode')
 
 
 def test_nightcity_backdrop_stays_sharp():
