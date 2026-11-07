@@ -68,6 +68,26 @@
         </definition>
     </include>
 
+    <!-- A card of a row of what plays on (continue, next up): here the same as any card -->
+    <constant name="LookRowWideItemWidth">228</constant>
+    <variable name="LookRowWideArt">
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
+        <value>$INFO[ListItem.Art(poster)]</value>
+    </variable>
+    <include name="LookRowWideCard">
+        <param name="image"/>
+        <param name="dim" default="false"/>
+        <param name="focused" default="false"/>
+        <definition>
+            <include content="CutCard">
+                <param name="image" value="$PARAM[image]"/>
+                <param name="dim" value="$PARAM[dim]"/>
+                <param name="focused" value="$PARAM[focused]"/>
+                <include>CardExtras</include>
+            </include>
+        </definition>
+    </include>
+
     <!-- The title of the focused card in the top line of its row -->
     <include name="LookRowFocusTitle">
         <param name="label"/>

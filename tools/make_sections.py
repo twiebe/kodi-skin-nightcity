@@ -118,6 +118,10 @@ def variants(page):
             yield key, value or IMPLICIT[page], values, value
 
 
+# rows of what plays on: a look can show them wide (LookRowWideCard)
+WIDE = ('continue', 'nextup')
+
+
 def param(name, value):
     return '<param name="{}" value="{}"/>'.format(name, value)
 
@@ -148,6 +152,9 @@ def slot_include(page):
         for extra in ('click', 'art'):
             if extra in row:
                 params.append(param(extra, row[extra]))
+        if key in WIDE:
+            params += [param('card', 'LookRowWideCard'), param('itemwidth', 'LookRowWideItemWidth'),
+                       param('art', '$VAR[LookRowWideArt]')]
         nested = []
         if row.get('genres'):
             db, prop, label, pick = GENRES[row['genres']]

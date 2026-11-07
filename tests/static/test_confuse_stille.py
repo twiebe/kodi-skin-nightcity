@@ -1,5 +1,6 @@
 """Confuse in the design Stille Mitte: logo, loading page, tabs in the middle, the hero as a large
 rounded picture and wide rows. Nightcity keeps every value, the expansion of its windows does not change."""
+import re
 import xml.etree.ElementTree as ET
 
 from PIL import Image
@@ -204,8 +205,8 @@ def test_tab_glow_fades_out_before_the_bottom_edge():
     assert all(glow.getpixel((middle, y)) == 255 for y in solid)
 
 
-def test_row_card_is_wide_and_names_its_title():
-    card = look_includes()['LookRowCard']
+def test_what_plays_on_is_wide_and_names_its_title():
+    card = look_includes()['LookRowWideCard']
     args = {p.get('name'): p.get('value') for p in next(i for i in card.iter('include') if i.get('content') == 'CutCard').findall('param')}
     assert (args['width'], args['height'], args['mask']) == ('400', '225', 'ui/mask_400x225.png')
     assert (args['glowwidth'], args['glowheight']) == ('448', '273')
@@ -213,19 +214,38 @@ def test_row_card_is_wide_and_names_its_title():
     assert ui('mask_400x225.png').size == (400, 225)
 
 
-def test_row_top_line_has_no_title():
-    """The hero and the label under the card name it already."""
-    assert len(look_includes()['LookRowFocusTitle'].find('definition')) == 0
-    night = {i.get('name'): i for i in parse(ROOT / '1080i' / 'Includes_Look.xml').iter('include') if i.get('name')}
-    assert night['LookRowFocusTitle'].find('.//control').findtext('visible') == '$PARAM[shown]'
+def test_other_rows_show_posters():
+    card = look_includes()['LookRowCard']
+    cut = next(i for i in card.iter('include') if i.get('content') == 'CutCard')
+    assert {p.get('name') for p in cut.findall('param')} == {'image', 'dim', 'focused'}  # CutCard's poster size
 
 
-def test_row_art_prefers_wide_pictures():
+def variable(name):
     root = parse(OVERLAY / '1080i' / 'Includes_Look.xml')
-    values = next(v for v in root.iter('variable') if v.get('name') == 'LookRowArt').findall('value')
-    order = [v.text for v in values]
+    return [v.text for v in next(v for v in root.iter('variable') if v.get('name') == name).findall('value')]
+
+
+def test_wide_art_is_the_film_or_show_never_a_still():
+    """Fanart and wide art are 16:9: nothing is cut. The still of an episode looked like a chapter
+    picture on the box."""
+    order = variable('LookRowWideArt')
+    assert not any('Art(thumb)' in v for v in order)
     assert order.index('$INFO[ListItem.Art(landscape)]') < order.index('$INFO[ListItem.Art(fanart)]') < order.index('$INFO[ListItem.Art(poster)]')
-    assert order[-1] == '$INFO[ListItem.Art(poster)]'  # never an empty card when there is art at all
+    assert order[-1] == '$INFO[ListItem.Art(poster)]'
+    assert variable('LookRowArt') == ['$INFO[ListItem.Art(tvshow.poster)]', '$INFO[ListItem.Art(poster)]']
+
+
+def test_only_continue_and_next_up_are_wide():
+    text = (ROOT / '1080i' / 'Includes_Sections.xml').read_text(encoding='utf-8')
+    rows = re.findall(r'<include content="RowBox".*?</include>', text, re.S)
+    wide = [r for r in rows if 'LookRowWideCard' in r]
+    assert len(wide) == 6
+    assert all('$LOCALIZE[31233]' in r or '$LOCALIZE[31234]' in r for r in wide)
+    assert all('$VAR[LookRowWideArt]' in r and 'LookRowWideItemWidth' in r for r in wide)
+
+
+def test_logo_stays_bright_under_the_quick_menu():
+    assert 'QuickMenuFade' not in ET.tostring(look_includes()['LookHomeLogo'], encoding='unicode')
 
 
 def test_a_focused_card_glows():

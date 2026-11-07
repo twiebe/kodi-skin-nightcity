@@ -41,6 +41,9 @@
                 <param name="content2" value="special://skin/playlists/WidgetInProgressEpisodes.xsp"/>
                 <param name="loader" value="922$PARAM[n]"/>
                 <param name="wait" value="true"/>
+                <param name="card" value="LookRowWideCard"/>
+                <param name="itemwidth" value="LookRowWideItemWidth"/>
+                <param name="art" value="$VAR[LookRowWideArt]"/>
             </include>
             <include content="RowBox" condition="[String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),continue) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_continue]]] + String.IsEqual(Skin.String(nc.home.slot$PARAM[n].opt),movies)">
                 <param name="id" value="920$PARAM[n]"/>
@@ -53,6 +56,9 @@
                 <param name="content1" value="special://skin/playlists/WidgetInProgressMovies.xsp"/>
                 <param name="loader" value="922$PARAM[n]"/>
                 <param name="wait" value="true"/>
+                <param name="card" value="LookRowWideCard"/>
+                <param name="itemwidth" value="LookRowWideItemWidth"/>
+                <param name="art" value="$VAR[LookRowWideArt]"/>
             </include>
             <include content="RowBox" condition="[String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),continue) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_continue]]] + String.IsEqual(Skin.String(nc.home.slot$PARAM[n].opt),shows)">
                 <param name="id" value="920$PARAM[n]"/>
@@ -65,6 +71,9 @@
                 <param name="content1" value="special://skin/playlists/WidgetInProgressEpisodes.xsp"/>
                 <param name="loader" value="922$PARAM[n]"/>
                 <param name="wait" value="true"/>
+                <param name="card" value="LookRowWideCard"/>
+                <param name="itemwidth" value="LookRowWideItemWidth"/>
+                <param name="art" value="$VAR[LookRowWideArt]"/>
             </include>
             <include content="RowBox" condition="[String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),nextup) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_nextup]]]">
                 <param name="id" value="920$PARAM[n]"/>
@@ -77,6 +86,9 @@
                 <param name="content1" value="special://skin/playlists/WidgetContinueShows.xsp"/>
                 <param name="loader" value="922$PARAM[n]"/>
                 <param name="wait" value="true"/>
+                <param name="card" value="LookRowWideCard"/>
+                <param name="itemwidth" value="LookRowWideItemWidth"/>
+                <param name="art" value="$VAR[LookRowWideArt]"/>
             </include>
             <include content="RowBox" condition="[String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),newmovies) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_newmovies]]] + ![String.IsEqual(Skin.String(nc.home.slot$PARAM[n].opt),unwatched)]">
                 <param name="id" value="920$PARAM[n]"/>
@@ -497,6 +509,9 @@
                 <param name="content1" value="special://skin/playlists/WidgetInProgressMovies.xsp"/>
                 <param name="loader" value="942$PARAM[n]"/>
                 <param name="wait" value="true"/>
+                <param name="card" value="LookRowWideCard"/>
+                <param name="itemwidth" value="LookRowWideItemWidth"/>
+                <param name="art" value="$VAR[LookRowWideArt]"/>
             </include>
             <include content="RowBox" condition="[String.IsEqual(Skin.String(nc.movies.slot$PARAM[n]),newmovies) | [String.IsEmpty(Skin.String(nc.movies.slot$PARAM[n])) + $PARAM[def_newmovies]]] + ![String.IsEqual(Skin.String(nc.movies.slot$PARAM[n].opt),unwatched)]">
                 <param name="id" value="940$PARAM[n]"/>
@@ -751,6 +766,9 @@
                 <param name="content1" value="special://skin/playlists/WidgetContinueShows.xsp"/>
                 <param name="loader" value="952$PARAM[n]"/>
                 <param name="wait" value="true"/>
+                <param name="card" value="LookRowWideCard"/>
+                <param name="itemwidth" value="LookRowWideItemWidth"/>
+                <param name="art" value="$VAR[LookRowWideArt]"/>
             </include>
             <include content="RowBox" condition="[String.IsEqual(Skin.String(nc.shows.slot$PARAM[n]),newepisodes) | [String.IsEmpty(Skin.String(nc.shows.slot$PARAM[n])) + $PARAM[def_newepisodes]]] + ![String.IsEqual(Skin.String(nc.shows.slot$PARAM[n].opt),unwatched)]">
                 <param name="id" value="950$PARAM[n]"/>

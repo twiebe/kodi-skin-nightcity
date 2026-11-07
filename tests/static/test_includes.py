@@ -875,7 +875,8 @@ def test_every_look_name_is_used_outside_the_look_file():
     root = parse(ROOT / '1080i' / 'Includes_Look.xml')
     for el in root.findall('include'):
         name = el.get('name')
-        assert 'content="{0}"'.format(name) in text + look or '>{0}<'.format(name) in text + look, name
+        # also as a parameter that names an include (RowBox's card)
+        assert any(form.format(name) in text + look for form in ('content="{0}"', '>{0}<', 'value="{0}"', 'default="{0}"')), name
     for el in root.findall('constant'):
         assert '>{0}<'.format(el.get('name')) in text or '"{0}"'.format(el.get('name')) in text, el.get('name')
 
@@ -938,8 +939,10 @@ def test_row_padding_is_in_constants():
     rows = next(c for c in row.iter('control') if c.get('type') == 'list')
     assert (rows.findtext('left'), rows.findtext('top'), rows.findtext('width'), rows.findtext('height')) == (
         'LookRowListLeft', 'LookRowListTop', 'LookRowListWidth', 'LookRowListHeight')
+    widths = {p.get('name'): p.get('default') for p in row.findall('param')}
+    assert widths['itemwidth'] == 'LookRowItemWidth' and widths['card'] == 'LookRowCard'
     for layout in (rows.find('itemlayout'), rows.find('focusedlayout')):
-        assert (layout.get('width'), layout.get('height')) == ('LookRowItemWidth', 'LookRowListHeight')
+        assert (layout.get('width'), layout.get('height')) == ('$PARAM[itemwidth]', 'LookRowListHeight')
         card = layout.find('control')
         assert (card.findtext('left'), card.findtext('top')) == ('LookRowItemLeft', 'LookRowItemTop')
 
