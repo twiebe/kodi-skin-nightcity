@@ -48,7 +48,8 @@
         </definition>
     </include>
 
-    <!-- The tabs stand in the middle of the top line, the logo left of them -->
+    <!-- The tabs stand in the middle of the top line, the logo left of them. The logo stays bright
+         while the quick menu dims the page, like the menu's own icon -->
     <constant name="LookMenuLeft">-24</constant>
     <constant name="LookMenuWidth">1920</constant>
     <include name="LookMenuAlign">
@@ -58,7 +59,6 @@
         <control type="group">
             <left>64</left>
             <top>14</top>
-            <include>QuickMenuFade</include>
             <!-- the plate in the accent, on it the mark: a disc whose gap points forward -->
             <control type="image">
                 <width>60</width>
@@ -142,11 +142,29 @@
         <definition/>
     </include>
 
-    <!-- Rows of Home are wide: an episode shows its still, the rest its wide art, fanart when it has
-         no other, the poster at last. A wide picture does not always name its title, so the label
-         stands under the card -->
+    <!-- The other rows of Home show posters, as Nightcity -->
     <variable name="LookRowArt">
-        <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
+        <value>$INFO[ListItem.Art(poster)]</value>
+    </variable>
+    <include name="LookRowCard">
+        <param name="image"/>
+        <param name="dim" default="false"/>
+        <param name="focused" default="false"/>
+        <definition>
+            <include content="CutCard">
+                <param name="image" value="$PARAM[image]"/>
+                <param name="dim" value="$PARAM[dim]"/>
+                <param name="focused" value="$PARAM[focused]"/>
+                <include>CardExtras</include>
+            </include>
+        </definition>
+    </include>
+    <constant name="LookRowWideItemWidth">444</constant>
+    <!-- What plays on (continue, next up) is wide: the picture of the film or the show, never the
+         still of an episode; fanart is 16:9, so nothing is cut. A wide picture does not always name
+         its title, so the label stands under the card. Only these rows load large pictures -->
+    <variable name="LookRowWideArt">
         <value condition="!String.IsEmpty(ListItem.Art(landscape))">$INFO[ListItem.Art(landscape)]</value>
         <value condition="!String.IsEmpty(ListItem.Art(tvshow.landscape))">$INFO[ListItem.Art(tvshow.landscape)]</value>
         <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
@@ -154,7 +172,7 @@
         <value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
         <value>$INFO[ListItem.Art(poster)]</value>
     </variable>
-    <include name="LookRowCard">
+    <include name="LookRowWideCard">
         <param name="image"/>
         <param name="dim" default="false"/>
         <param name="focused" default="false"/>
@@ -197,7 +215,8 @@
     <constant name="LookRowGap">0</constant>
     <!-- The list of a row and the room around a card in it, for what a focused card draws past its
          edges; a list clips its items. A 400 x 225 card at 108 % grows 16 px to a side and 9 up and
-         down, its shadow is 24 px x 1.08 more: ItemTop at least 36, ItemLeft at least 42. The list
+         down (a poster 8 and 12), its glow is 24 px x 1.08 more: ItemTop at least 38, ItemLeft at
+         least 42. ItemWidth is a poster and its gap, the wide rows take LookRowWideItemWidth. The list
          starts where the card before ends, so no strip of that card shows on a scrolled row:
          ItemLeft is also the gap between the cards, 44.
          In pairs, since a constant cannot add up: ListLeft + ItemLeft stays 64, ListTop + ItemTop
@@ -210,7 +229,7 @@
     <constant name="LookRowItemTop">48</constant>
     <constant name="LookRowListWidth">1900</constant>
     <constant name="LookRowListHeight">438</constant>
-    <constant name="LookRowItemWidth">444</constant>
+    <constant name="LookRowItemWidth">244</constant>
 
     <!-- The genre tabs of a row: no number before them here, so the text of the first stands over
          the first card (24 px gap, 10 px of padding) -->

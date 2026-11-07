@@ -1202,6 +1202,10 @@
              favourites and sets); art: the card image -->
         <param name="click" default="ClickRouting"/>
         <param name="art" default="$VAR[LookRowArt]"/>
+        <!-- card: the look include of a card, itemwidth the room of one in the row: what plays
+             on (continue, next up) can be wide in a look -->
+        <param name="card" default="LookRowCard"/>
+        <param name="itemwidth" default="LookRowItemWidth"/>
         <definition>
             <control type="group" id="$PARAM[group]">
                 <height>468</height>
@@ -1246,21 +1250,21 @@
                     <onup>$PARAM[up]</onup>
                     <ondown>$PARAM[down]</ondown>
                     <include content="$PARAM[click]"/>
-                    <itemlayout width="LookRowItemWidth" height="LookRowListHeight">
+                    <itemlayout width="$PARAM[itemwidth]" height="LookRowListHeight">
                         <control type="group">
                             <left>LookRowItemLeft</left>
                             <top>LookRowItemTop</top>
-                            <include content="LookRowCard">
+                            <include content="$PARAM[card]">
                                 <param name="image" value="$PARAM[art]"/>
                                 <param name="dim" value="Control.HasFocus($PARAM[id])"/>
                             </include>
                         </control>
                     </itemlayout>
-                    <focusedlayout width="LookRowItemWidth" height="LookRowListHeight">
+                    <focusedlayout width="$PARAM[itemwidth]" height="LookRowListHeight">
                         <control type="group">
                             <left>LookRowItemLeft</left>
                             <top>LookRowItemTop</top>
-                            <include content="LookRowCard">
+                            <include content="$PARAM[card]">
                                 <param name="image" value="$PARAM[art]"/>
                                 <param name="focused" value="Control.HasFocus($PARAM[id])"/>
                             </include>

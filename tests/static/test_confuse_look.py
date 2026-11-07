@@ -477,10 +477,11 @@ def test_row_constants_add_up():
 
 def test_row_shows_no_strip_of_the_card_before(confuse_root):
     """The list starts where the card before ends: seen on the shot, a wider ItemLeft leaves a hard
-    cut strip of it. The cards stand 44 px apart for the room of the glow."""
+    cut strip of it. The cards stand 44 px apart for the room of the glow, posters and wide cards."""
     c = constants()
     assert (c['LookRowListLeft'], c['LookRowItemLeft'], c['LookRowListWidth']) == (20, 44, 1900)
-    assert c['LookRowItemLeft'] + 400 == c['LookRowItemWidth']
+    assert c['LookRowItemLeft'] + CARD[0] == c['LookRowItemWidth']
+    assert c['LookRowItemLeft'] + 400 == c['LookRowWideItemWidth']
 
 
 def test_shadow_margin_matches_its_texture(confuse_root):
