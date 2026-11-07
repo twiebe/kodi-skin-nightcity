@@ -353,7 +353,8 @@ def test_info_page_stays_readable_on_a_white_fanart(confuse_root):
 
 
 def test_player_text_stays_readable_on_a_white_picture(confuse_root):
-    """Over a white video frame the text block of the player, from y 440 down."""
+    """Over a white video frame the text block of the player, from y 440 down. The fade is light by
+    choice (after the test on the box): large and bold text there, 3:1 is the bar."""
     palette = colours(confuse_root)
     scrim, text = palette['scrim'], rgb(palette['text'])
     fade = Image.open(confuse_root / 'media' / 'ui' / 'fade_b.png').convert('RGBA').getchannel('A')
@@ -363,7 +364,7 @@ def test_player_text_stays_readable_on_a_white_picture(confuse_root):
         alpha = int(scrim[:2], 16) / 255 * fade.getpixel((0, round(place * (fade.height - 1)))) / 255
         back = tuple(c * alpha + 255 * (1 - alpha) for c in rgb(scrim))
         worst = min(worst, contrast(text, back))
-    assert worst >= 4.5, worst
+    assert worst >= 3, worst
 
 
 def test_player_fades_end_clear(confuse_root):

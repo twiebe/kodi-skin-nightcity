@@ -312,9 +312,9 @@ def textures():
         'fade_r.png': fanart_mask(384, 216),  # 16:9, stretched over the screen
         'info_fade.png': info_fade(256, 4),
         # the player's scrim, in the colour scrim (.96): y 340 to 1080 and 0 to 220 of the screen.
-        # The draft, stronger at the top of the text block, which starts at 440
-        'fade_b.png': player_fade(256, [(0, 0), (0.135, 0.7), (0.445, 0.875), (1, 1)]),
-        'fade_t.png': player_fade(256, [(0, 0.58), (1, 0)]),
+        # Light like the spotlight's after the test on the box: more of the picture stays visible
+        'fade_b.png': player_fade(256, [(0, 0), (0.135, 0.5), (0.445, 0.68), (1, 0.82)]),
+        'fade_t.png': player_fade(256, [(0, 0.42), (1, 0)]),
         'seek_head.png': soft_dot(16, 8, 2.2),  # the spark at the head of the seek line, on its 16 px high track
         # twins of the check boxes and the selected spin signs, which Nightcity cuts at a corner
         'check_off_pad.png': check(32, 8, on=False),
