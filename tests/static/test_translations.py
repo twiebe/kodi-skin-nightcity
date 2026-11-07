@@ -105,3 +105,33 @@ def test_nightcity_fixed_width_labels_fit(lang):
             continue  # the English does not fit either: not the translation's doing
         need = width(font, label, fontset_of(lang)) + 2 * offset
         assert need <= w, (name, label, round(need), w)
+
+
+INFO_ROW_WIDTH = 1472  # grouplist 9000 of DialogVideoInfo.xml
+BACK_LABELS = (31330, 31331, 31332, 31333, 31334, 31335, 31301)  # ChainBackLabel, 9009
+
+
+@pytest.mark.parametrize('lang', ('en_gb',) + LANGUAGES)
+@pytest.mark.parametrize('skin', ('nightcity', 'confuse'))
+def test_info_buttons_fit_in_their_row(skin, lang, confuse_root):
+    """The fullest button row of the info page: the way back of a chain, resume at 100 %, from
+    start, trailer, description or biography and the … list. A grouplist cuts off what does not
+    fit; the … pill was cut in German. Each pill is its text plus 34 px on either side."""
+    from PIL import ImageFont
+    from test_confuse_look import font_defs, font_file, fontset_of, look_font, strings
+    root = ROOT if skin == 'nightcity' else confuse_root
+    info = (root / '1080i' / 'DialogVideoInfo.xml').read_text(encoding='utf-8')
+    assert re.search(r'<control type="grouplist" id="9000">\s*<left>\d+</left>\s*<top>\d+</top>\s*<width>{}</width>'.format(INFO_ROW_WIDTH), info)
+    font_name, _ = look_font(root, 'LookPillText')
+    filename, size = font_defs(root, fontset_of(lang))[font_name]
+    font = ImageFont.truetype(str(font_file(root, filename)), size)
+    s = strings(root, lang)
+
+    def pill(text):  # Nightcity shows most pills in capitals
+        return max(font.getlength(text), font.getlength(text.upper()) if skin == 'nightcity' else 0) + 2 * 34
+
+    pills = [max(pill('‹ ' + s[i]) for i in BACK_LABELS),
+             max(pill('▶ {} 100%'.format(s[31043])), pill('▶ ' + s[31010]), pill('▶ ' + s[31106])),
+             pill('« ' + s[31123]), pill(s[31041]), max(pill(s[31473]), pill(s[31474])), 116]
+    need = sum(pills) - 4 * (len(pills) - 1)  # itemgap -4
+    assert need <= INFO_ROW_WIDTH, (round(need), [round(p) for p in pills])

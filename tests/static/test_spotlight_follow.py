@@ -212,4 +212,4 @@ def test_hero_poster_ends_with_the_buttons():
     look = (ROOT / '1080i' / 'Includes_Look.xml').read_text(encoding='utf-8')
     assert '<constant name="LookHeroPillsLeft">384</constant>' in look and '<constant name="LookHeroPillsTop">487</constant>' in look
     assert 'mask_280x420' not in home and 'mask_280x420' not in info
-    assert re.search(r'<control type="grouplist" id="9000">\s*<left>384</left>\s*<top>487</top>\s*<width>1010</width>', info)
+    assert re.search(r'<control type="grouplist" id="9000">\s*<left>384</left>\s*<top>487</top>\s*<width>1472</width>', info)

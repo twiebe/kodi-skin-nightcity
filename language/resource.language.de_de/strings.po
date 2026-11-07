@@ -1099,7 +1099,7 @@ msgstr "Einspielergebnis"
 
 msgctxt "#31473"
 msgid "description"
-msgstr "Beschreibung"
+msgstr "Handlung"
 
 msgctxt "#31474"
 msgid "biography"

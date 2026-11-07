@@ -329,10 +329,12 @@
             </include>
         </control>
 
+        <!-- as wide as the text above it reaches (to x 1856): a chain's way back, resume, from
+             start, trailer, description and … fit in every language -->
         <control type="grouplist" id="9000">
             <left>384</left>
             <top>487</top>
-            <width>1010</width>
+            <width>1472</width>
             <height>74</height>
             <orientation>horizontal</orientation>
             <itemgap>-4</itemgap>

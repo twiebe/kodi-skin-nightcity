@@ -233,7 +233,7 @@ msgstr "croissant"
 
 msgctxt "#31123"
 msgid "from start"
-msgstr "depuis le début"
+msgstr "du début"
 
 msgctxt "#31124"
 msgid "cast"
@@ -801,27 +801,27 @@ msgstr "fréquence d'images"
 
 msgctxt "#31330"
 msgid "back to video"
-msgstr "retour à la vidéo"
+msgstr "à la vidéo"
 
 msgctxt "#31331"
 msgid "back to home"
-msgstr "retour à l'accueil"
+msgstr "à l'accueil"
 
 msgctxt "#31332"
 msgid "back to movies"
-msgstr "retour aux films"
+msgstr "aux films"
 
 msgctxt "#31333"
 msgid "back to shows"
-msgstr "retour aux séries"
+msgstr "aux séries"
 
 msgctxt "#31334"
 msgid "back to search"
-msgstr "retour à la recherche"
+msgstr "à la recherche"
 
 msgctxt "#31335"
 msgid "back to library"
-msgstr "retour à la médiathèque"
+msgstr "à la médiathèque"
 
 msgctxt "#31310"
 msgid "Home key opens the home page"
@@ -837,7 +837,7 @@ msgstr "équipe"
 
 msgctxt "#31301"
 msgid "back to start"
-msgstr "retour au début"
+msgstr "au début"
 
 msgctxt "#31302"
 msgid "person"
@@ -1097,7 +1097,7 @@ msgstr "box-office"
 
 msgctxt "#31473"
 msgid "description"
-msgstr "description"
+msgstr "résumé"
 
 msgctxt "#31474"
 msgid "biography"

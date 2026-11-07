@@ -801,27 +801,27 @@ msgstr "fotogramas por segundo"
 
 msgctxt "#31330"
 msgid "back to video"
-msgstr "volver al vídeo"
+msgstr "al vídeo"
 
 msgctxt "#31331"
 msgid "back to home"
-msgstr "volver a inicio"
+msgstr "a inicio"
 
 msgctxt "#31332"
 msgid "back to movies"
-msgstr "volver a películas"
+msgstr "a películas"
 
 msgctxt "#31333"
 msgid "back to shows"
-msgstr "volver a series"
+msgstr "a series"
 
 msgctxt "#31334"
 msgid "back to search"
-msgstr "volver a la búsqueda"
+msgstr "a la búsqueda"
 
 msgctxt "#31335"
 msgid "back to library"
-msgstr "volver a la biblioteca"
+msgstr "a la biblioteca"
 
 msgctxt "#31310"
 msgid "Home key opens the home page"
@@ -837,7 +837,7 @@ msgstr "equipo técnico"
 
 msgctxt "#31301"
 msgid "back to start"
-msgstr "volver al principio"
+msgstr "al principio"
 
 msgctxt "#31302"
 msgid "person"
@@ -1097,7 +1097,7 @@ msgstr "taquilla"
 
 msgctxt "#31473"
 msgid "description"
-msgstr "descripción"
+msgstr "argumento"
 
 msgctxt "#31474"
 msgid "biography"
