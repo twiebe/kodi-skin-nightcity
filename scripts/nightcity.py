@@ -1608,16 +1608,6 @@ def take_old_settings():
     xbmc.executebuiltin('Skin.SetBool(nc.migrated)')
 
 
-def look_settings():
-    """What a skin's look asks of TMDb Helper. Confuse draws its fanart blurred: skin settings, so
-    Nightcity does not pay for it. The helper's own watch stays off, see BlurWatch."""
-    import xbmc
-    if skin_id() == 'skin.confuse':
-        xbmc.executebuiltin('Skin.Reset(TMDbHelper.EnableBlur)')
-        xbmc.executebuiltin('Skin.SetString(TMDbHelper.Blur.Radius,{})'.format(BLUR_RADIUS))
-        xbmc.executebuiltin('Skin.SetString(TMDbHelper.Blur.Size,{})'.format(BLUR_SIZE))
-
-
 def startup():
     """One-off settings, then nc.startup.ready: the Startup screen hands over to Home once it is
     set (nc_startup timer). The service runs this first, then listens for the skin."""
@@ -2129,86 +2119,15 @@ def hero_tick(kept, now):
         _keep(kept, home, container, HERO_KEY, True, now)
 
 
-# --- the blurred fanart of Confuse (LookFanartBackdrop) -------------------------------------------
-# TMDb Helper makes the blurred pictures and keeps them in a folder of its own, but on Home its watch
-# only looks at an item while the ratings need it (see above), so a picture would come late or not at
-# all. This looks at what the backdrop shows itself: a picture the helper already made shows at once,
-# for another one the helper is asked once the cursor stands, one script at a time. The backdrop shows
-# nc.blur.image when nc.blur.original is its art, the sharp art until then.
-
-BLUR_RADIUS, BLUR_SIZE = 8, 320  # the helper's name of a picture holds them
-BLUR_SETTLE = 0.4  # s the cursor stands on an item before its picture is made
-BLUR_GIVE_UP = 20  # s until the next picture may start if this one does not come
-BLUR_ITEM_ART = ('ListItem.Art(fanart)', 'ListItem.Art(artist.fanart)')
-BLUR_REST = 'Window.IsActive(fullscreenvideo)'
-BLUR_SCRIPT = 'RunScript(plugin.video.themoviedb.helper,"blur_image={}")'
-
-
-def blur_path(art):
-    """The file TMDb Helper writes for this art (ImageFunctions.blur)."""
-    import hashlib
-    import xbmcvfs
-    name = hashlib.md5(str(art).encode(errors='surrogatepass')).hexdigest()
-    return xbmcvfs.translatePath('special://profile/addon_data/plugin.video.themoviedb.helper/blur_v3/'
-                                 '{}-{}-{}.jpg'.format(name, BLUR_RADIUS, BLUR_SIZE))
-
-
-def _blur_art():
-    import xbmc
-    for label in BLUR_ITEM_ART:
-        art = xbmc.getInfoLabel(label)
-        if art:
-            return art
-    for container, group in HEROES:
-        if xbmc.getCondVisibility(HERO_SHOWN.format(group)):
-            return xbmc.getInfoLabel('Container({}).ListItem.Art(fanart)'.format(container))
-    return ''
-
-
-class BlurWatch:
-    def __init__(self):
-        self.art, self.since = None, 0.0
-        self.running, self.started = None, 0.0
-        self.asked = set()
-
-    def tick(self, home, now):
-        import os
-        import xbmc
-        if xbmc.getCondVisibility(BLUR_REST):
-            return
-        if self.running and (os.path.exists(blur_path(self.running)) or now - self.started >= BLUR_GIVE_UP):
-            self.running = None
-        art = _blur_art()
-        if not art:
-            return
-        if art != self.art:
-            self.art, self.since = art, now
-        path = blur_path(art)
-        if os.path.exists(path):
-            if home.getProperty('nc.blur.original') != art:
-                home.setProperty('nc.blur.image', path)
-                home.setProperty('nc.blur.original', art)
-            return
-        if self.running or art in self.asked or now - self.since < BLUR_SETTLE:
-            return
-        self.asked.add(art)
-        self.running, self.started = art, now
-        xbmc.executebuiltin(BLUR_SCRIPT.format(art))
-
-
 def hero_watch(monitor, stop):
-    """player_tick and hero_tick every HERO_POLL s until STOP, Kodi ends or the service goes. In
-    Confuse also the blurred fanart."""
+    """player_tick and hero_tick every HERO_POLL s until STOP, Kodi ends or the service goes."""
     import time
     import xbmc
     kept, playing = HeroRatings(), HeroRatings()
-    blur = BlurWatch() if skin_id() == 'skin.confuse' else None
     while not stop.wait(HERO_POLL) and not QUIT.is_set() and not monitor.abortRequested():
         try:
             player_tick(playing, time.monotonic())
             hero_tick(kept, time.monotonic())
-            if blur:
-                blur.tick(_home(), time.monotonic())
         except Exception as e:  # a failing look must not end the watch
             xbmc.log('nightcity: hero ratings failed: {!r}'.format(e), xbmc.LOGERROR)
             stop.wait(5)
@@ -2637,7 +2556,6 @@ def service(*first):
         _run(first[0], list(first[1:]))
     # after a skin switch nothing runs startup, and each skin has its own Home key setting
     _run('home_keymap', [])
-    look_settings()
     threading.Thread(target=hero_watch, args=(monitor, stop), daemon=True).start()
     while not monitor.waitForAbort(1):
         if skin_id() != started:

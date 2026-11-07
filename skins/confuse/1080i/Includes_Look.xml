@@ -112,42 +112,6 @@
         </control>
     </include>
 
-    <!-- The fanart, blurred as soon as the picture of this art is there, sharp until then. One of the
-         two shows, and they fade into each other. TMDb Helper makes a picture once, then it comes from
-         its folder: drawing costs what any picture costs. BlurWatch in nightcity.py runs this. -->
-    <include name="LookFanartBackdrop">
-        <param name="art"/>
-        <param name="fadetime"/>
-        <param name="shown"/>
-        <param name="blurred"/>
-        <definition>
-            <control type="image">
-                <description>fanart backdrop</description>
-                <left>0</left>
-                <top>0</top>
-                <width>1920</width>
-                <height>1080</height>
-                <aspectratio>scale</aspectratio>
-                <fadetime>$PARAM[fadetime]</fadetime>
-                <texture colordiffuse="fanart" diffuse="ui/fade_r.png" background="true">$INFO[$PARAM[art]]</texture>
-                <animation effect="fade" time="300">VisibleChange</animation>
-                <visible>$PARAM[shown] + !$PARAM[blurred]</visible>
-            </control>
-            <control type="image">
-                <description>fanart backdrop</description>
-                <left>0</left>
-                <top>0</top>
-                <width>1920</width>
-                <height>1080</height>
-                <aspectratio>scale</aspectratio>
-                <fadetime>$PARAM[fadetime]</fadetime>
-                <texture colordiffuse="fanart" diffuse="ui/fade_r.png" background="true">$INFO[Window(Home).Property(nc.blur.image)]</texture>
-                <animation effect="fade" time="300">VisibleChange</animation>
-                <visible>$PARAM[shown] + $PARAM[blurred]</visible>
-            </control>
-        </definition>
-    </include>
-
     <!-- The info page's fanart is quieter than Home's in the draft: over its mask a fade in the base
          colour, the second and last full screen layer with alpha. Right column of the page stays
          readable on a white picture. -->
