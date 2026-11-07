@@ -151,7 +151,7 @@ def test_dog_ear_asks_the_cards_own_item():
     ear = next(c for c in card.iter('control') if 'dogear' in (c.findtext('texture') or ''))
     assert not re.search(r'(?<![\w.\]])ListItem\.', ear.findtext('visible'))
     hero = next(el for p in layout_files() for el in parse(p).iter('include') if el.get('name') == 'HeroBody')
-    poster = next(el for el in hero.iter('include') if el.get('content') == 'CutCard')
+    poster = next(el for el in hero.iter('include') if el.get('content') == '$PARAM[posterlook]')
     assert {p.get('name'): p.get('value') for p in poster.findall('param')}['item'] == '$PARAM[item]'
 
 

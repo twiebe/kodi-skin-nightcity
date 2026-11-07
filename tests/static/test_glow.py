@@ -133,7 +133,8 @@ def holds_padded(el, defs, depth=0):
 
 
 def geometry(el):
-    return tuple(el.findtext(k) for k in ('left', 'top', 'width', 'height', 'itemgap'))
+    look = {c.get('name'): c.text for c in parse(ROOT / '1080i' / 'Includes_Look.xml').iter('constant')}
+    return tuple(look.get(el.findtext(k), el.findtext(k)) for k in ('left', 'top', 'width', 'height', 'itemgap'))
 
 
 def grown(before):

@@ -32,4 +32,4 @@ def test_spotlight_layout_limits():
     assert int(args['left']) + int(args['width']) <= 1920 - 64  # one line, cut at the right margin
     plot = controls['$PARAM[plotid]']
     assert plot.get('type') == 'textbox'
-    assert int(plot.findtext('height')) <= 160
+    assert int(defaults[plot.findtext('height')[7:-1]]) <= 160

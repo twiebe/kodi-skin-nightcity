@@ -16,6 +16,7 @@ TEXTURE_SIDE = 512
 FADE_SIDE = 1024
 MASK_SIDE = 540  # a mask is as large as its card, the largest being 360 x 540
 CARD_RADIUS = 12  # 8 px at 1280 x 720 on a 1920 x 1080 grid; a mask is shown at its own size
+HERO_TEXTURES = ('mask_hero', 'hero_scrim')  # half the size of the hero on screen
 LOCALIZE = re.compile(r'\$LOCALIZE\[(\d+)\]')
 
 
@@ -163,7 +164,7 @@ def test_main_menu_fits(confuse_root):
             assert len(label) == 1, p['label']
             widths.append(text_width(confuse_root, font_name, label[0]) + 2 * offset)
     total = sum(widths) + int(group.findtext('itemgap')) * (len(widths) - 1)
-    assert total <= int(group.findtext('width')), (round(total), group.findtext('width'))
+    assert total <= constants()[group.findtext('width')], (round(total), group.findtext('width'))
 
 
 def overlay_textures():
@@ -175,8 +176,11 @@ def test_textures_are_white_and_small():
     assert textures
     for path in textures:
         image = Image.open(path).convert('RGBA')
-        limit = FADE_SIDE if 'fade' in path.stem else MASK_SIDE if path.stem.startswith('mask_') else TEXTURE_SIDE
+        limit = FADE_SIDE if path.stem in HERO_TEXTURES or 'fade' in path.stem else MASK_SIDE if path.stem.startswith('mask_') else TEXTURE_SIDE
         assert max(image.size) <= limit, (path.name, image.size)
+        if path.stem == 'page_wash':  # opaque grey, multiplied by the ground's colour
+            assert image.getchannel('A').getextrema() == (255, 255)
+            continue
         colours = {rgba[:3] for _, rgba in image.getcolors(image.width * image.height) if rgba[3]}
         assert colours <= {(255, 255, 255)}, path.name
 
@@ -219,6 +223,8 @@ def test_masks_have_round_corners(confuse_root):
     for path in masks:
         alpha = Image.open(path).convert('RGBA').getchannel('A')
         w, h = alpha.size
+        if path.stem in HERO_TEXTURES:
+            continue
         assert '{}x{}'.format(w, h) in path.name
         assert [alpha.getpixel(c) for c in ((0, 0), (w - 1, 0), (0, h - 1), (w - 1, h - 1))] == [0] * 4, path.name
         assert alpha.getpixel((w // 2, h // 2)) == 255
@@ -380,11 +386,14 @@ def test_fanart_mask_follows_the_draft(confuse_root):
 
 
 def test_background_without_fanart_is_the_base_colour():
-    """Under everything an opaque area in bg, and nothing else: no glow."""
+    """Under everything one opaque picture: lighter at the top, at the bottom the base colour."""
     images = look_includes()['LookBackground'].findall('control')
     assert [i.get('type') for i in images] == ['image']
-    assert images[0].find('texture').get('colordiffuse') == 'bg'
-    assert images[0].findtext('texture') == 'ui/white.png'
+    assert images[0].find('texture').get('colordiffuse') == 'surface'
+    assert images[0].findtext('texture') == 'ui/page_wash.png'
+    wash = Image.open(OVERLAY / 'media' / 'ui' / 'page_wash.png').convert('RGB')
+    assert wash.getpixel((0, 0))[0] == 255
+    assert abs(wash.getpixel((0, wash.height - 1))[0] * 0x1A / 255 - 0x0B) <= 1
 
 
 def test_card_has_a_placeholder(confuse_root):
@@ -429,7 +438,7 @@ def test_fullscreen_alpha_budget(confuse_root):
                 fanart = True
                 continue
             colour = palette.get(texture.get('colordiffuse'), 'FFFFFFFF')
-            if texture.text == 'ui/white.png' and colour.startswith('FF'):
+            if texture.text in ('ui/white.png', 'ui/page_wash.png') and colour.startswith('FF'):
                 continue
             layers += 1
         assert layers + fanart <= 2, (name, layers, fanart)
@@ -444,7 +453,7 @@ def test_no_endless_animation():
 def test_card_focus_keeps_the_row_layout(confuse_root):
     """The card grows by animation only, so the row does not move and no focus target changes."""
     c = constants()
-    assert c['LookCardFocusZoom'] == 113.5
+    assert c['LookCardFocusZoom'] == 108
     assert c['LookCardFocusTime'] == 120
     for inc in parse(confuse_root / '1080i' / 'Includes_Home.xml').iter('control'):
         item, focused = inc.find('itemlayout'), inc.find('focusedlayout')
@@ -470,7 +479,7 @@ def test_row_shows_no_strip_of_the_card_before(confuse_root):
     cut strip of it. The cards stand 44 px apart for the room of the glow."""
     c = constants()
     assert (c['LookRowListLeft'], c['LookRowItemLeft'], c['LookRowListWidth']) == (20, 44, 1900)
-    assert c['LookRowItemLeft'] + CARD[0] == c['LookRowItemWidth']
+    assert c['LookRowItemLeft'] + 400 == c['LookRowItemWidth']
 
 
 def test_shadow_margin_matches_its_texture(confuse_root):
@@ -494,7 +503,8 @@ def test_focus_ring_is_four_to_five_px_on_screen(confuse_root):
 
 
 def test_information_marks_keep_their_condition(confuse_root):
-    """The dot stands where Nightcity has its dog-ear, under the same condition, in every window."""
+    """The dot stands where Nightcity has its dog-ear, under the same condition, in every window. On
+    Home the hero has no poster here, so its dot is gone with it; the cards keep theirs."""
     from navigation import load
     from conftest import window_files
     found = 0
@@ -502,7 +512,10 @@ def test_information_marks_keep_their_condition(confuse_root):
         marks = [[el.findtext('visible') for el in load(path.name, layout=layout).iter('control')
                   if el.get('type') == 'image' and el.findtext('texture') == texture]
                  for layout, texture in ((ROOT / '1080i', 'ui/dogear.png'), (confuse_root / '1080i', 'ui/dot.png'))]
-        assert marks[0] == marks[1], path.name
+        if path.name == 'Home.xml':
+            assert marks[1] and set(marks[1]) <= set(marks[0])
+        else:
+            assert marks[0] == marks[1], path.name
         found += len(marks[0])
     assert found >= 20
 
@@ -559,23 +572,6 @@ def test_buttons_are_pills(confuse_root):
     assert look_includes()['LookPillText'].findtext('.//focusedcolor') == 'focus_text'
 
 
-def test_menu_shows_the_page_on_a_line_in_the_same_font(confuse_root):
-    """The focus shows a page at once: a bold shown entry would change its letters and push the
-    entries after it on every move. Only the colour differs. The line stands in a texture as high as
-    the entry: Kodi draws a button's texture over the whole button."""
-    include = look_includes()['LookMenuText']
-    assert '[B]' not in include.findtext('.//altlabel') and '[B]' not in include.findtext('.//label')
-    assert '[COLOR text]' in include.findtext('.//altlabel')
-    textures = look_includes()['LookMenuTextures']
-    line = textures.find('alttexturenofocus')
-    assert line.text == 'ui/menu_line.png' and line.get('colordiffuse') == 'accent'
-    alpha = Image.open(confuse_root / 'media' / 'ui' / 'menu_line.png').convert('RGBA').getchannel('A')
-    assert alpha.height == 64  # MenuButton
-    column = [alpha.getpixel((alpha.width // 2, y)) for y in range(alpha.height)]
-    assert 4 <= sum(v / 255 for v in column) <= 5
-    assert not any(column[:40])
-
-
 def test_tab_focus_differs_from_the_shown_tab(confuse_root):
     """A tab takes the focus and shows its page at once, so the alt state has to tell them apart: the
     shown tab has the line, with the focus the same line glows. No plate, one shape."""
@@ -616,9 +612,7 @@ def test_tab_lines_keep_their_round_ends(confuse_root):
     """Kodi stretches what lies between the borders: with a round end there, the line turns into a
     lens, seen on the shot. Between the borders every column is the same."""
     for name, include, tag in (('tab_line.png', 'LookTabTextures', 'alttexturenofocus'),
-                               ('tab_glow.png', 'LookTabTextures', 'alttexturefocus'),
-                               ('menu_glow.png', 'LookMenuTextures', 'alttexturefocus'),
-                               ('menu_line.png', 'LookMenuTextures', 'alttexturenofocus')):
+                               ('tab_glow.png', 'LookTabTextures', 'alttexturefocus')):
         border = int(look_includes()[include].find(tag).get('border').split(',')[0])
         alpha = Image.open(confuse_root / 'media' / 'ui' / name).convert('RGBA').getchannel('A')
         assert alpha.width > 2 * border, name

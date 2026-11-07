@@ -13,6 +13,102 @@
          skins/confuse has the same names with its own values. No ids, no on* actions, a visible
          only as a $PARAM: what a control does stays in the file that uses these. -->
 
+    <!-- Where the top menu stands and how it lines up -->
+    <constant name="LookMenuLeft">-28</constant>
+    <constant name="LookMenuWidth">1520</constant>
+    <include name="LookMenuAlign">
+        <definition/>
+    </include>
+    <!-- Beside the menu: nothing in this look -->
+    <include name="LookHomeLogo">
+        <definition/>
+    </include>
+
+    <!-- The hero of a page of Home: where its text and buttons stand, and where the rows start -->
+    <constant name="LookHeroLeft">394</constant>
+    <constant name="LookHeroKickerTop">116</constant>
+    <constant name="LookHeroLogoTop">161</constant>
+    <constant name="LookHeroTitleTop">167</constant>
+    <constant name="LookHeroMetaTop">279</constant>
+    <constant name="LookHeroRatingsTop">325</constant>
+    <constant name="LookHeroPlotTop">367</constant>
+    <constant name="LookHeroPlotHeight">116</constant>
+    <constant name="LookHeroFocusTop">497</constant>
+    <constant name="LookHeroPillsLeft">384</constant>
+    <constant name="LookHeroPillsTop">487</constant>
+    <constant name="LookHeroProgressTop">569</constant>
+    <constant name="LookPageRowsTop">619</constant>
+
+    <!-- The picture behind a page of Home. shown: the art is there -->
+    <include name="LookHomeFanart">
+        <param name="art"/>
+        <param name="shown"/>
+        <param name="fadetime" default="200"/>
+        <definition>
+            <include content="FanartBackdrop">
+                <param name="art" value="$PARAM[art]"/>
+                <param name="fadetime" value="$PARAM[fadetime]"/>
+            </include>
+        </definition>
+    </include>
+
+    <!-- The poster of the hero on a page of Home -->
+    <include name="LookHeroPoster">
+        <param name="image"/>
+        <param name="item"/>
+        <param name="label"/>
+        <param name="missing"/>
+        <definition>
+            <include content="HeroPoster">
+                <param name="image" value="$PARAM[image]"/>
+                <param name="item" value="$PARAM[item]"/>
+                <param name="label" value="$PARAM[label]"/>
+                <param name="missing" value="$PARAM[missing]"/>
+            </include>
+        </definition>
+    </include>
+
+    <!-- The title of the focused card in the top line of its row -->
+    <include name="LookRowFocusTitle">
+        <param name="label"/>
+        <param name="shown"/>
+        <definition>
+            <control type="label">
+                <left>600</left>
+                <top>6</top>
+                <width>1150</width>
+                <height>34</height>
+                <align>right</align>
+                <font>font_caps_small</font>
+                <textcolor>text_dim</textcolor>
+                <selectedcolor>text_dim</selectedcolor>
+                <include content="LookLabelCase">
+                    <param name="text" value="$PARAM[label]"/>
+                </include>
+                <visible>$PARAM[shown]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- A card of a row of Home and the picture it shows unless the row names another -->
+    <variable name="LookRowArt">
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
+        <value>$INFO[ListItem.Art(poster)]</value>
+    </variable>
+    <include name="LookRowCard">
+        <param name="image"/>
+        <param name="dim" default="false"/>
+        <param name="focused" default="false"/>
+        <definition>
+            <include content="CutCard">
+                <param name="image" value="$PARAM[image]"/>
+                <param name="dim" value="$PARAM[dim]"/>
+                <param name="focused" value="$PARAM[focused]"/>
+                <include>CardExtras</include>
+            </include>
+        </definition>
+    </include>
+
     <!-- how far a focused card grows and how long it takes -->
     <constant name="LookCardFocusZoom">106</constant>
     <constant name="LookCardFocusTime">150</constant>

@@ -12,16 +12,14 @@ radius is the radius on screen. The design gives cards 8 px at 1280 x 720, so 12
 
 python tools/make_textures_confuse.py
 """
-import math
 import pathlib
 
-from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
 UI = pathlib.Path(__file__).resolve().parents[1] / 'skins' / 'confuse' / 'media' / 'ui'
-LEXEND = pathlib.Path(__file__).resolve().parent / 'fonts' / 'Lexend[wght].ttf'
 SCALE = 8
 CARD_RADIUS = 12  # 8 px at 1280 x 720
-CARD_SIZES = [(200, 300), (290, 435), (360, 540), (320, 180), (160, 220), (200, 200), (280, 280), (360, 360)]
+CARD_SIZES = [(200, 300), (290, 435), (360, 540), (320, 180), (400, 225), (160, 220), (200, 200), (280, 280), (360, 360)]
 GLOW_PAD = 10  # a padded texture keeps this much clear around its shape for the shadow
 
 
@@ -186,24 +184,6 @@ def pill_halo(size, pad, radius):
     return finish(ImageChops.lighter(fill, near), (size, size))
 
 
-def wordmark(text, size=250, height=215, baseline=198, tracking=-0.03):
-    """A part of the name, in the extra bold of Lexend set a little tight, the one place that font is
-    used: as a texture it needs no font file in the skin. Both parts have one height and baseline, and
-    side by side they read as one word. tools/fonts holds the font and its licence."""
-    font = ImageFont.truetype(str(LEXEND), size * SCALE)
-    font.set_variation_by_axes([800])
-    step = tracking * size * SCALE
-    width = math.ceil((sum(font.getlength(c) + step for c in text)) / SCALE)
-    width += width % 2  # even, so the two parts can stand exactly around the middle of the screen
-    big = Image.new('L', (width * SCALE, height * SCALE), 0)
-    draw = ImageDraw.Draw(big)
-    x = 0
-    for c in text:
-        draw.text((x, baseline * SCALE), c, font=font, fill=255, anchor='ls')
-        x += font.getlength(c) + step
-    return finish(big, (width, height))
-
-
 def soft_dot(size, core, blur, boost=1.0):
     """A round spot: a solid core of `core` px, the rest a glow that ends inside the texture."""
     s = size * SCALE
@@ -214,14 +194,63 @@ def soft_dot(size, core, blur, boost=1.0):
     return finish(ImageChops.lighter(big, halo), (size, size))
 
 
-def ember_glow(width, height):
-    """The soft light around the bar of the loading page. Small, Kodi scales it up smoothly."""
+def logo_mark(size):
+    """The mark: a disc, and the gap through it is the play sign. The gap runs past the disc on both
+    ends. In a grid of 100. Blurred and cut at the middle again while still large, which keeps the
+    straight edges where they are and rounds every corner and tip a little."""
+    s = size * SCALE / 100
+    big = Image.new('L', (size * SCALE, size * SCALE), 0)
+    draw = ImageDraw.Draw(big)
+    draw.ellipse([13 * s, 13 * s, 87 * s, 87 * s], fill=255)
+    gap = [(72, 50), (28, -16.8), (16, -16.8), (60, 50), (16, 116.8), (28, 116.8)]
+    draw.polygon([(x * s, y * s) for x, y in gap], fill=0)
+    soft = big.filter(ImageFilter.GaussianBlur(1.8 * s)).point(lambda v: 255 if v >= 128 else 0)
+    return finish(soft, (size, size))
+
+
+def spinner_frame(size, head):
+    """Twelve spokes that stay where they are. The spoke `head` is the brightest, each one behind it,
+    against the clock, a step fainter: from frame to frame the light walks clockwise."""
+    s = size * SCALE
+    image = Image.new('L', (s, s), 0)
+    for spoke in range(12):
+        one = Image.new('L', (s, s), 0)
+        ImageDraw.Draw(one).rounded_rectangle(
+            [0.46 * s, 0.02 * s, 0.54 * s, 0.30 * s], radius=0.04 * s,
+            fill=round(255 * (1 - 0.82 * ((head - spoke) % 12) / 11)))
+        image = ImageChops.lighter(image, one.rotate(-30 * spoke, resample=Image.BICUBIC))
+    return finish(image, (size, size))
+
+
+def page_wash(height):
+    """The ground of a page, opaque, multiplied by the colour surface: full at the top, at 80 % of the
+    height as dark as the base colour (0B over 1A) and so to the bottom. Replaces the plain area, so
+    a page has no extra layer. Grey, unlike the rest: its value is the point."""
+    image = Image.new('RGBA', (64, height), (255, 255, 255, 255))
+    for y in range(height):
+        place = y / (height - 1)
+        grey = round(255 * max(0.42, 1 - 0.58 * place / 0.8))
+        for x in range(64):
+            image.putpixel((x, y), (grey, grey, grey, 255))
+    return image
+
+
+def smooth(low, high, value):
+    place = max(0.0, min(1.0, (value - low) / (high - low)))
+    return place * place * (3 - 2 * place)
+
+
+def hero_scrim(width, height):
+    """What carries the text on the hero: one fade down over the full width, so it has no corner of
+    its own. The top stays free; from where the text starts it is strong enough for it on a white
+    picture, and a little more towards the bottom. Square: past the round corners of the picture it
+    lies on the base colour, where it does not show, and a round one would leave a light rim."""
     image = Image.new('RGBA', (width, height), (255, 255, 255, 0))
     for y in range(height):
+        down = y / (height - 1)
+        alpha = round(255 * (0.74 * smooth(0.06, 0.31, down) + 0.12 * smooth(0.31, 1.0, down)))
         for x in range(width):
-            across, up = (x / (width - 1) - 0.5) * 2, (y / (height - 1) - 0.5) * 2
-            value = max(0.0, 1 - math.sqrt(across * across + up * up))
-            image.putpixel((x, y), (255, 255, 255, round(255 * value * value)))
+            image.putpixel((x, y), (255, 255, 255, alpha))
     return image
 
 
@@ -252,20 +281,22 @@ def textures():
         'chip.png': shape(24, 24, 8),  # 5 px at 1280 x 720 is 7.5; border 8
         'dot.png': dot(16),
         'dot_shade.png': dot_shade(28),
-        # 4.5 px, the menu entry is 64 px, 12 px clear below for the glow; border 19,0,19,0 holds the
-        # line's clear and round ends, 30,0,30,0 the glow of menu_glow.png as well
-        'menu_line.png': line_texture(64, 64, 4.5, 12, 14),
-        'menu_glow.png': line_glow(64, 64, 4.5, 12, 14, 5),
         # 4.5 px on the line of Nightcity's tab_line.png; border 11,0,11,0 holds the clear ends and
         # the round ends of the line, or Kodi stretches those into a lens
         'tab_line.png': line_texture(24, 44, 4.5, 2, 8),
         # a tab with the focus: the same line glows, upwards as a tab has 2 px below it; border 18,0,18,0
         'tab_glow.png': line_glow(64, 44, 4.5, 2, 8, 3),
         'card_halo.png': card_halo(128, 24, CARD_RADIUS),
-        # the loading page: the name and the light behind its bar
-        'word_con.png': wordmark('con'),
-        'word_fuse.png': wordmark('fuse'),
-        'ember_glow.png': ember_glow(256, 128),
+        # the logo, 1:1 in the two sizes it is shown: Kodi has no mipmaps for these, a large texture
+        # drawn small gets rough edges. The plate's radius is 23 % of its side
+        'logo_plate_230.png': shape(230, 230, 53),
+        'logo_mark_230.png': logo_mark(230),
+        'logo_plate_60.png': shape(60, 60, 14),
+        'logo_mark_60.png': logo_mark(60),
+        'page_wash.png': page_wash(256),
+        # the hero, half its size on screen and its fade a quarter: Kodi scales both to 1792 x 554, radius 26
+        'mask_hero.png': shape(896, 277, 13),
+        'hero_scrim.png': hero_scrim(448, 139),
         'fade_r.png': fanart_mask(384, 216),  # 16:9, stretched over the screen
         'info_fade.png': info_fade(256, 4),
         # the player's scrim, in the colour scrim (.96): y 340 to 1080 and 0 to 220 of the screen.
@@ -279,29 +310,25 @@ def textures():
         'spin_minus_focus.png': sign_focus(34, plus=False),
         'spin_plus_focus.png': sign_focus(34, plus=True),
     }
+    # the frames of the loading page's spinner, shown in the order of their names
+    for head in range(12):
+        out['spinner/{:02d}.png'.format(head)] = spinner_frame(112, head)
     for width, height in CARD_SIZES:
         out['mask_{}x{}.png'.format(width, height)] = card_mask(width, height)
     return out
 
 
 def icon(size=512):
-    """The add-on's icon: c and f of the name in the colours of the wordmark, on Ember's ground."""
-    font = ImageFont.truetype(str(LEXEND), 300 * SCALE)
-    font.set_variation_by_axes([800])
-    step = -0.03 * 300 * SCALE
-    big = Image.new('RGB', (size * SCALE, size * SCALE), (11, 11, 16))
-    draw = ImageDraw.Draw(big)
-    width = font.getlength('c') + step + font.getlength('f')
-    x = (size * SCALE - width) / 2
-    baseline = size * SCALE * 0.71
-    draw.text((x, baseline), 'c', font=font, fill=(169, 169, 182), anchor='ls')
-    draw.text((x + font.getlength('c') + step, baseline), 'f', font=font, fill=(255, 91, 53), anchor='ls')
-    return big.resize((size, size), Image.LANCZOS)
+    """The add-on's icon: the mark on the accent of Ember, in Ember's colours."""
+    image = Image.new('RGB', (size, size), (255, 91, 53))
+    mark = Image.new('RGB', (size, size), (22, 8, 4))
+    image.paste(mark, (0, 0), logo_mark(size).getchannel('A'))
+    return image
 
 
 def main():
     icon().save(UI.parent.parent / 'resources' / 'icon.png', optimize=True)
-    UI.mkdir(parents=True, exist_ok=True)
+    (UI / 'spinner').mkdir(parents=True, exist_ok=True)
     for name, image in sorted(textures().items()):
         image.save(UI / name, optimize=True)
         print(UI / name)
