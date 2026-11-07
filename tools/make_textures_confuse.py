@@ -165,7 +165,19 @@ def line_glow(width, height, thick, bottom, inset, blur, boost=2.2):
         [inset * SCALE, top * SCALE, (width - inset) * SCALE - 1, (height - bottom) * SCALE - 1],
         radius=thick / 2 * SCALE, fill=255)
     halo = big.filter(ImageFilter.GaussianBlur(blur * SCALE)).point(lambda v: min(255, round(v * boost)))
-    return finish(ImageChops.lighter(big, halo), (width, height))
+    # below the line there are only `bottom` px: there the glow fades to nothing at the edge, or the
+    # edge cuts it off straight
+    line_end = (height - bottom) * SCALE
+    fade = Image.new('L', (1, height * SCALE), 255)
+    for y in range(line_end, height * SCALE):
+        fade.putpixel((0, y), round(255 * (1 - (y - line_end + 1) / (bottom * SCALE + 1)) ** 2))
+    halo = ImageChops.multiply(halo, fade.resize((width * SCALE, height * SCALE), Image.NEAREST))
+    glow = finish(ImageChops.lighter(big, halo), (width, height))
+    # the line itself exactly as in line_texture: scaling down next to the steep end of the glow
+    # would take a step off it
+    line = line_texture(width, height, thick, bottom, inset).getchannel('A')
+    glow.putalpha(ImageChops.lighter(glow.getchannel('A'), line))
+    return glow
 
 
 def card_halo(size, pad, radius):
@@ -242,13 +254,13 @@ def smooth(low, high, value):
 
 def hero_scrim(width, height):
     """What carries the text on the hero: one fade down over the full width, so it has no corner of
-    its own. The top stays free; from where the text starts it is strong enough for it on a white
-    picture, and a little more towards the bottom. Square: past the round corners of the picture it
+    its own. It starts low, under the genre, and rises softly: most of the picture stays light, the
+    plot still reads on a white one. Square: past the round corners of the picture it
     lies on the base colour, where it does not show, and a round one would leave a light rim."""
     image = Image.new('RGBA', (width, height), (255, 255, 255, 0))
     for y in range(height):
         down = y / (height - 1)
-        alpha = round(255 * (0.74 * smooth(0.06, 0.31, down) + 0.12 * smooth(0.31, 1.0, down)))
+        alpha = round(255 * (0.62 * smooth(0.22, 0.80, down) + 0.13 * smooth(0.80, 1.0, down)))
         for x in range(width):
             image.putpixel((x, y), (255, 255, 255, alpha))
     return image

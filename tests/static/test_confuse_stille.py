@@ -151,15 +151,16 @@ def test_hero_text_block_does_not_overlap():
     assert c['LookHeroPillsLeft'] == c['LookHeroLeft'] - 10  # the padding of a pill
 
 
-def test_hero_text_stays_readable_on_a_white_picture():
-    """The worst case: a white picture under the fade, in the colour bg of Ember. Every line of text
-    as far as it usually reaches: the genres of the kicker, the tags, the plot's full width."""
+def test_hero_plot_stays_readable_on_a_white_picture():
+    """The worst case: a white picture under the fade, in the colour bg of Ember. The fade starts low
+    and stays light, as asked after the test on the box: the plot over its full width still reads,
+    the lines above it are left to the picture (the tags have their own plates)."""
     from test_confuse_look import contrast, rgb
     scrim = ui('hero_scrim.png').getchannel('A')
     bg = (0x0B, 0x0B, 0x10)
     c = constants()
     top, height, left, width = 116, 554, 64, 1792
-    for line_top, colour, wide in ((c['LookHeroKickerTop'] + 6, (0xFF, 0x7A, 0x57), 500), (c['LookHeroMetaTop'], (0xA9, 0xA9, 0xB6), 700), (c['LookHeroPlotTop'], (0xD4, 0xD4, 0xDC), 980)):
+    for line_top, colour, wide in ((c['LookHeroPlotTop'] + 20, (0xD4, 0xD4, 0xDC), 980),):
         for x in (c['LookHeroLeft'], c['LookHeroLeft'] + wide):
             a = scrim.getpixel((round((x - left) / width * (scrim.width - 1)), round((line_top - top) / height * (scrim.height - 1)))) / 255
             ground = tuple(255 * (1 - a) + v * a for v in bg)
@@ -186,6 +187,23 @@ def test_music_keeps_its_soft_backdrop(confuse_root):
     assert pictures == {'$INFO[Container(9000).ListItem.Art(fanart)]', '$INFO[Container(9001).ListItem.Art(fanart)]', '$INFO[ListItem.Art(fanart)]'}
 
 
+def test_hero_fade_leaves_the_upper_part_light():
+    scrim = ui('hero_scrim.png').getchannel('A')
+    column = [scrim.getpixel((0, y)) / 255 for y in range(scrim.height)]
+    assert max(column[:round(scrim.height * 0.3)]) < 0.05
+    assert max(column) < 0.8
+
+
+def test_tab_glow_fades_out_before_the_bottom_edge():
+    """A tab has 2 px below its line: the glow there ends at the edge instead of being cut by it."""
+    glow = ui('tab_glow.png').getchannel('A')
+    middle = glow.width // 2
+    assert glow.getpixel((middle, glow.height - 1)) < 40
+    line = ui('tab_line.png').getchannel('A')
+    solid = [y for y in range(line.height) if line.getpixel((line.width // 2, y)) == 255]
+    assert all(glow.getpixel((middle, y)) == 255 for y in solid)
+
+
 def test_row_card_is_wide_and_names_its_title():
     card = look_includes()['LookRowCard']
     args = {p.get('name'): p.get('value') for p in next(i for i in card.iter('include') if i.get('content') == 'CutCard').findall('param')}
@@ -210,9 +228,9 @@ def test_row_art_prefers_wide_pictures():
     assert order[-1] == '$INFO[ListItem.Art(poster)]'  # never an empty card when there is art at all
 
 
-def test_a_focused_card_rises_on_a_shadow():
+def test_a_focused_card_glows():
     texture = next(c for c in look_includes()['LookCardFocus'].iter('control')).find('texture')
-    assert texture.text == 'ui/card_halo.png' and texture.get('colordiffuse') == 'shadow'
+    assert texture.text == 'ui/card_halo.png' and texture.get('colordiffuse') == 'card_glow'
 
 
 def test_info_page_keeps_its_poster_and_place(confuse_root):
