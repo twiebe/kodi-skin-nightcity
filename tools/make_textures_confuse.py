@@ -234,6 +234,21 @@ def spinner_frame(size, head):
     return finish(image, (size, size))
 
 
+def glitch_sequence():
+    """The heads of the spinner with glitches, 85 ms each, looping: a round and a bit, then the light
+    sticks like a needle in a groove (two spokes back and forth, four times); later it freezes for
+    half a second and skips five spokes, as if frames were lost; later still it falters and runs a
+    round backwards. The startup screen is up three seconds or more: the first two come in it."""
+    heads = list(range(12)) + [0, 1]
+    heads += [2, 3] * 4                                   # record skip, from 1.2 s
+    heads += list(range(4, 12)) + list(range(0, 8))       # on to 7
+    heads += [7] * 6 + [0]                                # dropout, from 2.6 s, then five on
+    heads += list(range(1, 12)) + list(range(0, 12))      # on to 11
+    heads += [11, 11] + [h % 12 for h in range(10, -3, -1)] + [10]  # falter, a round back, falter
+    heads += [11] + list(range(12))                       # on, ending on 11 before the loop's 0
+    return heads
+
+
 def page_wash(height):
     """The ground of a page, opaque, multiplied by the colour surface: full at the top, at 80 % of the
     height as dark as the base colour (0B over 1A) and so to the bottom. Replaces the plain area, so
@@ -305,6 +320,8 @@ def textures():
         'logo_mark_230.png': logo_mark(230),
         'logo_plate_60.png': shape(60, 60, 14),
         'logo_mark_60.png': logo_mark(60),
+        # the mark mirrored, its gap pointing back: the startup logo shows it for a blink (glitches)
+        'logo_mark_230_back.png': logo_mark(230).transpose(Image.FLIP_LEFT_RIGHT),
         'page_wash.png': page_wash(256),
         # the hero, half its size on screen and its fade a quarter: Kodi scales both to 1792 x 554, radius 26
         'mask_hero.png': shape(896, 277, 13),
@@ -325,6 +342,9 @@ def textures():
     # the frames of the loading page's spinner, shown in the order of their names
     for head in range(12):
         out['spinner/{:02d}.png'.format(head)] = spinner_frame(112, head)
+    # the same spinner with its glitches (the skin setting, on by default): a frame per name again
+    for place, head in enumerate(glitch_sequence()):
+        out['spinner_glitch/{:03d}.png'.format(place)] = spinner_frame(112, head)
     for width, height in CARD_SIZES:
         out['mask_{}x{}.png'.format(width, height)] = card_mask(width, height)
     return out
@@ -340,7 +360,8 @@ def icon(size=512):
 
 def main():
     icon().save(UI.parent.parent / 'resources' / 'icon.png', optimize=True)
-    (UI / 'spinner').mkdir(parents=True, exist_ok=True)
+    for folder in ('spinner', 'spinner_glitch'):
+        (UI / folder).mkdir(parents=True, exist_ok=True)
     for name, image in sorted(textures().items()):
         image.save(UI / name, optimize=True)
         print(UI / name)

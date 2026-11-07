@@ -1104,3 +1104,11 @@ msgstr "説明"
 msgctxt "#31474"
 msgid "biography"
 msgstr "人物紹介"
+
+msgctxt "#31475"
+msgid "Small glitches"
+msgstr "小さなグリッチ"
+
+msgctxt "#31476"
+msgid "Now and then something stumbles for a blink: the loading spinner skips, the logo shivers, the spotlight tears, some titles twitch when they get the focus."
+msgstr "ときどき一瞬だけ何かがつまずきます。読み込み表示が引っかかり、ロゴが震え、スポットライトが乱れ、一部のタイトルはフォーカス時にぴくっと動きます。"

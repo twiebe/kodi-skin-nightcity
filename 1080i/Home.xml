@@ -47,6 +47,8 @@
                     <param name="art" value="Container(9000).ListItem.Art(fanart)"/>
                     <param name="shown" value="!String.IsEmpty(Container(9000).ListItem.Art(fanart))"/>
                     <param name="fadetime" value="400"/>
+                    <!-- every fifth title of the spotlight, if the look has glitches -->
+                    <param name="tear" value="$EXP[LookGlitch] + [String.EndsWith(Container(9000).CurrentItem,3) | String.EndsWith(Container(9000).CurrentItem,8)]"/>
                 </include>
             </control>
             <control type="group">
@@ -56,6 +58,7 @@
                     <param name="art" value="Container(9001).ListItem.Art(fanart)"/>
                     <param name="shown" value="!String.IsEmpty(Container(9001).ListItem.Art(fanart))"/>
                     <param name="fadetime" value="400"/>
+                    <param name="tear" value="$EXP[LookGlitch] + [String.EndsWith(Container(9001).CurrentItem,3) | String.EndsWith(Container(9001).CurrentItem,8)]"/>
                 </include>
             </control>
             <!-- music: an album has the fanart of its artist -->

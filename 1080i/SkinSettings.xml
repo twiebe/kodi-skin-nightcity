@@ -160,7 +160,7 @@
                      larger on each side; what does not glow stands 10 px in. -->
                 <control type="group" id="600">
                     <width>1260</width>
-                    <height>125</height>
+                    <height>LookSettingsLookHeight</height>
                     <control type="image">
                         <left>10</left>
                         <top>10</top>
@@ -182,9 +182,25 @@
                         <label2>$VAR[ColourSchemeLabel]</label2>
                         <onclick>NotifyAll(nightcity,colours)</onclick>
                         <onup>521</onup>
+                        <ondown condition="Control.IsVisible(603)">603</ondown>
+                        <ondown condition="!Control.IsVisible(603)">noop</ondown>
+                        <onleft>9005</onleft>
+                        <onright>noop</onright>
+                    </control>
+                    <!-- a look's glitches (Confuse), on unless the bool is set; a look without
+                         them has no row (LookGlitchSetting) and a group as high as one row -->
+                    <control type="radiobutton" id="603">
+                        <top>105</top>
+                        <width>1260</width>
+                        <include>SettingsToggleLook</include>
+                        <label>$LOCALIZE[31475]</label>
+                        <selected>!Skin.HasSetting(cf.glitch.off)</selected>
+                        <onclick>Skin.ToggleSetting(cf.glitch.off)</onclick>
+                        <onup>602</onup>
                         <ondown>noop</ondown>
                         <onleft>9005</onleft>
                         <onright>noop</onright>
+                        <visible>$EXP[LookGlitchSetting]</visible>
                     </control>
                 </control>
             </include>

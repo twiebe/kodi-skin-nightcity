@@ -51,10 +51,11 @@ def test_logo_is_drawn_at_its_own_size():
                 continue
             found += 1
             assert ui(name[3:]).size == (int(c.findtext('width')), int(c.findtext('height'))), name
-            colours[c.find('texture').get('colordiffuse')] = name
-        assert set(colours) == {'accent', 'focus_text'}
+            colours.setdefault(c.find('texture').get('colordiffuse'), name)
+        # the logo itself; the glitches' copies come after it (test_confuse_glitch.py)
+        assert {'accent', 'focus_text'} <= set(colours)
         assert 'plate' in colours['accent'] and 'mark' in colours['focus_text']
-    assert found == 4
+    assert found == 8
 
 
 def test_icon_is_the_logo(confuse_root):
@@ -70,10 +71,12 @@ def test_loading_page_is_logo_and_spinner(confuse_root):
     used = {c.findtext('texture') for c in window.iter('control') if c.findtext('texture')}
     assert {'ui/logo_plate_230.png', 'ui/logo_mark_230.png'} <= used
     assert not any('word_' in t or 'ember_glow' in t for t in used)
-    spinner = [c for c in window.iter('control') if c.get('type') == 'multiimage']
-    assert len(spinner) == 1 and spinner[0].findtext('imagepath') == 'ui/spinner'
-    assert spinner[0].find('imagepath').get('colordiffuse') == 'text'
-    assert (spinner[0].findtext('fadetime'), spinner[0].findtext('loop')) == ('0', 'true')
+    spinners = [c for c in window.iter('control') if c.get('type') == 'multiimage']
+    # calm, or with the glitches of the setting (test_confuse_glitch.py)
+    assert [s.findtext('imagepath') for s in spinners] == ['ui/spinner', 'ui/spinner_glitch']
+    for spinner in spinners:
+        assert spinner.find('imagepath').get('colordiffuse') == 'text'
+        assert (spinner.findtext('fadetime'), spinner.findtext('loop')) == ('0', 'true')
 
 
 def spinner_frames():
