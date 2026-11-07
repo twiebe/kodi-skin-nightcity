@@ -284,7 +284,23 @@ def textures():
     return out
 
 
+def icon(size=512):
+    """The add-on's icon: c and f of the name in the colours of the wordmark, on Ember's ground."""
+    font = ImageFont.truetype(str(LEXEND), 300 * SCALE)
+    font.set_variation_by_axes([800])
+    step = -0.03 * 300 * SCALE
+    big = Image.new('RGB', (size * SCALE, size * SCALE), (11, 11, 16))
+    draw = ImageDraw.Draw(big)
+    width = font.getlength('c') + step + font.getlength('f')
+    x = (size * SCALE - width) / 2
+    baseline = size * SCALE * 0.71
+    draw.text((x, baseline), 'c', font=font, fill=(169, 169, 182), anchor='ls')
+    draw.text((x + font.getlength('c') + step, baseline), 'f', font=font, fill=(255, 91, 53), anchor='ls')
+    return big.resize((size, size), Image.LANCZOS)
+
+
 def main():
+    icon().save(UI.parent.parent / 'resources' / 'icon.png', optimize=True)
     UI.mkdir(parents=True, exist_ok=True)
     for name, image in sorted(textures().items()):
         image.save(UI / name, optimize=True)

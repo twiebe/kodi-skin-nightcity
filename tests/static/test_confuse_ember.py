@@ -200,3 +200,12 @@ def test_nightcity_backdrop_stays_sharp():
     images = [c for c in window.iter('control') if c.findtext('description') == 'fanart backdrop']
     assert [i.findtext('texture') for i in images] == ['$INFO[ListItem.Art(fanart)]']
     assert images[0].findtext('visible') == '!String.IsEmpty(ListItem.Art(fanart))'
+
+
+def test_icon_shows_the_look_of_the_skin(confuse_root):
+    """Ember, not the amber of the first draft: the first thing the repository shows of the skin."""
+    icon = Image.open(confuse_root / 'resources' / 'icon.png').convert('RGB')
+    assert icon.size == (512, 512)
+    colours = {rgb for _, rgb in icon.getcolors(512 * 512)}
+    assert (11, 11, 16) in colours and (255, 91, 53) in colours
+    assert (239, 170, 71) not in colours
