@@ -8,33 +8,24 @@
         <value>confuse $INFO[System.AddonVersion(skin.confuse)]</value>
     </variable>
 
-    <!-- The first screen after boot. The name as a texture in two colours of the theme, con and fuse,
-         and under it a bar that fills. The wait has no measure, so it fills once, slowing down, and
-         stops short. Once the startup script is done a second bar fills over it, so it never goes
-         back. No status text: the bar says it. -->
+    <!-- The first screen after boot: the logo in the middle and under it a spinner until Home takes
+         over: its spokes stay where they are, only the light walks around them. The wait has no measure, so nothing here pretends to know how long it is. -->
     <include name="LookStartupWordmark">
         <definition>
-            <control type="image">
-                <left>432</left>
-                <top>359</top>
-                <width>1056</width>
-                <height>528</height>
-                <texture colordiffuse="glow">ui/ember_glow.png</texture>
-            </control>
             <control type="group">
-                <top>347</top>
+                <left>845</left>
+                <top>340</top>
                 <animation effect="slide" start="0,16" end="0,0" time="500" delay="100" tween="cubic" easing="out">WindowOpen</animation>
+                <!-- the plate in the accent, on it the mark: a disc whose gap points forward -->
                 <control type="image">
-                    <left>486</left>
-                    <width>442</width>
-                    <height>215</height>
-                    <texture colordiffuse="text_mute">ui/word_con.png</texture>
+                    <width>230</width>
+                    <height>230</height>
+                    <texture colordiffuse="accent">ui/logo_plate_230.png</texture>
                 </control>
                 <control type="image">
-                    <left>928</left>
-                    <width>506</width>
-                    <height>215</height>
-                    <texture colordiffuse="accent">ui/word_fuse.png</texture>
+                    <width>230</width>
+                    <height>230</height>
+                    <texture colordiffuse="focus_text">ui/logo_mark_230.png</texture>
                 </control>
             </control>
         </definition>
@@ -43,30 +34,155 @@
         <param name="waiting"/>
         <param name="online"/>
         <definition>
-            <control type="group">
-                <left>480</left>
-                <top>621</top>
-                <control type="image">
-                    <width>960</width>
-                    <height>4</height>
-                    <texture colordiffuse="border_dim">ui/white.png</texture>
-                </control>
-                <control type="image">
-                    <width>960</width>
-                    <height>4</height>
-                    <texture colordiffuse="accent">ui/white.png</texture>
-                    <animation type="Conditional" condition="true" reversible="false">
-                        <effect type="zoom" start="1,100" end="90,100" center="0,2" time="8000" tween="quadratic" easing="out"/>
-                    </animation>
-                </control>
-                <control type="image">
-                    <width>960</width>
-                    <height>4</height>
-                    <texture colordiffuse="accent">ui/white.png</texture>
-                    <animation effect="zoom" start="1,100" end="100,100" center="0,2" time="350" tween="cubic" easing="out">Visible</animation>
-                    <visible>$PARAM[online]</visible>
-                </control>
+            <control type="multiimage">
+                <left>932</left>
+                <top>700</top>
+                <width>56</width>
+                <height>56</height>
+                <imagepath colordiffuse="text">ui/spinner</imagepath>
+                <timeperimage>85</timeperimage>
+                <fadetime>0</fadetime>
+                <loop>true</loop>
+                <randomize>false</randomize>
             </control>
+        </definition>
+    </include>
+
+    <!-- The tabs stand in the middle of the top line, the logo left of them -->
+    <constant name="LookMenuLeft">-24</constant>
+    <constant name="LookMenuWidth">1920</constant>
+    <include name="LookMenuAlign">
+        <align>center</align>
+    </include>
+    <include name="LookHomeLogo">
+        <control type="group">
+            <left>64</left>
+            <top>14</top>
+            <include>QuickMenuFade</include>
+            <!-- the plate in the accent, on it the mark: a disc whose gap points forward -->
+            <control type="image">
+                <width>60</width>
+                <height>60</height>
+                <texture colordiffuse="accent">ui/logo_plate_60.png</texture>
+            </control>
+            <control type="image">
+                <width>60</width>
+                <height>60</height>
+                <texture colordiffuse="focus_text">ui/logo_mark_60.png</texture>
+            </control>
+        </control>
+    </include>
+
+    <!-- The hero is a large rounded picture, 64 px from the sides and 116 to 670 down. Its text lies
+         on the lower part, the upper part of the picture stays free -->
+    <constant name="LookHeroLeft">112</constant>
+    <constant name="LookHeroKickerTop">284</constant>
+    <constant name="LookHeroLogoTop">316</constant>
+    <constant name="LookHeroTitleTop">326</constant>
+    <constant name="LookHeroMetaTop">426</constant>
+    <constant name="LookHeroRatingsTop">466</constant>
+    <constant name="LookHeroPlotTop">506</constant>
+    <constant name="LookHeroPlotHeight">72</constant>
+    <constant name="LookHeroFocusTop">590</constant>
+    <constant name="LookHeroPillsLeft">102</constant>
+    <constant name="LookHeroPillsTop">580</constant>
+    <constant name="LookHeroProgressTop">660</constant>
+    <constant name="LookPageRowsTop">674</constant>
+
+    <!-- The picture of the hero, sharp and round by its mask, and over it the fade that carries the
+         text. The shadow under it is the one of a focused card -->
+    <include name="LookHomeFanart">
+        <param name="art"/>
+        <param name="shown"/>
+        <param name="fadetime" default="200"/>
+        <definition>
+            <control type="image">
+                <left>40</left>
+                <top>92</top>
+                <width>1840</width>
+                <height>602</height>
+                <texture border="40" colordiffuse="shadow">ui/card_halo.png</texture>
+                <visible>$PARAM[shown]</visible>
+            </control>
+            <control type="image">
+                <description>hero picture</description>
+                <left>64</left>
+                <top>116</top>
+                <width>1792</width>
+                <height>554</height>
+                <aspectratio scalediffuse="false">scale</aspectratio>
+                <fadetime>$PARAM[fadetime]</fadetime>
+                <texture diffuse="ui/mask_hero.png" background="true">$INFO[$PARAM[art]]</texture>
+                <visible>$PARAM[shown]</visible>
+            </control>
+            <control type="image">
+                <left>64</left>
+                <top>116</top>
+                <width>1792</width>
+                <height>554</height>
+                <texture colordiffuse="bg">ui/hero_scrim.png</texture>
+                <visible>$PARAM[shown]</visible>
+            </control>
+        </definition>
+    </include>
+
+    <!-- The picture says it all: no poster beside it -->
+    <include name="LookHeroPoster">
+        <param name="image"/>
+        <param name="item"/>
+        <param name="label"/>
+        <param name="missing"/>
+        <definition/>
+    </include>
+
+    <!-- The title of the focused card in the top line of its row: none here, the hero and the card name it -->
+    <include name="LookRowFocusTitle">
+        <param name="label"/>
+        <param name="shown"/>
+        <definition/>
+    </include>
+
+    <!-- Rows of Home are wide: an episode shows its still, the rest its wide art, fanart when it has
+         no other, the poster at last. A wide picture does not always name its title, so the label
+         stands under the card -->
+    <variable name="LookRowArt">
+        <value condition="String.IsEqual(ListItem.DBType,episode) + !String.IsEmpty(ListItem.Art(thumb))">$INFO[ListItem.Art(thumb)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(landscape))">$INFO[ListItem.Art(landscape)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.landscape))">$INFO[ListItem.Art(tvshow.landscape)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(fanart))">$INFO[ListItem.Art(fanart)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.fanart))">$INFO[ListItem.Art(tvshow.fanart)]</value>
+        <value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
+        <value>$INFO[ListItem.Art(poster)]</value>
+    </variable>
+    <include name="LookRowCard">
+        <param name="image"/>
+        <param name="dim" default="false"/>
+        <param name="focused" default="false"/>
+        <definition>
+            <include content="CutCard">
+                <param name="width" value="400"/>
+                <param name="height" value="225"/>
+                <param name="mask" value="ui/mask_400x225.png"/>
+                <param name="glowwidth" value="448"/>
+                <param name="glowheight" value="273"/>
+                <param name="image" value="$PARAM[image]"/>
+                <param name="dim" value="$PARAM[dim]"/>
+                <param name="focused" value="$PARAM[focused]"/>
+                <include content="CardExtras">
+                    <param name="textwidth" value="368"/>
+                    <param name="textheight" value="193"/>
+                    <param name="linetop" value="209"/>
+                    <param name="linewidth" value="376"/>
+                </include>
+                <control type="label">
+                    <top>236</top>
+                    <width>400</width>
+                    <height>34</height>
+                    <font>font_small</font>
+                    <textcolor>text_mute</textcolor>
+                    <label>$INFO[ListItem.Label]</label>
+                </control>
+            </include>
         </definition>
     </include>
 
@@ -75,14 +191,14 @@
          actions, a visible only as a $PARAM: what a control does stays in the shared files. -->
 
     <!-- how far a focused card grows and how long it takes -->
-    <constant name="LookCardFocusZoom">113.5</constant>
+    <constant name="LookCardFocusZoom">108</constant>
     <constant name="LookCardFocusTime">120</constant>
     <!-- the space between the rows of a page of Home -->
     <constant name="LookRowGap">0</constant>
     <!-- The list of a row and the room around a card in it, for what a focused card draws past its
-         edges; a list clips its items. A 200 x 300 card at 113.5 % grows 13.5 px to a side and 20.25
-         up and down, its glow is 24 px x 1.135 more: ItemTop at least 48, ItemLeft at least 41. The
-         list starts where the card before ends, so no strip of that card shows on a scrolled row:
+         edges; a list clips its items. A 400 x 225 card at 108 % grows 16 px to a side and 9 up and
+         down, its shadow is 24 px x 1.08 more: ItemTop at least 36, ItemLeft at least 42. The list
+         starts where the card before ends, so no strip of that card shows on a scrolled row:
          ItemLeft is also the gap between the cards, 44.
          In pairs, since a constant cannot add up: ListLeft + ItemLeft stays 64, ListTop + ItemTop
          stays 78, ListLeft + ListWidth stays 1920, ListTop + ListHeight stays 468 (the height of a
@@ -94,21 +210,21 @@
     <constant name="LookRowItemTop">48</constant>
     <constant name="LookRowListWidth">1900</constant>
     <constant name="LookRowListHeight">438</constant>
-    <constant name="LookRowItemWidth">244</constant>
+    <constant name="LookRowItemWidth">444</constant>
 
     <!-- The genre tabs of a row: no number before them here, so the text of the first stands over
          the first card (24 px gap, 10 px of padding) -->
     <constant name="LookGenreTabsLeft">30</constant>
 
-    <!-- Full screen page: the base colour. The warm fade is in the mask of the fanart (ui/fade_r.png,
-         FanartBackdrop), so a page has one full screen layer with alpha -->
+    <!-- Full screen page: the base colour, a little lighter at the top. One opaque picture, small,
+         Kodi scales it up smoothly -->
     <include name="LookBackground">
         <control type="image">
             <left>0</left>
             <top>0</top>
             <width>1920</width>
             <height>1080</height>
-            <texture colordiffuse="bg">ui/white.png</texture>
+            <texture colordiffuse="surface">ui/page_wash.png</texture>
         </control>
     </include>
 
@@ -180,8 +296,8 @@
         </definition>
     </include>
 
-    <!-- A focused card's glow, under its artwork. Fixed at 24 px past the card since card_halo.png
-         has this margin: the callers pass card + 48 -->
+    <!-- A focused card rises on a shadow, under its artwork. Fixed at 24 px past the card since
+         card_halo.png has this margin: the callers pass card + 48 -->
     <include name="LookCardFocus">
         <param name="glowwidth"/>
         <param name="glowheight"/>
@@ -192,7 +308,7 @@
                 <top>-24</top>
                 <width>$PARAM[glowwidth]</width>
                 <height>$PARAM[glowheight]</height>
-                <texture border="40" colordiffuse="card_glow">ui/card_halo.png</texture>
+                <texture border="40" colordiffuse="shadow">ui/card_halo.png</texture>
                 <visible>$PARAM[focused]</visible>
             </control>
         </definition>
@@ -363,14 +479,13 @@
         </definition>
     </include>
 
-    <!-- An entry of the top menu, 64 px high: the shown page a line under its text, the focus the
-         same line with a glow. One shape, so nothing jumps when the focus moves. The textures are as
-         high as the entry since Kodi stretches a button's texture over the whole button. -->
+    <!-- An entry of the top menu, 64 px high with a 44 px pill: the shown page white, with the focus
+         the accent. The focus shows its page at once, so every other entry stays plain text. -->
     <include name="LookMenuTextures">
-        <texturefocus border="30,0,30,0" colordiffuse="accent">ui/menu_glow.png</texturefocus>
+        <texturefocus border="32" colordiffuse="accent">ui/pill_menu.png</texturefocus>
         <texturenofocus/>
-        <alttexturefocus border="30,0,30,0" colordiffuse="accent">ui/menu_glow.png</alttexturefocus>
-        <alttexturenofocus border="19,0,19,0" colordiffuse="accent">ui/menu_line.png</alttexturenofocus>
+        <alttexturefocus border="32" colordiffuse="accent">ui/pill_menu.png</alttexturefocus>
+        <alttexturenofocus border="32" colordiffuse="text">ui/pill_menu.png</alttexturenofocus>
     </include>
 
     <!-- Dialog panel: opaque base (surface alone lets the window behind show through), cut-corner
@@ -440,12 +555,12 @@
         <param name="label"/>
         <definition>
             <font>font_caps</font>
-            <textoffsetx>26</textoffsetx>
+            <textoffsetx>32</textoffsetx>
             <aligny>center</aligny>
             <textcolor>text_dim</textcolor>
-            <focusedcolor>text</focusedcolor>
+            <focusedcolor>focus_text</focusedcolor>
             <label>[CAPITALIZE][UPPERCASE]$PARAM[label][/UPPERCASE][/CAPITALIZE]</label>
-            <altlabel>[COLOR text][CAPITALIZE][UPPERCASE]$PARAM[label][/UPPERCASE][/CAPITALIZE][/COLOR]</altlabel>
+            <altlabel>[COLOR bg][CAPITALIZE][UPPERCASE]$PARAM[label][/UPPERCASE][/CAPITALIZE][/COLOR]</altlabel>
         </definition>
     </include>
 

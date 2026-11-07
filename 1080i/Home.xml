@@ -43,16 +43,18 @@
                     <param name="page1" value="String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)"/>
                     <param name="page2" value="String.IsEqual(Window(Home).Property(nc.page),movies)"/>
                 </include>
-                <include content="FanartBackdrop">
+                <include content="LookHomeFanart">
                     <param name="art" value="Container(9000).ListItem.Art(fanart)"/>
+                    <param name="shown" value="!String.IsEmpty(Container(9000).ListItem.Art(fanart))"/>
                     <param name="fadetime" value="400"/>
                 </include>
             </control>
             <control type="group">
                 <visible>String.IsEqual(Window(Home).Property(nc.page),shows) + !String.IsEqual(Skin.String(nc.shows.spotlight),off)</visible>
                 <include>BackdropFade</include>
-                <include content="FanartBackdrop">
+                <include content="LookHomeFanart">
                     <param name="art" value="Container(9001).ListItem.Art(fanart)"/>
+                    <param name="shown" value="!String.IsEmpty(Container(9001).ListItem.Art(fanart))"/>
                     <param name="fadetime" value="400"/>
                 </include>
             </control>
@@ -69,8 +71,9 @@
         <control type="group">
             <visible>ControlGroup(9210).HasFocus() | ControlGroup(9410).HasFocus() | ControlGroup(9510).HasFocus() | ControlGroup(9710).HasFocus() | ControlGroup(9810).HasFocus()</visible>
             <include>HeroSwapFade</include>
-            <include content="FanartBackdrop">
+            <include content="LookHomeFanart">
                 <param name="art" value="ListItem.Art(fanart)"/>
+                <param name="shown" value="!String.IsEmpty(ListItem.Art(fanart))"/>
             </include>
             <include content="FanartBackdrop">
                 <param name="art" value="ListItem.Art(artist.fanart)"/>
