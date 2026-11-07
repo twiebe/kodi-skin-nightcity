@@ -189,3 +189,22 @@ def test_down_opens_chapter_list(tracks):
         screenshot('osd-chapters')
     finally:
         action('back', delay=1)
+
+
+def test_subtitle_offset_moves_with_left_and_right(playing):
+    """The slider dialog of the delay: left and right change the value (it stood upright and did not)."""
+    builtin('Action(subtitledelay)')
+    try:
+        wait_for('Window.IsActive(sliderdialog)')
+        wait_for('Control.HasFocus(11)')
+        before = info('Control.GetLabel(12)')['Control.GetLabel(12)']
+        action('right', delay=0.5)
+        action('right', delay=0.5)
+        after = info('Control.GetLabel(12)')['Control.GetLabel(12)']
+        assert after != before and after.endswith('s')
+        screenshot('subtitle_offset')
+        action('left', delay=0.5)
+        action('left', delay=0.5)
+        assert info('Control.GetLabel(12)')['Control.GetLabel(12)'] == before
+    finally:
+        action('back', delay=1)

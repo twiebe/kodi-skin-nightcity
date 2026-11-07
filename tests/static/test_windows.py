@@ -335,3 +335,17 @@ def test_windows_over_a_playing_video_keep_it_rendering():
     for name in ('Home.xml', 'Custom_1190_TMDbHelper.xml'):
         controls = parse(ROOT / '1080i' / name).find('controls')
         assert controls[0].tag == 'include' and controls[0].text == 'Background', name
+
+
+def test_a_slider_lies_on_its_side():
+    """Without an orientation a slider stands upright (GUIControlFactory.cpp): left and right do not
+    move it, and its nib scales to the slider's width. The subtitle offset could not be changed and
+    its nib covered the screen."""
+    from conftest import all_xml_files
+    found = 0
+    for path in all_xml_files():
+        for control in parse(path).iter('control'):
+            if control.get('type') == 'slider':
+                found += 1
+                assert control.findtext('orientation') == 'horizontal', path.name
+    assert found >= 1

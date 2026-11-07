@@ -28,6 +28,7 @@
                 <textcolor>state_text</textcolor>
             </control>
             <control type="slider" id="11">
+                <orientation>horizontal</orientation>
                 <left>40</left>
                 <top>84</top>
                 <width>920</width>
