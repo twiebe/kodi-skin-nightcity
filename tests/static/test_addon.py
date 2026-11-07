@@ -93,7 +93,12 @@ def test_string_ids_unique():
         assert len(ids) == len(set(ids)), (po.parent.name, sorted({i for i in ids if ids.count(i) > 1}))
 
 
-def test_english_only_for_now():
-    """No translation yet: summary and description in English only."""
-    langs = {el.get('lang') for el in parse(ROOT / 'addon.xml').iter() if el.get('lang')}
-    assert langs <= {'en_GB'}
+def test_summary_and_description_in_every_language():
+    """Each language of the strings has a summary and a description, in both skins."""
+    want = {'en_GB'} | {p.parent.name.split('.')[-1][:3] + p.parent.name[-2:].upper()
+                        for p in ROOT.glob('language/*/strings.po')}
+    for addon in (ROOT / 'addon.xml', ROOT / 'skins' / 'confuse' / 'addon.xml'):
+        for tag in ('summary', 'description'):
+            found = [el.get('lang') for el in parse(addon).iter(tag)]
+            assert sorted(found) == sorted(want), (addon.parent.name, tag)
+            assert all((el.text or '').strip() for el in parse(addon).iter(tag))

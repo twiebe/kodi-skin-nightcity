@@ -86,7 +86,7 @@ def test_temperature_large_and_tight():
         ('String.IsEqual(System.TemperatureUnits,°C)', 'C'), ('String.IsEqual(System.TemperatureUnits,°F)', 'F'),
         (None, '$INFO[System.TemperatureUnits]')]
     fonts = {f.findtext('name'): (f.findtext('filename'), f.findtext('size'))
-             for f in parse(ROOT / '1080i' / 'Font.xml').iter('font')}
+             for f in parse(ROOT / '1080i' / 'Font.xml').find("fontset[@id='Default']").iter('font')}
     assert fonts['font_temp'] == ('RetroUI-Bold.ttf', '140')
 
 

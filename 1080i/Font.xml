@@ -100,4 +100,104 @@
             <size>32</size>
         </font>
     </fontset>
+    <!-- Kodi's own arial.ttf (DejaVu Sans with Chinese, Japanese and Korean), chosen under
+         Settings > Interface > Skin > Fonts for a language the skin fonts lack: Kodi has no glyph
+         fallback. Sizes are smaller as its letters are wider; bold weights are drawn bold. The
+         underline font stays, its bars only fit Latin text. -->
+    <fontset id="Arial" unicode="true">
+        <font>
+            <name>font_tiny</name>
+            <filename>arial.ttf</filename>
+            <size>20</size>
+        </font>
+        <font>
+            <name>font_small</name>
+            <filename>arial.ttf</filename>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font_body</name>
+            <filename>arial.ttf</filename>
+            <size>26</size>
+        </font>
+        <font>
+            <name>font_label</name>
+            <filename>arial.ttf</filename>
+            <size>27</size>
+        </font>
+        <font>
+            <name>font_title</name>
+            <filename>arial.ttf</filename>
+            <size>37</size>
+            <style>bold</style>
+        </font>
+        <font>
+            <name>font_hero</name>
+            <filename>arial.ttf</filename>
+            <size>65</size>
+            <style>bold</style>
+        </font>
+        <font>
+            <name>font_wordmark</name>
+            <filename>arial.ttf</filename>
+            <size>113</size>
+            <style>bold</style>
+        </font>
+        <font>
+            <name>font_caps</name>
+            <filename>arial.ttf</filename>
+            <size>23</size>
+        </font>
+        <font>
+            <name>font_caps_line</name>
+            <filename>RetroUIWideLine-SemiBold.ttf</filename>
+            <size>23</size>
+        </font>
+        <font>
+            <name>font_caps_small</name>
+            <filename>arial.ttf</filename>
+            <size>21</size>
+        </font>
+        <font>
+            <name>font_num</name>
+            <filename>arial.ttf</filename>
+            <size>27</size>
+        </font>
+        <font>
+            <name>font_num_small</name>
+            <filename>arial.ttf</filename>
+            <size>23</size>
+        </font>
+        <font>
+            <name>font_clock</name>
+            <filename>arial.ttf</filename>
+            <size>61</size>
+        </font>
+        <font>
+            <name>font_temp</name>
+            <filename>arial.ttf</filename>
+            <size>119</size>
+            <style>bold</style>
+        </font>
+        <font>
+            <name>font10</name>
+            <filename>arial.ttf</filename>
+            <size>20</size>
+        </font>
+        <font>
+            <name>font12</name>
+            <filename>arial.ttf</filename>
+            <size>22</size>
+        </font>
+        <font>
+            <name>font13</name>
+            <filename>arial.ttf</filename>
+            <size>26</size>
+        </font>
+        <font>
+            <name>font14</name>
+            <filename>arial.ttf</filename>
+            <size>27</size>
+        </font>
+    </fontset>
 </fonts>

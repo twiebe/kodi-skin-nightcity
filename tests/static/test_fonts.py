@@ -23,8 +23,16 @@ def font_files_by_name():
 
 def test_fontsets_same_names():
     sets = fontsets()
-    assert set(sets) == {'Default'}
+    assert set(sets) == {'Default', 'Arial'}
     assert set(font_files_by_name()) == NAMES
+    assert {f.findtext('name') for f in sets['Arial'].iter('font')} == NAMES
+
+
+def test_arial_fontset_is_kodis_own_font():
+    """Arial is for a language the skin fonts lack (Japanese): Kodi's media/Fonts/arial.ttf, which
+    every Kodi has, so the skin ships nothing for it. Only the underline font stays the skin's."""
+    for f in fontsets()['Arial'].iter('font'):
+        assert f.findtext('filename') == ('RetroUIWideLine-SemiBold.ttf' if f.findtext('name') == 'font_caps_line' else 'arial.ttf')
 
 
 def test_font_files_exist():
@@ -55,7 +63,10 @@ def skin_texts():
 
 
 def po_texts():
+    """The strings of the languages shown in the skin fonts (not Japanese, see test_arial_fontset_is_kodis_own_font)."""
     for po in ROOT.glob('language/*/strings.po'):
+        if po.parent.name == 'resource.language.ja_jp':
+            continue
         for m in re.finditer(r'^msgstr "(.*)"$', po.read_text(encoding='utf-8'), re.M):
             yield po.parent.name, m.group(1)
 

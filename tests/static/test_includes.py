@@ -410,7 +410,7 @@ def test_header_parts_split_by_a_dark_blue_dot(name):
 def test_hero_titles_fit_long_names():
     """A hero title takes about 30 characters (Everything Everywhere All at Once): width per
     pixel of font size of at least 16."""
-    sizes = {f.findtext('name'): int(f.findtext('size')) for f in parse(ROOT / '1080i' / 'Font.xml').iter('font')}
+    sizes = {f.findtext('name'): int(f.findtext('size')) for f in parse(ROOT / '1080i' / 'Font.xml').find("fontset[@id='Default']").iter('font')}
     hero = include('HeroBody')
     defaults = {p.get('name'): p.get('default') for p in hero.findall('param')}
     for path in layout_files():

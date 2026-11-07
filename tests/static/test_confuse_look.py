@@ -4,6 +4,7 @@ import math
 import re
 import xml.etree.ElementTree as ET
 
+import pytest
 from fontTools.ttLib import TTFont
 from PIL import Image, ImageFont
 
@@ -20,10 +21,28 @@ HERO_TEXTURES = ('mask_hero', 'hero_scrim')  # half the size of the hero on scre
 LOCALIZE = re.compile(r'\$LOCALIZE\[(\d+)\]')
 
 
-def font_defs(root):
-    """name -> (file, size) of the Default fontset."""
+# Kodi's own fonts (media/Fonts), for the fontset a language the skin fonts lack is shown in
+KODI_FONTS = ROOT.parent / 'xbmc' / 'media' / 'Fonts'
+FONTSET = {'ja_jp': 'Arial'}  # language -> fontset, Default for the others
+
+
+def fontset_of(lang):
+    return FONTSET.get(lang, 'Default')
+
+
+def font_defs(root, fontset='Default'):
+    """name -> (file, size) of a fontset."""
     return {f.findtext('name'): (f.findtext('filename'), int(f.findtext('size')))
-            for f in parse(root / '1080i' / 'Font.xml').iter('font')}
+            for f in parse(root / '1080i' / 'Font.xml').find("fontset[@id='{}']".format(fontset)).iter('font')}
+
+
+def font_file(root, filename):
+    """The skin's font, else Kodi's of that name; a test skips when Kodi's sources are not at hand."""
+    if (root / 'fonts' / filename).is_file():
+        return root / 'fonts' / filename
+    if not (KODI_FONTS / filename).is_file():
+        pytest.skip('Kodi fonts not at {}'.format(KODI_FONTS))
+    return KODI_FONTS / filename
 
 
 def font_names(root):
@@ -34,10 +53,14 @@ def used_fonts(root):
     return sorted({root / 'fonts' / name for name, _ in font_defs(root).values()})
 
 
-def strings(root):
-    """number -> English text (msgid; the msgstr of en_gb is empty)."""
-    text = (root / 'language' / 'resource.language.en_gb' / 'strings.po').read_text(encoding='utf-8')
-    return {int(m.group(1)): m.group(2) for m in re.finditer(r'msgctxt "#(\d+)"\nmsgid "(.*)"', text)}
+LANGUAGES = ('en_gb', 'de_de', 'fr_fr', 'es_es', 'it_it', 'pt_br', 'pl_pl', 'ja_jp')
+
+
+def strings(root, lang='en_gb'):
+    """number -> text in a language: the msgid for English (its msgstr is empty), the msgstr else."""
+    text = (root / 'language' / 'resource.language.{}'.format(lang) / 'strings.po').read_text(encoding='utf-8')
+    return {int(m.group(1)): m.group(3) if lang != 'en_gb' else m.group(2)
+            for m in re.finditer(r'msgctxt "#(\d+)"\nmsgid "(.*)"\nmsgstr "(.*)"', text)}
 
 
 def variables(root):
@@ -57,11 +80,11 @@ def texts_of(label, root, texts):
     return [] if '$' in label else [label.replace('\\"', '"')]
 
 
-def text_width(root, font_name, text):
+def text_width(root, font_name, text, fontset='Default'):
     """Widest of the text as written and in Title Case (Confuse shows titles as written, the
     sources are not all cased the same), at the font's size in Font.xml."""
-    filename, size = font_defs(root)[font_name]
-    font = ImageFont.truetype(str(root / 'fonts' / filename), size)
+    filename, size = font_defs(root, fontset)[font_name]
+    font = ImageFont.truetype(str(font_file(root, filename)), size)
     return max(font.getlength(text), font.getlength(text.title()))
 
 
@@ -84,7 +107,8 @@ def test_font_names_match_nightcity(confuse_root):
 
 def test_every_glyph_the_skin_uses_exists(confuse_root):
     texts = [p.read_text(encoding='utf-8') for p in (confuse_root / '1080i').glob('*.xml')]
-    texts += [p.read_text(encoding='utf-8') for p in confuse_root.glob('language/*/strings.po')]
+    texts += [p.read_text(encoding='utf-8') for p in confuse_root.glob('language/*/strings.po')
+              if fontset_of(p.parent.name.split('.')[-1]) == 'Default']
     texts.append((confuse_root / 'scripts' / 'nightcity.py').read_text(encoding='utf-8'))
     chars = {c for text in texts for c in text if ord(c) > 127} | set('ÄÖÜäöüßΩαβЖжЯяБДệờượ')
     assert chars
@@ -92,6 +116,20 @@ def test_every_glyph_the_skin_uses_exists(confuse_root):
         cmap = TTFont(path).getBestCmap()
         missing = sorted(c for c in chars if ord(c) not in cmap)
         assert not missing, (path.name, missing)
+
+
+@pytest.mark.parametrize('lang', sorted(FONTSET))
+def test_a_language_beyond_the_skin_fonts_has_its_glyphs(confuse_root, lang):
+    """A language the skin fonts lack is read in its own fontset: every character of its strings and
+    of the skin's own labels is in each file of that fontset, but the underline font, which only
+    draws bars."""
+    po = (confuse_root / 'language' / 'resource.language.{}'.format(lang) / 'strings.po').read_text(encoding='utf-8')
+    chars = {c for c in ''.join(re.findall(r'^msgstr "(.*)"$', po, re.M)) if ord(c) > 127}
+    assert chars
+    assert set(font_defs(confuse_root, FONTSET[lang])) == font_names(confuse_root)
+    for filename in {f for f, _ in font_defs(confuse_root, FONTSET[lang]).values() if 'Line' not in f}:
+        cmap = TTFont(font_file(confuse_root, filename)).getBestCmap()
+        assert not sorted(c for c in chars if ord(c) not in cmap), filename
 
 
 def test_digits_have_one_width(confuse_root):
@@ -112,10 +150,10 @@ def test_font_budget(confuse_root):
 ARROW_KEYS = {('DialogKeyboard.xml', '◄'), ('DialogKeyboard.xml', '►')}
 
 
-def fixed_width_buttons(root):
+def fixed_width_buttons(root, lang='en_gb'):
     """(file, label text, width, textoffsetx, font name) of every button of fixed width: a Button or
     PillButton include (Button's width is 220 unless set), and a raw button or radiobutton control."""
-    texts = strings(root)
+    texts = strings(root, lang)
     pill_font, _ = look_font(root, 'LookPillText')
     for path in sorted((root / '1080i').glob('*.xml')):
         tree = parse(path)
@@ -134,23 +172,27 @@ def fixed_width_buttons(root):
                            int(offset) if offset.isdigit() else 0, (control.findtext('font') or 'font13').strip())
 
 
-def test_fixed_width_labels_fit(confuse_root):
-    """A button of fixed width: each text its label can show, plus both text offsets, fits in the width."""
+@pytest.mark.parametrize('lang', LANGUAGES)
+def test_fixed_width_labels_fit(confuse_root, lang):
+    """A button of fixed width: each text its label can show, plus both text offsets, fits in the
+    width, in every language."""
     checked = []
-    for name, label, width, offset, font in fixed_width_buttons(confuse_root):
+    for name, label, width, offset, font in fixed_width_buttons(confuse_root, lang):
         if not label.strip() or (name, label) in ARROW_KEYS:
             continue
-        need = text_width(confuse_root, font, label) + 2 * offset
+        need = text_width(confuse_root, font, label, fontset_of(lang)) + 2 * offset
         checked.append((name, label))
         assert need <= width, (name, label, round(need), width)
     assert len(checked) >= 40
-    assert ('Custom_1110_Library.xml', 'Sort: Year') in checked and ('DialogKeyboard.xml', 'space') in checked
+    if lang == 'en_gb':
+        assert ('Custom_1110_Library.xml', 'Sort: Year') in checked and ('DialogKeyboard.xml', 'space') in checked
 
 
-def test_main_menu_fits(confuse_root):
+@pytest.mark.parametrize('lang', LANGUAGES)
+def test_main_menu_fits(confuse_root, lang):
     """Every entry of the top menu, shown at once, with the gaps between them: within the list."""
     font_name, offset = look_font(confuse_root, 'LookMenuText')
-    texts = strings(confuse_root)
+    texts = strings(confuse_root, lang)
     menu = next(el for el in parse(confuse_root / '1080i' / 'Includes_Home.xml').iter('include') if el.get('name') == 'MainMenu')
     group = next(g for g in menu.iter('control') if g.get('id') == '9100')
     items = [inc for inc in group.findall('include') if inc.get('content') in ('MenuButton', 'TabGap')]
@@ -162,7 +204,7 @@ def test_main_menu_fits(confuse_root):
         else:
             label = texts_of(p['label'], confuse_root, texts)
             assert len(label) == 1, p['label']
-            widths.append(text_width(confuse_root, font_name, label[0]) + 2 * offset)
+            widths.append(text_width(confuse_root, font_name, label[0], fontset_of(lang)) + 2 * offset)
     total = sum(widths) + int(group.findtext('itemgap')) * (len(widths) - 1)
     assert total <= constants()[group.findtext('width')], (round(total), group.findtext('width'))
 

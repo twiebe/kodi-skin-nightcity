@@ -1,0 +1,1104 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: it_it\n"
+
+msgctxt "#31002"
+msgid "Spotlight source"
+msgstr "Fonte della vetrina"
+
+msgctxt "#31003"
+msgid "All movies"
+msgstr "Tutti i film"
+
+msgctxt "#31004"
+msgid "Unwatched movies"
+msgstr "Film non visti"
+
+msgctxt "#31005"
+msgid "Effects"
+msgstr "Effetti"
+
+msgctxt "#31006"
+msgid "home"
+msgstr "home"
+
+msgctxt "#31010"
+msgid "play"
+msgstr "riproduci"
+
+msgctxt "#31011"
+msgid "info"
+msgstr "info"
+
+msgctxt "#31012"
+msgid "min"
+msgstr "min"
+
+msgctxt "#31020"
+msgid "on deck"
+msgstr "da guardare"
+
+msgctxt "#31021"
+msgid "new movies"
+msgstr "nuovi film"
+
+msgctxt "#31022"
+msgid "new episodes"
+msgstr "nuovi episodi"
+
+msgctxt "#31023"
+msgid "continue watching"
+msgstr "continua a guardare"
+
+msgctxt "#31030"
+msgid "movies"
+msgstr "film"
+
+msgctxt "#31031"
+msgid "shows"
+msgstr "serie TV"
+
+msgctxt "#31032"
+msgid "search"
+msgstr "cerca"
+
+msgctxt "#31033"
+msgid "System"
+msgstr "Sistema"
+
+msgctxt "#31041"
+msgid "trailer"
+msgstr "trailer"
+
+msgctxt "#31042"
+msgid "posters"
+msgstr "poster"
+
+msgctxt "#31043"
+msgid "resume"
+msgstr "riprendi"
+
+msgctxt "#31050"
+msgid "ends"
+msgstr "termina"
+
+msgctxt "#31051"
+msgid "pause"
+msgstr "pausa"
+
+msgctxt "#31052"
+msgid "stop"
+msgstr "stop"
+
+msgctxt "#31053"
+msgid "subtitles"
+msgstr "sottotitoli"
+
+msgctxt "#31054"
+msgid "audio"
+msgstr "audio"
+
+msgctxt "#31055"
+msgid "video"
+msgstr "video"
+
+msgctxt "#31056"
+msgid "bookmarks"
+msgstr "segnalibri"
+
+msgctxt "#31057"
+msgid "buffering"
+msgstr "buffering"
+
+msgctxt "#31058"
+msgid "video already has subtitles"
+msgstr "il video ha già i sottotitoli"
+
+msgctxt "#31080"
+msgid "quit kodi"
+msgstr "chiudi Kodi"
+
+msgctxt "#31081"
+msgid "power off"
+msgstr "spegni"
+
+msgctxt "#31082"
+msgid "reboot"
+msgstr "riavvia"
+
+msgctxt "#31083"
+msgid "suspend"
+msgstr "sospendi"
+
+msgctxt "#31084"
+msgid "hibernate"
+msgstr "iberna"
+
+msgctxt "#31085"
+msgid "shutdown timer"
+msgstr "timer spegnimento"
+
+msgctxt "#31086"
+msgid "cancel shutdown timer"
+msgstr "annulla timer spegnimento"
+
+msgctxt "#31087"
+msgid "log off"
+msgstr "disconnettiti"
+
+msgctxt "#31088"
+msgid "reload skin"
+msgstr "ricarica skin"
+
+msgctxt "#31089"
+msgid "power"
+msgstr "uscita"
+
+msgctxt "#31090"
+msgid "Hide foreign"
+msgstr "Nascondi stranieri"
+
+msgctxt "#31091"
+msgid "Hide broken"
+msgstr "Nascondi non funzionanti"
+
+msgctxt "#31094"
+msgid "thumbs"
+msgstr "miniature"
+
+msgctxt "#31095"
+msgid "mute"
+msgstr "muto"
+
+msgctxt "#31096"
+msgid "descending"
+msgstr "decrescente"
+
+msgctxt "#31100"
+msgid "spotlight"
+msgstr "vetrina"
+
+msgctxt "#31101"
+msgid "all movies"
+msgstr "tutti i film"
+
+msgctxt "#31102"
+msgid "all shows"
+msgstr "tutte le serie TV"
+
+msgctxt "#31103"
+msgid "in progress"
+msgstr "in corso"
+
+msgctxt "#31104"
+msgid "unwatched"
+msgstr "non visti"
+
+msgctxt "#31105"
+msgid "genres"
+msgstr "generi"
+
+msgctxt "#31106"
+msgid "episodes"
+msgstr "episodi"
+
+msgctxt "#31116"
+msgid "sort"
+msgstr "ordina"
+
+msgctxt "#31117"
+msgid "descending"
+msgstr "decrescente"
+
+msgctxt "#31118"
+msgid "title"
+msgstr "titolo"
+
+msgctxt "#31119"
+msgid "year"
+msgstr "anno"
+
+msgctxt "#31120"
+msgid "added"
+msgstr "data aggiunta"
+
+msgctxt "#31121"
+msgid "rating"
+msgstr "valutazione"
+
+msgctxt "#31122"
+msgid "ascending"
+msgstr "crescente"
+
+msgctxt "#31123"
+msgid "from start"
+msgstr "dall'inizio"
+
+msgctxt "#31124"
+msgid "cast"
+msgstr "attori"
+
+msgctxt "#31125"
+msgid "details"
+msgstr "dettagli"
+
+msgctxt "#31126"
+msgid "director"
+msgstr "regia"
+
+msgctxt "#31127"
+msgid "writer"
+msgstr "sceneggiatura"
+
+msgctxt "#31128"
+msgid "studio"
+msgstr "studio"
+
+msgctxt "#31129"
+msgid "country"
+msgstr "paese"
+
+msgctxt "#31130"
+msgid "similar"
+msgstr "simili"
+
+msgctxt "#31131"
+msgid "season"
+msgstr "stagione"
+
+msgctxt "#31132"
+msgid "episode"
+msgstr "episodio"
+
+msgctxt "#31133"
+msgid "all"
+msgstr "tutte"
+
+msgctxt "#31134"
+msgid "specials"
+msgstr "speciali"
+
+msgctxt "#31135"
+msgid "select"
+msgstr "seleziona"
+
+msgctxt "#31136"
+msgid "age rating"
+msgstr "classificazione"
+
+msgctxt "#31059"
+msgid "ends at"
+msgstr "termina alle"
+
+msgctxt "#31137"
+msgid "next episode"
+msgstr "prossimo episodio"
+
+msgctxt "#31138"
+msgid "off"
+msgstr "disattivato"
+
+msgctxt "#31139"
+msgid "all settings"
+msgstr "tutte le impostazioni"
+
+msgctxt "#31140"
+msgid "chapters"
+msgstr "capitoli"
+
+msgctxt "#31141"
+msgid "search for a title"
+msgstr "cerca un titolo"
+
+msgctxt "#31142"
+msgid "actions"
+msgstr "azioni"
+
+msgctxt "#31143"
+msgid "power off"
+msgstr "spegni"
+
+msgctxt "#31144"
+msgid "reboot"
+msgstr "riavvia"
+
+msgctxt "#31145"
+msgid "suspend"
+msgstr "sospendi"
+
+msgctxt "#31146"
+msgid "exit kodi"
+msgstr "esci da Kodi"
+
+msgctxt "#31147"
+msgid "restart kodi"
+msgstr "riavvia Kodi"
+
+msgctxt "#31148"
+msgid "movies (library)"
+msgstr "film (libreria)"
+
+msgctxt "#31149"
+msgid "shows (library)"
+msgstr "serie TV (libreria)"
+
+msgctxt "#31150"
+msgid "episodes (library)"
+msgstr "episodi (libreria)"
+
+msgctxt "#31151"
+msgid "online: movies (tmdb)"
+msgstr "online: film (TMDb)"
+
+msgctxt "#31152"
+msgid "online: shows (tmdb)"
+msgstr "online: serie TV (TMDb)"
+
+msgctxt "#31153"
+msgid "recent"
+msgstr "recenti"
+
+msgctxt "#31154"
+msgid "not available on this device"
+msgstr "non disponibile su questo dispositivo"
+
+msgctxt "#31155"
+msgid "stats"
+msgstr "statistiche"
+
+msgctxt "#31157"
+msgid "booting"
+msgstr "avvio"
+
+msgctxt "#31158"
+msgid "online"
+msgstr "online"
+
+msgctxt "#31159"
+msgid "Playback & media"
+msgstr "Riproduzione e multimedia"
+
+msgctxt "#31160"
+msgid "Look & profiles"
+msgstr "Aspetto e profili"
+
+msgctxt "#31161"
+msgid "Add-ons & content"
+msgstr "Add-on e contenuti"
+
+msgctxt "#31162"
+msgid "System & network"
+msgstr "Sistema e rete"
+
+msgctxt "#31163"
+msgid "Tools"
+msgstr "Strumenti"
+
+msgctxt "#31164"
+msgid "How videos, music and pictures play: decoding, refresh rate, discs, audio and subtitle language, subtitles."
+msgstr "Come vengono riprodotti video, musica e immagini: decodifica, frequenza di aggiornamento, dischi, lingua audio e sottotitoli, sottotitoli."
+
+msgctxt "#31165"
+msgid "How the library collects and shows your media: scanning, file lists, videos, music, pictures."
+msgstr "Come la libreria raccoglie e mostra i tuoi contenuti: scansione, elenchi file, video, musica, immagini."
+
+msgctxt "#31166"
+msgid "Live TV and recordings from your PVR client: channels, guide, recording, reminders."
+msgstr "Live TV e registrazioni dal tuo client PVR: canali, guida, registrazione, promemoria."
+
+msgctxt "#31167"
+msgid "How Kodi looks and starts: skin, language and region, screensaver, master lock, startup."
+msgstr "Come Kodi appare e si avvia: skin, lingua e regione, salvaschermo, blocco master, avvio."
+
+msgctxt "#31168"
+msgid "The options of this skin: the home pages and the look."
+msgstr "Le opzioni di questa skin: le pagine principali e l'aspetto."
+
+msgctxt "#31169"
+msgid "Users with their own library, settings and add-ons, and the login screen."
+msgstr "Utenti con libreria, impostazioni e add-on propri, e la schermata di accesso."
+
+msgctxt "#31170"
+msgid "Installed add-ons, repositories, install from a zip file, search and updates."
+msgstr "Add-on installati, repository, installazione da file zip, ricerca e aggiornamenti."
+
+msgctxt "#31171"
+msgid "Browse sources and folders, copy, move and delete files."
+msgstr "Esplora sorgenti e cartelle, copia, sposta ed elimina file."
+
+msgctxt "#31172"
+msgid "The device: display, audio output, input, internet access, power saving, add-on rules, logging."
+msgstr "Il dispositivo: schermo, uscita audio, ingressi, accesso a internet, risparmio energetico, regole degli add-on, registro eventi."
+
+msgctxt "#31173"
+msgid "What Kodi offers on the network and uses from it: remote control, UPnP, AirPlay, SMB, NFS, caching, weather."
+msgstr "Cosa Kodi offre in rete e cosa ne usa: controllo remoto, UPnP, AirPlay, SMB, NFS, cache, meteo."
+
+msgctxt "#31174"
+msgid "Facts about this device: Kodi version, storage, network, video, hardware."
+msgstr "Informazioni su questo dispositivo: versione di Kodi, archiviazione, rete, video, hardware."
+
+msgctxt "#31175"
+msgid "What happened lately: add-on installs and updates, library scans, errors."
+msgstr "Cosa è successo di recente: installazioni e aggiornamenti di add-on, scansioni della libreria, errori."
+
+msgctxt "#31176"
+msgid "Categories"
+msgstr "Categorie"
+
+msgctxt "#31178"
+msgid "[COLOR state_text]OK[/COLOR] open   [COLOR state_text]Back[/COLOR] close"
+msgstr "[COLOR state_text]OK[/COLOR] apri   [COLOR state_text]Indietro[/COLOR] chiudi"
+
+msgctxt "#31181"
+msgid "refresh rate, decoding, resume"
+msgstr "frequenza di aggiornamento, decodifica, ripresa"
+
+msgctxt "#31182"
+msgid "crossfade, visualisation, volume adjustment"
+msgstr "dissolvenza, visualizzazione, regolazione volume"
+
+msgctxt "#31183"
+msgid "DVD, Blu-ray, audio CD"
+msgstr "DVD, Blu-ray, CD audio"
+
+msgctxt "#31184"
+msgid "slideshow, transitions"
+msgstr "presentazione, transizioni"
+
+msgctxt "#31185"
+msgid "audio, subtitles and menus"
+msgstr "audio, sottotitoli e menu"
+
+msgctxt "#31186"
+msgid "font, size, download services"
+msgstr "carattere, dimensione, servizi di download"
+
+msgctxt "#31187"
+msgid "scan on startup, update, clean up"
+msgstr "scansione all'avvio, aggiornamento, pulizia"
+
+msgctxt "#31188"
+msgid "file extensions, hidden files, sorting"
+msgstr "estensioni file, file nascosti, ordinamento"
+
+msgctxt "#31189"
+msgid "select action, plots, thumbnails"
+msgstr "azione di selezione, trame, miniature"
+
+msgctxt "#31190"
+msgid "artists, album covers, tags"
+msgstr "artisti, copertine album, etichette"
+
+msgctxt "#31191"
+msgid "thumbnails, EXIF"
+msgstr "miniature, EXIF"
+
+msgctxt "#31192"
+msgid "channel groups, channel icons"
+msgstr "gruppi canali, icone canali"
+
+msgctxt "#31193"
+msgid "channel info, switching"
+msgstr "info canale, cambio canale"
+
+msgctxt "#31194"
+msgid "days shown, updates"
+msgstr "giorni mostrati, aggiornamenti"
+
+msgctxt "#31195"
+msgid "start, channel switch delay"
+msgstr "avvio, ritardo cambio canale"
+
+msgctxt "#31196"
+msgid "margins, folders"
+msgstr "margini, cartelle"
+
+msgctxt "#31197"
+msgid "reminder before a show"
+msgstr "promemoria prima di un programma"
+
+msgctxt "#31198"
+msgid "wake up for recordings"
+msgstr "risveglio per le registrazioni"
+
+msgctxt "#31199"
+msgid "lock by age, PIN"
+msgstr "blocco per età, PIN"
+
+msgctxt "#31200"
+msgid "PVR client add-ons"
+msgstr "Add-on client PVR"
+
+msgctxt "#31201"
+msgid "skin, theme, colours, fonts"
+msgstr "skin, tema, colori, caratteri"
+
+msgctxt "#31202"
+msgid "language, region, time, keyboard"
+msgstr "lingua, regione, ora, tastiera"
+
+msgctxt "#31203"
+msgid "mode, wait time"
+msgstr "modalità, tempo di attesa"
+
+msgctxt "#31204"
+msgid "lock code, protected areas"
+msgstr "codice di blocco, aree protette"
+
+msgctxt "#31205"
+msgid "start window, splash screen"
+msgstr "schermata di avvio, splash screen"
+
+msgctxt "#31206"
+msgid "resolution, refresh rate, calibration"
+msgstr "risoluzione, frequenza di aggiornamento, calibrazione"
+
+msgctxt "#31207"
+msgid "output device, channels, passthrough"
+msgstr "dispositivo di uscita, canali, passthrough"
+
+msgctxt "#31208"
+msgid "devices, mouse, remote"
+msgstr "dispositivi, mouse, telecomando"
+
+msgctxt "#31209"
+msgid "proxy"
+msgstr "proxy"
+
+msgctxt "#31210"
+msgid "shutdown, display off"
+msgstr "spegnimento, schermo spento"
+
+msgctxt "#31211"
+msgid "updates, unknown sources"
+msgstr "aggiornamenti, sorgenti sconosciute"
+
+msgctxt "#31212"
+msgid "debug log, components"
+msgstr "log di debug, componenti"
+
+msgctxt "#31213"
+msgid "device name, Zeroconf"
+msgstr "nome dispositivo, Zeroconf"
+
+msgctxt "#31214"
+msgid "web server, remote apps"
+msgstr "server web, app remote"
+
+msgctxt "#31215"
+msgid "share library, renderer"
+msgstr "condivisione libreria, renderer"
+
+msgctxt "#31216"
+msgid "receive AirPlay"
+msgstr "ricezione AirPlay"
+
+msgctxt "#31217"
+msgid "Windows shares, WINS"
+msgstr "Condivisioni Windows, WINS"
+
+msgctxt "#31218"
+msgid "NFS shares"
+msgstr "Condivisioni NFS"
+
+msgctxt "#31219"
+msgid "buffer, read rate"
+msgstr "buffer, velocità di lettura"
+
+msgctxt "#31220"
+msgid "weather service"
+msgstr "servizio meteo"
+
+msgctxt "#31221"
+msgid "Spotlight change"
+msgstr "Cambio vetrina"
+
+msgctxt "#31222"
+msgid "Home pages"
+msgstr "Pagine principali"
+
+msgctxt "#31224"
+msgid "Rows"
+msgstr "Righe"
+
+msgctxt "#31225"
+msgid "Spotlight"
+msgstr "Vetrina"
+
+msgctxt "#31226"
+msgid "Still"
+msgstr "Ferma"
+
+msgctxt "#31227"
+msgid "All shows"
+msgstr "Tutte le serie TV"
+
+msgctxt "#31228"
+msgid "Unwatched shows"
+msgstr "Serie TV non viste"
+
+msgctxt "#31229"
+msgid "Slot"
+msgstr "Posizione"
+
+msgctxt "#31231"
+msgid "Section for slot"
+msgstr "Sezione per la posizione"
+
+msgctxt "#31232"
+msgid "menu"
+msgstr "menu"
+
+msgctxt "#31233"
+msgid "Continue watching"
+msgstr "Continua a guardare"
+
+msgctxt "#31234"
+msgid "Next up"
+msgstr "Prossimi episodi"
+
+msgctxt "#31235"
+msgid "New movies"
+msgstr "Nuovi film"
+
+msgctxt "#31236"
+msgid "New episodes"
+msgstr "Nuovi episodi"
+
+msgctxt "#31237"
+msgid "Random movies"
+msgstr "Film a caso"
+
+msgctxt "#31238"
+msgid "Top rated"
+msgstr "Più apprezzati"
+
+msgctxt "#31239"
+msgid "TMDb trending"
+msgstr "Di tendenza su TMDb"
+
+msgctxt "#31240"
+msgid "Recently watched"
+msgstr "Visti di recente"
+
+msgctxt "#31241"
+msgid "Started movies and episodes, the last watched first."
+msgstr "Film ed episodi iniziati, prima l'ultimo visto."
+
+msgctxt "#31242"
+msgid "The shows you are watching. OK opens the next episode."
+msgstr "Le serie TV che stai guardando. OK apre il prossimo episodio."
+
+msgctxt "#31243"
+msgid "The movies added to the library last."
+msgstr "Gli ultimi film aggiunti alla libreria."
+
+msgctxt "#31244"
+msgid "The shows with the episodes added last."
+msgstr "Le serie TV con gli ultimi episodi aggiunti."
+
+msgctxt "#31245"
+msgid "Tabs for the three biggest genres and a picker for all others."
+msgstr "Schede per i tre generi più diffusi e un selettore per tutti gli altri."
+
+msgctxt "#31246"
+msgid "A new choice from the whole library every time Home opens."
+msgstr "Una nuova scelta da tutta la libreria a ogni apertura della home."
+
+msgctxt "#31247"
+msgid "What never played, newest first."
+msgstr "Ciò che non è mai stato riprodotto, prima i più recenti."
+
+msgctxt "#31248"
+msgid "Sorted by rating, from 7.0 up."
+msgstr "Ordinati per valutazione, da 7.0 in su."
+
+msgctxt "#31249"
+msgid "Kodi's favourites, as you set them."
+msgstr "I preferiti di Kodi, come li hai impostati."
+
+msgctxt "#31250"
+msgid "What is trending on TMDb this week."
+msgstr "Ciò che è di tendenza su TMDb questa settimana."
+
+msgctxt "#31251"
+msgid "What played last, also what you watched to the end."
+msgstr "Ciò che è stato riprodotto per ultimo, anche quello che hai visto fino alla fine."
+
+msgctxt "#31252"
+msgid "The movie sets of your library. OK opens a set."
+msgstr "Le saghe della tua libreria. OK apre una saga."
+
+msgctxt "#31253"
+msgid "Episodes you started and did not finish."
+msgstr "Episodi iniziati e non finiti."
+
+msgctxt "#31254"
+msgid "Free slot. OK picks a section from the catalogue."
+msgstr "Posizione libera. OK sceglie una sezione dal catalogo."
+
+msgctxt "#31255"
+msgid "Large artwork with title and plot, in random order. OK or Right picks the source."
+msgstr "Grandi immagini con titolo e trama, in ordine casuale. OK o Destra sceglie la fonte."
+
+msgctxt "#31256"
+msgid "No spotlight: the page starts with the first row."
+msgstr "Nessuna vetrina: la pagina inizia con la prima riga."
+
+msgctxt "#31257"
+msgid "How often the spotlight moves on by itself. OK or Right: 10, 15, 30, 60 s or still (then only by hand)."
+msgstr "Ogni quanto la vetrina cambia da sola. OK o Destra: 10, 15, 30, 60 s o ferma (allora solo a mano)."
+
+msgctxt "#31258"
+msgid "Home and movies show the same spotlight, so they share this setting."
+msgstr "Home e film mostrano la stessa vetrina, quindi condividono questa impostazione."
+
+msgctxt "#31259"
+msgid "Show or hide entries of the main menu. Home, system and power always stay."
+msgstr "Mostra o nascondi le voci del menu principale. Home, sistema e uscita restano sempre."
+
+msgctxt "#31260"
+msgid "[COLOR state_text]OK[/COLOR] choose   [COLOR state_text]Right[/COLOR] option   [COLOR state_text]Left[/COLOR] back"
+msgstr "[COLOR state_text]OK[/COLOR] scegli   [COLOR state_text]Destra[/COLOR] opzione   [COLOR state_text]Sinistra[/COLOR] indietro"
+
+msgctxt "#31261"
+msgid "[COLOR state_text]Up/Down[/COLOR] move   [COLOR state_text]OK[/COLOR] drop"
+msgstr "[COLOR state_text]Su/Giù[/COLOR] sposta   [COLOR state_text]OK[/COLOR] rilascia"
+
+msgctxt "#31262"
+msgid "Spotlight, rows and main menu of the home, movies and shows pages."
+msgstr "Vetrina, righe e menu principale delle pagine home, film e serie TV."
+
+msgctxt "#31263"
+msgid "swap"
+msgstr "scambia"
+
+msgctxt "#31264"
+msgid "Main menu"
+msgstr "Menu principale"
+
+msgctxt "#31265"
+msgid "Spotlight and rows of the home page."
+msgstr "Vetrina e righe della pagina home."
+
+msgctxt "#31266"
+msgid "Spotlight and rows of the movies page."
+msgstr "Vetrina e righe della pagina film."
+
+msgctxt "#31267"
+msgid "Spotlight and rows of the shows page."
+msgstr "Vetrina e righe della pagina serie TV."
+
+msgctxt "#31268"
+msgid "How the skin draws the focus."
+msgstr "Come la skin evidenzia l'elemento selezionato."
+
+msgctxt "#31230"
+msgid "frame rate"
+msgstr "frequenza fotogrammi"
+
+msgctxt "#31330"
+msgid "back to video"
+msgstr "torna al video"
+
+msgctxt "#31331"
+msgid "back to home"
+msgstr "torna alla home"
+
+msgctxt "#31332"
+msgid "back to movies"
+msgstr "torna ai film"
+
+msgctxt "#31333"
+msgid "back to shows"
+msgstr "torna alle serie TV"
+
+msgctxt "#31334"
+msgid "back to search"
+msgstr "torna alla ricerca"
+
+msgctxt "#31335"
+msgid "back to library"
+msgstr "torna alla libreria"
+
+msgctxt "#31310"
+msgid "Home key opens the home page"
+msgstr "Il tasto Home apre la home"
+
+msgctxt "#31311"
+msgid "The Home key of the remote always leads to the home page, held down it opens the quick menu. The skin sets up the keymap 0_skin.nightcity.xml in the profile for it; your own keymaps still win."
+msgstr "Il tasto Home del telecomando porta sempre alla home; tenuto premuto apre il menu rapido. Per questo la skin crea la keymap 0_skin.nightcity.xml nel profilo; le tue keymap hanno comunque la precedenza."
+
+msgctxt "#31300"
+msgid "crew"
+msgstr "troupe"
+
+msgctxt "#31301"
+msgid "back to start"
+msgstr "torna all'inizio"
+
+msgctxt "#31302"
+msgid "person"
+msgstr "persona"
+
+msgctxt "#31303"
+msgid "born"
+msgstr "nascita"
+
+msgctxt "#31304"
+msgid "died"
+msgstr "morte"
+
+msgctxt "#31320"
+msgid "quick menu"
+msgstr "menu rapido"
+
+msgctxt "#31321"
+msgid "set up weather"
+msgstr "configura meteo"
+
+msgctxt "#31322"
+msgid "more"
+msgstr "altro"
+
+msgctxt "#31323"
+msgid "timer"
+msgstr "timer"
+
+msgctxt "#31336"
+msgid "Remember search terms"
+msgstr "Ricorda le ricerche"
+
+msgctxt "#31337"
+msgid "The search page lists the last five search terms. Switched off, the skin keeps no terms and forgets the ones it has."
+msgstr "La pagina di ricerca elenca le ultime cinque ricerche. Se disattivato, la skin non conserva ricerche e dimentica quelle salvate."
+
+msgctxt "#31338"
+msgid "Clear search history"
+msgstr "Cancella cronologia ricerche"
+
+msgctxt "#31339"
+msgid "Forgets the remembered search terms."
+msgstr "Dimentica le ricerche memorizzate."
+
+msgctxt "#31340"
+msgid "The colour scheme of the skin, the same choice as under Interface."
+msgstr "Lo schema colori della skin, la stessa scelta presente in Interfaccia."
+
+msgctxt "#31341"
+msgid "forecast"
+msgstr "previsioni"
+
+msgctxt "#31360"
+msgid "Hide the controls automatically"
+msgstr "Nascondi i controlli automaticamente"
+
+msgctxt "#31361"
+msgid "While a video plays, the player controls close by themselves once no key was pressed for the time set below. While paused they stay; the time starts again when playback goes on."
+msgstr "Durante la riproduzione di un video, i controlli del lettore si chiudono da soli se non si preme alcun tasto per il tempo impostato sotto. In pausa restano visibili; il tempo riparte quando la riproduzione riprende."
+
+msgctxt "#31362"
+msgid "Hide after"
+msgstr "Nascondi dopo"
+
+msgctxt "#31363"
+msgid "Time without a key press before the player controls close, 3 to 30 seconds. OK takes the slider, left and right move it, OK lets go."
+msgstr "Tempo senza premere tasti prima che i controlli del lettore si chiudano, da 3 a 30 secondi. OK prende il cursore, sinistra e destra lo spostano, OK lo rilascia."
+
+msgctxt "#31364"
+msgid "The video player: its controls and what it shows while they are up."
+msgstr "Il lettore video: i suoi controlli e cosa mostra mentre sono visibili."
+
+msgctxt "#31365"
+msgid "Show the plot"
+msgstr "Mostra la trama"
+
+msgctxt "#31366"
+msgid "The plot of what plays, under its title while the player controls or the seek line are up."
+msgstr "La trama di ciò che è in riproduzione, sotto il titolo, mentre i controlli del lettore o la barra di avanzamento sono visibili."
+
+msgctxt "#31400"
+msgid "New albums"
+msgstr "Nuovi album"
+
+msgctxt "#31401"
+msgid "Recently played"
+msgstr "Riprodotti di recente"
+
+msgctxt "#31402"
+msgid "Random albums"
+msgstr "Album a caso"
+
+msgctxt "#31403"
+msgid "Artists"
+msgstr "Artisti"
+
+msgctxt "#31404"
+msgid "Genres"
+msgstr "Generi"
+
+msgctxt "#31405"
+msgid "music"
+msgstr "musica"
+
+msgctxt "#31406"
+msgid "now playing"
+msgstr "in riproduzione"
+
+msgctxt "#31407"
+msgid "albums"
+msgstr "album"
+
+msgctxt "#31408"
+msgid "more by"
+msgstr "altro di"
+
+msgctxt "#31409"
+msgid "tracks"
+msgstr "tracce"
+
+msgctxt "#31410"
+msgid "up next"
+msgstr "prossimo"
+
+msgctxt "#31411"
+msgid "shuffle"
+msgstr "casuale"
+
+msgctxt "#31412"
+msgid "repeat"
+msgstr "ripeti"
+
+msgctxt "#31413"
+msgid "repeat all"
+msgstr "ripeti tutto"
+
+msgctxt "#31414"
+msgid "repeat one"
+msgstr "ripeti brano"
+
+msgctxt "#31420"
+msgid "Network, Bluetooth, updates"
+msgstr "Rete, Bluetooth, aggiornamenti"
+
+msgctxt "#31440"
+msgid "audience"
+msgstr "pubblico"
+
+msgctxt "#31441"
+msgid "Ratings only from TMDb Helper"
+msgstr "Valutazioni solo da TMDb Helper"
+
+msgctxt "#31442"
+msgid "Show only the ratings TMDb Helper fetched for exactly this title. Off: the library's own rating (from Jellyfin) fills in while TMDb Helper has none."
+msgstr "Mostra solo le valutazioni che TMDb Helper ha recuperato esattamente per questo titolo. Disattivato: la valutazione della libreria (da Jellyfin) la sostituisce finché TMDb Helper non ne ha."
+
+msgctxt "#31443"
+msgid "Ratings only on title pages"
+msgstr "Valutazioni solo nelle pagine dei titoli"
+
+msgctxt "#31444"
+msgid "Spotlight and rows show no ratings, which saves requests to TMDb. A title's page still shows them."
+msgstr "Vetrina e righe non mostrano valutazioni, così si risparmiano richieste a TMDb. La pagina di un titolo le mostra comunque."
+
+msgctxt "#31445"
+msgid "Ratings"
+msgstr "Valutazioni"
+
+msgctxt "#31446"
+msgid "Sources"
+msgstr "Fonti"
+
+msgctxt "#31447"
+msgid "Which ratings the ratings line of the spotlight and the info page shows, and where they come from."
+msgstr "Quali valutazioni mostra la riga delle valutazioni nella vetrina e nella pagina info, e da dove provengono."
+
+msgctxt "#31450"
+msgid "IMDb"
+msgstr "IMDb"
+
+msgctxt "#31451"
+msgid "TMDb"
+msgstr "TMDb"
+
+msgctxt "#31452"
+msgid "Rotten Tomatoes critics"
+msgstr "Rotten Tomatoes critica"
+
+msgctxt "#31453"
+msgid "Rotten Tomatoes audience"
+msgstr "Rotten Tomatoes pubblico"
+
+msgctxt "#31454"
+msgid "Metacritic"
+msgstr "Metacritic"
+
+msgctxt "#31455"
+msgid "Trakt"
+msgstr "Trakt"
+
+msgctxt "#31456"
+msgid "Letterboxd"
+msgstr "Letterboxd"
+
+msgctxt "#31457"
+msgid "MDbList"
+msgstr "MDbList"
+
+msgctxt "#31460"
+msgid "IMDb users, 0 to 10, with the Top 250 rank. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Utenti IMDb, da 0 a 10, con la posizione nella Top 250. Richiede una chiave OMDb o MDbList in TMDb Helper."
+
+msgctxt "#31461"
+msgid "TMDb users, 0 to 10. Needs no key."
+msgstr "Utenti TMDb, da 0 a 10. Non richiede chiavi."
+
+msgctxt "#31462"
+msgid "Tomatometer: the share of positive critic reviews. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Tomatometer: la quota di recensioni positive della critica. Richiede una chiave OMDb o MDbList in TMDb Helper."
+
+msgctxt "#31463"
+msgid "Popcornmeter: the share of positive audience ratings. Needs an MDbList or OMDb key in TMDb Helper."
+msgstr "Popcornmeter: la quota di valutazioni positive del pubblico. Richiede una chiave MDbList o OMDb in TMDb Helper."
+
+msgctxt "#31464"
+msgid "A weighted average of critic reviews, 0 to 100, mostly for theatrical films and big series. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Una media ponderata delle recensioni della critica, da 0 a 100, soprattutto per film usciti al cinema e grandi serie. Richiede una chiave OMDb o MDbList in TMDb Helper."
+
+msgctxt "#31465"
+msgid "Trakt users, 0 to 10. Needs a connected Trakt account in TMDb Helper: fetched from Trakt, not MDbList."
+msgstr "Utenti Trakt, da 0 a 10. Richiede un account Trakt collegato in TMDb Helper: dati presi da Trakt, non da MDbList."
+
+msgctxt "#31466"
+msgid "Letterboxd users, 0 to 5, mostly films. Needs an MDbList key in TMDb Helper."
+msgstr "Utenti Letterboxd, da 0 a 5, soprattutto film. Richiede una chiave MDbList in TMDb Helper."
+
+msgctxt "#31467"
+msgid "MDbList score: an average of the other sources, 0 to 100. Needs an MDbList key in TMDb Helper."
+msgstr "Punteggio MDbList: una media delle altre fonti, da 0 a 100. Richiede una chiave MDbList in TMDb Helper."
+
+msgctxt "#31469"
+msgid "No description"
+msgstr "Nessuna descrizione"
+
+msgctxt "#31470"
+msgid "back"
+msgstr "indietro"
+
+msgctxt "#31471"
+msgid "budget"
+msgstr "budget"
+
+msgctxt "#31472"
+msgid "box office"
+msgstr "incassi"
+
+msgctxt "#31473"
+msgid "description"
+msgstr "descrizione"
+
+msgctxt "#31474"
+msgid "biography"
+msgstr "biografia"

@@ -594,8 +594,8 @@ def po_ids(lang):
 
 
 def test_skin_strings_exist_in_english():
-    """English only for now: the skin keeps Kodi's language files, a translation can follow."""
-    assert [p.name for p in (ROOT / 'language').iterdir()] == ['resource.language.en_gb']
+    """Every string the skin uses is in the English file; the translations follow it
+    (test_translations.py)."""
     used = set()
     for path in list(layout_files()) + [ROOT / 'scripts' / 'nightcity.py']:
         used |= {int(i) for i in re.findall(r'LOCALIZE\[(31\d{3})\]', path.read_text(encoding='utf-8'))}

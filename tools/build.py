@@ -91,9 +91,12 @@ def _lay_out(overlay, dest):
     # so a number that went into [UPPERCASE] becomes $NUMBER[n]: as text, or as the value of the
     # param that fills such a label
     wrapped = {n for text in texts.values() for n in UPPER_PARAM.findall(text)}
-    strings = dest / 'language' / 'resource.language.en_gb' / 'strings.po'
-    if strings.exists():
-        strings.write_text(_sentence_case(strings.read_text(encoding='utf-8')), encoding='utf-8')
+    for strings in sorted((dest / 'language').glob('*/strings.po')):
+        text = strings.read_text(encoding='utf-8')
+        english = strings.parent.name == 'resource.language.en_gb'
+        # a translation's msgid changes with the English one: Kodi shows the English string where
+        # they differ (LocalizeStrings.cpp:50-60, an id re-used in English)
+        strings.write_text(_sentence_case(text) if english else _first_capital(_sentence_case(text)), encoding='utf-8')
     for path, text in texts.items():
         fixed = text
         for name in sorted(wrapped):
@@ -102,6 +105,13 @@ def _lay_out(overlay, dest):
         fixed = fixed.replace('[UPPERCASE]', '').replace('[/UPPERCASE]', '')
         if fixed != text:
             path.write_text(fixed, encoding='utf-8')
+
+
+def _first_capital(po):
+    """A translation the same way: Nightcity's strings follow the English, small where it is small,
+    and here the first letter is a capital. A unit after a number stays as it is."""
+    return re.sub(r'(msgctxt "#(\d+)"\nmsgid "(?:[^"\\]|\\.)*"\nmsgstr ")(.)',
+                  lambda m: m.group(0) if m.group(2) in LOWERCASE_STRINGS else m.group(1) + m.group(3).upper(), po)
 
 
 def _sentence_case(po):

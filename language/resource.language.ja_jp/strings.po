@@ -1,0 +1,1106 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ja_jp\n"
+
+msgctxt "#31002"
+msgid "Spotlight source"
+msgstr "スポットライトのソース"
+
+msgctxt "#31003"
+msgid "All movies"
+msgstr "すべてのムービー"
+
+msgctxt "#31004"
+msgid "Unwatched movies"
+msgstr "未視聴のムービー"
+
+msgctxt "#31005"
+msgid "Effects"
+msgstr "エフェクト"
+
+msgctxt "#31006"
+msgid "home"
+msgstr "ホーム"
+
+msgctxt "#31010"
+msgid "play"
+msgstr "再生"
+
+msgctxt "#31011"
+msgid "info"
+msgstr "情報"
+
+msgctxt "#31012"
+msgid "min"
+msgstr "分"
+
+msgctxt "#31020"
+msgid "on deck"
+msgstr "次に見る"
+
+msgctxt "#31021"
+msgid "new movies"
+msgstr "新着ムービー"
+
+msgctxt "#31022"
+msgid "new episodes"
+msgstr "新着エピソード"
+
+msgctxt "#31023"
+msgid "continue watching"
+msgstr "続きを見る"
+
+msgctxt "#31030"
+msgid "movies"
+msgstr "ムービー"
+
+msgctxt "#31031"
+msgid "shows"
+msgstr "テレビ番組"
+
+msgctxt "#31032"
+msgid "search"
+msgstr "検索"
+
+msgctxt "#31033"
+msgid "System"
+msgstr "システム"
+
+msgctxt "#31041"
+msgid "trailer"
+msgstr "トレーラー"
+
+msgctxt "#31042"
+msgid "posters"
+msgstr "ポスター"
+
+msgctxt "#31043"
+msgid "resume"
+msgstr "再開"
+
+msgctxt "#31050"
+msgid "ends"
+msgstr "終了"
+
+msgctxt "#31051"
+msgid "pause"
+msgstr "一時停止"
+
+msgctxt "#31052"
+msgid "stop"
+msgstr "停止"
+
+msgctxt "#31053"
+msgid "subtitles"
+msgstr "字幕"
+
+msgctxt "#31054"
+msgid "audio"
+msgstr "オーディオ"
+
+msgctxt "#31055"
+msgid "video"
+msgstr "ビデオ"
+
+msgctxt "#31056"
+msgid "bookmarks"
+msgstr "ブックマーク"
+
+msgctxt "#31057"
+msgid "buffering"
+msgstr "バッファリング"
+
+msgctxt "#31058"
+msgid "video already has subtitles"
+msgstr "ビデオには既に字幕があります"
+
+msgctxt "#31080"
+msgid "quit kodi"
+msgstr "Kodiを終了"
+
+msgctxt "#31081"
+msgid "power off"
+msgstr "電源を切る"
+
+msgctxt "#31082"
+msgid "reboot"
+msgstr "再起動"
+
+msgctxt "#31083"
+msgid "suspend"
+msgstr "サスペンド"
+
+msgctxt "#31084"
+msgid "hibernate"
+msgstr "ハイバネート"
+
+msgctxt "#31085"
+msgid "shutdown timer"
+msgstr "シャットダウンタイマー"
+
+msgctxt "#31086"
+msgid "cancel shutdown timer"
+msgstr "シャットダウンタイマーのキャンセル"
+
+msgctxt "#31087"
+msgid "log off"
+msgstr "ログオフ"
+
+msgctxt "#31088"
+msgid "reload skin"
+msgstr "スキンのリロード"
+
+msgctxt "#31089"
+msgid "power"
+msgstr "電源"
+
+msgctxt "#31090"
+msgid "Hide foreign"
+msgstr "他の国を隠す"
+
+msgctxt "#31091"
+msgid "Hide broken"
+msgstr "破損を隠す"
+
+msgctxt "#31094"
+msgid "thumbs"
+msgstr "サムネイル"
+
+msgctxt "#31095"
+msgid "mute"
+msgstr "ミュート"
+
+msgctxt "#31096"
+msgid "descending"
+msgstr "降順"
+
+msgctxt "#31100"
+msgid "spotlight"
+msgstr "スポットライト"
+
+msgctxt "#31101"
+msgid "all movies"
+msgstr "すべてのムービー"
+
+msgctxt "#31102"
+msgid "all shows"
+msgstr "すべてのテレビ番組"
+
+msgctxt "#31103"
+msgid "in progress"
+msgstr "再生途中"
+
+msgctxt "#31104"
+msgid "unwatched"
+msgstr "未視聴"
+
+msgctxt "#31105"
+msgid "genres"
+msgstr "ジャンル"
+
+msgctxt "#31106"
+msgid "episodes"
+msgstr "エピソード"
+
+msgctxt "#31116"
+msgid "sort"
+msgstr "ソート"
+
+msgctxt "#31117"
+msgid "descending"
+msgstr "降順"
+
+msgctxt "#31118"
+msgid "title"
+msgstr "タイトル"
+
+msgctxt "#31119"
+msgid "year"
+msgstr "公開年"
+
+msgctxt "#31120"
+msgid "added"
+msgstr "追加日"
+
+msgctxt "#31121"
+msgid "rating"
+msgstr "レーティング"
+
+msgctxt "#31122"
+msgid "ascending"
+msgstr "昇順"
+
+msgctxt "#31123"
+msgid "from start"
+msgstr "最初から"
+
+msgctxt "#31124"
+msgid "cast"
+msgstr "出演者"
+
+msgctxt "#31125"
+msgid "details"
+msgstr "詳細"
+
+msgctxt "#31126"
+msgid "director"
+msgstr "監督"
+
+msgctxt "#31127"
+msgid "writer"
+msgstr "脚本"
+
+msgctxt "#31128"
+msgid "studio"
+msgstr "スタジオ"
+
+msgctxt "#31129"
+msgid "country"
+msgstr "国"
+
+msgctxt "#31130"
+msgid "similar"
+msgstr "類似作品"
+
+msgctxt "#31131"
+msgid "season"
+msgstr "シーズン"
+
+msgctxt "#31132"
+msgid "episode"
+msgstr "エピソード"
+
+msgctxt "#31133"
+msgid "all"
+msgstr "すべて"
+
+msgctxt "#31134"
+msgid "specials"
+msgstr "スペシャル"
+
+msgctxt "#31135"
+msgid "select"
+msgstr "選択"
+
+msgctxt "#31136"
+msgid "age rating"
+msgstr "年齢制限"
+
+msgctxt "#31059"
+msgid "ends at"
+msgstr "終了予定"
+
+msgctxt "#31137"
+msgid "next episode"
+msgstr "次のエピソード"
+
+msgctxt "#31138"
+msgid "off"
+msgstr "オフ"
+
+msgctxt "#31139"
+msgid "all settings"
+msgstr "すべての設定"
+
+msgctxt "#31140"
+msgid "chapters"
+msgstr "チャプター"
+
+msgctxt "#31141"
+msgid "search for a title"
+msgstr "タイトルを検索"
+
+msgctxt "#31142"
+msgid "actions"
+msgstr "アクション"
+
+msgctxt "#31143"
+msgid "power off"
+msgstr "電源を切る"
+
+msgctxt "#31144"
+msgid "reboot"
+msgstr "再起動"
+
+msgctxt "#31145"
+msgid "suspend"
+msgstr "サスペンド"
+
+msgctxt "#31146"
+msgid "exit kodi"
+msgstr "Kodiを終了"
+
+msgctxt "#31147"
+msgid "restart kodi"
+msgstr "Kodiを再起動"
+
+msgctxt "#31148"
+msgid "movies (library)"
+msgstr "ムービー (ライブラリ)"
+
+msgctxt "#31149"
+msgid "shows (library)"
+msgstr "テレビ番組 (ライブラリ)"
+
+msgctxt "#31150"
+msgid "episodes (library)"
+msgstr "エピソード (ライブラリ)"
+
+msgctxt "#31151"
+msgid "online: movies (tmdb)"
+msgstr "オンライン: ムービー (TMDb)"
+
+msgctxt "#31152"
+msgid "online: shows (tmdb)"
+msgstr "オンライン: テレビ番組 (TMDb)"
+
+msgctxt "#31153"
+msgid "recent"
+msgstr "最近の検索"
+
+msgctxt "#31154"
+msgid "not available on this device"
+msgstr "このデバイスでは利用できません"
+
+msgctxt "#31155"
+msgid "stats"
+msgstr "統計"
+
+msgctxt "#31157"
+msgid "booting"
+msgstr "起動中"
+
+msgctxt "#31158"
+msgid "online"
+msgstr "オンライン"
+
+msgctxt "#31159"
+msgid "Playback & media"
+msgstr "再生とメディア"
+
+msgctxt "#31160"
+msgid "Look & profiles"
+msgstr "外観とプロファイル"
+
+msgctxt "#31161"
+msgid "Add-ons & content"
+msgstr "アドオンとコンテンツ"
+
+msgctxt "#31162"
+msgid "System & network"
+msgstr "システムとネットワーク"
+
+msgctxt "#31163"
+msgid "Tools"
+msgstr "ツール"
+
+msgctxt "#31164"
+msgid "How videos, music and pictures play: decoding, refresh rate, discs, audio and subtitle language, subtitles."
+msgstr "ビデオ、ミュージック、ピクチャーの再生方法：デコード、リフレッシュレート、ディスク、オーディオと字幕の言語、字幕。"
+
+msgctxt "#31165"
+msgid "How the library collects and shows your media: scanning, file lists, videos, music, pictures."
+msgstr "ライブラリがメディアを集めて表示する方法：スキャン、ファイルリスト、ビデオ、ミュージック、ピクチャー。"
+
+msgctxt "#31166"
+msgid "Live TV and recordings from your PVR client: channels, guide, recording, reminders."
+msgstr "PVRクライアントのテレビ放送と録画：チャンネル、ガイド、録画、リマインダー。"
+
+msgctxt "#31167"
+msgid "How Kodi looks and starts: skin, language and region, screensaver, master lock, startup."
+msgstr "Kodiの外観と起動：スキン、言語とリージョン、スクリーンセーバー、マスターロック、スタートアップ。"
+
+msgctxt "#31168"
+msgid "The options of this skin: the home pages and the look."
+msgstr "このスキンのオプション：ホーム画面と外観。"
+
+msgctxt "#31169"
+msgid "Users with their own library, settings and add-ons, and the login screen."
+msgstr "独自のライブラリ、設定、アドオンを持つユーザーと、ログイン画面。"
+
+msgctxt "#31170"
+msgid "Installed add-ons, repositories, install from a zip file, search and updates."
+msgstr "インストール済みアドオン、リポジトリ、zipファイルからインストール、検索とアップデート。"
+
+msgctxt "#31171"
+msgid "Browse sources and folders, copy, move and delete files."
+msgstr "ソースとフォルダの参照、ファイルのコピー、移動、削除。"
+
+msgctxt "#31172"
+msgid "The device: display, audio output, input, internet access, power saving, add-on rules, logging."
+msgstr "デバイス：画面、オーディオ出力、インプット、インターネット接続、省電力、アドオンのルール、ロギング。"
+
+msgctxt "#31173"
+msgid "What Kodi offers on the network and uses from it: remote control, UPnP, AirPlay, SMB, NFS, caching, weather."
+msgstr "Kodiがネットワークで提供するものと利用するもの：リモートコントロール、UPnP、AirPlay、SMB、NFS、キャッシュ、天気予報。"
+
+msgctxt "#31174"
+msgid "Facts about this device: Kodi version, storage, network, video, hardware."
+msgstr "このデバイスの情報：Kodiのバージョン、ストレージ、ネットワーク、ビデオ、ハードウェア。"
+
+msgctxt "#31175"
+msgid "What happened lately: add-on installs and updates, library scans, errors."
+msgstr "最近の出来事：アドオンのインストールとアップデート、ライブラリのスキャン、エラー。"
+
+msgctxt "#31176"
+msgid "Categories"
+msgstr "カテゴリー"
+
+msgctxt "#31178"
+msgid "[COLOR state_text]OK[/COLOR] open   [COLOR state_text]Back[/COLOR] close"
+msgstr "[COLOR state_text]OK[/COLOR] 開く   [COLOR state_text]戻る[/COLOR] 閉じる"
+
+msgctxt "#31181"
+msgid "refresh rate, decoding, resume"
+msgstr "リフレッシュレート、デコード、再開"
+
+msgctxt "#31182"
+msgid "crossfade, visualisation, volume adjustment"
+msgstr "クロスフェード、ビジュアライザ、音量調整"
+
+msgctxt "#31183"
+msgid "DVD, Blu-ray, audio CD"
+msgstr "DVD、ブルーレイ、オーディオCD"
+
+msgctxt "#31184"
+msgid "slideshow, transitions"
+msgstr "スライドショー、トランジション"
+
+msgctxt "#31185"
+msgid "audio, subtitles and menus"
+msgstr "オーディオ、字幕、メニュー"
+
+msgctxt "#31186"
+msgid "font, size, download services"
+msgstr "フォント、サイズ、ダウンロードサービス"
+
+msgctxt "#31187"
+msgid "scan on startup, update, clean up"
+msgstr "起動時にスキャン、アップデート、整理"
+
+msgctxt "#31188"
+msgid "file extensions, hidden files, sorting"
+msgstr "拡張子、隠しファイル、ソート"
+
+msgctxt "#31189"
+msgid "select action, plots, thumbnails"
+msgstr "選択動作、ストーリー、サムネイル"
+
+msgctxt "#31190"
+msgid "artists, album covers, tags"
+msgstr "アーティスト、アルバムカバー、タグ"
+
+msgctxt "#31191"
+msgid "thumbnails, EXIF"
+msgstr "サムネイル、EXIF"
+
+msgctxt "#31192"
+msgid "channel groups, channel icons"
+msgstr "チャンネルグループ、チャンネルアイコン"
+
+msgctxt "#31193"
+msgid "channel info, switching"
+msgstr "チャンネル情報、切り替え"
+
+msgctxt "#31194"
+msgid "days shown, updates"
+msgstr "表示日数、アップデート"
+
+msgctxt "#31195"
+msgid "start, channel switch delay"
+msgstr "開始、チャンネル切り替えの遅延"
+
+msgctxt "#31196"
+msgid "margins, folders"
+msgstr "マージン、フォルダ"
+
+msgctxt "#31197"
+msgid "reminder before a show"
+msgstr "番組前のリマインダー"
+
+msgctxt "#31198"
+msgid "wake up for recordings"
+msgstr "録画のために起動"
+
+msgctxt "#31199"
+msgid "lock by age, PIN"
+msgstr "年齢によるロック、PIN"
+
+msgctxt "#31200"
+msgid "PVR client add-ons"
+msgstr "PVRクライアントアドオン"
+
+msgctxt "#31201"
+msgid "skin, theme, colours, fonts"
+msgstr "スキン、テーマ、色、フォント"
+
+msgctxt "#31202"
+msgid "language, region, time, keyboard"
+msgstr "言語、リージョン、時刻、キーボード"
+
+msgctxt "#31203"
+msgid "mode, wait time"
+msgstr "モード、待ち時間"
+
+msgctxt "#31204"
+msgid "lock code, protected areas"
+msgstr "ロックコード、保護する領域"
+
+msgctxt "#31205"
+msgid "start window, splash screen"
+msgstr "スタートアップ画面、スプラッシュ画面"
+
+msgctxt "#31206"
+msgid "resolution, refresh rate, calibration"
+msgstr "解像度、リフレッシュレート、キャリブレーション"
+
+msgctxt "#31207"
+msgid "output device, channels, passthrough"
+msgstr "出力デバイス、チャンネル、パススルー"
+
+msgctxt "#31208"
+msgid "devices, mouse, remote"
+msgstr "デバイス、マウス、リモコン"
+
+msgctxt "#31209"
+msgid "proxy"
+msgstr "プロキシ"
+
+msgctxt "#31210"
+msgid "shutdown, display off"
+msgstr "シャットダウン、画面オフ"
+
+msgctxt "#31211"
+msgid "updates, unknown sources"
+msgstr "アップデート、不明なソース"
+
+msgctxt "#31212"
+msgid "debug log, components"
+msgstr "デバッグログ、コンポーネント"
+
+msgctxt "#31213"
+msgid "device name, Zeroconf"
+msgstr "デバイス名、Zeroconf"
+
+msgctxt "#31214"
+msgid "web server, remote apps"
+msgstr "Webサーバー、リモートアプリ"
+
+msgctxt "#31215"
+msgid "share library, renderer"
+msgstr "ライブラリの共有、レンダラー"
+
+msgctxt "#31216"
+msgid "receive AirPlay"
+msgstr "AirPlayの受信"
+
+msgctxt "#31217"
+msgid "Windows shares, WINS"
+msgstr "Windows共有、WINS"
+
+msgctxt "#31218"
+msgid "NFS shares"
+msgstr "NFS共有"
+
+msgctxt "#31219"
+msgid "buffer, read rate"
+msgstr "バッファ、読み込み速度"
+
+msgctxt "#31220"
+msgid "weather service"
+msgstr "天気予報サービス"
+
+msgctxt "#31221"
+msgid "Spotlight change"
+msgstr "スポットライトの切り替え"
+
+msgctxt "#31222"
+msgid "Home pages"
+msgstr "ホーム画面"
+
+msgctxt "#31224"
+msgid "Rows"
+msgstr "列"
+
+msgctxt "#31225"
+msgid "Spotlight"
+msgstr "スポットライト"
+
+msgctxt "#31226"
+msgid "Still"
+msgstr "固定"
+
+msgctxt "#31227"
+msgid "All shows"
+msgstr "すべてのテレビ番組"
+
+msgctxt "#31228"
+msgid "Unwatched shows"
+msgstr "未視聴のテレビ番組"
+
+msgctxt "#31229"
+msgid "Slot"
+msgstr "枠"
+
+msgctxt "#31231"
+msgid "Section for slot"
+msgstr "セクションの選択: 枠"
+
+msgctxt "#31232"
+msgid "menu"
+msgstr "メニュー"
+
+msgctxt "#31233"
+msgid "Continue watching"
+msgstr "続きを見る"
+
+msgctxt "#31234"
+msgid "Next up"
+msgstr "次に見る"
+
+msgctxt "#31235"
+msgid "New movies"
+msgstr "新着ムービー"
+
+msgctxt "#31236"
+msgid "New episodes"
+msgstr "新着エピソード"
+
+msgctxt "#31237"
+msgid "Random movies"
+msgstr "ランダムなムービー"
+
+msgctxt "#31238"
+msgid "Top rated"
+msgstr "高評価"
+
+msgctxt "#31239"
+msgid "TMDb trending"
+msgstr "TMDbトレンド"
+
+msgctxt "#31240"
+msgid "Recently watched"
+msgstr "視聴履歴"
+
+msgctxt "#31241"
+msgid "Started movies and episodes, the last watched first."
+msgstr "視聴を始めたムービーとエピソードを、最近視聴した順に表示します。"
+
+msgctxt "#31242"
+msgid "The shows you are watching. OK opens the next episode."
+msgstr "視聴中のテレビ番組を表示します。OKで次のエピソードを開きます。"
+
+msgctxt "#31243"
+msgid "The movies added to the library last."
+msgstr "ライブラリに最近追加されたムービーを表示します。"
+
+msgctxt "#31244"
+msgid "The shows with the episodes added last."
+msgstr "最近エピソードが追加されたテレビ番組を表示します。"
+
+msgctxt "#31245"
+msgid "Tabs for the three biggest genres and a picker for all others."
+msgstr "作品数の多い3つのジャンルのタブと、ほかのジャンルを選ぶリストです。"
+
+msgctxt "#31246"
+msgid "A new choice from the whole library every time Home opens."
+msgstr "ホームを開くたびに、ライブラリ全体から新しく選んで表示します。"
+
+msgctxt "#31247"
+msgid "What never played, newest first."
+msgstr "一度も再生されていない作品を、新しい順に表示します。"
+
+msgctxt "#31248"
+msgid "Sorted by rating, from 7.0 up."
+msgstr "レーティング7.0以上の作品を、レーティング順に表示します。"
+
+msgctxt "#31249"
+msgid "Kodi's favourites, as you set them."
+msgstr "Kodiのお気に入りを、登録したとおりに表示します。"
+
+msgctxt "#31250"
+msgid "What is trending on TMDb this week."
+msgstr "今週TMDbで話題の作品を表示します。"
+
+msgctxt "#31251"
+msgid "What played last, also what you watched to the end."
+msgstr "最近再生した作品を表示します。最後まで視聴した作品も含みます。"
+
+msgctxt "#31252"
+msgid "The movie sets of your library. OK opens a set."
+msgstr "ライブラリのムービーセットを表示します。OKでセットを開きます。"
+
+msgctxt "#31253"
+msgid "Episodes you started and did not finish."
+msgstr "視聴を始めて、まだ最後まで見ていないエピソードを表示します。"
+
+msgctxt "#31254"
+msgid "Free slot. OK picks a section from the catalogue."
+msgstr "空き枠です。OKでカタログからセクションを選びます。"
+
+msgctxt "#31255"
+msgid "Large artwork with title and plot, in random order. OK or Right picks the source."
+msgstr "タイトルとストーリー付きの大きなアートワークを、ランダムな順で表示します。OKまたは右でソースを選びます。"
+
+msgctxt "#31256"
+msgid "No spotlight: the page starts with the first row."
+msgstr "スポットライトなし：ページは最初の列から始まります。"
+
+msgctxt "#31257"
+msgid "How often the spotlight moves on by itself. OK or Right: 10, 15, 30, 60 s or still (then only by hand)."
+msgstr "スポットライトが自動で切り替わる間隔です。OKまたは右：10、15、30、60秒、または固定（手動でのみ切り替え）。"
+
+msgctxt "#31258"
+msgid "Home and movies show the same spotlight, so they share this setting."
+msgstr "ホームとムービーは同じスポットライトを表示するため、この設定を共有します。"
+
+msgctxt "#31259"
+msgid "Show or hide entries of the main menu. Home, system and power always stay."
+msgstr "メインメニューの項目を表示または非表示にします。ホーム、システム、電源は常に表示されます。"
+
+msgctxt "#31260"
+msgid "[COLOR state_text]OK[/COLOR] choose   [COLOR state_text]Right[/COLOR] option   [COLOR state_text]Left[/COLOR] back"
+msgstr "[COLOR state_text]OK[/COLOR] 選択   [COLOR state_text]右[/COLOR] オプション   [COLOR state_text]左[/COLOR] 戻る"
+
+msgctxt "#31261"
+msgid "[COLOR state_text]Up/Down[/COLOR] move   [COLOR state_text]OK[/COLOR] drop"
+msgstr "[COLOR state_text]上/下[/COLOR] 移動   [COLOR state_text]OK[/COLOR] 確定"
+
+msgctxt "#31262"
+msgid "Spotlight, rows and main menu of the home, movies and shows pages."
+msgstr "ホーム、ムービー、テレビ番組のスポットライト、列、メインメニュー。"
+
+msgctxt "#31263"
+msgid "swap"
+msgstr "入れ替え"
+
+msgctxt "#31264"
+msgid "Main menu"
+msgstr "メインメニュー"
+
+msgctxt "#31265"
+msgid "Spotlight and rows of the home page."
+msgstr "ホームのスポットライトと列。"
+
+msgctxt "#31266"
+msgid "Spotlight and rows of the movies page."
+msgstr "ムービーのスポットライトと列。"
+
+msgctxt "#31267"
+msgid "Spotlight and rows of the shows page."
+msgstr "テレビ番組のスポットライトと列。"
+
+msgctxt "#31268"
+msgid "How the skin draws the focus."
+msgstr "スキンのフォーカスの表示方法です。"
+
+msgctxt "#31230"
+msgid "frame rate"
+msgstr "フレームレート"
+
+# TMDb navigation
+
+msgctxt "#31330"
+msgid "back to video"
+msgstr "ビデオに戻る"
+
+msgctxt "#31331"
+msgid "back to home"
+msgstr "ホームに戻る"
+
+msgctxt "#31332"
+msgid "back to movies"
+msgstr "ムービーに戻る"
+
+msgctxt "#31333"
+msgid "back to shows"
+msgstr "テレビ番組に戻る"
+
+msgctxt "#31334"
+msgid "back to search"
+msgstr "検索に戻る"
+
+msgctxt "#31335"
+msgid "back to library"
+msgstr "ライブラリに戻る"
+
+msgctxt "#31310"
+msgid "Home key opens the home page"
+msgstr "ホームボタンでホームを開く"
+
+msgctxt "#31311"
+msgid "The Home key of the remote always leads to the home page, held down it opens the quick menu. The skin sets up the keymap 0_skin.nightcity.xml in the profile for it; your own keymaps still win."
+msgstr "リモコンのホームボタンを押すと常にホームに移動し、長押しするとクイックメニューが開きます。そのためにスキンはプロファイルにキーマップ 0_skin.nightcity.xml を作成します。自分で作成したキーマップは引き続き優先されます。"
+
+msgctxt "#31300"
+msgid "crew"
+msgstr "スタッフ"
+
+msgctxt "#31301"
+msgid "back to start"
+msgstr "最初に戻る"
+
+msgctxt "#31302"
+msgid "person"
+msgstr "人物"
+
+msgctxt "#31303"
+msgid "born"
+msgstr "生年月日"
+
+msgctxt "#31304"
+msgid "died"
+msgstr "没年月日"
+
+msgctxt "#31320"
+msgid "quick menu"
+msgstr "クイックメニュー"
+
+msgctxt "#31321"
+msgid "set up weather"
+msgstr "天気予報を設定"
+
+msgctxt "#31322"
+msgid "more"
+msgstr "その他"
+
+msgctxt "#31323"
+msgid "timer"
+msgstr "タイマー"
+
+msgctxt "#31336"
+msgid "Remember search terms"
+msgstr "検索語を記憶"
+
+msgctxt "#31337"
+msgid "The search page lists the last five search terms. Switched off, the skin keeps no terms and forgets the ones it has."
+msgstr "検索画面に最近の検索語が5件表示されます。オフにすると、スキンは検索語を保存せず、保存済みの検索語も消去します。"
+
+msgctxt "#31338"
+msgid "Clear search history"
+msgstr "検索履歴をクリア"
+
+msgctxt "#31339"
+msgid "Forgets the remembered search terms."
+msgstr "記憶した検索語をクリアします。"
+
+msgctxt "#31340"
+msgid "The colour scheme of the skin, the same choice as under Interface."
+msgstr "スキンの配色です。インターフェースの設定と同じ選択肢です。"
+
+msgctxt "#31341"
+msgid "forecast"
+msgstr "予報"
+
+msgctxt "#31360"
+msgid "Hide the controls automatically"
+msgstr "コントロールを自動で隠す"
+
+msgctxt "#31361"
+msgid "While a video plays, the player controls close by themselves once no key was pressed for the time set below. While paused they stay; the time starts again when playback goes on."
+msgstr "ビデオの再生中、下で設定した時間キー操作がないと、プレーヤーコントロールは自動で閉じます。一時停止中は表示されたままで、再生を再開すると時間を数え直します。"
+
+msgctxt "#31362"
+msgid "Hide after"
+msgstr "隠すまでの時間"
+
+msgctxt "#31363"
+msgid "Time without a key press before the player controls close, 3 to 30 seconds. OK takes the slider, left and right move it, OK lets go."
+msgstr "キー操作がない状態でプレーヤーコントロールが閉じるまでの時間です（3から30秒）。OKでスライダーをつかみ、左右で動かし、OKで離します。"
+
+msgctxt "#31364"
+msgid "The video player: its controls and what it shows while they are up."
+msgstr "ビデオプレーヤー：コントロールと、その表示中に表示される内容。"
+
+msgctxt "#31365"
+msgid "Show the plot"
+msgstr "ストーリーを表示"
+
+msgctxt "#31366"
+msgid "The plot of what plays, under its title while the player controls or the seek line are up."
+msgstr "プレーヤーコントロールまたはシークバーの表示中に、再生中の作品のストーリーをタイトルの下に表示します。"
+
+msgctxt "#31400"
+msgid "New albums"
+msgstr "新着アルバム"
+
+msgctxt "#31401"
+msgid "Recently played"
+msgstr "最近再生"
+
+msgctxt "#31402"
+msgid "Random albums"
+msgstr "ランダムなアルバム"
+
+msgctxt "#31403"
+msgid "Artists"
+msgstr "アーティスト"
+
+msgctxt "#31404"
+msgid "Genres"
+msgstr "ジャンル"
+
+msgctxt "#31405"
+msgid "music"
+msgstr "ミュージック"
+
+msgctxt "#31406"
+msgid "now playing"
+msgstr "再生中"
+
+msgctxt "#31407"
+msgid "albums"
+msgstr "アルバム"
+
+msgctxt "#31408"
+msgid "more by"
+msgstr "その他の作品:"
+
+msgctxt "#31409"
+msgid "tracks"
+msgstr "トラック"
+
+msgctxt "#31410"
+msgid "up next"
+msgstr "次の曲"
+
+msgctxt "#31411"
+msgid "shuffle"
+msgstr "シャッフル"
+
+msgctxt "#31412"
+msgid "repeat"
+msgstr "リピート"
+
+msgctxt "#31413"
+msgid "repeat all"
+msgstr "全曲リピート"
+
+msgctxt "#31414"
+msgid "repeat one"
+msgstr "1曲リピート"
+
+msgctxt "#31420"
+msgid "Network, Bluetooth, updates"
+msgstr "ネットワーク、Bluetooth、アップデート"
+
+msgctxt "#31440"
+msgid "audience"
+msgstr "観客"
+
+msgctxt "#31441"
+msgid "Ratings only from TMDb Helper"
+msgstr "TMDb Helperのレーティングのみ"
+
+msgctxt "#31442"
+msgid "Show only the ratings TMDb Helper fetched for exactly this title. Off: the library's own rating (from Jellyfin) fills in while TMDb Helper has none."
+msgstr "TMDb Helperがこのタイトル用に取得したレーティングだけを表示します。オフ：TMDb Helperにレーティングがない間は、ライブラリ自身のレーティング（Jellyfinから）で補います。"
+
+msgctxt "#31443"
+msgid "Ratings only on title pages"
+msgstr "作品ページのみレーティング表示"
+
+msgctxt "#31444"
+msgid "Spotlight and rows show no ratings, which saves requests to TMDb. A title's page still shows them."
+msgstr "スポットライトと列にはレーティングを表示せず、TMDbへのリクエストを減らします。作品ページには引き続き表示されます。"
+
+msgctxt "#31445"
+msgid "Ratings"
+msgstr "レーティング"
+
+msgctxt "#31446"
+msgid "Sources"
+msgstr "ソース"
+
+msgctxt "#31447"
+msgid "Which ratings the ratings line of the spotlight and the info page shows, and where they come from."
+msgstr "スポットライトと情報ページのレーティング行に表示するレーティングと、その取得元です。"
+
+msgctxt "#31450"
+msgid "IMDb"
+msgstr "IMDb"
+
+msgctxt "#31451"
+msgid "TMDb"
+msgstr "TMDb"
+
+msgctxt "#31452"
+msgid "Rotten Tomatoes critics"
+msgstr "Rotten Tomatoes 批評家"
+
+msgctxt "#31453"
+msgid "Rotten Tomatoes audience"
+msgstr "Rotten Tomatoes 観客"
+
+msgctxt "#31454"
+msgid "Metacritic"
+msgstr "Metacritic"
+
+msgctxt "#31455"
+msgid "Trakt"
+msgstr "Trakt"
+
+msgctxt "#31456"
+msgid "Letterboxd"
+msgstr "Letterboxd"
+
+msgctxt "#31457"
+msgid "MDbList"
+msgstr "MDbList"
+
+msgctxt "#31460"
+msgid "IMDb users, 0 to 10, with the Top 250 rank. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "IMDbユーザーのレーティング（0から10）、Top 250の順位付き。TMDb HelperでOMDbまたはMDbListのキーが必要です。"
+
+msgctxt "#31461"
+msgid "TMDb users, 0 to 10. Needs no key."
+msgstr "TMDbユーザーのレーティング（0から10）。キーは不要です。"
+
+msgctxt "#31462"
+msgid "Tomatometer: the share of positive critic reviews. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Tomatometer：批評家による肯定的なレビューの割合。TMDb HelperでOMDbまたはMDbListのキーが必要です。"
+
+msgctxt "#31463"
+msgid "Popcornmeter: the share of positive audience ratings. Needs an MDbList or OMDb key in TMDb Helper."
+msgstr "Popcornmeter：観客による肯定的な評価の割合。TMDb HelperでMDbListまたはOMDbのキーが必要です。"
+
+msgctxt "#31464"
+msgid "A weighted average of critic reviews, 0 to 100, mostly for theatrical films and big series. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "批評家レビューの加重平均（0から100）。主に劇場公開作品と大型シリーズが対象です。TMDb HelperでOMDbまたはMDbListのキーが必要です。"
+
+msgctxt "#31465"
+msgid "Trakt users, 0 to 10. Needs a connected Trakt account in TMDb Helper: fetched from Trakt, not MDbList."
+msgstr "Traktユーザーのレーティング（0から10）。TMDb HelperでTraktアカウントの連携が必要です。MDbListではなくTraktから取得します。"
+
+msgctxt "#31466"
+msgid "Letterboxd users, 0 to 5, mostly films. Needs an MDbList key in TMDb Helper."
+msgstr "Letterboxdユーザーのレーティング（0から5）、主にムービーが対象です。TMDb HelperでMDbListのキーが必要です。"
+
+msgctxt "#31467"
+msgid "MDbList score: an average of the other sources, 0 to 100. Needs an MDbList key in TMDb Helper."
+msgstr "MDbListスコア：他のソースの平均（0から100）。TMDb HelperでMDbListのキーが必要です。"
+
+msgctxt "#31469"
+msgid "No description"
+msgstr "説明なし"
+
+msgctxt "#31470"
+msgid "back"
+msgstr "戻る"
+
+msgctxt "#31471"
+msgid "budget"
+msgstr "製作費"
+
+msgctxt "#31472"
+msgid "box office"
+msgstr "興行収入"
+
+msgctxt "#31473"
+msgid "description"
+msgstr "説明"
+
+msgctxt "#31474"
+msgid "biography"
+msgstr "人物紹介"
