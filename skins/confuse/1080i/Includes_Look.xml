@@ -296,7 +296,7 @@
         </definition>
     </include>
 
-    <!-- A focused card rises on a shadow, under its artwork. Fixed at 24 px past the card since
+    <!-- A focused card grows and glows, under its artwork. Fixed at 24 px past the card since
          card_halo.png has this margin: the callers pass card + 48 -->
     <include name="LookCardFocus">
         <param name="glowwidth"/>
@@ -308,7 +308,7 @@
                 <top>-24</top>
                 <width>$PARAM[glowwidth]</width>
                 <height>$PARAM[glowheight]</height>
-                <texture border="40" colordiffuse="shadow">ui/card_halo.png</texture>
+                <texture border="40" colordiffuse="card_glow">ui/card_halo.png</texture>
                 <visible>$PARAM[focused]</visible>
             </control>
         </definition>
