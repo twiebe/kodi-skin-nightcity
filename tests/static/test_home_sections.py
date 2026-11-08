@@ -52,20 +52,19 @@ def slot_skin(page, n, key, opt=''):
 # --- Home: rows per slot ---------------------------------------------------------------------
 
 def test_defaults_are_todays_rows():
-    """Without any setting each page shows the rows it had before, under the same ids."""
+    """Without any setting: home and shows lead with On Deck (continue watching and next up in
+    one row), movies as before."""
     genre = 'videodb://movies/genres/$INFO[Window(Home).Property(nc.genre.id)]/'
     assert rows('home') == [
-        ('9201', [PL.format('WidgetInProgressMovies'), PL.format('WidgetInProgressEpisodes')]),
+        ('9201', [PL.format('WidgetInProgressMovies'), PL.format('WidgetInProgressEpisodes'), '$VAR[ComboNextUp]']),
         ('9202', [PL.format('WidgetNewMovies')]), ('9203', [PL.format('WidgetNewShows')]),
-        ('9204', [PL.format('WidgetContinueShows')]),
-        ('9215', None), ('9216', None), ('9217', None), ('9218', None)]
+        ('9214', None), ('9215', None), ('9216', None), ('9217', None), ('9218', None)]
     assert rows('movies')[:3] == [
         ('9401', [PL.format('WidgetNewMovies')]), ('9402', [PL.format('WidgetInProgressMovies')]),
         ('9403', [genre])]
-    assert rows('shows')[:3] == [
-        ('9501', [PL.format('WidgetContinueShows')]), ('9502', [PL.format('WidgetNewShows')]),
-        ('9503', [PL.format('WidgetInProgressEpisodes')])]
-    assert [r[1] for r in rows('movies')[3:] + rows('shows')[3:]] == [None] * 10
+    assert rows('shows')[:2] == [
+        ('9501', [PL.format('WidgetInProgressEpisodes'), '$VAR[ComboNextUp]']), ('9502', [PL.format('WidgetNewShows')])]
+    assert [r[1] for r in rows('movies')[3:] + rows('shows')[2:]] == [None] * 11
 
 
 def variants():
@@ -126,7 +125,7 @@ def test_empty_slots_and_stray_values():
     skin = dict(slot_skin('home', 1, 'none'), **slot_skin('home', 3, 'bogus'))
     found = rows('home', skin)
     assert found[0] == ('9211', None) and found[2] == ('9213', None)
-    assert found[1][0] == '9202' and found[3][0] == '9204'
+    assert found[1][0] == '9202' and found[3] == ('9214', None)  # slot 4 has no default row
     skin = {'nc.home.slot{}'.format(n): 'none' for n in range(1, 9)}
     assert rows('home', skin) == [('92{}'.format(10 + n), None) for n in range(1, 9)]
 
@@ -140,13 +139,13 @@ def test_the_dropped_unwatched_section_is_an_empty_slot():
 
 
 def test_option_values_without_meaning_fall_back_to_the_first():
-    assert rows('home', slot_skin('home', 1, 'continue', 'bogus'))[0][1] == rows('home')[0][1]
+    assert rows('home', slot_skin('home', 1, 'continue', 'bogus'))[0][1] == rows('home', slot_skin('home', 1, 'continue'))[0][1]
 
 
 def test_rows_wire_up_and_down_through_empty_slots():
     """A row moves up and down to the neighbouring slot's group; empty slots are hidden groups,
     which pass the move on, the first slot moves up to the hero."""
-    window = load('Home.xml', slot_skin('home', 2, 'none'))
+    window = load('Home.xml', dict(slot_skin('home', 2, 'none'), **slot_skin('home', 4, 'nextup')))
     c = controls(window)
     assert c['9201'].findtext('onup') == '9050' and c['9201'].findtext('ondown') == '9212'
     assert c['9212'].findtext('visible') == 'false'
@@ -544,9 +543,9 @@ def test_settings_page_fills_the_defaults_on_load():
         if not onload.get('condition') or evaluate(onload.get('condition'), state):
             run_one(onload.text, state)
     assert [state['nc.home.slot{}'.format(n)] for n in range(1, 9)] == \
-           ['continue', 'toprated', 'newepisodes', 'nextup', 'none', 'none', 'none', 'none']
-    assert state['nc.movies.slot3'] == 'genres' and state['nc.shows.slot3'] == 'inprogress'
-    assert state['nc.movies.slot4'] == state['nc.shows.slot4'] == 'none'
+           ['combo', 'toprated', 'newepisodes', 'none', 'none', 'none', 'none', 'none']
+    assert state['nc.movies.slot3'] == 'genres' and state['nc.shows.slot2'] == 'newepisodes'
+    assert state['nc.movies.slot4'] == state['nc.shows.slot3'] == 'none'
     assert state['nc.movies.spotlight'] == 'unwatched'
     assert state['nc.shows.interval'] == '30'
     # movies has its own interval now: an existing shared one goes on for both until changed
@@ -604,11 +603,11 @@ def test_move_carries_the_slot():
     state['Window.Property(nc.hp.grab)'] = 'home.1'
     target = run(slot_button('home', 1), 'ondown', state)
     assert target == '222'
-    assert state['nc.home.slot1'] == 'newmovies' and state['nc.home.slot2'] == 'continue'
+    assert state['nc.home.slot1'] == 'newmovies' and state['nc.home.slot2'] == 'combo'
     assert state['nc.home.slot2.opt'] == 'shows' and state['nc.home.slot1.opt'] == ''
     assert state['Window.Property(nc.hp.grab)'] == 'home.2'
     target = run(slot_button('home', 2), 'onup', state)
-    assert target == '221' and state['nc.home.slot1'] == 'continue'
+    assert target == '221' and state['nc.home.slot1'] == 'combo'
     assert run(slot_button('home', 1), 'onup', state) == '221'  # stays at the top
     state['Window.Property(nc.hp.grab)'] = 'home.8'
     assert run(slot_button('home', 8), 'ondown', state) == '228'

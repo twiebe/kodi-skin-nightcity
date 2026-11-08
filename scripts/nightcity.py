@@ -244,9 +244,9 @@ CATALOGUE = {
               ('trending', ())],
 }
 # the rows of a page that nobody changed: what an empty Skin.String stands for
-DEFAULTS = {'home': ('continue', 'newmovies', 'newepisodes', 'nextup'),
+DEFAULTS = {'home': ('combo', 'newmovies', 'newepisodes'),
             'movies': ('newmovies', 'continue', 'genres'),
-            'shows': ('nextup', 'newepisodes', 'inprogress')}
+            'shows': ('combo', 'newepisodes')}
 
 
 def default_slots(page):
@@ -265,38 +265,21 @@ def slot_values(page, raw):
 
 
 # Up to 0.4.90 a section Unwatched: the same rows as new movies and new episodes, unwatched only
-OLD_DEFAULTS = {'home': DEFAULTS['home'], 'movies': ('newmovies', 'continue', 'unwatched', 'genres'),
-                'shows': ('nextup', 'newepisodes', 'inprogress', 'unwatched')}
 UNWATCHED_AS = {'home': {'shows': 'newepisodes'}, 'movies': {}, 'shows': {'': 'newepisodes'}}
 
 
 def unwatched_writes(page, raw):
-    """Slots to change once {slot: (key, option)} so that the page shows the rows it had, with
-    Unwatched as new movies or new episodes, unwatched only (gone where the page shows that section
-    already). Empty slots keep following the defaults where the rows stay the same."""
-    keys = [key for key, _ in CATALOGUE[page]]
-    old = list(OLD_DEFAULTS[page]) + ['none'] * (SLOTS - len(OLD_DEFAULTS[page]))
-    wanted, moved = [], []
-    for n, ((key, opt), default) in enumerate(zip(raw, old), 1):
-        effective = key or default
-        if effective == 'unwatched':
-            moved.append((n, key, UNWATCHED_AS[page].get(opt, 'newmovies')))
-            wanted.append(('none', ''))
-        else:
-            wanted.append((effective, opt) if effective in keys else ('none', ''))
+    """Slots to change once {slot: (key, option)}: a slot set to Unwatched becomes new movies or new
+    episodes, unwatched only, or empty where the page shows that section already. Empty slots
+    follow the defaults, also where those changed."""
+    shown = {key for key, _ in slot_values(page, raw) if key != 'none'}
     writes = {}
-    for n, stored, target in moved:
-        if target not in [key for key, _ in wanted]:
-            wanted[n - 1] = (target, 'unwatched')
-        if stored or wanted[n - 1][0] != 'none':
-            writes[n] = wanted[n - 1]
-    raw = [writes.get(n, pair) for n, pair in enumerate(raw, 1)]
-    now = slot_values(page, raw)
-
-    def shown(slots):
-        return [slot for slot in slots if slot[0] != 'none']
-    if shown(now) != shown(wanted):
-        writes.update({n: slot for n, slot in enumerate(wanted, 1) if now[n - 1] != slot})
+    for n, (key, opt) in enumerate(raw, 1):
+        if key != 'unwatched':
+            continue
+        target = UNWATCHED_AS[page].get(opt, 'newmovies')
+        writes[n] = ('none', '') if target in shown else (target, 'unwatched')
+        shown.add(target)
     return writes
 
 

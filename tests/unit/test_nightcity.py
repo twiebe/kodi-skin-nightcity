@@ -565,9 +565,10 @@ def test_combo_keeps_an_unchanged_path(monkeypatch):
 
 
 def test_default_slots_are_todays_rows():
-    assert nightcity.default_slots('home') == ['continue', 'newmovies', 'newepisodes', 'nextup'] + ['none'] * 4
+    """On Deck (continue watching and next up in one row) leads home and shows."""
+    assert nightcity.default_slots('home') == ['combo', 'newmovies', 'newepisodes'] + ['none'] * 5
     assert nightcity.default_slots('movies') == ['newmovies', 'continue', 'genres'] + ['none'] * 5
-    assert nightcity.default_slots('shows') == ['nextup', 'newepisodes', 'inprogress'] + ['none'] * 5
+    assert nightcity.default_slots('shows') == ['combo', 'newepisodes'] + ['none'] * 6
 
 
 def test_slot_values_hide_the_old_unwatched_row():
@@ -610,27 +611,17 @@ def test_defaults_need_no_writes(page):
     assert nightcity.unwatched_writes(page, raw_slots()) == {}
 
 
-def test_slots_after_a_default_unwatched_keep_their_rows():
-    """An empty slot 3 meant unwatched; it now means genres, which the user had replaced in slot
-    4: slot 3 empties, no genres row comes in."""
-    raw = raw_slots(('', ''), ('', ''), ('', ''), ('toprated', ''))
-    assert nightcity.unwatched_writes('movies', raw) == {3: ('none', '')}
-    raw = raw_slots(('', ''), ('', ''), ('', ''), ('trending', ''), ('genres', ''))
-    assert nightcity.unwatched_writes('movies', raw) == {3: ('none', '')}
-
-
-def test_default_after_a_changed_unwatched_slot_keeps_its_row():
-    """An empty slot 4 meant genres (movies) or unwatched (shows): genres must not vanish."""
-    raw = raw_slots(('', ''), ('', ''), ('toprated', ''))
-    assert nightcity.unwatched_writes('movies', raw) == {4: ('genres', '')}
-    raw = raw_slots(('', ''), ('', ''), ('genres', ''))
-    assert nightcity.unwatched_writes('shows', raw) == {}  # its slot 4 was unwatched, which goes
+def test_empty_slots_follow_the_new_defaults():
+    """Only slots set to Unwatched change: an empty slot follows the defaults, also where they
+    changed (On Deck on home and shows), and nothing is written for it."""
+    assert nightcity.unwatched_writes('movies', raw_slots(('', ''), ('', ''), ('', ''), ('toprated', ''))) == {}
+    assert nightcity.unwatched_writes('shows', raw_slots(('', ''), ('', ''), ('genres', ''))) == {}
 
 
 def test_slot_values_fill_defaults():
     raw = [('', ''), ('none', ''), ('toprated', 'shows'), ('bogus', 'x')] + [('', '')] * 4
     slots = nightcity.slot_values('home', raw)
-    assert slots[:4] == [('continue', ''), ('none', ''), ('toprated', 'shows'), ('none', '')]
+    assert slots[:4] == [('combo', ''), ('none', ''), ('toprated', 'shows'), ('none', '')]
     assert slots[4:] == [('none', '')] * 4
 
 
@@ -642,8 +633,8 @@ def test_section_rows_mark_used_slots():
     rows = nightcity.section_rows('home', home_slots(), 1)
     assert rows[0] == ('none', None) and rows[-1] == ('move', None)
     used = dict(rows)
-    assert used['continue'] is None  # the slot itself
-    assert used['newmovies'] == 2 and used['nextup'] == 4
+    assert used['combo'] is None  # the slot itself
+    assert used['newmovies'] == 2 and used['newepisodes'] == 3 and used['nextup'] is None
     assert used['favourites'] is None
     assert [k for k, _ in rows[1:-1]] == [k for k, _ in nightcity.CATALOGUE['home']]
 
@@ -657,7 +648,7 @@ def test_pick_free_section_resets_option():
 def test_pick_used_section_swaps():
     slots = home_slots()
     slots[0] = ('continue', 'movies')
-    assert nightcity.apply_pick(slots, 1, 'nextup') == {1: ('nextup', ''), 4: ('continue', 'movies')}
+    assert nightcity.apply_pick(slots, 1, 'newepisodes') == {1: ('newepisodes', ''), 3: ('continue', 'movies')}
 
 
 def test_pick_empty_and_same():

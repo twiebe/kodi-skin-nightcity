@@ -79,11 +79,11 @@ def test_defaults_are_todays_pages(home):
 
 def test_page_fills_defaults_and_labels(settings):
     assert [skin('nc.home.slot{}'.format(n)) for n in range(1, 9)] == \
-        ['continue', 'newmovies', 'newepisodes', 'nextup', 'none', 'none', 'none', 'none']
+        ['combo', 'newmovies', 'newepisodes', 'none', 'none', 'none', 'none', 'none']
     assert skin('nc.movies.slot3') == 'genres' and skin('nc.movies.slot4') == 'none'
     assert skin('nc.movies.spotlight') == 'all'
     assert skin('nc.shows.interval') == '15' and skin('nc.movies.interval') == '15'
-    assert 'Continue watching' in info('Control.GetLabel(221)')['Control.GetLabel(221)']
+    assert 'On Deck' in info('Control.GetLabel(221)')['Control.GetLabel(221)']
     screenshot('hs-settings-home')
 
 
@@ -100,7 +100,7 @@ def test_choose_a_used_section_swaps(settings):
     pick(225, 'newmovies')
     assert skin('nc.home.slot5') == 'newmovies' and skin('nc.home.slot2') == 'none'
     pick(221, 'newmovies')
-    assert skin('nc.home.slot1') == 'newmovies' and skin('nc.home.slot5') == 'continue'
+    assert skin('nc.home.slot1') == 'newmovies' and skin('nc.home.slot5') == 'combo'
 
 
 def test_move_a_slot(settings):
@@ -109,7 +109,7 @@ def test_move_a_slot(settings):
     screenshot('hs-settings-grab')
     action('down', 'down')
     wait_for('Control.HasFocus(223)')
-    assert [skin('nc.home.slot{}'.format(n)) for n in (1, 2, 3)] == ['newmovies', 'newepisodes', 'continue']
+    assert [skin('nc.home.slot{}'.format(n)) for n in (1, 2, 3)] == ['newmovies', 'newepisodes', 'combo']
     action('select')
     wait_for('String.IsEmpty(Window.Property(nc.hp.grab))')
     action('up')

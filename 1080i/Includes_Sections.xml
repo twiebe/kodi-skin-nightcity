@@ -450,7 +450,7 @@
                 <param name="num" value="$VAR[RowNumber_home_1]"/>
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="9212"/>
-                <param name="def_continue" value="true"/>
+                <param name="def_combo" value="true"/>
             </include>
             <include content="HomeSlot">
                 <param name="n" value="2"/>
@@ -471,7 +471,6 @@
                 <param name="num" value="$VAR[RowNumber_home_4]"/>
                 <param name="up" value="9213"/>
                 <param name="down" value="9215"/>
-                <param name="def_nextup" value="true"/>
             </include>
             <include content="HomeSlot">
                 <param name="n" value="5"/>
@@ -501,7 +500,7 @@
     <include name="HomeSlotLoaders">
         <include content="HomeSlotLoader">
             <param name="n" value="1"/>
-            <param name="def_continue" value="true"/>
+            <param name="def_combo" value="true"/>
         </include>
         <include content="HomeSlotLoader">
             <param name="n" value="2"/>
@@ -513,7 +512,6 @@
         </include>
         <include content="HomeSlotLoader">
             <param name="n" value="4"/>
-            <param name="def_nextup" value="true"/>
         </include>
         <include content="HomeSlotLoader">
             <param name="n" value="5"/>
@@ -952,7 +950,7 @@
                 <param name="num" value="$VAR[RowNumber_shows_1]"/>
                 <param name="up" value="$PARAM[up]"/>
                 <param name="down" value="9512"/>
-                <param name="def_nextup" value="true"/>
+                <param name="def_combo" value="true"/>
             </include>
             <include content="ShowsSlot">
                 <param name="n" value="2"/>
@@ -966,7 +964,6 @@
                 <param name="num" value="$VAR[RowNumber_shows_3]"/>
                 <param name="up" value="9512"/>
                 <param name="down" value="9514"/>
-                <param name="def_inprogress" value="true"/>
             </include>
             <include content="ShowsSlot">
                 <param name="n" value="4"/>
@@ -1002,7 +999,7 @@
     <include name="ShowsSlotLoaders">
         <include content="ShowsSlotLoader">
             <param name="n" value="1"/>
-            <param name="def_nextup" value="true"/>
+            <param name="def_combo" value="true"/>
         </include>
         <include content="ShowsSlotLoader">
             <param name="n" value="2"/>
@@ -1010,7 +1007,6 @@
         </include>
         <include content="ShowsSlotLoader">
             <param name="n" value="3"/>
-            <param name="def_inprogress" value="true"/>
         </include>
         <include content="ShowsSlotLoader">
             <param name="n" value="4"/>
@@ -1347,10 +1343,10 @@
     <!-- Skin settings onload: every slot gets its effective value, so moving and swapping
          copy real values (an empty Skin.String means the default only on Home) -->
     <include name="HomePagesDefaults">
-        <onload condition="String.IsEmpty(Skin.String(nc.home.slot1))">Skin.SetString(nc.home.slot1,continue)</onload>
+        <onload condition="String.IsEmpty(Skin.String(nc.home.slot1))">Skin.SetString(nc.home.slot1,combo)</onload>
         <onload condition="String.IsEmpty(Skin.String(nc.home.slot2))">Skin.SetString(nc.home.slot2,newmovies)</onload>
         <onload condition="String.IsEmpty(Skin.String(nc.home.slot3))">Skin.SetString(nc.home.slot3,newepisodes)</onload>
-        <onload condition="String.IsEmpty(Skin.String(nc.home.slot4))">Skin.SetString(nc.home.slot4,nextup)</onload>
+        <onload condition="String.IsEmpty(Skin.String(nc.home.slot4))">Skin.SetString(nc.home.slot4,none)</onload>
         <onload condition="String.IsEmpty(Skin.String(nc.home.slot5))">Skin.SetString(nc.home.slot5,none)</onload>
         <onload condition="String.IsEmpty(Skin.String(nc.home.slot6))">Skin.SetString(nc.home.slot6,none)</onload>
         <onload condition="String.IsEmpty(Skin.String(nc.home.slot7))">Skin.SetString(nc.home.slot7,none)</onload>
@@ -1363,9 +1359,9 @@
         <onload condition="String.IsEmpty(Skin.String(nc.movies.slot6))">Skin.SetString(nc.movies.slot6,none)</onload>
         <onload condition="String.IsEmpty(Skin.String(nc.movies.slot7))">Skin.SetString(nc.movies.slot7,none)</onload>
         <onload condition="String.IsEmpty(Skin.String(nc.movies.slot8))">Skin.SetString(nc.movies.slot8,none)</onload>
-        <onload condition="String.IsEmpty(Skin.String(nc.shows.slot1))">Skin.SetString(nc.shows.slot1,nextup)</onload>
+        <onload condition="String.IsEmpty(Skin.String(nc.shows.slot1))">Skin.SetString(nc.shows.slot1,combo)</onload>
         <onload condition="String.IsEmpty(Skin.String(nc.shows.slot2))">Skin.SetString(nc.shows.slot2,newepisodes)</onload>
-        <onload condition="String.IsEmpty(Skin.String(nc.shows.slot3))">Skin.SetString(nc.shows.slot3,inprogress)</onload>
+        <onload condition="String.IsEmpty(Skin.String(nc.shows.slot3))">Skin.SetString(nc.shows.slot3,none)</onload>
         <onload condition="String.IsEmpty(Skin.String(nc.shows.slot4))">Skin.SetString(nc.shows.slot4,none)</onload>
         <onload condition="String.IsEmpty(Skin.String(nc.shows.slot5))">Skin.SetString(nc.shows.slot5,none)</onload>
         <onload condition="String.IsEmpty(Skin.String(nc.shows.slot6))">Skin.SetString(nc.shows.slot6,none)</onload>
@@ -2344,9 +2340,9 @@
     </include>
     <!-- Names, options and descriptions of the slots in the skin settings -->
     <variable name="HomePagesName_home_1">
-        <value condition="[String.IsEqual(Skin.String(nc.home.slot1),continue) | [String.IsEmpty(Skin.String(nc.home.slot1)) + true]]">$LOCALIZE[31233]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.home.slot1),continue) | [String.IsEmpty(Skin.String(nc.home.slot1)) + false]]">$LOCALIZE[31233]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot1),nextup) | [String.IsEmpty(Skin.String(nc.home.slot1)) + false]]">$LOCALIZE[31234]</value>
-        <value condition="[String.IsEqual(Skin.String(nc.home.slot1),combo) | [String.IsEmpty(Skin.String(nc.home.slot1)) + false]]">$LOCALIZE[31700]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.home.slot1),combo) | [String.IsEmpty(Skin.String(nc.home.slot1)) + true]]">$LOCALIZE[31700]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot1),newmovies) | [String.IsEmpty(Skin.String(nc.home.slot1)) + false]]">$LOCALIZE[31235]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot1),newepisodes) | [String.IsEmpty(Skin.String(nc.home.slot1)) + false]]">$LOCALIZE[31236]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot1),genres) | [String.IsEmpty(Skin.String(nc.home.slot1)) + false]]">$LOCALIZE[135]</value>
@@ -2495,7 +2491,7 @@
     </variable>
     <variable name="HomePagesName_home_4">
         <value condition="[String.IsEqual(Skin.String(nc.home.slot4),continue) | [String.IsEmpty(Skin.String(nc.home.slot4)) + false]]">$LOCALIZE[31233]</value>
-        <value condition="[String.IsEqual(Skin.String(nc.home.slot4),nextup) | [String.IsEmpty(Skin.String(nc.home.slot4)) + true]]">$LOCALIZE[31234]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.home.slot4),nextup) | [String.IsEmpty(Skin.String(nc.home.slot4)) + false]]">$LOCALIZE[31234]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot4),combo) | [String.IsEmpty(Skin.String(nc.home.slot4)) + false]]">$LOCALIZE[31700]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot4),newmovies) | [String.IsEmpty(Skin.String(nc.home.slot4)) + false]]">$LOCALIZE[31235]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot4),newepisodes) | [String.IsEmpty(Skin.String(nc.home.slot4)) + false]]">$LOCALIZE[31236]</value>
@@ -2952,8 +2948,8 @@
         <value>$LOCALIZE[31254]</value>
     </variable>
     <variable name="HomePagesName_shows_1">
-        <value condition="[String.IsEqual(Skin.String(nc.shows.slot1),nextup) | [String.IsEmpty(Skin.String(nc.shows.slot1)) + true]]">$LOCALIZE[31234]</value>
-        <value condition="[String.IsEqual(Skin.String(nc.shows.slot1),combo) | [String.IsEmpty(Skin.String(nc.shows.slot1)) + false]]">$LOCALIZE[31700]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.shows.slot1),nextup) | [String.IsEmpty(Skin.String(nc.shows.slot1)) + false]]">$LOCALIZE[31234]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.shows.slot1),combo) | [String.IsEmpty(Skin.String(nc.shows.slot1)) + true]]">$LOCALIZE[31700]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot1),newepisodes) | [String.IsEmpty(Skin.String(nc.shows.slot1)) + false]]">$LOCALIZE[31236]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot1),inprogress) | [String.IsEmpty(Skin.String(nc.shows.slot1)) + false]]">$LOCALIZE[575]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot1),genres) | [String.IsEmpty(Skin.String(nc.shows.slot1)) + false]]">$LOCALIZE[135]</value>
@@ -2999,7 +2995,7 @@
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot3),nextup) | [String.IsEmpty(Skin.String(nc.shows.slot3)) + false]]">$LOCALIZE[31234]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot3),combo) | [String.IsEmpty(Skin.String(nc.shows.slot3)) + false]]">$LOCALIZE[31700]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot3),newepisodes) | [String.IsEmpty(Skin.String(nc.shows.slot3)) + false]]">$LOCALIZE[31236]</value>
-        <value condition="[String.IsEqual(Skin.String(nc.shows.slot3),inprogress) | [String.IsEmpty(Skin.String(nc.shows.slot3)) + true]]">$LOCALIZE[575]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.shows.slot3),inprogress) | [String.IsEmpty(Skin.String(nc.shows.slot3)) + false]]">$LOCALIZE[575]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot3),genres) | [String.IsEmpty(Skin.String(nc.shows.slot3)) + false]]">$LOCALIZE[135]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot3),trending) | [String.IsEmpty(Skin.String(nc.shows.slot3)) + false]]">$LOCALIZE[31239]</value>
         <value>[COLOR text_mute]$LOCALIZE[504][/COLOR]</value>

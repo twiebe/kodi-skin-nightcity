@@ -126,16 +126,17 @@ def test_empty_row_hidden(home):
 
 
 def test_continue_opens_next_episode(home):
-    """A show in "continue watching" opens the info page of its next episode."""
+    """A show in next up opens the info page of its next episode; next up stands in On Deck, the
+    default first row of home, after its started titles (none here)."""
     clear_progress()
     _, episodes = kdev_show_episodes()
     rpc('VideoLibrary.SetEpisodeDetails', {'episodeid': episodes[0]['episodeid'], 'playcount': 1,
                                            'lastplayed': time.strftime('%Y-%m-%d %H:%M:%S')})
     try:
         reload_home()
-        assert num_items(CONTINUE) >= 1
-        builtin('SetFocus({},0,absolute)'.format(CONTINUE))
-        wait_for('Control.HasFocus({})'.format(CONTINUE))
+        wait_for('Integer.IsGreater(Container({}).NumItems,0)'.format(ON_DECK), timeout=15)
+        builtin('SetFocus({},0,absolute)'.format(ON_DECK))
+        wait_for('Control.HasFocus({})'.format(ON_DECK))
         action('select')
         wait_for('Window.IsActive(movieinformation)')
         labels = info('ListItem.Episode', 'ListItem.Season')

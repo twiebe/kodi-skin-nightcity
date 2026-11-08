@@ -12,7 +12,7 @@ import pytest
 
 from conftest import _data, action, builtin, rpc, seed, wait_for
 from test_tmdb_chain import _list_in, _log, _log_since, _open_cast_row, _page, _play, matrix  # noqa: F401
-from test_widgets import CONTINUE, ON_DECK, clear_progress, kdev_show_episodes, num_items
+from test_widgets import ON_DECK, clear_progress, kdev_show_episodes, num_items
 
 pytestmark = pytest.mark.e2e
 
@@ -145,6 +145,6 @@ def test_a_finished_episode_brings_the_next_up_on_home(home):
     time.sleep(3)
     _stop()
     try:
-        _comes_and_stays(CONTINUE)
+        _comes_and_stays(ON_DECK)  # next up stands in On Deck, the default first row of home
     finally:
         clear_progress()
