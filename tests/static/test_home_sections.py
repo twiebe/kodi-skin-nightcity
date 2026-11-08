@@ -59,13 +59,13 @@ def test_defaults_are_todays_rows():
         ('9202', [PL.format('WidgetNewMovies')]), ('9203', [PL.format('WidgetNewShows')]),
         ('9204', [PL.format('WidgetContinueShows')]),
         ('9215', None), ('9216', None), ('9217', None), ('9218', None)]
-    assert rows('movies')[:4] == [
+    assert rows('movies')[:3] == [
         ('9401', [PL.format('WidgetNewMovies')]), ('9402', [PL.format('WidgetInProgressMovies')]),
-        ('9403', [PL.format('WidgetUnwatchedMovies')]), ('9404', [genre])]
-    assert rows('shows')[:4] == [
+        ('9403', [genre])]
+    assert rows('shows')[:3] == [
         ('9501', [PL.format('WidgetContinueShows')]), ('9502', [PL.format('WidgetNewShows')]),
-        ('9503', [PL.format('WidgetInProgressEpisodes')]), ('9504', [PL.format('WidgetUnwatchedShows')])]
-    assert [r[1] for r in rows('movies')[4:] + rows('shows')[4:]] == [None] * 8
+        ('9503', [PL.format('WidgetInProgressEpisodes')])]
+    assert [r[1] for r in rows('movies')[3:] + rows('shows')[3:]] == [None] * 10
 
 
 def variants():
@@ -96,7 +96,6 @@ EXPECTED_PATHS = {
     ('home', 'genres', 'shows'): ['videodb://tvshows/genres/$INFO[Window(Home).Property(nc.tvgenre.id)]/'],
     ('home', 'random', 'all'): [PL.format('WidgetRandomMovies')],
     ('home', 'random', 'unwatched'): [PL.format('WidgetRandomMoviesUnwatched')],
-    ('home', 'unwatched', 'both'): [PL.format('WidgetUnwatchedMovies'), PL.format('WidgetUnwatchedShows')],
     ('home', 'toprated', 'movies'): [PL.format('WidgetTopRatedMovies')],
     ('home', 'toprated', 'shows'): [PL.format('WidgetTopRatedShows')],
     ('home', 'favourites', ''): ['favourites://'],
@@ -105,7 +104,6 @@ EXPECTED_PATHS = {
     ('home', 'recent', 'both'): [PL.format('WidgetRecentMovies'), PL.format('WidgetRecentEpisodes')],
     ('movies', 'sets', ''): ['videodb://movies/sets/'],
     ('movies', 'trending', ''): ['$VAR[TmdbTrendingMoviesMovies]'],
-    ('shows', 'unwatched', ''): [PL.format('WidgetUnwatchedShows')],
     ('shows', 'genres', ''): ['videodb://tvshows/genres/$INFO[Window(Home).Property(nc.tvgenre.id)]/'],
     ('shows', 'trending', ''): ['$VAR[TmdbTrendingShowsShows]'],
     # continue watching, then next up (without the shows a started episode stands for already)
@@ -133,6 +131,14 @@ def test_empty_slots_and_stray_values():
     assert rows('home', skin) == [('92{}'.format(10 + n), None) for n in range(1, 9)]
 
 
+def test_the_dropped_unwatched_section_is_an_empty_slot():
+    """Unwatched was new movies and new episodes, unwatched only, under another name: a slot that
+    still holds it is a hidden placeholder, its playlists are gone."""
+    for page in PAGES:
+        assert rows(page, slot_skin(page, 2, 'unwatched'))[1] == (PAGES[page] + '12', None)
+    assert not list((ROOT / 'playlists').glob('WidgetUnwatched*'))
+
+
 def test_option_values_without_meaning_fall_back_to_the_first():
     assert rows('home', slot_skin('home', 1, 'continue', 'bogus'))[0][1] == rows('home')[0][1]
 
@@ -151,15 +157,15 @@ def test_rows_wire_up_and_down_through_empty_slots():
 def test_genre_row_skips_its_tabs_from_above():
     """DESIGN.md: a selector is skipped from above. The group of a genre row takes the focus
     on its list; up from the list reaches the genre tabs."""
-    for page, base, prop in (('movies', '94', 'nc.genre'), ('home', '92', 'nc.tvgenre')):
+    for page, base, prop, n in (('movies', '94', 'nc.genre', 3), ('home', '92', 'nc.tvgenre', 4)):
         skin = {} if page == 'movies' else slot_skin('home', 4, 'genres', 'shows')
         c = controls(load('Home.xml', skin))
-        group = c[base + '14']
-        assert group.findtext('defaultcontrol') == base + '04'
-        assert c[base + '04'].findtext('onup') == base + '30'
+        group = c['{}1{}'.format(base, n)]
+        assert group.findtext('defaultcontrol') == '{}0{}'.format(base, n)
+        assert c['{}0{}'.format(base, n)].findtext('onup') == base + '30'
         assert group.find('defaultcontrol').get('always') == 'true'
         tabs = c[base + '30']
-        assert tabs.findtext('ondown') == base + '04' and tabs.findtext('onup') == base + '13'
+        assert tabs.findtext('ondown') == '{}0{}'.format(base, n) and tabs.findtext('onup') == '{}1{}'.format(base, n - 1)
         labels = ''.join(t.findtext('label') or '' for t in tabs.iter('control'))
         assert prop + '.1.label' in labels
 
@@ -512,7 +518,8 @@ def test_settings_page_fills_the_defaults_on_load():
             run_one(onload.text, state)
     assert [state['nc.home.slot{}'.format(n)] for n in range(1, 9)] == \
            ['continue', 'toprated', 'newepisodes', 'nextup', 'none', 'none', 'none', 'none']
-    assert state['nc.movies.slot4'] == 'genres' and state['nc.shows.slot3'] == 'inprogress'
+    assert state['nc.movies.slot3'] == 'genres' and state['nc.shows.slot3'] == 'inprogress'
+    assert state['nc.movies.slot4'] == state['nc.shows.slot4'] == 'none'
     assert state['nc.movies.spotlight'] == 'unwatched'
     assert state['nc.shows.interval'] == '30'
 

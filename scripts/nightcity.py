@@ -229,24 +229,24 @@ ALL, UNWATCHED = ('all', 593), ('unwatched', 16101)
 SECTIONS = {  # key: (name, description) string ids
     'continue': (31233, 31241), 'nextup': (31234, 31242), 'newmovies': (31235, 31243),
     'newepisodes': (31236, 31244), 'genres': (135, 31245), 'random': (31237, 31246),
-    'unwatched': (16101, 31247), 'toprated': (31238, 31248), 'favourites': (1036, 31249),
+    'toprated': (31238, 31248), 'favourites': (1036, 31249),
     'trending': (31239, 31250), 'recent': (31240, 31251), 'sets': (20434, 31252),
     'inprogress': (575, 31253), 'combo': (31700, 31701),
 }
 CATALOGUE = {
     'home': [('continue', (BOTH, MOVIES, SHOWS)), ('nextup', ()), ('combo', (BOTH, SHOWS)), ('newmovies', (ALL, UNWATCHED)),
              ('newepisodes', (ALL, UNWATCHED)), ('genres', (MOVIES, SHOWS)), ('random', (ALL, UNWATCHED)),
-             ('unwatched', (MOVIES, SHOWS, BOTH)), ('toprated', (MOVIES, SHOWS)), ('favourites', ()),
+             ('toprated', (MOVIES, SHOWS)), ('favourites', ()),
              ('trending', (MOVIES, SHOWS)), ('recent', (BOTH, MOVIES, SHOWS))],
-    'movies': [('continue', ()), ('newmovies', (ALL, UNWATCHED)), ('unwatched', ()), ('random', (ALL, UNWATCHED)),
+    'movies': [('continue', ()), ('newmovies', (ALL, UNWATCHED)), ('random', (ALL, UNWATCHED)),
                ('toprated', ()), ('genres', ()), ('sets', ()), ('trending', ())],
-    'shows': [('nextup', ()), ('combo', ()), ('newepisodes', (ALL, UNWATCHED)), ('inprogress', ()), ('unwatched', ()),
-              ('genres', ()), ('trending', ())],
+    'shows': [('nextup', ()), ('combo', ()), ('newepisodes', (ALL, UNWATCHED)), ('inprogress', ()), ('genres', ()),
+              ('trending', ())],
 }
-# the rows each page had before the slots: what an empty Skin.String stands for
+# the rows of a page that nobody changed: what an empty Skin.String stands for
 DEFAULTS = {'home': ('continue', 'newmovies', 'newepisodes', 'nextup'),
-            'movies': ('newmovies', 'continue', 'unwatched', 'genres'),
-            'shows': ('nextup', 'newepisodes', 'inprogress', 'unwatched')}
+            'movies': ('newmovies', 'continue', 'genres'),
+            'shows': ('nextup', 'newepisodes', 'inprogress')}
 
 
 def default_slots(page):
@@ -262,6 +262,42 @@ def slot_values(page, raw):
         key = key or default
         slots.append((key, opt) if key in keys else ('none', ''))
     return slots
+
+
+# Up to 0.4.90 a section Unwatched: the same rows as new movies and new episodes, unwatched only
+OLD_DEFAULTS = {'home': DEFAULTS['home'], 'movies': ('newmovies', 'continue', 'unwatched', 'genres'),
+                'shows': ('nextup', 'newepisodes', 'inprogress', 'unwatched')}
+UNWATCHED_AS = {'home': {'shows': 'newepisodes'}, 'movies': {}, 'shows': {'': 'newepisodes'}}
+
+
+def unwatched_writes(page, raw):
+    """Slots to change once {slot: (key, option)} so that the page shows the rows it had, with
+    Unwatched as new movies or new episodes, unwatched only (gone where the page shows that section
+    already). Empty slots keep following the defaults where the rows stay the same."""
+    keys = [key for key, _ in CATALOGUE[page]]
+    old = list(OLD_DEFAULTS[page]) + ['none'] * (SLOTS - len(OLD_DEFAULTS[page]))
+    wanted, moved = [], []
+    for n, ((key, opt), default) in enumerate(zip(raw, old), 1):
+        effective = key or default
+        if effective == 'unwatched':
+            moved.append((n, key, UNWATCHED_AS[page].get(opt, 'newmovies')))
+            wanted.append(('none', ''))
+        else:
+            wanted.append((effective, opt) if effective in keys else ('none', ''))
+    writes = {}
+    for n, stored, target in moved:
+        if target not in [key for key, _ in wanted]:
+            wanted[n - 1] = (target, 'unwatched')
+        if stored or wanted[n - 1][0] != 'none':
+            writes[n] = wanted[n - 1]
+    raw = [writes.get(n, pair) for n, pair in enumerate(raw, 1)]
+    now = slot_values(page, raw)
+
+    def shown(slots):
+        return [slot for slot in slots if slot[0] != 'none']
+    if shown(now) != shown(wanted):
+        writes.update({n: slot for n, slot in enumerate(wanted, 1) if now[n - 1] != slot})
+    return writes
 
 
 def section_rows(page, slots, n):
@@ -1674,12 +1710,27 @@ def take_old_settings():
     xbmc.executebuiltin('Skin.SetBool(nc.migrated)')
 
 
+def drop_unwatched():
+    """Once: the slots of the dropped section Unwatched (unwatched_writes)."""
+    import xbmc
+    if xbmc.getCondVisibility('Skin.HasSetting(nc.migrated.unwatched)'):
+        return
+    for page in CATALOGUE:
+        raw = [(xbmc.getInfoLabel('Skin.String(nc.{}.slot{})'.format(page, n)),
+                xbmc.getInfoLabel('Skin.String(nc.{}.slot{}.opt)'.format(page, n))) for n in range(1, SLOTS + 1)]
+        for n, (key, opt) in sorted(unwatched_writes(page, raw).items()):
+            xbmc.executebuiltin('Skin.SetString(nc.{}.slot{},{})'.format(page, n, key))
+            xbmc.executebuiltin('Skin.SetString(nc.{}.slot{}.opt,{})'.format(page, n, opt))
+    xbmc.executebuiltin('Skin.SetBool(nc.migrated.unwatched)')
+
+
 def startup():
     """One-off settings, then nc.startup.ready: the Startup screen hands over to Home once it is
     set (nc_startup timer). The service runs this first, then listens for the skin."""
     import xbmc
     try:
         take_old_settings()
+        drop_unwatched()
         for done, setting, value in ONE_OFF:
             if xbmc.getCondVisibility('Skin.HasSetting({})'.format(done)):
                 continue

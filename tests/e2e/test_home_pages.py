@@ -116,7 +116,7 @@ def test_rows_one_at_a_time(home_page):
 
 
 
-GENRE_ROW, GENRE_TABS, GENRE_PICK = 9404, (9431, 9432, 9433), 9434
+GENRE_ROW, GENRE_TABS, GENRE_PICK = 9403, (9431, 9432, 9433), 9434
 
 
 def prop(name):
@@ -169,14 +169,15 @@ def test_genre_tab_switches_row(genres):
 def test_genre_row_navigation(genres):
     focus(9102)
     wait_for('Integer.IsGreater(Container({}).NumItems,0)'.format(GENRE_ROW))
-    focus(9403)
+    above = 9402 if visible(9402) else 9401  # continue watching shows only what was started
+    focus(above)
     # past the genre tabs onto the row, up reaches the tabs (DESIGN.md)
     action('down')
     wait_for('Control.HasFocus({})'.format(GENRE_ROW))
     action('up')
     wait_for('ControlGroup(9430).HasFocus()')
     action('up')
-    wait_for('Control.HasFocus(9403)')
+    wait_for('Control.HasFocus({})'.format(above))
 
 
 def test_genre_pick_dialog(genres):

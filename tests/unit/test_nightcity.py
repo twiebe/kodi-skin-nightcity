@@ -436,18 +436,35 @@ def test_startup_takes_the_retrowave_settings_once(monkeypatch, tmp_path):
     old.write_text(RETROWAVE_SETTINGS)
     fake, _ = _startup_env(monkeypatch, done=True, profile=tmp_path)
     nightcity.startup()
-    taken = [b for b in fake.builtins if 'menu.hide' in b or 'nc.migrated' in b]
+    taken = [b for b in fake.builtins if 'menu.hide' in b or 'nc.migrated)' in b]
     assert taken == ['Skin.SetBool(nc.menu.hide.shows)', 'Skin.SetBool(nc.migrated)']
     fake.true.add('Skin.HasSetting(nc.migrated)')
     fake.builtins.clear()
     nightcity.startup()
-    assert not [b for b in fake.builtins if 'menu.hide' in b or 'nc.migrated' in b]
+    assert not [b for b in fake.builtins if 'menu.hide' in b or 'nc.migrated)' in b]
 
 
 def test_startup_without_retrowave_marks_nothing_to_take(monkeypatch):
     fake, _ = _startup_env(monkeypatch, done=True)
     nightcity.startup()
     assert 'Skin.SetBool(nc.migrated)' in fake.builtins
+
+
+def test_startup_drops_the_unwatched_rows_once(monkeypatch):
+    """Startup turns slots of the dropped Unwatched section into new movies or new episodes,
+    unwatched only, once (nc.migrated.unwatched)."""
+    fake, _ = _startup_env(monkeypatch, done=True)
+    fake.labels.update({'Skin.String(nc.home.slot3)': 'toprated', 'Skin.String(nc.home.slot6)': 'unwatched',
+                        'Skin.String(nc.home.slot6.opt)': 'shows', 'Skin.String(nc.movies.slot5)': 'unwatched'})
+    nightcity.startup()
+    writes = [b for b in fake.builtins if b.startswith('Skin.SetString(nc.') or 'nc.migrated.unwatched' in b]
+    assert writes == ['Skin.SetString(nc.home.slot6,newepisodes)', 'Skin.SetString(nc.home.slot6.opt,unwatched)',
+                      'Skin.SetString(nc.movies.slot5,none)', 'Skin.SetString(nc.movies.slot5.opt,)',
+                      'Skin.SetBool(nc.migrated.unwatched)']
+    fake.true.add('Skin.HasSetting(nc.migrated.unwatched)')
+    fake.builtins.clear()
+    nightcity.startup()
+    assert not [b for b in fake.builtins if 'slot' in b or 'unwatched' in b]
 
 
 def test_startup_signals_ready(monkeypatch):
@@ -478,15 +495,15 @@ def test_startup_signals_ready_after_an_error(monkeypatch):
 def test_catalogue_per_page():
     keys = {page: [key for key, _ in sections] for page, sections in nightcity.CATALOGUE.items()}
     assert keys == {
-        'home': ['continue', 'nextup', 'combo', 'newmovies', 'newepisodes', 'genres', 'random', 'unwatched',
+        'home': ['continue', 'nextup', 'combo', 'newmovies', 'newepisodes', 'genres', 'random',
                  'toprated', 'favourites', 'trending', 'recent'],
-        'movies': ['continue', 'newmovies', 'unwatched', 'random', 'toprated', 'genres', 'sets', 'trending'],
-        'shows': ['nextup', 'combo', 'newepisodes', 'inprogress', 'unwatched', 'genres', 'trending'],
+        'movies': ['continue', 'newmovies', 'random', 'toprated', 'genres', 'sets', 'trending'],
+        'shows': ['nextup', 'combo', 'newepisodes', 'inprogress', 'genres', 'trending'],
     }
+    assert 'unwatched' not in nightcity.SECTIONS  # new movies and new episodes have it as option
     options = {key: [value for value, _ in opts] for key, opts in nightcity.CATALOGUE['home']}
     assert options['continue'] == ['both', 'movies', 'shows']
     assert options['combo'] == ['both', 'shows']  # next up is shows only: no movies alone
-    assert options['unwatched'] == ['movies', 'shows', 'both']
     assert options['recent'] == ['both', 'movies', 'shows']
     assert options['newmovies'] == options['random'] == ['all', 'unwatched']
     assert options['genres'] == options['toprated'] == options['trending'] == ['movies', 'shows']
@@ -549,8 +566,65 @@ def test_combo_keeps_an_unchanged_path(monkeypatch):
 
 def test_default_slots_are_todays_rows():
     assert nightcity.default_slots('home') == ['continue', 'newmovies', 'newepisodes', 'nextup'] + ['none'] * 4
-    assert nightcity.default_slots('movies') == ['newmovies', 'continue', 'unwatched', 'genres'] + ['none'] * 4
-    assert nightcity.default_slots('shows') == ['nextup', 'newepisodes', 'inprogress', 'unwatched'] + ['none'] * 4
+    assert nightcity.default_slots('movies') == ['newmovies', 'continue', 'genres'] + ['none'] * 5
+    assert nightcity.default_slots('shows') == ['nextup', 'newepisodes', 'inprogress'] + ['none'] * 5
+
+
+def test_slot_values_hide_the_old_unwatched_row():
+    """A slot that still holds the dropped section is an empty slot (a hidden placeholder)."""
+    raw = [('', ''), ('unwatched', 'shows')] + [('', '')] * 6
+    assert nightcity.slot_values('home', raw)[1] == ('none', '')
+
+
+def raw_slots(*pairs):
+    return list(pairs) + [('', '')] * (8 - len(pairs))
+
+
+@pytest.mark.parametrize('opt,key', [('', 'newmovies'), ('movies', 'newmovies'), ('both', 'newmovies'),
+                                     ('shows', 'newepisodes')])
+def test_unwatched_on_home_becomes_new_unwatched_only(opt, key):
+    """Unwatched (movies, the first option, or both) becomes new movies, unwatched only; its
+    shows option new episodes. The page's other row of that section is elsewhere."""
+    raw = raw_slots(('', ''), ('toprated', 'movies'), ('favourites', ''), ('', ''), ('unwatched', opt))
+    assert nightcity.unwatched_writes('home', raw) == {5: (key, 'unwatched')}
+
+
+@pytest.mark.parametrize('page,key', [('movies', 'newmovies'), ('shows', 'newepisodes')])
+def test_unwatched_on_its_page_becomes_new_unwatched_only(page, key):
+    raw = raw_slots(('trending', ''), ('none', ''), ('genres', ''), ('none', ''), ('unwatched', ''))
+    assert nightcity.unwatched_writes(page, raw) == {5: (key, 'unwatched')}
+
+
+def test_unwatched_next_to_its_new_row_goes():
+    """A page shows a section once: next to new movies or new episodes the row just goes."""
+    raw = raw_slots(('', ''), ('', ''), ('', ''), ('', ''), ('unwatched', 'both'))
+    assert nightcity.unwatched_writes('home', raw) == {5: ('none', '')}
+    raw = raw_slots(('newmovies', ''), ('continue', ''), ('unwatched', ''), ('genres', ''))
+    assert nightcity.unwatched_writes('movies', raw) == {3: ('none', '')}  # the settings filled it
+
+
+@pytest.mark.parametrize('page', ['home', 'movies', 'shows'])
+def test_defaults_need_no_writes(page):
+    """Who never changed a slot follows the new defaults: the unwatched row goes, the rows after it
+    move up."""
+    assert nightcity.unwatched_writes(page, raw_slots()) == {}
+
+
+def test_slots_after_a_default_unwatched_keep_their_rows():
+    """An empty slot 3 meant unwatched; it now means genres, which the user had replaced in slot
+    4: slot 3 empties, no genres row comes in."""
+    raw = raw_slots(('', ''), ('', ''), ('', ''), ('toprated', ''))
+    assert nightcity.unwatched_writes('movies', raw) == {3: ('none', '')}
+    raw = raw_slots(('', ''), ('', ''), ('', ''), ('trending', ''), ('genres', ''))
+    assert nightcity.unwatched_writes('movies', raw) == {3: ('none', '')}
+
+
+def test_default_after_a_changed_unwatched_slot_keeps_its_row():
+    """An empty slot 4 meant genres (movies) or unwatched (shows): genres must not vanish."""
+    raw = raw_slots(('', ''), ('', ''), ('toprated', ''))
+    assert nightcity.unwatched_writes('movies', raw) == {4: ('genres', '')}
+    raw = raw_slots(('', ''), ('', ''), ('genres', ''))
+    assert nightcity.unwatched_writes('shows', raw) == {}  # its slot 4 was unwatched, which goes
 
 
 def test_slot_values_fill_defaults():

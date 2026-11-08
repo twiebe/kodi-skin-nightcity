@@ -9,7 +9,7 @@ pytestmark = pytest.mark.e2e
 
 PAGES = ('home', 'movies', 'shows')
 CATALOGUE_HOME = ['none', 'continue', 'nextup', 'combo', 'newmovies', 'newepisodes', 'genres', 'random',
-                  'unwatched', 'toprated', 'favourites', 'trending', 'recent', 'move']
+                  'toprated', 'favourites', 'trending', 'recent', 'move']
 
 
 def skin(name):
@@ -70,7 +70,7 @@ def test_defaults_are_todays_pages(home):
     assert not true('Control.IsVisible(9205)')
     builtin('SetFocus(9102)')
     wait_for('Integer.IsGreater(Container(9401).NumItems,0)')  # movies: new movies first
-    wait_for('Integer.IsGreater(Container(9403).NumItems,0)')  # unwatched third
+    assert not true('Control.IsVisible(9404)')  # the genre row is third, nothing after it
     screenshot('hs-default-movies')
     builtin('SetFocus(9103)')
     wait_for('Integer.IsGreater(Container(9502).NumItems,0)')  # shows: new episodes second
@@ -80,7 +80,8 @@ def test_defaults_are_todays_pages(home):
 def test_page_fills_defaults_and_labels(settings):
     assert [skin('nc.home.slot{}'.format(n)) for n in range(1, 9)] == \
         ['continue', 'newmovies', 'newepisodes', 'nextup', 'none', 'none', 'none', 'none']
-    assert skin('nc.movies.slot4') == 'genres' and skin('nc.movies.spotlight') == 'all'
+    assert skin('nc.movies.slot3') == 'genres' and skin('nc.movies.slot4') == 'none'
+    assert skin('nc.movies.spotlight') == 'all'
     assert skin('nc.shows.interval') == '15'
     assert 'Continue watching' in info('Control.GetLabel(221)')['Control.GetLabel(221)']
     screenshot('hs-settings-home')
@@ -264,3 +265,26 @@ def test_the_last_page_shown_cannot_be_hidden(settings):
         builtin('Skin.Reset(nc.menu.hide.movies)')
     finally:
         builtins(*('Skin.Reset({})'.format(h) for h in hidden))
+
+
+def test_old_unwatched_slot_becomes_new_episodes_unwatched_only(home):
+    """Up to 0.4.90 there was a section Unwatched: startup turns it once into new episodes (its
+    option shows) or new movies, unwatched only (scripts/nightcity.py drop_unwatched)."""
+    reset()
+    builtins('Skin.SetString(nc.home.slot3,toprated)', 'Skin.SetString(nc.home.slot5,unwatched)',
+             'Skin.SetString(nc.home.slot5.opt,shows)', 'Skin.Reset(nc.migrated.unwatched)')
+    try:
+        assert not true('Control.IsVisible(9205)')  # not in the catalogue: an empty slot
+        builtin('RunScript(special://skin/scripts/nightcity.py,startup)')
+        wait_for('Skin.HasSetting(nc.migrated.unwatched)', timeout=15)
+        assert skin('nc.home.slot5') == 'newepisodes' and skin('nc.home.slot5.opt') == 'unwatched'
+        assert skin('nc.home.slot3') == 'toprated'
+        builtin('ActivateWindow(Settings)')  # Home builds its rows anew when it opens again
+        wait_for('Window.IsActive(settings)')
+        action('back')
+        wait_for('Window.IsActive(home)')
+        wait_for('Integer.IsGreater(Container(9205).NumItems,0)', timeout=15)
+        screenshot('hs-home-unwatched-migrated')
+    finally:
+        reset()
+        builtin('Skin.SetBool(nc.migrated.unwatched)')

@@ -707,10 +707,6 @@ msgctxt "#31246"
 msgid "A new choice from the whole library every time Home opens."
 msgstr "ホームを開くたびに、ライブラリ全体から新しく選んで表示します。"
 
-msgctxt "#31247"
-msgid "What never played, newest first."
-msgstr "一度も再生されていない作品を、新しい順に表示します。"
-
 msgctxt "#31248"
 msgid "Sorted by rating, from 7.0 up."
 msgstr "レーティング7.0以上の作品を、レーティング順に表示します。"

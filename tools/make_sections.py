@@ -51,7 +51,6 @@ def pl(name):
 
 
 IN_PROGRESS = {'movies': [pl('WidgetInProgressMovies')], 'shows': [pl('WidgetInProgressEpisodes')]}
-UNWATCHED = {'movies': [pl('WidgetUnwatchedMovies')], 'shows': [pl('WidgetUnwatchedShows')]}
 RECENT = {'movies': [pl('WidgetRecentMovies')], 'shows': [pl('WidgetRecentEpisodes')]}
 
 
@@ -81,8 +80,6 @@ def section(page, key, kind):
         return {'content': [pl('WidgetNewShows' + ('Unwatched' if kind == 'unwatched' else ''))]}
     if key == 'random':
         return {'content': [pl('WidgetRandomMovies' + ('Unwatched' if kind == 'unwatched' else ''))]}
-    if key == 'unwatched':
-        return {'content': both(UNWATCHED)[kind]}
     if key == 'toprated':
         return {'content': [pl('WidgetTopRated' + kind.capitalize())]}
     if key == 'favourites':

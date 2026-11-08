@@ -707,10 +707,6 @@ msgctxt "#31246"
 msgid "A new choice from the whole library every time Home opens."
 msgstr "Una selección nueva de toda la biblioteca cada vez que se abre Inicio."
 
-msgctxt "#31247"
-msgid "What never played, newest first."
-msgstr "Lo que nunca se ha reproducido, lo más nuevo primero."
-
 msgctxt "#31248"
 msgid "Sorted by rating, from 7.0 up."
 msgstr "Ordenadas por valoración, a partir de 7.0."
