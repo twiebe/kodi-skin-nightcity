@@ -242,7 +242,6 @@
         </definition>
     </include>
 
-    <!-- A focused card's glow, under its artwork, 24 px past it on each side -->
     <!-- A card that twitches when it gets the focus (Confuse's glitches): none here -->
     <include name="LookCardTwitch">
         <param name="focused"/>
@@ -250,6 +249,7 @@
         <param name="item"/>
         <definition/>
     </include>
+    <!-- A focused card's glow, under its artwork, 24 px past it on each side -->
     <include name="LookCardFocus">
         <param name="glowwidth"/>
         <param name="glowheight"/>
