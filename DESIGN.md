@@ -80,10 +80,15 @@ The Music page's album spotlight does the same on an album or an artist card, wi
 an album as far as the card has it; a genre leaves it alone. All of it from the library, no online
 lookups, and no ratings since that spotlight has none. Its buttons are out of sight meanwhile.
 
-A page whose spotlight is off keeps the hero, without buttons: on a title card it follows the card
-as above; anywhere else (the top menu, a genre tab) it previews the title Down would land on, the
-current title of the row that had the cursor last, before any the first row with titles. Moving
-along the menu to such a page previews its title at once; Down lands on it.
+Home, movies and shows each have their own spotlight, with its source and change interval. A page
+whose spotlight is off has no hero: its rows start at the top, Down from the menu goes into them, Up
+from the first row back to the menu. A spotlight whose interval is "still" keeps its hero and its
+buttons (play, info, all movies or all shows), but shows the title Down would land on instead of one
+of its own: the current title of the row that had the cursor last, before any the first row with
+titles. The buttons act on that title (play plays a movie or an episode, a show opens its next
+episode, anything else its page), Left and Right only move between them, Down lands on exactly that
+title, Up from the rows comes back to the buttons. Moving along the menu to such a page shows its
+title at once; on a title card the hero follows the card as above.
 
 Both swaps fade 400 ms, as long as the spotlight's own crossfade of poster, logo and backdrop. Onto
 a card the spotlight fades out under the card's hero fading in. Off a card the card's hero goes at

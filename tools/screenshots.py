@@ -367,9 +367,10 @@ def prepare(kodi):
         wait_until(lambda: any(a['addonid'] == WEATHER for a in kodi.rpc('Addons.GetAddons')['addons']), 30, WEATHER)
     kodi.rpc('Addons.SetAddonEnabled', {'addonid': WEATHER, 'enabled': True})
     kodi.rpc('Settings.SetSettingValue', {'setting': 'weather.addon', 'value': WEATHER})
-    # a still spotlight: each shot picks its title (Kodi reads the interval when Home loads)
-    for name in ('SpotlightInterval', 'nc.shows.interval', 'nc.music.interval'):
-        kodi.builtin('Skin.SetString({},off)'.format(name))
+    # a slow spotlight: each shot picks its title and keeps it (settle_on); "still" would show a
+    # title of the rows instead (Kodi reads the interval when Home loads)
+    for name in ('SpotlightInterval', 'nc.movies.interval', 'nc.shows.interval'):
+        kodi.builtin('Skin.SetString({},60)'.format(name))
     # TMDb's own rating next to the ones the API keys bring
     kodi.builtin('Skin.SetBool(nc.ratings.show.tmdb)')
     movies = {m['title']: m for m in kodi.rpc('VideoLibrary.GetMovies', {'properties': ['title', 'runtime']})['movies']}
@@ -420,7 +421,8 @@ def home(kodi, page='home'):
 
 
 def spotlight_on(kodi, container, title):
-    """Move the (still) spotlight CONTAINER to TITLE."""
+    """Move the spotlight CONTAINER to TITLE; its interval starts anew."""
+    kodi.builtin('Skin.TimerStart(nc_spot_hold)')
     kodi.wait('Integer.IsGreater(Container({}).NumItems,0) + !Container({}).IsUpdating'.format(container, container))
     total = int(kodi.info('Container({}).NumItems'.format(container)))
     for offset in range(total):
@@ -430,6 +432,16 @@ def spotlight_on(kodi, container, title):
             kodi.wait('String.IsEqual(Container({}).ListItem.Label,{})'.format(container, title))
             return
     raise RuntimeError('{} is not in spotlight {}'.format(title, container))
+
+
+def settle_on(kodi, container, title):
+    """settle, with the spotlight CONTAINER on TITLE at the end: it turned meanwhile, put it back."""
+    for _ in range(3):
+        settle(kodi)
+        if kodi.info('Container({}).ListItem.Label'.format(container)) == title:
+            return
+        spotlight_on(kodi, container, title)
+    raise RuntimeError('spotlight {} does not stay on {}'.format(container, title))
 
 
 def settle(kodi, seconds=3):
@@ -444,7 +456,7 @@ def shot_home(kodi):
     spotlight_on(kodi, 9000, 'Blade Runner 2049')
     kodi.builtin('SetFocus(9010)')
     kodi.wait('Control.HasFocus(9010)')
-    settle(kodi)
+    settle_on(kodi, 9000, 'Blade Runner 2049')
 
 
 def shot_movies(kodi):
@@ -454,7 +466,7 @@ def shot_movies(kodi):
     kodi.wait('Control.HasFocus(9010)')
     kodi.action('down', delay=1)  # the first row, on its first title
     kodi.action('right', 'right', delay=0.6)
-    settle(kodi)
+    settle_on(kodi, 9003, 'Dune: Part Two')
 
 
 def matrix_info(kodi):
@@ -511,7 +523,7 @@ def shot_player(kodi):
 def shot_music(kodi):
     home(kodi, 'music')
     spotlight_on(kodi, 9002, 'Pulse City')
-    settle(kodi)
+    settle_on(kodi, 9002, 'Pulse City')
 
 
 def shot_settings(kodi):
@@ -532,7 +544,7 @@ def shot_quick(kodi):
     kodi.wait('Control.HasFocus(9109)')
     time.sleep(0.5)
     kodi.action('down')
-    settle(kodi)
+    settle_on(kodi, 9000, 'TRON: Legacy')
 
 
 SHOTS = {  # name: (file, take)

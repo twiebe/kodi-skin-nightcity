@@ -249,53 +249,41 @@ def test_generated_includes_are_current():
 
 # --- spotlight per page ----------------------------------------------------------------------
 
-def test_spotlight_off_keeps_the_hero_but_not_its_buttons():
-    """Without spotlight a page keeps its hero, which previews a title (PeekHeroes): the rows stay
-    under it, the spotlight's own list and buttons go, Up from the rows goes to the menu."""
+def test_spotlight_off_removes_the_hero_and_lifts_the_rows():
+    """Off is gone: no hero, no buttons, no title from the rows; the rows start at the top, Up
+    from the first goes to the menu."""
     on = controls(load('Home.xml'))
     assert on['9210'].findtext('top') == 'LookPageRowsTop' and on['9210'].findtext('onup') == '9050'
     assert '<constant name="LookPageRowsTop">619</constant>' in (ROOT / '1080i' / 'Includes_Look.xml').read_text(encoding='utf-8')
     off = controls(load('Home.xml', {'SpotlightSource': 'off', 'nc.movies.spotlight': 'off', 'nc.shows.spotlight': 'off'}))
-    for gone in ('9000', '9001', '9050', '9550', '9300'):
+    for gone in ('9000', '9001', '9003', '9050', '9550', '9300', '9301'):
         assert gone not in off
+    assert not [i for i in off if i[:3] in ('936', '937', '938')]  # nothing of the still hero
     for page in PAGES:
         rows_ = off[PAGES[page] + '10']
-        assert rows_.findtext('top') == 'LookPageRowsTop' and rows_.findtext('height') == '468'
+        assert int(rows_.findtext('top')) < 200 and int(rows_.findtext('height')) >= 2 * 468
         assert rows_.findtext('onup') == '9100'
         assert off[PAGES[page] + '01'].findtext('onup') == '9100'
-        # a preview group per row, no buttons in it
-        groups = [off[str(base + n)] for base in (PEEK[page],) for n in range(1, 9)]
-        assert all(g.findtext('visible') == '$EXP[PeekRow{}0{}]'.format(PAGES[page], n) for n, g in enumerate(groups, 1))
-        # the tags are buttons only for their width, without an id: nothing to land on
-        assert not [c for g in groups for c in g.iter('control') if c.get('type') in ('button', 'list') and c.get('id')]
-    assert not [i for i in ('9361', '9371', '9381') if i in on]  # only built without spotlight
     window = load('Home.xml', {'SpotlightSource': 'off'})
     assert window.findtext('defaultcontrol') == '9101'
     assert '9003' in controls(window) and '9000' not in controls(window)  # movies has its own
     assert load('Home.xml').findtext('defaultcontrol') == '9010'
+    assert load('Home.xml', {'SpotlightInterval': 'off'}).findtext('defaultcontrol') == '9010'
 
 
-def test_menu_moves_down_onto_the_previewed_title():
-    """Down from the menu: on a page without spotlight onto the title its hero previews, with no
-    title in the rows to the rows; else the spotlight's buttons."""
-    skin = {'SpotlightSource': 'off', 'nc.movies.spotlight': 'off', 'nc.shows.spotlight': 'off'}
-    menu = controls(load('Home.xml', skin))['9100']
+def test_menu_moves_down_past_a_missing_hero():
+    """Down from the menu: into the rows of a page without spotlight, else onto the hero's
+    buttons, also on a still one."""
+    menu = controls(load('Home.xml'))['9100']
     downs = [(d.get('condition') or '', d.text) for d in menu.findall('ondown')]
-    for page in PAGES:
-        for n in range(1, 9):
-            row = '{}0{}'.format(PAGES[page], n)
-            assert ('$EXP[PeekRow{}]'.format(row), 'SetFocus({})'.format(row)) in downs
     for page, rows_ in (('movies', '9410'), ('shows', '9510')):
         cond = next(c for c, t in downs if t == rows_)
         assert 'nc.page),{}'.format(page) in cond and SPOTLIGHT[page] in cond
-        assert '!$EXP[PeekAny{}]'.format(page.capitalize()) in cond
     cond = next(c for c, t in downs if t == '9210')
-    assert 'SpotlightSource),off' in cond and '!$EXP[PeekAnyHome]' in cond
+    assert 'SpotlightSource),off' in cond
     assert downs.index(next(d for d in downs if d[1] == '9510')) < downs.index(next(d for d in downs if d[1] == '9550'))
-    assert downs[-1] == ('![$EXP[PeekAnyHome] | $EXP[PeekAnyMovies] | $EXP[PeekAnyShows]]', '9050')
-
-
-PEEK = {'home': 9360, 'movies': 9370, 'shows': 9380}
+    assert downs[-1] == ('', '9050')
+    assert [d for d in downs if 'Peek' in d[0] or 'SetFocus' in d[1]] == []
 
 
 def autoscroll_times(list_id, skin):
@@ -317,6 +305,19 @@ def test_spotlight_intervals_per_page():
     assert autoscroll_times('9000', {'SpotlightInterval': '10', 'nc.movies.interval': '60'}) == ['10000']
     assert autoscroll_times('9003', {'SpotlightInterval': '10', 'nc.movies.interval': '60'}) == ['60000']
     assert autoscroll_times('9001', {'SpotlightInterval': '10', 'nc.movies.interval': '60'}) == ['10000']
+
+
+def test_a_still_spotlight_loads_no_list():
+    """Interval "still": the hero shows a title from the rows (tests/static/test_peek_hero.py),
+    the page's spotlight list is not built, its plugin or playlist never loads."""
+    for skin, gone, kept in (({'SpotlightInterval': 'off'}, ('9000', '9003', '9001'), ()),
+                             ({'SpotlightInterval': 'off', 'nc.movies.interval': '30'}, ('9000', '9001'), ('9003',)),
+                             ({'nc.movies.interval': 'off'}, ('9003',), ('9000', '9001')),
+                             ({'nc.shows.interval': 'off'}, ('9001',), ('9000', '9003'))):
+        c = controls(load('Home.xml', skin))
+        assert not [g for g in gone if g in c], skin
+        assert [k for k in kept if k in c] == list(kept), skin
+    assert autoscroll_times('9003', {'SpotlightInterval': 'off', 'nc.movies.interval': '30'}) == ['30000']
 
 
 def test_each_movie_spotlight_is_built_with_its_page():
@@ -366,6 +367,7 @@ def test_menu_entries_can_be_hidden():
 def combos():
     yield {}
     yield {'SpotlightSource': 'off', 'nc.movies.spotlight': 'off', 'nc.shows.spotlight': 'off'}
+    yield {'SpotlightInterval': 'off', 'nc.movies.interval': 'off', 'nc.shows.interval': 'off'}
     yield {'nc.{}.slot{}'.format(p, n): 'none' for p in PAGES for n in range(1, 9)}
     rnd = random.Random(7)
     for _ in range(12):
@@ -376,6 +378,8 @@ def combos():
             for n, key in enumerate(chosen, 1):
                 skin['nc.{}.slot{}'.format(page, n)] = key
             skin[SPOTLIGHT[page]] = rnd.choice(['', 'unwatched', 'off'])
+        for name in ('SpotlightInterval', 'nc.movies.interval', 'nc.shows.interval'):
+            skin[name] = rnd.choice(['', '30', 'off'])
         yield skin
 
 

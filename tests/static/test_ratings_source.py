@@ -86,7 +86,7 @@ def test_heroes_show_no_library_rating_either_with_the_setting_but_the_info_page
     assert '<param name="library" default="Skin.HasSetting(nc.ratings.library)"/>' in body
     line = re.search(r'<include content="RatingsLine">(.*?)</include>', body, re.S).group(1)
     assert '<param name="library" value="$PARAM[library]"/>' in line
-    for hero in ('MovieHeroBody', 'ShowHero', 'FollowHero'):
+    for hero in ('MovieHeroBody', 'ShowHeroBody', 'FollowHero'):
         hero_body = re.search(r'<include name="{}">(.*?)\n    </include>'.format(hero), home, re.S).group(1)
         assert '<param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)"/>' in hero_body, hero
     assert 'nc.ratings.titleonly' not in (SKIN / 'DialogVideoInfo.xml').read_text(encoding='utf-8')

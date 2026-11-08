@@ -467,18 +467,27 @@ def settings_variables():
     return out
 
 
-# --- the preview of a page without spotlight -------------------------------------------------
-# Its hero stays and shows the title the cursor would land on: the current title of the row that
-# had the focus last (nc.peek.<page>, set by the row), or of the first row with titles before any.
-# Kodi has no list item without a focused list, so each row gets its own copy of the hero that
-# follows a card (FollowHero, Includes_Home.xml): the same XML with Container(row).ListItem for
-# ListItem, and copies of the variables and expressions it reads.
+# --- the hero of a still spotlight -----------------------------------------------------------
+# A page whose spotlight stands still (interval "still", Includes_Home.xml SpotlightStill<page>)
+# keeps its hero and buttons and shows the title the cursor would land on: the current title of
+# the row that had the focus last (nc.peek.<page>, set by the row), or of the first row with titles
+# before any. Kodi has no list item without a focused list, so each row gets its own copy of the
+# hero that follows a card (FollowHero, Includes_Home.xml): the same XML with Container(row).ListItem
+# for ListItem, and copies of the variables and expressions it reads. The buttons act on that title
+# (PeekPlay, PeekInfo, PeekItemPath, PeekPlayLabel) and Down lands on it (PeekDown).
 
-PEEK_ID = {'home': 9360, 'movies': 9370, 'shows': 9380}  # + n: the preview group of slot n
-SPOTLIGHT_OFF = {'home': 'String.IsEqual(Skin.String(SpotlightSource),off)',
-                 'movies': 'String.IsEqual(Skin.String(nc.movies.spotlight),off)',
-                 'shows': 'String.IsEqual(Skin.String(nc.shows.spotlight),off)'}
+PEEK_ID = {'home': 9360, 'movies': 9370, 'shows': 9380}  # + n: the hero group of slot n
 TITLE_TYPES = ('movie', 'tvshow', 'episode', 'season')
+# a card the play button plays: (type, action with {item} for Container(row).ListItem)
+PLAYS = (('movie', 'NotifyAll(nightcity,play:movie:$INFO[{item}.DBID]:resume:home)'),
+         ('episode', 'NotifyAll(nightcity,play:episode:$INFO[{item}.DBID]:resume:home)'),
+         ('tvshow', 'NotifyAll(nightcity,next_episode:$INFO[{item}.DBID])'))
+# the title alone as a one-item list, for the buttons' context menu and info key
+ITEM_PATHS = (('movie', 'videodb://movies/titles/?videoversionid=0&mediaid=$INFO[{item}.DBID]'),
+              ('episode', 'videodb://tvshows/titles/$INFO[{item}.TvShowDBID]/$INFO[{item}.Season]/?xsp='
+                          '{{"rules":{{"and":[{{"field":"episode","operator":"is","value":["$INFO[{item}.Episode]"]}}]}},"type":"episodes"}}'),
+              ('tvshow', 'videodb://tvshows/titles/?xsp={{"rules":{{"and":[{{"field":"path","operator":"is","value":'
+                         '["$INFO[{item}.Path]"]}}]}},"type":"tvshows"}}'))
 
 
 def titles(item):
@@ -553,12 +562,12 @@ def peek_parts():
     swap = [c for c in follow if c.tag == 'animation' or (c.tag == 'include' and not c.get('content'))]
     inner = ''.join(ET.tostring(c, encoding='unicode') for c in follow if c.tag != 'visible' and c not in swap)
     fades = ''.join(ET.tostring(c, encoding='unicode') for c in swap)
-    out = ['    <!-- The preview of a page without spotlight (see tools/make_sections.py peek_parts) -->']
+    out = ['    <!-- The hero of a still spotlight (see tools/make_sections.py peek_parts) -->']
     for page in PAGES:
         cap = page.capitalize()
         # also on a card: its title is the current one of its row, which names itself on focus
-        out.append('    <expression name="PeekOn{}">{} + {}</expression>'.format(
-            cap, escape(PAGE_SHOWN[page]), SPOTLIGHT_OFF[page]))
+        out.append('    <expression name="PeekOn{}">{} + $EXP[SpotlightStill{}]</expression>'.format(
+            cap, escape(PAGE_SHOWN[page]), cap))
         for row in rows(page):
             out.append('    <expression name="PeekTitle{0}">Control.IsVisible({0}) + Integer.IsGreater(Container({0}).NumItems,0) + {1}</expression>'.format(
                 row, titles('Container({}).ListItem'.format(row))))
@@ -570,6 +579,13 @@ def peek_parts():
             out.append('    <expression name="PeekRow{0}">$EXP[PeekOn{1}] + [[String.IsEqual({2},{0}) + $EXP[PeekTitle{0}]] | [!$EXP[PeekKept{1}] + {3}]]</expression>'.format(
                 row, cap, prop, first))
         out.append('    <expression name="PeekAny{}">{}</expression>'.format(cap, ' | '.join('$EXP[PeekRow{}]'.format(r) for r in rows(page))))
+        # the shown title is none the play button plays (a season, a card without library id): its page
+        for row in rows(page):
+            item = 'Container({}).ListItem'.format(row)
+            plays = ' | '.join('String.IsEqual({}.DBType,{})'.format(item, kind) for kind, _ in PLAYS)
+            out.append('    <expression name="PeekNoPlay{0}">$EXP[PeekRow{0}] + ![[{1}] + !String.IsEmpty({2}.DBID)]</expression>'.format(row, plays, item))
+        out.append('    <expression name="PeekNoPlay{}">{}</expression>'.format(cap, ' | '.join('$EXP[PeekNoPlay{}]'.format(r) for r in rows(page))))
+    out += peek_variables()
     # the variables and expressions of the follow hero, once per row
     for page in PAGES:
         for row in rows(page):
@@ -581,8 +597,9 @@ def peek_parts():
             for name in sorted(expressions):
                 out.append('    <expression name="{}{}">{}</expression>'.format(
                     name, row, escape(_for_row(exp_defs[name].text, row, variables, expressions))))
-    # per page, which Home builds only while that page has no spotlight (Home.xml): the heroes,
-    # one group per row (the service looks at them), their backdrops, and Down onto the title
+    # per page, which Home builds only while that page stands still (Home.xml, Includes_Home.xml):
+    # the heroes, one group per row (the service looks at them), their backdrops, Down onto the
+    # title and what the buttons do with it
     for page in PAGES:
         cap = page.capitalize()
         out += ['    <include name="PeekHeroes{}">'.format(cap), '        <control type="group">',
@@ -603,6 +620,43 @@ def peek_parts():
         out.append('    <include name="PeekDown{}">'.format(cap))
         out += ['        <ondown condition="$EXP[PeekRow{0}]">SetFocus({0})</ondown>'.format(row) for row in rows(page)]
         out.append('    </include>')
+        # play: a movie or an episode plays (resuming), a show opens its next episode as on its
+        # card; anything else opens its page from its card, as OK on it, and back returns to button
+        out += ['    <include name="PeekPlay{}">'.format(cap), '        <param name="button"/>', '        <definition>']
+        for row in rows(page):
+            item = 'Container({}).ListItem'.format(row)
+            for kind, act in PLAYS:
+                cond = '$EXP[PeekRow{0}] + String.IsEqual({1}.DBType,{2}) + !String.IsEmpty({1}.DBID)'.format(row, item, kind)
+                out.append('            ' + action('onclick', act.format(item=item), cond))
+        for row in rows(page):
+            out.append('            ' + action('onclick', 'SetProperty(nc.spot.back,$PARAM[button],home)', '$EXP[PeekNoPlay{}]'.format(row)))
+            out.append('            ' + action('onclick', 'SetFocus({})'.format(row), '$EXP[PeekNoPlay{}]'.format(row)))
+        out.append('            ' + action('onclick', 'Action(Info)', '$EXP[PeekNoPlay{}]'.format(cap)))
+        out += ['        </definition>', '    </include>']
+        # info: the page of the title, opened on its card; the button sets nc.spot.back and runs Action(Info)
+        out.append('    <include name="PeekInfo{}">'.format(cap))
+        out += ['        ' + action('onclick', 'SetFocus({})'.format(row), '$EXP[PeekRow{}]'.format(row)) for row in rows(page)]
+        out.append('    </include>')
+    return out
+
+
+def peek_variables():
+    """Play label and one-item path of the title a still hero shows, for its buttons."""
+    out = ['    <variable name="PeekPlayLabel">']
+    for page in PAGES:
+        for row in rows(page):
+            item = 'Container({}).ListItem'.format(row)
+            out.append('        <value condition="$EXP[PeekRow{0}] + {1}.IsResumable">▶ $LOCALIZE[31043] $INFO[{1}.PercentPlayed]%</value>'.format(row, item))
+            out.append('        <value condition="$EXP[PeekRow{0}] + String.IsEqual({1}.DBType,tvshow)">▶ $LOCALIZE[31106]</value>'.format(row, item))
+    out += ['        <value>▶ $LOCALIZE[31010]</value>', '    </variable>']
+    out.append('    <variable name="PeekItemPath">')
+    for page in PAGES:
+        for row in rows(page):
+            item = 'Container({}).ListItem'.format(row)
+            for kind, path in ITEM_PATHS:
+                out.append('        <value condition="$EXP[PeekRow{0}] + String.IsEqual({1}.DBType,{2}) + !String.IsEmpty({1}.DBID)">{3}</value>'.format(
+                    row, item, kind, escape(path.format(item=item))))
+    out += ['        <value>videodb://movies/titles/?xsp={"type":"movies","limit":1}</value>', '    </variable>']
     return out
 
 

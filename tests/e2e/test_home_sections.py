@@ -150,7 +150,10 @@ def test_spotlight_off(settings):
     builtin('SetFocus(9101)')
     action('down')
     wait_for('ControlGroup(9210).HasFocus()')
+    assert not true('Control.IsVisible(9350)') or not true('Control.IsVisible(9361)')  # no hero at all
     screenshot('hs-home-spotlight-off')
+    action('up')
+    wait_for('Control.HasFocus(9101)')  # Up from the first row to the menu
     builtin('SetFocus(9102)')
     wait_for('Control.IsVisible(9300)')  # movies keeps its spotlight
     builtin('SetFocus(9101)')

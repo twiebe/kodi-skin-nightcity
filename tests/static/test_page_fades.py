@@ -11,6 +11,7 @@ ROWS = {'home': '9210', 'movies': '9410', 'shows': '9510', 'system': '9610', 'se
 SETTINGS_WINDOWS = ('Settings.xml', 'SettingsCategory.xml', 'SkinSettings.xml', 'SettingsSystemInfo.xml',
                     'EventLog.xml', 'AddonBrowser.xml', 'FileManager.xml', 'SettingsProfile.xml')
 SPOTLIGHT_OFF = {'SpotlightSource': 'off', 'nc.movies.spotlight': 'off', 'nc.shows.spotlight': 'off'}
+SPOTLIGHT_STILL = {'SpotlightInterval': 'off', 'nc.movies.interval': 'off', 'nc.shows.interval': 'off'}
 
 
 def constants():
@@ -108,10 +109,17 @@ def test_home_page_builds_up_block_by_block(page):
 
 
 @pytest.mark.parametrize('page', ('home', 'movies', 'shows'))
-def test_rows_without_spotlight_come_after_the_hero(page):
-    """Without a spotlight the hero stays and previews a title: the rows fade in after it, as
-    with a spotlight."""
+def test_rows_without_spotlight_come_first(page):
+    """Without a spotlight the rows are the page: they start at once."""
     rows = next(c for c, _ in page_blocks(page, SPOTLIGHT_OFF) if c.get('id') == ROWS[page])
+    assert page_fade(rows, page)[0] == 0
+
+
+@pytest.mark.parametrize('page', ('home', 'movies', 'shows'))
+def test_rows_under_a_still_spotlight_come_after_the_hero(page):
+    """A still spotlight keeps its hero, showing a title of the rows: they fade in after it, as
+    with a turning one."""
+    rows = next(c for c, _ in page_blocks(page, SPOTLIGHT_STILL) if c.get('id') == ROWS[page])
     with_spotlight = next(c for c, _ in page_blocks(page) if c.get('id') == ROWS[page])
     assert page_fade(rows, page) == page_fade(with_spotlight, page)
 

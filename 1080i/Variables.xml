@@ -49,14 +49,17 @@
         <value>special://skin/playlists/SpotlightShows.xsp</value>
     </variable>
     <!-- the spotlight title alone, for the spotlight buttons (SpotlightButton): home's or the
-         movies page's; until the spotlight has one, any one title keeps the buttons focusable -->
+         movies page's, on a still page the title its hero shows (PeekItemPath); until the
+         spotlight has one, any one title keeps the buttons focusable -->
     <variable name="SpotlightItemPath">
+        <value condition="$EXP[PeekAnyHome] | $EXP[PeekAnyMovies]">$VAR[PeekItemPath]</value>
         <value condition="String.IsEqual(Window(Home).Property(nc.page),movies) + !String.IsEmpty(Container(9003).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9003).ListItem.DBID]</value>
         <value condition="!String.IsEqual(Window(Home).Property(nc.page),movies) + !String.IsEmpty(Container(9000).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9000).ListItem.DBID]</value>
         <value>videodb://movies/titles/?xsp={"type":"movies","limit":1}</value>
     </variable>
     <!-- shows have no id filter: the show's folder is unique -->
     <variable name="SpotlightShowItemPath">
+        <value condition="$EXP[PeekAnyShows]">$VAR[PeekItemPath]</value>
         <value condition="!String.IsEmpty(Container(9001).ListItem.Path)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":"$INFO[Container(9001).ListItem.Path]"}]},"type":"tvshows"}</value>
         <value>videodb://tvshows/titles/?xsp={"type":"tvshows","limit":1}</value>
     </variable>
@@ -636,10 +639,17 @@
         <value condition="Player.Muted">$LOCALIZE[31095]</value>
         <value>vol $INFO[Player.Volume]</value>
     </variable>
+    <!-- what the play button of the movie and the show hero does: on a still page with the title
+         its hero shows -->
     <variable name="SpotlightPlayLabel">
+        <value condition="$EXP[PeekAnyHome] | $EXP[PeekAnyMovies]">$VAR[PeekPlayLabel]</value>
         <value condition="String.IsEqual(Window(Home).Property(nc.page),movies) + Container(9003).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9003).ListItem.PercentPlayed]%</value>
         <value condition="!String.IsEqual(Window(Home).Property(nc.page),movies) + Container(9000).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9000).ListItem.PercentPlayed]%</value>
         <value>▶ $LOCALIZE[31010]</value>
+    </variable>
+    <variable name="ShowSpotlightPlayLabel">
+        <value condition="$EXP[PeekAnyShows]">$VAR[PeekPlayLabel]</value>
+        <value>▶ $LOCALIZE[31106]</value>
     </variable>
     <variable name="SystemTileColor">
         <value condition="Control.HasFocus(9601)">focus_text</value>

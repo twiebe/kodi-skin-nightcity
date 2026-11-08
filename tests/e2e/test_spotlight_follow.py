@@ -229,18 +229,37 @@ def test_info_page_from_a_row_and_back_still_follows(back_to_home):
     assert_shows_card()
 
 
-def test_no_spotlight_the_preview_shows_the_card(home):
-    """Without spotlight the hero stays and previews a title (test_peek_hero.py); on a card the
-    preview of its row shows it, the follow hero stays out."""
+def test_no_spotlight_nothing_to_follow(home):
+    """Without spotlight there is no hero: the rows start at the top."""
     builtin('Skin.SetString(SpotlightSource,off)')
     try:
         reopen_home()
-        focus_row(9202)
+        wait_for('Integer.IsGreater(Container(9202).NumItems,0)', timeout=30)
+        builtin('SetFocus(9202)')
+        wait_for('Control.HasFocus(9202)')
         assert label('ListItem.DBType') == 'movie'
-        wait_for('Control.IsVisible(9362) + !' + FOLLOWS)
+        time.sleep(0.5)
+        assert not true(FOLLOWS) and not true('Control.IsVisible(9362)') and not true('Control.IsVisible(9300)')
         screenshot('follow-spotlight-off')
     finally:
         builtin('Skin.Reset(SpotlightSource)')
+        reopen_home()
+
+
+def test_still_spotlight_shows_the_card(home):
+    """A still spotlight shows a title of the rows (test_peek_hero.py); on a card the hero of its
+    row shows it, the follow hero stays out."""
+    builtin('Skin.SetString(SpotlightInterval,off)')
+    try:
+        reopen_home()
+        wait_for('Integer.IsGreater(Container(9202).NumItems,0)', timeout=30)
+        builtin('SetFocus(9202)')
+        wait_for('Control.HasFocus(9202)')
+        assert label('ListItem.DBType') == 'movie'
+        wait_for('Control.IsVisible(9362) + !' + FOLLOWS)
+        screenshot('follow-spotlight-still')
+    finally:
+        builtin('Skin.Reset(SpotlightInterval)')
         reopen_home()
 
 

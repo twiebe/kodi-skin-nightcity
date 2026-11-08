@@ -864,11 +864,12 @@ def _wait_for_video():
         seconds += step
 
 
-def play(mediatype, dbid, mode='resume'):
+def play(mediatype, dbid, mode='resume', back=''):
     """Play a library item from its info page. PlayMedia(path,resume) cannot resume a plugin
     path, Player.Open with the database id uses the library's resume point. The info page stays
     until the video is up (closing it first shows Home while the box starts playback) and closes
-    then, as Kodi would draw it over the video. For an episode it comes back after playback."""
+    then, as Kodi would draw it over the video. For an episode it comes back after playback,
+    unless BACK is 'home': started from the buttons of a still spotlight, Home stays."""
     import xbmc
     params = player_open_params(mediatype, dbid, mode)
     if params is None:
@@ -886,7 +887,7 @@ def play(mediatype, dbid, mode='resume'):
     if not started:
         _log('play: {} {} did not start, or the info page was closed'.format(mediatype, dbid))
         return
-    if mediatype == 'episode':
+    if mediatype == 'episode' and back != 'home':
         _return_to_episode(int(dbid))
 
 
@@ -2125,8 +2126,8 @@ HERO_PROPS = 'nc.kept.{}.{}'
 HEROES = (('9000', '9304'), ('9003', '9305'), ('9001', '9306'))
 # the group of the hero while it follows a row title, where its ratings go
 FOLLOW_GROUP = '9302'
-# a page without spotlight previews the title of a row (Includes_Sections.xml PeekHeroes): the
-# group of slot n is base + n, its row list is the page's row id; the same ratings as a card
+# a still spotlight shows the title of a row (Includes_Sections.xml PeekHeroes): the group of
+# slot n is base + n, its row list is the page's row id; the same ratings as a card
 PEEK_GROUPS = tuple((str(base + n), '{}0{}'.format(row, n)) for base, row in ((9360, 92), (9370, 94), (9380, 95))
                     for n in range(1, 9))
 PEEK_SHOWN = ' | '.join('Control.IsVisible({})'.format(group) for group, _ in PEEK_GROUPS)
@@ -2277,8 +2278,8 @@ def _point_helper(kept, home, container):
 def follow_tick(kept, home, now, row=None):
     """The hero follows the focused card: point TMDb Helper at its row once the cursor stood
     still and the card has nothing kept, let go when the ratings are kept or at the next move;
-    keep only what it found while it was pointed, and show that. ROW: the hero previews the
-    current title of that row instead (a page without spotlight), as if it were the focused card."""
+    keep only what it found while it was pointed, and show that. ROW: the hero shows the
+    current title of that row instead (a still spotlight), as if it were the focused card."""
     import xbmc
     item = 'Container({}).ListItem.'.format(row) if row else 'ListItem.'
     row = row or xbmc.getInfoLabel(FOLLOW_ROW)

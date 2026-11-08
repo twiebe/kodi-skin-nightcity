@@ -74,9 +74,11 @@ class State:
             (r'Player\.HasVideo$', lambda m: False),
             # $EXP[InfoPlaying] (Includes_Info.xml): the page is not the title that plays
             (r'InfoPlaying$', lambda m: False),
-            # $EXP[PeekRow<id>], $EXP[PeekAny<page>] (Includes_Sections.xml): no page previews a
-            # title unless `extra` says so
-            (r'Peek(Row|Any)\w+$', lambda m: False),
+            # $EXP[PeekRow<id>], $EXP[PeekAny<page>] (Includes_Sections.xml), $EXP[SpotlightStill<page>]
+            # and SpotlightStillShown (Includes_Home.xml): no spotlight stands still and shows a
+            # title of the rows unless `extra` says so
+            (r'Peek(Row|Any|NoPlay)\w+$', lambda m: False),
+            (r'SpotlightStill\w*$', lambda m: False),
         )
         if text in self.extra:
             return self.extra[text]

@@ -14,13 +14,27 @@
     <expression name="PageFirstMusic">!$EXP[PageShownHome] + !$EXP[PageShownMovies] + !$EXP[PageShownShows] + $EXP[PageShownMusic]</expression>
     <expression name="PageFirstSearch">!$EXP[PageShownHome] + !$EXP[PageShownMovies] + !$EXP[PageShownShows] + !$EXP[PageShownMusic] + $EXP[PageShownSearch]</expression>
 
-    <!-- The cursor is on a title card of a row, on a page with its spotlight on: the hero shows that
+    <!-- A page's spotlight is off (no hero, the rows start at the top), turns (its own interval;
+         an empty one of movies or shows follows home's) or stands still (interval "still": the
+         hero keeps its buttons and shows the title Down would land on, PeekHeroes in
+         Includes_Sections.xml). Home.xml spells these out in its include conditions. -->
+    <expression name="SpotlightStillHome">!String.IsEqual(Skin.String(SpotlightSource),off) + String.IsEqual(Skin.String(SpotlightInterval),off)</expression>
+    <expression name="SpotlightStillMovies">!String.IsEqual(Skin.String(nc.movies.spotlight),off) + [String.IsEqual(Skin.String(nc.movies.interval),off) | [String.IsEmpty(Skin.String(nc.movies.interval)) + String.IsEqual(Skin.String(SpotlightInterval),off)]]</expression>
+    <expression name="SpotlightStillShows">!String.IsEqual(Skin.String(nc.shows.spotlight),off) + [String.IsEqual(Skin.String(nc.shows.interval),off) | [String.IsEmpty(Skin.String(nc.shows.interval)) + String.IsEqual(Skin.String(SpotlightInterval),off)]]</expression>
+    <expression name="SpotlightRotatesHome">!String.IsEqual(Skin.String(SpotlightSource),off) + !String.IsEqual(Skin.String(SpotlightInterval),off)</expression>
+    <expression name="SpotlightRotatesMovies">!String.IsEqual(Skin.String(nc.movies.spotlight),off) + ![String.IsEqual(Skin.String(nc.movies.interval),off) | [String.IsEmpty(Skin.String(nc.movies.interval)) + String.IsEqual(Skin.String(SpotlightInterval),off)]]</expression>
+    <expression name="SpotlightRotatesShows">!String.IsEqual(Skin.String(nc.shows.spotlight),off) + ![String.IsEqual(Skin.String(nc.shows.interval),off) | [String.IsEmpty(Skin.String(nc.shows.interval)) + String.IsEqual(Skin.String(SpotlightInterval),off)]]</expression>
+    <expression name="SpotlightStillShown">[[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + $EXP[SpotlightStillHome]] | [String.IsEqual(Window(Home).Property(nc.page),movies) + $EXP[SpotlightStillMovies]] | [String.IsEqual(Window(Home).Property(nc.page),shows) + $EXP[SpotlightStillShows]]</expression>
+    <!-- The cursor is on a title card of a row, on a page whose spotlight turns: the hero shows that
          title (FollowHero) and the rotation stands. Everywhere else, also on a card that is no
-         title, the spotlight is its random self. The Music page has its own (MusicFollows). -->
-    <expression name="SpotlightFollows">[[[ControlGroup(9210).HasFocus() + !String.IsEqual(Skin.String(SpotlightSource),off)] | [ControlGroup(9410).HasFocus() + !String.IsEqual(Skin.String(nc.movies.spotlight),off)] | [ControlGroup(9510).HasFocus() + !String.IsEqual(Skin.String(nc.shows.spotlight),off)]] + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,season)]]</expression>
-    <!-- the backdrop is the focused card's: on a row of a page with spotlight and on the rows of
-         music and search; a page without spotlight keeps its preview's (PeekFanarts) -->
-    <expression name="CardBackdrop">[ControlGroup(9210).HasFocus() + !String.IsEqual(Skin.String(SpotlightSource),off)] | [ControlGroup(9410).HasFocus() + !String.IsEqual(Skin.String(nc.movies.spotlight),off)] | [ControlGroup(9510).HasFocus() + !String.IsEqual(Skin.String(nc.shows.spotlight),off)] | ControlGroup(9710).HasFocus() | ControlGroup(9810).HasFocus()</expression>
+         title, the spotlight is its random self. A still page shows the card in its own hero.
+         The Music page has its own (MusicFollows). -->
+    <expression name="SpotlightFollows">[[ControlGroup(9210).HasFocus() + $EXP[SpotlightRotatesHome]] | [ControlGroup(9410).HasFocus() + $EXP[SpotlightRotatesMovies]] | [ControlGroup(9510).HasFocus() + $EXP[SpotlightRotatesShows]]] + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,season)]</expression>
+    <!-- the hero shows a title card of the rows, turning or still: the pills step aside -->
+    <expression name="HeroOnCard">$EXP[SpotlightFollows] | [[[ControlGroup(9210).HasFocus() + $EXP[SpotlightStillHome]] | [ControlGroup(9410).HasFocus() + $EXP[SpotlightStillMovies]] | [ControlGroup(9510).HasFocus() + $EXP[SpotlightStillShows]]] + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,season)]]</expression>
+    <!-- the backdrop is the focused card's: on a row of a page whose spotlight turns and on the
+         rows of music and search; a still page keeps its hero's (PeekFanarts) -->
+    <expression name="CardBackdrop">[ControlGroup(9210).HasFocus() + $EXP[SpotlightRotatesHome]] | [ControlGroup(9410).HasFocus() + $EXP[SpotlightRotatesMovies]] | [ControlGroup(9510).HasFocus() + $EXP[SpotlightRotatesShows]] | ControlGroup(9710).HasFocus() | ControlGroup(9810).HasFocus()</expression>
     <!-- nc.kept.follow.* name the focused card: by library id, without one (Trending) by year and label -->
     <expression name="FollowKeptIsCard">[[!String.IsEmpty(Window(Home).Property(nc.kept.follow.dbid)) + Integer.IsEqual(ListItem.DBID,Window(Home).Property(nc.kept.follow.dbid))] | [String.IsEmpty(ListItem.DBID) + !String.IsEmpty(Window(Home).Property(nc.kept.follow.label)) + String.IsEqual(ListItem.Label,Window(Home).Property(nc.kept.follow.label)) + String.IsEqual(ListItem.Year,Window(Home).Property(nc.kept.follow.year))]] + String.IsEqual(ListItem.DBType,Window(Home).Property(nc.kept.follow.dbtype))</expression>
     <!-- Off-screen list holding the spotlight items; autoscroll rotates the selection. The focused
@@ -409,11 +423,14 @@
         </definition>
     </include>
 
-    <!-- Up and down from the movie spotlight buttons -->
+    <!-- Up and down from the movie spotlight buttons; a still page's down lands on the title its
+         hero shows (PeekDown), with none in its rows on the rows -->
     <include name="MovieSpotlightUpDown">
         <onup>9100</onup>
-        <ondown condition="String.IsEqual(Window(Home).Property(nc.page),movies)">9410</ondown>
-        <ondown>9210</ondown>
+        <include condition="!String.IsEqual(Skin.String(SpotlightSource),off) + String.IsEqual(Skin.String(SpotlightInterval),off)">PeekDownHome</include>
+        <include condition="!String.IsEqual(Skin.String(nc.movies.spotlight),off) + [String.IsEqual(Skin.String(nc.movies.interval),off) | [String.IsEmpty(Skin.String(nc.movies.interval)) + String.IsEqual(Skin.String(SpotlightInterval),off)]]">PeekDownMovies</include>
+        <ondown condition="String.IsEqual(Window(Home).Property(nc.page),movies) + !$EXP[PeekAnyMovies]">9410</ondown>
+        <ondown condition="!String.IsEqual(Window(Home).Property(nc.page),movies) + !$EXP[PeekAnyHome]">9210</ondown>
     </include>
 
     <!-- A spotlight button as Kodi sees it: a one-item list holding the spotlight title, so the
@@ -491,6 +508,8 @@
             <control type="group" id="$PARAM[id]">
                 <width>55</width>
                 <height>74</height>
+                <!-- a still page has no titles to step to -->
+                <visible>!$EXP[SpotlightStillShown]</visible>
                 <include>LookDecoration</include>
             </control>
         </definition>
@@ -517,12 +536,12 @@
          home and movies, so they fade on each of the two pages (SharedPageFade); they act on the
          shown page's spotlight. -->
     <include name="MovieHero">
-        <include content="MovieHeroBody" condition="!String.IsEqual(Skin.String(SpotlightSource),off)">
+        <include content="MovieHeroBody" condition="!String.IsEqual(Skin.String(SpotlightSource),off) + !String.IsEqual(Skin.String(SpotlightInterval),off)">
             <param name="list" value="9000"/>
             <param name="page" value="[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)]"/>
             <param name="marker" value="9304"/>
         </include>
-        <include content="MovieHeroBody" condition="!String.IsEqual(Skin.String(nc.movies.spotlight),off)">
+        <include content="MovieHeroBody" condition="!String.IsEqual(Skin.String(nc.movies.spotlight),off) + ![String.IsEqual(Skin.String(nc.movies.interval),off) | [String.IsEmpty(Skin.String(nc.movies.interval)) + String.IsEqual(Skin.String(SpotlightInterval),off)]]">
             <param name="list" value="9003"/>
             <param name="page" value="String.IsEqual(Window(Home).Property(nc.page),movies)"/>
             <param name="marker" value="9305"/>
@@ -550,11 +569,20 @@
                 <include content="SpotlightButton">
                     <param name="id" value="9010"/>
                     <param name="content" value="$VAR[SpotlightItemPath]"/>
-                    <onclick condition="!String.IsEqual(Window(Home).Property(nc.page),movies)">NotifyAll(nightcity,play:movie:$INFO[Container(9000).ListItem.DBID]:resume)</onclick>
-                    <onclick condition="String.IsEqual(Window(Home).Property(nc.page),movies)">NotifyAll(nightcity,play:movie:$INFO[Container(9003).ListItem.DBID]:resume)</onclick>
-                    <onleft>Skin.TimerStart(nc_spot_hold)</onleft>
-                    <onleft condition="!String.IsEqual(Window(Home).Property(nc.page),movies)">Control.Move(9000,-1)</onleft>
-                    <onleft condition="String.IsEqual(Window(Home).Property(nc.page),movies)">Control.Move(9003,-1)</onleft>
+                    <onclick condition="!String.IsEqual(Window(Home).Property(nc.page),movies) + !$EXP[SpotlightStillHome]">NotifyAll(nightcity,play:movie:$INFO[Container(9000).ListItem.DBID]:resume)</onclick>
+                    <onclick condition="String.IsEqual(Window(Home).Property(nc.page),movies) + !$EXP[SpotlightStillMovies]">NotifyAll(nightcity,play:movie:$INFO[Container(9003).ListItem.DBID]:resume)</onclick>
+                    <!-- a still page plays the title its hero shows (PeekPlay) -->
+                    <include content="PeekPlayHome" condition="!String.IsEqual(Skin.String(SpotlightSource),off) + String.IsEqual(Skin.String(SpotlightInterval),off)">
+                        <param name="button" value="9010"/>
+                    </include>
+                    <include content="PeekPlayMovies" condition="!String.IsEqual(Skin.String(nc.movies.spotlight),off) + [String.IsEqual(Skin.String(nc.movies.interval),off) | [String.IsEmpty(Skin.String(nc.movies.interval)) + String.IsEqual(Skin.String(SpotlightInterval),off)]]">
+                        <param name="button" value="9010"/>
+                    </include>
+                    <!-- a still page has no titles to step through: left and right only move between the buttons -->
+                    <onleft condition="!String.IsEqual(Window(Home).Property(nc.page),movies) + !$EXP[SpotlightStillHome]">Skin.TimerStart(nc_spot_hold)</onleft>
+                    <onleft condition="!String.IsEqual(Window(Home).Property(nc.page),movies) + !$EXP[SpotlightStillHome]">Control.Move(9000,-1)</onleft>
+                    <onleft condition="String.IsEqual(Window(Home).Property(nc.page),movies) + !$EXP[SpotlightStillMovies]">Skin.TimerStart(nc_spot_hold)</onleft>
+                    <onleft condition="String.IsEqual(Window(Home).Property(nc.page),movies) + !$EXP[SpotlightStillMovies]">Control.Move(9003,-1)</onleft>
                     <onright>9011</onright>
                     <include>MovieSpotlightUpDown</include>
                 </include>
@@ -564,13 +592,16 @@
                     <!-- back from the info page returns here (nc_spot_back, Timers.xml); first, Action(Info)
                          opens the page modally and the click's later actions run once it closed -->
                     <param name="onclick" value="SetProperty(nc.spot.back,9011,home)"/>
-                    <onclick condition="!String.IsEqual(Window(Home).Property(nc.page),movies)">SetFocus(9000)</onclick>
-                    <onclick condition="String.IsEqual(Window(Home).Property(nc.page),movies)">SetFocus(9003)</onclick>
+                    <onclick condition="!String.IsEqual(Window(Home).Property(nc.page),movies) + !$EXP[SpotlightStillHome]">SetFocus(9000)</onclick>
+                    <onclick condition="String.IsEqual(Window(Home).Property(nc.page),movies) + !$EXP[SpotlightStillMovies]">SetFocus(9003)</onclick>
+                    <!-- a still page parks on the card of the title its hero shows (PeekInfo) -->
+                    <include condition="!String.IsEqual(Skin.String(SpotlightSource),off) + String.IsEqual(Skin.String(SpotlightInterval),off)">PeekInfoHome</include>
+                    <include condition="!String.IsEqual(Skin.String(nc.movies.spotlight),off) + [String.IsEqual(Skin.String(nc.movies.interval),off) | [String.IsEmpty(Skin.String(nc.movies.interval)) + String.IsEqual(Skin.String(SpotlightInterval),off)]]">PeekInfoMovies</include>
                     <onclick>Action(Info)</onclick>
                     <onleft>9010</onleft>
                     <onright condition="String.IsEqual(Window(Home).Property(nc.page),movies)">9012</onright>
-                    <onright condition="!String.IsEqual(Window(Home).Property(nc.page),movies)">Skin.TimerStart(nc_spot_hold)</onright>
-                    <onright condition="!String.IsEqual(Window(Home).Property(nc.page),movies)">Control.Move(9000,1)</onright>
+                    <onright condition="!String.IsEqual(Window(Home).Property(nc.page),movies) + !$EXP[SpotlightStillHome]">Skin.TimerStart(nc_spot_hold)</onright>
+                    <onright condition="!String.IsEqual(Window(Home).Property(nc.page),movies) + !$EXP[SpotlightStillHome]">Control.Move(9000,1)</onright>
                     <include>MovieSpotlightUpDown</include>
                 </include>
                 <include content="SpotlightButton">
@@ -580,14 +611,14 @@
                     <param name="onclick2" value="ActivateWindow(1110)"/>
                     <param name="visible" value="String.IsEqual(Window(Home).Property(nc.page),movies)"/>
                     <onleft>9011</onleft>
-                    <onright>Skin.TimerStart(nc_spot_hold)</onright>
-                    <onright>Control.Move(9003,1)</onright>
+                    <onright condition="!$EXP[SpotlightStillMovies]">Skin.TimerStart(nc_spot_hold)</onright>
+                    <onright condition="!$EXP[SpotlightStillMovies]">Control.Move(9003,1)</onright>
                     <include>MovieSpotlightUpDown</include>
                 </include>
             </control>
             <!-- they act on the spotlight's own title; the buttons they draw stay for Up -->
             <control type="group">
-                <visible>!$EXP[SpotlightFollows]</visible>
+                <visible>!$EXP[HeroOnCard]</visible>
                 <include>HeroSwapFade</include>
                 <control type="grouplist">
                     <left>LookHeroPillsLeft</left>
@@ -685,8 +716,94 @@
         </definition>
     </include>
 
-    <!-- Hero of the shows page: the show spotlight -->
+    <!-- Hero of the shows page: the show spotlight; a still one shows a title of the rows
+         (PeekHeroes) under the same buttons -->
     <include name="ShowHero">
+        <include condition="!String.IsEqual(Skin.String(nc.shows.spotlight),off) + ![String.IsEqual(Skin.String(nc.shows.interval),off) | [String.IsEmpty(Skin.String(nc.shows.interval)) + String.IsEqual(Skin.String(SpotlightInterval),off)]]">ShowHeroBody</include>
+        <!-- 9301: the buttons of the show hero are on screen -->
+        <control type="group" id="9301">
+            <visible>String.IsEqual(Window(Home).Property(nc.page),shows)</visible>
+            <include content="PageFade">
+                <param name="delay" value="FadeStep2"/>
+            </include>
+            <control type="group" id="9550">
+                <left>LookHeroLeft</left>
+                <top>LookHeroFocusTop</top>
+                <defaultcontrol>9551</defaultcontrol>
+                <include content="SpotlightButton">
+                    <param name="id" value="9551"/>
+                    <param name="content" value="$VAR[SpotlightShowItemPath]"/>
+                    <onclick condition="!$EXP[SpotlightStillShows]">NotifyAll(nightcity,next_episode:$INFO[Container(9001).ListItem.DBID])</onclick>
+                    <include content="PeekPlayShows" condition="!String.IsEqual(Skin.String(nc.shows.spotlight),off) + [String.IsEqual(Skin.String(nc.shows.interval),off) | [String.IsEmpty(Skin.String(nc.shows.interval)) + String.IsEqual(Skin.String(SpotlightInterval),off)]]">
+                        <param name="button" value="9551"/>
+                    </include>
+                    <onleft condition="!$EXP[SpotlightStillShows]">Skin.TimerStart(nc_spot_hold)</onleft>
+                    <onleft condition="!$EXP[SpotlightStillShows]">Control.Move(9001,-1)</onleft>
+                    <onright>9552</onright>
+                    <include>ShowSpotlightUpDown</include>
+                </include>
+                <include content="SpotlightButton">
+                    <param name="id" value="9552"/>
+                    <param name="content" value="$VAR[SpotlightShowItemPath]"/>
+                    <!-- back from the info page returns here (nc_spot_back, Timers.xml); first, Action(Info)
+                         opens the page modally and the click's later actions run once it closed -->
+                    <param name="onclick" value="SetProperty(nc.spot.back,9552,home)"/>
+                    <onclick condition="!$EXP[SpotlightStillShows]">SetFocus(9001)</onclick>
+                    <include condition="!String.IsEqual(Skin.String(nc.shows.spotlight),off) + [String.IsEqual(Skin.String(nc.shows.interval),off) | [String.IsEmpty(Skin.String(nc.shows.interval)) + String.IsEqual(Skin.String(SpotlightInterval),off)]]">PeekInfoShows</include>
+                    <onclick>Action(Info)</onclick>
+                    <onleft>9551</onleft>
+                    <onright>9553</onright>
+                    <include>ShowSpotlightUpDown</include>
+                </include>
+                <include content="SpotlightButton">
+                    <param name="id" value="9553"/>
+                    <param name="content" value="$VAR[SpotlightShowItemPath]"/>
+                    <param name="onclick" value="SetProperty(nc.library,tvshows,home)"/>
+                    <param name="onclick2" value="ActivateWindow(1110)"/>
+                    <onleft>9552</onleft>
+                    <onright condition="!$EXP[SpotlightStillShows]">Skin.TimerStart(nc_spot_hold)</onright>
+                    <onright condition="!$EXP[SpotlightStillShows]">Control.Move(9001,1)</onright>
+                    <include>ShowSpotlightUpDown</include>
+                </include>
+            </control>
+            <!-- they act on the spotlight's own title; the buttons they draw stay for Up -->
+            <control type="group">
+                <visible>!$EXP[HeroOnCard]</visible>
+                <include>HeroSwapFade</include>
+                <control type="grouplist">
+                    <left>LookHeroPillsLeft</left>
+                    <top>LookHeroPillsTop</top>
+                    <width>1420</width>
+                    <height>74</height>
+                    <orientation>horizontal</orientation>
+                    <itemgap>-4</itemgap>
+                    <include content="SpotlightPill">
+                        <param name="button" value="9551"/>
+                        <param name="label" value="$VAR[ShowSpotlightPlayLabel]"/>
+                        <param name="color" value="accent"/>
+                        <param name="textcolor" value="accent"/>
+                    </include>
+                    <include content="SpotlightPill">
+                        <param name="button" value="9552"/>
+                        <param name="label" value="$LOCALIZE[31011]"/>
+                    </include>
+                    <include content="SpotlightPill">
+                        <param name="button" value="9553"/>
+                        <param name="label" value="$LOCALIZE[31102] »"/>
+                    </include>
+                    <include>SpotlightMore</include>
+                </control>
+            </control>
+        </control>
+    </include>
+    <!-- Up and down from the show spotlight buttons, as from the movie spotlight's -->
+    <include name="ShowSpotlightUpDown">
+        <onup>9100</onup>
+        <include condition="!String.IsEqual(Skin.String(nc.shows.spotlight),off) + [String.IsEqual(Skin.String(nc.shows.interval),off) | [String.IsEmpty(Skin.String(nc.shows.interval)) + String.IsEqual(Skin.String(SpotlightInterval),off)]]">PeekDownShows</include>
+        <ondown condition="!$EXP[PeekAnyShows]">9510</ondown>
+    </include>
+    <!-- Poster and text of the show hero, from the show spotlight (list 9001) -->
+    <include name="ShowHeroBody">
         <!-- around HeroBody: Kodi does not update the children of a hidden group, so coming back
              from a row runs no page fade, only the swap's -->
         <control type="group">
@@ -717,80 +834,6 @@
         <!-- 9306: the show hero is on screen (scripts/nightcity.py HEROES) -->
         <control type="group" id="9306">
             <visible>String.IsEqual(Window(Home).Property(nc.page),shows)</visible>
-        </control>
-        <!-- 9301: the buttons of the show hero are on screen -->
-        <control type="group" id="9301">
-            <visible>String.IsEqual(Window(Home).Property(nc.page),shows)</visible>
-            <include content="PageFade">
-                <param name="delay" value="FadeStep2"/>
-            </include>
-            <control type="group" id="9550">
-                <left>LookHeroLeft</left>
-                <top>LookHeroFocusTop</top>
-                <defaultcontrol>9551</defaultcontrol>
-                <include content="SpotlightButton">
-                    <param name="id" value="9551"/>
-                    <param name="content" value="$VAR[SpotlightShowItemPath]"/>
-                    <param name="onclick" value="NotifyAll(nightcity,next_episode:$INFO[Container(9001).ListItem.DBID])"/>
-                    <onleft>Skin.TimerStart(nc_spot_hold)</onleft>
-                    <onleft>Control.Move(9001,-1)</onleft>
-                    <onright>9552</onright>
-                    <onup>9100</onup>
-                    <ondown>9510</ondown>
-                </include>
-                <include content="SpotlightButton">
-                    <param name="id" value="9552"/>
-                    <param name="content" value="$VAR[SpotlightShowItemPath]"/>
-                    <!-- back from the info page returns here (nc_spot_back, Timers.xml); first, Action(Info)
-                         opens the page modally and the click's later actions run once it closed -->
-                    <param name="onclick" value="SetProperty(nc.spot.back,9552,home)"/>
-                    <param name="onclick2" value="SetFocus(9001)"/>
-                    <onclick>Action(Info)</onclick>
-                    <onleft>9551</onleft>
-                    <onright>9553</onright>
-                    <onup>9100</onup>
-                    <ondown>9510</ondown>
-                </include>
-                <include content="SpotlightButton">
-                    <param name="id" value="9553"/>
-                    <param name="content" value="$VAR[SpotlightShowItemPath]"/>
-                    <param name="onclick" value="SetProperty(nc.library,tvshows,home)"/>
-                    <param name="onclick2" value="ActivateWindow(1110)"/>
-                    <onleft>9552</onleft>
-                    <onright>Skin.TimerStart(nc_spot_hold)</onright>
-                    <onright>Control.Move(9001,1)</onright>
-                    <onup>9100</onup>
-                    <ondown>9510</ondown>
-                </include>
-            </control>
-            <!-- they act on the spotlight's own title; the buttons they draw stay for Up -->
-            <control type="group">
-                <visible>!$EXP[SpotlightFollows]</visible>
-                <include>HeroSwapFade</include>
-                <control type="grouplist">
-                    <left>LookHeroPillsLeft</left>
-                    <top>LookHeroPillsTop</top>
-                    <width>1420</width>
-                    <height>74</height>
-                    <orientation>horizontal</orientation>
-                    <itemgap>-4</itemgap>
-                    <include content="SpotlightPill">
-                        <param name="button" value="9551"/>
-                        <param name="label" value="▶ $LOCALIZE[31106]"/>
-                        <param name="color" value="accent"/>
-                        <param name="textcolor" value="accent"/>
-                    </include>
-                    <include content="SpotlightPill">
-                        <param name="button" value="9552"/>
-                        <param name="label" value="$LOCALIZE[31011]"/>
-                    </include>
-                    <include content="SpotlightPill">
-                        <param name="button" value="9553"/>
-                        <param name="label" value="$LOCALIZE[31102] »"/>
-                    </include>
-                    <include>SpotlightMore</include>
-                </control>
-            </control>
         </control>
     </include>
 
@@ -1099,20 +1142,16 @@
          dark blue outline. Focus switches the page. Entries and gaps are padded for the glow
          (MenuButton): 20 px larger, the grouplist puts them 20 px closer. -->
     <!-- Down from the top line (the menu, what plays) into the shown page; a page without
-         spotlight starts with its rows, on the title its hero previews (PeekDown), with no title
-         in them at their first row -->
+         spotlight starts with its rows -->
     <include name="HomePageDown">
-        <include condition="String.IsEqual(Skin.String(SpotlightSource),off)">PeekDownHome</include>
-        <include condition="String.IsEqual(Skin.String(nc.movies.spotlight),off)">PeekDownMovies</include>
-        <include condition="String.IsEqual(Skin.String(nc.shows.spotlight),off)">PeekDownShows</include>
-        <ondown condition="String.IsEqual(Window(Home).Property(nc.page),shows) + String.IsEqual(Skin.String(nc.shows.spotlight),off) + !$EXP[PeekAnyShows]">9510</ondown>
-        <ondown condition="String.IsEqual(Window(Home).Property(nc.page),shows) + !String.IsEqual(Skin.String(nc.shows.spotlight),off)">9550</ondown>
+        <ondown condition="String.IsEqual(Window(Home).Property(nc.page),shows) + String.IsEqual(Skin.String(nc.shows.spotlight),off)">9510</ondown>
+        <ondown condition="String.IsEqual(Window(Home).Property(nc.page),shows)">9550</ondown>
         <ondown condition="String.IsEqual(Window(Home).Property(nc.page),system)">9610</ondown>
         <ondown condition="String.IsEqual(Window(Home).Property(nc.page),search)">9750</ondown>
         <ondown condition="String.IsEqual(Window(Home).Property(nc.page),music)">9850</ondown>
-        <ondown condition="String.IsEqual(Window(Home).Property(nc.page),movies) + String.IsEqual(Skin.String(nc.movies.spotlight),off) + !$EXP[PeekAnyMovies]">9410</ondown>
-        <ondown condition="[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + String.IsEqual(Skin.String(SpotlightSource),off) + !$EXP[PeekAnyHome]">9210</ondown>
-        <ondown condition="![$EXP[PeekAnyHome] | $EXP[PeekAnyMovies] | $EXP[PeekAnyShows]]">9050</ondown>
+        <ondown condition="String.IsEqual(Window(Home).Property(nc.page),movies) + String.IsEqual(Skin.String(nc.movies.spotlight),off)">9410</ondown>
+        <ondown condition="[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + String.IsEqual(Skin.String(SpotlightSource),off)">9210</ondown>
+        <ondown>9050</ondown>
     </include>
 
     <include name="MainMenu">
@@ -1286,7 +1325,7 @@
              on (continue, next up) can be wide in a look -->
         <param name="card" default="LookRowCard"/>
         <param name="itemwidth" default="LookRowItemWidth"/>
-        <!-- on a title: names the row as the one the page without spotlight previews (PeekHeroes) -->
+        <!-- on a title: names the row as the one whose title a still spotlight shows (PeekHeroes) -->
         <param name="peek" default="noop"/>
         <!-- split: the include the first card of a row's second part draws (LookRowSplit for a
              combo row: continue watching, then next up), RowNoSplit for a row of one part. That

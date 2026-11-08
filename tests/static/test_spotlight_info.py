@@ -37,6 +37,8 @@ def test_back_from_the_info_page_returns_to_the_info_button():
     assert timer.findtext('stop') == ('Window.IsActive(home) + !Window.IsVisible(movieinformation) + '
                                       '!Window.IsVisible(musicinformation) + !System.HasActiveModalDialog')
     onstop = [(o.get('condition') or '', o.text) for o in timer.findall('onstop')]
-    parked = ' | '.join('Control.HasFocus({})'.format(d) for d in PARKED)
+    parked = ' | '.join(['Control.HasFocus({})'.format(d) for d in PARKED]
+                        # a still spotlight parks on the card of the title its hero shows
+                        + ['ControlGroup({}).HasFocus()'.format(g) for g in ('9210', '9410', '9510')])
     assert onstop == [('[{}]'.format(parked), 'SetFocus($INFO[Window(Home).Property(nc.spot.back)])'),
                       ('', 'ClearProperty(nc.spot.back,home)')]

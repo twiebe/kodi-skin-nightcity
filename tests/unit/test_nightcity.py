@@ -754,6 +754,22 @@ def test_play_ends_a_running_chain_first(monkeypatch):
     assert calls[1][0] == 'Player.Open'
 
 
+@pytest.mark.parametrize('back,returns', [('', True), ('home', False)])
+def test_play_of_an_episode_from_home_stays_home(monkeypatch, back, returns):
+    """From its info page an episode's page comes back after playback; from the buttons of a still
+    spotlight on Home (back 'home') Home stays, the following episodes are queued all the same."""
+    window = ChainWindow(False)
+    calls = []
+    monkeypatch.setattr(nightcity, '_home', lambda: window)
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', FakeXbmc(set(), {}))
+    monkeypatch.setattr(nightcity, '_rpc', lambda method, **params: calls.append(method))
+    monkeypatch.setattr(nightcity, '_wait_for_video', lambda: True)
+    monkeypatch.setattr(nightcity, '_queue_following', lambda dbid: calls.append('queue'))
+    monkeypatch.setattr(nightcity, '_return_to_episode', lambda dbid: calls.append('return'))
+    nightcity.play('episode', '4', 'resume', back)
+    assert calls == ['Player.Open', 'queue'] + (['return'] if returns else [])
+
+
 def test_startup_switches_chapter_thumbnails_on_once(monkeypatch):
     """The chapter row shows thumbnails only with Kodi's setting myvideos.extractchapterthumbs;
     switched on once, a user who turns it off again keeps it off."""

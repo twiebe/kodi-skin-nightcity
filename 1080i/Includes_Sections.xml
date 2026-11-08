@@ -3153,8 +3153,8 @@
         <value condition="Control.HasFocus(427)">$VAR[HomePagesDesc_shows_7]</value>
         <value condition="Control.HasFocus(428)">$VAR[HomePagesDesc_shows_8]</value>
     </variable>
-    <!-- The preview of a page without spotlight (see tools/make_sections.py peek_parts) -->
-    <expression name="PeekOnHome">[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + String.IsEqual(Skin.String(SpotlightSource),off)</expression>
+    <!-- The hero of a still spotlight (see tools/make_sections.py peek_parts) -->
+    <expression name="PeekOnHome">[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + $EXP[SpotlightStillHome]</expression>
     <expression name="PeekTitle9201">Control.IsVisible(9201) + Integer.IsGreater(Container(9201).NumItems,0) + [String.IsEqual(Container(9201).ListItem.DBType,movie) | String.IsEqual(Container(9201).ListItem.DBType,tvshow) | String.IsEqual(Container(9201).ListItem.DBType,episode) | String.IsEqual(Container(9201).ListItem.DBType,season)]</expression>
     <expression name="PeekTitle9202">Control.IsVisible(9202) + Integer.IsGreater(Container(9202).NumItems,0) + [String.IsEqual(Container(9202).ListItem.DBType,movie) | String.IsEqual(Container(9202).ListItem.DBType,tvshow) | String.IsEqual(Container(9202).ListItem.DBType,episode) | String.IsEqual(Container(9202).ListItem.DBType,season)]</expression>
     <expression name="PeekTitle9203">Control.IsVisible(9203) + Integer.IsGreater(Container(9203).NumItems,0) + [String.IsEqual(Container(9203).ListItem.DBType,movie) | String.IsEqual(Container(9203).ListItem.DBType,tvshow) | String.IsEqual(Container(9203).ListItem.DBType,episode) | String.IsEqual(Container(9203).ListItem.DBType,season)]</expression>
@@ -3173,7 +3173,16 @@
     <expression name="PeekRow9207">$EXP[PeekOnHome] + [[String.IsEqual(Window(Home).Property(nc.peek.home),9207) + $EXP[PeekTitle9207]] | [!$EXP[PeekKeptHome] + $EXP[PeekTitle9207] + !$EXP[PeekTitle9201] + !$EXP[PeekTitle9202] + !$EXP[PeekTitle9203] + !$EXP[PeekTitle9204] + !$EXP[PeekTitle9205] + !$EXP[PeekTitle9206]]]</expression>
     <expression name="PeekRow9208">$EXP[PeekOnHome] + [[String.IsEqual(Window(Home).Property(nc.peek.home),9208) + $EXP[PeekTitle9208]] | [!$EXP[PeekKeptHome] + $EXP[PeekTitle9208] + !$EXP[PeekTitle9201] + !$EXP[PeekTitle9202] + !$EXP[PeekTitle9203] + !$EXP[PeekTitle9204] + !$EXP[PeekTitle9205] + !$EXP[PeekTitle9206] + !$EXP[PeekTitle9207]]]</expression>
     <expression name="PeekAnyHome">$EXP[PeekRow9201] | $EXP[PeekRow9202] | $EXP[PeekRow9203] | $EXP[PeekRow9204] | $EXP[PeekRow9205] | $EXP[PeekRow9206] | $EXP[PeekRow9207] | $EXP[PeekRow9208]</expression>
-    <expression name="PeekOnMovies">String.IsEqual(Window(Home).Property(nc.page),movies) + String.IsEqual(Skin.String(nc.movies.spotlight),off)</expression>
+    <expression name="PeekNoPlay9201">$EXP[PeekRow9201] + ![[String.IsEqual(Container(9201).ListItem.DBType,movie) | String.IsEqual(Container(9201).ListItem.DBType,episode) | String.IsEqual(Container(9201).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9201).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlay9202">$EXP[PeekRow9202] + ![[String.IsEqual(Container(9202).ListItem.DBType,movie) | String.IsEqual(Container(9202).ListItem.DBType,episode) | String.IsEqual(Container(9202).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9202).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlay9203">$EXP[PeekRow9203] + ![[String.IsEqual(Container(9203).ListItem.DBType,movie) | String.IsEqual(Container(9203).ListItem.DBType,episode) | String.IsEqual(Container(9203).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9203).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlay9204">$EXP[PeekRow9204] + ![[String.IsEqual(Container(9204).ListItem.DBType,movie) | String.IsEqual(Container(9204).ListItem.DBType,episode) | String.IsEqual(Container(9204).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9204).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlay9205">$EXP[PeekRow9205] + ![[String.IsEqual(Container(9205).ListItem.DBType,movie) | String.IsEqual(Container(9205).ListItem.DBType,episode) | String.IsEqual(Container(9205).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9205).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlay9206">$EXP[PeekRow9206] + ![[String.IsEqual(Container(9206).ListItem.DBType,movie) | String.IsEqual(Container(9206).ListItem.DBType,episode) | String.IsEqual(Container(9206).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9206).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlay9207">$EXP[PeekRow9207] + ![[String.IsEqual(Container(9207).ListItem.DBType,movie) | String.IsEqual(Container(9207).ListItem.DBType,episode) | String.IsEqual(Container(9207).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9207).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlay9208">$EXP[PeekRow9208] + ![[String.IsEqual(Container(9208).ListItem.DBType,movie) | String.IsEqual(Container(9208).ListItem.DBType,episode) | String.IsEqual(Container(9208).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9208).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlayHome">$EXP[PeekNoPlay9201] | $EXP[PeekNoPlay9202] | $EXP[PeekNoPlay9203] | $EXP[PeekNoPlay9204] | $EXP[PeekNoPlay9205] | $EXP[PeekNoPlay9206] | $EXP[PeekNoPlay9207] | $EXP[PeekNoPlay9208]</expression>
+    <expression name="PeekOnMovies">String.IsEqual(Window(Home).Property(nc.page),movies) + $EXP[SpotlightStillMovies]</expression>
     <expression name="PeekTitle9401">Control.IsVisible(9401) + Integer.IsGreater(Container(9401).NumItems,0) + [String.IsEqual(Container(9401).ListItem.DBType,movie) | String.IsEqual(Container(9401).ListItem.DBType,tvshow) | String.IsEqual(Container(9401).ListItem.DBType,episode) | String.IsEqual(Container(9401).ListItem.DBType,season)]</expression>
     <expression name="PeekTitle9402">Control.IsVisible(9402) + Integer.IsGreater(Container(9402).NumItems,0) + [String.IsEqual(Container(9402).ListItem.DBType,movie) | String.IsEqual(Container(9402).ListItem.DBType,tvshow) | String.IsEqual(Container(9402).ListItem.DBType,episode) | String.IsEqual(Container(9402).ListItem.DBType,season)]</expression>
     <expression name="PeekTitle9403">Control.IsVisible(9403) + Integer.IsGreater(Container(9403).NumItems,0) + [String.IsEqual(Container(9403).ListItem.DBType,movie) | String.IsEqual(Container(9403).ListItem.DBType,tvshow) | String.IsEqual(Container(9403).ListItem.DBType,episode) | String.IsEqual(Container(9403).ListItem.DBType,season)]</expression>
@@ -3192,7 +3201,16 @@
     <expression name="PeekRow9407">$EXP[PeekOnMovies] + [[String.IsEqual(Window(Home).Property(nc.peek.movies),9407) + $EXP[PeekTitle9407]] | [!$EXP[PeekKeptMovies] + $EXP[PeekTitle9407] + !$EXP[PeekTitle9401] + !$EXP[PeekTitle9402] + !$EXP[PeekTitle9403] + !$EXP[PeekTitle9404] + !$EXP[PeekTitle9405] + !$EXP[PeekTitle9406]]]</expression>
     <expression name="PeekRow9408">$EXP[PeekOnMovies] + [[String.IsEqual(Window(Home).Property(nc.peek.movies),9408) + $EXP[PeekTitle9408]] | [!$EXP[PeekKeptMovies] + $EXP[PeekTitle9408] + !$EXP[PeekTitle9401] + !$EXP[PeekTitle9402] + !$EXP[PeekTitle9403] + !$EXP[PeekTitle9404] + !$EXP[PeekTitle9405] + !$EXP[PeekTitle9406] + !$EXP[PeekTitle9407]]]</expression>
     <expression name="PeekAnyMovies">$EXP[PeekRow9401] | $EXP[PeekRow9402] | $EXP[PeekRow9403] | $EXP[PeekRow9404] | $EXP[PeekRow9405] | $EXP[PeekRow9406] | $EXP[PeekRow9407] | $EXP[PeekRow9408]</expression>
-    <expression name="PeekOnShows">String.IsEqual(Window(Home).Property(nc.page),shows) + String.IsEqual(Skin.String(nc.shows.spotlight),off)</expression>
+    <expression name="PeekNoPlay9401">$EXP[PeekRow9401] + ![[String.IsEqual(Container(9401).ListItem.DBType,movie) | String.IsEqual(Container(9401).ListItem.DBType,episode) | String.IsEqual(Container(9401).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9401).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlay9402">$EXP[PeekRow9402] + ![[String.IsEqual(Container(9402).ListItem.DBType,movie) | String.IsEqual(Container(9402).ListItem.DBType,episode) | String.IsEqual(Container(9402).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9402).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlay9403">$EXP[PeekRow9403] + ![[String.IsEqual(Container(9403).ListItem.DBType,movie) | String.IsEqual(Container(9403).ListItem.DBType,episode) | String.IsEqual(Container(9403).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9403).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlay9404">$EXP[PeekRow9404] + ![[String.IsEqual(Container(9404).ListItem.DBType,movie) | String.IsEqual(Container(9404).ListItem.DBType,episode) | String.IsEqual(Container(9404).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9404).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlay9405">$EXP[PeekRow9405] + ![[String.IsEqual(Container(9405).ListItem.DBType,movie) | String.IsEqual(Container(9405).ListItem.DBType,episode) | String.IsEqual(Container(9405).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9405).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlay9406">$EXP[PeekRow9406] + ![[String.IsEqual(Container(9406).ListItem.DBType,movie) | String.IsEqual(Container(9406).ListItem.DBType,episode) | String.IsEqual(Container(9406).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9406).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlay9407">$EXP[PeekRow9407] + ![[String.IsEqual(Container(9407).ListItem.DBType,movie) | String.IsEqual(Container(9407).ListItem.DBType,episode) | String.IsEqual(Container(9407).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9407).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlay9408">$EXP[PeekRow9408] + ![[String.IsEqual(Container(9408).ListItem.DBType,movie) | String.IsEqual(Container(9408).ListItem.DBType,episode) | String.IsEqual(Container(9408).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9408).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlayMovies">$EXP[PeekNoPlay9401] | $EXP[PeekNoPlay9402] | $EXP[PeekNoPlay9403] | $EXP[PeekNoPlay9404] | $EXP[PeekNoPlay9405] | $EXP[PeekNoPlay9406] | $EXP[PeekNoPlay9407] | $EXP[PeekNoPlay9408]</expression>
+    <expression name="PeekOnShows">String.IsEqual(Window(Home).Property(nc.page),shows) + $EXP[SpotlightStillShows]</expression>
     <expression name="PeekTitle9501">Control.IsVisible(9501) + Integer.IsGreater(Container(9501).NumItems,0) + [String.IsEqual(Container(9501).ListItem.DBType,movie) | String.IsEqual(Container(9501).ListItem.DBType,tvshow) | String.IsEqual(Container(9501).ListItem.DBType,episode) | String.IsEqual(Container(9501).ListItem.DBType,season)]</expression>
     <expression name="PeekTitle9502">Control.IsVisible(9502) + Integer.IsGreater(Container(9502).NumItems,0) + [String.IsEqual(Container(9502).ListItem.DBType,movie) | String.IsEqual(Container(9502).ListItem.DBType,tvshow) | String.IsEqual(Container(9502).ListItem.DBType,episode) | String.IsEqual(Container(9502).ListItem.DBType,season)]</expression>
     <expression name="PeekTitle9503">Control.IsVisible(9503) + Integer.IsGreater(Container(9503).NumItems,0) + [String.IsEqual(Container(9503).ListItem.DBType,movie) | String.IsEqual(Container(9503).ListItem.DBType,tvshow) | String.IsEqual(Container(9503).ListItem.DBType,episode) | String.IsEqual(Container(9503).ListItem.DBType,season)]</expression>
@@ -3211,6 +3229,141 @@
     <expression name="PeekRow9507">$EXP[PeekOnShows] + [[String.IsEqual(Window(Home).Property(nc.peek.shows),9507) + $EXP[PeekTitle9507]] | [!$EXP[PeekKeptShows] + $EXP[PeekTitle9507] + !$EXP[PeekTitle9501] + !$EXP[PeekTitle9502] + !$EXP[PeekTitle9503] + !$EXP[PeekTitle9504] + !$EXP[PeekTitle9505] + !$EXP[PeekTitle9506]]]</expression>
     <expression name="PeekRow9508">$EXP[PeekOnShows] + [[String.IsEqual(Window(Home).Property(nc.peek.shows),9508) + $EXP[PeekTitle9508]] | [!$EXP[PeekKeptShows] + $EXP[PeekTitle9508] + !$EXP[PeekTitle9501] + !$EXP[PeekTitle9502] + !$EXP[PeekTitle9503] + !$EXP[PeekTitle9504] + !$EXP[PeekTitle9505] + !$EXP[PeekTitle9506] + !$EXP[PeekTitle9507]]]</expression>
     <expression name="PeekAnyShows">$EXP[PeekRow9501] | $EXP[PeekRow9502] | $EXP[PeekRow9503] | $EXP[PeekRow9504] | $EXP[PeekRow9505] | $EXP[PeekRow9506] | $EXP[PeekRow9507] | $EXP[PeekRow9508]</expression>
+    <expression name="PeekNoPlay9501">$EXP[PeekRow9501] + ![[String.IsEqual(Container(9501).ListItem.DBType,movie) | String.IsEqual(Container(9501).ListItem.DBType,episode) | String.IsEqual(Container(9501).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9501).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlay9502">$EXP[PeekRow9502] + ![[String.IsEqual(Container(9502).ListItem.DBType,movie) | String.IsEqual(Container(9502).ListItem.DBType,episode) | String.IsEqual(Container(9502).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9502).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlay9503">$EXP[PeekRow9503] + ![[String.IsEqual(Container(9503).ListItem.DBType,movie) | String.IsEqual(Container(9503).ListItem.DBType,episode) | String.IsEqual(Container(9503).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9503).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlay9504">$EXP[PeekRow9504] + ![[String.IsEqual(Container(9504).ListItem.DBType,movie) | String.IsEqual(Container(9504).ListItem.DBType,episode) | String.IsEqual(Container(9504).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9504).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlay9505">$EXP[PeekRow9505] + ![[String.IsEqual(Container(9505).ListItem.DBType,movie) | String.IsEqual(Container(9505).ListItem.DBType,episode) | String.IsEqual(Container(9505).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9505).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlay9506">$EXP[PeekRow9506] + ![[String.IsEqual(Container(9506).ListItem.DBType,movie) | String.IsEqual(Container(9506).ListItem.DBType,episode) | String.IsEqual(Container(9506).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9506).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlay9507">$EXP[PeekRow9507] + ![[String.IsEqual(Container(9507).ListItem.DBType,movie) | String.IsEqual(Container(9507).ListItem.DBType,episode) | String.IsEqual(Container(9507).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9507).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlay9508">$EXP[PeekRow9508] + ![[String.IsEqual(Container(9508).ListItem.DBType,movie) | String.IsEqual(Container(9508).ListItem.DBType,episode) | String.IsEqual(Container(9508).ListItem.DBType,tvshow)] + !String.IsEmpty(Container(9508).ListItem.DBID)]</expression>
+    <expression name="PeekNoPlayShows">$EXP[PeekNoPlay9501] | $EXP[PeekNoPlay9502] | $EXP[PeekNoPlay9503] | $EXP[PeekNoPlay9504] | $EXP[PeekNoPlay9505] | $EXP[PeekNoPlay9506] | $EXP[PeekNoPlay9507] | $EXP[PeekNoPlay9508]</expression>
+    <variable name="PeekPlayLabel">
+        <value condition="$EXP[PeekRow9201] + Container(9201).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9201).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9201] + String.IsEqual(Container(9201).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9202] + Container(9202).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9202).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9202] + String.IsEqual(Container(9202).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9203] + Container(9203).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9203).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9203] + String.IsEqual(Container(9203).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9204] + Container(9204).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9204).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9204] + String.IsEqual(Container(9204).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9205] + Container(9205).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9205).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9205] + String.IsEqual(Container(9205).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9206] + Container(9206).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9206).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9206] + String.IsEqual(Container(9206).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9207] + Container(9207).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9207).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9207] + String.IsEqual(Container(9207).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9208] + Container(9208).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9208).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9208] + String.IsEqual(Container(9208).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9401] + Container(9401).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9401).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9401] + String.IsEqual(Container(9401).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9402] + Container(9402).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9402).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9402] + String.IsEqual(Container(9402).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9403] + Container(9403).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9403).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9403] + String.IsEqual(Container(9403).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9404] + Container(9404).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9404).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9404] + String.IsEqual(Container(9404).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9405] + Container(9405).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9405).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9405] + String.IsEqual(Container(9405).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9406] + Container(9406).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9406).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9406] + String.IsEqual(Container(9406).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9407] + Container(9407).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9407).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9407] + String.IsEqual(Container(9407).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9408] + Container(9408).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9408).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9408] + String.IsEqual(Container(9408).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9501] + Container(9501).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9501).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9501] + String.IsEqual(Container(9501).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9502] + Container(9502).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9502).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9502] + String.IsEqual(Container(9502).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9503] + Container(9503).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9503).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9503] + String.IsEqual(Container(9503).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9504] + Container(9504).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9504).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9504] + String.IsEqual(Container(9504).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9505] + Container(9505).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9505).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9505] + String.IsEqual(Container(9505).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9506] + Container(9506).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9506).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9506] + String.IsEqual(Container(9506).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9507] + Container(9507).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9507).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9507] + String.IsEqual(Container(9507).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value condition="$EXP[PeekRow9508] + Container(9508).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9508).ListItem.PercentPlayed]%</value>
+        <value condition="$EXP[PeekRow9508] + String.IsEqual(Container(9508).ListItem.DBType,tvshow)">▶ $LOCALIZE[31106]</value>
+        <value>▶ $LOCALIZE[31010]</value>
+    </variable>
+    <variable name="PeekItemPath">
+        <value condition="$EXP[PeekRow9201] + String.IsEqual(Container(9201).ListItem.DBType,movie) + !String.IsEmpty(Container(9201).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9201).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9201] + String.IsEqual(Container(9201).ListItem.DBType,episode) + !String.IsEmpty(Container(9201).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9201).ListItem.TvShowDBID]/$INFO[Container(9201).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9201).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9201] + String.IsEqual(Container(9201).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9201).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9201).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9202] + String.IsEqual(Container(9202).ListItem.DBType,movie) + !String.IsEmpty(Container(9202).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9202).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9202] + String.IsEqual(Container(9202).ListItem.DBType,episode) + !String.IsEmpty(Container(9202).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9202).ListItem.TvShowDBID]/$INFO[Container(9202).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9202).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9202] + String.IsEqual(Container(9202).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9202).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9202).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9203] + String.IsEqual(Container(9203).ListItem.DBType,movie) + !String.IsEmpty(Container(9203).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9203).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9203] + String.IsEqual(Container(9203).ListItem.DBType,episode) + !String.IsEmpty(Container(9203).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9203).ListItem.TvShowDBID]/$INFO[Container(9203).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9203).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9203] + String.IsEqual(Container(9203).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9203).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9203).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9204] + String.IsEqual(Container(9204).ListItem.DBType,movie) + !String.IsEmpty(Container(9204).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9204).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9204] + String.IsEqual(Container(9204).ListItem.DBType,episode) + !String.IsEmpty(Container(9204).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9204).ListItem.TvShowDBID]/$INFO[Container(9204).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9204).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9204] + String.IsEqual(Container(9204).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9204).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9204).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9205] + String.IsEqual(Container(9205).ListItem.DBType,movie) + !String.IsEmpty(Container(9205).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9205).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9205] + String.IsEqual(Container(9205).ListItem.DBType,episode) + !String.IsEmpty(Container(9205).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9205).ListItem.TvShowDBID]/$INFO[Container(9205).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9205).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9205] + String.IsEqual(Container(9205).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9205).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9205).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9206] + String.IsEqual(Container(9206).ListItem.DBType,movie) + !String.IsEmpty(Container(9206).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9206).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9206] + String.IsEqual(Container(9206).ListItem.DBType,episode) + !String.IsEmpty(Container(9206).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9206).ListItem.TvShowDBID]/$INFO[Container(9206).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9206).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9206] + String.IsEqual(Container(9206).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9206).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9206).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9207] + String.IsEqual(Container(9207).ListItem.DBType,movie) + !String.IsEmpty(Container(9207).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9207).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9207] + String.IsEqual(Container(9207).ListItem.DBType,episode) + !String.IsEmpty(Container(9207).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9207).ListItem.TvShowDBID]/$INFO[Container(9207).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9207).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9207] + String.IsEqual(Container(9207).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9207).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9207).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9208] + String.IsEqual(Container(9208).ListItem.DBType,movie) + !String.IsEmpty(Container(9208).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9208).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9208] + String.IsEqual(Container(9208).ListItem.DBType,episode) + !String.IsEmpty(Container(9208).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9208).ListItem.TvShowDBID]/$INFO[Container(9208).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9208).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9208] + String.IsEqual(Container(9208).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9208).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9208).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9401] + String.IsEqual(Container(9401).ListItem.DBType,movie) + !String.IsEmpty(Container(9401).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9401).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9401] + String.IsEqual(Container(9401).ListItem.DBType,episode) + !String.IsEmpty(Container(9401).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9401).ListItem.TvShowDBID]/$INFO[Container(9401).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9401).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9401] + String.IsEqual(Container(9401).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9401).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9401).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9402] + String.IsEqual(Container(9402).ListItem.DBType,movie) + !String.IsEmpty(Container(9402).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9402).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9402] + String.IsEqual(Container(9402).ListItem.DBType,episode) + !String.IsEmpty(Container(9402).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9402).ListItem.TvShowDBID]/$INFO[Container(9402).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9402).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9402] + String.IsEqual(Container(9402).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9402).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9402).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9403] + String.IsEqual(Container(9403).ListItem.DBType,movie) + !String.IsEmpty(Container(9403).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9403).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9403] + String.IsEqual(Container(9403).ListItem.DBType,episode) + !String.IsEmpty(Container(9403).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9403).ListItem.TvShowDBID]/$INFO[Container(9403).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9403).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9403] + String.IsEqual(Container(9403).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9403).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9403).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9404] + String.IsEqual(Container(9404).ListItem.DBType,movie) + !String.IsEmpty(Container(9404).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9404).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9404] + String.IsEqual(Container(9404).ListItem.DBType,episode) + !String.IsEmpty(Container(9404).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9404).ListItem.TvShowDBID]/$INFO[Container(9404).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9404).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9404] + String.IsEqual(Container(9404).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9404).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9404).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9405] + String.IsEqual(Container(9405).ListItem.DBType,movie) + !String.IsEmpty(Container(9405).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9405).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9405] + String.IsEqual(Container(9405).ListItem.DBType,episode) + !String.IsEmpty(Container(9405).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9405).ListItem.TvShowDBID]/$INFO[Container(9405).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9405).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9405] + String.IsEqual(Container(9405).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9405).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9405).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9406] + String.IsEqual(Container(9406).ListItem.DBType,movie) + !String.IsEmpty(Container(9406).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9406).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9406] + String.IsEqual(Container(9406).ListItem.DBType,episode) + !String.IsEmpty(Container(9406).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9406).ListItem.TvShowDBID]/$INFO[Container(9406).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9406).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9406] + String.IsEqual(Container(9406).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9406).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9406).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9407] + String.IsEqual(Container(9407).ListItem.DBType,movie) + !String.IsEmpty(Container(9407).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9407).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9407] + String.IsEqual(Container(9407).ListItem.DBType,episode) + !String.IsEmpty(Container(9407).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9407).ListItem.TvShowDBID]/$INFO[Container(9407).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9407).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9407] + String.IsEqual(Container(9407).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9407).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9407).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9408] + String.IsEqual(Container(9408).ListItem.DBType,movie) + !String.IsEmpty(Container(9408).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9408).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9408] + String.IsEqual(Container(9408).ListItem.DBType,episode) + !String.IsEmpty(Container(9408).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9408).ListItem.TvShowDBID]/$INFO[Container(9408).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9408).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9408] + String.IsEqual(Container(9408).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9408).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9408).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9501] + String.IsEqual(Container(9501).ListItem.DBType,movie) + !String.IsEmpty(Container(9501).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9501).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9501] + String.IsEqual(Container(9501).ListItem.DBType,episode) + !String.IsEmpty(Container(9501).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9501).ListItem.TvShowDBID]/$INFO[Container(9501).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9501).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9501] + String.IsEqual(Container(9501).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9501).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9501).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9502] + String.IsEqual(Container(9502).ListItem.DBType,movie) + !String.IsEmpty(Container(9502).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9502).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9502] + String.IsEqual(Container(9502).ListItem.DBType,episode) + !String.IsEmpty(Container(9502).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9502).ListItem.TvShowDBID]/$INFO[Container(9502).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9502).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9502] + String.IsEqual(Container(9502).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9502).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9502).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9503] + String.IsEqual(Container(9503).ListItem.DBType,movie) + !String.IsEmpty(Container(9503).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9503).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9503] + String.IsEqual(Container(9503).ListItem.DBType,episode) + !String.IsEmpty(Container(9503).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9503).ListItem.TvShowDBID]/$INFO[Container(9503).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9503).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9503] + String.IsEqual(Container(9503).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9503).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9503).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9504] + String.IsEqual(Container(9504).ListItem.DBType,movie) + !String.IsEmpty(Container(9504).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9504).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9504] + String.IsEqual(Container(9504).ListItem.DBType,episode) + !String.IsEmpty(Container(9504).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9504).ListItem.TvShowDBID]/$INFO[Container(9504).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9504).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9504] + String.IsEqual(Container(9504).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9504).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9504).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9505] + String.IsEqual(Container(9505).ListItem.DBType,movie) + !String.IsEmpty(Container(9505).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9505).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9505] + String.IsEqual(Container(9505).ListItem.DBType,episode) + !String.IsEmpty(Container(9505).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9505).ListItem.TvShowDBID]/$INFO[Container(9505).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9505).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9505] + String.IsEqual(Container(9505).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9505).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9505).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9506] + String.IsEqual(Container(9506).ListItem.DBType,movie) + !String.IsEmpty(Container(9506).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9506).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9506] + String.IsEqual(Container(9506).ListItem.DBType,episode) + !String.IsEmpty(Container(9506).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9506).ListItem.TvShowDBID]/$INFO[Container(9506).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9506).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9506] + String.IsEqual(Container(9506).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9506).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9506).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9507] + String.IsEqual(Container(9507).ListItem.DBType,movie) + !String.IsEmpty(Container(9507).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9507).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9507] + String.IsEqual(Container(9507).ListItem.DBType,episode) + !String.IsEmpty(Container(9507).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9507).ListItem.TvShowDBID]/$INFO[Container(9507).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9507).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9507] + String.IsEqual(Container(9507).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9507).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9507).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value condition="$EXP[PeekRow9508] + String.IsEqual(Container(9508).ListItem.DBType,movie) + !String.IsEmpty(Container(9508).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9508).ListItem.DBID]</value>
+        <value condition="$EXP[PeekRow9508] + String.IsEqual(Container(9508).ListItem.DBType,episode) + !String.IsEmpty(Container(9508).ListItem.DBID)">videodb://tvshows/titles/$INFO[Container(9508).ListItem.TvShowDBID]/$INFO[Container(9508).ListItem.Season]/?xsp={"rules":{"and":[{"field":"episode","operator":"is","value":["$INFO[Container(9508).ListItem.Episode]"]}]},"type":"episodes"}</value>
+        <value condition="$EXP[PeekRow9508] + String.IsEqual(Container(9508).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9508).ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[Container(9508).ListItem.Path]"]}]},"type":"tvshows"}</value>
+        <value>videodb://movies/titles/?xsp={"type":"movies","limit":1}</value>
+    </variable>
     <variable name="CardArt9201">
         <value condition="!String.IsEmpty(Container(9201).ListItem.Art(tvshow.poster))">$INFO[Container(9201).ListItem.Art(tvshow.poster)]</value>
         <value>$INFO[Container(9201).ListItem.Art(poster)]</value>
@@ -4978,6 +5131,62 @@
         <ondown condition="$EXP[PeekRow9207]">SetFocus(9207)</ondown>
         <ondown condition="$EXP[PeekRow9208]">SetFocus(9208)</ondown>
     </include>
+    <include name="PeekPlayHome">
+        <param name="button"/>
+        <definition>
+            <onclick condition="$EXP[PeekRow9201] + String.IsEqual(Container(9201).ListItem.DBType,movie) + !String.IsEmpty(Container(9201).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9201).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9201] + String.IsEqual(Container(9201).ListItem.DBType,episode) + !String.IsEmpty(Container(9201).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9201).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9201] + String.IsEqual(Container(9201).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9201).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9201).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekRow9202] + String.IsEqual(Container(9202).ListItem.DBType,movie) + !String.IsEmpty(Container(9202).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9202).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9202] + String.IsEqual(Container(9202).ListItem.DBType,episode) + !String.IsEmpty(Container(9202).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9202).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9202] + String.IsEqual(Container(9202).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9202).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9202).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekRow9203] + String.IsEqual(Container(9203).ListItem.DBType,movie) + !String.IsEmpty(Container(9203).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9203).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9203] + String.IsEqual(Container(9203).ListItem.DBType,episode) + !String.IsEmpty(Container(9203).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9203).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9203] + String.IsEqual(Container(9203).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9203).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9203).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekRow9204] + String.IsEqual(Container(9204).ListItem.DBType,movie) + !String.IsEmpty(Container(9204).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9204).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9204] + String.IsEqual(Container(9204).ListItem.DBType,episode) + !String.IsEmpty(Container(9204).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9204).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9204] + String.IsEqual(Container(9204).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9204).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9204).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekRow9205] + String.IsEqual(Container(9205).ListItem.DBType,movie) + !String.IsEmpty(Container(9205).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9205).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9205] + String.IsEqual(Container(9205).ListItem.DBType,episode) + !String.IsEmpty(Container(9205).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9205).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9205] + String.IsEqual(Container(9205).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9205).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9205).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekRow9206] + String.IsEqual(Container(9206).ListItem.DBType,movie) + !String.IsEmpty(Container(9206).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9206).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9206] + String.IsEqual(Container(9206).ListItem.DBType,episode) + !String.IsEmpty(Container(9206).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9206).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9206] + String.IsEqual(Container(9206).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9206).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9206).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekRow9207] + String.IsEqual(Container(9207).ListItem.DBType,movie) + !String.IsEmpty(Container(9207).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9207).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9207] + String.IsEqual(Container(9207).ListItem.DBType,episode) + !String.IsEmpty(Container(9207).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9207).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9207] + String.IsEqual(Container(9207).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9207).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9207).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekRow9208] + String.IsEqual(Container(9208).ListItem.DBType,movie) + !String.IsEmpty(Container(9208).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9208).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9208] + String.IsEqual(Container(9208).ListItem.DBType,episode) + !String.IsEmpty(Container(9208).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9208).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9208] + String.IsEqual(Container(9208).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9208).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9208).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekNoPlay9201]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9201]">SetFocus(9201)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9202]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9202]">SetFocus(9202)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9203]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9203]">SetFocus(9203)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9204]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9204]">SetFocus(9204)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9205]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9205]">SetFocus(9205)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9206]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9206]">SetFocus(9206)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9207]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9207]">SetFocus(9207)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9208]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9208]">SetFocus(9208)</onclick>
+            <onclick condition="$EXP[PeekNoPlayHome]">Action(Info)</onclick>
+        </definition>
+    </include>
+    <include name="PeekInfoHome">
+        <onclick condition="$EXP[PeekRow9201]">SetFocus(9201)</onclick>
+        <onclick condition="$EXP[PeekRow9202]">SetFocus(9202)</onclick>
+        <onclick condition="$EXP[PeekRow9203]">SetFocus(9203)</onclick>
+        <onclick condition="$EXP[PeekRow9204]">SetFocus(9204)</onclick>
+        <onclick condition="$EXP[PeekRow9205]">SetFocus(9205)</onclick>
+        <onclick condition="$EXP[PeekRow9206]">SetFocus(9206)</onclick>
+        <onclick condition="$EXP[PeekRow9207]">SetFocus(9207)</onclick>
+        <onclick condition="$EXP[PeekRow9208]">SetFocus(9208)</onclick>
+    </include>
     <include name="PeekHeroesMovies">
         <control type="group">
             <visible>$EXP[PeekAnyMovies]</visible>
@@ -5377,6 +5586,62 @@
         <ondown condition="$EXP[PeekRow9407]">SetFocus(9407)</ondown>
         <ondown condition="$EXP[PeekRow9408]">SetFocus(9408)</ondown>
     </include>
+    <include name="PeekPlayMovies">
+        <param name="button"/>
+        <definition>
+            <onclick condition="$EXP[PeekRow9401] + String.IsEqual(Container(9401).ListItem.DBType,movie) + !String.IsEmpty(Container(9401).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9401).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9401] + String.IsEqual(Container(9401).ListItem.DBType,episode) + !String.IsEmpty(Container(9401).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9401).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9401] + String.IsEqual(Container(9401).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9401).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9401).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekRow9402] + String.IsEqual(Container(9402).ListItem.DBType,movie) + !String.IsEmpty(Container(9402).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9402).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9402] + String.IsEqual(Container(9402).ListItem.DBType,episode) + !String.IsEmpty(Container(9402).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9402).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9402] + String.IsEqual(Container(9402).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9402).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9402).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekRow9403] + String.IsEqual(Container(9403).ListItem.DBType,movie) + !String.IsEmpty(Container(9403).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9403).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9403] + String.IsEqual(Container(9403).ListItem.DBType,episode) + !String.IsEmpty(Container(9403).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9403).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9403] + String.IsEqual(Container(9403).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9403).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9403).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekRow9404] + String.IsEqual(Container(9404).ListItem.DBType,movie) + !String.IsEmpty(Container(9404).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9404).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9404] + String.IsEqual(Container(9404).ListItem.DBType,episode) + !String.IsEmpty(Container(9404).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9404).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9404] + String.IsEqual(Container(9404).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9404).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9404).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekRow9405] + String.IsEqual(Container(9405).ListItem.DBType,movie) + !String.IsEmpty(Container(9405).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9405).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9405] + String.IsEqual(Container(9405).ListItem.DBType,episode) + !String.IsEmpty(Container(9405).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9405).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9405] + String.IsEqual(Container(9405).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9405).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9405).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekRow9406] + String.IsEqual(Container(9406).ListItem.DBType,movie) + !String.IsEmpty(Container(9406).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9406).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9406] + String.IsEqual(Container(9406).ListItem.DBType,episode) + !String.IsEmpty(Container(9406).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9406).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9406] + String.IsEqual(Container(9406).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9406).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9406).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekRow9407] + String.IsEqual(Container(9407).ListItem.DBType,movie) + !String.IsEmpty(Container(9407).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9407).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9407] + String.IsEqual(Container(9407).ListItem.DBType,episode) + !String.IsEmpty(Container(9407).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9407).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9407] + String.IsEqual(Container(9407).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9407).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9407).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekRow9408] + String.IsEqual(Container(9408).ListItem.DBType,movie) + !String.IsEmpty(Container(9408).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9408).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9408] + String.IsEqual(Container(9408).ListItem.DBType,episode) + !String.IsEmpty(Container(9408).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9408).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9408] + String.IsEqual(Container(9408).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9408).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9408).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekNoPlay9401]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9401]">SetFocus(9401)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9402]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9402]">SetFocus(9402)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9403]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9403]">SetFocus(9403)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9404]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9404]">SetFocus(9404)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9405]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9405]">SetFocus(9405)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9406]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9406]">SetFocus(9406)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9407]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9407]">SetFocus(9407)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9408]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9408]">SetFocus(9408)</onclick>
+            <onclick condition="$EXP[PeekNoPlayMovies]">Action(Info)</onclick>
+        </definition>
+    </include>
+    <include name="PeekInfoMovies">
+        <onclick condition="$EXP[PeekRow9401]">SetFocus(9401)</onclick>
+        <onclick condition="$EXP[PeekRow9402]">SetFocus(9402)</onclick>
+        <onclick condition="$EXP[PeekRow9403]">SetFocus(9403)</onclick>
+        <onclick condition="$EXP[PeekRow9404]">SetFocus(9404)</onclick>
+        <onclick condition="$EXP[PeekRow9405]">SetFocus(9405)</onclick>
+        <onclick condition="$EXP[PeekRow9406]">SetFocus(9406)</onclick>
+        <onclick condition="$EXP[PeekRow9407]">SetFocus(9407)</onclick>
+        <onclick condition="$EXP[PeekRow9408]">SetFocus(9408)</onclick>
+    </include>
     <include name="PeekHeroesShows">
         <control type="group">
             <visible>$EXP[PeekAnyShows]</visible>
@@ -5775,5 +6040,61 @@
         <ondown condition="$EXP[PeekRow9506]">SetFocus(9506)</ondown>
         <ondown condition="$EXP[PeekRow9507]">SetFocus(9507)</ondown>
         <ondown condition="$EXP[PeekRow9508]">SetFocus(9508)</ondown>
+    </include>
+    <include name="PeekPlayShows">
+        <param name="button"/>
+        <definition>
+            <onclick condition="$EXP[PeekRow9501] + String.IsEqual(Container(9501).ListItem.DBType,movie) + !String.IsEmpty(Container(9501).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9501).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9501] + String.IsEqual(Container(9501).ListItem.DBType,episode) + !String.IsEmpty(Container(9501).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9501).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9501] + String.IsEqual(Container(9501).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9501).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9501).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekRow9502] + String.IsEqual(Container(9502).ListItem.DBType,movie) + !String.IsEmpty(Container(9502).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9502).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9502] + String.IsEqual(Container(9502).ListItem.DBType,episode) + !String.IsEmpty(Container(9502).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9502).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9502] + String.IsEqual(Container(9502).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9502).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9502).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekRow9503] + String.IsEqual(Container(9503).ListItem.DBType,movie) + !String.IsEmpty(Container(9503).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9503).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9503] + String.IsEqual(Container(9503).ListItem.DBType,episode) + !String.IsEmpty(Container(9503).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9503).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9503] + String.IsEqual(Container(9503).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9503).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9503).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekRow9504] + String.IsEqual(Container(9504).ListItem.DBType,movie) + !String.IsEmpty(Container(9504).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9504).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9504] + String.IsEqual(Container(9504).ListItem.DBType,episode) + !String.IsEmpty(Container(9504).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9504).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9504] + String.IsEqual(Container(9504).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9504).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9504).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekRow9505] + String.IsEqual(Container(9505).ListItem.DBType,movie) + !String.IsEmpty(Container(9505).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9505).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9505] + String.IsEqual(Container(9505).ListItem.DBType,episode) + !String.IsEmpty(Container(9505).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9505).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9505] + String.IsEqual(Container(9505).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9505).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9505).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekRow9506] + String.IsEqual(Container(9506).ListItem.DBType,movie) + !String.IsEmpty(Container(9506).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9506).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9506] + String.IsEqual(Container(9506).ListItem.DBType,episode) + !String.IsEmpty(Container(9506).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9506).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9506] + String.IsEqual(Container(9506).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9506).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9506).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekRow9507] + String.IsEqual(Container(9507).ListItem.DBType,movie) + !String.IsEmpty(Container(9507).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9507).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9507] + String.IsEqual(Container(9507).ListItem.DBType,episode) + !String.IsEmpty(Container(9507).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9507).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9507] + String.IsEqual(Container(9507).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9507).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9507).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekRow9508] + String.IsEqual(Container(9508).ListItem.DBType,movie) + !String.IsEmpty(Container(9508).ListItem.DBID)">NotifyAll(nightcity,play:movie:$INFO[Container(9508).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9508] + String.IsEqual(Container(9508).ListItem.DBType,episode) + !String.IsEmpty(Container(9508).ListItem.DBID)">NotifyAll(nightcity,play:episode:$INFO[Container(9508).ListItem.DBID]:resume:home)</onclick>
+            <onclick condition="$EXP[PeekRow9508] + String.IsEqual(Container(9508).ListItem.DBType,tvshow) + !String.IsEmpty(Container(9508).ListItem.DBID)">NotifyAll(nightcity,next_episode:$INFO[Container(9508).ListItem.DBID])</onclick>
+            <onclick condition="$EXP[PeekNoPlay9501]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9501]">SetFocus(9501)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9502]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9502]">SetFocus(9502)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9503]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9503]">SetFocus(9503)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9504]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9504]">SetFocus(9504)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9505]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9505]">SetFocus(9505)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9506]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9506]">SetFocus(9506)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9507]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9507]">SetFocus(9507)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9508]">SetProperty(nc.spot.back,$PARAM[button],home)</onclick>
+            <onclick condition="$EXP[PeekNoPlay9508]">SetFocus(9508)</onclick>
+            <onclick condition="$EXP[PeekNoPlayShows]">Action(Info)</onclick>
+        </definition>
+    </include>
+    <include name="PeekInfoShows">
+        <onclick condition="$EXP[PeekRow9501]">SetFocus(9501)</onclick>
+        <onclick condition="$EXP[PeekRow9502]">SetFocus(9502)</onclick>
+        <onclick condition="$EXP[PeekRow9503]">SetFocus(9503)</onclick>
+        <onclick condition="$EXP[PeekRow9504]">SetFocus(9504)</onclick>
+        <onclick condition="$EXP[PeekRow9505]">SetFocus(9505)</onclick>
+        <onclick condition="$EXP[PeekRow9506]">SetFocus(9506)</onclick>
+        <onclick condition="$EXP[PeekRow9507]">SetFocus(9507)</onclick>
+        <onclick condition="$EXP[PeekRow9508]">SetFocus(9508)</onclick>
     </include>
 </includes>

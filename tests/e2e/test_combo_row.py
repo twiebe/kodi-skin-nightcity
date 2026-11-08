@@ -199,9 +199,9 @@ def test_next_up_follows_the_library(combo):
 
 
 @pytest.fixture
-def combo_first_no_spotlight(library):
+def combo_first_still_spotlight(library):
     builtin('Skin.SetString(nc.home.slot1,combo)')
-    builtin('Skin.SetString(SpotlightSource,off)')
+    builtin('Skin.SetString(SpotlightInterval,off)')
     builtin('ReloadSkin()')
     time.sleep(3)
     wait_for('Window.IsActive(home)', timeout=20)
@@ -209,22 +209,25 @@ def combo_first_no_spotlight(library):
         yield
     finally:
         builtin('Skin.Reset(nc.home.slot1)')
-        builtin('Skin.Reset(SpotlightSource)')
+        builtin('Skin.Reset(SpotlightInterval)')
         builtin('ReloadSkin()')
         time.sleep(3)
         wait_for('Window.IsActive(home)', timeout=20)
 
 
-def test_page_without_spotlight_previews_the_combo_row(combo_first_no_spotlight):
+def test_still_spotlight_shows_the_combo_row(combo_first_still_spotlight):
+    """A still spotlight shows the combo row's title, a show of next up too (test_peek_hero.py)."""
     builtin('SetFocus(9101)')
     wait_for('Control.HasFocus(9101)')
     wait_for('Integer.IsGreater(Container(9201).NumItems,2)', timeout=20)
     wait_for('Control.IsVisible(9361) + Integer.IsEqual(Container(9201).Position,0)')
+    rpc('Input.Down')
+    wait_for('Control.HasFocus(9010)')
     rpc('Input.Down')
     wait_for('Control.HasFocus(9201)')
     action('right', 'right')
     wait_for('Integer.IsEqual(Container(9201).CurrentItem,3)')
     assert label('ListItem.DBType') == 'tvshow'
     rpc('Input.Up')
-    wait_for('Control.HasFocus(9101) + Control.IsVisible(9361)')
+    wait_for('Control.HasFocus(9010) + Control.IsVisible(9361)')
     assert label('Container(9201).ListItem.DBType') == 'tvshow'  # the title the cursor left

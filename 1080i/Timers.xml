@@ -101,13 +101,14 @@
          data list, which shows nothing, and opens the info page there; the button remembers
          itself (nc.spot.back). Once the page was open and Home is in front again (also after a
          chain or a playback started from it), the focus goes back to the button: on the hidden
-         list left and right moved the spotlight, but no button showed the cursor. -->
+         list left and right moved the spotlight, but no button showed the cursor. A still spotlight
+         parks on the card of the title its hero shows (PeekInfo), the way back is the same. -->
     <timer>
         <name>nc_spot_back</name>
         <description>Back from a spotlight's info page returns to its info button</description>
         <start reset="true">!String.IsEmpty(Window(Home).Property(nc.spot.back)) + [Window.IsVisible(movieinformation) | Window.IsVisible(musicinformation)]</start>
         <stop>Window.IsActive(home) + !Window.IsVisible(movieinformation) + !Window.IsVisible(musicinformation) + !System.HasActiveModalDialog</stop>
-        <onstop condition="[Control.HasFocus(9000) | Control.HasFocus(9001) | Control.HasFocus(9002) | Control.HasFocus(9003)]">SetFocus($INFO[Window(Home).Property(nc.spot.back)])</onstop>
+        <onstop condition="[Control.HasFocus(9000) | Control.HasFocus(9001) | Control.HasFocus(9002) | Control.HasFocus(9003) | ControlGroup(9210).HasFocus() | ControlGroup(9410).HasFocus() | ControlGroup(9510).HasFocus()]">SetFocus($INFO[Window(Home).Property(nc.spot.back)])</onstop>
         <onstop>ClearProperty(nc.spot.back,home)</onstop>
     </timer>
     <!-- The play button of a TMDb page appears once the library copy is found (DialogVideoInfo
