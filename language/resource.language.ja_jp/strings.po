@@ -1174,8 +1174,8 @@ msgid "none"
 msgstr "無し"
 
 msgctxt "#31700"
-msgid "Continue watching + Next up"
-msgstr "続きを見る + 次に見る"
+msgid "On Deck"
+msgstr "On Deck"
 
 msgctxt "#31701"
 msgid "What you started, then the shows you are watching. OK on a show opens the next episode."

@@ -1174,7 +1174,7 @@ msgid "none"
 msgstr ""
 
 msgctxt "#31700"
-msgid "Continue watching + Next up"
+msgid "On Deck"
 msgstr ""
 
 msgctxt "#31701"
