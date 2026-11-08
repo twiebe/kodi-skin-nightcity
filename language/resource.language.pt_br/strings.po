@@ -1150,3 +1150,35 @@ msgstr "canais de áudio"
 msgctxt "#31508"
 msgid "clear filter"
 msgstr "limpar filtro"
+
+msgctxt "#31600"
+msgid "runtime"
+msgstr "duração"
+
+msgctxt "#31601"
+msgid "genre"
+msgstr "gênero"
+
+msgctxt "#31602"
+msgid "details"
+msgstr "detalhes"
+
+msgctxt "#31603"
+msgid "seasons"
+msgstr "temporadas"
+
+msgctxt "#31604"
+msgid "season"
+msgstr "temporada"
+
+msgctxt "#31605"
+msgid "seasons"
+msgstr "temporadas"
+
+msgctxt "#31606"
+msgid "episodes"
+msgstr "episódios"
+
+msgctxt "#31607"
+msgid "none"
+msgstr "nenhum"

@@ -2589,6 +2589,13 @@ def test_bar_rating(value, key):
     assert nightcity.bar_rating(value) == key
 
 
+@pytest.mark.parametrize('value,key', [('95', '1:30'), ('90', '1:30'), ('89', '1:00'), ('120', '2:00'), ('29', '0:00'),
+                                       ('200', '3:00'), ('', 'none'), ('0', 'none'), ('n/a', 'none')])
+def test_bar_runtime(value, key):
+    """Half hours, written as a clock: no word to translate."""
+    assert nightcity.bar_runtime(value) == key
+
+
 def test_bar_groups_keep_the_first_title_of_each_key_in_list_order():
     assert nightcity.bar_groups(['#', 'A', 'A', 'C', 'C', 'Z']) == [('#', 0), ('A', 1), ('C', 3), ('Z', 5)]
 
@@ -2657,7 +2664,7 @@ def test_bar_width_grows_with_the_label():
 
 
 @pytest.mark.parametrize('name,method', [('', 'bar_letter'), ('sorttitle', 'bar_letter'), ('year', 'bar_year'),
-                                         ('rating', 'bar_rating')])
+                                         ('rating', 'bar_rating'), ('time', 'bar_runtime')])
 def test_bar_key_of_the_info_label_sorts(name, method):
     assert nightcity.BAR_INFO[name][1] is getattr(nightcity, method)
 

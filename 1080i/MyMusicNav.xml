@@ -18,7 +18,7 @@
             </include>
         </control>
         <include content="StatusBar">
-            <param name="title" value="$INFO[Container.FolderName]"/>
+            <param name="title" value="$VAR[MusicNavTitle]"/>
             <param name="counter" value="$INFO[Container.CurrentItem]/$INFO[Container.NumItems]"/>
             <param name="weather" value="false"/>
         </include>
@@ -196,18 +196,19 @@
             <control type="textbox">
                 <top>420</top>
                 <width>360</width>
-                <height>300</height>
+                <height>260</height>
                 <font>font_tiny</font>
                 <textcolor>text_dim</textcolor>
                 <label>$INFO[ListItem.Property(Album_Description)]$INFO[ListItem.Property(Artist_Description)]</label>
             </control>
         </control>
-        <!-- View and sort: Kodi ids 2 view (Kodi labels it), 3 sort by (Kodi labels it), 4 descending -->
+        <!-- View and sort: Kodi ids 2 view (Kodi labels it), 3 sort by (Kodi labels it), 4 descending;
+             on all albums, artists or songs the genre filter (scripts/nightcity.py music_filter) -->
         <control type="grouplist" id="9060">
             <left>1421</left>
-            <top>870</top>
+            <top>818</top>
             <width>380</width>
-            <height>196</height>
+            <height>248</height>
             <itemgap>-20</itemgap>
             <onleft condition="Control.IsVisible(51)">51</onleft>
             <onleft>50</onleft>
@@ -235,6 +236,13 @@
                 <textureradiooffnofocus colordiffuse="text_mute">ui/check_off_pad.png</textureradiooffnofocus>
                 <textureradioofffocus colordiffuse="focus_text">ui/check_off_pad.png</textureradioofffocus>
             </control>
+            <include content="ListButton">
+                <param name="id" value="9061"/>
+                <param name="width" value="380"/>
+                <param name="label" value="$LOCALIZE[31502]: $VAR[MusicFilterLabel]"/>
+                <param name="visible" value="$EXP[MusicFilterable]"/>
+                <param name="onclick" value="NotifyAll(nightcity,music_filter)"/>
+            </include>
         </control>
         <include content="PillButton">
             <param name="id" value="5200"/>

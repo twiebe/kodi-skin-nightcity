@@ -1152,3 +1152,35 @@ msgstr "オーディオチャンネル"
 msgctxt "#31508"
 msgid "clear filter"
 msgstr "フィルターをクリア"
+
+msgctxt "#31600"
+msgid "runtime"
+msgstr "ランタイム"
+
+msgctxt "#31601"
+msgid "genre"
+msgstr "ジャンル"
+
+msgctxt "#31602"
+msgid "details"
+msgstr "詳細"
+
+msgctxt "#31603"
+msgid "seasons"
+msgstr "シーズン"
+
+msgctxt "#31604"
+msgid "season"
+msgstr "シーズン"
+
+msgctxt "#31605"
+msgid "seasons"
+msgstr "シーズン"
+
+msgctxt "#31606"
+msgid "episodes"
+msgstr "エピソード"
+
+msgctxt "#31607"
+msgid "none"
+msgstr "無し"

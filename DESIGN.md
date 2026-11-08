@@ -23,7 +23,7 @@ The remote moves through levels, not through confirmations.
 
 All movies and all shows have a faint rail at the far right with a mark of where the grid stands.
 Right goes grid, menu, bar, Left comes back the same way. On the bar the mark becomes a cursor that
-names its group, whatever the sort: a letter, a year, a month or a whole rating. Up and Down move one
+names its group, whatever the sort: a letter, a year, a month, a whole rating or a half hour of runtime (1:30). Up and Down move one
 group, evenly over the rail whatever the sizes of the groups, and the grid follows at once (focus
 applies). OK goes to the group's first title, Left stays there too, Back returns to the card it came
 from. With fewer than three groups there is no bar: Right stays on the menu.
@@ -37,6 +37,14 @@ title, artist, album, genre or year. Other sorts have no groups to name, and nob
 list of songs, so no bar there. The parent
 folder and "all albums" belong to no group. Esc and the like stay what they were off the bar: they
 leave the window.
+
+### The skin's select dialogs
+
+The filter dialogs (the library grid's and the music library's) and the details dialog of the list
+have one OK and no Cancel: Left goes one level up and keeps what is ticked (in a group it confirms,
+on the list of groups it closes), Right one level down (on the list of groups it opens the group,
+in a multi-select it stays), Back cancels. Every select dialog, Kodi's own too: Up from the
+buttons goes back to the list.
 
 ### Selectors are skipped from above
 

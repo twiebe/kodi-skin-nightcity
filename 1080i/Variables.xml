@@ -204,6 +204,15 @@
         <value condition="String.StartsWith(ListItem.FileExtension,dsf) | String.StartsWith(ListItem.FileExtension,dff)">DSD$INFO[ListItem.BitRate,  , kbit/s]</value>
         <value>$INFO[ListItem.BitRate,, kbit/s]</value>
     </variable>
+    <!-- the genres of the filter (scripts/nightcity.py music_filter) while their path is shown -->
+    <variable name="MusicNavTitle">
+        <value condition="!String.IsEmpty(Window(Home).Property(nc.musicfilter.path)) + String.IsEqual(Container.FolderPath,Window(Home).Property(nc.musicfilter.path))">$INFO[Container.FolderName]$INFO[Window(Home).Property(nc.musicfilter.label),  ·  ,]</value>
+        <value>$INFO[Container.FolderName]</value>
+    </variable>
+    <variable name="MusicFilterLabel">
+        <value condition="!String.IsEmpty(Window(Home).Property(nc.musicfilter.path)) + String.IsEqual(Container.FolderPath,Window(Home).Property(nc.musicfilter.path))">$INFO[Window(Home).Property(nc.musicfilter.label)]</value>
+        <value>$LOCALIZE[31503]</value>
+    </variable>
     <variable name="MusicNavMeta">
         <value condition="String.IsEqual(ListItem.DBType,artist) | String.IsEqual(ListItem.DBType,genre)">$INFO[ListItem.Genre]</value>
         <value>$INFO[ListItem.Artist]$INFO[ListItem.Year,  ·  ]</value>
@@ -642,7 +651,9 @@
     </variable>
 
     <!-- Full library grid (window 1110): movies or shows, sorted by nc.sort / nc.sortdesc -->
+    <!-- time is Kodi's sort by duration, the runtime; shows have none, they take the title -->
     <variable name="LibrarySortMethod">
+        <value condition="String.IsEqual(Skin.String(nc.sort),time) + String.IsEqual(Window(Home).Property(nc.library),tvshows)">sorttitle</value>
         <value condition="!String.IsEmpty(Skin.String(nc.sort))">$INFO[Skin.String(nc.sort)]</value>
         <value>sorttitle</value>
     </variable>
@@ -671,9 +682,39 @@
         <value condition="$EXP[LibraryAsList]">$LOCALIZE[31501]</value>
         <value>$LOCALIZE[31042]</value>
     </variable>
-    <!-- a row of the list: what the info page shows of the format, 4K  DV  TrueHD 7.1 -->
-    <variable name="LibraryFormat">
-        <value>$VAR[ItemResolution]$VAR[ItemHdr,  ,]$VAR[ItemAudio,  ,]</value>
+    <!-- a row of the list: the details chosen (LibraryDetail... in Includes_Base.xml) in a fixed
+         order, the format as the info page shows it: 1999  136 min  ★ 8.7  4K  DV  TrueHD 7.1. Right
+         aligned, so the gap before the first one never shows -->
+    <variable name="LibraryDetails">
+        <value>$VAR[LibraryRowYear,  ,]$VAR[LibraryRowRuntime,  ,]$VAR[LibraryRowRating,  ,]$VAR[LibraryRowSeasons,  ,]$VAR[LibraryRowEpisodes,  ,]$VAR[LibraryRowStudio,  ,]$VAR[LibraryRowRes,  ,]$VAR[LibraryRowHdr,  ,]$VAR[LibraryRowAudio,  ,]</value>
+    </variable>
+    <variable name="LibraryRowYear">
+        <value condition="$EXP[LibraryDetailYear]">$INFO[ListItem.Year]</value>
+    </variable>
+    <variable name="LibraryRowRuntime">
+        <value condition="$EXP[LibraryDetailRuntime]">$INFO[ListItem.Duration(mins),, min]</value>
+    </variable>
+    <variable name="LibraryRowRating">
+        <value condition="$EXP[LibraryDetailRating]">$INFO[ListItem.Rating,★ ,]</value>
+    </variable>
+    <variable name="LibraryRowSeasons">
+        <value condition="$EXP[LibraryDetailSeasons] + Integer.IsEqual(ListItem.Property(TotalSeasons),1)">1 $LOCALIZE[31604]</value>
+        <value condition="$EXP[LibraryDetailSeasons] + Integer.IsGreater(ListItem.Property(TotalSeasons),1)">$INFO[ListItem.Property(TotalSeasons)] $LOCALIZE[31605]</value>
+    </variable>
+    <variable name="LibraryRowEpisodes">
+        <value condition="$EXP[LibraryDetailEpisodes] + !String.IsEmpty(ListItem.Property(TotalEpisodes))">$INFO[ListItem.Property(WatchedEpisodes)]/$INFO[ListItem.Property(TotalEpisodes)]</value>
+    </variable>
+    <variable name="LibraryRowStudio">
+        <value condition="$EXP[LibraryDetailStudio]">$INFO[ListItem.Studio]</value>
+    </variable>
+    <variable name="LibraryRowRes">
+        <value condition="$EXP[LibraryDetailRes]">$VAR[ItemResolution]</value>
+    </variable>
+    <variable name="LibraryRowHdr">
+        <value condition="$EXP[LibraryDetailHdr]">$VAR[ItemHdr]</value>
+    </variable>
+    <variable name="LibraryRowAudio">
+        <value condition="$EXP[LibraryDetailAudio]">$VAR[ItemAudio]</value>
     </variable>
     <variable name="LibraryGridFocusColor">
         <value condition="Control.HasFocus(5000)">focus_text</value>
@@ -683,6 +724,7 @@
         <value condition="String.IsEqual(Skin.String(nc.sort),year)">$LOCALIZE[31119]</value>
         <value condition="String.IsEqual(Skin.String(nc.sort),dateadded)">$LOCALIZE[31120]</value>
         <value condition="String.IsEqual(Skin.String(nc.sort),rating)">$LOCALIZE[31121]</value>
+        <value condition="String.IsEqual(Skin.String(nc.sort),time) + !String.IsEqual(Window(Home).Property(nc.library),tvshows)">$LOCALIZE[31600]</value>
         <value>$LOCALIZE[31118]</value>
     </variable>
     <variable name="LibraryDirectionLabel">

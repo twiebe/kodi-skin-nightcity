@@ -80,7 +80,7 @@ def test_every_layout_carries_its_condition():
     assert 'lib_layout' in _nightcity().COMMANDS
 
 
-def test_a_row_names_year_runtime_and_format():
+def test_a_row_names_the_title_and_the_chosen_details():
     rows = [layout for layout in _controls()['5000'] if layout.get('condition') == AS_LIST]
     base = parse(ROOT / '1080i' / 'Includes_Base.xml')
     row = next(i for i in base.iter('include') if i.get('name') == 'LibraryRow')
@@ -88,11 +88,7 @@ def test_a_row_names_year_runtime_and_format():
         assert [i.get('content') for i in layout.iter('include') if i.get('content')] == ['LibraryRow']
         labels = ' '.join(c.findtext('label') or '' for c in row.iter('control'))
         assert '$INFO[ListItem.Label]' in labels
-        assert '$VAR[LibraryRight]' in labels  # year and runtime, watched episodes of a show
-        assert '$VAR[LibraryFormat]' in labels
-    variable = re.search(r'<variable name="LibraryFormat">(.*?)</variable>', _variables(), re.S).group(1)
-    # the formatting of the info page and the heroes, not a new one
-    assert '$VAR[ItemResolution]' in variable and '$VAR[ItemHdr,' in variable and '$VAR[ItemAudio,' in variable
+        assert '$VAR[LibraryDetails]' in labels  # tests/static/test_library_details.py
 
 
 def test_the_focused_row_glows_in_both_looks():
@@ -103,9 +99,9 @@ def test_the_focused_row_glows_in_both_looks():
 def test_the_menu_has_view_and_filter():
     menu = _controls()['5100']
     ids = [_params(i)['id'] for i in menu.iter('include') if i.get('content') == 'PillButton']
-    assert ids == ['5101', '5102', '5103', '5104']
-    assert _nightcity().BAR_MENU_BUTTONS == (5101, 5102, 5103, 5104)
-    for cid in ('5103', '5104'):
+    assert ids == ['5101', '5102', '5103', '5104', '5105']
+    assert _nightcity().BAR_MENU_BUTTONS == (5101, 5102, 5103, 5104, 5105)
+    for cid in ('5103', '5104', '5105'):
         assert _params(_pill(cid))['onfocus'] == 'NotifyAll(nightcity,lib_bar:prepare)'
         assert _params(_pill(cid))['width'] == str(_nightcity().BAR_MENU_WIDE)
 
@@ -140,7 +136,7 @@ def test_the_filter_makes_the_path_and_the_header():
 def test_the_title_column_starts_below_the_menu():
     menu = _controls()['5100']
     bottom = int(menu.findtext('top')) + int(menu.findtext('height'))
-    assert int(menu.findtext('height')) >= 4 * 74 - 3 * 4
+    assert int(menu.findtext('height')) >= 5 * 74 - 4 * 4
     base = parse(ROOT / '1080i' / 'Includes_Base.xml')
     include = next(i for i in base.iter('include') if i.get('name') == 'LibraryTitle')
     kicker = next(i for i in include.iter('include') if i.get('content') == 'Kicker')
@@ -169,7 +165,7 @@ def test_right_from_the_grid_goes_back_to_the_bars_last_button():
     rights = [(r.get('condition'), r.text) for r in grid.findall('onright')]
     assert rights == [('!String.IsEmpty(Window(Home).Property(nc.lib.menu))', 'SetFocus($INFO[Window(Home).Property(nc.lib.menu)])'),
                       ('String.IsEmpty(Window(Home).Property(nc.lib.menu))', '5101')]
-    for button in ('5101', '5102', '5103', '5104'):
+    for button in ('5101', '5102', '5103', '5104', '5105'):
         inc = next(i for i in window.iter('include') if i.find("param[@name='id']") is not None
                    and i.find("param[@name='id']").get('value') == button)
         assert 'SetProperty(nc.lib.menu,{},home)'.format(button) in [f.text for f in inc.findall('onfocus')]

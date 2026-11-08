@@ -1150,3 +1150,35 @@ msgstr "canali audio"
 msgctxt "#31508"
 msgid "clear filter"
 msgstr "cancella filtro"
+
+msgctxt "#31600"
+msgid "runtime"
+msgstr "durata"
+
+msgctxt "#31601"
+msgid "genre"
+msgstr "genere"
+
+msgctxt "#31602"
+msgid "details"
+msgstr "dettagli"
+
+msgctxt "#31603"
+msgid "seasons"
+msgstr "stagioni"
+
+msgctxt "#31604"
+msgid "season"
+msgstr "stagione"
+
+msgctxt "#31605"
+msgid "seasons"
+msgstr "stagioni"
+
+msgctxt "#31606"
+msgid "episodes"
+msgstr "episodi"
+
+msgctxt "#31607"
+msgid "none"
+msgstr "nessuno"

@@ -1150,3 +1150,35 @@ msgstr "kanały dźwięku"
 msgctxt "#31508"
 msgid "clear filter"
 msgstr "wyczyść filtr"
+
+msgctxt "#31600"
+msgid "runtime"
+msgstr "czas trwania"
+
+msgctxt "#31601"
+msgid "genre"
+msgstr "gatunek"
+
+msgctxt "#31602"
+msgid "details"
+msgstr "szczegóły"
+
+msgctxt "#31603"
+msgid "seasons"
+msgstr "sezony"
+
+msgctxt "#31604"
+msgid "season"
+msgstr "sezon"
+
+msgctxt "#31605"
+msgid "seasons"
+msgstr "sez."
+
+msgctxt "#31606"
+msgid "episodes"
+msgstr "odcinki"
+
+msgctxt "#31607"
+msgid "none"
+msgstr "brak"

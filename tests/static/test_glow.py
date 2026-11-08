@@ -32,7 +32,7 @@ TEXTURE_TAGS = ('texture', 'texturefocus', 'texturenofocus', 'alttexturefocus', 
 # '#n' is the n-th grouplist of a file without id.
 BEFORE = {
     ('AddonBrowser.xml', '9000'): ('1440', '100', '400', '600', '0'),
-    ('Custom_1110_Library.xml', '5100'): ('1431', '108', '439', '264', '16'),
+    ('Custom_1110_Library.xml', '5100'): ('1431', '108', '439', '334', '16'),
     ('Custom_1151_NextEpisode.xml', '1153'): ('856', '952', '1000', '54', '12'),
     ('DialogAddonInfo.xml', '9000'): ('40', '760', '1520', '54', '16'),
     ('DialogAddonSettings.xml', '3'): ('40', '84', '400', '720', '0'),
@@ -70,7 +70,7 @@ BEFORE = {
     ('Includes_Settings.xml', '$PARAM[id]'): ('560', '100', '1240', '$PARAM[height]', '0'),
     ('MusicOSD.xml', '600'): ('64', '590', '1000', '54', '12'),
     ('MusicOSD.xml', '620'): ('1056', '590', '800', '54', '12'),
-    ('MyMusicNav.xml', '9060'): ('1431', '880', '360', '176', '0'),
+    ('MyMusicNav.xml', '9060'): ('1431', '828', '360', '228', '0'),
     ('MyVideoNav.xml', '9060'): ('1440', '880', '400', '176', '0'),
     ('Settings.xml', '9200'): ('64', '90', '520', '900', '0'),
     ('SettingsCategory.xml', '3'): ('120', '100', '400', '840', '0'),

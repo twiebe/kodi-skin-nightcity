@@ -284,6 +284,8 @@
     <!-- The cursor is on an album or artist of a row of the Music page: the hero shows that card
          (MusicFollowHero) and the rotation stands. Anywhere else, also on a genre, the spotlight
          is its random self. -->
+    <!-- the lists the genre filter works on (scripts/nightcity.py music_filter_parse) -->
+    <expression name="MusicFilterable">String.IsEqual(Container.FolderPath,musicdb://albums/) | String.IsEqual(Container.FolderPath,musicdb://artists/) | String.IsEqual(Container.FolderPath,musicdb://songs/) | String.StartsWith(Container.FolderPath,musicdb://albums/?xsp=) | String.StartsWith(Container.FolderPath,musicdb://artists/?xsp=) | String.StartsWith(Container.FolderPath,musicdb://songs/?xsp=)</expression>
     <expression name="MusicFollows">ControlGroup(9810).HasFocus() + [String.IsEqual(ListItem.DBType,album) | String.IsEqual(ListItem.DBType,artist)]</expression>
 
     <!-- Hero of the Music page: the album spotlight (list 9002, random albums). Cover, text and

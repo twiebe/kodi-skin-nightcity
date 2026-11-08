@@ -2192,7 +2192,7 @@ BAR_RIGHT = 1912  # px, right edge of the cursor, padded for its glow like every
 BAR_BUTTON = 74  # px, height of a pill
 BAR_MIN_GROUPS = 3  # fewer and a jump is no use: Right stays on the menu
 BAR_FOLLOW = 0.15  # s after the last press the grid follows
-BAR_MENU_BUTTONS = (5101, 5102, 5103, 5104)  # the library grid's menu: wide, narrow only while the bar has the focus
+BAR_MENU_BUTTONS = (5101, 5102, 5103, 5104, 5105)  # the library grid's menu: wide, narrow only while the bar has the focus
 BAR_MENU_WIDE, BAR_MENU_NARROW = 459, 380
 BAR_GLIDE_FRAME = 0.016  # s between the steps of the cursor on its way to the next group
 BAR_NONE = 'none'
@@ -2218,6 +2218,15 @@ def bar_month(value):
     return '{} {}'.format(BAR_MONTHS[int(match.group(3)) - 1], match.group(2))
 
 
+def bar_runtime(minutes):
+    """Half hours of a runtime in minutes, as a clock: 95 is 1:30."""
+    try:
+        half = int(minutes) // 30
+    except ValueError:
+        return BAR_NONE
+    return '{}:{:02d}'.format(half // 2, half % 2 * 30) if int(minutes) > 0 else BAR_NONE
+
+
 def bar_rating(value):
     """Whole points; Kodi writes the decimal sign of the language. No rating is 0.0."""
     try:
@@ -2235,7 +2244,7 @@ MUSIC_BAR_SORTS = {7: ('SortLetter', bar_letter), 10: ('SortLetter', bar_letter)
 # sort method: (the item's info label, what makes its group of it); added dates come from JSON-RPC,
 # ListItem.DateAdded is written in the language's format
 BAR_INFO = {'': ('SortLetter', bar_letter), 'sorttitle': ('SortLetter', bar_letter), 'year': ('Year', bar_year),
-            'rating': ('Rating', bar_rating)}
+            'rating': ('Rating', bar_rating), 'time': ('Duration(mins)', bar_runtime)}
 
 
 def bar_groups(keys):
@@ -2455,7 +2464,7 @@ _music_bar = LibBar(MUSIC_WINDOW, MUSIC_WINDOW, MUSIC_MENU_BUTTON, _music_grid, 
 # filtering: a smart playlist in the grid's path (videodb://movies/titles/?xsp=...), its rules as in
 # SmartPlayList.cpp. The values of a group or, the groups and. The choice holds for the session, per
 # library, in Home's nc.libfilter.<library> (the choice), .path (what the grid shows) and .label
-# (the header). Shows have no stream details in Kodi, only the studio.
+# (the header). Shows have no stream details in Kodi, only genre and studio.
 
 LIB_FILTER_HDR = ['hdr10', 'hdr10plus', 'dolbyvision', 'hlg']  # Kodi 21 names three; hdr10plus from an NFO
 LIB_FILTER_OPTIONS = {
@@ -2471,10 +2480,11 @@ LIB_FILTER_OPTIONS = {
               ('pcm', 'PCM', ['pcm', 'pcm_s16le', 'pcm_s24le', 'pcm_s32le', 'pcm_bluray', 'pcm_dvd'])],
     'channels': [('8', '7.1', ['8']), ('6', '5.1', ['6']), ('2', '2.0', ['2'])],
 }
-LIB_FILTER_FIELDS = {'res': 'videoresolution', 'hdr': 'hdrtype', 'audio': 'audiocodec',
+LIB_FILTER_FIELDS = {'genre': 'genre', 'res': 'videoresolution', 'hdr': 'hdrtype', 'audio': 'audiocodec',
                      'channels': 'audiochannels', 'studio': 'studio'}
-LIB_FILTER_NAMES = {'res': 31504, 'hdr': 31505, 'audio': 31506, 'channels': 31507, 'studio': 31128}
-LIB_FILTER_GROUPS = {'movies': ['res', 'hdr', 'audio', 'channels', 'studio'], 'tvshows': ['studio']}
+LIB_FILTER_NAMES = {'genre': 31601, 'res': 31504, 'hdr': 31505, 'audio': 31506, 'channels': 31507, 'studio': 31128}
+LIB_FILTER_GROUPS = {'movies': ['genre', 'res', 'hdr', 'audio', 'channels', 'studio'], 'tvshows': ['genre', 'studio']}
+LIB_FILTER_FREE = ('genre', 'studio')  # their values are the library's own, the names Kodi files them under
 
 
 def lib_filter_groups(library):
@@ -2486,7 +2496,7 @@ def _lib_filter_chosen(library, choice):
     chosen = []
     for group in lib_filter_groups(library):
         keys = choice.get(group) or []
-        if group == 'studio':
+        if group in LIB_FILTER_FREE:
             options = [(k, k, [k]) for k in keys]
         else:
             options = [o for o in LIB_FILTER_OPTIONS[group] if o[0] in keys]
@@ -2541,6 +2551,12 @@ def _lib_studios(library):
     return sorted({f['label'] for f in found.get('files') or [] if f.get('label')}, key=str.lower)
 
 
+def _lib_genres(library):
+    """The genres of the library's titles."""
+    found = _rpc('VideoLibrary.GetGenres', type='tvshow' if library == 'tvshows' else 'movie')
+    return sorted({g['label'] for g in found.get('genres') or [] if g.get('label')}, key=str.lower)
+
+
 def _capital(label):
     return label[:1].upper() + label[1:]
 
@@ -2565,6 +2581,7 @@ def lib_layout():
     while the window was closed: another library, or a skin string set from outside."""
     if not _monitor().waitForAbort(LIB_LAYOUT_WAIT):
         _home().setProperty('nc.lib.layout', '1')
+        _lib_details_name()
 
 
 def lib_filter():
@@ -2572,7 +2589,7 @@ def lib_filter():
     OK on one its multi-select; every change applies at once, the grid follows behind the
     dialog. Back closes it."""
     import xbmc
-    library = 'tvshows' if _home().getProperty('nc.library') == 'tvshows' else 'movies'
+    library = _lib_library()
     choice = lib_filter_load(_home().getProperty('nc.libfilter.' + library))
     groups = lib_filter_groups(library)
     text = lambda string_id: _capital(xbmc.getLocalizedString(string_id))  # noqa: E731
@@ -2587,7 +2604,7 @@ def lib_filter():
 def _lib_filter_dialogs(library, choice, groups, text):
     """The list of groups and their multi-selects, until the list closes."""
     import xbmcgui
-    studios = None
+    free = {}  # group: the library's values, asked once a dialog
     current = 0
     while True:
         items = []
@@ -2607,10 +2624,10 @@ def _lib_filter_dialogs(library, choice, groups, text):
             _lib_filter_apply(library, choice)
             continue
         group = groups[picked]
-        if group == 'studio':
-            if studios is None:
-                studios = _lib_studios(library)
-            options = [(s, s) for s in studios]
+        if group in LIB_FILTER_FREE:
+            if group not in free:
+                free[group] = _lib_genres(library) if group == 'genre' else _lib_studios(library)
+            options = [(v, v) for v in free[group]]
         else:
             options = [(key, label) for key, label, _ in LIB_FILTER_OPTIONS[group]]
         if not options:
@@ -2624,6 +2641,141 @@ def _lib_filter_dialogs(library, choice, groups, text):
         choice = dict(choice)
         choice[group] = [options[i][0] for i in selected]
         _lib_filter_apply(library, choice)
+
+
+# --- the details of a row of the list -------------------------------------------------------------
+# The details button of window 1110 opens a multi-select of what a row of the list shows, per library
+# in the skin string nc.libdetails.<library>: the keys in the row's order with dots between them (a
+# comma would end the value of Skin.SetString), 'none' for none, empty for the default. The skin reads it with String.Contains (Includes_Base.xml LibraryDetail...), so
+# no key is part of another. Home's nc.libdetails.label names the choice on the button.
+
+LIB_DETAILS = {
+    'movies': [('year', 31119), ('runtime', 31600), ('rating', 31121), ('res', 31504), ('hdr', 31505),
+               ('audio', 31506)],
+    'tvshows': [('year', 31119), ('rating', 31121), ('seasons', 31603), ('episodes', 31606), ('studio', 31128)],
+}
+LIB_DETAILS_DEFAULT = {'movies': ['year', 'runtime'], 'tvshows': ['year', 'episodes']}
+LIB_DETAILS_NONE = 'none'
+
+
+def lib_details_load(library, text):
+    """The keys a row of LIBRARY shows, in the row's order, from its skin string."""
+    if not text:
+        return list(LIB_DETAILS_DEFAULT[library])
+    chosen = text.split('.')
+    return [key for key, _ in LIB_DETAILS[library] if key in chosen]
+
+
+def lib_details_dump(library, keys):
+    text = '.'.join(key for key, _ in LIB_DETAILS[library] if key in keys)
+    return text or LIB_DETAILS_NONE
+
+
+def lib_details_label(library, keys, text):
+    names = dict(LIB_DETAILS[library])
+    return ', '.join(text(names[key]) for key in keys) or text(31607)
+
+
+def _lib_library():
+    return 'tvshows' if _home().getProperty('nc.library') == 'tvshows' else 'movies'
+
+
+def _lib_details_name():
+    """The choice of the shown library on the details button, in the language of the moment."""
+    import xbmc
+    library = _lib_library()
+    keys = lib_details_load(library, xbmc.getInfoLabel('Skin.String(nc.libdetails.{})'.format(library)))
+    _home().setProperty('nc.libdetails.label', lib_details_label(library, keys, xbmc.getLocalizedString))
+
+
+def lib_details():
+    """The details dialog: a multi-select of what a row of the list shows, marked like the filter's
+    (one OK, Left confirms); Back keeps the choice as it was."""
+    import xbmc
+    import xbmcgui
+    library = _lib_library()
+    keys = lib_details_load(library, xbmc.getInfoLabel('Skin.String(nc.libdetails.{})'.format(library)))
+    details = LIB_DETAILS[library]
+    _home().setProperty('nc.select.ok', '1')
+    try:
+        selected = xbmcgui.Dialog().multiselect(
+            _capital(xbmc.getLocalizedString(31602)), [_capital(xbmc.getLocalizedString(name)) for _, name in details],
+            preselect=[i for i, (key, _) in enumerate(details) if key in keys])
+    finally:
+        _home().clearProperty('nc.select.ok')
+    if selected is None:
+        return
+    value = lib_details_dump(library, [details[i][0] for i in selected])
+    xbmc.executebuiltin('Skin.SetString(nc.libdetails.{},{})'.format(library, value))
+    _home().setProperty('nc.libdetails.label', lib_details_label(library, lib_details_load(library, value),
+                                                                 xbmc.getLocalizedString))
+
+
+# --- the genre filter of the music library ---------------------------------------------------------
+# The filter button of the music window (MyMusicNav.xml) on the list of all albums, artists or
+# songs: a multi-select of the library's genres, the choice a smart playlist rule in the path Kodi
+# shows (musicdb://albums/?xsp=...), so the window's history keeps it and Back leaves it. Other
+# rules of a path stay (the skin's own smart playlists). Home's nc.musicfilter.path and .label name
+# the choice in the header while that path is shown.
+
+MUSIC_FILTER_NODES = ('albums', 'artists', 'songs')
+MUSIC_FILTER_PATH = re.compile(r'musicdb://(albums|artists|songs)/(?:\?xsp=(.*))?$')
+
+
+def music_filter_parse(path):
+    """(node, other rules, genres) of a path the filter works on, else None."""
+    match = MUSIC_FILTER_PATH.match(path or '')
+    if not match:
+        return None
+    node, query = match.groups()
+    if query is None:
+        return node, [], []
+    try:
+        xsp = json.loads(urllib.parse.unquote(query))
+    except ValueError:
+        return None
+    rules = (xsp.get('rules') or {}).get('and') if isinstance(xsp, dict) else None
+    if not isinstance(rules, list) or set(xsp['rules']) != {'and'}:
+        return None
+    genres = [r for r in rules if isinstance(r, dict) and r.get('field') == 'genre' and r.get('operator') == 'is']
+    others = [r for r in rules if r not in genres]
+    return node, others, [v for r in genres for v in r.get('value') or []]
+
+
+def music_filter_path(node, rules, genres):
+    rules = list(rules) + ([{'field': 'genre', 'operator': 'is', 'value': list(genres)}] if genres else [])
+    if not rules:
+        return 'musicdb://{}/'.format(node)
+    xsp = json.dumps({'rules': {'and': rules}, 'type': node}, separators=(',', ':'))
+    return 'musicdb://{}/?xsp={}'.format(node, urllib.parse.quote(xsp, safe=''))
+
+
+def music_filter():
+    """The genre filter of the music window: the genres ticked show, none ticked is all."""
+    import xbmc
+    import xbmcgui
+    parsed = music_filter_parse(xbmc.getInfoLabel('Container.FolderPath'))
+    if parsed is None:
+        return
+    node, rules, chosen = parsed
+    found = _rpc('AudioLibrary.GetGenres')
+    genres = sorted({g['label'] for g in found.get('genres') or [] if g.get('label')}, key=str.lower)
+    if not genres:
+        return
+    _home().setProperty('nc.select.ok', '1')
+    try:
+        selected = xbmcgui.Dialog().multiselect(_capital(xbmc.getLocalizedString(31601)), genres,
+                                                preselect=[i for i, g in enumerate(genres) if g in chosen])
+    finally:
+        _home().clearProperty('nc.select.ok')
+    if selected is None:
+        return
+    picked = [genres[i] for i in selected]
+    path = music_filter_path(node, rules, picked)
+    _home().setProperty('nc.musicfilter.path', path if picked else '')
+    _home().setProperty('nc.musicfilter.label', ', '.join(picked))
+    xbmc.executebuiltin('Container.Update({},replace)'.format(path))
+    run_command('music_bar', ['changed'])
 
 
 def _bar_command(bar, action, args):
@@ -2674,7 +2826,7 @@ COMMANDS = {'lib_bar': lib_bar, 'music_bar': music_bar, 'next_episode': next_epi
             'music_play': music_play, 'music_goto': music_goto, 'music_info': music_info,
             'music_back': music_back, 'now_playing': now_playing, 'music_queue': music_queue,
             'music_queue_select': music_queue_select, 'lib_filter': lib_filter,
-            'lib_layout': lib_layout}
+            'lib_layout': lib_layout, 'lib_details': lib_details, 'music_filter': music_filter}
 
 
 # --- the skin service -------------------------------------------------------------------------

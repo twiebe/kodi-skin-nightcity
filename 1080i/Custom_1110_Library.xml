@@ -62,7 +62,7 @@
                     </include>
                 </control>
             </focusedlayout>
-            <!-- a row as wide as the panel, so one column: title, year and runtime, format -->
+            <!-- a row as wide as the panel, so one column: the title and the details chosen -->
             <itemlayout width="1368" height="60" condition="$EXP[LibraryLayoutReady] + $EXP[LibraryAsList]">
                 <include content="LibraryRow">
                     <param name="color" value="text_dim"/>
@@ -118,7 +118,7 @@
             <left>1421</left>
             <top>98</top>
             <width>459</width>
-            <height>284</height>
+            <height>354</height>
             <orientation>vertical</orientation>
             <itemgap>-4</itemgap>
             <onleft>5000</onleft>
@@ -132,11 +132,13 @@
                 <param name="width" value="459"/>
                 <param name="label" value="$LOCALIZE[31116]: $VAR[LibrarySortLabel]"/>
             
-                <!-- title, year, added, rating, title... (conditions are all checked before any runs) -->
-                <onclick condition="String.IsEmpty(Skin.String(nc.sort)) | String.IsEqual(Skin.String(nc.sort),sorttitle)">Skin.SetString(nc.sort,year)</onclick>
+                <!-- title, year, added, rating, runtime (Kodi's time), title... (conditions are all checked
+                     before any runs). Kodi keeps no runtime of a show: the shows skip it, and take it for the title -->
+                <onclick condition="String.IsEmpty(Skin.String(nc.sort)) | String.IsEqual(Skin.String(nc.sort),sorttitle) | [String.IsEqual(Skin.String(nc.sort),time) + String.IsEqual(Window(Home).Property(nc.library),tvshows)]">Skin.SetString(nc.sort,year)</onclick>
                 <onclick condition="String.IsEqual(Skin.String(nc.sort),year)">Skin.SetString(nc.sort,dateadded)</onclick>
                 <onclick condition="String.IsEqual(Skin.String(nc.sort),dateadded)">Skin.SetString(nc.sort,rating)</onclick>
-                <onclick condition="String.IsEqual(Skin.String(nc.sort),rating)">Skin.SetString(nc.sort,sorttitle)</onclick>
+                <onclick condition="String.IsEqual(Skin.String(nc.sort),rating) + !String.IsEqual(Window(Home).Property(nc.library),tvshows)">Skin.SetString(nc.sort,time)</onclick>
+                <onclick condition="[String.IsEqual(Skin.String(nc.sort),rating) + String.IsEqual(Window(Home).Property(nc.library),tvshows)] | [String.IsEqual(Skin.String(nc.sort),time) + !String.IsEqual(Window(Home).Property(nc.library),tvshows)]">Skin.SetString(nc.sort,sorttitle)</onclick>
                 <onclick>NotifyAll(nightcity,lib_bar:changed)</onclick>
             </include>
             <include content="PillButton">
@@ -170,6 +172,17 @@
                 <param name="label" value="$LOCALIZE[31502]: $VAR[LibraryFilterLabel]"/>
                 <param name="onfocus" value="NotifyAll(nightcity,lib_bar:prepare)"/>
                 <param name="onclick" value="NotifyAll(nightcity,lib_filter)"/>
+            </include>
+            <!-- what a row of the list shows, for the shown library (scripts/nightcity.py lib_details);
+                 the posters have no rows -->
+            <include content="PillButton">
+                <param name="id" value="5105"/>
+                <onfocus>SetProperty(nc.lib.menu,5105,home)</onfocus>
+                <param name="width" value="459"/>
+                <param name="label" value="$LOCALIZE[31602]: $INFO[Window(Home).Property(nc.libdetails.label)]"/>
+                <param name="visible" value="$EXP[LibraryAsList]"/>
+                <param name="onfocus" value="NotifyAll(nightcity,lib_bar:prepare)"/>
+                <param name="onclick" value="NotifyAll(nightcity,lib_details)"/>
             </include>
         </control>
         <!-- the focused title, large on the right; a text cannot change its width, so two of it:

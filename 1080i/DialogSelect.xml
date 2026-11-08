@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Select dialog. Kodi ids: 1 heading, 2 item count, 3 simple list, 6 detailed list, 5/8 extra buttons
      (5: OK of a multi-select), 7 cancel. The skin's filter dialogs (Window(Home).Property(nc.select.ok),
-     scripts/nightcity.py lib_filter) have one OK and no Cancel: a multi-select Kodi's own, a list
+     scripts/nightcity.py lib_filter, lib_details, music_filter) have one OK and no Cancel: a multi-select Kodi's own, a list
      of choices 9, which closes it; Back still cancels. -->
 <window>
     <depth>DepthDialog</depth>
@@ -30,9 +30,11 @@
             </control>
             <include content="DialogList">
                 <param name="id" value="3"/>
-                <!-- the skin's filter dialogs (Window(Home).Property(nc.select.ok)): Left one level up, Right stays,
-                     Down past the end to their one OK below; other dialogs keep Right to the buttons -->
+                <!-- the skin's filter dialogs (Window(Home).Property(nc.select.ok)): Left one level up, Right one
+                     down (a list of groups opens the group, a multi-select stays), Down past the end to their
+                     one OK below; other dialogs keep Right to the buttons -->
                 <onright condition="String.IsEmpty(Window(Home).Property(nc.select.ok))">9001</onright>
+                <onright condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)">Action(Select)</onright>
                 <onleft condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + Control.IsVisible(5)">SendClick(12000,5)</onleft>
                 <onleft condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)">Action(Back)</onleft>
                 <ondown condition="!String.IsEmpty(Window(Home).Property(nc.select.ok))">9001</ondown>
@@ -45,9 +47,11 @@
             </include>
             <include content="DialogList">
                 <param name="id" value="6"/>
-                <!-- the skin's filter dialogs (Window(Home).Property(nc.select.ok)): Left one level up, Right stays,
-                     Down past the end to their one OK below; other dialogs keep Right to the buttons -->
+                <!-- the skin's filter dialogs (Window(Home).Property(nc.select.ok)): Left one level up, Right one
+                     down (a list of groups opens the group, a multi-select stays), Down past the end to their
+                     one OK below; other dialogs keep Right to the buttons -->
                 <onright condition="String.IsEmpty(Window(Home).Property(nc.select.ok))">9001</onright>
+                <onright condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)">Action(Select)</onright>
                 <onleft condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + Control.IsVisible(5)">SendClick(12000,5)</onleft>
                 <onleft condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)">Action(Back)</onleft>
                 <ondown condition="!String.IsEmpty(Window(Home).Property(nc.select.ok))">9001</ondown>
@@ -62,7 +66,9 @@
             <control type="grouplist" id="9001">
                 <onleft condition="Control.IsVisible(6)">6</onleft>
                 <onleft>3</onleft>
-                <onup>noop</onup>
+                <!-- every select dialog: Up goes back to the list shown -->
+                <onup condition="Control.IsVisible(6)">6</onup>
+                <onup condition="!Control.IsVisible(6)">3</onup>
                 <left>30</left>
                 <top>730</top>
                 <width>1040</width>

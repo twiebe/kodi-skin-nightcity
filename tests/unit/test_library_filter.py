@@ -20,11 +20,11 @@ def _xsp(path):
     return base, json.loads(urllib.parse.unquote(query[len('xsp='):]))
 
 
-def test_movies_have_every_group_shows_only_the_studio():
+def test_movies_have_every_group_shows_genre_and_studio():
     """Kodi keeps stream details per file: a show has none, and a stream rule on tvshows is an SQL
-    error (tvshow_view has no idFile)."""
-    assert nightcity.lib_filter_groups('movies') == ['res', 'hdr', 'audio', 'channels', 'studio']
-    assert nightcity.lib_filter_groups('tvshows') == ['studio']
+    error (tvshow_view has no idFile). The genre comes first, the most asked for."""
+    assert nightcity.lib_filter_groups('movies') == ['genre', 'res', 'hdr', 'audio', 'channels', 'studio']
+    assert nightcity.lib_filter_groups('tvshows') == ['genre', 'studio']
 
 
 def test_nothing_chosen_is_the_plain_library():
@@ -129,3 +129,121 @@ def test_no_dashes_in_the_labels():
     for options in nightcity.LIB_FILTER_OPTIONS.values():
         for _, label, _ in options:
             assert '\u2013' not in label and '\u2014' not in label
+
+
+# --- the genre ------------------------------------------------------------------------------------
+
+def test_genres_are_one_rule_their_values_or():
+    for library in ('movies', 'tvshows'):
+        base, xsp = _xsp(nightcity.lib_filter_path(library, {'genre': ['Drama', 'Science Fiction']}))
+        assert base == 'videodb://{}/titles/'.format(library)
+        assert xsp['rules']['and'] == [{'field': 'genre', 'operator': 'is', 'value': ['Drama', 'Science Fiction']}]
+
+
+def test_genre_and_studio_and():
+    _, xsp = _xsp(nightcity.lib_filter_path('tvshows', {'studio': ['HBO'], 'genre': ['Drama']}))
+    assert xsp['rules']['and'] == [{'field': 'genre', 'operator': 'is', 'value': ['Drama']},
+                                   {'field': 'studio', 'operator': 'is', 'value': ['HBO']}]
+
+
+def test_the_label_starts_with_the_genres():
+    assert nightcity.lib_filter_label('movies', {'res': ['2160'], 'genre': ['Drama', 'Action']}) == 'Drama, Action  ·  4K'
+
+
+def test_the_genres_are_the_librarys(monkeypatch):
+    calls = []
+
+    def rpc(method, **params):
+        calls.append((method, params))
+        return {'genres': [{'label': 'drama'}, {'label': 'Action'}, {'label': ''}]}
+    monkeypatch.setattr(nightcity, '_rpc', rpc)
+    assert nightcity._lib_genres('tvshows') == ['Action', 'drama']
+    nightcity._lib_genres('movies')
+    assert [p['type'] for _, p in calls] == ['tvshow', 'movie']
+    assert {m for m, _ in calls} == {'VideoLibrary.GetGenres'}
+
+
+# --- the details of a row of the list -------------------------------------------------------------
+
+def test_the_details_each_library_offers_in_the_order_of_the_row():
+    assert [k for k, _ in nightcity.LIB_DETAILS['movies']] == ['year', 'runtime', 'rating', 'res', 'hdr', 'audio']
+    assert [k for k, _ in nightcity.LIB_DETAILS['tvshows']] == ['year', 'rating', 'seasons', 'episodes', 'studio']
+
+
+def test_by_default_year_and_runtime_of_a_movie_year_and_episodes_of_a_show():
+    assert nightcity.lib_details_load('movies', '') == ['year', 'runtime']
+    assert nightcity.lib_details_load('tvshows', '') == ['year', 'episodes']
+
+
+def test_the_details_survive_their_skin_string_in_the_rows_order():
+    text = nightcity.lib_details_dump('movies', ['audio', 'year', 'res'])
+    assert text == 'year.res.audio'
+    assert nightcity.lib_details_load('movies', text) == ['year', 'res', 'audio']
+
+
+def test_the_skin_string_has_no_comma():
+    """Skin.SetString ends its value at a comma."""
+    keys = [k for k, _ in nightcity.LIB_DETAILS['movies']]
+    assert ',' not in nightcity.lib_details_dump('movies', keys)
+
+
+def test_no_details_is_not_the_default():
+    assert nightcity.lib_details_dump('movies', []) == 'none'
+    assert nightcity.lib_details_load('movies', 'none') == []
+
+
+def test_a_detail_of_the_other_library_is_left_out():
+    assert nightcity.lib_details_load('tvshows', 'year.runtime.seasons.bogus') == ['year', 'seasons']
+    assert nightcity.lib_details_dump('tvshows', ['runtime', 'studio']) == 'studio'
+
+
+def test_no_key_is_part_of_another():
+    """The skin tells a detail by String.Contains on the skin string."""
+    keys = {k for details in nightcity.LIB_DETAILS.values() for k, _ in details} | {'none'}
+    assert not [(a, b) for a in keys for b in keys if a != b and a in b]
+
+
+def test_the_details_label_names_the_choice():
+    names = {31119: 'year', 31600: 'runtime', 31121: 'rating', 31607: 'none'}
+    assert nightcity.lib_details_label('movies', ['year', 'runtime'], names.get) == 'year, runtime'
+    assert nightcity.lib_details_label('movies', [], names.get) == 'none'
+
+
+# --- the genre filter of the music library --------------------------------------------------------
+
+def test_the_music_filter_keeps_to_the_lists_of_albums_artists_and_songs():
+    for node in ('albums', 'artists', 'songs'):
+        assert nightcity.music_filter_parse('musicdb://{}/'.format(node)) == (node, [], [])
+    for path in ('musicdb://albums/1/', 'musicdb://genres/', 'musicdb://genres/2/', 'musicdb://albums/?artistid=3',
+                 'musicdb://recentlyaddedalbums/', 'videodb://movies/titles/', '', 'special://music/'):
+        assert nightcity.music_filter_parse(path) is None, path
+
+
+def test_the_music_filter_is_a_genre_rule_in_the_path():
+    path = nightcity.music_filter_path('albums', [], ['Rock', 'Jazz'])
+    base, xsp = _xsp(path)
+    assert base == 'musicdb://albums/'
+    assert xsp == {'type': 'albums', 'rules': {'and': [{'field': 'genre', 'operator': 'is', 'value': ['Rock', 'Jazz']}]}}
+    assert nightcity.music_filter_parse(path) == ('albums', [], ['Rock', 'Jazz'])
+
+
+def test_no_genre_is_the_plain_list():
+    assert nightcity.music_filter_path('songs', [], []) == 'musicdb://songs/'
+
+
+def test_the_music_filter_keeps_the_other_rules_of_a_path():
+    """The skin opens an artist's other albums as a smart playlist (Variables.xml MusicInfoMore...)."""
+    other = [{'field': 'artist', 'operator': 'is', 'value': ['Chrome Saints']}]
+    xsp = json.dumps({'rules': {'and': other + [{'field': 'genre', 'operator': 'is', 'value': ['Rock']}]}, 'type': 'albums'})
+    node, rules, genres = nightcity.music_filter_parse('musicdb://albums/?xsp=' + urllib.parse.quote(xsp))
+    assert (node, rules, genres) == ('albums', other, ['Rock'])
+    _, back = _xsp(nightcity.music_filter_path(node, rules, ['Jazz']))
+    assert back['rules']['and'] == other + [{'field': 'genre', 'operator': 'is', 'value': ['Jazz']}]
+    _, plain = _xsp(nightcity.music_filter_path(node, rules, []))
+    assert plain['rules']['and'] == other
+
+
+def test_a_path_the_filter_cannot_read_is_not_filtered():
+    assert nightcity.music_filter_parse('musicdb://albums/?xsp=not%20json') is None
+    xsp = json.dumps({'rules': {'or': [{'field': 'genre', 'operator': 'is', 'value': ['Rock']}]}, 'type': 'albums'})
+    assert nightcity.music_filter_parse('musicdb://albums/?xsp=' + urllib.parse.quote(xsp)) is None

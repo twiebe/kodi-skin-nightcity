@@ -1152,3 +1152,35 @@ msgstr "Audiokanäle"
 msgctxt "#31508"
 msgid "clear filter"
 msgstr "Filter löschen"
+
+msgctxt "#31600"
+msgid "runtime"
+msgstr "Laufzeit"
+
+msgctxt "#31601"
+msgid "genre"
+msgstr "Genre"
+
+msgctxt "#31602"
+msgid "details"
+msgstr "Details"
+
+msgctxt "#31603"
+msgid "seasons"
+msgstr "Staffeln"
+
+msgctxt "#31604"
+msgid "season"
+msgstr "Staffel"
+
+msgctxt "#31605"
+msgid "seasons"
+msgstr "Staffeln"
+
+msgctxt "#31606"
+msgid "episodes"
+msgstr "Episoden"
+
+msgctxt "#31607"
+msgid "none"
+msgstr "keine"

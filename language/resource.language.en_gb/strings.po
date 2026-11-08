@@ -1152,3 +1152,35 @@ msgstr ""
 msgctxt "#31508"
 msgid "clear filter"
 msgstr ""
+
+msgctxt "#31600"
+msgid "runtime"
+msgstr ""
+
+msgctxt "#31601"
+msgid "genre"
+msgstr ""
+
+msgctxt "#31602"
+msgid "details"
+msgstr ""
+
+msgctxt "#31603"
+msgid "seasons"
+msgstr ""
+
+msgctxt "#31604"
+msgid "season"
+msgstr ""
+
+msgctxt "#31605"
+msgid "seasons"
+msgstr ""
+
+msgctxt "#31606"
+msgid "episodes"
+msgstr ""
+
+msgctxt "#31607"
+msgid "none"
+msgstr ""

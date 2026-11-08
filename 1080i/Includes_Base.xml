@@ -9,6 +9,18 @@
     <!-- The library grid (Custom_1110_Library.xml) as a list: per library, posters by default -->
     <expression name="LibraryLayoutReady">!String.IsEmpty(Window(Home).Property(nc.lib.layout))</expression>
     <expression name="LibraryAsList">[String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.IsEqual(Skin.String(nc.libview.tvshows),list)] | [!String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.IsEqual(Skin.String(nc.libview.movies),list)]</expression>
+    <!-- the details a row of the list shows (scripts/nightcity.py lib_details): the keys in
+         nc.libdetails.<library>, empty for the default (year and runtime, a show's year and episodes).
+         Skin strings only, so Kodi works them out once a frame, not per row -->
+    <expression name="LibraryDetailYear">[String.IsEqual(Window(Home).Property(nc.library),tvshows) + [String.IsEmpty(Skin.String(nc.libdetails.tvshows)) | String.Contains(Skin.String(nc.libdetails.tvshows),year)]] | [!String.IsEqual(Window(Home).Property(nc.library),tvshows) + [String.IsEmpty(Skin.String(nc.libdetails.movies)) | String.Contains(Skin.String(nc.libdetails.movies),year)]]</expression>
+    <expression name="LibraryDetailRuntime">!String.IsEqual(Window(Home).Property(nc.library),tvshows) + [String.IsEmpty(Skin.String(nc.libdetails.movies)) | String.Contains(Skin.String(nc.libdetails.movies),runtime)]</expression>
+    <expression name="LibraryDetailRating">[String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.Contains(Skin.String(nc.libdetails.tvshows),rating)] | [!String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.Contains(Skin.String(nc.libdetails.movies),rating)]</expression>
+    <expression name="LibraryDetailSeasons">String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.Contains(Skin.String(nc.libdetails.tvshows),seasons)</expression>
+    <expression name="LibraryDetailEpisodes">String.IsEqual(Window(Home).Property(nc.library),tvshows) + [String.IsEmpty(Skin.String(nc.libdetails.tvshows)) | String.Contains(Skin.String(nc.libdetails.tvshows),episodes)]</expression>
+    <expression name="LibraryDetailStudio">String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.Contains(Skin.String(nc.libdetails.tvshows),studio)</expression>
+    <expression name="LibraryDetailRes">!String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.Contains(Skin.String(nc.libdetails.movies),res)</expression>
+    <expression name="LibraryDetailHdr">!String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.Contains(Skin.String(nc.libdetails.movies),hdr)</expression>
+    <expression name="LibraryDetailAudio">!String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.Contains(Skin.String(nc.libdetails.movies),audio)</expression>
     <!-- Full screen page: base colour and the petrol glow top right. Never a hole, with or
          without fanart (FanartBackdrop goes on top of this). -->
     <include name="Background">
@@ -325,12 +337,12 @@
             <include content="Kicker">
                 <param name="label" value="$INFO[Container(5000).ListItem.Year]$INFO[Container(5000).ListItem.Genre, · ,]"/>
                 <param name="left" value="1431"/>
-                <param name="top" value="400"/>
+                <param name="top" value="470"/>
                 <param name="width" value="$PARAM[width]"/>
             </include>
             <control type="textbox">
                 <left>1431</left>
-                <top>440</top>
+                <top>510</top>
                 <width>$PARAM[width]</width>
                 <height>180</height>
                 <font>font_title</font>
@@ -341,9 +353,9 @@
             </control>
             <control type="textbox">
                 <left>1431</left>
-                <top>630</top>
+                <top>700</top>
                 <width>$PARAM[width]</width>
-                <height>360</height>
+                <height>290</height>
                 <font>font_small</font>
                 <textcolor>text_dim</textcolor>
                 <label>$INFO[Container(5000).ListItem.Plot]</label>
@@ -351,9 +363,9 @@
         </definition>
     </include>
 
-    <!-- A row of the library grid as a list: the watched mark, the title, year and runtime (watched
-         episodes of a show), the format of a movie as on its info page. Labels only, no art: the
-         Amlogic box scrolls a long list. 10 px of room around it for the focused row's glow. -->
+    <!-- A row of the library grid as a list: the watched mark, the title and the details chosen for the
+         library (LibraryDetails), on the right. Labels only, no art: the Amlogic box scrolls a long
+         list. 10 px of room around it for the focused row's glow. -->
     <include name="LibraryRow">
         <param name="color"/>
         <param name="mute"/>
@@ -384,23 +396,13 @@
                 </control>
                 <control type="label">
                     <left>760</left>
-                    <width>200</width>
+                    <width>540</width>
                     <height>56</height>
                     <align>right</align>
                     <aligny>center</aligny>
                     <font>font_small</font>
                     <textcolor>$PARAM[mute]</textcolor>
-                    <label>$VAR[LibraryRight]</label>
-                </control>
-                <control type="label">
-                    <left>980</left>
-                    <width>320</width>
-                    <height>56</height>
-                    <align>right</align>
-                    <aligny>center</aligny>
-                    <font>font_small</font>
-                    <textcolor>$PARAM[mute]</textcolor>
-                    <label>$VAR[LibraryFormat]</label>
+                    <label>$VAR[LibraryDetails]</label>
                 </control>
             </control>
         </definition>

@@ -158,8 +158,8 @@ def test_the_column_is_wide_until_the_bar_has_the_focus():
     visible, narrow = _title('title narrow')
     assert visible == 'Control.HasFocus({})'.format(BAR)
     assert narrow == nc.BAR_MENU_NARROW - 20 and left + narrow <= limit
-    assert nc.BAR_MENU_BUTTONS == (5101, 5102, 5103, 5104)
-    for cid in ('5101', '5102', '5103', '5104'):
+    assert nc.BAR_MENU_BUTTONS == (5101, 5102, 5103, 5104, 5105)
+    for cid in ('5101', '5102', '5103', '5104', '5105'):
         call = next(i for i in root.iter('include') if i.get('content') == 'PillButton'
                     and any(p.get('name') == 'id' and p.get('value') == cid for p in i.findall('param')))
         assert {p.get('name'): p.get('value') for p in call.findall('param')}['width'] == str(nc.BAR_MENU_WIDE)
