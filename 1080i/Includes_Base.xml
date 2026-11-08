@@ -6,6 +6,9 @@
     <!-- Startup.xml: online once the startup script is done, but not before a second ahead of
          the hand-over to Home (nc_startup in Timers.xml, 4 s minimum) -->
     <expression name="StartupOnline">!String.IsEmpty(Window(Home).Property(nc.startup.ready)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_startup),2)</expression>
+    <!-- The library grid (Custom_1110_Library.xml) as a list: per library, posters by default -->
+    <expression name="LibraryLayoutReady">!String.IsEmpty(Window(Home).Property(nc.lib.layout))</expression>
+    <expression name="LibraryAsList">[String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.IsEqual(Skin.String(nc.libview.tvshows),list)] | [!String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.IsEqual(Skin.String(nc.libview.movies),list)]</expression>
     <!-- Full screen page: base colour and the petrol glow top right. Never a hole, with or
          without fanart (FanartBackdrop goes on top of this). -->
     <include name="Background">
@@ -322,12 +325,12 @@
             <include content="Kicker">
                 <param name="label" value="$INFO[Container(5000).ListItem.Year]$INFO[Container(5000).ListItem.Genre, · ,]"/>
                 <param name="left" value="1431"/>
-                <param name="top" value="260"/>
+                <param name="top" value="400"/>
                 <param name="width" value="$PARAM[width]"/>
             </include>
             <control type="textbox">
                 <left>1431</left>
-                <top>300</top>
+                <top>440</top>
                 <width>$PARAM[width]</width>
                 <height>180</height>
                 <font>font_title</font>
@@ -338,12 +341,67 @@
             </control>
             <control type="textbox">
                 <left>1431</left>
-                <top>490</top>
+                <top>630</top>
                 <width>$PARAM[width]</width>
-                <height>420</height>
+                <height>360</height>
                 <font>font_small</font>
                 <textcolor>text_dim</textcolor>
                 <label>$INFO[Container(5000).ListItem.Plot]</label>
+            </control>
+        </definition>
+    </include>
+
+    <!-- A row of the library grid as a list: the watched mark, the title, year and runtime (watched
+         episodes of a show), the format of a movie as on its info page. Labels only, no art: the
+         Amlogic box scrolls a long list. 10 px of room around it for the focused row's glow. -->
+    <include name="LibraryRow">
+        <param name="color"/>
+        <param name="mute"/>
+        <param name="mark"/>
+        <param name="scroll" default="false"/>
+        <definition>
+            <control type="group">
+                <left>24</left>
+                <top>24</top>
+                <control type="label">
+                    <left>16</left>
+                    <width>36</width>
+                    <height>56</height>
+                    <aligny>center</aligny>
+                    <font>font_label</font>
+                    <textcolor>$PARAM[mark]</textcolor>
+                    <label>$VAR[LibraryMark]</label>
+                </control>
+                <control type="label">
+                    <left>60</left>
+                    <width>680</width>
+                    <height>56</height>
+                    <aligny>center</aligny>
+                    <font>font_label</font>
+                    <textcolor>$PARAM[color]</textcolor>
+                    <scroll>$PARAM[scroll]</scroll>
+                    <label>$INFO[ListItem.Label]</label>
+                </control>
+                <control type="label">
+                    <left>760</left>
+                    <width>200</width>
+                    <height>56</height>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font_small</font>
+                    <textcolor>$PARAM[mute]</textcolor>
+                    <label>$VAR[LibraryRight]</label>
+                </control>
+                <control type="label">
+                    <left>980</left>
+                    <width>320</width>
+                    <height>56</height>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <font>font_small</font>
+                    <textcolor>$PARAM[mute]</textcolor>
+                    <label>$VAR[LibraryFormat]</label>
+                </control>
             </control>
         </definition>
     </include>

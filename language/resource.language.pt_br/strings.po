@@ -1114,3 +1114,39 @@ msgstr "De vez em quando algo tropeça por um instante: o indicador de carregame
 msgctxt "#31477"
 msgid "Home"
 msgstr "Início"
+
+msgctxt "#31500"
+msgid "view"
+msgstr "exibição"
+
+msgctxt "#31501"
+msgid "list"
+msgstr "lista"
+
+msgctxt "#31502"
+msgid "filter"
+msgstr "filtro"
+
+msgctxt "#31503"
+msgid "all"
+msgstr "todos"
+
+msgctxt "#31504"
+msgid "resolution"
+msgstr "resolução"
+
+msgctxt "#31505"
+msgid "dynamic range"
+msgstr "faixa dinâmica"
+
+msgctxt "#31506"
+msgid "audio format"
+msgstr "formato de áudio"
+
+msgctxt "#31507"
+msgid "audio channels"
+msgstr "canais de áudio"
+
+msgctxt "#31508"
+msgid "clear filter"
+msgstr "limpar filtro"

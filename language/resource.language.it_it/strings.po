@@ -1114,3 +1114,39 @@ msgstr "Ogni tanto qualcosa inciampa per un attimo: l'indicatore di caricamento 
 msgctxt "#31477"
 msgid "Home"
 msgstr "Home"
+
+msgctxt "#31500"
+msgid "view"
+msgstr "vista"
+
+msgctxt "#31501"
+msgid "list"
+msgstr "elenco"
+
+msgctxt "#31502"
+msgid "filter"
+msgstr "filtro"
+
+msgctxt "#31503"
+msgid "all"
+msgstr "tutti"
+
+msgctxt "#31504"
+msgid "resolution"
+msgstr "risoluzione"
+
+msgctxt "#31505"
+msgid "dynamic range"
+msgstr "gamma dinamica"
+
+msgctxt "#31506"
+msgid "audio format"
+msgstr "formato audio"
+
+msgctxt "#31507"
+msgid "audio channels"
+msgstr "canali audio"
+
+msgctxt "#31508"
+msgid "clear filter"
+msgstr "cancella filtro"

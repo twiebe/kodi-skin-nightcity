@@ -5,6 +5,9 @@
 <window type="window" id="1110">
     <defaultcontrol always="true">5000</defaultcontrol>
     <onload>NotifyAll(nightcity,lib_bar:changed)</onload>
+    <!-- the layouts hold once the window is up (LibraryLayoutReady): each open draws every row anew -->
+    <onload>NotifyAll(nightcity,lib_layout)</onload>
+    <onunload>ClearProperty(nc.lib.layout,home)</onunload>
     <controls>
         <include>Background</include>
         <include content="FanartBackdrop">
@@ -28,7 +31,13 @@
             <onup>noop</onup>
             <ondown>noop</ondown>
             <include>ClickRouting</include>
-            <itemlayout width="228" height="340">
+            <!-- posters or a list (nc.libview.<library>), each layout with its condition: Kodi only
+                 looks again when the condition of the layout it uses changes, and only then draws
+                 its items anew. It keeps them over closing the window, so nothing until the window
+                 is up (scripts/nightcity.py lib_layout): then this one goes, and every item with it -->
+            <itemlayout width="228" height="340" condition="!$EXP[LibraryLayoutReady]"/>
+            <focusedlayout width="228" height="340" condition="!$EXP[LibraryLayoutReady]"/>
+            <itemlayout width="228" height="340" condition="$EXP[LibraryLayoutReady] + !$EXP[LibraryAsList]">
                 <control type="group">
                     <left>24</left>
                     <top>24</top>
@@ -39,7 +48,7 @@
                     </include>
                 </control>
             </itemlayout>
-            <focusedlayout width="228" height="340">
+            <focusedlayout width="228" height="340" condition="$EXP[LibraryLayoutReady] + !$EXP[LibraryAsList]">
                 <control type="group">
                     <left>24</left>
                     <top>24</top>
@@ -49,6 +58,30 @@
                         <include>CardExtras</include>
                     </include>
                 </control>
+            </focusedlayout>
+            <!-- a row as wide as the panel, so one column: title, year and runtime, format -->
+            <itemlayout width="1368" height="60" condition="$EXP[LibraryLayoutReady] + $EXP[LibraryAsList]">
+                <include content="LibraryRow">
+                    <param name="color" value="text_dim"/>
+                    <param name="mute" value="text_mute"/>
+                    <param name="mark" value="state_text"/>
+                </include>
+            </itemlayout>
+            <focusedlayout width="1368" height="60" condition="$EXP[LibraryLayoutReady] + $EXP[LibraryAsList]">
+                <control type="image">
+                    <left>14</left>
+                    <top>14</top>
+                    <width>1340</width>
+                    <height>76</height>
+                    <include>LookListFocus</include>
+                    <visible>Control.HasFocus(5000)</visible>
+                </control>
+                <include content="LibraryRow">
+                    <param name="color" value="$VAR[LibraryGridFocusColor]"/>
+                    <param name="mute" value="$VAR[LibraryGridFocusColor]"/>
+                    <param name="mark" value="$VAR[LibraryGridFocusColor]"/>
+                    <param name="scroll" value="Control.HasFocus(5000)"/>
+                </include>
             </focusedlayout>
             <content target="videos" sortby="$VAR[LibrarySortMethod]" sortorder="$VAR[LibrarySortDirection]">$VAR[LibraryPath]</content>
         </control>
@@ -82,7 +115,7 @@
             <left>1421</left>
             <top>98</top>
             <width>459</width>
-            <height>220</height>
+            <height>284</height>
             <orientation>vertical</orientation>
             <itemgap>-4</itemgap>
             <onleft>5000</onleft>
@@ -109,6 +142,27 @@
                 <param name="onclick" value="Skin.ToggleSetting(nc.sortdesc)"/>
                 <param name="onfocus" value="NotifyAll(nightcity,lib_bar:prepare)"/>
                 <onclick>NotifyAll(nightcity,lib_bar:changed)</onclick>
+            </include>
+            <!-- posters or list, for the shown library: a toggle, OK flips it -->
+            <include content="PillButton">
+                <param name="id" value="5103"/>
+                <param name="width" value="459"/>
+                <param name="label" value="$LOCALIZE[31500]: $VAR[LibraryViewLabel]"/>
+                <param name="onfocus" value="NotifyAll(nightcity,lib_bar:prepare)"/>
+                <onclick condition="String.IsEqual(Window(Home).Property(nc.library),tvshows) + $EXP[LibraryAsList]">Skin.Reset(nc.libview.tvshows)</onclick>
+                <onclick condition="String.IsEqual(Window(Home).Property(nc.library),tvshows) + !$EXP[LibraryAsList]">Skin.SetString(nc.libview.tvshows,list)</onclick>
+                <onclick condition="!String.IsEqual(Window(Home).Property(nc.library),tvshows) + $EXP[LibraryAsList]">Skin.Reset(nc.libview.movies)</onclick>
+                <onclick condition="!String.IsEqual(Window(Home).Property(nc.library),tvshows) + !$EXP[LibraryAsList]">Skin.SetString(nc.libview.movies,list)</onclick>
+                <onclick>NotifyAll(nightcity,lib_bar:changed)</onclick>
+            </include>
+            <!-- by resolution, dynamic range, audio and studio (scripts/nightcity.py lib_filter): the
+                 dialog builds the grid's path, the header names the choice -->
+            <include content="PillButton">
+                <param name="id" value="5104"/>
+                <param name="width" value="459"/>
+                <param name="label" value="$LOCALIZE[31502]: $VAR[LibraryFilterLabel]"/>
+                <param name="onfocus" value="NotifyAll(nightcity,lib_bar:prepare)"/>
+                <param name="onclick" value="NotifyAll(nightcity,lib_filter)"/>
             </include>
         </control>
         <!-- the focused title, large on the right; a text cannot change its width, so two of it:

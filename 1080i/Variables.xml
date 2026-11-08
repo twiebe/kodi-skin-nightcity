@@ -187,8 +187,22 @@
         <value condition="Integer.IsGreater(ListItem.PlayCount,0)">▪</value>
     </variable>
     <variable name="MusicNavRight">
-        <value condition="String.IsEqual(ListItem.DBType,song)">$INFO[ListItem.Duration]</value>
+        <value condition="String.IsEqual(ListItem.DBType,song)">$VAR[MusicSongFormat,,    ]$INFO[ListItem.Duration]</value>
         <value condition="String.IsEqual(ListItem.DBType,album)">$INFO[ListItem.Artist]$INFO[ListItem.Year,  ·  ]</value>
+    </variable>
+    <!-- a song's format by its file's extension (Kodi keeps no codec of a song), and its bitrate -->
+    <variable name="MusicSongFormat">
+        <value condition="String.StartsWith(ListItem.FileExtension,flac)">FLAC$INFO[ListItem.BitRate,  , kbit/s]</value>
+        <value condition="String.StartsWith(ListItem.FileExtension,mp3)">MP3$INFO[ListItem.BitRate,  , kbit/s]</value>
+        <value condition="String.StartsWith(ListItem.FileExtension,m4a) | String.StartsWith(ListItem.FileExtension,aac)">AAC$INFO[ListItem.BitRate,  , kbit/s]</value>
+        <value condition="String.StartsWith(ListItem.FileExtension,ogg) | String.StartsWith(ListItem.FileExtension,oga)">Vorbis$INFO[ListItem.BitRate,  , kbit/s]</value>
+        <value condition="String.StartsWith(ListItem.FileExtension,opus)">Opus$INFO[ListItem.BitRate,  , kbit/s]</value>
+        <value condition="String.StartsWith(ListItem.FileExtension,wav)">WAV$INFO[ListItem.BitRate,  , kbit/s]</value>
+        <value condition="String.StartsWith(ListItem.FileExtension,alac)">ALAC$INFO[ListItem.BitRate,  , kbit/s]</value>
+        <value condition="String.StartsWith(ListItem.FileExtension,ape)">APE$INFO[ListItem.BitRate,  , kbit/s]</value>
+        <value condition="String.StartsWith(ListItem.FileExtension,wv)">WavPack$INFO[ListItem.BitRate,  , kbit/s]</value>
+        <value condition="String.StartsWith(ListItem.FileExtension,dsf) | String.StartsWith(ListItem.FileExtension,dff)">DSD$INFO[ListItem.BitRate,  , kbit/s]</value>
+        <value>$INFO[ListItem.BitRate,, kbit/s]</value>
     </variable>
     <variable name="MusicNavMeta">
         <value condition="String.IsEqual(ListItem.DBType,artist) | String.IsEqual(ListItem.DBType,genre)">$INFO[ListItem.Genre]</value>
@@ -636,13 +650,34 @@
         <value condition="Skin.HasSetting(nc.sortdesc)">descending</value>
         <value>ascending</value>
     </variable>
+    <!-- with a filter (scripts/nightcity.py lib_filter) a smart playlist in the path, its choice
+         in the header -->
     <variable name="LibraryPath">
+        <value condition="String.IsEqual(Window(Home).Property(nc.library),tvshows) + !String.IsEmpty(Window(Home).Property(nc.libfilter.tvshows.path))">$INFO[Window(Home).Property(nc.libfilter.tvshows.path)]</value>
         <value condition="String.IsEqual(Window(Home).Property(nc.library),tvshows)">videodb://tvshows/titles/</value>
+        <value condition="!String.IsEmpty(Window(Home).Property(nc.libfilter.movies.path))">$INFO[Window(Home).Property(nc.libfilter.movies.path)]</value>
         <value>videodb://movies/titles/</value>
     </variable>
     <variable name="LibraryTitle">
-        <value condition="String.IsEqual(Window(Home).Property(nc.library),tvshows)">$LOCALIZE[31102]</value>
-        <value>$LOCALIZE[31101]</value>
+        <value condition="String.IsEqual(Window(Home).Property(nc.library),tvshows)">$LOCALIZE[31102]$INFO[Window(Home).Property(nc.libfilter.tvshows.label),  ·  ,]</value>
+        <value>$LOCALIZE[31101]$INFO[Window(Home).Property(nc.libfilter.movies.label),  ·  ,]</value>
+    </variable>
+    <variable name="LibraryFilterLabel">
+        <value condition="String.IsEqual(Window(Home).Property(nc.library),tvshows) + !String.IsEmpty(Window(Home).Property(nc.libfilter.tvshows.label))">$INFO[Window(Home).Property(nc.libfilter.tvshows.label)]</value>
+        <value condition="!String.IsEqual(Window(Home).Property(nc.library),tvshows) + !String.IsEmpty(Window(Home).Property(nc.libfilter.movies.label))">$INFO[Window(Home).Property(nc.libfilter.movies.label)]</value>
+        <value>$LOCALIZE[31503]</value>
+    </variable>
+    <variable name="LibraryViewLabel">
+        <value condition="$EXP[LibraryAsList]">$LOCALIZE[31501]</value>
+        <value>$LOCALIZE[31042]</value>
+    </variable>
+    <!-- a row of the list: what the info page shows of the format, 4K  DV  TrueHD 7.1 -->
+    <variable name="LibraryFormat">
+        <value>$VAR[ItemResolution]$VAR[ItemHdr,  ,]$VAR[ItemAudio,  ,]</value>
+    </variable>
+    <variable name="LibraryGridFocusColor">
+        <value condition="Control.HasFocus(5000)">focus_text</value>
+        <value>text</value>
     </variable>
     <variable name="LibrarySortLabel">
         <value condition="String.IsEqual(Skin.String(nc.sort),year)">$LOCALIZE[31119]</value>

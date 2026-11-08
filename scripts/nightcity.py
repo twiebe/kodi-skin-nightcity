@@ -2192,7 +2192,7 @@ BAR_RIGHT = 1912  # px, right edge of the cursor, padded for its glow like every
 BAR_BUTTON = 74  # px, height of a pill
 BAR_MIN_GROUPS = 3  # fewer and a jump is no use: Right stays on the menu
 BAR_FOLLOW = 0.15  # s after the last press the grid follows
-BAR_MENU_BUTTONS = (5101, 5102)  # the library grid's menu: wide, narrow only while the bar has the focus
+BAR_MENU_BUTTONS = (5101, 5102, 5103, 5104)  # the library grid's menu: wide, narrow only while the bar has the focus
 BAR_MENU_WIDE, BAR_MENU_NARROW = 459, 380
 BAR_GLIDE_FRAME = 0.016  # s between the steps of the cursor on its way to the next group
 BAR_NONE = 'none'
@@ -2450,6 +2450,172 @@ _lib_bar = LibBar(LIB_WINDOW, LIB_WINDOW_PYTHON, LIB_MENU_BUTTON, lambda: LIB_GR
 _music_bar = LibBar(MUSIC_WINDOW, MUSIC_WINDOW, MUSIC_MENU_BUTTON, _music_grid, _music_keys)
 
 
+# --- the filter of the library grid ---------------------------------------------------------------
+# OK on the filter button of window 1110 opens a list of groups, each a multi-select. Kodi does the
+# filtering: a smart playlist in the grid's path (videodb://movies/titles/?xsp=...), its rules as in
+# SmartPlayList.cpp. The values of a group or, the groups and. The choice holds for the session, per
+# library, in Home's nc.libfilter.<library> (the choice), .path (what the grid shows) and .label
+# (the header). Shows have no stream details in Kodi, only the studio.
+
+LIB_FILTER_HDR = ['hdr10', 'hdr10plus', 'dolbyvision', 'hlg']  # Kodi 21 names three; hdr10plus from an NFO
+LIB_FILTER_OPTIONS = {
+    # group: (key, label, the values Kodi files it under)
+    'res': [('2160', '4K', ['2160']), ('1080', '1080p', ['1080']), ('720', '720p', ['720']), ('480', 'SD', ['480'])],
+    'hdr': [('sdr', 'SDR', []), ('hdr', 'HDR', LIB_FILTER_HDR), ('hdr10', 'HDR10', ['hdr10']),
+            ('hdr10plus', 'HDR10+', ['hdr10plus']), ('dolbyvision', 'Dolby Vision', ['dolbyvision']),
+            ('hlg', 'HLG', ['hlg'])],
+    'audio': [('truehd', 'TrueHD', ['truehd']), ('dtshd', 'DTS-HD', ['dtshd_ma', 'dtshd_hra']),
+              ('dts', 'DTS', ['dca', 'dts']), ('eac3', 'DD+', ['eac3']), ('ac3', 'DD', ['ac3']),
+              ('aac', 'AAC', ['aac']), ('flac', 'FLAC', ['flac']), ('opus', 'Opus', ['opus']),
+              ('mp3', 'MP3', ['mp3']),
+              ('pcm', 'PCM', ['pcm', 'pcm_s16le', 'pcm_s24le', 'pcm_s32le', 'pcm_bluray', 'pcm_dvd'])],
+    'channels': [('8', '7.1', ['8']), ('6', '5.1', ['6']), ('2', '2.0', ['2'])],
+}
+LIB_FILTER_FIELDS = {'res': 'videoresolution', 'hdr': 'hdrtype', 'audio': 'audiocodec',
+                     'channels': 'audiochannels', 'studio': 'studio'}
+LIB_FILTER_NAMES = {'res': 31504, 'hdr': 31505, 'audio': 31506, 'channels': 31507, 'studio': 31128}
+LIB_FILTER_GROUPS = {'movies': ['res', 'hdr', 'audio', 'channels', 'studio'], 'tvshows': ['studio']}
+
+
+def lib_filter_groups(library):
+    return list(LIB_FILTER_GROUPS.get(library, LIB_FILTER_GROUPS['movies']))
+
+
+def _lib_filter_chosen(library, choice):
+    """(group, [(key, label, values)]) of the choice, in the order of the dialog."""
+    chosen = []
+    for group in lib_filter_groups(library):
+        keys = choice.get(group) or []
+        if group == 'studio':
+            options = [(k, k, [k]) for k in keys]
+        else:
+            options = [o for o in LIB_FILTER_OPTIONS[group] if o[0] in keys]
+        if options:
+            chosen.append((group, options))
+    return chosen
+
+
+def _lib_filter_rule(group, options):
+    field = LIB_FILTER_FIELDS[group]
+    values = []
+    for _, _, vals in options:
+        values += [v for v in vals if v not in values]
+    if group != 'hdr' or not any(key == 'sdr' for key, _, _ in options):
+        return {'field': field, 'operator': 'is', 'value': values}
+    # Kodi drops an empty value: SDR is none of the HDR types
+    sdr = {'field': field, 'operator': 'isnot', 'value': list(LIB_FILTER_HDR)}
+    return {'or': [sdr, {'field': field, 'operator': 'is', 'value': values}]} if values else sdr
+
+
+def lib_filter_path(library, choice):
+    """The grid's path for CHOICE ({group: [key]}), '' for none."""
+    rules = [_lib_filter_rule(group, options) for group, options in _lib_filter_chosen(library, choice)]
+    if not rules:
+        return ''
+    xsp = json.dumps({'rules': {'and': rules}, 'type': library}, separators=(',', ':'))
+    return 'videodb://{}/titles/?xsp={}'.format(library, urllib.parse.quote(xsp, safe=''))
+
+
+def lib_filter_label(library, choice):
+    return '  ·  '.join(', '.join(label for _, label, _ in options)
+                        for _, options in _lib_filter_chosen(library, choice))
+
+
+def lib_filter_dump(choice):
+    return json.dumps({g: list(keys) for g, keys in choice.items() if keys}, separators=(',', ':'))
+
+
+def lib_filter_load(text):
+    try:
+        choice = json.loads(text) if text else {}
+    except ValueError:
+        return {}
+    if not isinstance(choice, dict):
+        return {}
+    return {g: [k for k in keys if isinstance(k, str)] for g, keys in choice.items() if isinstance(keys, list)}
+
+
+def _lib_studios(library):
+    """The studios of the library's titles, from Kodi's own studio node."""
+    found = _rpc('Files.GetDirectory', directory='videodb://{}/studios/'.format(library), media='video')
+    return sorted({f['label'] for f in found.get('files') or [] if f.get('label')}, key=str.lower)
+
+
+def _capital(label):
+    return label[:1].upper() + label[1:]
+
+
+def _lib_filter_apply(library, choice):
+    home = _home()
+    prop = 'nc.libfilter.' + library
+    home.setProperty(prop, lib_filter_dump(choice))
+    home.setProperty(prop + '.path', lib_filter_path(library, choice))
+    home.setProperty(prop + '.label', lib_filter_label(library, choice))
+    run_command('lib_bar', ['changed'])  # the grid reloads: the bar's groups anew
+
+
+LIB_LAYOUT_WAIT = 0.1  # s: the window draws once without a layout that holds
+
+
+def lib_layout():
+    """The library window is up: its layouts may hold (LibraryLayoutReady). A panel keeps its items
+    over closing the window, each with the layout it drew it with, and picks its layout on the way
+    back without telling them; only a condition that changes on screen makes Kodi let them go
+    (GUIBaseContainer::UpdateVisibility). So the rows drew as posters after a change of the view
+    while the window was closed: another library, or a skin string set from outside."""
+    if not _monitor().waitForAbort(LIB_LAYOUT_WAIT):
+        _home().setProperty('nc.lib.layout', '1')
+
+
+def lib_filter():
+    """The filter dialog of the library grid: a list of the groups with what is chosen in each,
+    OK on one its multi-select; every change applies at once, the grid follows behind the
+    dialog. Back closes it."""
+    import xbmc
+    import xbmcgui
+    library = 'tvshows' if _home().getProperty('nc.library') == 'tvshows' else 'movies'
+    choice = lib_filter_load(_home().getProperty('nc.libfilter.' + library))
+    groups = lib_filter_groups(library)
+    studios = None
+    text = lambda string_id: _capital(xbmc.getLocalizedString(string_id))  # noqa: E731
+    current = 0
+    while True:
+        items = []
+        for group in groups:
+            item = xbmcgui.ListItem(text(LIB_FILTER_NAMES[group]))
+            chosen = dict(_lib_filter_chosen(library, {group: choice.get(group)}))
+            item.setLabel2(', '.join(label for _, label, _ in chosen.get(group, [])) or text(31503))
+            items.append(item)
+        if lib_filter_path(library, choice):
+            items.append(xbmcgui.ListItem(text(31508)))
+        picked = xbmcgui.Dialog().select(text(31502), items, preselect=current, useDetails=True)
+        if picked < 0:
+            return
+        current = picked
+        if picked >= len(groups):  # clear filter
+            choice, current = {}, 0
+            _lib_filter_apply(library, choice)
+            continue
+        group = groups[picked]
+        if group == 'studio':
+            if studios is None:
+                studios = _lib_studios(library)
+            options = [(s, s) for s in studios]
+        else:
+            options = [(key, label) for key, label, _ in LIB_FILTER_OPTIONS[group]]
+        if not options:
+            continue
+        keys = choice.get(group) or []
+        preselect = [i for i, (key, _) in enumerate(options) if key in keys]
+        selected = xbmcgui.Dialog().multiselect(text(LIB_FILTER_NAMES[group]), [label for _, label in options],
+                                                preselect=preselect)
+        if selected is None:  # cancelled: the choice stays
+            continue
+        choice = dict(choice)
+        choice[group] = [options[i][0] for i in selected]
+        _lib_filter_apply(library, choice)
+
+
 def _bar_command(bar, action, args):
     """The bar's keys: changed (the window opened or the sort changed, the grid reloads), prepare
     (the menu has the focus: at once, Right may come right after), enter, step:N, ok, cancel, leave."""
@@ -2497,7 +2663,8 @@ COMMANDS = {'lib_bar': lib_bar, 'music_bar': music_bar, 'next_episode': next_epi
             'home': home, 'home_keymap': home_keymap, 'osd_hide': osd_hide,
             'music_play': music_play, 'music_goto': music_goto, 'music_info': music_info,
             'music_back': music_back, 'now_playing': now_playing, 'music_queue': music_queue,
-            'music_queue_select': music_queue_select}
+            'music_queue_select': music_queue_select, 'lib_filter': lib_filter,
+            'lib_layout': lib_layout}
 
 
 # --- the skin service -------------------------------------------------------------------------

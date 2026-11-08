@@ -49,7 +49,7 @@
                     </control>
                     <control type="label">
                         <left>76</left>
-                        <width>868</width>
+                        <width>708</width>
                         <height>56</height>
                         <aligny>center</aligny>
                         <font>font_label</font>
@@ -58,8 +58,8 @@
                         <label>$VAR[MusicTrackTitle]</label>
                     </control>
                     <control type="label">
-                        <left>960</left>
-                        <width>260</width>
+                        <left>800</left>
+                        <width>420</width>
                         <height>56</height>
                         <align>right</align>
                         <aligny>center</aligny>
@@ -95,7 +95,7 @@
                     </control>
                     <control type="label">
                         <left>76</left>
-                        <width>868</width>
+                        <width>708</width>
                         <height>56</height>
                         <aligny>center</aligny>
                         <font>font_label</font>
@@ -105,8 +105,8 @@
                         <label>$VAR[MusicTrackTitle]</label>
                     </control>
                     <control type="label">
-                        <left>960</left>
-                        <width>260</width>
+                        <left>800</left>
+                        <width>420</width>
                         <height>56</height>
                         <align>right</align>
                         <aligny>center</aligny>

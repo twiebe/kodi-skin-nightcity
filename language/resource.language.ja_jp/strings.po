@@ -1116,3 +1116,39 @@ msgstr "ときどき一瞬だけ何かがつまずきます。読み込み表示
 msgctxt "#31477"
 msgid "Home"
 msgstr "ホーム"
+
+msgctxt "#31500"
+msgid "view"
+msgstr "ビュー"
+
+msgctxt "#31501"
+msgid "list"
+msgstr "リスト"
+
+msgctxt "#31502"
+msgid "filter"
+msgstr "フィルター"
+
+msgctxt "#31503"
+msgid "all"
+msgstr "すべて"
+
+msgctxt "#31504"
+msgid "resolution"
+msgstr "解像度"
+
+msgctxt "#31505"
+msgid "dynamic range"
+msgstr "ダイナミックレンジ"
+
+msgctxt "#31506"
+msgid "audio format"
+msgstr "オーディオフォーマット"
+
+msgctxt "#31507"
+msgid "audio channels"
+msgstr "オーディオチャンネル"
+
+msgctxt "#31508"
+msgid "clear filter"
+msgstr "フィルターをクリア"

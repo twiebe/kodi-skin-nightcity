@@ -1114,3 +1114,39 @@ msgstr "De temps en temps, quelque chose trébuche un instant : l'indicateur de 
 msgctxt "#31477"
 msgid "Home"
 msgstr "Accueil"
+
+msgctxt "#31500"
+msgid "view"
+msgstr "vue"
+
+msgctxt "#31501"
+msgid "list"
+msgstr "liste"
+
+msgctxt "#31502"
+msgid "filter"
+msgstr "filtre"
+
+msgctxt "#31503"
+msgid "all"
+msgstr "tous"
+
+msgctxt "#31504"
+msgid "resolution"
+msgstr "résolution"
+
+msgctxt "#31505"
+msgid "dynamic range"
+msgstr "plage dynamique"
+
+msgctxt "#31506"
+msgid "audio format"
+msgstr "format audio"
+
+msgctxt "#31507"
+msgid "audio channels"
+msgstr "canaux audio"
+
+msgctxt "#31508"
+msgid "clear filter"
+msgstr "effacer le filtre"

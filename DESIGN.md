@@ -112,8 +112,8 @@ follows a moment later.
 
 Not applied on focus, on purpose:
 
-- **Toggles and cycles** (sort field and direction in the library, "more" in the OSD): on focus
-  they would flip on every pass.
+- **Toggles and cycles** (sort field and direction, posters or list in the library, "more" in the
+  OSD): on focus they would flip on every pass.
 - **Recent search terms**: each one runs a new search and moves to the front of the list, so
   the terms would reorder under the cursor. OK runs it.
 
