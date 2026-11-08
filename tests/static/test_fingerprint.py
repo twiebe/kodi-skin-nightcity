@@ -105,7 +105,9 @@ def test_changed_onclick_behind_a_skin_setting_is_noticed(tmp_path, confuse_root
     """Every control with an id in the includes gets another onclick. Controls that Kodi builds only
     for some skin setting (listed in Home.xml as 'with <settings>: ...') must show it too."""
     layout = copy_tree(confuse_root, tmp_path) / '1080i'
-    before = [line for line in fingerprint(layout, 'Home.xml') if line.startswith('with ') and ': window | ' not in line]
+    # controls with an id: one without (the disabled tags of a hero that previews a title) gets no onclick here
+    before = [line for line in fingerprint(layout, 'Home.xml') if line.startswith('with ') and ': window | ' not in line
+              and line.split(': ', 1)[1].split(' | ')[1]]
     assert before
     for path in sorted(layout.glob('Includes*.xml')):
         tree = ET.parse(path)

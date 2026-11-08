@@ -147,6 +147,8 @@ def slot_include(page):
         if len(row['content']) > 1:
             params.append(param('content2', row['content'][1]))
         params.append(param('loader', loader))
+        # a page without spotlight previews the title of the row that had the focus last
+        params.append(param('peek', 'SetProperty(nc.peek.{},{}0$PARAM[n],home)'.format(page, base)))
         if row.get('wait'):
             params.append(param('wait', 'true'))
         for extra in ('click', 'art'):
@@ -454,6 +456,139 @@ def settings_variables():
     return out
 
 
+# --- the preview of a page without spotlight -------------------------------------------------
+# Its hero stays and shows the title the cursor would land on: the current title of the row that
+# had the focus last (nc.peek.<page>, set by the row), or of the first row with titles before any.
+# Kodi has no list item without a focused list, so each row gets its own copy of the hero that
+# follows a card (FollowHero, Includes_Home.xml): the same XML with Container(row).ListItem for
+# ListItem, and copies of the variables and expressions it reads.
+
+PEEK_ID = {'home': 9360, 'movies': 9370, 'shows': 9380}  # + n: the preview group of slot n
+SPOTLIGHT_OFF = {'home': 'String.IsEqual(Skin.String(SpotlightSource),off)',
+                 'movies': 'String.IsEqual(Skin.String(nc.movies.spotlight),off)',
+                 'shows': 'String.IsEqual(Skin.String(nc.shows.spotlight),off)'}
+TITLE_TYPES = ('movie', 'tvshow', 'episode', 'season')
+
+
+def titles(item):
+    return '[' + ' | '.join('String.IsEqual({}.DBType,{})'.format(item, t) for t in TITLE_TYPES) + ']'
+
+
+def rows(page):
+    return [BASE[page] + '0{}'.format(n) for n in range(1, 9)]
+
+
+def _definitions(tag):
+    import xml.etree.ElementTree as ET
+    out = {}
+    for path in sorted((ROOT / '1080i').glob('*.xml')):
+        if path.name in ('Includes_Sections.xml',) or not path.name.startswith(('Includes', 'Variables')):
+            continue
+        for el in ET.parse(path).getroot().iter(tag):
+            if el.get('name'):
+                out[el.get('name')] = el
+    return out
+
+
+def _item_bound(names, defs, text_of):
+    """Of `names`, those whose definition reads ListItem, with what they read in turn."""
+    import re
+    found, todo = set(), list(names)
+    while todo:
+        name = todo.pop()
+        if name in found or name not in defs:
+            continue
+        text = text_of(defs[name])
+        refs = re.findall(r'\$VAR\[(\w+)', text)
+        todo += refs
+        if 'ListItem' in text or any(r in found for r in refs):
+            found.add(name)
+    # a variable that reads one of the found ones reads ListItem too
+    changed = True
+    while changed:
+        changed = False
+        for name in names:
+            if name in defs and name not in found and any(r in found for r in re.findall(r'\$VAR\[(\w+)', text_of(defs[name]))):
+                found.add(name)
+                changed = True
+    return found
+
+
+def _for_row(text, row, variables, expressions):
+    """`text` of the follow hero for the current title of list `row`."""
+    import re
+    text = re.sub(r'(?<![\w).])ListItem(?=[.")])', 'Container({}).ListItem'.format(row), text)
+    text = re.sub(r'\$VAR\[(\w+)', lambda m: '$VAR[{}{}'.format(m.group(1), row) if m.group(1) in variables else m.group(0), text)
+    text = re.sub(r'\$EXP\[(\w+)\]', lambda m: '$EXP[{}{}]'.format(m.group(1), row) if m.group(1) in expressions else m.group(0), text)
+    return text
+
+
+def peek_parts():
+    import re
+    import xml.etree.ElementTree as ET
+    follow = next(i for i in ET.parse(ROOT / '1080i' / 'Includes_Home.xml').getroot().iter('include')
+                  if i.get('name') == 'FollowHero').find('control')
+    # what the copies take: the group's content, not its visible (SpotlightFollows)
+    body = ''.join(ET.tostring(c, encoding='unicode') for c in follow if c.tag != 'visible')
+    var_defs, exp_defs = _definitions('variable'), _definitions('expression')
+    variables = _item_bound(set(re.findall(r'\$VAR\[(\w+)', body)), var_defs, lambda el: ET.tostring(el, encoding='unicode'))
+    expressions = {n for n in re.findall(r'\$EXP\[(\w+)\]', body) if n in exp_defs and 'ListItem' in (exp_defs[n].text or '')}
+    # the hero's own controls carry no ids in the copies: one id, one control
+    for el in follow.iter():
+        if el.tag == 'param' and el.get('name', '').endswith('id'):
+            el.set('value', '0')
+    inner = ''.join(ET.tostring(c, encoding='unicode') for c in follow if c.tag != 'visible')
+    out = ['    <!-- The preview of a page without spotlight (see tools/make_sections.py peek_parts) -->']
+    for page in PAGES:
+        cap = page.capitalize()
+        out.append('    <expression name="PeekOn{}">{} + {} + !$EXP[SpotlightFollows]</expression>'.format(
+            cap, escape(PAGE_SHOWN[page]), SPOTLIGHT_OFF[page]))
+        for row in rows(page):
+            out.append('    <expression name="PeekTitle{0}">Control.IsVisible({0}) + Integer.IsGreater(Container({0}).NumItems,0) + {1}</expression>'.format(
+                row, titles('Container({}).ListItem'.format(row))))
+        prop = 'Window(Home).Property(nc.peek.{})'.format(page)
+        kept = ' | '.join('[String.IsEqual({},{}) + $EXP[PeekTitle{}]]'.format(prop, row, row) for row in rows(page))
+        out.append('    <expression name="PeekKept{}">{}</expression>'.format(cap, kept))
+        for i, row in enumerate(rows(page)):
+            first = ' + '.join(['$EXP[PeekTitle{}]'.format(row)] + ['!$EXP[PeekTitle{}]'.format(r) for r in rows(page)[:i]])
+            out.append('    <expression name="PeekRow{0}">$EXP[PeekOn{1}] + [[String.IsEqual({2},{0}) + $EXP[PeekTitle{0}]] | [!$EXP[PeekKept{1}] + {3}]]</expression>'.format(
+                row, cap, prop, first))
+        out.append('    <expression name="PeekAny{}">{}</expression>'.format(cap, ' | '.join('$EXP[PeekRow{}]'.format(r) for r in rows(page))))
+    # the variables and expressions of the follow hero, once per row
+    for page in PAGES:
+        for row in rows(page):
+            for name in sorted(variables):
+                el = var_defs[name]
+                text = _for_row(ET.tostring(el, encoding='unicode'), row, variables, expressions)
+                text = text.replace('name="{}"'.format(name), 'name="{}{}"'.format(name, row), 1)
+                out.append('    ' + text.strip())
+            for name in sorted(expressions):
+                out.append('    <expression name="{}{}">{}</expression>'.format(
+                    name, row, escape(_for_row(exp_defs[name].text, row, variables, expressions))))
+    # per page, which Home builds only while that page has no spotlight (Home.xml): the heroes,
+    # one group per row (the service looks at them), their backdrops, and Down onto the title
+    for page in PAGES:
+        cap = page.capitalize()
+        out += ['    <include name="PeekHeroes{}">'.format(cap)]
+        for n, row in enumerate(rows(page), 1):
+            out.append('        <control type="group" id="{}">'.format(PEEK_ID[page] + n))
+            out.append('            <visible>$EXP[PeekRow{}]</visible>'.format(row))
+            out.append('            ' + _for_row(inner, row, variables, expressions))
+            out.append('        </control>')
+        out.append('    </include>')
+        out.append('    <include name="PeekFanarts{}">'.format(cap))
+        for row in rows(page):
+            out += ['        <include content="LookHomeFanart">',
+                    '            ' + param('art', 'Container({}).ListItem.Art(fanart)'.format(row)),
+                    '            ' + param('shown', '$EXP[PeekRow{0}] + !String.IsEmpty(Container({0}).ListItem.Art(fanart))'.format(row)),
+                    '        </include>']
+        out.append('    </include>')
+        out.append('    <include name="PeekDown{}">'.format(cap))
+        out += ['        <ondown condition="$EXP[PeekRow{0}]">SetFocus({0})</ondown>'.format(row) for row in rows(page)]
+        out.append('    </include>')
+    return out
+
+
 def render():
     out = ['<?xml version="1.0" encoding="UTF-8"?>',
            '<!-- Generated by tools/make_sections.py from the catalogue in scripts/nightcity.py: do not',
@@ -474,6 +609,7 @@ def render():
     for page in PAGES:
         out += settings_header(page) + settings_slots(page)
     out += settings_variables()
+    out += peek_parts()
     out.append('</includes>')
     return '\n'.join(out) + '\n'
 

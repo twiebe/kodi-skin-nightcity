@@ -71,6 +71,11 @@ The Music page's album spotlight does the same on an album or an artist card, wi
 an album as far as the card has it; a genre leaves it alone. All of it from the library, no online
 lookups, and no ratings since that spotlight has none. Its buttons are out of sight meanwhile.
 
+A page whose spotlight is off keeps the hero, without buttons: on a title card it follows the card
+as above; anywhere else (the top menu, a genre tab) it previews the title Down would land on, the
+current title of the row that had the cursor last, before any the first row with titles. Moving
+along the menu to such a page previews its title at once; Down lands on it.
+
 Both swaps fade 400 ms, as long as the spotlight's own crossfade of poster, logo and backdrop. Onto
 a card the spotlight fades out under the card's hero fading in. Off a card the card's hero goes at
 once (it shows whatever has the focus, there is nothing left to fade out) and the spotlight fades

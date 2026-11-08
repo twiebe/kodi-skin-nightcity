@@ -108,10 +108,12 @@ def test_home_page_builds_up_block_by_block(page):
 
 
 @pytest.mark.parametrize('page', ('home', 'movies', 'shows'))
-def test_rows_without_spotlight_come_first(page):
-    """Without a spotlight the rows are the page: they start at once."""
+def test_rows_without_spotlight_come_after_the_hero(page):
+    """Without a spotlight the hero stays and previews a title: the rows fade in after it, as
+    with a spotlight."""
     rows = next(c for c, _ in page_blocks(page, SPOTLIGHT_OFF) if c.get('id') == ROWS[page])
-    assert page_fade(rows, page)[0] == 0
+    with_spotlight = next(c for c, _ in page_blocks(page) if c.get('id') == ROWS[page])
+    assert page_fade(rows, page) == page_fade(with_spotlight, page)
 
 
 @pytest.mark.parametrize('page', PAGES)

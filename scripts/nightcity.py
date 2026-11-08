@@ -1869,6 +1869,11 @@ HERO_PROPS = 'nc.kept.{}.{}'
 HEROES = (('9000', '9300'), ('9001', '9301'))
 # the group of the hero while it follows a row title, where its ratings go
 FOLLOW_GROUP = '9302'
+# a page without spotlight previews the title of a row (Includes_Sections.xml PeekHeroes): the
+# group of slot n is base + n, its row list is the page's row id; the same ratings as a card
+PEEK_GROUPS = tuple((str(base + n), '{}0{}'.format(row, n)) for base, row in ((9360, 92), (9370, 94), (9380, 95))
+                    for n in range(1, 9))
+PEEK_SHOWN = ' | '.join('Control.IsVisible({})'.format(group) for group, _ in PEEK_GROUPS)
 FOLLOW_KEPT = 'follow'
 FOLLOW_SETTLE = 1.5  # s the cursor stands on a card before TMDb Helper looks it up
 FOLLOW_EMPTY = 5.0  # s it stays pointed at a card without ratings: its poller may be in another lookup
@@ -2013,15 +2018,17 @@ def _point_helper(kept, home, container):
     home.setProperty('TMDbHelper.WidgetContainer', container)
 
 
-def follow_tick(kept, home, now):
+def follow_tick(kept, home, now, row=None):
     """The hero follows the focused card: point TMDb Helper at its row once the cursor stood
     still and the card has nothing kept, let go when the ratings are kept or at the next move;
-    keep only what it found while it was pointed, and show that."""
+    keep only what it found while it was pointed, and show that. ROW: the hero previews the
+    current title of that row instead (a page without spotlight), as if it were the focused card."""
     import xbmc
-    row = xbmc.getInfoLabel(FOLLOW_ROW)
-    dbtype, dbid, label = (xbmc.getInfoLabel('ListItem.' + info) for info in ('DBType', 'DBID', 'Label'))
+    item = 'Container({}).ListItem.'.format(row) if row else 'ListItem.'
+    row = row or xbmc.getInfoLabel(FOLLOW_ROW)
+    dbtype, dbid, label = (xbmc.getInfoLabel(item + info) for info in ('DBType', 'DBID', 'Label'))
     fields = HERO_KEY if dbid else CARD_KEY
-    key = tuple((name, xbmc.getInfoLabel('ListItem.' + info)) for name, info in fields)
+    key = tuple((name, xbmc.getInfoLabel(item + info)) for name, info in fields)
     card = (row, dbtype, dbid, label)
     pointed = home.getProperty('TMDbHelper.WidgetContainer')
     ratings = kept.cache.get(key, {})
@@ -2038,7 +2045,7 @@ def follow_tick(kept, home, now):
     elif now - kept.card_since >= FOLLOW_SETTLE and row and kept.card_asked is None and not any(ratings.values()):
         _point_helper(kept, home, row)
         kept.card_asked = now
-    _keep(kept, home, FOLLOW_KEPT, fields, kept.card_asked is not None, now, item='ListItem.')
+    _keep(kept, home, FOLLOW_KEPT, fields, kept.card_asked is not None, now, item=item)
 
 
 def player_same_title(props, playing):
@@ -2104,6 +2111,12 @@ def hero_tick(kept, now):
         return
     if xbmc.getCondVisibility(HERO_SHOWN.format(FOLLOW_GROUP)):
         follow_tick(kept, home, now)
+        return
+    # one look at all of them, then which one (most pages have a spotlight)
+    peek = xbmc.getCondVisibility(PEEK_SHOWN) and next(
+        (row for group, row in PEEK_GROUPS if xbmc.getCondVisibility(HERO_SHOWN.format(group))), '')
+    if peek:
+        follow_tick(kept, home, now, row=peek)
         return
     if kept.card:
         if _helper_busy(home):

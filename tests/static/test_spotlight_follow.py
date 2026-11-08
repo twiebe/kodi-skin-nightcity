@@ -20,10 +20,11 @@ def _expression():
     return match.group(1)
 
 
-def test_follows_on_the_rows_of_a_page_with_its_spotlight_on():
+def test_follows_on_the_rows_of_a_page_with_or_without_spotlight():
+    """Without spotlight the hero stays and previews a title (PeekHeroes); on a card it follows it."""
     expression = _expression()
-    for group, setting in ((9210, 'SpotlightSource'), (9410, 'nc.movies.spotlight'), (9510, 'nc.shows.spotlight')):
-        assert '[ControlGroup({}).HasFocus() + !String.IsEqual(Skin.String({}),off)]'.format(group, setting) in expression
+    assert expression.startswith('[[ControlGroup(9210).HasFocus() | ControlGroup(9410).HasFocus() | ControlGroup(9510).HasFocus()] + ')
+    assert 'spotlight),off' not in expression and 'SpotlightSource' not in expression
 
 
 def test_follows_only_title_cards():

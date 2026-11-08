@@ -200,7 +200,9 @@ def test_generated_includes_are_current():
 
 # --- spotlight per page ----------------------------------------------------------------------
 
-def test_spotlight_off_removes_the_hero_and_lifts_the_rows():
+def test_spotlight_off_keeps_the_hero_but_not_its_buttons():
+    """Without spotlight a page keeps its hero, which previews a title (PeekHeroes): the rows stay
+    under it, the spotlight's own list and buttons go, Up from the rows goes to the menu."""
     on = controls(load('Home.xml'))
     assert on['9210'].findtext('top') == 'LookPageRowsTop' and on['9210'].findtext('onup') == '9050'
     assert '<constant name="LookPageRowsTop">619</constant>' in (ROOT / '1080i' / 'Includes_Look.xml').read_text(encoding='utf-8')
@@ -209,25 +211,42 @@ def test_spotlight_off_removes_the_hero_and_lifts_the_rows():
         assert gone not in off
     for page in PAGES:
         rows_ = off[PAGES[page] + '10']
-        assert int(rows_.findtext('top')) < 200 and int(rows_.findtext('height')) >= 2 * 468
+        assert rows_.findtext('top') == 'LookPageRowsTop' and rows_.findtext('height') == '468'
         assert rows_.findtext('onup') == '9100'
         assert off[PAGES[page] + '01'].findtext('onup') == '9100'
+        # a preview group per row, no buttons in it
+        groups = [off[str(base + n)] for base in (PEEK[page],) for n in range(1, 9)]
+        assert all(g.findtext('visible') == '$EXP[PeekRow{}0{}]'.format(PAGES[page], n) for n, g in enumerate(groups, 1))
+        # the tags are buttons only for their width, without an id: nothing to land on
+        assert not [c for g in groups for c in g.iter('control') if c.get('type') in ('button', 'list') and c.get('id')]
+    assert not [i for i in ('9361', '9371', '9381') if i in on]  # only built without spotlight
     window = load('Home.xml', {'SpotlightSource': 'off'})
     assert window.findtext('defaultcontrol') == '9101'
     assert '9000' in controls(window)  # still needed by the movies page
     assert load('Home.xml').findtext('defaultcontrol') == '9010'
 
 
-def test_menu_moves_down_past_a_missing_hero():
-    menu = controls(load('Home.xml'))['9100']
+def test_menu_moves_down_onto_the_previewed_title():
+    """Down from the menu: on a page without spotlight onto the title its hero previews, with no
+    title in the rows to the rows; else the spotlight's buttons."""
+    skin = {'SpotlightSource': 'off', 'nc.movies.spotlight': 'off', 'nc.shows.spotlight': 'off'}
+    menu = controls(load('Home.xml', skin))['9100']
     downs = [(d.get('condition') or '', d.text) for d in menu.findall('ondown')]
+    for page in PAGES:
+        for n in range(1, 9):
+            row = '{}0{}'.format(PAGES[page], n)
+            assert ('$EXP[PeekRow{}]'.format(row), 'SetFocus({})'.format(row)) in downs
     for page, rows_ in (('movies', '9410'), ('shows', '9510')):
         cond = next(c for c, t in downs if t == rows_)
         assert 'nc.page),{}'.format(page) in cond and SPOTLIGHT[page] in cond
+        assert '!$EXP[PeekAny{}]'.format(page.capitalize()) in cond
     cond = next(c for c, t in downs if t == '9210')
-    assert 'SpotlightSource),off' in cond
+    assert 'SpotlightSource),off' in cond and '!$EXP[PeekAnyHome]' in cond
     assert downs.index(next(d for d in downs if d[1] == '9510')) < downs.index(next(d for d in downs if d[1] == '9550'))
-    assert downs[-1] == ('', '9050')
+    assert downs[-1] == ('![$EXP[PeekAnyHome] | $EXP[PeekAnyMovies] | $EXP[PeekAnyShows]]', '9050')
+
+
+PEEK = {'home': 9360, 'movies': 9370, 'shows': 9380}
 
 
 def autoscroll_times(list_id, skin):

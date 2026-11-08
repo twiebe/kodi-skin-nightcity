@@ -47,6 +47,10 @@
         <control type="group">
             <visible>!ControlGroup(9210).HasFocus() + !ControlGroup(9410).HasFocus() + !ControlGroup(9510).HasFocus() + !ControlGroup(9710).HasFocus() + !ControlGroup(9810).HasFocus()</visible>
             <include>HeroSwapFade</include>
+            <!-- a page without spotlight: the title its hero previews (PeekHeroes) -->
+            <include condition="String.IsEqual(Skin.String(SpotlightSource),off)">PeekFanartsHome</include>
+            <include condition="String.IsEqual(Skin.String(nc.movies.spotlight),off)">PeekFanartsMovies</include>
+            <include condition="String.IsEqual(Skin.String(nc.shows.spotlight),off)">PeekFanartsShows</include>
             <control type="group">
                 <visible>Control.IsVisible(9300)</visible>
                 <include content="SharedBackdropFade">
@@ -116,6 +120,12 @@
         <include condition="!String.IsEqual(Skin.String(SpotlightSource),off) | !String.IsEqual(Skin.String(nc.movies.spotlight),off)">MovieHero</include>
         <include condition="!String.IsEqual(Skin.String(nc.shows.spotlight),off)">ShowHero</include>
         <include>FollowHero</include>
+        <!-- 9350: a page without spotlight previews a title (Includes_Sections.xml), built only then -->
+        <control type="group" id="9350">
+            <include condition="String.IsEqual(Skin.String(SpotlightSource),off)">PeekHeroesHome</include>
+            <include condition="String.IsEqual(Skin.String(nc.movies.spotlight),off)">PeekHeroesMovies</include>
+            <include condition="String.IsEqual(Skin.String(nc.shows.spotlight),off)">PeekHeroesShows</include>
+        </control>
         <include>SystemHero</include>
         <include>SearchHero</include>
         <include>MusicHero</include>
@@ -131,10 +141,8 @@
         <include content="PageRows" condition="String.IsEqual(Skin.String(SpotlightSource),off)">
             <param name="id" value="9210"/>
             <param name="page" value="String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)"/>
+            <!-- under the hero that previews a title (PeekHeroes), Up to the menu -->
             <param name="up" value="9100"/>
-            <param name="top" value="116"/>
-            <param name="height" value="936"/>
-            <param name="delay" value="0"/>
             <include content="HomeSlots">
                 <param name="up" value="9100"/>
             </include>
@@ -150,10 +158,8 @@
         <include content="PageRows" condition="String.IsEqual(Skin.String(nc.movies.spotlight),off)">
             <param name="id" value="9410"/>
             <param name="page" value="String.IsEqual(Window(Home).Property(nc.page),movies)"/>
+            <!-- under the hero that previews a title (PeekHeroes), Up to the menu -->
             <param name="up" value="9100"/>
-            <param name="top" value="116"/>
-            <param name="height" value="936"/>
-            <param name="delay" value="0"/>
             <include content="MoviesSlots">
                 <param name="up" value="9100"/>
             </include>
@@ -169,10 +175,8 @@
         <include content="PageRows" condition="String.IsEqual(Skin.String(nc.shows.spotlight),off)">
             <param name="id" value="9510"/>
             <param name="page" value="String.IsEqual(Window(Home).Property(nc.page),shows)"/>
+            <!-- under the hero that previews a title (PeekHeroes), Up to the menu -->
             <param name="up" value="9100"/>
-            <param name="top" value="116"/>
-            <param name="height" value="936"/>
-            <param name="delay" value="0"/>
             <include content="ShowsSlots">
                 <param name="up" value="9100"/>
             </include>

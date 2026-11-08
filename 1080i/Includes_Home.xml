@@ -17,7 +17,7 @@
     <!-- The cursor is on a title card of a row, on a page with its spotlight on: the hero shows that
          title (FollowHero) and the rotation stands. Everywhere else, also on a card that is no
          title, the spotlight is its random self. The Music page has its own (MusicFollows). -->
-    <expression name="SpotlightFollows">[[[ControlGroup(9210).HasFocus() + !String.IsEqual(Skin.String(SpotlightSource),off)] | [ControlGroup(9410).HasFocus() + !String.IsEqual(Skin.String(nc.movies.spotlight),off)] | [ControlGroup(9510).HasFocus() + !String.IsEqual(Skin.String(nc.shows.spotlight),off)]] + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,season)]]</expression>
+    <expression name="SpotlightFollows">[[ControlGroup(9210).HasFocus() | ControlGroup(9410).HasFocus() | ControlGroup(9510).HasFocus()] + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,season)]]</expression>
     <!-- nc.kept.follow.* name the focused card: by library id, without one (Trending) by year and label -->
     <expression name="FollowKeptIsCard">[[!String.IsEmpty(Window(Home).Property(nc.kept.follow.dbid)) + Integer.IsEqual(ListItem.DBID,Window(Home).Property(nc.kept.follow.dbid))] | [String.IsEmpty(ListItem.DBID) + !String.IsEmpty(Window(Home).Property(nc.kept.follow.label)) + String.IsEqual(ListItem.Label,Window(Home).Property(nc.kept.follow.label)) + String.IsEqual(ListItem.Year,Window(Home).Property(nc.kept.follow.year))]] + String.IsEqual(ListItem.DBType,Window(Home).Property(nc.kept.follow.dbtype))</expression>
     <!-- Off-screen list holding the spotlight items; autoscroll rotates the selection. The focused
@@ -1047,16 +1047,20 @@
          dark blue outline. Focus switches the page. Entries and gaps are padded for the glow
          (MenuButton): 20 px larger, the grouplist puts them 20 px closer. -->
     <!-- Down from the top line (the menu, what plays) into the shown page; a page without
-         spotlight starts with its rows -->
+         spotlight starts with its rows, on the title its hero previews (PeekDown), with no title
+         in them at their first row -->
     <include name="HomePageDown">
-        <ondown condition="String.IsEqual(Window(Home).Property(nc.page),shows) + String.IsEqual(Skin.String(nc.shows.spotlight),off)">9510</ondown>
-        <ondown condition="String.IsEqual(Window(Home).Property(nc.page),shows)">9550</ondown>
+        <include condition="String.IsEqual(Skin.String(SpotlightSource),off)">PeekDownHome</include>
+        <include condition="String.IsEqual(Skin.String(nc.movies.spotlight),off)">PeekDownMovies</include>
+        <include condition="String.IsEqual(Skin.String(nc.shows.spotlight),off)">PeekDownShows</include>
+        <ondown condition="String.IsEqual(Window(Home).Property(nc.page),shows) + String.IsEqual(Skin.String(nc.shows.spotlight),off) + !$EXP[PeekAnyShows]">9510</ondown>
+        <ondown condition="String.IsEqual(Window(Home).Property(nc.page),shows) + !String.IsEqual(Skin.String(nc.shows.spotlight),off)">9550</ondown>
         <ondown condition="String.IsEqual(Window(Home).Property(nc.page),system)">9610</ondown>
         <ondown condition="String.IsEqual(Window(Home).Property(nc.page),search)">9750</ondown>
         <ondown condition="String.IsEqual(Window(Home).Property(nc.page),music)">9850</ondown>
-        <ondown condition="String.IsEqual(Window(Home).Property(nc.page),movies) + String.IsEqual(Skin.String(nc.movies.spotlight),off)">9410</ondown>
-        <ondown condition="[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + String.IsEqual(Skin.String(SpotlightSource),off)">9210</ondown>
-        <ondown>9050</ondown>
+        <ondown condition="String.IsEqual(Window(Home).Property(nc.page),movies) + String.IsEqual(Skin.String(nc.movies.spotlight),off) + !$EXP[PeekAnyMovies]">9410</ondown>
+        <ondown condition="[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + String.IsEqual(Skin.String(SpotlightSource),off) + !$EXP[PeekAnyHome]">9210</ondown>
+        <ondown condition="![$EXP[PeekAnyHome] | $EXP[PeekAnyMovies] | $EXP[PeekAnyShows]]">9050</ondown>
     </include>
 
     <include name="MainMenu">
@@ -1229,6 +1233,8 @@
              on (continue, next up) can be wide in a look -->
         <param name="card" default="LookRowCard"/>
         <param name="itemwidth" default="LookRowItemWidth"/>
+        <!-- on a title: names the row as the one the page without spotlight previews (PeekHeroes) -->
+        <param name="peek" default="noop"/>
         <definition>
             <control type="group" id="$PARAM[group]">
                 <height>468</height>
@@ -1272,6 +1278,7 @@
                          neighbouring row group itself; a hidden group passes the move on -->
                     <onup>$PARAM[up]</onup>
                     <ondown>$PARAM[down]</ondown>
+                    <onfocus condition="String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,season)">$PARAM[peek]</onfocus>
                     <include content="$PARAM[click]"/>
                     <itemlayout width="$PARAM[itemwidth]" height="LookRowListHeight">
                         <control type="group">
