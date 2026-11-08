@@ -71,4 +71,4 @@ def test_skin_settings_switch_off_the_home_key():
     assert '<param name="setting" value="nc.homekey.off"/>' in text
     assert '<param name="onclick" value="NotifyAll(nightcity,home_keymap)"/>' in text
     toggle = (ROOT / '1080i' / 'Includes_Settings.xml').read_text()
-    assert '<onclick>Skin.ToggleSetting($PARAM[setting])</onclick>\n                <onclick>$PARAM[onclick]</onclick>' in toggle
+    assert '<onclick condition="$PARAM[changeable]">Skin.ToggleSetting($PARAM[setting])</onclick>\n                <onclick>$PARAM[onclick]</onclick>' in toggle

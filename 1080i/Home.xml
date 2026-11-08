@@ -45,7 +45,7 @@
         <include>Background</include>
         <!-- the backdrops fade over to each other (BackdropFade) -->
         <control type="group">
-            <visible>!ControlGroup(9210).HasFocus() + !ControlGroup(9410).HasFocus() + !ControlGroup(9510).HasFocus() + !ControlGroup(9710).HasFocus() + !ControlGroup(9810).HasFocus()</visible>
+            <visible>!$EXP[CardBackdrop]</visible>
             <include>HeroSwapFade</include>
             <!-- a page without spotlight: the title its hero previews (PeekHeroes) -->
             <include condition="String.IsEqual(Skin.String(SpotlightSource),off)">PeekFanartsHome</include>
@@ -86,7 +86,7 @@
             </control>
         </control>
         <control type="group">
-            <visible>ControlGroup(9210).HasFocus() | ControlGroup(9410).HasFocus() | ControlGroup(9510).HasFocus() | ControlGroup(9710).HasFocus() | ControlGroup(9810).HasFocus()</visible>
+            <visible>$EXP[CardBackdrop]</visible>
             <include>HeroSwapFade</include>
             <include content="LookHomeFanart">
                 <param name="art" value="ListItem.Art(fanart)"/>

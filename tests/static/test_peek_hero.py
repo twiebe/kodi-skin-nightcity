@@ -64,10 +64,29 @@ def test_the_kept_row_else_the_first_with_titles(page):
 
 
 @pytest.mark.parametrize('page', PAGES)
-def test_no_preview_with_a_spotlight_or_on_a_card(page):
+def test_no_preview_with_a_spotlight(page):
     exps = expressions()
     assert shown_rows(page, atoms_for(page, {1, 2}, 2, off=False), exps) == []
-    assert shown_rows(page, atoms_for(page, {1, 2}, 2, follows=True), exps) == []
+
+
+@pytest.mark.parametrize('page', PAGES)
+def test_on_a_card_the_preview_is_the_card(page):
+    """The row names itself when it gets the focus: on its card the preview shows that row's
+    current title, the card; the hero that follows a card stays out (no swap, no fade)."""
+    exps = expressions()
+    assert shown_rows(page, atoms_for(page, {1, 2}, 2, follows=True), exps) == [2]
+    assert not value('$EXP[SpotlightFollows]', atoms_for(page, {1, 2}, 2, follows=True), exps)
+
+
+def test_rows_swap_without_a_fade_the_page_fades():
+    sections = parse(ROOT / '1080i' / 'Includes_Sections.xml')
+    for page in PAGES:
+        include = next(i for i in sections.iter('include') if i.get('name') == 'PeekHeroes' + page.capitalize())
+        page_group = include.find('control')
+        assert page_group.findtext('visible') == '$EXP[PeekAny{}]'.format(page.capitalize())
+        assert [i.text for i in page_group.findall('include')] == ['HeroSwapIn']
+        for row in page_group.findall('control'):
+            assert row.find('animation') is None and not [i for i in row.findall('include') if not i.get('content')]
 
 
 def test_a_row_names_itself_on_a_title():
@@ -87,7 +106,7 @@ def test_the_preview_is_the_follow_hero_for_a_row():
     sections = parse(ROOT / '1080i' / 'Includes_Sections.xml')
     for page, base in PAGES.items():
         include = next(i for i in sections.iter('include') if i.get('name') == 'PeekHeroes' + page.capitalize())
-        for n, group in enumerate(include.findall('control'), 1):
+        for n, group in enumerate(include.find('control').findall('control'), 1):
             row = '{}0{}'.format(base, n)
             text = ''.join(t for el in group.iter() for t in [el.text or ''] + list(el.attrib.values()))
             assert not re.search(r'(?<![\w).])ListItem\.', text), row

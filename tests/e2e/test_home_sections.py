@@ -253,8 +253,14 @@ def test_the_last_page_shown_cannot_be_hidden(settings):
     wait_for('Control.HasFocus(9005) + Control.IsVisible(511)')
     builtins(*('Skin.SetBool({})'.format(h) for h in hidden))
     try:
-        wait_for('!Control.IsEnabled(511) + Control.IsEnabled(510)')
+        # the last page's switch shows checked and stays so on OK
+        builtin('SetFocus(511)')
+        wait_for('Control.HasFocus(511) + Control.IsEnabled(511)')
+        action('select', delay=0.5)
+        assert not true('Skin.HasSetting(nc.menu.hide.movies)')
         builtin('Skin.Reset(nc.menu.hide.home)')
-        wait_for('Control.IsEnabled(511)')
+        action('select', delay=0.5)
+        wait_for('Skin.HasSetting(nc.menu.hide.movies)')
+        builtin('Skin.Reset(nc.menu.hide.movies)')
     finally:
         builtins(*('Skin.Reset({})'.format(h) for h in hidden))

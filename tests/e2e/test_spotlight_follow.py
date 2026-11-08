@@ -229,15 +229,15 @@ def test_info_page_from_a_row_and_back_still_follows(back_to_home):
     assert_shows_card()
 
 
-def test_no_spotlight_still_follows(home):
-    """Without spotlight the hero stays (it previews a title from the menu, test_peek_hero.py) and
-    follows the card as with one."""
+def test_no_spotlight_the_preview_shows_the_card(home):
+    """Without spotlight the hero stays and previews a title (test_peek_hero.py); on a card the
+    preview of its row shows it, the follow hero stays out."""
     builtin('Skin.SetString(SpotlightSource,off)')
     try:
         reopen_home()
         focus_row(9202)
         assert label('ListItem.DBType') == 'movie'
-        wait_for(FOLLOWS)
+        wait_for('Control.IsVisible(9362) + !' + FOLLOWS)
         screenshot('follow-spotlight-off')
     finally:
         builtin('Skin.Reset(SpotlightSource)')

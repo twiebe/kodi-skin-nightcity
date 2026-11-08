@@ -51,6 +51,8 @@ def test_the_hero_previews_where_down_lands(no_spotlight):
     assert not true('Control.IsVisible(9050)')  # no buttons
     rpc('Input.Down')
     wait_for('Control.HasFocus({}) + Integer.IsEqual(Container({}).Position,0)'.format(row, row))
+    # the same hero from the menu onto the card: no swap to the hero that follows a card
+    assert true('Control.IsVisible({}) + !Control.IsVisible(9302)'.format(group))
     rpc('Input.Right')
     wait_for('Integer.IsEqual(Container({}).Position,1)'.format(row))
     title = info('Container({}).ListItem.Label'.format(row))['Container({}).ListItem.Label'.format(row)]

@@ -117,31 +117,31 @@
                     <param name="id" value="510"/>
                     <param name="label" value="$LOCALIZE[31477]"/>
                     <param name="setting" value="nc.menu.hide.home"/>
-                    <param name="enable" value="!$EXP[PageShownHome] | $EXP[PageShownMovies] | $EXP[PageShownShows] | $EXP[PageShownMusic] | $EXP[PageShownSearch]"/>
+                    <param name="changeable" value="!$EXP[PageShownHome] | $EXP[PageShownMovies] | $EXP[PageShownShows] | $EXP[PageShownMusic] | $EXP[PageShownSearch]"/>
                 </include>
                 <include content="SkinSettingsToggle">
                     <param name="id" value="511"/>
                     <param name="label" value="$LOCALIZE[342]"/>
                     <param name="setting" value="nc.menu.hide.movies"/>
-                    <param name="enable" value="!$EXP[PageShownMovies] | $EXP[PageShownHome] | $EXP[PageShownShows] | $EXP[PageShownMusic] | $EXP[PageShownSearch]"/>
+                    <param name="changeable" value="!$EXP[PageShownMovies] | $EXP[PageShownHome] | $EXP[PageShownShows] | $EXP[PageShownMusic] | $EXP[PageShownSearch]"/>
                 </include>
                 <include content="SkinSettingsToggle">
                     <param name="id" value="512"/>
                     <param name="label" value="$LOCALIZE[20343]"/>
                     <param name="setting" value="nc.menu.hide.shows"/>
-                    <param name="enable" value="!$EXP[PageShownShows] | $EXP[PageShownHome] | $EXP[PageShownMovies] | $EXP[PageShownMusic] | $EXP[PageShownSearch]"/>
+                    <param name="changeable" value="!$EXP[PageShownShows] | $EXP[PageShownHome] | $EXP[PageShownMovies] | $EXP[PageShownMusic] | $EXP[PageShownSearch]"/>
                 </include>
                 <include content="SkinSettingsToggle">
                     <param name="id" value="516"/>
                     <param name="label" value="$LOCALIZE[2]"/>
                     <param name="setting" value="nc.menu.hide.music"/>
-                    <param name="enable" value="!$EXP[PageShownMusic] | $EXP[PageShownHome] | $EXP[PageShownMovies] | $EXP[PageShownShows] | $EXP[PageShownSearch]"/>
+                    <param name="changeable" value="!$EXP[PageShownMusic] | $EXP[PageShownHome] | $EXP[PageShownMovies] | $EXP[PageShownShows] | $EXP[PageShownSearch]"/>
                 </include>
                 <include content="SkinSettingsToggle">
                     <param name="id" value="513"/>
                     <param name="label" value="$LOCALIZE[137]"/>
                     <param name="setting" value="nc.menu.hide.search"/>
-                    <param name="enable" value="!$EXP[PageShownSearch] | $EXP[PageShownHome] | $EXP[PageShownMovies] | $EXP[PageShownShows] | $EXP[PageShownMusic]"/>
+                    <param name="changeable" value="!$EXP[PageShownSearch] | $EXP[PageShownHome] | $EXP[PageShownMovies] | $EXP[PageShownShows] | $EXP[PageShownMusic]"/>
                 </include>
                 <!-- the script forgets the remembered terms when the switch goes off -->
                 <include content="SkinSettingsToggle">

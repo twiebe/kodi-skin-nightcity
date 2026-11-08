@@ -20,11 +20,12 @@ def _expression():
     return match.group(1)
 
 
-def test_follows_on_the_rows_of_a_page_with_or_without_spotlight():
-    """Without spotlight the hero stays and previews a title (PeekHeroes); on a card it follows it."""
+def test_follows_on_the_rows_of_a_page_with_its_spotlight_on():
+    """Without spotlight the preview shows the focused card itself (test_peek_hero.py): one hero
+    from the menu onto the card, no swap."""
     expression = _expression()
-    assert expression.startswith('[[ControlGroup(9210).HasFocus() | ControlGroup(9410).HasFocus() | ControlGroup(9510).HasFocus()] + ')
-    assert 'spotlight),off' not in expression and 'SpotlightSource' not in expression
+    for group, setting in ((9210, 'SpotlightSource'), (9410, 'nc.movies.spotlight'), (9510, 'nc.shows.spotlight')):
+        assert '[ControlGroup({}).HasFocus() + !String.IsEqual(Skin.String({}),off)]'.format(group, setting) in expression
 
 
 def test_follows_only_title_cards():
@@ -141,8 +142,9 @@ def test_followed_hero_only_fades_in():
 
 def test_backdrop_of_hero_and_rows_fade_as_long_as_the_swap():
     window = (SKIN / 'Home.xml').read_text(encoding='utf-8')
-    assert re.search(r'<visible>!ControlGroup\(9210\)\.HasFocus\(\)[^<]*</visible>\s*<include>HeroSwapFade</include>', window)
-    assert re.search(r'<visible>ControlGroup\(9210\)\.HasFocus\(\)[^<]*</visible>\s*<include>HeroSwapFade</include>', window)
+    # the card's backdrop where the hero follows the card (CardBackdrop), else the hero's own
+    assert re.search(r'<visible>!\$EXP\[CardBackdrop\]</visible>\s*<include>HeroSwapFade</include>', window)
+    assert re.search(r'<visible>\$EXP\[CardBackdrop\]</visible>\s*<include>HeroSwapFade</include>', window)
 
 
 

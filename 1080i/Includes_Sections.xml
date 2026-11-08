@@ -3164,7 +3164,7 @@
         <value condition="Control.HasFocus(428)">$VAR[HomePagesDesc_shows_8]</value>
     </variable>
     <!-- The preview of a page without spotlight (see tools/make_sections.py peek_parts) -->
-    <expression name="PeekOnHome">[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + String.IsEqual(Skin.String(SpotlightSource),off) + !$EXP[SpotlightFollows]</expression>
+    <expression name="PeekOnHome">[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + String.IsEqual(Skin.String(SpotlightSource),off)</expression>
     <expression name="PeekTitle9201">Control.IsVisible(9201) + Integer.IsGreater(Container(9201).NumItems,0) + [String.IsEqual(Container(9201).ListItem.DBType,movie) | String.IsEqual(Container(9201).ListItem.DBType,tvshow) | String.IsEqual(Container(9201).ListItem.DBType,episode) | String.IsEqual(Container(9201).ListItem.DBType,season)]</expression>
     <expression name="PeekTitle9202">Control.IsVisible(9202) + Integer.IsGreater(Container(9202).NumItems,0) + [String.IsEqual(Container(9202).ListItem.DBType,movie) | String.IsEqual(Container(9202).ListItem.DBType,tvshow) | String.IsEqual(Container(9202).ListItem.DBType,episode) | String.IsEqual(Container(9202).ListItem.DBType,season)]</expression>
     <expression name="PeekTitle9203">Control.IsVisible(9203) + Integer.IsGreater(Container(9203).NumItems,0) + [String.IsEqual(Container(9203).ListItem.DBType,movie) | String.IsEqual(Container(9203).ListItem.DBType,tvshow) | String.IsEqual(Container(9203).ListItem.DBType,episode) | String.IsEqual(Container(9203).ListItem.DBType,season)]</expression>
@@ -3183,7 +3183,7 @@
     <expression name="PeekRow9207">$EXP[PeekOnHome] + [[String.IsEqual(Window(Home).Property(nc.peek.home),9207) + $EXP[PeekTitle9207]] | [!$EXP[PeekKeptHome] + $EXP[PeekTitle9207] + !$EXP[PeekTitle9201] + !$EXP[PeekTitle9202] + !$EXP[PeekTitle9203] + !$EXP[PeekTitle9204] + !$EXP[PeekTitle9205] + !$EXP[PeekTitle9206]]]</expression>
     <expression name="PeekRow9208">$EXP[PeekOnHome] + [[String.IsEqual(Window(Home).Property(nc.peek.home),9208) + $EXP[PeekTitle9208]] | [!$EXP[PeekKeptHome] + $EXP[PeekTitle9208] + !$EXP[PeekTitle9201] + !$EXP[PeekTitle9202] + !$EXP[PeekTitle9203] + !$EXP[PeekTitle9204] + !$EXP[PeekTitle9205] + !$EXP[PeekTitle9206] + !$EXP[PeekTitle9207]]]</expression>
     <expression name="PeekAnyHome">$EXP[PeekRow9201] | $EXP[PeekRow9202] | $EXP[PeekRow9203] | $EXP[PeekRow9204] | $EXP[PeekRow9205] | $EXP[PeekRow9206] | $EXP[PeekRow9207] | $EXP[PeekRow9208]</expression>
-    <expression name="PeekOnMovies">String.IsEqual(Window(Home).Property(nc.page),movies) + String.IsEqual(Skin.String(nc.movies.spotlight),off) + !$EXP[SpotlightFollows]</expression>
+    <expression name="PeekOnMovies">String.IsEqual(Window(Home).Property(nc.page),movies) + String.IsEqual(Skin.String(nc.movies.spotlight),off)</expression>
     <expression name="PeekTitle9401">Control.IsVisible(9401) + Integer.IsGreater(Container(9401).NumItems,0) + [String.IsEqual(Container(9401).ListItem.DBType,movie) | String.IsEqual(Container(9401).ListItem.DBType,tvshow) | String.IsEqual(Container(9401).ListItem.DBType,episode) | String.IsEqual(Container(9401).ListItem.DBType,season)]</expression>
     <expression name="PeekTitle9402">Control.IsVisible(9402) + Integer.IsGreater(Container(9402).NumItems,0) + [String.IsEqual(Container(9402).ListItem.DBType,movie) | String.IsEqual(Container(9402).ListItem.DBType,tvshow) | String.IsEqual(Container(9402).ListItem.DBType,episode) | String.IsEqual(Container(9402).ListItem.DBType,season)]</expression>
     <expression name="PeekTitle9403">Control.IsVisible(9403) + Integer.IsGreater(Container(9403).NumItems,0) + [String.IsEqual(Container(9403).ListItem.DBType,movie) | String.IsEqual(Container(9403).ListItem.DBType,tvshow) | String.IsEqual(Container(9403).ListItem.DBType,episode) | String.IsEqual(Container(9403).ListItem.DBType,season)]</expression>
@@ -3202,7 +3202,7 @@
     <expression name="PeekRow9407">$EXP[PeekOnMovies] + [[String.IsEqual(Window(Home).Property(nc.peek.movies),9407) + $EXP[PeekTitle9407]] | [!$EXP[PeekKeptMovies] + $EXP[PeekTitle9407] + !$EXP[PeekTitle9401] + !$EXP[PeekTitle9402] + !$EXP[PeekTitle9403] + !$EXP[PeekTitle9404] + !$EXP[PeekTitle9405] + !$EXP[PeekTitle9406]]]</expression>
     <expression name="PeekRow9408">$EXP[PeekOnMovies] + [[String.IsEqual(Window(Home).Property(nc.peek.movies),9408) + $EXP[PeekTitle9408]] | [!$EXP[PeekKeptMovies] + $EXP[PeekTitle9408] + !$EXP[PeekTitle9401] + !$EXP[PeekTitle9402] + !$EXP[PeekTitle9403] + !$EXP[PeekTitle9404] + !$EXP[PeekTitle9405] + !$EXP[PeekTitle9406] + !$EXP[PeekTitle9407]]]</expression>
     <expression name="PeekAnyMovies">$EXP[PeekRow9401] | $EXP[PeekRow9402] | $EXP[PeekRow9403] | $EXP[PeekRow9404] | $EXP[PeekRow9405] | $EXP[PeekRow9406] | $EXP[PeekRow9407] | $EXP[PeekRow9408]</expression>
-    <expression name="PeekOnShows">String.IsEqual(Window(Home).Property(nc.page),shows) + String.IsEqual(Skin.String(nc.shows.spotlight),off) + !$EXP[SpotlightFollows]</expression>
+    <expression name="PeekOnShows">String.IsEqual(Window(Home).Property(nc.page),shows) + String.IsEqual(Skin.String(nc.shows.spotlight),off)</expression>
     <expression name="PeekTitle9501">Control.IsVisible(9501) + Integer.IsGreater(Container(9501).NumItems,0) + [String.IsEqual(Container(9501).ListItem.DBType,movie) | String.IsEqual(Container(9501).ListItem.DBType,tvshow) | String.IsEqual(Container(9501).ListItem.DBType,episode) | String.IsEqual(Container(9501).ListItem.DBType,season)]</expression>
     <expression name="PeekTitle9502">Control.IsVisible(9502) + Integer.IsGreater(Container(9502).NumItems,0) + [String.IsEqual(Container(9502).ListItem.DBType,movie) | String.IsEqual(Container(9502).ListItem.DBType,tvshow) | String.IsEqual(Container(9502).ListItem.DBType,episode) | String.IsEqual(Container(9502).ListItem.DBType,season)]</expression>
     <expression name="PeekTitle9503">Control.IsVisible(9503) + Integer.IsGreater(Container(9503).NumItems,0) + [String.IsEqual(Container(9503).ListItem.DBType,movie) | String.IsEqual(Container(9503).ListItem.DBType,tvshow) | String.IsEqual(Container(9503).ListItem.DBType,episode) | String.IsEqual(Container(9503).ListItem.DBType,season)]</expression>
@@ -4590,14 +4590,17 @@
     </variable>
     <expression name="FollowKeptIsCard9508">[[!String.IsEmpty(Window(Home).Property(nc.kept.follow.dbid)) + Integer.IsEqual(Container(9508).ListItem.DBID,Window(Home).Property(nc.kept.follow.dbid))] | [String.IsEmpty(Container(9508).ListItem.DBID) + !String.IsEmpty(Window(Home).Property(nc.kept.follow.label)) + String.IsEqual(Container(9508).ListItem.Label,Window(Home).Property(nc.kept.follow.label)) + String.IsEqual(Container(9508).ListItem.Year,Window(Home).Property(nc.kept.follow.year))]] + String.IsEqual(Container(9508).ListItem.DBType,Window(Home).Property(nc.kept.follow.dbtype))</expression>
     <include name="PeekHeroesHome">
-        <control type="group" id="9361">
-            <visible>$EXP[PeekRow9201]</visible>
+        <control type="group">
+            <visible>$EXP[PeekAnyHome]</visible>
             <include>HeroSwapIn</include>
             <animation type="WindowOpen" condition="!Player.HasVideo">
                 <effect type="fade" start="0" end="100" time="FadeTime" />
             </animation>
             
-            <control type="group">
+            
+            <control type="group" id="9361">
+                <visible>$EXP[PeekRow9201]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -4637,15 +4640,10 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
-        </control>
-        <control type="group" id="9362">
-            <visible>$EXP[PeekRow9202]</visible>
-            <include>HeroSwapIn</include>
-            <animation type="WindowOpen" condition="!Player.HasVideo">
-                <effect type="fade" start="0" end="100" time="FadeTime" />
-            </animation>
-            
-            <control type="group">
+            </control>
+            <control type="group" id="9362">
+                <visible>$EXP[PeekRow9202]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -4685,15 +4683,10 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
-        </control>
-        <control type="group" id="9363">
-            <visible>$EXP[PeekRow9203]</visible>
-            <include>HeroSwapIn</include>
-            <animation type="WindowOpen" condition="!Player.HasVideo">
-                <effect type="fade" start="0" end="100" time="FadeTime" />
-            </animation>
-            
-            <control type="group">
+            </control>
+            <control type="group" id="9363">
+                <visible>$EXP[PeekRow9203]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -4733,15 +4726,10 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
-        </control>
-        <control type="group" id="9364">
-            <visible>$EXP[PeekRow9204]</visible>
-            <include>HeroSwapIn</include>
-            <animation type="WindowOpen" condition="!Player.HasVideo">
-                <effect type="fade" start="0" end="100" time="FadeTime" />
-            </animation>
-            
-            <control type="group">
+            </control>
+            <control type="group" id="9364">
+                <visible>$EXP[PeekRow9204]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -4781,15 +4769,10 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
-        </control>
-        <control type="group" id="9365">
-            <visible>$EXP[PeekRow9205]</visible>
-            <include>HeroSwapIn</include>
-            <animation type="WindowOpen" condition="!Player.HasVideo">
-                <effect type="fade" start="0" end="100" time="FadeTime" />
-            </animation>
-            
-            <control type="group">
+            </control>
+            <control type="group" id="9365">
+                <visible>$EXP[PeekRow9205]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -4829,15 +4812,10 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
-        </control>
-        <control type="group" id="9366">
-            <visible>$EXP[PeekRow9206]</visible>
-            <include>HeroSwapIn</include>
-            <animation type="WindowOpen" condition="!Player.HasVideo">
-                <effect type="fade" start="0" end="100" time="FadeTime" />
-            </animation>
-            
-            <control type="group">
+            </control>
+            <control type="group" id="9366">
+                <visible>$EXP[PeekRow9206]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -4877,15 +4855,10 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
-        </control>
-        <control type="group" id="9367">
-            <visible>$EXP[PeekRow9207]</visible>
-            <include>HeroSwapIn</include>
-            <animation type="WindowOpen" condition="!Player.HasVideo">
-                <effect type="fade" start="0" end="100" time="FadeTime" />
-            </animation>
-            
-            <control type="group">
+            </control>
+            <control type="group" id="9367">
+                <visible>$EXP[PeekRow9207]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -4925,15 +4898,10 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
-        </control>
-        <control type="group" id="9368">
-            <visible>$EXP[PeekRow9208]</visible>
-            <include>HeroSwapIn</include>
-            <animation type="WindowOpen" condition="!Player.HasVideo">
-                <effect type="fade" start="0" end="100" time="FadeTime" />
-            </animation>
-            
-            <control type="group">
+            </control>
+            <control type="group" id="9368">
+                <visible>$EXP[PeekRow9208]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -4973,6 +4941,7 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
+            </control>
         </control>
     </include>
     <include name="PeekFanartsHome">
@@ -5020,14 +4989,17 @@
         <ondown condition="$EXP[PeekRow9208]">SetFocus(9208)</ondown>
     </include>
     <include name="PeekHeroesMovies">
-        <control type="group" id="9371">
-            <visible>$EXP[PeekRow9401]</visible>
+        <control type="group">
+            <visible>$EXP[PeekAnyMovies]</visible>
             <include>HeroSwapIn</include>
             <animation type="WindowOpen" condition="!Player.HasVideo">
                 <effect type="fade" start="0" end="100" time="FadeTime" />
             </animation>
             
-            <control type="group">
+            
+            <control type="group" id="9371">
+                <visible>$EXP[PeekRow9401]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -5067,15 +5039,10 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
-        </control>
-        <control type="group" id="9372">
-            <visible>$EXP[PeekRow9402]</visible>
-            <include>HeroSwapIn</include>
-            <animation type="WindowOpen" condition="!Player.HasVideo">
-                <effect type="fade" start="0" end="100" time="FadeTime" />
-            </animation>
-            
-            <control type="group">
+            </control>
+            <control type="group" id="9372">
+                <visible>$EXP[PeekRow9402]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -5115,15 +5082,10 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
-        </control>
-        <control type="group" id="9373">
-            <visible>$EXP[PeekRow9403]</visible>
-            <include>HeroSwapIn</include>
-            <animation type="WindowOpen" condition="!Player.HasVideo">
-                <effect type="fade" start="0" end="100" time="FadeTime" />
-            </animation>
-            
-            <control type="group">
+            </control>
+            <control type="group" id="9373">
+                <visible>$EXP[PeekRow9403]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -5163,15 +5125,10 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
-        </control>
-        <control type="group" id="9374">
-            <visible>$EXP[PeekRow9404]</visible>
-            <include>HeroSwapIn</include>
-            <animation type="WindowOpen" condition="!Player.HasVideo">
-                <effect type="fade" start="0" end="100" time="FadeTime" />
-            </animation>
-            
-            <control type="group">
+            </control>
+            <control type="group" id="9374">
+                <visible>$EXP[PeekRow9404]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -5211,15 +5168,10 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
-        </control>
-        <control type="group" id="9375">
-            <visible>$EXP[PeekRow9405]</visible>
-            <include>HeroSwapIn</include>
-            <animation type="WindowOpen" condition="!Player.HasVideo">
-                <effect type="fade" start="0" end="100" time="FadeTime" />
-            </animation>
-            
-            <control type="group">
+            </control>
+            <control type="group" id="9375">
+                <visible>$EXP[PeekRow9405]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -5259,15 +5211,10 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
-        </control>
-        <control type="group" id="9376">
-            <visible>$EXP[PeekRow9406]</visible>
-            <include>HeroSwapIn</include>
-            <animation type="WindowOpen" condition="!Player.HasVideo">
-                <effect type="fade" start="0" end="100" time="FadeTime" />
-            </animation>
-            
-            <control type="group">
+            </control>
+            <control type="group" id="9376">
+                <visible>$EXP[PeekRow9406]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -5307,15 +5254,10 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
-        </control>
-        <control type="group" id="9377">
-            <visible>$EXP[PeekRow9407]</visible>
-            <include>HeroSwapIn</include>
-            <animation type="WindowOpen" condition="!Player.HasVideo">
-                <effect type="fade" start="0" end="100" time="FadeTime" />
-            </animation>
-            
-            <control type="group">
+            </control>
+            <control type="group" id="9377">
+                <visible>$EXP[PeekRow9407]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -5355,15 +5297,10 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
-        </control>
-        <control type="group" id="9378">
-            <visible>$EXP[PeekRow9408]</visible>
-            <include>HeroSwapIn</include>
-            <animation type="WindowOpen" condition="!Player.HasVideo">
-                <effect type="fade" start="0" end="100" time="FadeTime" />
-            </animation>
-            
-            <control type="group">
+            </control>
+            <control type="group" id="9378">
+                <visible>$EXP[PeekRow9408]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -5403,6 +5340,7 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
+            </control>
         </control>
     </include>
     <include name="PeekFanartsMovies">
@@ -5450,14 +5388,17 @@
         <ondown condition="$EXP[PeekRow9408]">SetFocus(9408)</ondown>
     </include>
     <include name="PeekHeroesShows">
-        <control type="group" id="9381">
-            <visible>$EXP[PeekRow9501]</visible>
+        <control type="group">
+            <visible>$EXP[PeekAnyShows]</visible>
             <include>HeroSwapIn</include>
             <animation type="WindowOpen" condition="!Player.HasVideo">
                 <effect type="fade" start="0" end="100" time="FadeTime" />
             </animation>
             
-            <control type="group">
+            
+            <control type="group" id="9381">
+                <visible>$EXP[PeekRow9501]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -5497,15 +5438,10 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
-        </control>
-        <control type="group" id="9382">
-            <visible>$EXP[PeekRow9502]</visible>
-            <include>HeroSwapIn</include>
-            <animation type="WindowOpen" condition="!Player.HasVideo">
-                <effect type="fade" start="0" end="100" time="FadeTime" />
-            </animation>
-            
-            <control type="group">
+            </control>
+            <control type="group" id="9382">
+                <visible>$EXP[PeekRow9502]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -5545,15 +5481,10 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
-        </control>
-        <control type="group" id="9383">
-            <visible>$EXP[PeekRow9503]</visible>
-            <include>HeroSwapIn</include>
-            <animation type="WindowOpen" condition="!Player.HasVideo">
-                <effect type="fade" start="0" end="100" time="FadeTime" />
-            </animation>
-            
-            <control type="group">
+            </control>
+            <control type="group" id="9383">
+                <visible>$EXP[PeekRow9503]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -5593,15 +5524,10 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
-        </control>
-        <control type="group" id="9384">
-            <visible>$EXP[PeekRow9504]</visible>
-            <include>HeroSwapIn</include>
-            <animation type="WindowOpen" condition="!Player.HasVideo">
-                <effect type="fade" start="0" end="100" time="FadeTime" />
-            </animation>
-            
-            <control type="group">
+            </control>
+            <control type="group" id="9384">
+                <visible>$EXP[PeekRow9504]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -5641,15 +5567,10 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
-        </control>
-        <control type="group" id="9385">
-            <visible>$EXP[PeekRow9505]</visible>
-            <include>HeroSwapIn</include>
-            <animation type="WindowOpen" condition="!Player.HasVideo">
-                <effect type="fade" start="0" end="100" time="FadeTime" />
-            </animation>
-            
-            <control type="group">
+            </control>
+            <control type="group" id="9385">
+                <visible>$EXP[PeekRow9505]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -5689,15 +5610,10 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
-        </control>
-        <control type="group" id="9386">
-            <visible>$EXP[PeekRow9506]</visible>
-            <include>HeroSwapIn</include>
-            <animation type="WindowOpen" condition="!Player.HasVideo">
-                <effect type="fade" start="0" end="100" time="FadeTime" />
-            </animation>
-            
-            <control type="group">
+            </control>
+            <control type="group" id="9386">
+                <visible>$EXP[PeekRow9506]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -5737,15 +5653,10 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
-        </control>
-        <control type="group" id="9387">
-            <visible>$EXP[PeekRow9507]</visible>
-            <include>HeroSwapIn</include>
-            <animation type="WindowOpen" condition="!Player.HasVideo">
-                <effect type="fade" start="0" end="100" time="FadeTime" />
-            </animation>
-            
-            <control type="group">
+            </control>
+            <control type="group" id="9387">
+                <visible>$EXP[PeekRow9507]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -5785,15 +5696,10 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
-        </control>
-        <control type="group" id="9388">
-            <visible>$EXP[PeekRow9508]</visible>
-            <include>HeroSwapIn</include>
-            <animation type="WindowOpen" condition="!Player.HasVideo">
-                <effect type="fade" start="0" end="100" time="FadeTime" />
-            </animation>
-            
-            <control type="group">
+            </control>
+            <control type="group" id="9388">
+                <visible>$EXP[PeekRow9508]</visible>
+                <control type="group">
                 <left>64</left>
                 <top>116</top>
                 <include content="LookHeroPoster">
@@ -5833,6 +5739,7 @@
                 <param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)" />
             </include>
         
+            </control>
         </control>
     </include>
     <include name="PeekFanartsShows">

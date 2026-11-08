@@ -537,11 +537,16 @@ def peek_parts():
     for el in follow.iter():
         if el.tag == 'param' and el.get('name', '').endswith('id'):
             el.set('value', '0')
-    inner = ''.join(ET.tostring(c, encoding='unicode') for c in follow if c.tag != 'visible')
+    # the copies swap at once (the same title from the menu onto its card, row to row); the group
+    # of the page fades as FollowHero does
+    swap = [c for c in follow if c.tag == 'animation' or (c.tag == 'include' and not c.get('content'))]
+    inner = ''.join(ET.tostring(c, encoding='unicode') for c in follow if c.tag != 'visible' and c not in swap)
+    fades = ''.join(ET.tostring(c, encoding='unicode') for c in swap)
     out = ['    <!-- The preview of a page without spotlight (see tools/make_sections.py peek_parts) -->']
     for page in PAGES:
         cap = page.capitalize()
-        out.append('    <expression name="PeekOn{}">{} + {} + !$EXP[SpotlightFollows]</expression>'.format(
+        # also on a card: its title is the current one of its row, which names itself on focus
+        out.append('    <expression name="PeekOn{}">{} + {}</expression>'.format(
             cap, escape(PAGE_SHOWN[page]), SPOTLIGHT_OFF[page]))
         for row in rows(page):
             out.append('    <expression name="PeekTitle{0}">Control.IsVisible({0}) + Integer.IsGreater(Container({0}).NumItems,0) + {1}</expression>'.format(
@@ -569,13 +574,14 @@ def peek_parts():
     # one group per row (the service looks at them), their backdrops, and Down onto the title
     for page in PAGES:
         cap = page.capitalize()
-        out += ['    <include name="PeekHeroes{}">'.format(cap)]
+        out += ['    <include name="PeekHeroes{}">'.format(cap), '        <control type="group">',
+                '            <visible>$EXP[PeekAny{}]</visible>'.format(cap), '            ' + fades]
         for n, row in enumerate(rows(page), 1):
-            out.append('        <control type="group" id="{}">'.format(PEEK_ID[page] + n))
-            out.append('            <visible>$EXP[PeekRow{}]</visible>'.format(row))
-            out.append('            ' + _for_row(inner, row, variables, expressions))
-            out.append('        </control>')
-        out.append('    </include>')
+            out.append('            <control type="group" id="{}">'.format(PEEK_ID[page] + n))
+            out.append('                <visible>$EXP[PeekRow{}]</visible>'.format(row))
+            out.append('                ' + _for_row(inner, row, variables, expressions))
+            out.append('            </control>')
+        out += ['        </control>', '    </include>']
         out.append('    <include name="PeekFanarts{}">'.format(cap))
         for row in rows(page):
             out += ['        <include content="LookHomeFanart">',

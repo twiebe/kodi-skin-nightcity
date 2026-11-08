@@ -75,10 +75,18 @@ def test_the_last_page_shown_cannot_be_hidden(page):
     area = parse(ROOT / '1080i' / 'SkinSettings.xml')
     toggle = next(t for t in area.iter('include') if t.get('content') == 'SkinSettingsToggle'
                   and any(p.get('value') == 'nc.menu.hide.' + page for p in t.findall('param')))
-    enable = {p.get('name'): p.get('value') for p in toggle.findall('param')}['enable']
+    changeable = {p.get('name'): p.get('value') for p in toggle.findall('param')}['changeable']
     for skin, shown in states():
         others = [p for p in shown if p != page]
-        assert holds(enable, skin) == (page not in shown or bool(others)), (page, skin)
+        assert holds(changeable, skin) == (page not in shown or bool(others)), (page, skin)
+
+
+def test_a_switch_that_cannot_change_still_shows_its_state():
+    """Not greyed out: checked as ever, OK just leaves it."""
+    toggle = next(i for i in parse(ROOT / '1080i' / 'Includes_Settings.xml').iter('include') if i.get('name') == 'SkinSettingsToggle')
+    control = toggle.find('.//control')
+    assert control.find('enable') is None
+    assert control.find('onclick').get('condition') == '$PARAM[changeable]'
 
 
 def test_tabs_show_with_their_page():
