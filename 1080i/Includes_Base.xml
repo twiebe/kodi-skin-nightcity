@@ -311,6 +311,7 @@
                 <top>$PARAM[icontop]</top>
                 <width>$PARAM[icon]</width>
                 <height>$PARAM[icon]</height>
+                <aspectratio>keep</aspectratio>
                 <texture colordiffuse="text">ui/qm_weather.png</texture>
                 <visible>$PARAM[visible] + Weather.IsFetched</visible>
                 <include>QuickMenuFade</include>

@@ -31,11 +31,13 @@
                 <control type="image">
                     <width>230</width>
                     <height>230</height>
+                    <aspectratio>keep</aspectratio>
                     <texture colordiffuse="accent">ui/logo_plate_230.png</texture>
                 </control>
                 <control type="image">
                     <width>230</width>
                     <height>230</height>
+                    <aspectratio>keep</aspectratio>
                     <texture colordiffuse="focus_text">ui/logo_mark_230.png</texture>
                 </control>
                 <!-- glitch: for 150 ms at 1.9 s the mark points back and the logo hops 5 px left.
@@ -48,11 +50,13 @@
                     <control type="image">
                         <width>230</width>
                         <height>230</height>
+                        <aspectratio>keep</aspectratio>
                         <texture colordiffuse="accent">ui/logo_plate_230.png</texture>
                     </control>
                     <control type="image">
                         <width>230</width>
                         <height>230</height>
+                        <aspectratio>keep</aspectratio>
                         <texture colordiffuse="focus_text">ui/logo_mark_230_back.png</texture>
                     </control>
                 </control>
@@ -70,6 +74,7 @@
                 <top>700</top>
                 <width>56</width>
                 <height>56</height>
+                <aspectratio>keep</aspectratio>
                 <imagepath colordiffuse="text">ui/spinner</imagepath>
                 <timeperimage>85</timeperimage>
                 <fadetime>0</fadetime>
@@ -83,6 +88,7 @@
                 <top>700</top>
                 <width>56</width>
                 <height>56</height>
+                <aspectratio>keep</aspectratio>
                 <imagepath colordiffuse="text">ui/spinner_glitch</imagepath>
                 <timeperimage>85</timeperimage>
                 <fadetime>0</fadetime>
@@ -110,11 +116,13 @@
             <control type="image">
                 <width>60</width>
                 <height>60</height>
+                <aspectratio>keep</aspectratio>
                 <texture colordiffuse="accent">ui/logo_plate_60.png</texture>
             </control>
             <control type="image">
                 <width>60</width>
                 <height>60</height>
+                <aspectratio>keep</aspectratio>
                 <texture colordiffuse="focus_text">ui/logo_mark_60.png</texture>
             </control>
             <!-- glitch: every five minutes, at second 23 of minutes 2 and 7, two copies shiver beside
@@ -126,6 +134,7 @@
                 <control type="image">
                     <width>60</width>
                     <height>60</height>
+                    <aspectratio>keep</aspectratio>
                     <visible>$PARAM[glitch] + [String.EndsWith(System.Time(mm),2) | String.EndsWith(System.Time(mm),7)] + String.IsEqual(System.Time(ss),23)</visible>
                     <animation effect="fade" start="80" end="80" time="0">Visible</animation>
                     <animation effect="fade" start="100" end="0" time="0" delay="190">Visible</animation>
@@ -137,6 +146,7 @@
                 <control type="image">
                     <width>60</width>
                     <height>60</height>
+                    <aspectratio>keep</aspectratio>
                     <visible>$PARAM[glitch] + [String.EndsWith(System.Time(mm),2) | String.EndsWith(System.Time(mm),7)] + String.IsEqual(System.Time(ss),23)</visible>
                     <animation effect="fade" start="80" end="80" time="0">Visible</animation>
                     <animation effect="fade" start="100" end="0" time="0" delay="190">Visible</animation>
@@ -491,6 +501,7 @@
                 <bottom>4</bottom>
                 <width>28</width>
                 <height>28</height>
+                <aspectratio>keep</aspectratio>
                 <texture colordiffuse="shadow">ui/dot_shade.png</texture>
                 <visible>$PARAM[visible]</visible>
             </control>
@@ -499,6 +510,7 @@
                 <bottom>10</bottom>
                 <width>16</width>
                 <height>16</height>
+                <aspectratio>keep</aspectratio>
                 <texture colordiffuse="text">ui/dot.png</texture>
                 <visible>$PARAM[visible]</visible>
             </control>

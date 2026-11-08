@@ -37,6 +37,7 @@
                     <top>282</top>
                     <width>160</width>
                     <height>160</height>
+                    <aspectratio>keep</aspectratio>
                     <texture fallback="ui/weather/na.png" colordiffuse="state_text">ui/weather/$INFO[Window(Weather).Property(Current.FanartCode)].png</texture>
                 </control>
                 <!-- the temperature as one word: the font's degree sign stands wide apart, so

@@ -1785,6 +1785,7 @@
             <top>188</top>
             <width>56</width>
             <height>56</height>
+            <aspectratio>keep</aspectratio>
             <texture colordiffuse="$VAR[QuickWeatherIcon]">ui/qm_weather.png</texture>
         </control>
         <control type="group">
@@ -2009,6 +2010,7 @@
                     <top>18</top>
                     <width>40</width>
                     <height>40</height>
+                    <aspectratio>keep</aspectratio>
                     <texture colordiffuse="text_dim">$INFO[ListItem.Icon]</texture>
                     <visible>![$PARAM[focused] + Control.HasFocus($PARAM[list])]</visible>
                 </control>
@@ -2017,6 +2019,7 @@
                     <top>18</top>
                     <width>40</width>
                     <height>40</height>
+                    <aspectratio>keep</aspectratio>
                     <texture colordiffuse="focus_text">$INFO[ListItem.Icon]</texture>
                     <visible>$PARAM[focused] + Control.HasFocus($PARAM[list])</visible>
                 </control>
@@ -2096,6 +2099,7 @@
                 <top>22</top>
                 <width>28</width>
                 <height>28</height>
+                <aspectratio>keep</aspectratio>
                 <texture colordiffuse="text_dim">$INFO[ListItem.Icon]</texture>
                 <visible>![$PARAM[focused] + Control.HasFocus($PARAM[list])]</visible>
             </control>
@@ -2104,6 +2108,7 @@
                 <top>22</top>
                 <width>28</width>
                 <height>28</height>
+                <aspectratio>keep</aspectratio>
                 <texture colordiffuse="focus_text">$INFO[ListItem.Icon]</texture>
                 <visible>$PARAM[focused] + Control.HasFocus($PARAM[list])</visible>
             </control>

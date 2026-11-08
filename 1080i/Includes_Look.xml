@@ -294,6 +294,7 @@
                 <bottom>0</bottom>
                 <width>22</width>
                 <height>22</height>
+                <aspectratio align="right" aligny="bottom">keep</aspectratio>
                 <texture colordiffuse="focus">ui/dogear.png</texture>
                 <visible>$PARAM[visible]</visible>
             </control>
@@ -376,6 +377,7 @@
             <top>22</top>
             <width>13</width>
             <height>30</height>
+            <aspectratio>keep</aspectratio>
             <texture colordiffuse="state_text">ui/spot_more.png</texture>
         </control>
         <control type="image">
@@ -383,6 +385,7 @@
             <top>22</top>
             <width>13</width>
             <height>30</height>
+            <aspectratio>keep</aspectratio>
             <texture colordiffuse="state_fade">ui/spot_more.png</texture>
         </control>
         <control type="image">
@@ -390,6 +393,7 @@
             <top>22</top>
             <width>13</width>
             <height>30</height>
+            <aspectratio>keep</aspectratio>
             <texture colordiffuse="state_faint">ui/spot_more.png</texture>
         </control>
     </include>
