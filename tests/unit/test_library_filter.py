@@ -247,3 +247,36 @@ def test_a_path_the_filter_cannot_read_is_not_filtered():
     assert nightcity.music_filter_parse('musicdb://albums/?xsp=not%20json') is None
     xsp = json.dumps({'rules': {'or': [{'field': 'genre', 'operator': 'is', 'value': ['Rock']}]}, 'type': 'albums'})
     assert nightcity.music_filter_parse('musicdb://albums/?xsp=' + urllib.parse.quote(xsp)) is None
+
+
+def test_a_details_change_redraws_every_row(monkeypatch):
+    """Kodi keeps the rows a list drew until a condition of their layout changes: after the details
+    change the layouts let go once (nc.lib.layout off and on), so every row shows them at once,
+    not only after the cursor moved."""
+    import sys
+    import types
+    calls, props = [], {'nc.library': 'movies', 'nc.lib.layout': '1'}
+    xbmc = types.SimpleNamespace(getInfoLabel=lambda key: '', executebuiltin=calls.append,
+                                 getLocalizedString=lambda n: str(n))
+    xbmcgui = types.SimpleNamespace(Dialog=lambda: types.SimpleNamespace(multiselect=lambda *a, **k: [0, 2]))
+
+    class Home:
+        def getProperty(self, key):
+            return props.get(key, '')
+
+        def setProperty(self, key, value):
+            calls.append(('set', key, value))
+            props[key] = value
+
+        def clearProperty(self, key):
+            calls.append(('clear', key))
+            props.pop(key, None)
+    monkeypatch.setitem(sys.modules, 'xbmc', xbmc)
+    monkeypatch.setitem(sys.modules, 'xbmcgui', xbmcgui)
+    monkeypatch.setattr(nightcity, '_home', lambda: Home())
+    monkeypatch.setattr(nightcity, '_monitor', lambda: types.SimpleNamespace(waitForAbort=lambda s: False))
+    nightcity.lib_details()
+    written = next(i for i, c in enumerate(calls) if isinstance(c, str) and c.startswith('Skin.SetString(nc.libdetails.movies'))
+    assert ('clear', 'nc.lib.layout') in calls[written:]
+    assert calls.index(('set', 'nc.lib.layout', '1')) > calls.index(('clear', 'nc.lib.layout'))
+    assert props['nc.lib.layout'] == '1'

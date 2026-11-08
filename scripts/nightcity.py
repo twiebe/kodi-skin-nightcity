@@ -2921,6 +2921,11 @@ def lib_details():
     xbmc.executebuiltin('Skin.SetString(nc.libdetails.{},{})'.format(library, value))
     _home().setProperty('nc.libdetails.label', lib_details_label(library, lib_details_load(library, value),
                                                                  xbmc.getLocalizedString))
+    # the rows drawn before keep their details until their layout lets go (lib_layout): once off and
+    # on, so every row shows the new ones at once, not only after the cursor moved
+    _home().clearProperty('nc.lib.layout')
+    if not _monitor().waitForAbort(LIB_LAYOUT_WAIT):
+        _home().setProperty('nc.lib.layout', '1')
 
 
 # --- the genre filter of the music library ---------------------------------------------------------
