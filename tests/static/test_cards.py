@@ -99,15 +99,20 @@ def test_card_mask_fits_card_not_cropped_image():
             assert img.find('aspectratio').get('scalediffuse') == 'false'
 
 
-def test_card_cut_only_when_focused():
-    """Unfocused artwork is a plain rectangle; the cut corners come with the focus frame."""
-    art = [c for c in _card().iter('control') if c.get('type') == 'image' and
+def test_every_card_is_cut():
+    """Every card has the cut corners, focused or not: its artwork and the plate under it are cut
+    by the card's mask. An unfocused card has a faint frame in border_dim; the focus brings the
+    bright frame and the glow."""
+    card = _card()
+    art = [c for c in card.iter('control') if c.get('type') == 'image' and
            '$PARAM[image]' in (c.findtext('texture') or '')]
-    masked = [c for c in art if c.find('texture').get('diffuse')]
-    plain = [c for c in art if not c.find('texture').get('diffuse')]
-    assert masked and plain
-    assert all(c.findtext('visible') == '$PARAM[focused]' for c in masked)
-    assert all(c.findtext('visible') == '!$PARAM[focused]' for c in plain)
+    assert len(art) == 2 and all(c.find('texture').get('diffuse') == '$PARAM[mask]' for c in art)
+    assert sorted(c.findtext('visible') for c in art) == ['!$PARAM[focused]', '$PARAM[focused]']
+    plates = [c for c in card.iter('control') if c.findtext('texture') == 'ui/white.png']
+    assert plates and all(c.find('texture').get('diffuse') == '$PARAM[mask]' for c in plates)
+    frames = {c.findtext('visible'): c.find('texture').get('colordiffuse')
+              for c in card.iter('control') if c.findtext('texture') == 'ui/cut.png'}
+    assert frames == {'$PARAM[focused]': 'focus', '!$PARAM[focused]': 'border_dim'}
 
 
 DOG_EAR = 22  # px, legs of the unwatched mark

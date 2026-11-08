@@ -476,6 +476,7 @@
         <param name="width"/>
         <param name="height"/>
         <param name="focused"/>
+        <param name="unfocused"/>
         <definition>
             <control type="image">
                 <width>$PARAM[width]</width>

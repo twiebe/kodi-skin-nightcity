@@ -192,8 +192,8 @@
         </definition>
     </include>
 
-    <!-- The plate under a card's artwork: unfocused a plain rectangle, focused cut like the frame.
-         unfocused is the opposite of focused. -->
+    <!-- The plate under a card's artwork, cut like the frame in both states. unfocused is the
+         opposite of focused. -->
     <include name="LookCardFrame">
         <param name="width"/>
         <param name="height"/>
@@ -204,7 +204,7 @@
             <control type="image">
                 <width>$PARAM[width]</width>
                 <height>$PARAM[height]</height>
-                <texture colordiffuse="surface">ui/white.png</texture>
+                <texture colordiffuse="surface" diffuse="$PARAM[mask]">ui/white.png</texture>
                 <visible>$PARAM[unfocused]</visible>
             </control>
             <control type="image">
@@ -216,16 +216,16 @@
         </definition>
     </include>
 
-    <!-- A card's artwork, unfocused: a plain rectangle. `mask` is the card's mask, for a look with
-         corners of its own -->
+    <!-- A card's artwork, unfocused: cut like a focused one, every card has the corners.
+         scalediffuse="false" keeps the mask on the card -->
     <include name="LookCardArt">
         <param name="image"/>
         <param name="mask"/>
         <param name="fadetime"/>
         <definition>
-            <aspectratio>scale</aspectratio>
+            <aspectratio scalediffuse="false">scale</aspectratio>
             <fadetime>$PARAM[fadetime]</fadetime>
-            <texture background="true">$PARAM[image]</texture>
+            <texture diffuse="$PARAM[mask]" background="true">$PARAM[image]</texture>
         </definition>
     </include>
 
@@ -266,17 +266,25 @@
         </definition>
     </include>
 
-    <!-- A focused card's frame, over its artwork and extras -->
+    <!-- A card's frame, over its artwork and extras: bright with the focus, faint without -->
     <include name="LookCardFocusRing">
         <param name="width"/>
         <param name="height"/>
         <param name="focused"/>
+        <param name="unfocused"/>
         <definition>
             <control type="image">
                 <width>$PARAM[width]</width>
                 <height>$PARAM[height]</height>
                 <texture border="16" colordiffuse="focus">ui/cut.png</texture>
                 <visible>$PARAM[focused]</visible>
+            </control>
+            <!-- unfocused the same frame, faint: the corners read on dark artwork too -->
+            <control type="image">
+                <width>$PARAM[width]</width>
+                <height>$PARAM[height]</height>
+                <texture border="16" colordiffuse="border_dim">ui/cut.png</texture>
+                <visible>$PARAM[unfocused]</visible>
             </control>
         </definition>
     </include>

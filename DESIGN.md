@@ -142,6 +142,8 @@ browser.
   lead there), slider nibs, the fill of a progress bar, the head of the seek line and the
   playing time, and the dog-ear of an unwatched title. The seek line's chapter marks are the
   colour of its track (`border_dim`).
+- Every card has the cut corners, the netrunner shape, focused or not. An unfocused card has a
+  faint frame in `border_dim`; the focus brings the bright cyan frame and the glow.
 - The cursor glows: a soft cyan halo around the focused card, button, pill, row or tile. Kodi
   draws a control only inside its own rect, so a glowing button is 10 px larger on each side
   than it looks (padded textures, `tests/static/test_glow.py`).

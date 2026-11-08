@@ -709,6 +709,7 @@
                     <param name="width" value="$PARAM[width]"/>
                     <param name="height" value="$PARAM[height]"/>
                     <param name="focused" value="$PARAM[focused]"/>
+                    <param name="unfocused" value="!$PARAM[focused]"/>
                 </include>
             </control>
             <!-- beside the card, not inside it: the card's dimming must not reach the dog-ear -->
