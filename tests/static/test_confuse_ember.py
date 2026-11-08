@@ -126,4 +126,4 @@ def test_nightcity_backdrop_stays_sharp():
     window = load('MyVideoNav.xml', layout=ROOT / '1080i')
     images = [c for c in window.iter('control') if c.findtext('description') == 'fanart backdrop']
     assert [i.findtext('texture') for i in images] == ['$INFO[ListItem.Art(fanart)]']
-    assert images[0].findtext('visible') == '!String.IsEmpty(ListItem.Art(fanart))'
+    assert images[0].findtext('visible') == '!String.IsEmpty(ListItem.Art(fanart)) + [true]'

@@ -1376,7 +1376,8 @@
                          neighbouring row group itself; a hidden group passes the move on -->
                     <onup>$PARAM[up]</onup>
                     <ondown>$PARAM[down]</ondown>
-                    <onfocus condition="String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,season)">$PARAM[peek]</onfocus>
+                    <!-- its own item: at onfocus ListItem is still the control the focus came from -->
+                    <onfocus condition="String.IsEqual(Container($PARAM[id]).ListItem.DBType,movie) | String.IsEqual(Container($PARAM[id]).ListItem.DBType,tvshow) | String.IsEqual(Container($PARAM[id]).ListItem.DBType,episode) | String.IsEqual(Container($PARAM[id]).ListItem.DBType,season)">$PARAM[peek]</onfocus>
                     <include content="$PARAM[click]"/>
                     <itemlayout width="$PARAM[itemwidth]" height="LookRowListHeight">
                         <control type="group">

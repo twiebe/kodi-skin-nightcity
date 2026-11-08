@@ -45,9 +45,11 @@
         <param name="shown"/>
         <param name="fadetime" default="200"/>
         <definition>
+            <!-- shown: a still spotlight draws one of these per row, only its own may show -->
             <include content="FanartBackdrop">
                 <param name="art" value="$PARAM[art]"/>
                 <param name="fadetime" value="$PARAM[fadetime]"/>
+                <param name="shown" value="$PARAM[shown]"/>
             </include>
         </definition>
     </include>

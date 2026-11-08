@@ -114,6 +114,18 @@ def test_a_row_names_itself_on_a_title():
     focus = box.find('.//onfocus')
     assert focus.text == '$PARAM[peek]'
     assert sorted(re.findall(r'ListItem\.DBType,(\w+)', focus.get('condition'))) == ['episode', 'movie', 'season', 'tvshow']
+    # its own item: at onfocus Kodi's ListItem is still the control the focus came from, so a bare
+    # ListItem never named the row (the hero stuck on the first row)
+    assert focus.get('condition').count('Container($PARAM[id]).ListItem.DBType') == 4 and ' ListItem.DBType' not in focus.get('condition')
+
+
+def test_only_the_shown_backdrop_draws():
+    """A still page draws a backdrop per row; each look shows only its own (`shown`), else all
+    rows' pictures lay over each other (Nightcity drew them all)."""
+    for look in (ROOT / '1080i' / 'Includes_Look.xml', ROOT / 'skins' / 'confuse' / '1080i' / 'Includes_Look.xml'):
+        inc = next(i for i in parse(look).iter('include') if i.get('name') == 'LookHomeFanart')
+        uses = [v.text for v in inc.iter('visible')] + [p.get('value') for p in inc.iter('param') if p.get('name') == 'shown']
+        assert '$PARAM[shown]' in uses, look
     text = (ROOT / '1080i' / 'Includes_Sections.xml').read_text(encoding='utf-8')
     for page, base in PAGES.items():
         assert '<param name="peek" value="SetProperty(nc.peek.{},{}0$PARAM[n],home)"/>'.format(page, base) in text

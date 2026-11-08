@@ -181,7 +181,8 @@ def test_background_without_fanart():
     assert ('ui/white.png', 'bg', None) in textures
     assert ('ui/petrol_glow.png', 'petrol', None) in textures
     fanart = include('FanartBackdrop').find('.//control')
-    assert fanart.findtext('visible') == '!String.IsEmpty($PARAM[art])'
+    # shown: a still spotlight draws one per row, only its own shows
+    assert fanart.findtext('visible') == '!String.IsEmpty($PARAM[art]) + [$PARAM[shown]]'
     assert fanart.find('texture').get('fallback', '') == ''
     assert fanart.find('texture').get('colordiffuse') == 'fanart'
     assert fanart.findtext('description') == 'fanart backdrop'

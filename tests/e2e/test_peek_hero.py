@@ -128,7 +128,34 @@ def test_info_opens_the_shown_title_and_back_returns_to_the_button(still):
     wait_for('Control.IsVisible({})'.format(peek + n))
     title = label('Container({}).ListItem.Title'.format(row))
     action('select')
-    wait_for('Window.IsVisible(movieinformation)', timeout=15)
+    # the page is up and has its focus before Back: a Back while it still opens can go astray
+    wait_for('Window.IsActive(movieinformation) + Control.HasFocus(9001)', timeout=15)
     assert label('ListItem.Title') == title
+    time.sleep(0.5)
     action('back')
     wait_for('Window.IsActive(home) + !Window.IsVisible(movieinformation) + Control.HasFocus(9011)', timeout=15)
+
+
+def test_the_hero_follows_the_row_the_cursor_was_in(still):
+    """Down into a second row: the hero shows that row's title, also after Up to the buttons; a
+    row named itself only for a bare ListItem, which at onfocus is still the control before."""
+    peek, base = PEEK['movies']
+    # two rows with titles: new movies first, random movies second
+    builtin('Skin.SetString(nc.movies.slot1,newmovies)')
+    builtin('Skin.SetString(nc.movies.slot2,random)')
+    reopen_home()
+    try:
+        builtin('SetFocus(9102)')
+        wait_for('String.IsEqual(Window(Home).Property(nc.page),movies)')
+        first, second = '{}01'.format(base), '{}02'.format(base)
+        wait_for('Integer.IsGreater(Container({}).NumItems,0) + Integer.IsGreater(Container({}).NumItems,0)'.format(first, second), timeout=30)
+        wait_for('Control.IsVisible({})'.format(peek + 1))
+        builtin('SetFocus({})'.format(second))
+        wait_for('Control.HasFocus({})'.format(second))
+        wait_for('String.IsEqual(Window(Home).Property(nc.peek.movies),{})'.format(second))
+        wait_for('Control.IsVisible({}) + !Control.IsVisible({})'.format(peek + 2, peek + 1))
+        builtin('SetFocus(9010)')
+        wait_for('Control.HasFocus(9010) + Control.IsVisible({})'.format(peek + 2))
+    finally:
+        builtin('Skin.Reset(nc.movies.slot1)')
+        builtin('Skin.Reset(nc.movies.slot2)')

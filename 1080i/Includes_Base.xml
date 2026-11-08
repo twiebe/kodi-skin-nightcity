@@ -45,6 +45,8 @@
         <!-- fadetime: crossfade to the next picture; a spotlight backdrop takes longer, as the
              rest of its hero -->
         <param name="fadetime" default="200"/>
+        <!-- shown: also hidden where this is not the backdrop that shows (a still spotlight's rows) -->
+        <param name="shown" default="true"/>
         <definition>
             <control type="image">
                 <description>fanart backdrop</description>
@@ -55,7 +57,7 @@
                 <aspectratio>scale</aspectratio>
                 <fadetime>$PARAM[fadetime]</fadetime>
                 <texture colordiffuse="fanart" diffuse="ui/fade_r.png" background="true">$INFO[$PARAM[art]]</texture>
-                <visible>!String.IsEmpty($PARAM[art])</visible>
+                <visible>!String.IsEmpty($PARAM[art]) + [$PARAM[shown]]</visible>
             </control>
         </definition>
     </include>
