@@ -582,12 +582,6 @@ def test_waiting_cursor_shows_nothing_without_the_focus(confuse_root):
             assert cursor.find('texturenofocus').get('colordiffuse') == '00FFFFFF', (name, root)
 
 
-def test_episode_mark_clears_the_focused_ring():
-    """Seen on the shot: a focused still reaches 18 px over its place, the mark must stay above."""
-    mark = look_includes()['LookEpisodeMark'].find('.//control')
-    assert int(mark.findtext('top')) + int(mark.findtext('height')) <= -18
-
-
 def test_decoration_is_gone(confuse_root):
     for name, window in windows_expanded(confuse_root):
         names = {el.text for el in window.iter() if el.text} | {v for el in window.iter() for v in el.attrib.values()}

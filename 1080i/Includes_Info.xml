@@ -88,12 +88,6 @@
                     <label>$VAR[EpisodeCardNum]  $INFO[ListItem.Title]</label>
                     <visible>$PARAM[selected]</visible>
                 </control>
-                <!-- the current episode (the head shows it): a dark blue line over its still, a
-                     little above it and above the focused card's zoom. Under the title it met the
-                     progress line, a bar before the title was hardly seen. -->
-                <include content="LookEpisodeMark">
-                    <param name="visible" value="$PARAM[selected]"/>
-                </include>
                 <include content="ProgressLine">
                     <param name="top" value="234"/>
                     <param name="width" value="320"/>

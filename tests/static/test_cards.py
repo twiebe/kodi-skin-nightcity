@@ -191,18 +191,11 @@ def test_card_nested_at_top_level():
                         assert deep.find('nested') is None, (p.name, inc.get('name'))
 
 
-def test_current_episode_has_a_line_over_its_still():
-    """The current episode of an episode page's list (the selected card: the head shows it) has a
-    dark blue line over its still, a little above it: under the title it met the progress line,
-    a bar before the title was hardly seen. Light enough to see (state_text, a small mark)."""
+def test_current_episode_is_marked_by_its_title():
+    """The current episode of an episode page's list (the selected card: the head shows it) has its
+    number and title in the accent colour, the others white with a dimmed number; no line over
+    its still any more."""
     inc = with_look(next(i for i in parse(ROOT / '1080i' / 'Includes_Info.xml').iter('include') if i.get('name') == 'EpisodeCard'))
-    lines = [c for c in inc.iter('control') if c.get('type') == 'image' and c.findtext('texture') == 'ui/white.png']
-    assert len(lines) == 1
-    line = lines[0]
-    assert line.find('texture').get('colordiffuse') == 'state_text'
-    assert line.findtext('visible') == '$PARAM[selected]'
-    assert line.findtext('width') == '320' and line.findtext('height') == '3'
-    # above the still (which starts at 0), with a gap, and above the focused card's zoom (LookCardFocusZoom)
-    assert int(line.findtext('top')) + 3 <= -15
-    titles = [c for c in inc.iter('control') if c.get('type') == 'label']
-    assert {t.findtext('left') for t in titles} == {None} and {t.findtext('width') for t in titles} == {'320'}
+    assert not [c for c in inc.iter('control') if c.get('type') == 'image' and c.findtext('texture') == 'ui/white.png']
+    titles = {c.findtext('visible'): c.findtext('textcolor') for c in inc.iter('control') if c.get('type') == 'label'}
+    assert titles == {'$PARAM[selected]': 'accent', '!$PARAM[selected]': 'text'}

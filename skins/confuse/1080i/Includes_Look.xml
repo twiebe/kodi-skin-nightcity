@@ -379,21 +379,6 @@
         </control>
     </include>
 
-    <!-- The line of the current episode, over its still. A focused still reaches 18 px up at this
-         zoom, its ring included, so this stays clear of it. -->
-    <include name="LookEpisodeMark">
-        <param name="visible"/>
-        <definition>
-            <control type="image">
-                <top>-26</top>
-                <width>320</width>
-                <height>3</height>
-                <texture colordiffuse="state_text">ui/white.png</texture>
-                <visible>$PARAM[visible]</visible>
-            </control>
-        </definition>
-    </include>
-
     <!-- The plate under a card's artwork, round like it: what shows of a card without artwork. A
          9-slice with the radius of the masks, drawn without one -->
     <include name="LookCardFrame">

@@ -178,20 +178,6 @@
         <definition/>
     </include>
 
-    <!-- The line of the current episode, over its still and above the focused card's zoom -->
-    <include name="LookEpisodeMark">
-        <param name="visible"/>
-        <definition>
-            <control type="image">
-                <top>-18</top>
-                <width>320</width>
-                <height>3</height>
-                <texture colordiffuse="state_text">ui/white.png</texture>
-                <visible>$PARAM[visible]</visible>
-            </control>
-        </definition>
-    </include>
-
     <!-- The plate under a card's artwork, cut like the frame in both states. unfocused is the
          opposite of focused. -->
     <include name="LookCardFrame">
