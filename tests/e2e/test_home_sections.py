@@ -8,7 +8,7 @@ from conftest import action, builtin, builtins, cond, info, screenshot, wait_for
 pytestmark = pytest.mark.e2e
 
 PAGES = ('home', 'movies', 'shows')
-CATALOGUE_HOME = ['none', 'continue', 'nextup', 'newmovies', 'newepisodes', 'genres', 'random',
+CATALOGUE_HOME = ['none', 'continue', 'nextup', 'combo', 'newmovies', 'newepisodes', 'genres', 'random',
                   'unwatched', 'toprated', 'favourites', 'trending', 'recent', 'move']
 
 

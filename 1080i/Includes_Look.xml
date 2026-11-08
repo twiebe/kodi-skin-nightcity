@@ -88,6 +88,37 @@
         </definition>
     </include>
 
+    <!-- The split of a combo row, drawn by the first card of next up (RowBox split): a thin rule
+         in the gap before the card, from its top down to a small heading under it, quiet like any
+         separator. Under the card, since over it the focused card grows into the heading.
+         Relative to the card, which has 28 px of row before it -->
+    <include name="LookRowSplit">
+        <param name="visible"/>
+        <definition>
+            <control type="group">
+                <visible>$PARAM[visible]</visible>
+                <control type="image">
+                    <left>-15</left>
+                    <top>0</top>
+                    <width>2</width>
+                    <height>344</height>
+                    <texture colordiffuse="state">ui/white.png</texture>
+                </control>
+                <control type="label">
+                    <left>0</left>
+                    <top>318</top>
+                    <width>200</width>
+                    <height>26</height>
+                    <font>font_caps_small</font>
+                    <textcolor>state_text</textcolor>
+                    <include content="LookLabelCase">
+                        <param name="text" value="$LOCALIZE[31234]"/>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
     <!-- The title of the focused card in the top line of its row -->
     <include name="LookRowFocusTitle">
         <param name="label"/>

@@ -19,6 +19,7 @@
         <param name="down" default="noop"/>
         <param name="def_continue" default="false"/>
         <param name="def_nextup" default="false"/>
+        <param name="def_combo" default="false"/>
         <param name="def_newmovies" default="false"/>
         <param name="def_newepisodes" default="false"/>
         <param name="def_genres" default="false"/>
@@ -90,6 +91,45 @@
                 <param name="loader" value="922$PARAM[n]"/>
                 <param name="peek" value="SetProperty(nc.peek.home,920$PARAM[n],home)"/>
                 <param name="wait" value="true"/>
+                <param name="card" value="LookRowWideCard"/>
+                <param name="itemwidth" value="LookRowWideItemWidth"/>
+                <param name="art" value="$VAR[LookRowWideArt]"/>
+            </include>
+            <include content="RowBox" condition="[String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),combo) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_combo]]] + ![String.IsEqual(Skin.String(nc.home.slot$PARAM[n].opt),shows)]">
+                <param name="id" value="920$PARAM[n]"/>
+                <param name="group" value="921$PARAM[n]"/>
+                <param name="up" value="$PARAM[up]"/>
+                <param name="down" value="$PARAM[down]"/>
+                <param name="label" value="$LOCALIZE[31700]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
+                <param name="content1" value="special://skin/playlists/WidgetInProgressMovies.xsp"/>
+                <param name="content2" value="special://skin/playlists/WidgetInProgressEpisodes.xsp"/>
+                <param name="content3" value="$VAR[ComboNextUp]"/>
+                <param name="loader" value="922$PARAM[n]"/>
+                <param name="peek" value="SetProperty(nc.peek.home,920$PARAM[n],home)"/>
+                <param name="wait" value="true"/>
+                <param name="split" value="LookRowSplit"/>
+                <param name="splitloader" value="927$PARAM[n]"/>
+                <param name="card" value="LookRowWideCard"/>
+                <param name="itemwidth" value="LookRowWideItemWidth"/>
+                <param name="art" value="$VAR[LookRowWideArt]"/>
+            </include>
+            <include content="RowBox" condition="[String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),combo) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_combo]]] + String.IsEqual(Skin.String(nc.home.slot$PARAM[n].opt),shows)">
+                <param name="id" value="920$PARAM[n]"/>
+                <param name="group" value="921$PARAM[n]"/>
+                <param name="up" value="$PARAM[up]"/>
+                <param name="down" value="$PARAM[down]"/>
+                <param name="label" value="$LOCALIZE[31700]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
+                <param name="content1" value="special://skin/playlists/WidgetInProgressEpisodes.xsp"/>
+                <param name="content2" value="$VAR[ComboNextUp]"/>
+                <param name="loader" value="922$PARAM[n]"/>
+                <param name="peek" value="SetProperty(nc.peek.home,920$PARAM[n],home)"/>
+                <param name="wait" value="true"/>
+                <param name="split" value="LookRowSplit"/>
+                <param name="splitloader" value="927$PARAM[n]"/>
                 <param name="card" value="LookRowWideCard"/>
                 <param name="itemwidth" value="LookRowWideItemWidth"/>
                 <param name="art" value="$VAR[LookRowWideArt]"/>
@@ -359,7 +399,7 @@
                 <param name="peek" value="SetProperty(nc.peek.home,920$PARAM[n],home)"/>
                 <param name="wait" value="true"/>
             </include>
-            <include content="SlotPlaceholder" condition="![[String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),continue) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_continue]]] | [String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),nextup) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_nextup]]] | [String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),newmovies) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_newmovies]]] | [String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),newepisodes) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_newepisodes]]] | [String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),genres) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_genres]]] | [String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),random) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_random]]] | [String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),unwatched) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_unwatched]]] | [String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),toprated) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_toprated]]] | [String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),favourites) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_favourites]]] | [String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),trending) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_trending]]] | [String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),recent) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_recent]]]]">
+            <include content="SlotPlaceholder" condition="![[String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),continue) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_continue]]] | [String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),nextup) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_nextup]]] | [String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),combo) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_combo]]] | [String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),newmovies) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_newmovies]]] | [String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),newepisodes) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_newepisodes]]] | [String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),genres) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_genres]]] | [String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),random) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_random]]] | [String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),unwatched) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_unwatched]]] | [String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),toprated) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_toprated]]] | [String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),favourites) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_favourites]]] | [String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),trending) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_trending]]] | [String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),recent) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_recent]]]]">
                 <param name="id" value="921$PARAM[n]"/>
             </include>
         </definition>
@@ -369,6 +409,7 @@
         <param name="n"/>
         <param name="def_continue" default="false"/>
         <param name="def_nextup" default="false"/>
+        <param name="def_combo" default="false"/>
         <param name="def_newmovies" default="false"/>
         <param name="def_newepisodes" default="false"/>
         <param name="def_genres" default="false"/>
@@ -395,6 +436,26 @@
             <include content="WidgetLoader" condition="[String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),nextup) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_nextup]]]">
                 <param name="id" value="922$PARAM[n]"/>
                 <param name="content1" value="special://skin/playlists/WidgetContinueShows.xsp"/>
+            </include>
+            <include content="WidgetLoader" condition="[String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),combo) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_combo]]] + ![String.IsEqual(Skin.String(nc.home.slot$PARAM[n].opt),shows)]">
+                <param name="id" value="922$PARAM[n]"/>
+                <param name="content1" value="special://skin/playlists/WidgetInProgressMovies.xsp"/>
+                <param name="content2" value="special://skin/playlists/WidgetInProgressEpisodes.xsp"/>
+                <param name="content3" value="$VAR[ComboNextUp]"/>
+            </include>
+            <include content="SplitLoader" condition="[String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),combo) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_combo]]] + ![String.IsEqual(Skin.String(nc.home.slot$PARAM[n].opt),shows)]">
+                <param name="id" value="927$PARAM[n]"/>
+                <param name="content1" value="special://skin/playlists/WidgetInProgressMovies.xsp"/>
+                <param name="content2" value="special://skin/playlists/WidgetInProgressEpisodes.xsp"/>
+            </include>
+            <include content="WidgetLoader" condition="[String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),combo) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_combo]]] + String.IsEqual(Skin.String(nc.home.slot$PARAM[n].opt),shows)">
+                <param name="id" value="922$PARAM[n]"/>
+                <param name="content1" value="special://skin/playlists/WidgetInProgressEpisodes.xsp"/>
+                <param name="content2" value="$VAR[ComboNextUp]"/>
+            </include>
+            <include content="SplitLoader" condition="[String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),combo) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_combo]]] + String.IsEqual(Skin.String(nc.home.slot$PARAM[n].opt),shows)">
+                <param name="id" value="927$PARAM[n]"/>
+                <param name="content1" value="special://skin/playlists/WidgetInProgressEpisodes.xsp"/>
             </include>
             <include content="WidgetLoader" condition="[String.IsEqual(Skin.String(nc.home.slot$PARAM[n]),trending) | [String.IsEmpty(Skin.String(nc.home.slot$PARAM[n])) + $PARAM[def_trending]]] + ![String.IsEqual(Skin.String(nc.home.slot$PARAM[n].opt),shows)]">
                 <param name="id" value="922$PARAM[n]"/>
@@ -782,6 +843,7 @@
         <param name="up"/>
         <param name="down" default="noop"/>
         <param name="def_nextup" default="false"/>
+        <param name="def_combo" default="false"/>
         <param name="def_newepisodes" default="false"/>
         <param name="def_inprogress" default="false"/>
         <param name="def_unwatched" default="false"/>
@@ -800,6 +862,25 @@
                 <param name="loader" value="952$PARAM[n]"/>
                 <param name="peek" value="SetProperty(nc.peek.shows,950$PARAM[n],home)"/>
                 <param name="wait" value="true"/>
+                <param name="card" value="LookRowWideCard"/>
+                <param name="itemwidth" value="LookRowWideItemWidth"/>
+                <param name="art" value="$VAR[LookRowWideArt]"/>
+            </include>
+            <include content="RowBox" condition="[String.IsEqual(Skin.String(nc.shows.slot$PARAM[n]),combo) | [String.IsEmpty(Skin.String(nc.shows.slot$PARAM[n])) + $PARAM[def_combo]]]">
+                <param name="id" value="950$PARAM[n]"/>
+                <param name="group" value="951$PARAM[n]"/>
+                <param name="up" value="$PARAM[up]"/>
+                <param name="down" value="$PARAM[down]"/>
+                <param name="label" value="$LOCALIZE[31700]"/>
+                <param name="header" value="NumberedRowHeader"/>
+                <param name="num" value="$PARAM[num]"/>
+                <param name="content1" value="special://skin/playlists/WidgetInProgressEpisodes.xsp"/>
+                <param name="content2" value="$VAR[ComboNextUp]"/>
+                <param name="loader" value="952$PARAM[n]"/>
+                <param name="peek" value="SetProperty(nc.peek.shows,950$PARAM[n],home)"/>
+                <param name="wait" value="true"/>
+                <param name="split" value="LookRowSplit"/>
+                <param name="splitloader" value="957$PARAM[n]"/>
                 <param name="card" value="LookRowWideCard"/>
                 <param name="itemwidth" value="LookRowWideItemWidth"/>
                 <param name="art" value="$VAR[LookRowWideArt]"/>
@@ -892,7 +973,7 @@
                 <param name="peek" value="SetProperty(nc.peek.shows,950$PARAM[n],home)"/>
                 <param name="wait" value="true"/>
             </include>
-            <include content="SlotPlaceholder" condition="![[String.IsEqual(Skin.String(nc.shows.slot$PARAM[n]),nextup) | [String.IsEmpty(Skin.String(nc.shows.slot$PARAM[n])) + $PARAM[def_nextup]]] | [String.IsEqual(Skin.String(nc.shows.slot$PARAM[n]),newepisodes) | [String.IsEmpty(Skin.String(nc.shows.slot$PARAM[n])) + $PARAM[def_newepisodes]]] | [String.IsEqual(Skin.String(nc.shows.slot$PARAM[n]),inprogress) | [String.IsEmpty(Skin.String(nc.shows.slot$PARAM[n])) + $PARAM[def_inprogress]]] | [String.IsEqual(Skin.String(nc.shows.slot$PARAM[n]),unwatched) | [String.IsEmpty(Skin.String(nc.shows.slot$PARAM[n])) + $PARAM[def_unwatched]]] | [String.IsEqual(Skin.String(nc.shows.slot$PARAM[n]),genres) | [String.IsEmpty(Skin.String(nc.shows.slot$PARAM[n])) + $PARAM[def_genres]]] | [String.IsEqual(Skin.String(nc.shows.slot$PARAM[n]),trending) | [String.IsEmpty(Skin.String(nc.shows.slot$PARAM[n])) + $PARAM[def_trending]]]]">
+            <include content="SlotPlaceholder" condition="![[String.IsEqual(Skin.String(nc.shows.slot$PARAM[n]),nextup) | [String.IsEmpty(Skin.String(nc.shows.slot$PARAM[n])) + $PARAM[def_nextup]]] | [String.IsEqual(Skin.String(nc.shows.slot$PARAM[n]),combo) | [String.IsEmpty(Skin.String(nc.shows.slot$PARAM[n])) + $PARAM[def_combo]]] | [String.IsEqual(Skin.String(nc.shows.slot$PARAM[n]),newepisodes) | [String.IsEmpty(Skin.String(nc.shows.slot$PARAM[n])) + $PARAM[def_newepisodes]]] | [String.IsEqual(Skin.String(nc.shows.slot$PARAM[n]),inprogress) | [String.IsEmpty(Skin.String(nc.shows.slot$PARAM[n])) + $PARAM[def_inprogress]]] | [String.IsEqual(Skin.String(nc.shows.slot$PARAM[n]),unwatched) | [String.IsEmpty(Skin.String(nc.shows.slot$PARAM[n])) + $PARAM[def_unwatched]]] | [String.IsEqual(Skin.String(nc.shows.slot$PARAM[n]),genres) | [String.IsEmpty(Skin.String(nc.shows.slot$PARAM[n])) + $PARAM[def_genres]]] | [String.IsEqual(Skin.String(nc.shows.slot$PARAM[n]),trending) | [String.IsEmpty(Skin.String(nc.shows.slot$PARAM[n])) + $PARAM[def_trending]]]]">
                 <param name="id" value="951$PARAM[n]"/>
             </include>
         </definition>
@@ -901,6 +982,7 @@
     <include name="ShowsSlotLoader">
         <param name="n"/>
         <param name="def_nextup" default="false"/>
+        <param name="def_combo" default="false"/>
         <param name="def_newepisodes" default="false"/>
         <param name="def_inprogress" default="false"/>
         <param name="def_unwatched" default="false"/>
@@ -910,6 +992,15 @@
             <include content="WidgetLoader" condition="[String.IsEqual(Skin.String(nc.shows.slot$PARAM[n]),nextup) | [String.IsEmpty(Skin.String(nc.shows.slot$PARAM[n])) + $PARAM[def_nextup]]]">
                 <param name="id" value="952$PARAM[n]"/>
                 <param name="content1" value="special://skin/playlists/WidgetContinueShows.xsp"/>
+            </include>
+            <include content="WidgetLoader" condition="[String.IsEqual(Skin.String(nc.shows.slot$PARAM[n]),combo) | [String.IsEmpty(Skin.String(nc.shows.slot$PARAM[n])) + $PARAM[def_combo]]]">
+                <param name="id" value="952$PARAM[n]"/>
+                <param name="content1" value="special://skin/playlists/WidgetInProgressEpisodes.xsp"/>
+                <param name="content2" value="$VAR[ComboNextUp]"/>
+            </include>
+            <include content="SplitLoader" condition="[String.IsEqual(Skin.String(nc.shows.slot$PARAM[n]),combo) | [String.IsEmpty(Skin.String(nc.shows.slot$PARAM[n])) + $PARAM[def_combo]]]">
+                <param name="id" value="957$PARAM[n]"/>
+                <param name="content1" value="special://skin/playlists/WidgetInProgressEpisodes.xsp"/>
             </include>
             <include content="WidgetLoader" condition="[String.IsEqual(Skin.String(nc.shows.slot$PARAM[n]),inprogress) | [String.IsEmpty(Skin.String(nc.shows.slot$PARAM[n])) + $PARAM[def_inprogress]]]">
                 <param name="id" value="952$PARAM[n]"/>
@@ -1414,6 +1505,8 @@
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.1) + String.IsEqual(Skin.String(nc.home.slot1),continue) + ![String.IsEqual(Skin.String(nc.home.slot1.opt),movies) | String.IsEqual(Skin.String(nc.home.slot1.opt),shows)]">Skin.SetString(nc.home.slot1.opt,movies)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.1) + String.IsEqual(Skin.String(nc.home.slot1),continue) + String.IsEqual(Skin.String(nc.home.slot1.opt),movies)">Skin.SetString(nc.home.slot1.opt,shows)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.1) + String.IsEqual(Skin.String(nc.home.slot1),continue) + String.IsEqual(Skin.String(nc.home.slot1.opt),shows)">Skin.Reset(nc.home.slot1.opt)</onright>
+                <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.1) + String.IsEqual(Skin.String(nc.home.slot1),combo) + ![String.IsEqual(Skin.String(nc.home.slot1.opt),shows)]">Skin.SetString(nc.home.slot1.opt,shows)</onright>
+                <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.1) + String.IsEqual(Skin.String(nc.home.slot1),combo) + String.IsEqual(Skin.String(nc.home.slot1.opt),shows)">Skin.Reset(nc.home.slot1.opt)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.1) + String.IsEqual(Skin.String(nc.home.slot1),newmovies) + ![String.IsEqual(Skin.String(nc.home.slot1.opt),unwatched)]">Skin.SetString(nc.home.slot1.opt,unwatched)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.1) + String.IsEqual(Skin.String(nc.home.slot1),newmovies) + String.IsEqual(Skin.String(nc.home.slot1.opt),unwatched)">Skin.Reset(nc.home.slot1.opt)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.1) + String.IsEqual(Skin.String(nc.home.slot1),newepisodes) + ![String.IsEqual(Skin.String(nc.home.slot1.opt),unwatched)]">Skin.SetString(nc.home.slot1.opt,unwatched)</onright>
@@ -1456,6 +1549,8 @@
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.2) + String.IsEqual(Skin.String(nc.home.slot2),continue) + ![String.IsEqual(Skin.String(nc.home.slot2.opt),movies) | String.IsEqual(Skin.String(nc.home.slot2.opt),shows)]">Skin.SetString(nc.home.slot2.opt,movies)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.2) + String.IsEqual(Skin.String(nc.home.slot2),continue) + String.IsEqual(Skin.String(nc.home.slot2.opt),movies)">Skin.SetString(nc.home.slot2.opt,shows)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.2) + String.IsEqual(Skin.String(nc.home.slot2),continue) + String.IsEqual(Skin.String(nc.home.slot2.opt),shows)">Skin.Reset(nc.home.slot2.opt)</onright>
+                <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.2) + String.IsEqual(Skin.String(nc.home.slot2),combo) + ![String.IsEqual(Skin.String(nc.home.slot2.opt),shows)]">Skin.SetString(nc.home.slot2.opt,shows)</onright>
+                <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.2) + String.IsEqual(Skin.String(nc.home.slot2),combo) + String.IsEqual(Skin.String(nc.home.slot2.opt),shows)">Skin.Reset(nc.home.slot2.opt)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.2) + String.IsEqual(Skin.String(nc.home.slot2),newmovies) + ![String.IsEqual(Skin.String(nc.home.slot2.opt),unwatched)]">Skin.SetString(nc.home.slot2.opt,unwatched)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.2) + String.IsEqual(Skin.String(nc.home.slot2),newmovies) + String.IsEqual(Skin.String(nc.home.slot2.opt),unwatched)">Skin.Reset(nc.home.slot2.opt)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.2) + String.IsEqual(Skin.String(nc.home.slot2),newepisodes) + ![String.IsEqual(Skin.String(nc.home.slot2.opt),unwatched)]">Skin.SetString(nc.home.slot2.opt,unwatched)</onright>
@@ -1504,6 +1599,8 @@
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.3) + String.IsEqual(Skin.String(nc.home.slot3),continue) + ![String.IsEqual(Skin.String(nc.home.slot3.opt),movies) | String.IsEqual(Skin.String(nc.home.slot3.opt),shows)]">Skin.SetString(nc.home.slot3.opt,movies)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.3) + String.IsEqual(Skin.String(nc.home.slot3),continue) + String.IsEqual(Skin.String(nc.home.slot3.opt),movies)">Skin.SetString(nc.home.slot3.opt,shows)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.3) + String.IsEqual(Skin.String(nc.home.slot3),continue) + String.IsEqual(Skin.String(nc.home.slot3.opt),shows)">Skin.Reset(nc.home.slot3.opt)</onright>
+                <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.3) + String.IsEqual(Skin.String(nc.home.slot3),combo) + ![String.IsEqual(Skin.String(nc.home.slot3.opt),shows)]">Skin.SetString(nc.home.slot3.opt,shows)</onright>
+                <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.3) + String.IsEqual(Skin.String(nc.home.slot3),combo) + String.IsEqual(Skin.String(nc.home.slot3.opt),shows)">Skin.Reset(nc.home.slot3.opt)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.3) + String.IsEqual(Skin.String(nc.home.slot3),newmovies) + ![String.IsEqual(Skin.String(nc.home.slot3.opt),unwatched)]">Skin.SetString(nc.home.slot3.opt,unwatched)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.3) + String.IsEqual(Skin.String(nc.home.slot3),newmovies) + String.IsEqual(Skin.String(nc.home.slot3.opt),unwatched)">Skin.Reset(nc.home.slot3.opt)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.3) + String.IsEqual(Skin.String(nc.home.slot3),newepisodes) + ![String.IsEqual(Skin.String(nc.home.slot3.opt),unwatched)]">Skin.SetString(nc.home.slot3.opt,unwatched)</onright>
@@ -1552,6 +1649,8 @@
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.4) + String.IsEqual(Skin.String(nc.home.slot4),continue) + ![String.IsEqual(Skin.String(nc.home.slot4.opt),movies) | String.IsEqual(Skin.String(nc.home.slot4.opt),shows)]">Skin.SetString(nc.home.slot4.opt,movies)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.4) + String.IsEqual(Skin.String(nc.home.slot4),continue) + String.IsEqual(Skin.String(nc.home.slot4.opt),movies)">Skin.SetString(nc.home.slot4.opt,shows)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.4) + String.IsEqual(Skin.String(nc.home.slot4),continue) + String.IsEqual(Skin.String(nc.home.slot4.opt),shows)">Skin.Reset(nc.home.slot4.opt)</onright>
+                <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.4) + String.IsEqual(Skin.String(nc.home.slot4),combo) + ![String.IsEqual(Skin.String(nc.home.slot4.opt),shows)]">Skin.SetString(nc.home.slot4.opt,shows)</onright>
+                <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.4) + String.IsEqual(Skin.String(nc.home.slot4),combo) + String.IsEqual(Skin.String(nc.home.slot4.opt),shows)">Skin.Reset(nc.home.slot4.opt)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.4) + String.IsEqual(Skin.String(nc.home.slot4),newmovies) + ![String.IsEqual(Skin.String(nc.home.slot4.opt),unwatched)]">Skin.SetString(nc.home.slot4.opt,unwatched)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.4) + String.IsEqual(Skin.String(nc.home.slot4),newmovies) + String.IsEqual(Skin.String(nc.home.slot4.opt),unwatched)">Skin.Reset(nc.home.slot4.opt)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.4) + String.IsEqual(Skin.String(nc.home.slot4),newepisodes) + ![String.IsEqual(Skin.String(nc.home.slot4.opt),unwatched)]">Skin.SetString(nc.home.slot4.opt,unwatched)</onright>
@@ -1600,6 +1699,8 @@
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.5) + String.IsEqual(Skin.String(nc.home.slot5),continue) + ![String.IsEqual(Skin.String(nc.home.slot5.opt),movies) | String.IsEqual(Skin.String(nc.home.slot5.opt),shows)]">Skin.SetString(nc.home.slot5.opt,movies)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.5) + String.IsEqual(Skin.String(nc.home.slot5),continue) + String.IsEqual(Skin.String(nc.home.slot5.opt),movies)">Skin.SetString(nc.home.slot5.opt,shows)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.5) + String.IsEqual(Skin.String(nc.home.slot5),continue) + String.IsEqual(Skin.String(nc.home.slot5.opt),shows)">Skin.Reset(nc.home.slot5.opt)</onright>
+                <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.5) + String.IsEqual(Skin.String(nc.home.slot5),combo) + ![String.IsEqual(Skin.String(nc.home.slot5.opt),shows)]">Skin.SetString(nc.home.slot5.opt,shows)</onright>
+                <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.5) + String.IsEqual(Skin.String(nc.home.slot5),combo) + String.IsEqual(Skin.String(nc.home.slot5.opt),shows)">Skin.Reset(nc.home.slot5.opt)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.5) + String.IsEqual(Skin.String(nc.home.slot5),newmovies) + ![String.IsEqual(Skin.String(nc.home.slot5.opt),unwatched)]">Skin.SetString(nc.home.slot5.opt,unwatched)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.5) + String.IsEqual(Skin.String(nc.home.slot5),newmovies) + String.IsEqual(Skin.String(nc.home.slot5.opt),unwatched)">Skin.Reset(nc.home.slot5.opt)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.5) + String.IsEqual(Skin.String(nc.home.slot5),newepisodes) + ![String.IsEqual(Skin.String(nc.home.slot5.opt),unwatched)]">Skin.SetString(nc.home.slot5.opt,unwatched)</onright>
@@ -1648,6 +1749,8 @@
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.6) + String.IsEqual(Skin.String(nc.home.slot6),continue) + ![String.IsEqual(Skin.String(nc.home.slot6.opt),movies) | String.IsEqual(Skin.String(nc.home.slot6.opt),shows)]">Skin.SetString(nc.home.slot6.opt,movies)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.6) + String.IsEqual(Skin.String(nc.home.slot6),continue) + String.IsEqual(Skin.String(nc.home.slot6.opt),movies)">Skin.SetString(nc.home.slot6.opt,shows)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.6) + String.IsEqual(Skin.String(nc.home.slot6),continue) + String.IsEqual(Skin.String(nc.home.slot6.opt),shows)">Skin.Reset(nc.home.slot6.opt)</onright>
+                <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.6) + String.IsEqual(Skin.String(nc.home.slot6),combo) + ![String.IsEqual(Skin.String(nc.home.slot6.opt),shows)]">Skin.SetString(nc.home.slot6.opt,shows)</onright>
+                <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.6) + String.IsEqual(Skin.String(nc.home.slot6),combo) + String.IsEqual(Skin.String(nc.home.slot6.opt),shows)">Skin.Reset(nc.home.slot6.opt)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.6) + String.IsEqual(Skin.String(nc.home.slot6),newmovies) + ![String.IsEqual(Skin.String(nc.home.slot6.opt),unwatched)]">Skin.SetString(nc.home.slot6.opt,unwatched)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.6) + String.IsEqual(Skin.String(nc.home.slot6),newmovies) + String.IsEqual(Skin.String(nc.home.slot6.opt),unwatched)">Skin.Reset(nc.home.slot6.opt)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.6) + String.IsEqual(Skin.String(nc.home.slot6),newepisodes) + ![String.IsEqual(Skin.String(nc.home.slot6.opt),unwatched)]">Skin.SetString(nc.home.slot6.opt,unwatched)</onright>
@@ -1696,6 +1799,8 @@
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.7) + String.IsEqual(Skin.String(nc.home.slot7),continue) + ![String.IsEqual(Skin.String(nc.home.slot7.opt),movies) | String.IsEqual(Skin.String(nc.home.slot7.opt),shows)]">Skin.SetString(nc.home.slot7.opt,movies)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.7) + String.IsEqual(Skin.String(nc.home.slot7),continue) + String.IsEqual(Skin.String(nc.home.slot7.opt),movies)">Skin.SetString(nc.home.slot7.opt,shows)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.7) + String.IsEqual(Skin.String(nc.home.slot7),continue) + String.IsEqual(Skin.String(nc.home.slot7.opt),shows)">Skin.Reset(nc.home.slot7.opt)</onright>
+                <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.7) + String.IsEqual(Skin.String(nc.home.slot7),combo) + ![String.IsEqual(Skin.String(nc.home.slot7.opt),shows)]">Skin.SetString(nc.home.slot7.opt,shows)</onright>
+                <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.7) + String.IsEqual(Skin.String(nc.home.slot7),combo) + String.IsEqual(Skin.String(nc.home.slot7.opt),shows)">Skin.Reset(nc.home.slot7.opt)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.7) + String.IsEqual(Skin.String(nc.home.slot7),newmovies) + ![String.IsEqual(Skin.String(nc.home.slot7.opt),unwatched)]">Skin.SetString(nc.home.slot7.opt,unwatched)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.7) + String.IsEqual(Skin.String(nc.home.slot7),newmovies) + String.IsEqual(Skin.String(nc.home.slot7.opt),unwatched)">Skin.Reset(nc.home.slot7.opt)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.7) + String.IsEqual(Skin.String(nc.home.slot7),newepisodes) + ![String.IsEqual(Skin.String(nc.home.slot7.opt),unwatched)]">Skin.SetString(nc.home.slot7.opt,unwatched)</onright>
@@ -1744,6 +1849,8 @@
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.8) + String.IsEqual(Skin.String(nc.home.slot8),continue) + ![String.IsEqual(Skin.String(nc.home.slot8.opt),movies) | String.IsEqual(Skin.String(nc.home.slot8.opt),shows)]">Skin.SetString(nc.home.slot8.opt,movies)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.8) + String.IsEqual(Skin.String(nc.home.slot8),continue) + String.IsEqual(Skin.String(nc.home.slot8.opt),movies)">Skin.SetString(nc.home.slot8.opt,shows)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.8) + String.IsEqual(Skin.String(nc.home.slot8),continue) + String.IsEqual(Skin.String(nc.home.slot8.opt),shows)">Skin.Reset(nc.home.slot8.opt)</onright>
+                <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.8) + String.IsEqual(Skin.String(nc.home.slot8),combo) + ![String.IsEqual(Skin.String(nc.home.slot8.opt),shows)]">Skin.SetString(nc.home.slot8.opt,shows)</onright>
+                <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.8) + String.IsEqual(Skin.String(nc.home.slot8),combo) + String.IsEqual(Skin.String(nc.home.slot8.opt),shows)">Skin.Reset(nc.home.slot8.opt)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.8) + String.IsEqual(Skin.String(nc.home.slot8),newmovies) + ![String.IsEqual(Skin.String(nc.home.slot8.opt),unwatched)]">Skin.SetString(nc.home.slot8.opt,unwatched)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.8) + String.IsEqual(Skin.String(nc.home.slot8),newmovies) + String.IsEqual(Skin.String(nc.home.slot8.opt),unwatched)">Skin.Reset(nc.home.slot8.opt)</onright>
                 <onright condition="!String.IsEqual(Window.Property(nc.hp.grab),home.8) + String.IsEqual(Skin.String(nc.home.slot8),newepisodes) + ![String.IsEqual(Skin.String(nc.home.slot8.opt),unwatched)]">Skin.SetString(nc.home.slot8.opt,unwatched)</onright>
@@ -2332,6 +2439,7 @@
     <variable name="HomePagesName_home_1">
         <value condition="[String.IsEqual(Skin.String(nc.home.slot1),continue) | [String.IsEmpty(Skin.String(nc.home.slot1)) + true]]">$LOCALIZE[31233]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot1),nextup) | [String.IsEmpty(Skin.String(nc.home.slot1)) + false]]">$LOCALIZE[31234]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.home.slot1),combo) | [String.IsEmpty(Skin.String(nc.home.slot1)) + false]]">$LOCALIZE[31700]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot1),newmovies) | [String.IsEmpty(Skin.String(nc.home.slot1)) + false]]">$LOCALIZE[31235]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot1),newepisodes) | [String.IsEmpty(Skin.String(nc.home.slot1)) + false]]">$LOCALIZE[31236]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot1),genres) | [String.IsEmpty(Skin.String(nc.home.slot1)) + false]]">$LOCALIZE[135]</value>
@@ -2347,6 +2455,8 @@
         <value condition="String.IsEqual(Skin.String(nc.home.slot1),continue) + ![String.IsEqual(Skin.String(nc.home.slot1.opt),movies) | String.IsEqual(Skin.String(nc.home.slot1.opt),shows)]">$LOCALIZE[21475]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot1),continue) + String.IsEqual(Skin.String(nc.home.slot1.opt),movies)">$LOCALIZE[342]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot1),continue) + String.IsEqual(Skin.String(nc.home.slot1.opt),shows)">$LOCALIZE[20343]  ›</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot1),combo) + ![String.IsEqual(Skin.String(nc.home.slot1.opt),shows)]">$LOCALIZE[21475]  ›</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot1),combo) + String.IsEqual(Skin.String(nc.home.slot1.opt),shows)">$LOCALIZE[20343]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot1),newmovies) + ![String.IsEqual(Skin.String(nc.home.slot1.opt),unwatched)]">$LOCALIZE[593]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot1),newmovies) + String.IsEqual(Skin.String(nc.home.slot1.opt),unwatched)">$LOCALIZE[16101]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot1),newepisodes) + ![String.IsEqual(Skin.String(nc.home.slot1.opt),unwatched)]">$LOCALIZE[593]  ›</value>
@@ -2369,6 +2479,7 @@
     <variable name="HomePagesDesc_home_1">
         <value condition="String.IsEqual(Skin.String(nc.home.slot1),continue)">$LOCALIZE[31241]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot1),nextup)">$LOCALIZE[31242]</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot1),combo)">$LOCALIZE[31701]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot1),newmovies)">$LOCALIZE[31243]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot1),newepisodes)">$LOCALIZE[31244]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot1),genres)">$LOCALIZE[31245]</value>
@@ -2383,6 +2494,7 @@
     <variable name="HomePagesName_home_2">
         <value condition="[String.IsEqual(Skin.String(nc.home.slot2),continue) | [String.IsEmpty(Skin.String(nc.home.slot2)) + false]]">$LOCALIZE[31233]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot2),nextup) | [String.IsEmpty(Skin.String(nc.home.slot2)) + false]]">$LOCALIZE[31234]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.home.slot2),combo) | [String.IsEmpty(Skin.String(nc.home.slot2)) + false]]">$LOCALIZE[31700]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot2),newmovies) | [String.IsEmpty(Skin.String(nc.home.slot2)) + true]]">$LOCALIZE[31235]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot2),newepisodes) | [String.IsEmpty(Skin.String(nc.home.slot2)) + false]]">$LOCALIZE[31236]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot2),genres) | [String.IsEmpty(Skin.String(nc.home.slot2)) + false]]">$LOCALIZE[135]</value>
@@ -2398,6 +2510,8 @@
         <value condition="String.IsEqual(Skin.String(nc.home.slot2),continue) + ![String.IsEqual(Skin.String(nc.home.slot2.opt),movies) | String.IsEqual(Skin.String(nc.home.slot2.opt),shows)]">$LOCALIZE[21475]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot2),continue) + String.IsEqual(Skin.String(nc.home.slot2.opt),movies)">$LOCALIZE[342]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot2),continue) + String.IsEqual(Skin.String(nc.home.slot2.opt),shows)">$LOCALIZE[20343]  ›</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot2),combo) + ![String.IsEqual(Skin.String(nc.home.slot2.opt),shows)]">$LOCALIZE[21475]  ›</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot2),combo) + String.IsEqual(Skin.String(nc.home.slot2.opt),shows)">$LOCALIZE[20343]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot2),newmovies) + ![String.IsEqual(Skin.String(nc.home.slot2.opt),unwatched)]">$LOCALIZE[593]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot2),newmovies) + String.IsEqual(Skin.String(nc.home.slot2.opt),unwatched)">$LOCALIZE[16101]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot2),newepisodes) + ![String.IsEqual(Skin.String(nc.home.slot2.opt),unwatched)]">$LOCALIZE[593]  ›</value>
@@ -2420,6 +2534,7 @@
     <variable name="HomePagesDesc_home_2">
         <value condition="String.IsEqual(Skin.String(nc.home.slot2),continue)">$LOCALIZE[31241]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot2),nextup)">$LOCALIZE[31242]</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot2),combo)">$LOCALIZE[31701]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot2),newmovies)">$LOCALIZE[31243]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot2),newepisodes)">$LOCALIZE[31244]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot2),genres)">$LOCALIZE[31245]</value>
@@ -2434,6 +2549,7 @@
     <variable name="HomePagesName_home_3">
         <value condition="[String.IsEqual(Skin.String(nc.home.slot3),continue) | [String.IsEmpty(Skin.String(nc.home.slot3)) + false]]">$LOCALIZE[31233]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot3),nextup) | [String.IsEmpty(Skin.String(nc.home.slot3)) + false]]">$LOCALIZE[31234]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.home.slot3),combo) | [String.IsEmpty(Skin.String(nc.home.slot3)) + false]]">$LOCALIZE[31700]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot3),newmovies) | [String.IsEmpty(Skin.String(nc.home.slot3)) + false]]">$LOCALIZE[31235]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot3),newepisodes) | [String.IsEmpty(Skin.String(nc.home.slot3)) + true]]">$LOCALIZE[31236]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot3),genres) | [String.IsEmpty(Skin.String(nc.home.slot3)) + false]]">$LOCALIZE[135]</value>
@@ -2449,6 +2565,8 @@
         <value condition="String.IsEqual(Skin.String(nc.home.slot3),continue) + ![String.IsEqual(Skin.String(nc.home.slot3.opt),movies) | String.IsEqual(Skin.String(nc.home.slot3.opt),shows)]">$LOCALIZE[21475]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot3),continue) + String.IsEqual(Skin.String(nc.home.slot3.opt),movies)">$LOCALIZE[342]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot3),continue) + String.IsEqual(Skin.String(nc.home.slot3.opt),shows)">$LOCALIZE[20343]  ›</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot3),combo) + ![String.IsEqual(Skin.String(nc.home.slot3.opt),shows)]">$LOCALIZE[21475]  ›</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot3),combo) + String.IsEqual(Skin.String(nc.home.slot3.opt),shows)">$LOCALIZE[20343]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot3),newmovies) + ![String.IsEqual(Skin.String(nc.home.slot3.opt),unwatched)]">$LOCALIZE[593]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot3),newmovies) + String.IsEqual(Skin.String(nc.home.slot3.opt),unwatched)">$LOCALIZE[16101]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot3),newepisodes) + ![String.IsEqual(Skin.String(nc.home.slot3.opt),unwatched)]">$LOCALIZE[593]  ›</value>
@@ -2471,6 +2589,7 @@
     <variable name="HomePagesDesc_home_3">
         <value condition="String.IsEqual(Skin.String(nc.home.slot3),continue)">$LOCALIZE[31241]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot3),nextup)">$LOCALIZE[31242]</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot3),combo)">$LOCALIZE[31701]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot3),newmovies)">$LOCALIZE[31243]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot3),newepisodes)">$LOCALIZE[31244]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot3),genres)">$LOCALIZE[31245]</value>
@@ -2485,6 +2604,7 @@
     <variable name="HomePagesName_home_4">
         <value condition="[String.IsEqual(Skin.String(nc.home.slot4),continue) | [String.IsEmpty(Skin.String(nc.home.slot4)) + false]]">$LOCALIZE[31233]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot4),nextup) | [String.IsEmpty(Skin.String(nc.home.slot4)) + true]]">$LOCALIZE[31234]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.home.slot4),combo) | [String.IsEmpty(Skin.String(nc.home.slot4)) + false]]">$LOCALIZE[31700]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot4),newmovies) | [String.IsEmpty(Skin.String(nc.home.slot4)) + false]]">$LOCALIZE[31235]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot4),newepisodes) | [String.IsEmpty(Skin.String(nc.home.slot4)) + false]]">$LOCALIZE[31236]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot4),genres) | [String.IsEmpty(Skin.String(nc.home.slot4)) + false]]">$LOCALIZE[135]</value>
@@ -2500,6 +2620,8 @@
         <value condition="String.IsEqual(Skin.String(nc.home.slot4),continue) + ![String.IsEqual(Skin.String(nc.home.slot4.opt),movies) | String.IsEqual(Skin.String(nc.home.slot4.opt),shows)]">$LOCALIZE[21475]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot4),continue) + String.IsEqual(Skin.String(nc.home.slot4.opt),movies)">$LOCALIZE[342]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot4),continue) + String.IsEqual(Skin.String(nc.home.slot4.opt),shows)">$LOCALIZE[20343]  ›</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot4),combo) + ![String.IsEqual(Skin.String(nc.home.slot4.opt),shows)]">$LOCALIZE[21475]  ›</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot4),combo) + String.IsEqual(Skin.String(nc.home.slot4.opt),shows)">$LOCALIZE[20343]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot4),newmovies) + ![String.IsEqual(Skin.String(nc.home.slot4.opt),unwatched)]">$LOCALIZE[593]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot4),newmovies) + String.IsEqual(Skin.String(nc.home.slot4.opt),unwatched)">$LOCALIZE[16101]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot4),newepisodes) + ![String.IsEqual(Skin.String(nc.home.slot4.opt),unwatched)]">$LOCALIZE[593]  ›</value>
@@ -2522,6 +2644,7 @@
     <variable name="HomePagesDesc_home_4">
         <value condition="String.IsEqual(Skin.String(nc.home.slot4),continue)">$LOCALIZE[31241]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot4),nextup)">$LOCALIZE[31242]</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot4),combo)">$LOCALIZE[31701]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot4),newmovies)">$LOCALIZE[31243]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot4),newepisodes)">$LOCALIZE[31244]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot4),genres)">$LOCALIZE[31245]</value>
@@ -2536,6 +2659,7 @@
     <variable name="HomePagesName_home_5">
         <value condition="[String.IsEqual(Skin.String(nc.home.slot5),continue) | [String.IsEmpty(Skin.String(nc.home.slot5)) + false]]">$LOCALIZE[31233]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot5),nextup) | [String.IsEmpty(Skin.String(nc.home.slot5)) + false]]">$LOCALIZE[31234]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.home.slot5),combo) | [String.IsEmpty(Skin.String(nc.home.slot5)) + false]]">$LOCALIZE[31700]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot5),newmovies) | [String.IsEmpty(Skin.String(nc.home.slot5)) + false]]">$LOCALIZE[31235]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot5),newepisodes) | [String.IsEmpty(Skin.String(nc.home.slot5)) + false]]">$LOCALIZE[31236]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot5),genres) | [String.IsEmpty(Skin.String(nc.home.slot5)) + false]]">$LOCALIZE[135]</value>
@@ -2551,6 +2675,8 @@
         <value condition="String.IsEqual(Skin.String(nc.home.slot5),continue) + ![String.IsEqual(Skin.String(nc.home.slot5.opt),movies) | String.IsEqual(Skin.String(nc.home.slot5.opt),shows)]">$LOCALIZE[21475]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot5),continue) + String.IsEqual(Skin.String(nc.home.slot5.opt),movies)">$LOCALIZE[342]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot5),continue) + String.IsEqual(Skin.String(nc.home.slot5.opt),shows)">$LOCALIZE[20343]  ›</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot5),combo) + ![String.IsEqual(Skin.String(nc.home.slot5.opt),shows)]">$LOCALIZE[21475]  ›</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot5),combo) + String.IsEqual(Skin.String(nc.home.slot5.opt),shows)">$LOCALIZE[20343]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot5),newmovies) + ![String.IsEqual(Skin.String(nc.home.slot5.opt),unwatched)]">$LOCALIZE[593]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot5),newmovies) + String.IsEqual(Skin.String(nc.home.slot5.opt),unwatched)">$LOCALIZE[16101]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot5),newepisodes) + ![String.IsEqual(Skin.String(nc.home.slot5.opt),unwatched)]">$LOCALIZE[593]  ›</value>
@@ -2573,6 +2699,7 @@
     <variable name="HomePagesDesc_home_5">
         <value condition="String.IsEqual(Skin.String(nc.home.slot5),continue)">$LOCALIZE[31241]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot5),nextup)">$LOCALIZE[31242]</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot5),combo)">$LOCALIZE[31701]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot5),newmovies)">$LOCALIZE[31243]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot5),newepisodes)">$LOCALIZE[31244]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot5),genres)">$LOCALIZE[31245]</value>
@@ -2587,6 +2714,7 @@
     <variable name="HomePagesName_home_6">
         <value condition="[String.IsEqual(Skin.String(nc.home.slot6),continue) | [String.IsEmpty(Skin.String(nc.home.slot6)) + false]]">$LOCALIZE[31233]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot6),nextup) | [String.IsEmpty(Skin.String(nc.home.slot6)) + false]]">$LOCALIZE[31234]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.home.slot6),combo) | [String.IsEmpty(Skin.String(nc.home.slot6)) + false]]">$LOCALIZE[31700]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot6),newmovies) | [String.IsEmpty(Skin.String(nc.home.slot6)) + false]]">$LOCALIZE[31235]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot6),newepisodes) | [String.IsEmpty(Skin.String(nc.home.slot6)) + false]]">$LOCALIZE[31236]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot6),genres) | [String.IsEmpty(Skin.String(nc.home.slot6)) + false]]">$LOCALIZE[135]</value>
@@ -2602,6 +2730,8 @@
         <value condition="String.IsEqual(Skin.String(nc.home.slot6),continue) + ![String.IsEqual(Skin.String(nc.home.slot6.opt),movies) | String.IsEqual(Skin.String(nc.home.slot6.opt),shows)]">$LOCALIZE[21475]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot6),continue) + String.IsEqual(Skin.String(nc.home.slot6.opt),movies)">$LOCALIZE[342]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot6),continue) + String.IsEqual(Skin.String(nc.home.slot6.opt),shows)">$LOCALIZE[20343]  ›</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot6),combo) + ![String.IsEqual(Skin.String(nc.home.slot6.opt),shows)]">$LOCALIZE[21475]  ›</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot6),combo) + String.IsEqual(Skin.String(nc.home.slot6.opt),shows)">$LOCALIZE[20343]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot6),newmovies) + ![String.IsEqual(Skin.String(nc.home.slot6.opt),unwatched)]">$LOCALIZE[593]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot6),newmovies) + String.IsEqual(Skin.String(nc.home.slot6.opt),unwatched)">$LOCALIZE[16101]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot6),newepisodes) + ![String.IsEqual(Skin.String(nc.home.slot6.opt),unwatched)]">$LOCALIZE[593]  ›</value>
@@ -2624,6 +2754,7 @@
     <variable name="HomePagesDesc_home_6">
         <value condition="String.IsEqual(Skin.String(nc.home.slot6),continue)">$LOCALIZE[31241]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot6),nextup)">$LOCALIZE[31242]</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot6),combo)">$LOCALIZE[31701]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot6),newmovies)">$LOCALIZE[31243]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot6),newepisodes)">$LOCALIZE[31244]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot6),genres)">$LOCALIZE[31245]</value>
@@ -2638,6 +2769,7 @@
     <variable name="HomePagesName_home_7">
         <value condition="[String.IsEqual(Skin.String(nc.home.slot7),continue) | [String.IsEmpty(Skin.String(nc.home.slot7)) + false]]">$LOCALIZE[31233]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot7),nextup) | [String.IsEmpty(Skin.String(nc.home.slot7)) + false]]">$LOCALIZE[31234]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.home.slot7),combo) | [String.IsEmpty(Skin.String(nc.home.slot7)) + false]]">$LOCALIZE[31700]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot7),newmovies) | [String.IsEmpty(Skin.String(nc.home.slot7)) + false]]">$LOCALIZE[31235]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot7),newepisodes) | [String.IsEmpty(Skin.String(nc.home.slot7)) + false]]">$LOCALIZE[31236]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot7),genres) | [String.IsEmpty(Skin.String(nc.home.slot7)) + false]]">$LOCALIZE[135]</value>
@@ -2653,6 +2785,8 @@
         <value condition="String.IsEqual(Skin.String(nc.home.slot7),continue) + ![String.IsEqual(Skin.String(nc.home.slot7.opt),movies) | String.IsEqual(Skin.String(nc.home.slot7.opt),shows)]">$LOCALIZE[21475]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot7),continue) + String.IsEqual(Skin.String(nc.home.slot7.opt),movies)">$LOCALIZE[342]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot7),continue) + String.IsEqual(Skin.String(nc.home.slot7.opt),shows)">$LOCALIZE[20343]  ›</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot7),combo) + ![String.IsEqual(Skin.String(nc.home.slot7.opt),shows)]">$LOCALIZE[21475]  ›</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot7),combo) + String.IsEqual(Skin.String(nc.home.slot7.opt),shows)">$LOCALIZE[20343]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot7),newmovies) + ![String.IsEqual(Skin.String(nc.home.slot7.opt),unwatched)]">$LOCALIZE[593]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot7),newmovies) + String.IsEqual(Skin.String(nc.home.slot7.opt),unwatched)">$LOCALIZE[16101]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot7),newepisodes) + ![String.IsEqual(Skin.String(nc.home.slot7.opt),unwatched)]">$LOCALIZE[593]  ›</value>
@@ -2675,6 +2809,7 @@
     <variable name="HomePagesDesc_home_7">
         <value condition="String.IsEqual(Skin.String(nc.home.slot7),continue)">$LOCALIZE[31241]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot7),nextup)">$LOCALIZE[31242]</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot7),combo)">$LOCALIZE[31701]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot7),newmovies)">$LOCALIZE[31243]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot7),newepisodes)">$LOCALIZE[31244]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot7),genres)">$LOCALIZE[31245]</value>
@@ -2689,6 +2824,7 @@
     <variable name="HomePagesName_home_8">
         <value condition="[String.IsEqual(Skin.String(nc.home.slot8),continue) | [String.IsEmpty(Skin.String(nc.home.slot8)) + false]]">$LOCALIZE[31233]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot8),nextup) | [String.IsEmpty(Skin.String(nc.home.slot8)) + false]]">$LOCALIZE[31234]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.home.slot8),combo) | [String.IsEmpty(Skin.String(nc.home.slot8)) + false]]">$LOCALIZE[31700]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot8),newmovies) | [String.IsEmpty(Skin.String(nc.home.slot8)) + false]]">$LOCALIZE[31235]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot8),newepisodes) | [String.IsEmpty(Skin.String(nc.home.slot8)) + false]]">$LOCALIZE[31236]</value>
         <value condition="[String.IsEqual(Skin.String(nc.home.slot8),genres) | [String.IsEmpty(Skin.String(nc.home.slot8)) + false]]">$LOCALIZE[135]</value>
@@ -2704,6 +2840,8 @@
         <value condition="String.IsEqual(Skin.String(nc.home.slot8),continue) + ![String.IsEqual(Skin.String(nc.home.slot8.opt),movies) | String.IsEqual(Skin.String(nc.home.slot8.opt),shows)]">$LOCALIZE[21475]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot8),continue) + String.IsEqual(Skin.String(nc.home.slot8.opt),movies)">$LOCALIZE[342]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot8),continue) + String.IsEqual(Skin.String(nc.home.slot8.opt),shows)">$LOCALIZE[20343]  ›</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot8),combo) + ![String.IsEqual(Skin.String(nc.home.slot8.opt),shows)]">$LOCALIZE[21475]  ›</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot8),combo) + String.IsEqual(Skin.String(nc.home.slot8.opt),shows)">$LOCALIZE[20343]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot8),newmovies) + ![String.IsEqual(Skin.String(nc.home.slot8.opt),unwatched)]">$LOCALIZE[593]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot8),newmovies) + String.IsEqual(Skin.String(nc.home.slot8.opt),unwatched)">$LOCALIZE[16101]  ›</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot8),newepisodes) + ![String.IsEqual(Skin.String(nc.home.slot8.opt),unwatched)]">$LOCALIZE[593]  ›</value>
@@ -2726,6 +2864,7 @@
     <variable name="HomePagesDesc_home_8">
         <value condition="String.IsEqual(Skin.String(nc.home.slot8),continue)">$LOCALIZE[31241]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot8),nextup)">$LOCALIZE[31242]</value>
+        <value condition="String.IsEqual(Skin.String(nc.home.slot8),combo)">$LOCALIZE[31701]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot8),newmovies)">$LOCALIZE[31243]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot8),newepisodes)">$LOCALIZE[31244]</value>
         <value condition="String.IsEqual(Skin.String(nc.home.slot8),genres)">$LOCALIZE[31245]</value>
@@ -2963,6 +3102,7 @@
     </variable>
     <variable name="HomePagesName_shows_1">
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot1),nextup) | [String.IsEmpty(Skin.String(nc.shows.slot1)) + true]]">$LOCALIZE[31234]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.shows.slot1),combo) | [String.IsEmpty(Skin.String(nc.shows.slot1)) + false]]">$LOCALIZE[31700]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot1),newepisodes) | [String.IsEmpty(Skin.String(nc.shows.slot1)) + false]]">$LOCALIZE[31236]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot1),inprogress) | [String.IsEmpty(Skin.String(nc.shows.slot1)) + false]]">$LOCALIZE[575]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot1),unwatched) | [String.IsEmpty(Skin.String(nc.shows.slot1)) + false]]">$LOCALIZE[16101]</value>
@@ -2976,6 +3116,7 @@
     </variable>
     <variable name="HomePagesDesc_shows_1">
         <value condition="String.IsEqual(Skin.String(nc.shows.slot1),nextup)">$LOCALIZE[31242]</value>
+        <value condition="String.IsEqual(Skin.String(nc.shows.slot1),combo)">$LOCALIZE[31701]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot1),newepisodes)">$LOCALIZE[31244]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot1),inprogress)">$LOCALIZE[31253]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot1),unwatched)">$LOCALIZE[31247]</value>
@@ -2985,6 +3126,7 @@
     </variable>
     <variable name="HomePagesName_shows_2">
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot2),nextup) | [String.IsEmpty(Skin.String(nc.shows.slot2)) + false]]">$LOCALIZE[31234]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.shows.slot2),combo) | [String.IsEmpty(Skin.String(nc.shows.slot2)) + false]]">$LOCALIZE[31700]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot2),newepisodes) | [String.IsEmpty(Skin.String(nc.shows.slot2)) + true]]">$LOCALIZE[31236]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot2),inprogress) | [String.IsEmpty(Skin.String(nc.shows.slot2)) + false]]">$LOCALIZE[575]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot2),unwatched) | [String.IsEmpty(Skin.String(nc.shows.slot2)) + false]]">$LOCALIZE[16101]</value>
@@ -2998,6 +3140,7 @@
     </variable>
     <variable name="HomePagesDesc_shows_2">
         <value condition="String.IsEqual(Skin.String(nc.shows.slot2),nextup)">$LOCALIZE[31242]</value>
+        <value condition="String.IsEqual(Skin.String(nc.shows.slot2),combo)">$LOCALIZE[31701]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot2),newepisodes)">$LOCALIZE[31244]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot2),inprogress)">$LOCALIZE[31253]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot2),unwatched)">$LOCALIZE[31247]</value>
@@ -3007,6 +3150,7 @@
     </variable>
     <variable name="HomePagesName_shows_3">
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot3),nextup) | [String.IsEmpty(Skin.String(nc.shows.slot3)) + false]]">$LOCALIZE[31234]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.shows.slot3),combo) | [String.IsEmpty(Skin.String(nc.shows.slot3)) + false]]">$LOCALIZE[31700]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot3),newepisodes) | [String.IsEmpty(Skin.String(nc.shows.slot3)) + false]]">$LOCALIZE[31236]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot3),inprogress) | [String.IsEmpty(Skin.String(nc.shows.slot3)) + true]]">$LOCALIZE[575]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot3),unwatched) | [String.IsEmpty(Skin.String(nc.shows.slot3)) + false]]">$LOCALIZE[16101]</value>
@@ -3020,6 +3164,7 @@
     </variable>
     <variable name="HomePagesDesc_shows_3">
         <value condition="String.IsEqual(Skin.String(nc.shows.slot3),nextup)">$LOCALIZE[31242]</value>
+        <value condition="String.IsEqual(Skin.String(nc.shows.slot3),combo)">$LOCALIZE[31701]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot3),newepisodes)">$LOCALIZE[31244]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot3),inprogress)">$LOCALIZE[31253]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot3),unwatched)">$LOCALIZE[31247]</value>
@@ -3029,6 +3174,7 @@
     </variable>
     <variable name="HomePagesName_shows_4">
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot4),nextup) | [String.IsEmpty(Skin.String(nc.shows.slot4)) + false]]">$LOCALIZE[31234]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.shows.slot4),combo) | [String.IsEmpty(Skin.String(nc.shows.slot4)) + false]]">$LOCALIZE[31700]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot4),newepisodes) | [String.IsEmpty(Skin.String(nc.shows.slot4)) + false]]">$LOCALIZE[31236]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot4),inprogress) | [String.IsEmpty(Skin.String(nc.shows.slot4)) + false]]">$LOCALIZE[575]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot4),unwatched) | [String.IsEmpty(Skin.String(nc.shows.slot4)) + true]]">$LOCALIZE[16101]</value>
@@ -3042,6 +3188,7 @@
     </variable>
     <variable name="HomePagesDesc_shows_4">
         <value condition="String.IsEqual(Skin.String(nc.shows.slot4),nextup)">$LOCALIZE[31242]</value>
+        <value condition="String.IsEqual(Skin.String(nc.shows.slot4),combo)">$LOCALIZE[31701]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot4),newepisodes)">$LOCALIZE[31244]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot4),inprogress)">$LOCALIZE[31253]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot4),unwatched)">$LOCALIZE[31247]</value>
@@ -3051,6 +3198,7 @@
     </variable>
     <variable name="HomePagesName_shows_5">
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot5),nextup) | [String.IsEmpty(Skin.String(nc.shows.slot5)) + false]]">$LOCALIZE[31234]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.shows.slot5),combo) | [String.IsEmpty(Skin.String(nc.shows.slot5)) + false]]">$LOCALIZE[31700]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot5),newepisodes) | [String.IsEmpty(Skin.String(nc.shows.slot5)) + false]]">$LOCALIZE[31236]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot5),inprogress) | [String.IsEmpty(Skin.String(nc.shows.slot5)) + false]]">$LOCALIZE[575]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot5),unwatched) | [String.IsEmpty(Skin.String(nc.shows.slot5)) + false]]">$LOCALIZE[16101]</value>
@@ -3064,6 +3212,7 @@
     </variable>
     <variable name="HomePagesDesc_shows_5">
         <value condition="String.IsEqual(Skin.String(nc.shows.slot5),nextup)">$LOCALIZE[31242]</value>
+        <value condition="String.IsEqual(Skin.String(nc.shows.slot5),combo)">$LOCALIZE[31701]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot5),newepisodes)">$LOCALIZE[31244]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot5),inprogress)">$LOCALIZE[31253]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot5),unwatched)">$LOCALIZE[31247]</value>
@@ -3073,6 +3222,7 @@
     </variable>
     <variable name="HomePagesName_shows_6">
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot6),nextup) | [String.IsEmpty(Skin.String(nc.shows.slot6)) + false]]">$LOCALIZE[31234]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.shows.slot6),combo) | [String.IsEmpty(Skin.String(nc.shows.slot6)) + false]]">$LOCALIZE[31700]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot6),newepisodes) | [String.IsEmpty(Skin.String(nc.shows.slot6)) + false]]">$LOCALIZE[31236]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot6),inprogress) | [String.IsEmpty(Skin.String(nc.shows.slot6)) + false]]">$LOCALIZE[575]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot6),unwatched) | [String.IsEmpty(Skin.String(nc.shows.slot6)) + false]]">$LOCALIZE[16101]</value>
@@ -3086,6 +3236,7 @@
     </variable>
     <variable name="HomePagesDesc_shows_6">
         <value condition="String.IsEqual(Skin.String(nc.shows.slot6),nextup)">$LOCALIZE[31242]</value>
+        <value condition="String.IsEqual(Skin.String(nc.shows.slot6),combo)">$LOCALIZE[31701]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot6),newepisodes)">$LOCALIZE[31244]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot6),inprogress)">$LOCALIZE[31253]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot6),unwatched)">$LOCALIZE[31247]</value>
@@ -3095,6 +3246,7 @@
     </variable>
     <variable name="HomePagesName_shows_7">
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot7),nextup) | [String.IsEmpty(Skin.String(nc.shows.slot7)) + false]]">$LOCALIZE[31234]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.shows.slot7),combo) | [String.IsEmpty(Skin.String(nc.shows.slot7)) + false]]">$LOCALIZE[31700]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot7),newepisodes) | [String.IsEmpty(Skin.String(nc.shows.slot7)) + false]]">$LOCALIZE[31236]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot7),inprogress) | [String.IsEmpty(Skin.String(nc.shows.slot7)) + false]]">$LOCALIZE[575]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot7),unwatched) | [String.IsEmpty(Skin.String(nc.shows.slot7)) + false]]">$LOCALIZE[16101]</value>
@@ -3108,6 +3260,7 @@
     </variable>
     <variable name="HomePagesDesc_shows_7">
         <value condition="String.IsEqual(Skin.String(nc.shows.slot7),nextup)">$LOCALIZE[31242]</value>
+        <value condition="String.IsEqual(Skin.String(nc.shows.slot7),combo)">$LOCALIZE[31701]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot7),newepisodes)">$LOCALIZE[31244]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot7),inprogress)">$LOCALIZE[31253]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot7),unwatched)">$LOCALIZE[31247]</value>
@@ -3117,6 +3270,7 @@
     </variable>
     <variable name="HomePagesName_shows_8">
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot8),nextup) | [String.IsEmpty(Skin.String(nc.shows.slot8)) + false]]">$LOCALIZE[31234]</value>
+        <value condition="[String.IsEqual(Skin.String(nc.shows.slot8),combo) | [String.IsEmpty(Skin.String(nc.shows.slot8)) + false]]">$LOCALIZE[31700]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot8),newepisodes) | [String.IsEmpty(Skin.String(nc.shows.slot8)) + false]]">$LOCALIZE[31236]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot8),inprogress) | [String.IsEmpty(Skin.String(nc.shows.slot8)) + false]]">$LOCALIZE[575]</value>
         <value condition="[String.IsEqual(Skin.String(nc.shows.slot8),unwatched) | [String.IsEmpty(Skin.String(nc.shows.slot8)) + false]]">$LOCALIZE[16101]</value>
@@ -3130,6 +3284,7 @@
     </variable>
     <variable name="HomePagesDesc_shows_8">
         <value condition="String.IsEqual(Skin.String(nc.shows.slot8),nextup)">$LOCALIZE[31242]</value>
+        <value condition="String.IsEqual(Skin.String(nc.shows.slot8),combo)">$LOCALIZE[31701]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot8),newepisodes)">$LOCALIZE[31244]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot8),inprogress)">$LOCALIZE[31253]</value>
         <value condition="String.IsEqual(Skin.String(nc.shows.slot8),unwatched)">$LOCALIZE[31247]</value>

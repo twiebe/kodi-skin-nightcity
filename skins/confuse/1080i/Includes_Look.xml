@@ -231,6 +231,36 @@
         </definition>
     </include>
 
+    <!-- The split of a combo row, drawn by the first card of next up (RowBox split): a thin rule
+         in the middle of the 44 px gap before the card, from the top of a small heading over the
+         card down to the card's label, quiet like any separator. Relative to the card -->
+    <include name="LookRowSplit">
+        <param name="visible"/>
+        <definition>
+            <control type="group">
+                <visible>$PARAM[visible]</visible>
+                <control type="image">
+                    <left>-23</left>
+                    <top>-38</top>
+                    <width>2</width>
+                    <height>308</height>
+                    <texture colordiffuse="state">ui/white.png</texture>
+                </control>
+                <control type="label">
+                    <left>0</left>
+                    <top>-42</top>
+                    <width>400</width>
+                    <height>30</height>
+                    <font>font_caps_small</font>
+                    <textcolor>state_text</textcolor>
+                    <include content="LookLabelCase">
+                        <param name="text" value="$LOCALIZE[31234]"/>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
     <!-- The look of the shared building blocks: texture tags, focus frames, decoration and
          sizes. The names of 1080i/Includes_Look.xml, with values of this skin. No ids, no on*
          actions, a visible only as a $PARAM: what a control does stays in the shared files. -->

@@ -11,7 +11,7 @@ the conditions changes. An empty Skin.String stands for the slot's default (the 
 had before), `none` for an empty slot, which leaves a hidden group that passes moves on.
 
 Ids per page base B (home 92, movies 94, shows 95), slot n: list B0n, group B1n, loader B2n,
-genre tabs B30 (tabs B31-B34, gaps B41-B45). Skin settings (SkinSettings.xml), page base S (home
+split loader of a combo row B7n, genre tabs B30 (tabs B31-B34, gaps B41-B45). Skin settings (SkinSettings.xml), page base S (home
 200, movies 300, shows 400): rows grouplist S, spotlight S+11, interval S+12, slots S+21 to S+28;
 category button C (home 9002, movies 9003, shows 9004).
 """
@@ -66,6 +66,9 @@ def section(page, key, kind):
         return dict(loader, content=both(IN_PROGRESS)[kind])
     if key == 'nextup':
         return dict(loader, content=[pl('WidgetContinueShows')])
+    if key == 'combo':
+        # what was started, then next up without the shows a started episode stands for
+        return dict(loader, content=both(IN_PROGRESS)[kind] + ['$VAR[ComboNextUp]'], split=len(both(IN_PROGRESS)[kind]))
     if key == 'inprogress':
         return dict(loader, content=IN_PROGRESS['shows'])
     if key == 'recent':
@@ -119,7 +122,7 @@ def variants(page):
 
 
 # rows of what plays on: a look can show them wide (LookRowWideCard)
-WIDE = ('continue', 'nextup')
+WIDE = ('continue', 'nextup', 'combo')
 
 
 def param(name, value):
@@ -144,8 +147,8 @@ def slot_include(page):
                   param('header', 'RowNumber' if row.get('genres') else 'NumberedRowHeader'),
                   param('num', '$PARAM[num]'),
                   param('content1', row['content'][0])]
-        if len(row['content']) > 1:
-            params.append(param('content2', row['content'][1]))
+        for i, path in enumerate(row['content'][1:], 2):
+            params.append(param('content{}'.format(i), path))
         params.append(param('loader', loader))
         # a page without spotlight previews the title of the row that had the focus last
         params.append(param('peek', 'SetProperty(nc.peek.{},{}0$PARAM[n],home)'.format(page, base)))
@@ -154,6 +157,9 @@ def slot_include(page):
         for extra in ('click', 'art'):
             if extra in row:
                 params.append(param(extra, row[extra]))
+        if row.get('split'):
+            # the first card of next up draws the split (RowBox)
+            params += [param('split', 'LookRowSplit'), param('splitloader', base + '7$PARAM[n]')]
         if key in WIDE:
             params += [param('card', 'LookRowWideCard'), param('itemwidth', 'LookRowWideItemWidth'),
                        param('art', '$VAR[LookRowWideArt]')]
@@ -197,6 +203,12 @@ def loader_include(page):
         for i, path in enumerate(row['content'], 1):
             out.append('                ' + param('content{}'.format(i), path))
         out.append('            </include>')
+        if row.get('split'):
+            out.append('            <include content="SplitLoader" condition="{}">'.format(cond))
+            out.append('                ' + param('id', base + '7$PARAM[n]'))
+            for i, path in enumerate(row['content'][:row['split']], 1):
+                out.append('                ' + param('content{}'.format(i), path))
+            out.append('            </include>')
     out += ['        </definition>', '    </include>']
     return out
 

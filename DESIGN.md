@@ -91,6 +91,11 @@ once (it shows whatever has the focus, there is nothing left to fade out) and th
 in, text and pills with it. Between two cards it is a title change as in the spotlight: text at
 once, poster and backdrop crossfade.
 
+The combo row (continue watching + next up) holds what was started, then next up. Where next up
+starts, a thin rule in the gap before its first card and the words next up under that card, in the
+dimmed blue of a separator; the cursor passes it like any gap. A show whose episode was started stands
+in the first part with that episode and not again in next up (both would open the same episode).
+
 Ratings are on everywhere by default: the spotlight has them wherever the cursor is, also in the top
 menu while it rotates. "Ratings only on title pages" (off by default) saves the requests: spotlight
 and rows then show none and fetch none, a title's page shows them as ever.

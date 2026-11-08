@@ -108,6 +108,11 @@ EXPECTED_PATHS = {
     ('shows', 'unwatched', ''): [PL.format('WidgetUnwatchedShows')],
     ('shows', 'genres', ''): ['videodb://tvshows/genres/$INFO[Window(Home).Property(nc.tvgenre.id)]/'],
     ('shows', 'trending', ''): ['$VAR[TmdbTrendingShowsShows]'],
+    # continue watching, then next up (without the shows a started episode stands for already)
+    ('home', 'combo', 'both'): [PL.format('WidgetInProgressMovies'), PL.format('WidgetInProgressEpisodes'),
+                                '$VAR[ComboNextUp]'],
+    ('home', 'combo', 'shows'): [PL.format('WidgetInProgressEpisodes'), '$VAR[ComboNextUp]'],
+    ('shows', 'combo', ''): [PL.format('WidgetInProgressEpisodes'), '$VAR[ComboNextUp]'],
 }
 
 
@@ -164,7 +169,8 @@ def test_loaders_for_rows_that_refill():
     take their visibility from an off-screen loader with the same content."""
     for page, key, opt, n in (('home', 'continue', '', 1), ('home', 'nextup', '', 4),
                               ('movies', 'continue', '', 2), ('shows', 'nextup', '', 1),
-                              ('home', 'recent', '', 3), ('home', 'trending', 'shows', 5)):
+                              ('home', 'recent', '', 3), ('home', 'trending', 'shows', 5),
+                              ('home', 'combo', '', 3), ('shows', 'combo', '', 2)):
         skin = slot_skin(page, n, key, opt)
         c = controls(load('Home.xml', skin))
         base = PAGES[page]
@@ -172,6 +178,43 @@ def test_loaders_for_rows_that_refill():
         assert [x.text for x in loader.findall('content') if x.text] == \
                [x.text for x in lst.findall('content') if x.text]
         assert 'Container({}2{}).NumItems'.format(base, n) in lst.findtext('visible')
+
+
+def test_combo_next_up_falls_back_to_the_playlist():
+    """The service sets the path of next up without the started shows (nightcity.combo); until it
+    did, next up as its own row."""
+    variables = {v.get('name'): v for v in parse(ROOT / '1080i' / 'Includes_Home.xml').iter('variable')}
+    values = variables['ComboNextUp'].findall('value')
+    assert [(v.get('condition'), v.text) for v in values] == [
+        ('!String.IsEmpty(Window(Home).Property({}))'.format(nightcity.COMBO_NEXTUP),
+         '$INFO[Window(Home).Property({})]'.format(nightcity.COMBO_NEXTUP)),
+        (None, PL.format('WidgetContinueShows'))]
+
+
+@pytest.mark.parametrize('page,opt,n,started', [('home', '', 3, ['WidgetInProgressMovies', 'WidgetInProgressEpisodes']),
+                                                ('home', 'shows', 6, ['WidgetInProgressEpisodes']),
+                                                ('shows', '', 2, ['WidgetInProgressEpisodes'])])
+def test_combo_row_marks_where_next_up_starts(page, opt, n, started):
+    """The first next-up card draws the split (LookRowSplit): its position is the number of
+    started titles plus one, which an off-screen loader of the started ones and one static item
+    counts (Kodi compares two numbers, it does not add)."""
+    import xml.etree.ElementTree as ET
+    base = PAGES[page]
+    c = controls(load('Home.xml', slot_skin(page, n, 'combo', opt)))
+    split = c['{}7{}'.format(base, n)]
+    contents = split.findall('content')
+    assert [x.text for x in contents if x.text and x.text.strip()] == [PL.format(s) for s in started]
+    assert len(contents[-1].findall('item')) == 1
+    lst = c['{}0{}'.format(base, n)]
+    first = 'Integer.IsEqual(ListItem.CurrentItem,Container({}7{}).NumItems)'.format(base, n)
+    some = 'Integer.IsGreater(Container({}7{}).NumItems,1)'.format(base, n)
+    for layout in ('itemlayout', 'focusedlayout'):
+        text = ET.tostring(lst.find(layout), encoding='unicode')
+        assert first in text and some in text, layout
+    # no other row has one
+    others = controls(load('Home.xml', slot_skin(page, n, 'nextup')))
+    assert 'ListItem.CurrentItem' not in ET.tostring(others['{}0{}'.format(base, n)], encoding='unicode')
+    assert '{}7{}'.format(base, n) not in others
 
 
 def test_tmdb_rows_wait_for_the_page_timer():
@@ -308,7 +351,7 @@ def combos():
 
 
 LOADERS = {'9000', '9001', '9002', '9721', '9722', '9723', '9724', '9725', '9822'} | \
-          {'{}2{}'.format(b, n) for b in PAGES.values() for n in range(1, 9)}
+          {'{}{}{}'.format(b, kind, n) for b in PAGES.values() for kind in (2, 7) for n in range(1, 9)}
 # reached by Back in the quick menu only, a numeric target that passes the focus on
 STAND_INS = {'9189'}
 

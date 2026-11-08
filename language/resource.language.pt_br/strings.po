@@ -1174,3 +1174,11 @@ msgstr "episódios"
 msgctxt "#31607"
 msgid "none"
 msgstr "nenhum"
+
+msgctxt "#31700"
+msgid "Continue watching + Next up"
+msgstr "Continuar assistindo + A seguir"
+
+msgctxt "#31701"
+msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
+msgstr "Os títulos iniciados e depois as séries que você está assistindo. OK em uma série abre o próximo episódio."

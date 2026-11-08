@@ -231,16 +231,16 @@ SECTIONS = {  # key: (name, description) string ids
     'newepisodes': (31236, 31244), 'genres': (135, 31245), 'random': (31237, 31246),
     'unwatched': (16101, 31247), 'toprated': (31238, 31248), 'favourites': (1036, 31249),
     'trending': (31239, 31250), 'recent': (31240, 31251), 'sets': (20434, 31252),
-    'inprogress': (575, 31253),
+    'inprogress': (575, 31253), 'combo': (31700, 31701),
 }
 CATALOGUE = {
-    'home': [('continue', (BOTH, MOVIES, SHOWS)), ('nextup', ()), ('newmovies', (ALL, UNWATCHED)),
+    'home': [('continue', (BOTH, MOVIES, SHOWS)), ('nextup', ()), ('combo', (BOTH, SHOWS)), ('newmovies', (ALL, UNWATCHED)),
              ('newepisodes', (ALL, UNWATCHED)), ('genres', (MOVIES, SHOWS)), ('random', (ALL, UNWATCHED)),
              ('unwatched', (MOVIES, SHOWS, BOTH)), ('toprated', (MOVIES, SHOWS)), ('favourites', ()),
              ('trending', (MOVIES, SHOWS)), ('recent', (BOTH, MOVIES, SHOWS))],
     'movies': [('continue', ()), ('newmovies', (ALL, UNWATCHED)), ('unwatched', ()), ('random', (ALL, UNWATCHED)),
                ('toprated', ()), ('genres', ()), ('sets', ()), ('trending', ())],
-    'shows': [('nextup', ()), ('newepisodes', (ALL, UNWATCHED)), ('inprogress', ()), ('unwatched', ()),
+    'shows': [('nextup', ()), ('combo', ()), ('newepisodes', (ALL, UNWATCHED)), ('inprogress', ()), ('unwatched', ()),
               ('genres', ()), ('trending', ())],
 }
 # the rows each page had before the slots: what an empty Skin.String stands for
@@ -283,6 +283,44 @@ def apply_pick(slots, n, value):
         if m != n and slot[0] == value and value != 'none':
             return {n: slot, m: current}
     return {n: (value, '')}
+
+
+# The combo row (continue watching, then next up): a show with a started episode stands in the
+# first part with that episode, which its next-up card would open too (pick_next_episode). So the
+# service gives next up a path without those shows, Window(Home).Property(nc.combo.nextup), at its
+# start and after library changes; nothing runs while the row scrolls.
+COMBO_NEXTUP = 'nc.combo.nextup'
+COMBO_DELAY = 2.0  # s without a library change before the path is made anew (a scan tells of every item)
+
+
+def started_shows(episodes):
+    """Titles of the shows of the started EPISODES, each once, in their order."""
+    titles = []
+    for episode in episodes:
+        title = episode.get('showtitle')
+        if title and (episode.get('resume') or {}).get('position', 0) > 0 and title not in titles:
+            titles.append(title)
+    return titles
+
+
+def combo_nextup_path(skip):
+    """Next up (playlists/WidgetContinueShows.xsp) without the shows titled SKIP, as a library path
+    with its smart playlist inline."""
+    rules = [{'field': 'inprogress', 'operator': 'true', 'value': []}]
+    if skip:
+        rules.append({'field': 'title', 'operator': 'isnot', 'value': list(skip)})
+    xsp = {'type': 'tvshows', 'rules': {'and': rules}, 'order': {'method': 'lastplayed', 'direction': 'descending'},
+           'limit': 25}
+    return 'videodb://tvshows/titles/?xsp=' + urllib.parse.quote(json.dumps(xsp, separators=(',', ':')), safe='')
+
+
+def combo():
+    episodes = _rpc('VideoLibrary.GetEpisodes', filter={'field': 'inprogress', 'operator': 'true', 'value': ''},
+                    properties=['showtitle', 'resume']).get('episodes', [])
+    path = combo_nextup_path(started_shows(episodes))
+    home = _home()
+    if home.getProperty(COMBO_NEXTUP) != path:
+        home.setProperty(COMBO_NEXTUP, path)
 
 
 def _rpc(method, **params):
@@ -2826,7 +2864,7 @@ COMMANDS = {'lib_bar': lib_bar, 'music_bar': music_bar, 'next_episode': next_epi
             'music_play': music_play, 'music_goto': music_goto, 'music_info': music_info,
             'music_back': music_back, 'now_playing': now_playing, 'music_queue': music_queue,
             'music_queue_select': music_queue_select, 'lib_filter': lib_filter,
-            'lib_layout': lib_layout, 'lib_details': lib_details, 'music_filter': music_filter}
+            'lib_layout': lib_layout, 'lib_details': lib_details, 'music_filter': music_filter, 'combo': combo}
 
 
 # --- the skin service -------------------------------------------------------------------------
@@ -2837,6 +2875,9 @@ COMMANDS = {'lib_bar': lib_bar, 'music_bar': music_bar, 'next_episode': next_epi
 
 SENDER = 'nightcity'
 _threads = []
+# what changes the started episodes and shows (Player.OnStop comes before the resume point is saved)
+LIBRARY_CHANGES = ('VideoLibrary.OnUpdate', 'VideoLibrary.OnRemove', 'VideoLibrary.OnScanFinished',
+                   'VideoLibrary.OnCleanFinished')
 
 
 def parse_message(sender, method):
@@ -2892,6 +2933,7 @@ def service(*first):
 
     music_start = MusicStart()
     queue_watch = Debounce(lambda: run_command('music_queue', []))
+    library_watch = Debounce(lambda: run_command('combo', []), COMBO_DELAY)
     stop = threading.Event()
 
     class Listener(xbmc.Monitor):
@@ -2909,6 +2951,8 @@ def service(*first):
                     run_command('now_playing', [])
                 if isinstance(details, dict) and (method == 'Player.OnPlay' or details.get('playlistid') == 0):
                     queue_watch.changed()
+            if sender == 'xbmc' and method in LIBRARY_CHANGES and not stop.is_set():
+                library_watch.changed()
             message = parse_message(sender, method)
             if message and not stop.is_set():
                 run_command(*message)
@@ -2926,6 +2970,7 @@ def service(*first):
         _run(first[0], list(first[1:]))
     # after a skin switch nothing runs startup, and each skin has its own Home key setting
     _run('home_keymap', [])
+    run_command('combo', [])
     threading.Thread(target=hero_watch, args=(monitor, stop), daemon=True).start()
     while not monitor.waitForAbort(1):
         if skin_id() != started:

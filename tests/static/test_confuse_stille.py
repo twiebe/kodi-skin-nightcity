@@ -241,8 +241,8 @@ def test_only_continue_and_next_up_are_wide():
     text = (ROOT / '1080i' / 'Includes_Sections.xml').read_text(encoding='utf-8')
     rows = re.findall(r'<include content="RowBox".*?</include>', text, re.S)
     wide = [r for r in rows if 'LookRowWideCard' in r]
-    assert len(wide) == 6
-    assert all('$LOCALIZE[31233]' in r or '$LOCALIZE[31234]' in r for r in wide)
+    assert len(wide) == 9  # continue, next up and both of them in one row (combo)
+    assert all('$LOCALIZE[31233]' in r or '$LOCALIZE[31234]' in r or '$LOCALIZE[31700]' in r for r in wide)
     assert all('$VAR[LookRowWideArt]' in r and 'LookRowWideItemWidth' in r for r in wide)
 
 

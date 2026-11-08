@@ -1210,6 +1210,7 @@
         <param name="label"/>
         <param name="content1"/>
         <param name="content2" default=""/>
+        <param name="content3" default=""/>
         <param name="loader"/>
         <param name="wait" default="false"/>
         <param name="up"/>
@@ -1236,6 +1237,12 @@
         <param name="itemwidth" default="LookRowItemWidth"/>
         <!-- on a title: names the row as the one the page without spotlight previews (PeekHeroes) -->
         <param name="peek" default="noop"/>
+        <!-- split: the include the first card of a row's second part draws (LookRowSplit for a
+             combo row: continue watching, then next up), RowNoSplit for a row of one part. That
+             card's position is the count of splitloader, which holds the first part and one static
+             item (SplitLoader) -->
+        <param name="split" default="RowNoSplit"/>
+        <param name="splitloader" default=""/>
         <definition>
             <control type="group" id="$PARAM[group]">
                 <height>468</height>
@@ -1289,6 +1296,9 @@
                                 <param name="image" value="$PARAM[art]"/>
                                 <param name="dim" value="Control.HasFocus($PARAM[id])"/>
                             </include>
+                            <include content="$PARAM[split]">
+                                <param name="visible" value="Integer.IsEqual(ListItem.CurrentItem,Container($PARAM[splitloader]).NumItems) + Integer.IsGreater(Container($PARAM[splitloader]).NumItems,1)"/>
+                            </include>
                         </control>
                     </itemlayout>
                     <focusedlayout width="$PARAM[itemwidth]" height="LookRowListHeight">
@@ -1299,10 +1309,14 @@
                                 <param name="image" value="$PARAM[art]"/>
                                 <param name="focused" value="Control.HasFocus($PARAM[id])"/>
                             </include>
+                            <include content="$PARAM[split]">
+                                <param name="visible" value="Integer.IsEqual(ListItem.CurrentItem,Container($PARAM[splitloader]).NumItems) + Integer.IsGreater(Container($PARAM[splitloader]).NumItems,1)"/>
+                            </include>
                         </control>
                     </focusedlayout>
                     <content target="videos" sortby="$PARAM[sortby]" sortorder="$PARAM[sortorder]" limit="$PARAM[limit]">$PARAM[content1]</content>
                     <content target="videos">$PARAM[content2]</content>
+                    <content target="videos">$PARAM[content3]</content>
                 </control>
                 <!-- extra controls, e.g. tabs in the top line instead of the title -->
                 <nested/>
@@ -1346,6 +1360,7 @@
         <param name="id"/>
         <param name="content1"/>
         <param name="content2" default=""/>
+        <param name="content3" default=""/>
         <definition>
             <control type="list" id="$PARAM[id]">
                 <left>-3000</left>
@@ -1356,9 +1371,49 @@
                 <focusedlayout width="1" height="1"/>
                 <content target="videos">$PARAM[content1]</content>
                 <content target="videos">$PARAM[content2]</content>
+                <content target="videos">$PARAM[content3]</content>
             </control>
         </definition>
     </include>
+
+    <!-- A row of one part draws no split (RowBox split) -->
+    <include name="RowNoSplit">
+        <param name="visible"/>
+        <definition/>
+    </include>
+
+    <!-- The count of the first part of a combo row and one more (RowBox split): the position of
+         the first card of next up, as a skin condition compares numbers and does not add -->
+    <include name="SplitLoader">
+        <param name="id"/>
+        <param name="content1"/>
+        <param name="content2" default=""/>
+        <definition>
+            <control type="list" id="$PARAM[id]">
+                <left>-3000</left>
+                <top>0</top>
+                <width>10</width>
+                <height>10</height>
+                <itemlayout width="1" height="1"/>
+                <focusedlayout width="1" height="1"/>
+                <content target="videos">$PARAM[content1]</content>
+                <content target="videos">$PARAM[content2]</content>
+                <content>
+                    <item>
+                        <label>split</label>
+                        <onclick>noop</onclick>
+                    </item>
+                </content>
+            </control>
+        </definition>
+    </include>
+
+    <!-- Next up of a combo row: without the shows a started episode stands for in its first part
+         (scripts/nightcity.py combo); until the service set that, all of next up -->
+    <variable name="ComboNextUp">
+        <value condition="!String.IsEmpty(Window(Home).Property(nc.combo.nextup))">$INFO[Window(Home).Property(nc.combo.nextup)]</value>
+        <value>special://skin/playlists/WidgetContinueShows.xsp</value>
+    </variable>
 
     <!-- Tabs in the top line of a genre row: the three biggest genres switch the row on focus,
          the last tab offers all genres on click (scripts/nightcity.py genres/genre_pick). base:

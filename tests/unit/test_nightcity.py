@@ -478,13 +478,14 @@ def test_startup_signals_ready_after_an_error(monkeypatch):
 def test_catalogue_per_page():
     keys = {page: [key for key, _ in sections] for page, sections in nightcity.CATALOGUE.items()}
     assert keys == {
-        'home': ['continue', 'nextup', 'newmovies', 'newepisodes', 'genres', 'random', 'unwatched',
+        'home': ['continue', 'nextup', 'combo', 'newmovies', 'newepisodes', 'genres', 'random', 'unwatched',
                  'toprated', 'favourites', 'trending', 'recent'],
         'movies': ['continue', 'newmovies', 'unwatched', 'random', 'toprated', 'genres', 'sets', 'trending'],
-        'shows': ['nextup', 'newepisodes', 'inprogress', 'unwatched', 'genres', 'trending'],
+        'shows': ['nextup', 'combo', 'newepisodes', 'inprogress', 'unwatched', 'genres', 'trending'],
     }
     options = {key: [value for value, _ in opts] for key, opts in nightcity.CATALOGUE['home']}
     assert options['continue'] == ['both', 'movies', 'shows']
+    assert options['combo'] == ['both', 'shows']  # next up is shows only: no movies alone
     assert options['unwatched'] == ['movies', 'shows', 'both']
     assert options['recent'] == ['both', 'movies', 'shows']
     assert options['newmovies'] == options['random'] == ['all', 'unwatched']
@@ -493,6 +494,57 @@ def test_catalogue_per_page():
     for page, sections in nightcity.CATALOGUE.items():
         for key, _ in sections:
             assert key in nightcity.SECTIONS, (page, key)
+
+
+def _xsp(path):
+    prefix = 'videodb://tvshows/titles/?xsp='
+    assert path.startswith(prefix)
+    return json.loads(urllib.parse.unquote(path[len(prefix):]))
+
+
+def test_combo_next_up_leaves_out_shows_with_a_started_episode():
+    """The combo row (continue watching + next up): a show whose episode stands in the continue
+    part already would open that same episode (pick_next_episode), so next up leaves it out."""
+    rules = [{'field': 'inprogress', 'operator': 'true', 'value': []}]
+    assert _xsp(nightcity.combo_nextup_path([])) == {
+        'type': 'tvshows', 'rules': {'and': rules}, 'order': {'method': 'lastplayed', 'direction': 'descending'},
+        'limit': 25}
+    xsp = _xsp(nightcity.combo_nextup_path(['Kdev Show', 'A & "B" #1?']))
+    assert xsp['rules']['and'] == rules + [{'field': 'title', 'operator': 'isnot', 'value': ['Kdev Show', 'A & "B" #1?']}]
+    # the same order and limit as next up alone (playlists/WidgetContinueShows.xsp)
+    playlist = (ROOT / 'playlists' / 'WidgetContinueShows.xsp').read_text()
+    assert '<limit>25</limit>' in playlist and '<order direction="descending">lastplayed</order>' in playlist
+
+
+def test_started_shows():
+    episodes = [{'showtitle': 'B', 'resume': {'position': 12.0}}, {'showtitle': 'A', 'resume': {'position': 0}},
+                {'showtitle': 'B', 'resume': {'position': 3.0}}, {'showtitle': 'C', 'resume': {'position': 1.0}}, {}]
+    assert nightcity.started_shows(episodes) == ['B', 'C']
+
+
+def test_combo_sets_the_next_up_path(monkeypatch):
+    window = FakeWindow()
+    calls = []
+    monkeypatch.setattr(nightcity, '_home', lambda: window)
+
+    def rpc(method, **params):
+        calls.append((method, params))
+        return {'episodes': [{'showtitle': 'Kdev Show', 'resume': {'position': 30.0}}]}
+    monkeypatch.setattr(nightcity, '_rpc', rpc)
+    nightcity.combo()
+    assert calls == [('VideoLibrary.GetEpisodes', {'filter': {'field': 'inprogress', 'operator': 'true', 'value': ''},
+                                                   'properties': ['showtitle', 'resume']})]
+    assert window.props[nightcity.COMBO_NEXTUP] == nightcity.combo_nextup_path(['Kdev Show'])
+
+
+def test_combo_keeps_an_unchanged_path(monkeypatch):
+    """A new path reloads the row: only when it changes."""
+    window = FakeWindow()
+    window.props[nightcity.COMBO_NEXTUP] = nightcity.combo_nextup_path([])
+    window.setProperty = lambda key, value: pytest.fail('set again')
+    monkeypatch.setattr(nightcity, '_home', lambda: window)
+    monkeypatch.setattr(nightcity, '_rpc', lambda method, **params: {'limits': {'total': 0}})
+    nightcity.combo()
 
 
 def test_default_slots_are_todays_rows():
@@ -1049,6 +1101,7 @@ def _service_env(monkeypatch, messages, skin='skin.nightcity'):
     monkeypatch.setitem(nightcity.COMMANDS, 'play', lambda *a: ran.append(('play',) + a))
     monkeypatch.setitem(nightcity.COMMANDS, 'startup', lambda *a: ran.append(('startup',) + a))
     monkeypatch.setitem(nightcity.COMMANDS, 'home_keymap', lambda *a: None)
+    monkeypatch.setitem(nightcity.COMMANDS, 'combo', lambda *a: None)
     return window, ran
 
 
@@ -1080,6 +1133,19 @@ def test_service_applies_the_home_key_setting_of_its_skin(monkeypatch):
     nightcity.service('home')
     nightcity.wait_for_commands()
     assert ran == [('home',), ('home_keymap',)]
+
+
+def test_service_keeps_the_combo_row_current(monkeypatch):
+    """At its start and once a burst of library changes is over (a scan tells of every item)."""
+    _, ran = _service_env(monkeypatch, [('xbmc', 'VideoLibrary.OnUpdate'), ('xbmc', 'VideoLibrary.OnUpdate'),
+                                        ('xbmc', 'VideoLibrary.OnScanFinished')])
+    monkeypatch.setattr(nightcity, 'COMBO_DELAY', 0.05)
+    monkeypatch.setitem(nightcity.COMMANDS, 'combo', lambda *a: ran.append(('combo',) + a))
+    nightcity.service()
+    import time
+    time.sleep(0.3)
+    nightcity.wait_for_commands()
+    assert ran == [('combo',), ('combo',)]
 
 
 def test_service_survives_a_failing_command(monkeypatch):

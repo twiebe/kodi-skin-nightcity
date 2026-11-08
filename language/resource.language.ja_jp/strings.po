@@ -1176,3 +1176,11 @@ msgstr "エピソード"
 msgctxt "#31607"
 msgid "none"
 msgstr "無し"
+
+msgctxt "#31700"
+msgid "Continue watching + Next up"
+msgstr "続きを見る + 次に見る"
+
+msgctxt "#31701"
+msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
+msgstr "視聴を始めたタイトルと、視聴中のテレビ番組を表示します。テレビ番組でOKを押すと次のエピソードを開きます。"
