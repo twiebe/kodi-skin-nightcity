@@ -54,8 +54,13 @@ def test_similar_movie_opens_in_the_chain():
 
 
 def test_spotlight_play_resumes_through_script():
-    value, _ = include_param('Includes_Home.xml', 9010, 'onclick')
-    assert 'NotifyAll(nightcity,play:movie:$INFO[Container(9000).ListItem.DBID]:resume)' in value
+    """The play button of the movie hero plays the shown page's spotlight title (home 9000,
+    movies 9003)."""
+    button = next(i for i in parse(SKIN / 'Includes_Home.xml').iter('include') if i.get('content') == 'SpotlightButton'
+                  and any(p.get('name') == 'id' and p.get('value') == '9010' for p in i.findall('param')))
+    clicks = [o.text for o in button.findall('onclick')]
+    for list_id in ('9000', '9003'):
+        assert 'NotifyAll(nightcity,play:movie:$INFO[Container({}).ListItem.DBID]:resume)'.format(list_id) in clicks
 
 
 def test_episode_number_stands_beside_the_title():

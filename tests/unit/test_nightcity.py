@@ -1895,7 +1895,7 @@ def _hero_env(monkeypatch, true, labels, props=None):
 
 
 HOME = nightcity.HERO_ON_HOME
-MOVIE_HERO = nightcity.HERO_SHOWN.format('9300')
+MOVIE_HERO = nightcity.HERO_SHOWN.format('9304')
 MOVIE_FOCUS = 'ControlGroup(9050).HasFocus()'
 MATRIX_ITEM = {'Container(9000).ListItem.DBID': '5', 'Container(9000).ListItem.DBType': 'movie',
                'Container(9000).ListItem.Label': 'The Matrix'}
@@ -1908,6 +1908,15 @@ def test_hero_tick_points_tmdb_helper_at_the_focused_hero(monkeypatch):
     home = _hero_env(monkeypatch, {HOME, MOVIE_HERO, MOVIE_FOCUS}, MATRIX_ITEM)
     nightcity.hero_tick(nightcity.HeroRatings(), 0.0)
     assert home.props['TMDbHelper.WidgetContainer'] == '9000'
+
+
+def test_hero_tick_points_tmdb_helper_at_the_movies_page_spotlight(monkeypatch):
+    """The movies page has a spotlight of its own (9003, marked by 9305)."""
+    item = {'Container(9003).ListItem.DBID': '5', 'Container(9003).ListItem.DBType': 'movie',
+            'Container(9003).ListItem.Label': 'The Matrix'}
+    home = _hero_env(monkeypatch, {HOME, nightcity.HERO_SHOWN.format('9305')}, item)
+    nightcity.hero_tick(nightcity.HeroRatings(), 0.0)
+    assert home.props['TMDbHelper.WidgetContainer'] == '9003'
 
 
 FOLLOW = nightcity.HERO_SHOWN.format(nightcity.FOLLOW_GROUP)

@@ -298,9 +298,11 @@ def settings_defaults():
     empty, unwatched = 'String.IsEmpty(Skin.String(nc.movies.spotlight))', 'String.IsEqual(Skin.String(SpotlightSource),unwatched)'
     out.append('        <onload condition="{} + {}">Skin.SetString(nc.movies.spotlight,unwatched)</onload>'.format(empty, unwatched))
     out.append('        <onload condition="{} + !{}">Skin.SetString(nc.movies.spotlight,all)</onload>'.format(empty, unwatched))
-    empty, home = 'String.IsEmpty(Skin.String(nc.shows.interval))', 'String.IsEmpty(Skin.String(SpotlightInterval))'
-    out.append('        <onload condition="{} + {}">Skin.SetString(nc.shows.interval,15)</onload>'.format(empty, home))
-    out.append('        <onload condition="{} + !{}">Skin.SetString(nc.shows.interval,$INFO[Skin.String(SpotlightInterval)])</onload>'.format(empty, home))
+    # movies and shows took home's interval before they had their own: it goes on until changed
+    for name in ('nc.movies.interval', 'nc.shows.interval'):
+        empty, home = 'String.IsEmpty(Skin.String({}))'.format(name), 'String.IsEmpty(Skin.String(SpotlightInterval))'
+        out.append('        <onload condition="{} + {}">Skin.SetString({},15)</onload>'.format(empty, home, name))
+        out.append('        <onload condition="{} + !{}">Skin.SetString({},$INFO[Skin.String(SpotlightInterval)])</onload>'.format(empty, home, name))
     out.append('    </include>')
     return out
 
@@ -382,12 +384,12 @@ def settings_slots(page):
 
 
 # spotlight rows of the settings tabs: (skin string, values in order, label variable); the
-# value '' is stored as an empty string. Movies shares the interval with home (one spotlight).
+# value '' is stored as an empty string. Each page has its own spotlight and interval.
 SOURCE = {'home': ('SpotlightSource', ['', 'unwatched', 'off'], 'SpotlightSourceLabel'),
           'movies': ('nc.movies.spotlight', ['all', 'unwatched', 'off'], 'MoviesSpotlightLabel'),
           'shows': ('nc.shows.spotlight', ['', 'unwatched', 'off'], 'ShowsSpotlightLabel')}
-HOME_INTERVAL = ('SpotlightInterval', ['10', '', '30', '60', 'off'], 'SpotlightIntervalLabel')
-INTERVAL = {'home': HOME_INTERVAL, 'movies': HOME_INTERVAL,
+INTERVAL = {'home': ('SpotlightInterval', ['10', '', '30', '60', 'off'], 'SpotlightIntervalLabel'),
+            'movies': ('nc.movies.interval', ['10', '15', '30', '60', 'off'], 'MoviesIntervalLabel'),
             'shows': ('nc.shows.interval', ['10', '15', '30', '60', 'off'], 'ShowsIntervalLabel')}
 
 

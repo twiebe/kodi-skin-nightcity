@@ -52,14 +52,20 @@
             <include condition="String.IsEqual(Skin.String(nc.movies.spotlight),off)">PeekFanartsMovies</include>
             <include condition="String.IsEqual(Skin.String(nc.shows.spotlight),off)">PeekFanartsShows</include>
             <control type="group">
-                <visible>Control.IsVisible(9300)</visible>
-                <include content="SharedBackdropFade">
-                    <param name="page1" value="String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)"/>
-                    <param name="page2" value="String.IsEqual(Window(Home).Property(nc.page),movies)"/>
-                </include>
+                <visible>[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + !String.IsEqual(Skin.String(SpotlightSource),off)</visible>
+                <include>BackdropFade</include>
                 <include content="LookHomeFanart">
                     <param name="art" value="Container(9000).ListItem.Art(fanart)"/>
                     <param name="shown" value="!String.IsEmpty(Container(9000).ListItem.Art(fanart))"/>
+                    <param name="fadetime" value="400"/>
+                </include>
+            </control>
+            <control type="group">
+                <visible>String.IsEqual(Window(Home).Property(nc.page),movies) + !String.IsEqual(Skin.String(nc.movies.spotlight),off)</visible>
+                <include>BackdropFade</include>
+                <include content="LookHomeFanart">
+                    <param name="art" value="Container(9003).ListItem.Art(fanart)"/>
+                    <param name="shown" value="!String.IsEmpty(Container(9003).ListItem.Art(fanart))"/>
                     <param name="fadetime" value="400"/>
                 </include>
             </control>
@@ -93,7 +99,14 @@
                 <param name="art" value="ListItem.Art(artist.fanart)"/>
             </include>
         </control>
-        <include content="SpotlightList" condition="!String.IsEqual(Skin.String(SpotlightSource),off) | !String.IsEqual(Skin.String(nc.movies.spotlight),off)"/>
+        <!-- the spotlights of home, movies and shows, each with its interval -->
+        <include content="SpotlightList" condition="!String.IsEqual(Skin.String(SpotlightSource),off)"/>
+        <include content="SpotlightList" condition="!String.IsEqual(Skin.String(nc.movies.spotlight),off)">
+            <param name="id" value="9003"/>
+            <param name="content" value="$VAR[SpotlightMoviesPath]"/>
+            <param name="interval" value="nc.movies.interval"/>
+            <param name="follow" value="String.IsEmpty(Skin.String(nc.movies.interval))"/>
+        </include>
         <include content="SpotlightList" condition="!String.IsEqual(Skin.String(nc.shows.spotlight),off)">
             <param name="id" value="9001"/>
             <param name="content" value="$VAR[SpotlightShowsPath]"/>

@@ -1373,6 +1373,8 @@
         <onload condition="String.IsEmpty(Skin.String(nc.shows.slot8))">Skin.SetString(nc.shows.slot8,none)</onload>
         <onload condition="String.IsEmpty(Skin.String(nc.movies.spotlight)) + String.IsEqual(Skin.String(SpotlightSource),unwatched)">Skin.SetString(nc.movies.spotlight,unwatched)</onload>
         <onload condition="String.IsEmpty(Skin.String(nc.movies.spotlight)) + !String.IsEqual(Skin.String(SpotlightSource),unwatched)">Skin.SetString(nc.movies.spotlight,all)</onload>
+        <onload condition="String.IsEmpty(Skin.String(nc.movies.interval)) + String.IsEmpty(Skin.String(SpotlightInterval))">Skin.SetString(nc.movies.interval,15)</onload>
+        <onload condition="String.IsEmpty(Skin.String(nc.movies.interval)) + !String.IsEmpty(Skin.String(SpotlightInterval))">Skin.SetString(nc.movies.interval,$INFO[Skin.String(SpotlightInterval)])</onload>
         <onload condition="String.IsEmpty(Skin.String(nc.shows.interval)) + String.IsEmpty(Skin.String(SpotlightInterval))">Skin.SetString(nc.shows.interval,15)</onload>
         <onload condition="String.IsEmpty(Skin.String(nc.shows.interval)) + !String.IsEmpty(Skin.String(SpotlightInterval))">Skin.SetString(nc.shows.interval,$INFO[Skin.String(SpotlightInterval)])</onload>
     </include>
@@ -1806,19 +1808,19 @@
         <control type="button" id="312">
             <include>HomePagesRow</include>
             <label>$LOCALIZE[31221]</label>
-            <label2>$VAR[SpotlightIntervalLabel]  ›</label2>
+            <label2>$VAR[MoviesIntervalLabel]  ›</label2>
             <visible>!String.IsEqual(Skin.String(nc.movies.spotlight),off)</visible>
             <onleft>9003</onleft>
-            <onclick condition="String.IsEqual(Skin.String(SpotlightInterval),10)">Skin.Reset(SpotlightInterval)</onclick>
-            <onclick condition="![String.IsEqual(Skin.String(SpotlightInterval),10) | String.IsEqual(Skin.String(SpotlightInterval),30) | String.IsEqual(Skin.String(SpotlightInterval),60) | String.IsEqual(Skin.String(SpotlightInterval),off)]">Skin.SetString(SpotlightInterval,30)</onclick>
-            <onclick condition="String.IsEqual(Skin.String(SpotlightInterval),30)">Skin.SetString(SpotlightInterval,60)</onclick>
-            <onclick condition="String.IsEqual(Skin.String(SpotlightInterval),60)">Skin.SetString(SpotlightInterval,off)</onclick>
-            <onclick condition="String.IsEqual(Skin.String(SpotlightInterval),off)">Skin.SetString(SpotlightInterval,10)</onclick>
-            <onright condition="String.IsEqual(Skin.String(SpotlightInterval),10)">Skin.Reset(SpotlightInterval)</onright>
-            <onright condition="![String.IsEqual(Skin.String(SpotlightInterval),10) | String.IsEqual(Skin.String(SpotlightInterval),30) | String.IsEqual(Skin.String(SpotlightInterval),60) | String.IsEqual(Skin.String(SpotlightInterval),off)]">Skin.SetString(SpotlightInterval,30)</onright>
-            <onright condition="String.IsEqual(Skin.String(SpotlightInterval),30)">Skin.SetString(SpotlightInterval,60)</onright>
-            <onright condition="String.IsEqual(Skin.String(SpotlightInterval),60)">Skin.SetString(SpotlightInterval,off)</onright>
-            <onright condition="String.IsEqual(Skin.String(SpotlightInterval),off)">Skin.SetString(SpotlightInterval,10)</onright>
+            <onclick condition="String.IsEqual(Skin.String(nc.movies.interval),10)">Skin.SetString(nc.movies.interval,15)</onclick>
+            <onclick condition="![String.IsEqual(Skin.String(nc.movies.interval),10) | String.IsEqual(Skin.String(nc.movies.interval),30) | String.IsEqual(Skin.String(nc.movies.interval),60) | String.IsEqual(Skin.String(nc.movies.interval),off)]">Skin.SetString(nc.movies.interval,30)</onclick>
+            <onclick condition="String.IsEqual(Skin.String(nc.movies.interval),30)">Skin.SetString(nc.movies.interval,60)</onclick>
+            <onclick condition="String.IsEqual(Skin.String(nc.movies.interval),60)">Skin.SetString(nc.movies.interval,off)</onclick>
+            <onclick condition="String.IsEqual(Skin.String(nc.movies.interval),off)">Skin.SetString(nc.movies.interval,10)</onclick>
+            <onright condition="String.IsEqual(Skin.String(nc.movies.interval),10)">Skin.SetString(nc.movies.interval,15)</onright>
+            <onright condition="![String.IsEqual(Skin.String(nc.movies.interval),10) | String.IsEqual(Skin.String(nc.movies.interval),30) | String.IsEqual(Skin.String(nc.movies.interval),60) | String.IsEqual(Skin.String(nc.movies.interval),off)]">Skin.SetString(nc.movies.interval,30)</onright>
+            <onright condition="String.IsEqual(Skin.String(nc.movies.interval),30)">Skin.SetString(nc.movies.interval,60)</onright>
+            <onright condition="String.IsEqual(Skin.String(nc.movies.interval),60)">Skin.SetString(nc.movies.interval,off)</onright>
+            <onright condition="String.IsEqual(Skin.String(nc.movies.interval),off)">Skin.SetString(nc.movies.interval,10)</onright>
         </control>
     </include>
     <!-- Rows heading and slot rows of the movies category: OK opens the section dialog (or

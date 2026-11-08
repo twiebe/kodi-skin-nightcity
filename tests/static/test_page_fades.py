@@ -156,12 +156,12 @@ def test_shared_blocks_fade_in_on_every_page_change(page):
 
 
 def test_movie_hero_fades_on_both_of_its_pages():
-    """The movie hero (poster, text, buttons) is the shared block of home and movies."""
+    """The buttons of the movie hero are the shared block of home and movies; poster and text
+    are each page's own (a spotlight each)."""
     home = load('Home.xml')
     shared = [c for c, _ in walk(home.find('controls')) if on_page(c, 'home') and on_page(c, 'movies')
               and animations(c, 'Conditional')]
-    assert len(shared) >= 3, [c.get('id') for c in shared]
-    assert '9300' in [c.get('id') for c in shared]
+    assert [c.get('id') for c in shared] == ['9300']
 
 
 def test_page_fades_do_not_hold_focus():
@@ -192,9 +192,8 @@ def test_page_fades_are_cheap():
 
 
 def test_backdrop_crossfades():
-    """The fanart behind Home fades over when the page or the focused part changes. The movie
-    spotlight's fanart stands behind home and movies alike: it fades in whenever one of the two
-    comes up (SharedBackdropFade, tests/static/test_spotlight_switch.py)."""
+    """The fanart behind Home fades over when the page or the focused part changes. Home and
+    movies have a movie spotlight each, with its own fanart (tests/static/test_spotlight_switch.py)."""
     home = load('Home.xml')
     groups = [c for c, _ in walk(home.find('controls'))
               if c.get('type') == 'group' and is_backdrop(c)]

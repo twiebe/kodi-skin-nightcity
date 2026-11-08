@@ -79,7 +79,7 @@ def test_kicker_names_the_show_and_number_of_an_episode():
 def test_own_heroes_hide_while_following_without_touching_their_fades():
     """The hidden state sits on a group around HeroBody: Kodi does not update the children of a
     hidden group, so coming back runs no page fade."""
-    for hero, item in (('MovieHero', 'Container(9000)'), ('ShowHero', 'Container(9001)')):
+    for hero, item in (('MovieHeroBody', 'Container($PARAM[list])'), ('ShowHero', 'Container(9001)')):
         body = _include(hero)
         assert re.search(r'<control type="group">\s*<visible>!\$EXP\[SpotlightFollows\]</visible>\s*'
                          r'<include>HeroSwapFade</include>\s*<include content="HeroBody">\s*<param name="item" value="{}\.ListItem"/>'.format(re.escape(item)),
@@ -125,10 +125,11 @@ def test_swap_fades_take_as_long_as_the_spotlights_own_crossfade():
 
 
 def test_spotlight_fades_out_and_in_around_a_card():
-    for hero in ('MovieHero', 'ShowHero'):
-        wrappers = re.findall(r'<visible>!\$EXP\[SpotlightFollows\]</visible>\s*<include>HeroSwapFade</include>', _include(hero))
+    for hero in ('MovieHero MovieHeroBody', 'ShowHero'):
+        body = ''.join(_include(name) for name in hero.split())
+        wrappers = re.findall(r'<visible>!\$EXP\[SpotlightFollows\]</visible>\s*<include>HeroSwapFade</include>', body)
         assert len(wrappers) == 2, hero  # the hero's text and poster, its pills
-        assert '<visible>!$EXP[SpotlightFollows]</visible>\n                <include content="SpotlightPill">' not in _include(hero)
+        assert '<visible>!$EXP[SpotlightFollows]</visible>\n                <include content="SpotlightPill">' not in body
 
 
 def test_followed_hero_only_fades_in():

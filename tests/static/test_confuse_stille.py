@@ -187,7 +187,7 @@ def test_music_keeps_its_soft_backdrop(confuse_root):
     backdrops = {c.findtext('texture') for c in window.iter('control') if c.findtext('description') == 'fanart backdrop'}
     assert {'$INFO[Container(9002).ListItem.Art(artist.fanart)]', '$INFO[ListItem.Art(artist.fanart)]'} <= backdrops
     pictures = {c.findtext('texture') for c in window.iter('control') if c.findtext('description') == 'hero picture'}
-    assert pictures == {'$INFO[Container(9000).ListItem.Art(fanart)]', '$INFO[Container(9001).ListItem.Art(fanart)]', '$INFO[ListItem.Art(fanart)]'}
+    assert pictures == {'$INFO[Container(9000).ListItem.Art(fanart)]', '$INFO[Container(9003).ListItem.Art(fanart)]', '$INFO[Container(9001).ListItem.Art(fanart)]', '$INFO[ListItem.Art(fanart)]'}
 
 
 def test_hero_fade_leaves_the_upper_part_light():

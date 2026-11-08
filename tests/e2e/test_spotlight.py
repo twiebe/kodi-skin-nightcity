@@ -74,9 +74,9 @@ def test_tmdbhelper_service_switched_on(home):
     wait_for('Skin.HasSetting(TMDbHelper.Service)')
 
 
-def seconds_between_changes():
-    key = 'Container(9000).CurrentItem'
-    wait_for('Integer.IsGreater(Container(9000).NumItems,2)')
+def seconds_between_changes(list_id=9000):
+    key = 'Container({}).CurrentItem'.format(list_id)
+    wait_for('Integer.IsGreater(Container({}).NumItems,2)'.format(list_id))
     start = info(key)[key]
     wait_for('!Integer.IsEqual({},{})'.format(key, start), timeout=70)
     changed, t0 = info(key)[key], time.time()
@@ -118,6 +118,22 @@ def test_spotlight_interval_from_skin_settings(home):
         reopen_home()
 
 
+def test_home_and_movies_change_at_their_own_interval(home):
+    """Home and movies have a spotlight each: the movies page's interval leaves home's alone."""
+    builtin('Skin.SetString(SpotlightInterval,10)')
+    builtin('Skin.SetString(nc.movies.interval,30)')
+    try:
+        reopen_home()
+        assert 9 <= seconds_between_changes(9000) <= 12
+        to_page('9102', 'movies')
+        assert 29 <= seconds_between_changes(9003) <= 32
+    finally:
+        builtin('Skin.Reset(SpotlightInterval)')
+        builtin('Skin.Reset(nc.movies.interval)')
+        to_page('9101', 'home')
+        reopen_home()
+
+
 def spot(list_id):
     """(position, number of titles, title) of a spotlight list."""
     keys = ['Container({}).{}'.format(list_id, k) for k in ('CurrentItem', 'NumItems', 'ListItem.Label')]
@@ -135,17 +151,17 @@ def hold_rotation():
     builtin('Skin.TimerStart(nc_spot_hold)')
 
 
-def test_page_switch_keeps_the_movie_spotlight(home):
-    """Home and movies share the movie spotlight: a switch between them keeps its title, which
-    fades in with the page."""
-    wait_for('Integer.IsGreater(Container(9000).NumItems,2)')
+def test_page_switch_keeps_the_movie_spotlights(home):
+    """Home and movies have a movie spotlight each: a switch between them keeps the title of
+    each, which fades in with its page."""
+    wait_for('Integer.IsGreater(Container(9000).NumItems,2) + Integer.IsGreater(Container(9003).NumItems,2)')
     try:
         for tab_id, page in (('9102', 'movies'), ('9101', 'home'), ('9102', 'movies')):
             hold_rotation()
-            before = spot(9000)
+            before = spot(9000), spot(9003)
             to_page(tab_id, page)
             time.sleep(0.5)
-            assert spot(9000) == before, page
+            assert (spot(9000), spot(9003)) == before, page
     finally:
         to_page('9101', 'home')
 
@@ -165,16 +181,16 @@ def test_page_switch_keeps_the_show_spotlight(home):
 def test_return_from_another_window_keeps_the_title(home):
     """Home coming back from another window with the movies tab focused (its onfocus runs
     again) keeps its title."""
-    wait_for('Integer.IsGreater(Container(9000).NumItems,2)')
+    wait_for('Integer.IsGreater(Container(9003).NumItems,2)')
     try:
         to_page('9102', 'movies')
         hold_rotation()
-        position, _, title = spot(9000)
+        position, _, title = spot(9003)
         builtin('ActivateWindow(Settings)')
         wait_for('Window.IsActive(settings)')
         action('back')
         wait_for('Window.IsActive(home) + Control.HasFocus(9102)')
         time.sleep(1)
-        assert spot(9000)[0] == position and spot(9000)[2] == title
+        assert spot(9003)[0] == position and spot(9003)[2] == title
     finally:
         to_page('9101', 'home')

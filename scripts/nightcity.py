@@ -2101,7 +2101,7 @@ def music_info(kind, dbid):
 
 # --- ratings kept per title -------------------------------------------------------------------
 # TMDb Helper fetches ratings for the item of TMDbHelper.WidgetContainer and lets go of it when
-# that goes. On Home the service points it at the hero's spotlight (9000 movies, 9001 shows),
+# that goes. On Home the service points it at the hero's spotlight (9000 home, 9003 movies, 9001 shows),
 # wherever the cursor is, unless "Ratings only on title pages" (nc.ratings.titleonly) keeps it off
 # spotlight and rows; an
 # episode's info page points it at its episode list itself (DialogVideoInfo.xml, 5100). The
@@ -2121,8 +2121,8 @@ EPISODE_SOURCES = ('IMDb_Rating', 'Trakt_Rating')
 HERO_STABLE = 0.8  # s TMDb Helper's ratings stay before they count: they lag behind its title
 HERO_POLL = 0.25  # s between two looks
 HERO_PROPS = 'nc.kept.{}.{}'
-# container of the spotlight, the group on screen with its hero
-HEROES = (('9000', '9300'), ('9001', '9301'))
+# container of the spotlight, the group on screen with its hero (Includes_Home.xml MovieHeroBody, ShowHero)
+HEROES = (('9000', '9304'), ('9003', '9305'), ('9001', '9306'))
 # the group of the hero while it follows a row title, where its ratings go
 FOLLOW_GROUP = '9302'
 # a page without spotlight previews the title of a row (Includes_Sections.xml PeekHeroes): the

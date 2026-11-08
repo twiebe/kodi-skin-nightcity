@@ -449,7 +449,7 @@ def shot_home(kodi):
 
 def shot_movies(kodi):
     home(kodi, 'movies')
-    spotlight_on(kodi, 9000, 'Dune: Part Two')
+    spotlight_on(kodi, 9003, 'Dune: Part Two')
     kodi.builtin('SetFocus(9010)')
     kodi.wait('Control.HasFocus(9010)')
     kodi.action('down', delay=1)  # the first row, on its first title

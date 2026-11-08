@@ -433,7 +433,7 @@ def test_spotlight_rests_behind_dialogs():
 
 
 def test_movie_hero_kicker_names_genre():
-    call = next(c for c in include('MovieHero').iter('include') if c.get('content') == 'HeroBody')
+    call = next(c for c in include('MovieHeroBody').iter('include') if c.get('content') == 'HeroBody')
     kicker = next(p.get('value') for p in call.findall('param') if p.get('name') == 'kicker')
     assert 'ListItem.Genre' in kicker
 

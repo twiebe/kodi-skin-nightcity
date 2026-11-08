@@ -66,7 +66,8 @@ def test_down_from_menu(home_page, name):
     screenshot('{}-dplus'.format(name))
 
 
-@pytest.mark.parametrize('spotlight,first,last,tab', [(9000, 9010, 9012, 9102), (9001, 9551, 9553, 9103)])
+@pytest.mark.parametrize('spotlight,first,last,tab', [(9000, 9010, 9011, 9101), (9003, 9010, 9012, 9102),
+                                                     (9001, 9551, 9553, 9103)])
 def test_spotlight_prev_next(home_page, spotlight, first, last, tab):
     focus(tab)
     wait_for('Integer.IsGreater(Container({}).NumItems,1)'.format(spotlight))  # the library has two shows
@@ -94,9 +95,9 @@ def page_spotlight(key, direction, expected):
 def test_manual_move_restarts_autoscroll(home_page):
     """After a manual move the next automatic change waits a full 15 s again."""
     focus(9102)
-    wait_for('Integer.IsGreater(Container(9000).NumItems,2)')
+    wait_for('Integer.IsGreater(Container(9003).NumItems,2)')
     focus(9012)
-    key = 'Container(9000).CurrentItem'
+    key = 'Container(9003).CurrentItem'
     start = info(key)[key]
     wait_for('!Integer.IsEqual({},{})'.format(key, start), timeout=17)  # an automatic change
     time.sleep(9)
@@ -192,7 +193,7 @@ def test_genre_pick_dialog(genres):
     assert prop('nc.genre.id') == before
 
 
-TITLES = {'home': 9020, 'movies': 9020, 'shows': 9560}
+TITLES = {'home': 9020, 'movies': 9023, 'shows': 9560}
 
 
 @pytest.mark.nightcity_look

@@ -4,8 +4,9 @@ hidden list: left and right still moved the spotlight, but no button showed the 
 returns to the info button (DESIGN.md: back returns where you left)."""
 from conftest import ROOT, parse
 
-# info button: hidden data list it parks on
-BUTTONS = {'9011': '9000', '9552': '9001', '9853': '9002'}
+# info button: hidden data lists it parks on (the movie hero's: home's, the movies page's)
+BUTTONS = {'9011': ('9000', '9003'), '9552': ('9001',), '9853': ('9002',)}
+PARKED = ('9000', '9001', '9002', '9003')
 OPEN = '[Window.IsVisible(movieinformation) | Window.IsVisible(musicinformation)]'
 
 
@@ -23,7 +24,8 @@ def test_info_buttons_remember_themselves():
     page closed, too late for the timer."""
     for cid, data in BUTTONS.items():
         clicks = [c for c in _clicks(cid) if c and c != 'noop']
-        assert clicks == ['SetProperty(nc.spot.back,{},home)'.format(cid), 'SetFocus({})'.format(data), 'Action(Info)'], cid
+        assert clicks == (['SetProperty(nc.spot.back,{},home)'.format(cid)] + ['SetFocus({})'.format(d) for d in data]
+                          + ['Action(Info)']), cid
 
 
 def test_back_from_the_info_page_returns_to_the_info_button():
@@ -35,6 +37,6 @@ def test_back_from_the_info_page_returns_to_the_info_button():
     assert timer.findtext('stop') == ('Window.IsActive(home) + !Window.IsVisible(movieinformation) + '
                                       '!Window.IsVisible(musicinformation) + !System.HasActiveModalDialog')
     onstop = [(o.get('condition') or '', o.text) for o in timer.findall('onstop')]
-    parked = ' | '.join('Control.HasFocus({})'.format(d) for d in BUTTONS.values())
+    parked = ' | '.join('Control.HasFocus({})'.format(d) for d in PARKED)
     assert onstop == [('[{}]'.format(parked), 'SetFocus($INFO[Window(Home).Property(nc.spot.back)])'),
                       ('', 'ClearProperty(nc.spot.back,home)')]

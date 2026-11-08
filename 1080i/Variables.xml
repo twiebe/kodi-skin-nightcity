@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
-    <!-- Spotlight settings (skin settings, categories home, movies, shows): source per page, change interval of
-         the movie spotlight (home and movies) and of the show spotlight -->
+    <!-- Spotlight settings (skin settings, categories home, movies, shows): source and change
+         interval per page -->
     <variable name="SpotlightSourceLabel">
         <value condition="String.IsEqual(Skin.String(SpotlightSource),unwatched)">$LOCALIZE[31004]</value>
         <value condition="String.IsEqual(Skin.String(SpotlightSource),off)">$LOCALIZE[351]</value>
@@ -22,16 +22,25 @@
         <value condition="!String.IsEmpty(Skin.String(SpotlightInterval))">$INFO[Skin.String(SpotlightInterval)] s</value>
         <value>15 s</value>
     </variable>
+    <variable name="MoviesIntervalLabel">
+        <value condition="String.IsEqual(Skin.String(nc.movies.interval),off)">$LOCALIZE[31226]</value>
+        <value condition="!String.IsEmpty(Skin.String(nc.movies.interval))">$INFO[Skin.String(nc.movies.interval)] s</value>
+        <value>$VAR[SpotlightIntervalLabel]</value>
+    </variable>
     <variable name="ShowsIntervalLabel">
         <value condition="String.IsEqual(Skin.String(nc.shows.interval),off)">$LOCALIZE[31226]</value>
         <value condition="!String.IsEmpty(Skin.String(nc.shows.interval))">$INFO[Skin.String(nc.shows.interval)] s</value>
         <value>$VAR[SpotlightIntervalLabel]</value>
     </variable>
-    <!-- the movie spotlight serves home and movies: the movies page may pick another source (an
-         empty choice follows home), the list then reloads when the page changes -->
+    <!-- the movie spotlights of home (9000) and movies (9003); an empty choice of movies follows
+         home -->
     <variable name="SpotlightPath">
-        <value condition="String.IsEqual(Window(Home).Property(nc.page),movies) + String.IsEqual(Skin.String(nc.movies.spotlight),unwatched)">special://skin/playlists/SpotlightUnwatched.xsp</value>
-        <value condition="String.IsEqual(Window(Home).Property(nc.page),movies) + !String.IsEmpty(Skin.String(nc.movies.spotlight))">special://skin/playlists/SpotlightAll.xsp</value>
+        <value condition="String.IsEqual(Skin.String(SpotlightSource),unwatched)">special://skin/playlists/SpotlightUnwatched.xsp</value>
+        <value>special://skin/playlists/SpotlightAll.xsp</value>
+    </variable>
+    <variable name="SpotlightMoviesPath">
+        <value condition="String.IsEqual(Skin.String(nc.movies.spotlight),unwatched)">special://skin/playlists/SpotlightUnwatched.xsp</value>
+        <value condition="!String.IsEmpty(Skin.String(nc.movies.spotlight))">special://skin/playlists/SpotlightAll.xsp</value>
         <value condition="String.IsEqual(Skin.String(SpotlightSource),unwatched)">special://skin/playlists/SpotlightUnwatched.xsp</value>
         <value>special://skin/playlists/SpotlightAll.xsp</value>
     </variable>
@@ -39,10 +48,11 @@
         <value condition="String.IsEqual(Skin.String(nc.shows.spotlight),unwatched)">special://skin/playlists/SpotlightShowsUnwatched.xsp</value>
         <value>special://skin/playlists/SpotlightShows.xsp</value>
     </variable>
-    <!-- the spotlight title alone, for the spotlight buttons (SpotlightButton); until the
-         spotlight has one, any one title keeps the buttons focusable -->
+    <!-- the spotlight title alone, for the spotlight buttons (SpotlightButton): home's or the
+         movies page's; until the spotlight has one, any one title keeps the buttons focusable -->
     <variable name="SpotlightItemPath">
-        <value condition="!String.IsEmpty(Container(9000).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9000).ListItem.DBID]</value>
+        <value condition="String.IsEqual(Window(Home).Property(nc.page),movies) + !String.IsEmpty(Container(9003).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9003).ListItem.DBID]</value>
+        <value condition="!String.IsEqual(Window(Home).Property(nc.page),movies) + !String.IsEmpty(Container(9000).ListItem.DBID)">videodb://movies/titles/?videoversionid=0&amp;mediaid=$INFO[Container(9000).ListItem.DBID]</value>
         <value>videodb://movies/titles/?xsp={"type":"movies","limit":1}</value>
     </variable>
     <!-- shows have no id filter: the show's folder is unique -->
@@ -115,6 +125,19 @@
         <value condition="String.IsEqual(Container(9000).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9000).ListItem.HdrType)">$INFO[Container(9000).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9000).ListItem.VideoResolution)">SDR</value>
+    </variable>
+    <!-- the same for the movies page's spotlight (list 9003) -->
+    <variable name="SpotlightResolutionMovies">
+        <value condition="String.IsEqual(Container(9003).ListItem.VideoResolution,4K)">4K</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.VideoResolution,8K)">8K</value>
+        <value condition="!String.IsEmpty(Container(9003).ListItem.VideoResolution)">$INFO[Container(9003).ListItem.VideoResolution]p</value>
+    </variable>
+    <variable name="SpotlightHdrMovies">
+        <value condition="String.IsEqual(Container(9003).ListItem.HdrType,dolbyvision)">DV</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.HdrType,hlg)">HLG</value>
+        <value condition="!String.IsEmpty(Container(9003).ListItem.HdrType)">$INFO[Container(9003).ListItem.HdrType]</value>
+        <value condition="!String.IsEmpty(Container(9003).ListItem.VideoResolution)">SDR</value>
     </variable>
     <!-- the same for the episode selected on the info page (list 5100) -->
     <variable name="InfoEpisodeResolution">
@@ -452,6 +475,34 @@
     <variable name="SpotlightAudio">
         <value>$VAR[SpotlightAudioCodec]$VAR[SpotlightAudioChannels, ,]</value>
     </variable>
+    <!-- the same for the movies page's spotlight (list 9003) -->
+    <variable name="SpotlightAudioCodecMovies">
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,truehd)">TrueHD</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,eac3)">DD+</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,ac3)">DD</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,dca)">DTS</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,dts)">DTS</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,aac)">AAC</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,flac)">FLAC</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,opus)">Opus</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,mp3)">MP3</value>
+        <value condition="String.StartsWith(Container(9003).ListItem.AudioCodec,pcm)">PCM</value>
+        <value>$INFO[Container(9003).ListItem.AudioCodec]</value>
+    </variable>
+    <variable name="SpotlightAudioChannelsMovies">
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioChannels,1)">1.0</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioChannels,2)">2.0</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioChannels,3)">2.1</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioChannels,6)">5.1</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioChannels,7)">6.1</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioChannels,8)">7.1</value>
+        <value condition="!String.IsEmpty(Container(9003).ListItem.AudioChannels)">$INFO[Container(9003).ListItem.AudioChannels]ch</value>
+    </variable>
+    <variable name="SpotlightAudioMovies">
+        <value>$VAR[SpotlightAudioCodecMovies]$VAR[SpotlightAudioChannelsMovies, ,]</value>
+    </variable>
     <variable name="PlayerPoster">
         <value condition="!String.IsEmpty(Player.Art(tvshow.poster))">$INFO[Player.Art(tvshow.poster)]</value>
         <value condition="!String.IsEmpty(Player.Art(poster))">$INFO[Player.Art(poster)]</value>
@@ -586,7 +637,8 @@
         <value>vol $INFO[Player.Volume]</value>
     </variable>
     <variable name="SpotlightPlayLabel">
-        <value condition="Container(9000).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9000).ListItem.PercentPlayed]%</value>
+        <value condition="String.IsEqual(Window(Home).Property(nc.page),movies) + Container(9003).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9003).ListItem.PercentPlayed]%</value>
+        <value condition="!String.IsEqual(Window(Home).Property(nc.page),movies) + Container(9000).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(9000).ListItem.PercentPlayed]%</value>
         <value>▶ $LOCALIZE[31010]</value>
     </variable>
     <variable name="SystemTileColor">

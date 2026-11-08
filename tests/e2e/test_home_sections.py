@@ -23,7 +23,7 @@ def true(condition):
 
 def reset():
     names = ['SpotlightSource', 'SpotlightInterval', 'nc.movies.spotlight', 'nc.shows.spotlight',
-             'nc.shows.interval', 'nc.search.forget']
+             'nc.movies.interval', 'nc.shows.interval', 'nc.search.forget']
     names += ['nc.{}.slot{}{}'.format(p, n, o) for p in PAGES for n in range(1, 9) for o in ('', '.opt')]
     builtins(*('Skin.Reset({})'.format(name) for name in names))
 
@@ -82,7 +82,7 @@ def test_page_fills_defaults_and_labels(settings):
         ['continue', 'newmovies', 'newepisodes', 'nextup', 'none', 'none', 'none', 'none']
     assert skin('nc.movies.slot3') == 'genres' and skin('nc.movies.slot4') == 'none'
     assert skin('nc.movies.spotlight') == 'all'
-    assert skin('nc.shows.interval') == '15'
+    assert skin('nc.shows.interval') == '15' and skin('nc.movies.interval') == '15'
     assert 'Continue watching' in info('Control.GetLabel(221)')['Control.GetLabel(221)']
     screenshot('hs-settings-home')
 

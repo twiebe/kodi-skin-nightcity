@@ -19,7 +19,8 @@ STRINGS = ROOT / 'language' / 'resource.language.en_gb' / 'strings.po'
 SOURCES = ['IMDb_Rating', 'TMDb_Rating', 'RottenTomatoes_Rating', 'RottenTomatoes_UserMeter',
            'MetaCritic_Rating', 'Trakt_Rating', 'Letterboxd_Rating', 'MDBList_Rating']
 LIBRARY = 'Skin.HasSetting(nc.ratings.library)'
-HEROES = [pytest.param('9000', '9030', id='movies'), pytest.param('9001', '9561', id='shows')]
+HEROES = [pytest.param('9000', '9030', id='home'), pytest.param('9003', '9031', id='movies'),
+          pytest.param('9001', '9561', id='shows')]
 
 
 def _string(number):
@@ -44,10 +45,10 @@ def _labels(line):
 
 
 def _lines():
-    """Every ratings line of the skin: the heads of the info page, the two heroes."""
+    """Every ratings line of the skin: the heads of the info page, the three heroes."""
     info = navigation.load('DialogVideoInfo.xml')
     home = navigation.load('Home.xml')
-    return [_control(info, '9046'), _control(info, '9043'), _control(home, '9030'), _control(home, '9561')]
+    return [_control(info, '9046'), _control(info, '9043')] + [_control(home, i) for i in ('9030', '9031', '9561')]
 
 
 def _toggle(cid):
@@ -85,7 +86,7 @@ def test_heroes_show_no_library_rating_either_with_the_setting_but_the_info_page
     assert '<param name="library" default="Skin.HasSetting(nc.ratings.library)"/>' in body
     line = re.search(r'<include content="RatingsLine">(.*?)</include>', body, re.S).group(1)
     assert '<param name="library" value="$PARAM[library]"/>' in line
-    for hero in ('MovieHero', 'ShowHero', 'FollowHero'):
+    for hero in ('MovieHeroBody', 'ShowHero', 'FollowHero'):
         hero_body = re.search(r'<include name="{}">(.*?)\n    </include>'.format(hero), home, re.S).group(1)
         assert '<param name="library" value="Skin.HasSetting(nc.ratings.library) + !Skin.HasSetting(nc.ratings.titleonly)"/>' in hero_body, hero
     assert 'nc.ratings.titleonly' not in (SKIN / 'DialogVideoInfo.xml').read_text(encoding='utf-8')
@@ -277,12 +278,22 @@ def test_episode_head_reads_the_ratings_kept_for_the_focused_episode():
     assert 'IsUpdatingRatings' not in _visible(line)
 
 
-def test_show_hero_is_marked_for_the_service():
-    """9301: the show hero is on screen (9300 the movie hero), the service asks for it."""
+@pytest.mark.parametrize('marker,page,setting', [('9304', 'home', 'SpotlightSource'),
+                                                  ('9305', 'movies', 'nc.movies.spotlight'),
+                                                  ('9306', 'shows', 'nc.shows.spotlight')])
+def test_each_spotlight_hero_is_marked_for_the_service(marker, page, setting):
+    """A group per spotlight hero on screen (scripts/nightcity.py HEROES), built with its list:
+    the service points TMDb Helper at that list."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location('nightcity', ROOT / 'scripts' / 'nightcity.py')
+    nightcity = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(nightcity)
+    container = dict((g, c) for c, g in nightcity.HEROES)[marker]
     home = navigation.load('Home.xml')
-    group = _control(home, '9301')
-    assert 'String.IsEqual(Window(Home).Property(nc.page),shows)' in _visible(group)
-    assert any(c.get('id') == '9550' for c in group.iter('control'))
+    assert 'nc.page),{}'.format(page) in _visible(_control(home, marker))
+    assert any(c.get('id') == container for c in home.iter('control'))
+    off = navigation.load('Home.xml', {setting: 'off'})
+    assert not [c for c in off.iter('control') if c.get('id') in (marker, container)]
 
 
 def test_ratings_line_fades_in_and_goes_at_once():

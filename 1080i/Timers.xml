@@ -107,7 +107,7 @@
         <description>Back from a spotlight's info page returns to its info button</description>
         <start reset="true">!String.IsEmpty(Window(Home).Property(nc.spot.back)) + [Window.IsVisible(movieinformation) | Window.IsVisible(musicinformation)]</start>
         <stop>Window.IsActive(home) + !Window.IsVisible(movieinformation) + !Window.IsVisible(musicinformation) + !System.HasActiveModalDialog</stop>
-        <onstop condition="[Control.HasFocus(9000) | Control.HasFocus(9001) | Control.HasFocus(9002)]">SetFocus($INFO[Window(Home).Property(nc.spot.back)])</onstop>
+        <onstop condition="[Control.HasFocus(9000) | Control.HasFocus(9001) | Control.HasFocus(9002) | Control.HasFocus(9003)]">SetFocus($INFO[Window(Home).Property(nc.spot.back)])</onstop>
         <onstop>ClearProperty(nc.spot.back,home)</onstop>
     </timer>
     <!-- The play button of a TMDb page appears once the library copy is found (DialogVideoInfo

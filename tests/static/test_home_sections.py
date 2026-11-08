@@ -271,7 +271,7 @@ def test_spotlight_off_keeps_the_hero_but_not_its_buttons():
     assert not [i for i in ('9361', '9371', '9381') if i in on]  # only built without spotlight
     window = load('Home.xml', {'SpotlightSource': 'off'})
     assert window.findtext('defaultcontrol') == '9101'
-    assert '9000' in controls(window)  # still needed by the movies page
+    assert '9003' in controls(window) and '9000' not in controls(window)  # movies has its own
     assert load('Home.xml').findtext('defaultcontrol') == '9010'
 
 
@@ -304,21 +304,44 @@ def autoscroll_times(list_id, skin):
 
 
 def test_spotlight_intervals_per_page():
-    """Home and movies share the movie spotlight and its interval; shows has its own, empty
-    follows home (as before the setting existed)."""
-    assert autoscroll_times('9000', {}) == ['15000'] and autoscroll_times('9001', {}) == ['15000']
+    """Each page has its own spotlight and interval: home 9000, movies 9003, shows 9001. An empty
+    interval of movies or shows follows home (as before they had one); one set stays its own."""
+    assert autoscroll_times('9000', {}) == ['15000']
+    assert autoscroll_times('9003', {}) == ['15000'] and autoscroll_times('9001', {}) == ['15000']
     assert autoscroll_times('9000', {'SpotlightInterval': '30'}) == ['30000']
-    assert autoscroll_times('9001', {'SpotlightInterval': '30'}) == ['30000']
-    assert autoscroll_times('9001', {'SpotlightInterval': '30', 'nc.shows.interval': '10'}) == ['10000']
-    assert autoscroll_times('9001', {'nc.shows.interval': 'off'}) == []
-    assert autoscroll_times('9001', {'SpotlightInterval': 'off', 'nc.shows.interval': '15'}) == ['15000']
-    assert autoscroll_times('9000', {'SpotlightInterval': 'off'}) == []
+    for list_id, name in (('9003', 'nc.movies.interval'), ('9001', 'nc.shows.interval')):
+        assert autoscroll_times(list_id, {'SpotlightInterval': '30'}) == ['30000']
+        assert autoscroll_times(list_id, {'SpotlightInterval': '30', name: '10'}) == ['10000']
+        assert autoscroll_times(list_id, {'SpotlightInterval': '60', name: '15'}) == ['15000']
+    # one page's change leaves the others alone
+    assert autoscroll_times('9000', {'SpotlightInterval': '10', 'nc.movies.interval': '60'}) == ['10000']
+    assert autoscroll_times('9003', {'SpotlightInterval': '10', 'nc.movies.interval': '60'}) == ['60000']
+    assert autoscroll_times('9001', {'SpotlightInterval': '10', 'nc.movies.interval': '60'}) == ['10000']
+
+
+def test_each_movie_spotlight_is_built_with_its_page():
+    """Home and movies no longer share list 9000: each is built only while its page has a
+    spotlight, with its own source."""
+    both = controls(load('Home.xml'))
+    assert both['9000'].findtext('content') == '$VAR[SpotlightPath]'
+    assert both['9003'].findtext('content') == '$VAR[SpotlightMoviesPath]'
+    no_home = controls(load('Home.xml', {'SpotlightSource': 'off'}))
+    assert '9000' not in no_home and '9003' in no_home
+    no_movies = controls(load('Home.xml', {'nc.movies.spotlight': 'off'}))
+    assert '9000' in no_movies and '9003' not in no_movies
 
 
 def test_spotlight_sources():
     variables = {v.get('name'): v for f in layout_files() for v in parse(f).iter('variable')}
-    movies = [(v.get('condition') or '', v.text) for v in variables['SpotlightPath'].findall('value')]
+    home = [(v.get('condition') or '', v.text) for v in variables['SpotlightPath'].findall('value')]
+    assert home == [('String.IsEqual(Skin.String(SpotlightSource),unwatched)', PL.format('SpotlightUnwatched')),
+                    ('', PL.format('SpotlightAll'))]
+    movies = [(v.get('condition') or '', v.text) for v in variables['SpotlightMoviesPath'].findall('value')]
     assert any('nc.movies.spotlight),unwatched' in c and t.endswith('SpotlightUnwatched.xsp') for c, t in movies)
+    assert not [c for c, _ in movies if 'nc.page' in c]
+    # an empty choice follows home, as it did with the shared spotlight
+    pick = {'nc.movies.spotlight': '', 'SpotlightSource': 'unwatched'}
+    assert next(t for c, t in movies if not c or evaluate(c, pick)) == PL.format('SpotlightUnwatched')
     shows = [(v.get('condition') or '', v.text) for v in variables['SpotlightShowsPath'].findall('value')]
     assert shows[-1] == ('', PL.format('SpotlightShows'))
     assert any('nc.shows.spotlight),unwatched' in c and t == PL.format('SpotlightShowsUnwatched') for c, t in shows)
@@ -356,7 +379,7 @@ def combos():
         yield skin
 
 
-LOADERS = {'9000', '9001', '9002', '9721', '9722', '9723', '9724', '9725', '9822'} | \
+LOADERS = {'9000', '9001', '9002', '9003', '9721', '9722', '9723', '9724', '9725', '9822'} | \
           {'{}{}{}'.format(b, kind, n) for b in PAGES.values() for kind in (2, 7) for n in range(1, 9)}
 # reached by Back in the quick menu only, a numeric target that passes the focus on
 STAND_INS = {'9189'}
@@ -522,6 +545,13 @@ def test_settings_page_fills_the_defaults_on_load():
     assert state['nc.movies.slot4'] == state['nc.shows.slot4'] == 'none'
     assert state['nc.movies.spotlight'] == 'unwatched'
     assert state['nc.shows.interval'] == '30'
+    # movies has its own interval now: an existing shared one goes on for both until changed
+    assert state['nc.movies.interval'] == '30'
+    state = {}
+    for onload in window.findall('onload'):
+        if not onload.get('condition') or evaluate(onload.get('condition'), state):
+            run_one(onload.text, state)
+    assert state['nc.movies.interval'] == '15' and state['nc.shows.interval'] == '15'
 
 
 def run_one(action, state):
@@ -596,7 +626,7 @@ def test_grab_turns_the_slot_dark_blue():
 
 def test_header_rows():
     """Spotlight source and change interval: OK and right step forward, the interval row hides
-    while the spotlight is off. Movies shares the interval with home."""
+    while the spotlight is off. Each page has its own interval."""
     c = controls(page_window())
     source, interval = c['211'], c['212']
     for tag in ('onright', 'onclick'):
@@ -614,10 +644,12 @@ def test_header_rows():
         seen.append(state.get('SpotlightInterval', ''))
     assert seen == ['30', '60', 'off', '10', '']
     run(c['311'], 'onright', {'nc.movies.spotlight': 'all'})
-    assert 'SpotlightInterval' in ''.join(a.text for a in c['312'].findall('onright'))
-    state = {'nc.shows.interval': '15'}
-    run(c['412'], 'onright', state)
-    assert state['nc.shows.interval'] == '30'
+    for cid, name in (('312', 'nc.movies.interval'), ('412', 'nc.shows.interval')):
+        assert 'SpotlightInterval' not in ''.join(a.text for a in c[cid].findall('onright'))
+        state = {name: '15'}
+        run(c[cid], 'onright', state)
+        assert state == {name: '30'}
+    assert c['312'].findtext('label2') == '$VAR[MoviesIntervalLabel]  ›'
 
 
 def test_menu_category_toggles_the_entries():
