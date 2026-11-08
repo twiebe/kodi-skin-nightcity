@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="skin.confuse" name="Confuse" version="0.1.1" provider-name="twiebe">
+<addon id="skin.confuse" name="Confuse" version="0.1.2" provider-name="twiebe">
     <requires>
         <import addon="xbmc.gui" version="5.17.0"/>
         <import addon="plugin.video.themoviedb.helper" version="1:6.20.2-1"/>
@@ -26,7 +26,7 @@
         <description lang="ja_JP">Nightcityスキンを静かな外観にしたものです。中央のスポットライト、静かに並ぶポスター、フォーカス時のやわらかな光、カラーテーマ、角の丸いボタンを備え、TMDb Helperによるムービーとテレビ番組のオンライン情報も表示します。</description>
         <platform>all</platform>
         <license>Creative Commons Attribution Non-Commercial Share-Alike 4.0</license>
-        <news>0.1.1 - A new look for Home: the tabs in the middle, the spotlight as a large sharp picture, continue and next up as wide cards with the art of the film or show, posters in every other row.[CR]A logo of its own, also as the icon, and a quiet loading page with the logo and a spinner.[CR]The fades over the spotlight and the player controls are lighter, a focused card glows, and the glow of a focused tab is no longer cut off.[CR]The subtitle and audio delay can be set again in the player.[CR]0.1.0 - First version of Confuse: the Nightcity skin in a calm look with a glowing ember focus and colour themes.</news>
+        <news>0.1.2 - Confuse now speaks German, French, Spanish, Italian, Brazilian Portuguese, Polish and Japanese. For Japanese choose the font Arial under Settings, Interface, Skin, Fonts: it is Kodi's own font with Japanese letters.[CR]Small glitches: now and then the loading spinner sticks or runs backwards, the logo shivers, the spotlight tears for a blink and some titles twitch when they get the focus. The switch is under Appearance in the skin settings.[CR]The buttons of an info page have room for every language: the last one was cut off in German.[CR]0.1.1 - A new look for Home: the tabs in the middle, the spotlight as a large sharp picture, continue and next up as wide cards with the art of the film or show, posters in every other row.[CR]A logo of its own, also as the icon, and a quiet loading page with the logo and a spinner.[CR]The fades over the spotlight and the player controls are lighter, a focused card glows, and the glow of a focused tab is no longer cut off.[CR]The subtitle and audio delay can be set again in the player.[CR]0.1.0 - First version of Confuse: the Nightcity skin in a calm look with a glowing ember focus and colour themes.</news>
         <assets>
             <icon>resources/icon.png</icon>
         </assets>

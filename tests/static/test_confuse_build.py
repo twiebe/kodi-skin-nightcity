@@ -13,7 +13,7 @@ def colour_names(root):
 
 def test_overlay_file_replaces_root_file(confuse_root):
     assert parse(confuse_root / 'addon.xml').get('id') == 'skin.confuse'
-    assert parse(confuse_root / 'addon.xml').get('version') == '0.1.1'
+    assert parse(confuse_root / 'addon.xml').get('version') == '0.1.2'
 
 
 def test_shared_files_come_from_root(confuse_root):
@@ -68,7 +68,7 @@ def test_nightcity_zip_has_no_confuse(tmp_path):
 
 
 def test_prerelease_of_confuse(tmp_path):
-    assert build(tmp_path, pre=True, skin='confuse').name == 'skin.confuse-0.1.2~beta1.zip'
+    assert build(tmp_path, pre=True, skin='confuse').name == 'skin.confuse-0.1.3~beta1.zip'
 
 
 def test_assemble_twice_keeps_the_folder_and_drops_stale_files(tmp_path):
