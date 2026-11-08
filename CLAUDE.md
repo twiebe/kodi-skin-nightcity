@@ -78,7 +78,10 @@ user should see before the release.
 
 ## Writing
 
-- The skin is English only; strings go to `language/resource.language.en_gb/strings.po`.
+- Strings go to `language/resource.language.en_gb/strings.po` and, in the same order, to the seven
+  translations next to it (de_de, fr_fr, es_es, it_it, pt_br, pl_pl, ja_jp), worded after Kodi's
+  own translation of each language; `tests/static/test_translations.py` checks them, also their
+  width in fixed buttons. Japanese is shown in the fontset Arial, Kodi's own font.
 - No em dashes or en dashes anywhere (strings, news, docs, comments, commit messages); use a
   plain hyphen.
 - Match the surrounding XML: includes, naming, comment density.
