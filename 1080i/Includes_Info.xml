@@ -68,6 +68,7 @@
                     <param name="glowheight" value="228"/>
                     <param name="focused" value="$PARAM[focused]"/>
                     <param name="dim" value="$PARAM[dim]"/>
+                    <param name="current" value="$PARAM[selected]"/>
                 </include>
                 <control type="label">
                     <top>192</top>

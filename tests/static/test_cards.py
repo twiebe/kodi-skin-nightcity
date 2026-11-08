@@ -112,7 +112,8 @@ def test_every_card_is_cut():
     assert plates and all(c.find('texture').get('diffuse') == '$PARAM[mask]' for c in plates)
     frames = {c.findtext('visible'): c.find('texture').get('colordiffuse')
               for c in card.iter('control') if c.findtext('texture') == 'ui/cut.png'}
-    assert frames == {'$PARAM[focused]': 'focus', '!$PARAM[focused]': 'border_dim'}
+    assert frames == {'$PARAM[focused]': 'focus', '![$PARAM[focused]] + ![$PARAM[current]]': 'border_dim',
+                      '[$PARAM[current]] + ![$PARAM[focused]]': 'state_text'}
 
 
 DOG_EAR = 22  # px, legs of the unwatched mark
@@ -199,3 +200,24 @@ def test_current_episode_is_marked_by_its_title():
     assert not [c for c in inc.iter('control') if c.get('type') == 'image' and c.findtext('texture') == 'ui/white.png']
     titles = {c.findtext('visible'): c.findtext('textcolor') for c in inc.iter('control') if c.get('type') == 'label'}
     assert titles == {'$PARAM[selected]': 'accent', '!$PARAM[selected]': 'text'}
+
+
+def test_the_current_episode_has_a_brighter_frame():
+    """At a glance which episode the page is about: its still has a frame a step brighter than the
+    others (state_text over border_dim), the focus the bright one with its glow. Dimming stays
+    for the list with the cursor only: dimmed stills elsewhere looked faded."""
+    info = parse(ROOT / '1080i' / 'DialogVideoInfo.xml')
+    episodes = next(c for c in info.iter('control') if c.get('id') == '5100')
+    item = {p.get('name'): p.get('value') for p in episodes.find('itemlayout').iter('param')}
+    assert item['dim'] == 'Control.HasFocus(5100)'
+    card = _card()
+    frames = {c.findtext('visible'): c.find('texture').get('colordiffuse')
+              for c in card.iter('control') if c.findtext('texture') == 'ui/cut.png'}
+    assert frames['[$PARAM[current]] + ![$PARAM[focused]]'] == 'state_text'
+    base = next(i for i in parse(ROOT / '1080i' / 'Includes_Base.xml').iter('include') if i.get('name') == 'CutCard')
+    params = {p.get('name'): p.get('value') for i in base.iter('include') if i.get('content') == 'LookCardFocusRing' for p in i.findall('param')}
+    assert params['current'] == '[$PARAM[current]] + ![$PARAM[focused]]'
+    assert params['unfocused'] == '![$PARAM[focused]] + ![$PARAM[current]]'
+    episode = next(i for i in parse(ROOT / '1080i' / 'Includes_Info.xml').iter('include') if i.get('name') == 'EpisodeCard')
+    cut = next(i for i in episode.iter('include') if i.get('content') == 'CutCard')
+    assert {p.get('name'): p.get('value') for p in cut.findall('param')}['current'] == '$PARAM[selected]'

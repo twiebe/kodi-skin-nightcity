@@ -718,6 +718,9 @@
         <param name="glowheight" default="348"/>
         <param name="focused" default="false"/>
         <param name="dim" default="false"/>
+        <!-- the card stands for what the page is about (the current episode): a stronger frame
+             than the others while it has no focus -->
+        <param name="current" default="false"/>
         <!-- the item of the dog-ear: a card outside a list names its container, there a bare
              ListItem is whatever holds the focus -->
         <param name="item" default="ListItem"/>
@@ -769,7 +772,8 @@
                     <param name="width" value="$PARAM[width]"/>
                     <param name="height" value="$PARAM[height]"/>
                     <param name="focused" value="$PARAM[focused]"/>
-                    <param name="unfocused" value="!$PARAM[focused]"/>
+                    <param name="current" value="[$PARAM[current]] + ![$PARAM[focused]]"/>
+                    <param name="unfocused" value="![$PARAM[focused]] + ![$PARAM[current]]"/>
                 </include>
             </control>
             <!-- beside the card, not inside it: the card's dimming must not reach the dog-ear -->
