@@ -86,6 +86,11 @@ TMDb Helper at the row, 2 s at worst until the request goes out): moving along a
 request, coming back to a card none either. Until they are there the line shows nothing, never the
 ratings of another title. Cards without a library id (Trending) get them too.
 
+Each page of the top menu can be hidden in the skin settings, home too, but never the last one
+shown: its switch is locked. Without the home page the first page shown takes its place
+wherever Home opens without a page: after startup, on the Home key, and right from the icon
+next to the clock wrapping round.
+
 The quick menu on Home follows it too: the cursor on the icon next to the clock shows the menu,
 Down or OK go into it, Up from its top comes out onto the icon with the menu still shown, Left
 or Right off the icon hide it. Back, in the menu or on the icon, closes it: the focus goes back

@@ -174,6 +174,8 @@ def test_menu_entries_hide(settings):
     builtin('SetFocus(9005)')
     wait_for('Control.HasFocus(9005)')
     action('right')
+    wait_for('Control.HasFocus(510)')  # home first, then the other pages
+    action('down')
     wait_for('Control.HasFocus(511)')
     screenshot('hs-settings-menu')
     action('select')
@@ -243,3 +245,16 @@ def test_search_terms_switch_off_and_clear(settings):
     builtin('NotifyAll(nightcity,search:Alien)')
     wait_for('String.IsEqual(Window(Home).Property(nc.search),Alien)')
     assert not cond(recent)[recent]
+
+
+def test_the_last_page_shown_cannot_be_hidden(settings):
+    hidden = ['nc.menu.hide.{}'.format(p) for p in ('home', 'shows', 'music', 'search')]
+    builtin('SetFocus(9005)')  # the main menu category shows its switches
+    wait_for('Control.HasFocus(9005) + Control.IsVisible(511)')
+    builtins(*('Skin.SetBool({})'.format(h) for h in hidden))
+    try:
+        wait_for('!Control.IsEnabled(511) + Control.IsEnabled(510)')
+        builtin('Skin.Reset(nc.menu.hide.home)')
+        wait_for('Control.IsEnabled(511)')
+    finally:
+        builtins(*('Skin.Reset({})'.format(h) for h in hidden))

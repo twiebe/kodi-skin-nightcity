@@ -330,7 +330,7 @@ def test_top_menu_wraps_around():
     icon goes to the last menu entry shown, not to the page that had the focus last."""
     from focus import Page, State
     page = Page('Home.xml')
-    hidden = {'Skin.HasSetting(nc.menu.hide.{})'.format(n): False for n in ('movies', 'shows', 'music', 'search')}
+    hidden = {'Skin.HasSetting(nc.menu.hide.{})'.format(n): False for n in ('home', 'movies', 'shows', 'music', 'search')}
     hidden['Library.HasContent(music)'] = False
     hidden['Player.HasAudio'] = False
     state = State(extra=hidden)
@@ -346,6 +346,9 @@ def test_top_menu_wraps_around():
                                                                  'Skin.HasSetting(nc.menu.hide.music)': True})))[0] == '9103'
     hidden.update({'Skin.HasSetting(nc.menu.hide.{})'.format(n): True for n in ('movies', 'shows', 'search')})
     assert page.move('9109', 'onleft', State(extra=hidden))[0] == '9101'
+    # without the home page right on the icon goes round to the first page shown
+    hidden.update({'Skin.HasSetting(nc.menu.hide.home)': True, 'Skin.HasSetting(nc.menu.hide.shows)': False})
+    assert page.move('9109', 'onright', State(extra=hidden))[0] == '9103'
 
 
 def test_settings_page_only_from_the_quick_menu():

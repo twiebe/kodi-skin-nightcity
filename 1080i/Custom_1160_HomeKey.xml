@@ -2,7 +2,7 @@
 <!-- The Home key (keymap written by the script, see HOME_KEYMAP) opens this empty dialog. Kodi
      refuses ActivateWindow(Home) while a modal dialog like the info page is open and does
      nothing when Home is in front already; a dialog opens anyway. It closes every dialog,
-     itself too, opens Home and focuses the home tab, which shows the home page.
+     itself too, opens Home and focuses the tab of its first page, home unless that is hidden.
      In a TMDb chain it asks TMDb Helper's manager to exit instead: closed under the manager,
      the info page looks like Back to it when it looks before the chain window is gone, and it
      opened the page before again, over Home. The exit command it reads first. A chain over
@@ -17,7 +17,11 @@
     <onload condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">Dialog.Close(1160,true)</onload>
     <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">Dialog.Close(all,true)</onload>
     <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))">ActivateWindow(Home)</onload>
-    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEmpty(Window(Home).Property(nc.go))">SetFocus(9101)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEmpty(Window(Home).Property(nc.go)) + $EXP[PageFirstHome]">SetFocus(9101)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEmpty(Window(Home).Property(nc.go)) + $EXP[PageFirstMovies]">SetFocus(9102)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEmpty(Window(Home).Property(nc.go)) + $EXP[PageFirstShows]">SetFocus(9103)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEmpty(Window(Home).Property(nc.go)) + $EXP[PageFirstMusic]">SetFocus(9107)</onload>
+    <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEmpty(Window(Home).Property(nc.go)) + $EXP[PageFirstSearch]">SetFocus(9104)</onload>
     <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEqual(Window(Home).Property(nc.go),system)">SetProperty(nc.page,system,home)</onload>
     <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEqual(Window(Home).Property(nc.go),system)">SetFocus(9601)</onload>
     <onload condition="String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEqual(Window(Home).Property(nc.go),files)">ActivateWindow(FileManager)</onload>

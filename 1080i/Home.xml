@@ -25,6 +25,16 @@
     <onload condition="String.IsEqual(Window(Home).Property(nc.page),shows) + Skin.HasSetting(nc.menu.hide.shows)">SetProperty(nc.page,home,home)</onload>
     <onload condition="String.IsEqual(Window(Home).Property(nc.page),search) + Skin.HasSetting(nc.menu.hide.search)">SetProperty(nc.page,home,home)</onload>
     <onload condition="String.IsEqual(Window(Home).Property(nc.page),music) + [Skin.HasSetting(nc.menu.hide.music) | !Library.HasContent(music)]">SetProperty(nc.page,home,home)</onload>
+    <!-- without the home page (hidden too) the first page shown takes its place: its tab, whose
+         focus makes it the page, and the page at once for what draws before the focus moves -->
+    <onload condition="[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + $EXP[PageFirstMovies]">SetFocus(9102)</onload>
+    <onload condition="[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + $EXP[PageFirstMovies]">SetProperty(nc.page,movies,home)</onload>
+    <onload condition="[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + $EXP[PageFirstShows]">SetFocus(9103)</onload>
+    <onload condition="[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + $EXP[PageFirstShows]">SetProperty(nc.page,shows,home)</onload>
+    <onload condition="[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + $EXP[PageFirstMusic]">SetFocus(9107)</onload>
+    <onload condition="[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + $EXP[PageFirstMusic]">SetProperty(nc.page,music,home)</onload>
+    <onload condition="[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + $EXP[PageFirstSearch]">SetFocus(9104)</onload>
+    <onload condition="[String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)] + $EXP[PageFirstSearch]">SetProperty(nc.page,search,home)</onload>
     <!-- one script for genre tabs and search history: two interpreters starting at once can
          crash Kodi -->
     <!-- the skin service (scripts/nightcity.py service) starts with the Startup screen; after a

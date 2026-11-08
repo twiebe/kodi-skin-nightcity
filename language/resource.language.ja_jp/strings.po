@@ -756,8 +756,8 @@ msgid "Home and movies show the same spotlight, so they share this setting."
 msgstr "ホームとムービーは同じスポットライトを表示するため、この設定を共有します。"
 
 msgctxt "#31259"
-msgid "Show or hide entries of the main menu. Home, system and power always stay."
-msgstr "メインメニューの項目を表示または非表示にします。ホーム、システム、電源は常に表示されます。"
+msgid "Show or hide entries of the main menu. System and power always stay, and so does the last page shown."
+msgstr "メインメニューの項目を表示または非表示にします。システムと電源は常に表示され、最後に表示されているページも残ります。"
 
 msgctxt "#31260"
 msgid "[COLOR state_text]OK[/COLOR] choose   [COLOR state_text]Right[/COLOR] option   [COLOR state_text]Left[/COLOR] back"
@@ -1112,3 +1112,7 @@ msgstr "小さなグリッチ"
 msgctxt "#31476"
 msgid "Now and then something stumbles for a blink: the loading spinner skips, the logo shivers, the spotlight tears, some titles twitch when they get the focus."
 msgstr "ときどき一瞬だけ何かがつまずきます。読み込み表示が引っかかり、ロゴが震え、スポットライトが乱れ、一部のタイトルはフォーカス時にぴくっと動きます。"
+
+msgctxt "#31477"
+msgid "Home"
+msgstr "ホーム"

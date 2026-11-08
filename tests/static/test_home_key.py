@@ -21,13 +21,14 @@ NO_CHAIN = 'String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))'
 
 
 def test_home_key_window_closes_dialogs_and_focuses_home():
-    """Closes every dialog (itself, the info page, the OSD) at once, opens Home and focuses its
-    tab, which shows the home page."""
+    """Closes every dialog (itself, the info page, the OSD) at once, opens Home and focuses the
+    tab of its first page, home unless that is hidden (tests/static/test_home_page_optional.py)."""
     loads = [(o.get('condition'), o.text) for o in _window().iter('onload')]
     assert [t for c, t in loads if c == NO_CHAIN] == [
         'Dialog.Close(all,true)', 'ActivateWindow(Home)', 'ClearProperty(nc.go,home)']
-    assert [t for c, t in loads if c == NO_CHAIN + ' + String.IsEmpty(Window(Home).Property(nc.go))'] == [
-        'SetFocus(9101)']
+    first = NO_CHAIN + ' + String.IsEmpty(Window(Home).Property(nc.go)) + $EXP[PageFirst{}]'
+    assert [t for c, t in loads if c == first.format('Home')] == ['SetFocus(9101)']
+    assert [t for c, t in loads if c == first.format('Movies')] == ['SetFocus(9102)']
 
 
 def test_home_key_window_takes_the_quick_menu_on():

@@ -19,6 +19,7 @@ A state is a State: the page's list item, the item counts of its containers ('it
 its own) and Window(Home) properties. Infobools it does not know raise, so a new
 condition in a page fails the tests instead of slipping through.
 """
+import functools
 import re
 
 from navigation import DIRS, FOCUSABLE, load
@@ -83,6 +84,13 @@ class State:
         raise KeyError('no value for {} in {}'.format(text, self))
 
 
+@functools.lru_cache(maxsize=None)
+def page_expressions():
+    from conftest import ROOT, parse
+    return {e.get('name'): e.text for e in parse(ROOT / '1080i' / 'Includes_Home.xml').iter('expression')
+            if e.get('name', '').startswith('Page')}
+
+
 class Page:
     """A window as Kodi builds it (includes expanded), evaluated for one State at a time."""
 
@@ -104,6 +112,10 @@ class Page:
     def holds(self, condition, state):
         if not condition:
             return True
+        # the pages of the menu (Includes_Home.xml PageShown*, PageFirst*) spelled out; any other
+        # expression is an atom of its own
+        for _ in range(3):
+            condition = re.sub(r'\$EXP\[(Page\w+)\]', lambda m: '[' + page_expressions()[m.group(1)] + ']', condition)
         condition = re.sub(r'\$EXP\[(\w+)\]', r'\1', condition)
         expr, pos = [], 0
         for m in ATOM.finditer(condition):

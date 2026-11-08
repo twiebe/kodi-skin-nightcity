@@ -262,7 +262,7 @@ def test_menu_entries_can_be_hidden():
     c = controls(load('Home.xml'))
     for tab, name in (('9102', 'movies'), ('9103', 'shows'), ('9104', 'search')):
         assert c[tab].findtext('visible') == '!Skin.HasSetting(nc.menu.hide.{})'.format(name)
-    assert c['9101'].findtext('visible') == 'true'
+    assert c['9101'].findtext('visible') == '$EXP[PageShownHome]'  # tests/static/test_home_page_optional.py
     home = parse(ROOT / '1080i' / 'Home.xml')
     loads = [(o.get('condition') or '', o.text) for o in home.findall('onload')]
     for name in ('movies', 'shows', 'search'):

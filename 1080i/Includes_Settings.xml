@@ -669,11 +669,13 @@
         <param name="label"/>
         <param name="setting"/>
         <param name="onclick" default="noop"/>
+        <param name="enable" default="true"/>
         <definition>
             <control type="radiobutton" id="$PARAM[id]">
                 <width>1260</width>
                 <include>SettingsToggleLook</include>
                 <label>$PARAM[label]</label>
+                <enable>$PARAM[enable]</enable>
                 <selected>!Skin.HasSetting($PARAM[setting])</selected>
                 <onclick>Skin.ToggleSetting($PARAM[setting])</onclick>
                 <onclick>$PARAM[onclick]</onclick>

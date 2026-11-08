@@ -756,7 +756,7 @@ msgid "Home and movies show the same spotlight, so they share this setting."
 msgstr ""
 
 msgctxt "#31259"
-msgid "Show or hide entries of the main menu. Home, system and power always stay."
+msgid "Show or hide entries of the main menu. System and power always stay, and so does the last page shown."
 msgstr ""
 
 msgctxt "#31260"
@@ -1111,4 +1111,8 @@ msgstr ""
 
 msgctxt "#31476"
 msgid "Now and then something stumbles for a blink: the loading spinner skips, the logo shivers, the spotlight tears, some titles twitch when they get the focus."
+msgstr ""
+
+msgctxt "#31477"
+msgid "Home"
 msgstr ""

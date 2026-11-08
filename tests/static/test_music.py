@@ -36,7 +36,8 @@ def test_music_tab_between_shows_and_search():
 def test_music_tab_only_with_music_and_hideable():
     c = controls(load('Home.xml'))
     assert c['9107'].findtext('visible') == SHOWN
-    assert c['9119'].findtext('visible') == SHOWN  # its gap goes with it
+    # its gap goes with it, and stands only after another tab (tests/static/test_home_page_optional.py)
+    assert c['9119'].findtext('visible') == '$EXP[PageShownMusic] + [$EXP[PageShownHome] | $EXP[PageShownMovies] | $EXP[PageShownShows]]'
     home = parse(ROOT / '1080i' / 'Home.xml')
     loads = [(o.get('condition') or '', o.text) for o in home.findall('onload')]
     assert ('{} + [Skin.HasSetting(nc.menu.hide.music) | !Library.HasContent(music)]'.format(PAGE),

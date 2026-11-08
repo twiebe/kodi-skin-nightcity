@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <includes>
+    <!-- The pages of the main menu that are shown: each can be hidden in the skin settings, music
+         also needs music in the library. The first one shown takes home's place where Kodi opens
+         Home without a page; the settings keep the last one from being hidden -->
+    <expression name="PageShownHome">!Skin.HasSetting(nc.menu.hide.home)</expression>
+    <expression name="PageShownMovies">!Skin.HasSetting(nc.menu.hide.movies)</expression>
+    <expression name="PageShownShows">!Skin.HasSetting(nc.menu.hide.shows)</expression>
+    <expression name="PageShownMusic">!Skin.HasSetting(nc.menu.hide.music) + Library.HasContent(music)</expression>
+    <expression name="PageShownSearch">!Skin.HasSetting(nc.menu.hide.search)</expression>
+    <expression name="PageFirstHome">$EXP[PageShownHome]</expression>
+    <expression name="PageFirstMovies">!$EXP[PageShownHome] + $EXP[PageShownMovies]</expression>
+    <expression name="PageFirstShows">!$EXP[PageShownHome] + !$EXP[PageShownMovies] + $EXP[PageShownShows]</expression>
+    <expression name="PageFirstMusic">!$EXP[PageShownHome] + !$EXP[PageShownMovies] + !$EXP[PageShownShows] + $EXP[PageShownMusic]</expression>
+    <expression name="PageFirstSearch">!$EXP[PageShownHome] + !$EXP[PageShownMovies] + !$EXP[PageShownShows] + !$EXP[PageShownMusic] + $EXP[PageShownSearch]</expression>
+
     <!-- The cursor is on a title card of a row, on a page with its spotlight on: the hero shows that
          title (FollowHero) and the rotation stands. Everywhere else, also on a card that is no
          title, the spotlight is its random self. The Music page has its own (MusicFollows). -->
@@ -170,7 +184,12 @@
                     <onleft condition="Skin.HasSetting(nc.menu.hide.search) + [Skin.HasSetting(nc.menu.hide.music) | !Library.HasContent(music)] + !Skin.HasSetting(nc.menu.hide.shows)">9103</onleft>
                     <onleft condition="Skin.HasSetting(nc.menu.hide.search) + [Skin.HasSetting(nc.menu.hide.music) | !Library.HasContent(music)] + Skin.HasSetting(nc.menu.hide.shows) + !Skin.HasSetting(nc.menu.hide.movies)">9102</onleft>
                     <onleft>9101</onleft>
-                    <onright>9101</onright>
+                    <!-- round to the first page shown -->
+                    <onright condition="$EXP[PageFirstHome]">9101</onright>
+                    <onright condition="$EXP[PageFirstMovies]">9102</onright>
+                    <onright condition="$EXP[PageFirstShows]">9103</onright>
+                    <onright condition="$EXP[PageFirstMusic]">9107</onright>
+                    <onright condition="$EXP[PageFirstSearch]">9104</onright>
                     <!-- off the icon the menu hides: forget where the power menu's keys came from -->
                     <onleft>ClearProperty(nc.quick.from,home)</onleft>
                     <onright>ClearProperty(nc.quick.from,home)</onright>
@@ -1081,12 +1100,14 @@
                 <param name="active" value="String.IsEmpty(Window(Home).Property(nc.page)) | String.IsEqual(Window(Home).Property(nc.page),home)"/>
                 <param name="onfocus" value="SetProperty(nc.page,home,home)"/>
                 <param name="onclick" value="Action(Down)"/>
+                <param name="visible" value="$EXP[PageShownHome]"/>
             </include>
             <include content="TabGap">
                 <param name="id" value="9115"/>
                 <param name="width" value="44"/>
                 <param name="height" value="64"/>
-                <param name="visible" value="!Skin.HasSetting(nc.menu.hide.movies)"/>
+                <!-- before a tab only when one is shown before it -->
+                <param name="visible" value="$EXP[PageShownMovies] + $EXP[PageShownHome]"/>
             </include>
             <include content="MenuButton">
                 <param name="id" value="9102"/>
@@ -1100,7 +1121,7 @@
                 <param name="id" value="9116"/>
                 <param name="width" value="44"/>
                 <param name="height" value="64"/>
-                <param name="visible" value="!Skin.HasSetting(nc.menu.hide.shows)"/>
+                <param name="visible" value="$EXP[PageShownShows] + [$EXP[PageShownHome] | $EXP[PageShownMovies]]"/>
             </include>
             <include content="MenuButton">
                 <param name="id" value="9103"/>
@@ -1114,7 +1135,7 @@
                 <param name="id" value="9119"/>
                 <param name="width" value="44"/>
                 <param name="height" value="64"/>
-                <param name="visible" value="!Skin.HasSetting(nc.menu.hide.music) + Library.HasContent(music)"/>
+                <param name="visible" value="$EXP[PageShownMusic] + [$EXP[PageShownHome] | $EXP[PageShownMovies] | $EXP[PageShownShows]]"/>
             </include>
             <!-- music: only with music in the library -->
             <include content="MenuButton">
@@ -1129,7 +1150,7 @@
                 <param name="id" value="9117"/>
                 <param name="width" value="44"/>
                 <param name="height" value="64"/>
-                <param name="visible" value="!Skin.HasSetting(nc.menu.hide.search)"/>
+                <param name="visible" value="$EXP[PageShownSearch] + [$EXP[PageShownHome] | $EXP[PageShownMovies] | $EXP[PageShownShows] | $EXP[PageShownMusic]]"/>
             </include>
             <include content="MenuButton">
                 <param name="id" value="9104"/>

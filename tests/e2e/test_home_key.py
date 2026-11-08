@@ -81,3 +81,45 @@ def test_startup_writes_the_back_keymap():
     data = KODI_DEV / 'instances' / instance / 'data' if instance else KODI_DEV / 'data'
     keymap = data / 'kodi' / 'userdata' / 'keymaps' / '0_skin.nightcity.back.xml'
     assert '<escape>Back</escape>' in keymap.read_text()
+
+
+# --- without the home page: the first page shown takes its place ------------------------------
+
+ON_FIRST_PAGE = ('Window.IsActive(home) + String.IsEqual(Window(Home).Property(nc.page),movies) + '
+                 'Control.HasFocus(9102) + !System.HasActiveModalDialog + !Control.IsVisible(9101)')
+
+
+@pytest.fixture
+def no_home_page(home):
+    builtin('Skin.SetBool(nc.menu.hide.home)')
+    try:
+        yield
+    finally:
+        builtin('Skin.Reset(nc.menu.hide.home)')
+        builtin('ReplaceWindow(Home)')
+        wait_for('Window.IsActive(home)')
+        builtin('SetFocus(9101)')
+        wait_for('Control.HasFocus(9101)')
+
+
+def test_home_key_without_the_home_page(no_home_page):
+    builtin('SetFocus(9103)')
+    wait_for('String.IsEqual(Window(Home).Property(nc.page),shows)')
+    press_home()
+    wait_for(ON_FIRST_PAGE, timeout=5)
+
+
+def test_home_opens_on_the_first_page_without_home(no_home_page):
+    """As after startup: Home opens without a page and shows the first page shown."""
+    builtin('ActivateWindow(settings)')
+    wait_for('Window.IsActive(settings)')
+    builtin('ClearProperty(nc.page,home)')
+    builtin('ReplaceWindow(Home)')
+    wait_for(ON_FIRST_PAGE, timeout=5)
+
+
+def test_the_icon_wraps_round_to_the_first_page_without_home(no_home_page):
+    builtin('SetFocus(9109)')
+    wait_for('Control.HasFocus(9109)')
+    rpc('Input.Right')
+    wait_for('Control.HasFocus(9102) + String.IsEqual(Window(Home).Property(nc.page),movies)', timeout=5)

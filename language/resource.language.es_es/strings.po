@@ -756,8 +756,8 @@ msgid "Home and movies show the same spotlight, so they share this setting."
 msgstr "Inicio y películas muestran el mismo destacado, así que comparten este ajuste."
 
 msgctxt "#31259"
-msgid "Show or hide entries of the main menu. Home, system and power always stay."
-msgstr "Muestra u oculta entradas del menú principal. Inicio, sistema y apagado siempre se quedan."
+msgid "Show or hide entries of the main menu. System and power always stay, and so does the last page shown."
+msgstr "Muestra u oculta entradas del menú principal. Sistema y apagado siempre se quedan, igual que la última página visible."
 
 msgctxt "#31260"
 msgid "[COLOR state_text]OK[/COLOR] choose   [COLOR state_text]Right[/COLOR] option   [COLOR state_text]Left[/COLOR] back"
@@ -1110,3 +1110,7 @@ msgstr "Pequeños fallos"
 msgctxt "#31476"
 msgid "Now and then something stumbles for a blink: the loading spinner skips, the logo shivers, the spotlight tears, some titles twitch when they get the focus."
 msgstr "De vez en cuando algo tropieza un instante: el indicador de carga se atasca, el logo tiembla, el destacado se rasga y algunos títulos dan un respingo al seleccionarlos."
+
+msgctxt "#31477"
+msgid "Home"
+msgstr "Inicio"
