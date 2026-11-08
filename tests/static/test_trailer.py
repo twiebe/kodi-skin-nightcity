@@ -46,16 +46,14 @@ IMDB = 'String.StartsWith(ListItem.IMDBNumber,tt) | String.StartsWith(ListItem.U
 
 
 def test_trailer_shows_on_a_movie_with_a_trailer_it_can_play():
-    """On a movie's page, a library movie or a TMDb title in a chain alike, with an IMDb id (the
-    trailer comes from IMDb, scripts/nightcity.py imdb_trailer) or ListItem.Trailer (TMDb Helper's
-    is a YouTube link; without the YouTube add-on the click offers it). Never over a video that
+    """On a movie's page, a library movie or a TMDb title in a chain alike, with an IMDb id: the
+    trailer comes from IMDb (scripts/nightcity.py imdb_trailer). The item's own trailer does not
+    count: mostly YouTube links, and the YouTube add-on fails often. Never over a video that
     plays (a chain from the OSD): the trailer would end it."""
     params, clicks = _pill('9008')
     visible = params['visible']
-    assert visible.startswith('String.IsEqual(ListItem.DBType,movie) + ')
-    assert '[!String.IsEmpty(ListItem.Trailer) | {}]'.format(IMDB) in visible
-    # without the YouTube add-on too: the click offers it (scripts/nightcity.py trailer)
-    assert 'youtube' not in visible
+    assert visible.startswith('String.IsEqual(ListItem.DBType,movie) + [{}] + '.format(IMDB))
+    assert 'Trailer' not in visible and 'youtube' not in visible
     # it stays while its own trailer plays, and while it has the focus: after Back the player
     # takes a few frames to stop, a button hidden meanwhile lost the focus to play (9001)
     assert '[!Player.HasVideo | {} | Control.HasFocus(9008)]'.format(WANTED) in visible
@@ -106,7 +104,7 @@ def test_keys_while_the_trailer_plays():
 def test_trailer_label_is_english():
     po = (ROOT / 'language' / 'resource.language.en_gb' / 'strings.po').read_text(encoding='utf-8')
     assert 'msgctxt "#31041"\nmsgid "trailer"\n' in po
-    # the notification when neither IMDb nor the item has one (scripts/nightcity.py trailer)
+    # the notification when IMDb has none (scripts/nightcity.py trailer)
     assert 'msgctxt "#31750"\nmsgid "No trailer found"\n' in po
 
 

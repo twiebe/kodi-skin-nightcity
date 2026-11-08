@@ -1,24 +1,20 @@
 """The trailer on a movie's info page (button 9008), end to end: it plays in full screen over the
 page, which stays, and Back ends it on its button.
 
-The Matrix (test_tmdb_chain.py) gets the clip of the track tests (tools/make_tracks_clip.py) as
-its trailer for the time of a test, without its IMDb id; or keeps its IMDb id and plays IMDb's
-trailer (that needs the internet).
+The trailer is IMDb's, by the movie's IMDb id, so these tests need the internet: The Matrix
+(test_tmdb_chain.py) keeps its IMDb id and loses its own trailer for the time of a test, or gets
+the id of a title IMDb has no trailer of.
 """
 import contextlib
-import pathlib
-import subprocess
-import sys
 import time
 
 import pytest
 
-from conftest import _data, action, builtin, cond, info, rpc, wait_for
+from conftest import action, builtin, cond, info, rpc, wait_for
 from test_tmdb_chain import _page, _settle, matrix  # noqa: F401 (fixture)
 
 pytestmark = pytest.mark.e2e
 
-CLIP = '/home/kodi/.kodi/media/nc-tracks.mkv'
 MATRIX_IMDB = 'tt0133093'
 IMDB_VIDEO_HOST = '.media-imdb.com/'
 OVER_THE_PAGE = ('Window.IsActive(movieinformation) + !Window.IsActive(fullscreenvideo) + '
@@ -27,18 +23,6 @@ OVER_THE_PAGE = ('Window.IsActive(movieinformation) + !Window.IsActive(fullscree
 
 @pytest.fixture
 def trailer(matrix):  # noqa: F811
-    clip = _data() / 'kodi' / 'media' / 'nc-tracks.mkv'  # this Kodi's, also on a pool worker
-    if not clip.is_file():
-        clip.parent.mkdir(parents=True, exist_ok=True)
-        subprocess.run([sys.executable, str(pathlib.Path(__file__).parents[2] / 'tools' / 'make_tracks_clip.py'),
-                        str(clip)], check=True)
-    # Kodi keeps a unique id set to null: one that is no IMDb id stands for none
-    with _details(matrix, trailer=CLIP, uniqueid={'imdb': 'none'}):
-        yield matrix
-
-
-@pytest.fixture
-def imdb_trailer(matrix):  # noqa: F811
     """The Matrix with its IMDb id and no trailer of its own: IMDb's plays."""
     with _details(matrix, trailer='', uniqueid={'imdb': MATRIX_IMDB}):
         yield matrix
@@ -130,9 +114,9 @@ def test_trailer_in_a_chain_keeps_the_chain(trailer):
     assert info('Window(Home).Property(TMDbHelper.Position)')['Window(Home).Property(TMDbHelper.Position)'] == '1'
 
 
-def test_imdb_trailer_plays_over_the_page_and_back_ends_it_on_its_button(imdb_trailer):
+def test_trailer_is_imdbs(trailer):
     """IMDb's trailer of the movie, by its IMDb id: an MP4 of IMDb's video host, over the page."""
-    _open(imdb_trailer)
+    _open(trailer)
     start = time.time()
     action('select', delay=0)
     wait_for('Player.HasVideo + ' + OVER_THE_PAGE, timeout=20)

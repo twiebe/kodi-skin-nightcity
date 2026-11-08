@@ -2519,11 +2519,8 @@ def test_trailer_state(wanted, video, info_open, started, seconds, state):
     assert nightcity.trailer_state(wanted, video, info_open, started, seconds) == state
 
 
-def test_play_windowed_quotes_the_path():
-    """The trailer plays without the switch to the player (,1): over its page, which shows it in
-    full screen; no question to resume a trailer file."""
-    assert nightcity.play_windowed('plugin://plugin.video.youtube/play/?video_id=a,b"c') == \
-        'PlayMedia("plugin://plugin.video.youtube/play/?video_id=a,b\\"c",1,noresume)'
+IMDB_URL = 'https://imdb-video.media-imdb.com/vi1/1080.mp4?Expires=1&Signature=x'
+IMDB_MOVIE = {'ListItem.IMDBNumber': 'tt0816692'}
 
 
 class TrailerXbmc(FakeXbmc):
@@ -2546,7 +2543,7 @@ class TrailerXbmc(FakeXbmc):
         return super().getCondVisibility(condition)
 
 
-def _trailer_env(monkeypatch, fake, props=None, imdb=None):
+def _trailer_env(monkeypatch, fake, props=None, imdb=IMDB_URL):
     """IMDb answers IMDB (the URL of a trailer, None for none); notifications go to home.notes."""
     import types
     home = FakeHome()
@@ -2570,19 +2567,18 @@ def _trailer_env(monkeypatch, fake, props=None, imdb=None):
 
 
 def test_trailer_plays_over_the_page_and_hands_the_focus_back(monkeypatch):
-    fake = TrailerXbmc({'ListItem.Trailer': 'plugin://plugin.video.youtube/play/?video_id=x'},
-                       true={'System.HasAddon(plugin.video.youtube)', 'System.AddonIsEnabled(plugin.video.youtube)'})
+    fake = TrailerXbmc(IMDB_MOVIE)
     home = _trailer_env(monkeypatch, fake)
     nightcity.trailer()
-    assert fake.builtins == ['PlayMedia("plugin://plugin.video.youtube/play/?video_id=x",1,noresume)', 'SetFocus(9008)']
+    assert fake.played == [(IMDB_URL, IMDB_URL, True)] and fake.builtins == ['SetFocus(9008)']
     assert 'nc.trailer' not in home.props
     assert nightcity.COMMANDS['trailer'] is nightcity.trailer
 
 
 def test_trailer_that_comes_after_back_is_stopped(monkeypatch):
-    """Back while the plugin still resolves the trailer: once it starts, under a page that no
-    longer shows it, it stops. A library title started meanwhile (it has a database id) plays."""
-    fake = TrailerXbmc({'ListItem.Trailer': 'x'}, start=3, end=50)
+    """Back while IMDb's file still opens: once it starts, under a page that no longer shows it,
+    it stops. A library title started meanwhile (it has a database id) plays."""
+    fake = TrailerXbmc(IMDB_MOVIE, start=3, end=50)
     home = _trailer_env(monkeypatch, fake)
     original = fake.getCondVisibility
 
@@ -2598,43 +2594,13 @@ def test_trailer_that_comes_after_back_is_stopped(monkeypatch):
 
 
 def test_trailer_needs_a_trailer_and_no_video(monkeypatch):
-    fake = TrailerXbmc({'ListItem.Trailer': 'x'}, true={'Player.HasVideo'})
+    fake = TrailerXbmc(IMDB_MOVIE, true={'Player.HasVideo'})
     fake.getCondVisibility = FakeXbmc.getCondVisibility.__get__(fake)
     home = _trailer_env(monkeypatch, fake)
     nightcity.trailer()
-    fake2 = TrailerXbmc({'ListItem.IMDBNumber': 'tt0816692'}, true={'Player.HasVideo'})
-    fake2.getCondVisibility = FakeXbmc.getCondVisibility.__get__(fake2)
-    home2 = _trailer_env(monkeypatch, fake2, imdb=IMDB_URL)
-    nightcity.trailer()
-    assert fake.builtins == fake2.builtins == ["SetFocus(9008)"]
-    assert 'nc.trailer' not in home.props and 'nc.trailer' not in home2.props
-    assert home.notes == home2.notes == []
-
-
-@pytest.mark.parametrize('true, asked', [
-    (set(), 'InstallAddon(plugin.video.youtube)'),
-    ({'System.HasAddon(plugin.video.youtube)'}, 'EnableAddon(plugin.video.youtube)'),
-])
-def test_trailer_without_the_youtube_add_on_offers_it(monkeypatch, true, asked):
-    """A YouTube trailer (Jellyfin for Kodi and TMDb Helper store them so) needs the YouTube
-    add-on: without it the click offers to install it (Kodi asks first), a disabled one to
-    enable it; nothing plays."""
-    fake = TrailerXbmc({'ListItem.Trailer': 'plugin://plugin.video.youtube/play/?video_id=x'}, true=true)
-    home = _trailer_env(monkeypatch, fake)
-    nightcity.trailer()
-    assert fake.builtins == [asked, 'SetFocus(9008)']
+    assert fake.builtins == ["SetFocus(9008)"] and fake.played == []
     assert 'nc.trailer' not in home.props
-
-
-@pytest.mark.parametrize('path, installed, enabled, builtin', [
-    ('plugin://plugin.video.youtube/play/?video_id=x', False, False, 'InstallAddon(plugin.video.youtube)'),
-    ('plugin://plugin.video.youtube/play/?video_id=x', True, False, 'EnableAddon(plugin.video.youtube)'),
-    ('plugin://plugin.video.youtube/play/?video_id=x', True, True, None),
-    ('plugin://plugin.video.jellyfin/trailer?id=1&mode=play', False, False, None),
-    ('/movies/Alien-trailer.mkv', False, False, None),
-])
-def test_trailer_addon_builtin(path, installed, enabled, builtin):
-    assert nightcity.trailer_addon_builtin(path, installed, enabled) == builtin
+    assert home.notes == []
 
 
 def test_trailer_frees_the_lists_once_the_cast_list_rests(monkeypatch):
@@ -2643,7 +2609,7 @@ def test_trailer_frees_the_lists_once_the_cast_list_rests(monkeypatch):
     loaded at once, and two plugins starting at once crash Kodi. The click holds the
     recommendations (nc.trailer.lists); they come back only once the player stopped and the cast
     list's reload is over, one after the other as when the page opens."""
-    fake = TrailerXbmc({'ListItem.Trailer': 'x'}, true={'!Player.HasMedia', '!Container(5500).IsUpdating'})
+    fake = TrailerXbmc(IMDB_MOVIE, true={'!Player.HasMedia', '!Container(5500).IsUpdating'})
     home = _trailer_env(monkeypatch, fake, {'nc.trailer': '1', 'nc.trailer.lists': '1'})
     seen = []
     original = fake.getCondVisibility
@@ -2658,26 +2624,15 @@ def test_trailer_frees_the_lists_once_the_cast_list_rests(monkeypatch):
     assert waits[-2:] == ['!Player.HasMedia', '!Container(5500).IsUpdating']
 
 
-def test_trailer_offered_frees_the_lists_at_once(monkeypatch):
-    fake = TrailerXbmc({'ListItem.Trailer': 'plugin://plugin.video.youtube/play/?video_id=x'})
-    home = _trailer_env(monkeypatch, fake, {'nc.trailer': '1', 'nc.trailer.lists': '1'})
-    nightcity.trailer()
-    assert 'nc.trailer.lists' not in home.props
-
-
-IMDB_URL = 'https://imdb-video.media-imdb.com/vi1/1080.mp4?Expires=1&Signature=x'
-
-
 @pytest.mark.parametrize('labels', [
     {'ListItem.IMDBNumber': 'tt0816692'},
     {'ListItem.UniqueID(imdb)': 'tt0816692'},
     # Kodi's IMDBNumber is the default id of the scraper: TMDb's for many
     {'ListItem.IMDBNumber': '157336', 'ListItem.UniqueID(imdb)': 'tt0816692'},
 ])
-def test_trailer_from_imdb_plays_first(monkeypatch, labels):
+def test_trailer_from_imdb(monkeypatch, labels):
     """The movie's IMDb id gives the trailer from IMDb, also when the item has a YouTube link."""
-    fake = TrailerXbmc(dict(labels, **{'ListItem.Trailer': 'plugin://plugin.video.youtube/play/?video_id=x'}),
-                       true={'System.HasAddon(plugin.video.youtube)', 'System.AddonIsEnabled(plugin.video.youtube)'})
+    fake = TrailerXbmc(dict(labels, **{'ListItem.Trailer': 'plugin://plugin.video.youtube/play/?video_id=x'}))
     asked = []
     home = _trailer_env(monkeypatch, fake)
     monkeypatch.setattr(nightcity, 'imdb_trailer', lambda imdb_id: asked.append(imdb_id) or IMDB_URL)
@@ -2690,18 +2645,24 @@ def test_trailer_from_imdb_plays_first(monkeypatch, labels):
     assert home.notes == []
 
 
-def test_trailer_from_youtube_when_imdb_has_none(monkeypatch):
-    fake = TrailerXbmc({'ListItem.IMDBNumber': 'tt0000001', 'ListItem.Trailer': 'plugin://plugin.video.youtube/play/?video_id=x'},
-                       true={'System.HasAddon(plugin.video.youtube)', 'System.AddonIsEnabled(plugin.video.youtube)'})
+@pytest.mark.parametrize('labels', [
+    {'ListItem.IMDBNumber': 'tt0000001'},
+    {'ListItem.IMDBNumber': ''},
+])
+def test_the_items_own_trailer_does_not_play(monkeypatch, labels):
+    """YouTube links (Jellyfin for Kodi and TMDb Helper store trailers so) need the YouTube
+    add-on, which fails often: the trailer is IMDb's or none. No offer of the add-on either."""
+    fake = TrailerXbmc(dict(labels, **{'ListItem.Trailer': 'plugin://plugin.video.youtube/play/?video_id=x',
+                                       '$LOCALIZE[31750]': 'No trailer found'}))
     home = _trailer_env(monkeypatch, fake, imdb=None)
     nightcity.trailer()
-    assert fake.builtins == ['PlayMedia("plugin://plugin.video.youtube/play/?video_id=x",1,noresume)', 'SetFocus(9008)']
-    assert home.notes == []
+    assert fake.builtins == ['SetFocus(9008)'] and fake.played == []
+    assert [note[1] for note in home.notes] == ['No trailer found']
 
 
-def test_no_trailer_anywhere_says_so_at_once(monkeypatch):
-    """Neither IMDb nor a link of the item: a notification under the movie's title, nothing plays
-    and nothing waits for a trailer to start."""
+def test_no_trailer_says_so_at_once(monkeypatch):
+    """IMDb has none: a notification under the movie's title, nothing plays and nothing waits for
+    a trailer to start."""
     fake = TrailerXbmc({'ListItem.IMDBNumber': 'tt0000001', 'ListItem.Title': 'Carmencita',
                         '$LOCALIZE[31750]': 'No trailer found'})
     home = _trailer_env(monkeypatch, fake, {'nc.trailer': '1', 'nc.trailer.lists': '1'}, imdb=None)

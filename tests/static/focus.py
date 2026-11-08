@@ -68,9 +68,8 @@ class State:
             (r'Control\.HasFocus\((\d+)\)$', lambda m: self.focus == m.group(1)),
             # $EXP[TmdbFresh<id>] (Includes_Tmdb.xml): the list shows items of this page
             (r'TmdbFresh(\d+)$', lambda m: self.containers.get(m.group(1), 'empty') == 'items'),
-            # the trailer button (DialogVideoInfo.xml 9008): every page has a trailer and an
-            # IMDb id, and no video plays under it; `extra` says otherwise
-            (r'String\.IsEmpty\(ListItem\.Trailer\)$', lambda m: False),
+            # the trailer button (DialogVideoInfo.xml 9008): every page has an IMDb id, and no
+            # video plays under it; `extra` says otherwise
             (r'String\.StartsWith\(ListItem\.(IMDBNumber|UniqueID\(imdb\)),tt\)$', lambda m: True),
             (r'Player\.HasVideo$', lambda m: False),
             # $EXP[InfoPlaying] (Includes_Info.xml): the page is not the title that plays

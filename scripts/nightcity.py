@@ -1264,20 +1264,8 @@ def imdb_trailer(imdb_id):
 
 # --- trailer: plays over its info page --------------------------------------------------------
 
-TRAILER_START = 30.0  # s a trailer has to start: a plugin (YouTube) resolves it first
+TRAILER_START = 30.0  # s a trailer has to start: IMDb's file opens over the internet
 TRAILER_OURS = 'Player.HasVideo + String.IsEmpty(VideoPlayer.DBID)'  # a library title has an id
-YOUTUBE = 'plugin.video.youtube'
-
-
-def trailer_addon_builtin(path, installed, enabled):
-    """The builtin that offers the add-on a trailer needs, None when it can play: YouTube links
-    (Jellyfin for Kodi and TMDb Helper store trailers so) need the YouTube add-on. Kodi asks
-    before it installs or enables one."""
-    if not path.startswith('plugin://{}/'.format(YOUTUBE)) or (installed and enabled):
-        return None
-    return '{}({})'.format('EnableAddon' if installed else 'InstallAddon', YOUTUBE)
-
-
 def trailer_state(wanted, has_video, info_open, started, seconds):
     """What the trailer over its info page does next: 'wait' for it to start, 'play', or 'over'
     once it ended, Back cleared nc.trailer (`wanted`), the page closed, or it did not start
@@ -1291,50 +1279,28 @@ def trailer_state(wanted, has_video, info_open, started, seconds):
     return 'wait'
 
 
-def play_windowed(path):
-    """PlayMedia without the switch to the player (,1), from the start."""
-    return 'PlayMedia("{}",1,noresume)'.format(path.replace('\\', '\\\\').replace('"', '\\"'))
-
-
-def trailer_source(imdb_url, path, installed, enabled):
-    """What the trailer button does: ('imdb', URL) with IMDb's trailer (imdb_trailer), else
-    ('play', PATH) with the item's own (ListItem.Trailer); ('offer', builtin) when that one needs
-    the YouTube add-on (trailer_addon_builtin); ('none', '') without either."""
-    if imdb_url:
-        return 'imdb', imdb_url
-    if not path:
-        return 'none', ''
-    offer = trailer_addon_builtin(path, installed, enabled)
-    return ('offer', offer) if offer else ('play', path)
-
-
 def trailer():
     """The trailer of the movie on the info page (button 9008), in full screen over the page: it
     plays without the player window, the page shows it (9095 in DialogVideoInfo.xml) and keeps
     the keys (9099), so the page and a TMDb chain under it stay. The button has set nc.trailer
     and moved the focus to 9099 already. Once the trailer is over the focus goes back to the
-    button. Never over a video that plays: it would end it. The trailer comes from IMDb, else
-    the item's own (trailer_source); without either a notification says so."""
+    button. Never over a video that plays: it would end it. The trailer comes from IMDb by the
+    movie's IMDb id (imdb_trailer); when IMDb has none a notification says so. The item's own
+    trailer (ListItem.Trailer) does not play: mostly YouTube links, and the YouTube add-on fails
+    often."""
     import xbmc
     home = _home()
     kind, what, title = 'busy', '', xbmc.getInfoLabel('ListItem.Title')
     started, seconds = False, 0.0
     try:
         if not xbmc.getCondVisibility('Player.HasVideo'):
-            path = xbmc.getInfoLabel('ListItem.Trailer')
-            installed = xbmc.getCondVisibility('System.HasAddon({})'.format(YOUTUBE))
-            enabled = xbmc.getCondVisibility('System.AddonIsEnabled({})'.format(YOUTUBE))
             imdb_id = item_imdb_id()
-            kind, what = trailer_source(imdb_trailer(imdb_id) if imdb_id else None, path, installed, enabled)
+            what = imdb_trailer(imdb_id) if imdb_id else None
+            kind = 'imdb' if what else 'none'
         if not home.getProperty('nc.trailer'):
             kind = 'gone'  # Back while IMDb answered
-        if kind == 'offer':
-            xbmc.executebuiltin(what)
         if kind == 'imdb':
             _play_url_windowed(what)
-        if kind == 'play':
-            xbmc.executebuiltin(play_windowed(what))
-        if kind in ('imdb', 'play'):
             started, seconds = _trailer_follow(home)
     finally:
         home.clearProperty('nc.trailer')
@@ -1343,9 +1309,9 @@ def trailer():
     try:
         if kind == 'none':
             _no_trailer(title)
-        if kind not in ('imdb', 'play'):
+        if kind != 'imdb':
             return
-        # the page closed under it, or Back came while the plugin still resolved it: a trailer
+        # the page closed under it, or Back came while its file still opened: a trailer
         # that plays (or starts late) without its page stops
         if _wait(TRAILER_OURS, 0.1 if started else max(TRAILER_START - seconds, 0.1)):
             xbmc.executebuiltin('PlayerControl(Stop)')
@@ -1356,7 +1322,8 @@ def trailer():
 
 def _play_url_windowed(url):
     """URL without the switch to the player, by Python's player: PlayMedia asked IMDb's host for
-    its signed URLs without the signature, which IMDb answers with 403 (Kodi 21)."""
+    its signed URLs without the signature, which IMDb answers with 403 (Kodi 21). No question to
+    resume a trailer file."""
     import xbmc
     import xbmcgui
     xbmc.Player().play(url, xbmcgui.ListItem(path=url), True)
