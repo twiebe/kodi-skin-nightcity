@@ -644,18 +644,29 @@ def info_forget():
     home.clearProperty('nc.ret.top')
 
 
+# the player's chapter row (VideoOSDBookmarks.xml) or cast row (Custom_1141_OSDCast.xml) has the
+# keys, no info page over them
+OSD_ROWS = '!Window.IsActive(movieinformation) + [Window.IsActive(videobookmarks) | Window.IsActive(1141)]'
+
+
 def back_to_start():
     """Back held on an info page (BACK_KEYMAP): back to where the browsing started, however deep
     the TMDb chain is. A chain from a movie or episode page has that page first (TMDb Helper's
     origin): its manager goes back to it at once (TMDbHelper.Command first, a command of the
     twiebe fork), and the page takes the focus to the item the chain went on from (nc.ret.1,
     info_back). A chain from the OSD cast row (nc.osd.ret) has no page before its first: it
-    ends, and the player's controls come back on their first button. Outside a chain, and on the
-    page it started from, it is a Back."""
+    ends, and the player's controls come back on their first button. In the player's chapter and
+    cast rows (OSD_ROWS) it goes there too: the rows close, the controls take the focus on their
+    first button. Outside a chain, and on the page it started from, it is a Back."""
     import xbmc
     home = _home()
     position = xbmc.getInfoLabel('Window(Home).Property(TMDbHelper.Position)')
-    if not chain_running(home):
+    if xbmc.getCondVisibility(OSD_ROWS):
+        # closed at once: the SetFocus goes to the topmost dialog, the OSD only once they are gone
+        xbmc.executebuiltin('Dialog.Close(1141,true)')
+        xbmc.executebuiltin('Dialog.Close(videobookmarks,true)')
+        xbmc.executebuiltin('SetFocus(602)')
+    elif not chain_running(home):
         xbmc.executebuiltin('Action(Back)')
     elif home.getProperty('nc.osd.ret'):
         info_forget()
@@ -1473,12 +1484,14 @@ HOME_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
 # second (ChainBackGuard, Includes_Tmdb.xml), so on info pages these keys are Back too: for Kodi
 # both close the page. On the library grid likewise: Back on its position bar returns to the card
 # it came from. Back held on an info page goes back to
-# where the browsing started (back_to_start); Kodi knows long presses only in the keyboard
+# where the browsing started (back_to_start), in the player's chapter and cast rows to the
+# player's controls: without sections of their own Kodi took the global long press there, one
+# row up like a single Back. Kodi knows long presses only in the keyboard
 # section (CEC and MCE remotes send theirs in the remote section). Written whatever the Home key
 # setting.
 BACK_KEYMAP_NAME = '0_skin.nightcity.back.xml'
 BACK_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
-<!-- Written by the Nightcity skin: on info pages and the library grid the keys of PreviousMenu are Back, Back held on an info page goes back to where the browsing started. -->
+<!-- Written by the Nightcity skin: on info pages and the library grid the keys of PreviousMenu are Back, Back held on an info page goes back to where the browsing started, in the player's chapter and cast rows to the player's controls. -->
 <keymap>
   <movieinformation>
     <keyboard>
@@ -1495,6 +1508,21 @@ BACK_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
       <rightclick>Back</rightclick>
     </mouse>
   </movieinformation>
+  <!-- the player's chapter and cast rows: Back held goes to the player's controls (back_to_start) -->
+  <videobookmarks>
+    <keyboard>
+      <backspace mod="longpress">NotifyAll(nightcity,back_to_start)</backspace>
+      <browser_back mod="longpress">NotifyAll(nightcity,back_to_start)</browser_back>
+      <escape mod="longpress">NotifyAll(nightcity,back_to_start)</escape>
+    </keyboard>
+  </videobookmarks>
+  <window1141>
+    <keyboard>
+      <backspace mod="longpress">NotifyAll(nightcity,back_to_start)</backspace>
+      <browser_back mod="longpress">NotifyAll(nightcity,back_to_start)</browser_back>
+      <escape mod="longpress">NotifyAll(nightcity,back_to_start)</escape>
+    </keyboard>
+  </window1141>
   <window1110>
     <keyboard>
       <escape>Back</escape>

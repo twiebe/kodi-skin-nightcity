@@ -143,3 +143,48 @@ def test_chapter_row_after_a_chain_focuses_the_chapters(tracks):
     wait_for('Window.IsActive(videobookmarks) + !Window.IsVisible(1141) + Control.HasFocus(11)', timeout=5)
     action('up')
     wait_for('Control.HasFocus(2)')
+
+
+def press(button, hold=0):
+    """A key through Kodi's keymaps; a hold over Kodi's threshold (500 ms) is a long press."""
+    rpc('Input.ButtonEvent', {'button': button, 'keymap': 'KB', 'holdtime': hold})
+
+
+def _rows(cast):
+    """From the bar's skip button (not the controls' first) Down to the chapter row and, with CAST,
+    on to the cast row. The clip has no cast, so the test opens that row itself. The back keymap
+    (scripts/nightcity.py BACK_KEYMAP) is written anew first, as the service does at startup."""
+    builtin('NotifyAll(nightcity,home_keymap)')
+    time.sleep(1)
+    focus(611)
+    action('down')
+    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(11)', timeout=5)
+    if cast:
+        builtin('ActivateWindow(1141)')
+        wait_for('Window.IsActive(1141)', timeout=5)
+    time.sleep(0.3)  # a key in the first moment after opening gets lost
+
+
+CONTROLS = ('Window.IsActive(videoosd) + !Window.IsVisible(videobookmarks) + !Window.IsVisible(1141)'
+            ' + Control.HasFocus(602)')
+
+
+@pytest.mark.parametrize('cast', [False, True], ids=['chapters', 'cast'])
+@pytest.mark.parametrize('key', ['backspace', 'escape'])
+def test_back_held_in_the_rows_goes_to_the_controls(tracks, cast, key):
+    """Back held in the chapter or the cast row: the player's controls on their own first button
+    (play or resume), as Back held in a chain from the cast row (back_to_start). It went one row
+    up like a single Back."""
+    _rows(cast)
+    press(key, hold=1000)
+    wait_for(CONTROLS, timeout=5)
+
+
+def test_back_in_the_rows_steps_up_one_row(tracks):
+    """A single Back still goes one row up: cast row, chapter row, the bar."""
+    _rows(True)
+    press('backspace')
+    wait_for('Window.IsActive(videobookmarks) + !Window.IsVisible(1141) + Control.HasFocus(11)', timeout=5)
+    time.sleep(0.3)
+    press('backspace')
+    wait_for('Window.IsActive(videoosd) + !Window.IsVisible(videobookmarks) + Control.HasFocus(611)', timeout=5)

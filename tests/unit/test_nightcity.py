@@ -736,7 +736,8 @@ def test_back_keymap_turns_previous_menu_into_back_on_info_pages():
     and the chain hung 30 s (ChainBackGuard, Includes_Tmdb.xml). On info pages they are Back."""
     import xml.etree.ElementTree as ET
     root = ET.fromstring(nightcity.BACK_KEYMAP)
-    assert [w.tag for w in root] == ['movieinformation', 'window1110', 'music']  # the library grid: test_library_bar.py
+    # the library grid: test_library_bar.py; the player's chapter and cast rows: Back held only
+    assert [w.tag for w in root] == ['movieinformation', 'videobookmarks', 'window1141', 'window1110', 'music']
     keys = {(device.tag, key.tag, key.get('mod')): key.text for device in root.find('movieinformation') for key in device}
     assert {k: v for k, v in keys.items() if not k[2]} == {
         ('keyboard', 'escape', None): 'Back', ('gamepad', 'back', None): 'Back', ('mouse', 'rightclick', None): 'Back'}
@@ -754,6 +755,19 @@ def test_back_keymap_long_back_goes_back_to_where_the_browsing_started():
             if key.get('mod') == 'longpress'}
     assert held == {('keyboard', k): 'NotifyAll(nightcity,back_to_start)' for k in ('backspace', 'browser_back', 'escape')}
     assert nightcity.COMMANDS['back_to_start'] is nightcity.back_to_start
+
+
+@pytest.mark.parametrize('window', ['videobookmarks', 'window1141'])
+def test_back_keymap_long_back_in_the_player_rows(window):
+    """Back held in the player's chapter row (videobookmarks) and cast row (1141) goes back to
+    the player's controls as from a chain started there. Without a section of their own Kodi took
+    the global long press (Back, or none for backspace): one step up, like a single Back. Only
+    the long presses: a single press keeps Kodi's own mapping, one row up."""
+    import xml.etree.ElementTree as ET
+    root = ET.fromstring(nightcity.BACK_KEYMAP)
+    keys = {(device.tag, key.tag, key.get('mod')): key.text for device in root.find(window) for key in device}
+    assert keys == {('keyboard', k, 'longpress'): 'NotifyAll(nightcity,back_to_start)'
+                    for k in ('backspace', 'browser_back', 'escape')}
 
 
 @pytest.mark.parametrize('off', [False, True])
@@ -2322,6 +2336,22 @@ def test_back_to_start_ends_a_chain_from_the_player(monkeypatch):
     assert fake.builtins == []
     assert home.props['TMDbHelper.Command'] == 'exit' and home.props['nc.chain.return'] == 'controls'
     assert 'nc.osd.ret' not in home.props and 'nc.osd.ret.tab' not in home.props
+
+
+ROWS = '!Window.IsActive(movieinformation) + [Window.IsActive(videobookmarks) | Window.IsActive(1141)]'
+
+
+@pytest.mark.parametrize('chain', [{}, {'TMDbHelper.Instance': 'True'}])
+def test_back_to_start_in_the_player_rows_goes_to_the_controls(monkeypatch, chain):
+    """Back held in the chapter or cast row of the player: the rows close and the controls take
+    the focus on their own first button (play or resume, 602 in VideoOSD.xml), where Back held
+    in a chain from the cast row ends too. Whatever a chain still ends meanwhile: no Back, no
+    command to TMDb Helper."""
+    fake, home = _start_env(monkeypatch, {}, dict(chain))
+    fake.true.add(ROWS)
+    nightcity.back_to_start()
+    assert fake.builtins == ['Dialog.Close(1141,true)', 'Dialog.Close(videobookmarks,true)', 'SetFocus(602)']
+    assert home.props == chain
 
 
 def test_back_to_start_on_the_first_page_is_a_back(monkeypatch):

@@ -16,6 +16,7 @@ The remote moves through levels, not through confirmations.
 - **Back held goes back to where the browsing started**, past every page of a chain: to the
   page the chain started from, on the element that started it, or to the player's controls on
   their first button (play or resume) when the chain started from the player's cast row.
+  In the player's chapter and cast rows it goes to those controls too, on their first button.
   Outside a chain, and on its first page, it is a Back.
 
 ### The position bar of the library grid
