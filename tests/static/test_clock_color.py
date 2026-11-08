@@ -1,5 +1,6 @@
-"""The clock is white (the text colour) everywhere: the Home top line, the quick menu, the
-startup screen and the path lines of the other windows. Counters next to it stay dark blue."""
+"""The clock is white (the text colour) everywhere: the Home top line, the quick menu and the path
+lines of the other windows; only the startup screen's clock is pink (the user's wish). Counters next
+to it stay dark blue."""
 import re
 
 from conftest import ROOT
@@ -18,7 +19,11 @@ def _clock_labels():
 def test_every_clock_label_is_white():
     found = list(_clock_labels())
     assert len(found) >= 3
+    startup = [c for name, c in found if name == 'Includes_Look.xml' and '<textcolor>accent2</textcolor>' in c]
+    assert len(startup) == 1  # LookStartupTrack
     for name, control in found:
+        if control in startup:
+            continue
         assert '<textcolor>text</textcolor>' in control, name
 
 

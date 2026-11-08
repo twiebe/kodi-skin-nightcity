@@ -773,7 +773,8 @@
                     <height>32</height>
                     <align>right</align>
                     <font>font_num_small</font>
-                    <textcolor>text</textcolor>
+                    <!-- the startup screen's clock in pink, like its line over the track -->
+                    <textcolor>accent2</textcolor>
                     <label>$INFO[System.Time]</label>
                 </control>
             </control>

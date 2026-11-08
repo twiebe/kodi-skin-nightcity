@@ -162,8 +162,9 @@ def test_pink_is_order_and_identity():
     """Pink (accent2) names or numbers something and never changes with input (DESIGN.md "What
     the colours say"): the kicker over a title, dialog headings, the settings rail numbers, the
     system tile numbers, the row numbers on Home, the add-on news heading, the notification heading
-    (the user liked it better than white, like the progress toasts)."""
-    assert _uses('accent2') == {'Includes_Look.xml': 3, 'Includes_Settings.xml': 1, 'Includes_Home.xml': 1,
+    (the user liked it better than white, like the progress toasts), and the clock of the startup
+    screen (the user's wish: pink there, the other clocks stay white)."""
+    assert _uses('accent2') == {'Includes_Look.xml': 4, 'Includes_Settings.xml': 1, 'Includes_Home.xml': 1,
                                 'Variables.xml': 1, 'DialogVideoManager.xml': 1, 'DialogSlider.xml': 1,
                                 'DialogExtendedProgressBar.xml': 1, 'DialogKeyboard.xml': 1,
                                 'DialogSubtitles.xml': 1, 'DialogAddonInfo.xml': 1,
