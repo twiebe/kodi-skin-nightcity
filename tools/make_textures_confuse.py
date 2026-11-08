@@ -339,10 +339,10 @@ def textures():
         'spin_minus_focus.png': sign_focus(34, plus=False),
         'spin_plus_focus.png': sign_focus(34, plus=True),
     }
-    # the frames of the loading page's spinner, shown in the order of their names
+    # the spinner's frames for one calm round; the loading page runs them in the glitch sequence
     for head in range(12):
         out['spinner/{:02d}.png'.format(head)] = spinner_frame(112, head)
-    # the same spinner with its glitches (the skin setting, on by default): a frame per name again
+    # the loading page's spinner with its glitches, always on: a frame per name, shown in their order
     for place, head in enumerate(glitch_sequence()):
         out['spinner_glitch/{:03d}.png'.format(place)] = spinner_frame(112, head)
     for width, height in CARD_SIZES:

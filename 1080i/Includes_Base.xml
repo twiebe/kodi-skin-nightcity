@@ -729,11 +729,6 @@
             <control type="group">
                 <animation effect="zoom" end="LookCardFocusZoom" center="auto" time="LookCardFocusTime" condition="$PARAM[focused]">Conditional</animation>
                 <animation effect="fade" start="100" end="75" time="150" condition="$PARAM[dim]">Conditional</animation>
-                <include content="LookCardTwitch">
-                    <param name="focused" value="$PARAM[focused]"/>
-                    <param name="glitch" value="$EXP[LookGlitch]"/>
-                    <param name="item" value="$PARAM[item]"/>
-                </include>
                 <include content="LookCardFocus">
                     <param name="glowwidth" value="$PARAM[glowwidth]"/>
                     <param name="glowheight" value="$PARAM[glowheight]"/>
@@ -780,11 +775,6 @@
             <!-- beside the card, not inside it: the card's dimming must not reach the dog-ear -->
             <control type="group">
                 <animation effect="zoom" end="LookCardFocusZoom" center="auto" time="LookCardFocusTime" condition="$PARAM[focused]">Conditional</animation>
-                <include content="LookCardTwitch">
-                    <param name="focused" value="$PARAM[focused]"/>
-                    <param name="glitch" value="$EXP[LookGlitch]"/>
-                    <param name="item" value="$PARAM[item]"/>
-                </include>
                 <!-- unwatched, never started: a cyan dog-ear (the focus colour) in the bottom right corner (no cut
                      there), bigger than the frame's cut so it reads from the sofa. A show: no episode
                      watched or started; its PlayCount stays 0 until all are watched. -->

@@ -8,20 +8,11 @@
         <value>confuse $INFO[System.AddonVersion(skin.confuse)]</value>
     </variable>
 
-    <!-- Glitches: Confuse also means to confuse. Now and then something stumbles for a blink: the
-         startup spinner skips, sticks and runs back, the startup logo points backwards, the Home
-         logo shivers, the spotlight tears on a new title, some titles twitch when they get the
-         focus. Each rare, never two at once. On unless the skin setting cf.glitch.off is set; the
-         shared files pass LookGlitch to the includes here as their `glitch` param -->
-    <expression name="LookGlitch">!Skin.HasSetting(cf.glitch.off)</expression>
-    <expression name="LookGlitchSetting">true</expression>
-    <!-- the look group of the skin settings: the colours and the glitches' switch -->
-    <constant name="LookSettingsLookHeight">177</constant>
-
     <!-- The first screen after boot: the logo in the middle and under it a spinner until Home takes
-         over: its spokes stay where they are, only the light walks around them. The wait has no measure, so nothing here pretends to know how long it is. -->
+         over: its spokes stay where they are, only the light walks around them. The wait has no measure, so nothing here pretends to know how long it is.
+         Confuse also means to confuse: on this screen something stumbles for a blink, the spinner
+         skips, sticks and runs back, the logo points backwards -->
     <include name="LookStartupWordmark">
-        <param name="glitch"/>
         <definition>
             <control type="group">
                 <left>845</left>
@@ -43,7 +34,6 @@
                 <!-- glitch: for 150 ms at 1.9 s the mark points back and the logo hops 5 px left.
                      Animations of one type add up: the first fade shows it, the second hides it -->
                 <control type="group">
-                    <visible>$PARAM[glitch]</visible>
                     <animation effect="fade" start="0" end="100" time="0" delay="1900">WindowOpen</animation>
                     <animation effect="fade" start="100" end="0" time="0" delay="2050">WindowOpen</animation>
                     <animation effect="slide" start="-5,0" end="-5,0" time="0">WindowOpen</animation>
@@ -66,23 +56,8 @@
     <include name="LookStartupTrack">
         <param name="waiting"/>
         <param name="online"/>
-        <param name="glitch"/>
-        <param name="calm"/>
         <definition>
-            <control type="multiimage">
-                <left>932</left>
-                <top>700</top>
-                <width>56</width>
-                <height>56</height>
-                <aspectratio>keep</aspectratio>
-                <imagepath colordiffuse="text">ui/spinner</imagepath>
-                <timeperimage>85</timeperimage>
-                <fadetime>0</fadetime>
-                <loop>true</loop>
-                <randomize>false</randomize>
-                <visible>$PARAM[calm]</visible>
-            </control>
-            <!-- with glitches: the frames in the order of tools/make_textures_confuse.py glitch_sequence -->
+            <!-- the frames in the order of tools/make_textures_confuse.py glitch_sequence -->
             <control type="multiimage">
                 <left>932</left>
                 <top>700</top>
@@ -94,7 +69,6 @@
                 <fadetime>0</fadetime>
                 <loop>true</loop>
                 <randomize>false</randomize>
-                <visible>$PARAM[glitch]</visible>
             </control>
         </definition>
     </include>
@@ -107,8 +81,6 @@
         <align>center</align>
     </include>
     <include name="LookHomeLogo">
-        <param name="glitch"/>
-        <definition>
         <control type="group">
             <left>64</left>
             <top>14</top>
@@ -125,39 +97,7 @@
                 <aspectratio>keep</aspectratio>
                 <texture colordiffuse="focus_text">ui/logo_mark_60.png</texture>
             </control>
-            <!-- glitch: every five minutes, at second 23 of minutes 2 and 7, two copies shiver beside
-                 it for 190 ms, a yellow plate and a light mark. Slides of one type add up: -5, then
-                 +3, then -2 px; the second fade hides them for the rest of the second. Each image
-                 has the condition itself: Kodi plays a Visible animation on the control that turns
-                 visible -->
-            <control type="group">
-                <control type="image">
-                    <width>60</width>
-                    <height>60</height>
-                    <aspectratio>keep</aspectratio>
-                    <visible>$PARAM[glitch] + [String.EndsWith(System.Time(mm),2) | String.EndsWith(System.Time(mm),7)] + String.IsEqual(System.Time(ss),23)</visible>
-                    <animation effect="fade" start="80" end="80" time="0">Visible</animation>
-                    <animation effect="fade" start="100" end="0" time="0" delay="190">Visible</animation>
-                    <animation effect="slide" start="-5,0" end="-5,0" time="0">Visible</animation>
-                    <animation effect="slide" start="0,0" end="8,0" time="0" delay="60">Visible</animation>
-                    <animation effect="slide" start="0,0" end="-5,0" time="0" delay="130">Visible</animation>
-                    <texture colordiffuse="accent3">ui/logo_plate_60.png</texture>
-                </control>
-                <control type="image">
-                    <width>60</width>
-                    <height>60</height>
-                    <aspectratio>keep</aspectratio>
-                    <visible>$PARAM[glitch] + [String.EndsWith(System.Time(mm),2) | String.EndsWith(System.Time(mm),7)] + String.IsEqual(System.Time(ss),23)</visible>
-                    <animation effect="fade" start="80" end="80" time="0">Visible</animation>
-                    <animation effect="fade" start="100" end="0" time="0" delay="190">Visible</animation>
-                    <animation effect="slide" start="4,0" end="4,0" time="0">Visible</animation>
-                    <animation effect="slide" start="0,0" end="-7,0" time="0" delay="70">Visible</animation>
-                    <animation effect="slide" start="0,0" end="5,0" time="0" delay="140">Visible</animation>
-                    <texture colordiffuse="text">ui/logo_mark_60.png</texture>
-                </control>
-            </control>
         </control>
-        </definition>
     </include>
 
     <!-- The hero is a large rounded picture, 64 px from the sides and 116 to 670 down. Its text lies
@@ -182,7 +122,6 @@
         <param name="art"/>
         <param name="shown"/>
         <param name="fadetime" default="200"/>
-        <param name="tear" default="false"/>
         <definition>
             <control type="image">
                 <left>40</left>
@@ -202,47 +141,6 @@
                 <fadetime>$PARAM[fadetime]</fadetime>
                 <texture diffuse="ui/mask_hero.png" background="true">$INFO[$PARAM[art]]</texture>
                 <visible>$PARAM[shown]</visible>
-            </control>
-            <!-- glitch: on some new titles (`tear`) three bands of the picture, each a slice from
-                 elsewhere in it, flash beside their place for 110 ms like a signal catching itself.
-                 Small, and drawn with the picture's own texture -->
-            <control type="group">
-                <control type="image">
-                    <left>64</left>
-                    <top>240</top>
-                    <width>1792</width>
-                    <height>46</height>
-                    <aspectratio aligny="top">scale</aspectratio>
-                    <texture background="true">$INFO[$PARAM[art]]</texture>
-                    <visible>$PARAM[shown] + [$PARAM[tear]]</visible>
-                    <animation effect="slide" start="-28,0" end="-28,0" time="0">Visible</animation>
-                    <animation effect="slide" start="0,0" end="42,0" time="0" delay="50">Visible</animation>
-                    <animation effect="fade" start="100" end="0" time="0" delay="110">Visible</animation>
-                </control>
-                <control type="image">
-                    <left>64</left>
-                    <top>352</top>
-                    <width>1792</width>
-                    <height>22</height>
-                    <aspectratio aligny="center">scale</aspectratio>
-                    <texture background="true">$INFO[$PARAM[art]]</texture>
-                    <visible>$PARAM[shown] + [$PARAM[tear]]</visible>
-                    <animation effect="slide" start="34,0" end="34,0" time="0">Visible</animation>
-                    <animation effect="slide" start="0,0" end="-51,0" time="0" delay="50">Visible</animation>
-                    <animation effect="fade" start="100" end="0" time="0" delay="130">Visible</animation>
-                </control>
-                <control type="image">
-                    <left>64</left>
-                    <top>452</top>
-                    <width>1792</width>
-                    <height>64</height>
-                    <aspectratio aligny="bottom">scale</aspectratio>
-                    <texture background="true">$INFO[$PARAM[art]]</texture>
-                    <visible>$PARAM[shown] + [$PARAM[tear]]</visible>
-                    <animation effect="slide" start="-16,0" end="-16,0" time="0">Visible</animation>
-                    <animation effect="slide" start="0,0" end="24,0" time="0" delay="50">Visible</animation>
-                    <animation effect="fade" start="100" end="0" time="0" delay="120">Visible</animation>
-                </control>
             </control>
             <control type="image">
                 <left>64</left>
@@ -431,25 +329,6 @@
 
     <!-- A focused card grows and glows, under its artwork. Fixed at 24 px past the card since
          card_halo.png has this margin: the callers pass card + 48 -->
-    <!-- glitch: a title whose database id ends in 7, about one in ten, does not settle at once when it
-         gets the focus: over by 14 px, back, and three smaller twitches, 230 ms in all. Slides of one
-         type add up to 0 at the end. The same title twitches every time: it has a tic. Focus, not
-         Conditional: a list builds the focused layout of an item with the condition already true,
-         and a Conditional animation then starts at its end -->
-    <include name="LookCardTwitch">
-        <param name="focused"/>
-        <param name="glitch"/>
-        <param name="item"/>
-        <definition>
-            <animation effect="slide" start="14,0" end="14,0" time="0" condition="$PARAM[glitch] + String.EndsWith($PARAM[item].DBID,7)">Focus</animation>
-            <animation effect="slide" start="0,0" end="-23,0" time="0" delay="40" condition="$PARAM[glitch] + String.EndsWith($PARAM[item].DBID,7)">Focus</animation>
-            <animation effect="slide" start="0,0" end="14,0" time="0" delay="80" condition="$PARAM[glitch] + String.EndsWith($PARAM[item].DBID,7)">Focus</animation>
-            <animation effect="slide" start="0,0" end="-8,0" time="0" delay="125" condition="$PARAM[glitch] + String.EndsWith($PARAM[item].DBID,7)">Focus</animation>
-            <animation effect="slide" start="0,0" end="4,0" time="0" delay="170" condition="$PARAM[glitch] + String.EndsWith($PARAM[item].DBID,7)">Focus</animation>
-            <animation effect="slide" start="0,0" end="-1,0" time="0" delay="210" condition="$PARAM[glitch] + String.EndsWith($PARAM[item].DBID,7)">Focus</animation>
-        </definition>
-    </include>
-
     <include name="LookCardFocus">
         <param name="glowwidth"/>
         <param name="glowheight"/>

@@ -9,13 +9,6 @@
         <value>nightcity $INFO[System.AddonVersion(skin.nightcity)]</value>
     </variable>
 
-    <!-- Confuse's glitches: none here. LookGlitch holds while they run, LookGlitchSetting offers
-         their switch in the skin settings -->
-    <expression name="LookGlitch">false</expression>
-    <expression name="LookGlitchSetting">false</expression>
-    <!-- the look group of the skin settings: the colours, here alone -->
-    <constant name="LookSettingsLookHeight">125</constant>
-
     <!-- The look of the shared building blocks: texture tags, focus frames, decoration and sizes.
          skins/confuse has the same names with its own values. No ids, no on* actions, a visible
          only as a $PARAM: what a control does stays in the file that uses these. -->
@@ -28,7 +21,6 @@
     </include>
     <!-- Beside the menu: nothing in this look -->
     <include name="LookHomeLogo">
-        <param name="glitch"/>
         <definition/>
     </include>
 
@@ -52,7 +44,6 @@
         <param name="art"/>
         <param name="shown"/>
         <param name="fadetime" default="200"/>
-        <param name="tear" default="false"/>
         <definition>
             <include content="FanartBackdrop">
                 <param name="art" value="$PARAM[art]"/>
@@ -228,13 +219,6 @@
         </definition>
     </include>
 
-    <!-- A card that twitches when it gets the focus (Confuse's glitches): none here -->
-    <include name="LookCardTwitch">
-        <param name="focused"/>
-        <param name="glitch"/>
-        <param name="item"/>
-        <definition/>
-    </include>
     <!-- A focused card's glow, under its artwork, 24 px past it on each side -->
     <include name="LookCardFocus">
         <param name="glowwidth"/>
@@ -636,8 +620,6 @@
     <!-- The first screen after boot: the wordmark and what runs under it until Home comes. `waiting`
          and `online` are the two states of the shared Startup.xml. -->
     <include name="LookStartupWordmark">
-        <param name="glitch"/>
-        <definition>
             <!-- wordmark: the static glitch of every title, plus a short burst of offset copies
                  every few seconds -->
             <control type="group">
@@ -689,13 +671,10 @@
                     <param name="align" value="center"/>
                 </include>
             </control>
-        </definition>
     </include>
     <include name="LookStartupTrack">
         <param name="waiting"/>
         <param name="online"/>
-        <param name="glitch"/>
-        <param name="calm"/>
         <definition>
             <!-- loading track: a ticker runs to and fro until the script is done, then the track
                  fills; held back to a second before Home comes (StartupOnline), so the screen

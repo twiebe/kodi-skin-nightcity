@@ -435,7 +435,7 @@ def test_main_menu_category_holds_the_look_under_appearance():
     labels = [k.findtext('label') for k in area.iter('control') if k.get('type') == 'label']
     assert '$LOCALIZE[480]' in labels
     ids = [k.get('id') for k in area.iter('control') if k.get('id')]
-    assert ids[-2:] == ['602', '603']  # 603: a look's glitches, only Confuse shows it
+    assert ids[-1] == '602'
     assert '601' not in controls(page_window())
 
 
@@ -455,10 +455,8 @@ def test_main_menu_category_picks_the_colour_scheme():
     row = c['602']
     assert row.findtext('onclick') == 'NotifyAll(nightcity,colours)'
     assert row.findtext('label2') == '$VAR[ColourSchemeLabel]'
-    assert [row.findtext(d) for d in ('onup', 'onleft')] == ['521', '9005']
-    # down to the glitches' switch where the look has one, else nowhere
-    assert [(d.get('condition'), d.text) for d in row.findall('ondown')] == [
-        ('Control.IsVisible(603)', '603'), ('!Control.IsVisible(603)', 'noop')]
+    assert [row.findtext(d) for d in ('onup', 'ondown', 'onleft')] == ['521', 'noop', '9005']
+    assert len(row.findall('ondown')) == 1
 
 
 def test_settings_page_fills_the_defaults_on_load():

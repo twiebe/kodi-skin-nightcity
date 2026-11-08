@@ -1103,14 +1103,6 @@ msgctxt "#31474"
 msgid "biography"
 msgstr "biografia"
 
-msgctxt "#31475"
-msgid "Small glitches"
-msgstr "Drobne usterki"
-
-msgctxt "#31476"
-msgid "Now and then something stumbles for a blink: the loading spinner skips, the logo shivers, the spotlight tears, some titles twitch when they get the focus."
-msgstr "Od czasu do czasu coś na chwilę się potyka: wskaźnik ładowania przeskakuje, logo drży, sekcja wyróżnionych się rwie, a niektóre tytuły drgają po zaznaczeniu."
-
 msgctxt "#31477"
 msgid "Home"
 msgstr "Start"

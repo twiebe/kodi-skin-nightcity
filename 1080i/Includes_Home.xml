@@ -221,9 +221,7 @@
                 <include>QuickMenuFade</include>
             </control>
         </control>
-        <include content="LookHomeLogo">
-            <param name="glitch" value="$EXP[LookGlitch]"/>
-        </include>
+        <include>LookHomeLogo</include>
         <include>MainMenu</include>
     </include>
 

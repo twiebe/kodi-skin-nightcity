@@ -94,6 +94,5 @@ def test_spotlight_kicker_has_no_position_counter():
     for name in ('Home.xml', 'Includes_Home.xml'):
         text = (ROOT / '1080i' / name).read_text()
         for spotlight in ('9000', '9001'):
-            # a condition may ask for the position (Confuse's tear, every fifth title), no label shows it
-            assert '$INFO[Container({}).CurrentItem'.format(spotlight) not in text, name
+            assert 'Container({}).CurrentItem'.format(spotlight) not in text, name
             assert 'Container({}).NumItems]'.format(spotlight) not in text, name

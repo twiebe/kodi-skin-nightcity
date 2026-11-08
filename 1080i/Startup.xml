@@ -18,14 +18,10 @@
         <control type="group">
             <animation effect="fade" start="0" end="100" time="400" delay="100">WindowOpen</animation>
             <animation effect="fade" start="100" end="0" time="250">WindowClose</animation>
-            <include content="LookStartupWordmark">
-                <param name="glitch" value="$EXP[LookGlitch]"/>
-            </include>
+            <include>LookStartupWordmark</include>
             <include content="LookStartupTrack">
                 <param name="waiting" value="!$EXP[StartupOnline]"/>
                 <param name="online" value="$EXP[StartupOnline]"/>
-                <param name="glitch" value="$EXP[LookGlitch]"/>
-                <param name="calm" value="!$EXP[LookGlitch]"/>
             </include>
         </control>
     </controls>

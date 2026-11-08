@@ -1,8 +1,7 @@
-"""Confuse's glitches: now and then something stumbles for a blink. Each is rare, runs only while
-LookGlitch holds (the skin setting cf.glitch.off, off by default, switches them off), and the
-animations of one type that make a twitch add up to nothing in the end. Nightcity has none."""
+"""Confuse's loading screen glitches: the startup spinner sticks, skips and runs back, the startup
+logo points backwards for a blink. Always on, no setting. The other glitches (the Home logo's
+ghost, the spotlight's tear, the twitching cards) and their switch are gone. Nightcity has none."""
 import importlib.util
-import re
 
 from PIL import Image, ImageChops
 
@@ -10,6 +9,7 @@ from conftest import ROOT, parse
 
 OVERLAY = ROOT / 'skins' / 'confuse'
 UI = OVERLAY / 'media' / 'ui'
+LANGUAGES = sorted(ROOT.glob('language/*/strings.po'))
 
 
 def textures_module():
@@ -27,30 +27,55 @@ def include(name, root=OVERLAY):
     return next(i for i in look(root).findall('include') if i.get('name') == name)
 
 
-def expression(name, root=OVERLAY):
-    return next(e.text for e in look(root).findall('expression') if e.get('name') == name)
+def windows():
+    paths = list((ROOT / '1080i').glob('*.xml')) + list((OVERLAY / '1080i').glob('*.xml'))
+    return {p: p.read_text(encoding='utf-8') for p in paths}
 
 
-def slides(animations):
-    return sum(int(a.get('end').split(',')[0]) - int(a.get('start').split(',')[0])
-               for a in animations if a.get('effect') == 'slide' and a.get('start') != a.get('end')) + \
-        sum(int(a.get('start').split(',')[0]) for a in animations if a.get('effect') == 'slide' and a.get('start') == a.get('end'))
+def test_no_setting_and_no_switch():
+    for path, text in windows().items():
+        for gone in ('LookGlitch', 'cf.glitch', 'LookSettingsLookHeight', '31475', '31476', 'LookCardTwitch'):
+            assert gone not in text, (path.name, gone)
+    ids = [c.get('id') for c in parse(ROOT / '1080i' / 'SkinSettings.xml').iter('control')]
+    assert '603' not in ids
+    assert len(LANGUAGES) == 8
+    for po in LANGUAGES:
+        text = po.read_text(encoding='utf-8')
+        assert 'msgctxt "#31475"' not in text and 'msgctxt "#31476"' not in text, po.parent.name
 
 
-def test_the_setting_switches_them():
-    assert expression('LookGlitch') == '!Skin.HasSetting(cf.glitch.off)'
-    assert expression('LookGlitchSetting') == 'true'
-    assert expression('LookGlitch', ROOT) == 'false' and expression('LookGlitchSetting', ROOT) == 'false'
-    row = next(c for c in parse(ROOT / '1080i' / 'SkinSettings.xml').iter('control') if c.get('id') == '603')
-    assert row.findtext('onclick') == 'Skin.ToggleSetting(cf.glitch.off)'
-    assert row.findtext('selected') == '!Skin.HasSetting(cf.glitch.off)'
-    assert row.findtext('visible') == '$EXP[LookGlitchSetting]'
+def test_startup_always_glitches():
+    """The shared Startup.xml passes no glitch params; Confuse always shows its glitch spinner and
+    the logo's backwards blink."""
+    startup = (ROOT / '1080i' / 'Startup.xml').read_text(encoding='utf-8')
+    assert 'name="glitch"' not in startup and 'name="calm"' not in startup
+    for name in ('LookStartupWordmark', 'LookStartupTrack'):
+        for root in (ROOT, OVERLAY):
+            params = [p.get('name') for p in include(name, root).findall('param')]
+            assert 'glitch' not in params and 'calm' not in params, (name, root.name)
+    text = (OVERLAY / '1080i' / 'Includes_Look.xml').read_text(encoding='utf-8')
+    assert '$PARAM[glitch]' not in text and '$PARAM[calm]' not in text
+    spinners = [c for c in include('LookStartupTrack').iter('control') if c.get('type') == 'multiimage']
+    assert [s.findtext('imagepath') for s in spinners] == ['ui/spinner_glitch']
+    assert spinners[0].find('visible') is None
+    back = [c for c in include('LookStartupWordmark').iter('control') if c.findtext('texture') == 'ui/logo_mark_230_back.png']
+    assert len(back) == 1
+    assert (UI / 'logo_mark_230_back.png').is_file()
+
+
+def test_home_logo_and_spotlight_hold_still():
+    home = (ROOT / '1080i' / 'Home.xml').read_text(encoding='utf-8')
+    assert 'name="tear"' not in home
+    for root in (ROOT, OVERLAY):
+        assert [p.get('name') for p in include('LookHomeLogo', root).findall('param')] == []
+        assert 'tear' not in [p.get('name') for p in include('LookHomeFanart', root).findall('param')]
+    assert '$PARAM[tear]' not in (OVERLAY / '1080i' / 'Includes_Look.xml').read_text(encoding='utf-8')
+    assert len([c for c in include('LookHomeLogo').iter('control') if c.get('type') == 'image']) == 2
+    assert '<include>LookHomeLogo</include>' in (ROOT / '1080i' / 'Includes_Home.xml').read_text(encoding='utf-8')
 
 
 def test_nightcity_hooks_are_empty():
-    for name in ('LookHomeLogo', 'LookCardTwitch'):
-        assert include(name, ROOT).find('definition') is not None
-        assert len(include(name, ROOT).find('definition')) == 0, name
+    assert len(include('LookHomeLogo', ROOT).find('definition')) == 0
 
 
 def test_spinner_frames_follow_the_sequence():
@@ -67,26 +92,3 @@ def test_spinner_frames_follow_the_sequence():
     assert set(steps) <= {0, 1, 11, 5}  # on, held, back, and the skip after the dropout
     assert steps.count(5) == 1 and steps.count(11) >= 12
     assert heads.index(3) < 20 and heads[14:22] == [2, 3] * 4  # the record skip comes in the first 2 s
-
-
-def test_twitch_and_ghosts_end_where_they_started():
-    twitch = include('LookCardTwitch').find('definition').findall('animation')
-    assert len(twitch) == 6 and slides(twitch) == 0
-    # on focus, as the item's focused layout gets it, and only for some titles
-    assert all(a.text == 'Focus' and a.get('condition') == '$PARAM[glitch] + String.EndsWith($PARAM[item].DBID,7)' for a in twitch)
-    # Kodi plays a Visible animation on the control that turns visible: each copy has the condition
-    ghosts = [g for g in include('LookHomeLogo').iter('control') if g.findtext('visible', '').startswith('$PARAM[glitch]')]
-    assert len(ghosts) == 2 and all(g.get('type') == 'image' for g in ghosts)
-    for image in ghosts:
-        assert slides(image.findall('animation')) in (-2, 2)
-    bands = [b for b in include('LookHomeFanart').iter('control') if '$PARAM[tear]' in b.findtext('visible', '')]
-    assert len(bands) == 3 and all(b.find('animation') is not None for b in bands)
-
-
-def test_each_glitch_waits_for_the_setting():
-    text = (OVERLAY / '1080i' / 'Includes_Look.xml').read_text(encoding='utf-8')
-    assert 'ui/spinner_glitch' in text and 'logo_mark_230_back' in text
-    home = (ROOT / '1080i' / 'Home.xml').read_text(encoding='utf-8')
-    tears = re.findall(r'<param name="tear" value="([^"]+)"', home)
-    assert len(tears) == 2 and all(t.startswith('$EXP[LookGlitch] + ') for t in tears)
-    assert (UI / 'logo_mark_230_back.png').is_file()
