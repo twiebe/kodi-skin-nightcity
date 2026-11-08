@@ -470,11 +470,11 @@
                 <texture border="16" colordiffuse="focus">ui/card_ring.png</texture>
                 <visible>$PARAM[focused]</visible>
             </control>
-            <!-- the current one (the episode the page is about): the ring, quiet -->
+            <!-- the current one (the episode the page is about): the focus frame without the glow -->
             <control type="image">
                 <width>$PARAM[width]</width>
                 <height>$PARAM[height]</height>
-                <texture border="16" colordiffuse="state_text">ui/card_ring.png</texture>
+                <texture border="16" colordiffuse="focus">ui/card_ring.png</texture>
                 <visible>$PARAM[current]</visible>
             </control>
         </definition>

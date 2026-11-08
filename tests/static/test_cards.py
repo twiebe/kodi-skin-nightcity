@@ -113,7 +113,7 @@ def test_every_card_is_cut():
     frames = {c.findtext('visible'): c.find('texture').get('colordiffuse')
               for c in card.iter('control') if c.findtext('texture') == 'ui/cut.png'}
     assert frames == {'$PARAM[focused]': 'focus', '![$PARAM[focused]] + ![$PARAM[current]]': 'border_dim',
-                      '[$PARAM[current]] + ![$PARAM[focused]]': 'state_text'}
+                      '[$PARAM[current]] + ![$PARAM[focused]]': 'focus'}
 
 
 DOG_EAR = 22  # px, legs of the unwatched mark
@@ -204,7 +204,7 @@ def test_current_episode_is_marked_by_its_title():
 
 def test_the_current_episode_has_a_brighter_frame():
     """At a glance which episode the page is about: its still has a frame a step brighter than the
-    others (state_text over border_dim), the focus the bright one with its glow. Dimming stays
+    others: the focus frame without the glow; the focus has the glow and the zoom. Dimming stays
     for the list with the cursor only: dimmed stills elsewhere looked faded."""
     info = parse(ROOT / '1080i' / 'DialogVideoInfo.xml')
     episodes = next(c for c in info.iter('control') if c.get('id') == '5100')
@@ -213,7 +213,7 @@ def test_the_current_episode_has_a_brighter_frame():
     card = _card()
     frames = {c.findtext('visible'): c.find('texture').get('colordiffuse')
               for c in card.iter('control') if c.findtext('texture') == 'ui/cut.png'}
-    assert frames['[$PARAM[current]] + ![$PARAM[focused]]'] == 'state_text'
+    assert frames['[$PARAM[current]] + ![$PARAM[focused]]'] == 'focus'  # no glow: the focus has it
     base = next(i for i in parse(ROOT / '1080i' / 'Includes_Base.xml').iter('include') if i.get('name') == 'CutCard')
     params = {p.get('name'): p.get('value') for i in base.iter('include') if i.get('content') == 'LookCardFocusRing' for p in i.findall('param')}
     assert params['current'] == '[$PARAM[current]] + ![$PARAM[focused]]'
