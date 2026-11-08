@@ -1178,3 +1178,7 @@ msgstr "On Deck"
 msgctxt "#31701"
 msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
 msgstr "Os títulos iniciados e depois as séries que você está assistindo. OK em uma série abre o próximo episódio."
+
+msgctxt "#31750"
+msgid "No trailer found"
+msgstr "Nenhum trailer encontrado"

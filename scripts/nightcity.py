@@ -1126,6 +1126,142 @@ def plot(item='ListItem'):
     xbmcgui.Dialog().textviewer(heading, xbmc.getInfoLabel(item + '.Plot'))
 
 
+# --- IMDb: the trailer of a title by its IMDb id --------------------------------------------------
+# IMDb's own pages ask its public GraphQL API for their videos, without a login or a key. One
+# question gives the title's trailers with their MP4 files; the answer is data, checked field by
+# field, and only an https URL on IMDb's video host plays.
+
+IMDB_API = 'https://graphql.prod.api.imdb.a2z.com/'
+IMDB_HEADERS = {'Content-Type': 'application/json', 'Referer': 'https://www.imdb.com/', 'Origin': 'https://www.imdb.com'}
+IMDB_TIMEOUT = 5.0  # s for IMDb's answer, under a second as a rule
+IMDB_LIMIT = 1 << 20  # bytes of an answer at most; 25 trailers are about 80 KB
+IMDB_QUERY = ('query NcTrailer($id: ID!) { title(id: $id) { latestTrailer { ...NcVideo } '
+              'videoStrip(first: 25, filter: { types: [TRAILER] }, sort: { by: DATE, order: DESC }) '
+              '{ edges { node { ...NcVideo } } } } } '
+              'fragment NcVideo on Video { id name { value } runtime { value } contentType { id } '
+              'playbackURLs { displayName { value } videoMimeType url } }')
+IMDB_TRAILER = 'amzn1.imdb.video.contenttype.trailer'
+IMDB_VIDEO_HOST = '.media-imdb.com'
+IMDB_ID = re.compile(r'tt\d{1,12}$')
+TRAILER_MAIN = (90, 300)  # s a main trailer runs: shorter ones are spots, longer ones odd uploads
+TRAILER_NOT_MAIN = ('teaser', 'spot', 'clip', 'featurette', 'sneak')
+IMDB_RENEW = 600  # s before IMDb's signature of a URL expires that it is asked for anew
+IMDB_NONE_KEPT = 6 * 3600  # s a title without a trailer is not asked for again
+_imdb_cache = {}  # IMDb id: (URL or None, until), for the service's lifetime
+
+
+def _now():
+    import time
+    return time.time()
+
+
+def _field(value, *keys):
+    """value[key][key]... where each step is a dict, else None."""
+    for key in keys:
+        if not isinstance(value, dict):
+            return None
+        value = value.get(key)
+    return value
+
+
+def item_imdb_id():
+    """The IMDb id of the page's item: Kodi's IMDBNumber is the scraper's default id (TMDb's for
+    many libraries), the unique id imdb is IMDb's for sure. '' when it has none."""
+    import xbmc
+    for label in ('ListItem.IMDBNumber', 'ListItem.UniqueID(imdb)'):
+        value = xbmc.getInfoLabel(label)
+        if IMDB_ID.match(value):
+            return value
+    return ''
+
+
+def _imdb_file(video):
+    """(height, URL) of the sharpest MP4 of an IMDb video (SD counts as 1), None without one."""
+    best = None
+    for entry in _field(video, 'playbackURLs') or ():
+        name, url = _field(entry, 'displayName', 'value'), _field(entry, 'url')
+        if _field(entry, 'videoMimeType') != 'MP4' or not isinstance(name, str) or not isinstance(url, str):
+            continue
+        if name == 'SD':
+            height = 1
+        elif name[:-1].isdigit() and name.endswith('p'):
+            height = int(name[:-1])
+        else:
+            continue
+        parts = urllib.parse.urlsplit(url)
+        if parts.scheme != 'https' or not (parts.hostname or '').endswith(IMDB_VIDEO_HOST):
+            continue
+        if best is None or height > best[0]:
+            best = (height, url)
+    return best
+
+
+def _trailer_rank(video, height):
+    """How much VIDEO looks like the title's main trailer: a trailer by name, of a trailer's
+    length, in HD, called official; then the longest."""
+    name = _field(video, 'name', 'value')
+    name = name.lower() if isinstance(name, str) else ''
+    runtime = _field(video, 'runtime', 'value')
+    runtime = runtime if isinstance(runtime, int) and not isinstance(runtime, bool) else 0
+    low, high = TRAILER_MAIN
+    main = low <= runtime <= high
+    return (not any(word in name for word in TRAILER_NOT_MAIN), main, height >= 720, 'official' in name,
+            runtime if main else -min(abs(runtime - low), abs(runtime - high)))
+
+
+def imdb_pick(answer):
+    """The URL of the trailer to play from IMDb's ANSWER to IMDB_QUERY: the main trailer among
+    the title's trailers (_trailer_rank), its sharpest MP4. The latest trailer, which IMDb names
+    first, is often a short spot: it plays only when the title lists no other. None for none."""
+    title = _field(answer, 'data', 'title')
+    best = None
+    for edge in _field(title, 'videoStrip', 'edges') or ():
+        video = _field(edge, 'node')
+        if _field(video, 'contentType', 'id') != IMDB_TRAILER:
+            continue
+        found = _imdb_file(video)
+        if found:
+            rank = _trailer_rank(video, found[0])
+            if best is None or rank > best[0]:
+                best = (rank, found[1])
+    if best:
+        return best[1]
+    found = _imdb_file(_field(title, 'latestTrailer'))
+    return found[1] if found else None
+
+
+def imdb_answer(imdb_id, urlopen=None):
+    """IMDb's answer to IMDB_QUERY for IMDB_ID, parsed; None when the question fails (no network,
+    an HTTP error, a timeout, no JSON)."""
+    import urllib.request
+    body = json.dumps({'operationName': 'NcTrailer', 'query': IMDB_QUERY, 'variables': {'id': imdb_id}}).encode()
+    request = urllib.request.Request(IMDB_API, data=body, headers=IMDB_HEADERS, method='POST')
+    try:
+        with (urlopen or urllib.request.urlopen)(request, timeout=IMDB_TIMEOUT) as response:
+            return json.loads(response.read(IMDB_LIMIT).decode('utf-8'))
+    except (OSError, ValueError):  # URLError, HTTPError and timeouts are OSErrors
+        return None
+
+
+def imdb_trailer(imdb_id):
+    """The URL of IMDB_ID's trailer (imdb_pick), None for none. Kept while IMDb's signature of the
+    URL holds, a title without a trailer for IMDB_NONE_KEPT; a failed question is not kept."""
+    kept = _imdb_cache.get(imdb_id)
+    now = _now()
+    if kept and now < kept[1]:
+        return kept[0]
+    answer = imdb_answer(imdb_id)
+    if answer is None:
+        return None
+    url = imdb_pick(answer)
+    until = now + IMDB_NONE_KEPT
+    if url:
+        expires = urllib.parse.parse_qs(urllib.parse.urlsplit(url).query).get('Expires', [''])[0]
+        until = int(expires) - IMDB_RENEW if expires.isdigit() else now
+    _imdb_cache[imdb_id] = (url, until)
+    return url
+
+
 # --- trailer: plays over its info page --------------------------------------------------------
 
 TRAILER_START = 30.0  # s a trailer has to start: a plugin (YouTube) resolves it first
@@ -1160,33 +1296,54 @@ def play_windowed(path):
     return 'PlayMedia("{}",1,noresume)'.format(path.replace('\\', '\\\\').replace('"', '\\"'))
 
 
+def trailer_source(imdb_url, path, installed, enabled):
+    """What the trailer button does: ('imdb', URL) with IMDb's trailer (imdb_trailer), else
+    ('play', PATH) with the item's own (ListItem.Trailer); ('offer', builtin) when that one needs
+    the YouTube add-on (trailer_addon_builtin); ('none', '') without either."""
+    if imdb_url:
+        return 'imdb', imdb_url
+    if not path:
+        return 'none', ''
+    offer = trailer_addon_builtin(path, installed, enabled)
+    return ('offer', offer) if offer else ('play', path)
+
+
 def trailer():
     """The trailer of the movie on the info page (button 9008), in full screen over the page: it
     plays without the player window, the page shows it (9095 in DialogVideoInfo.xml) and keeps
     the keys (9099), so the page and a TMDb chain under it stay. The button has set nc.trailer
     and moved the focus to 9099 already. Once the trailer is over the focus goes back to the
-    button. Never over a video that plays: it would end it. Without the add-on the trailer
-    needs it offers that instead (trailer_addon_builtin)."""
+    button. Never over a video that plays: it would end it. The trailer comes from IMDb, else
+    the item's own (trailer_source); without either a notification says so."""
     import xbmc
     home = _home()
-    path = xbmc.getInfoLabel('ListItem.Trailer')
-    offer = trailer_addon_builtin(path, xbmc.getCondVisibility('System.HasAddon({})'.format(YOUTUBE)),
-                                  xbmc.getCondVisibility('System.AddonIsEnabled({})'.format(YOUTUBE)))
-    played = bool(path) and not offer and not xbmc.getCondVisibility('Player.HasVideo')
+    kind, what, title = 'busy', '', xbmc.getInfoLabel('ListItem.Title')
     started, seconds = False, 0.0
     try:
-        if offer:
-            xbmc.executebuiltin(offer)
-        if played:
-            home.setProperty('nc.trailer', '1')
-            xbmc.executebuiltin(play_windowed(path))
+        if not xbmc.getCondVisibility('Player.HasVideo'):
+            path = xbmc.getInfoLabel('ListItem.Trailer')
+            installed = xbmc.getCondVisibility('System.HasAddon({})'.format(YOUTUBE))
+            enabled = xbmc.getCondVisibility('System.AddonIsEnabled({})'.format(YOUTUBE))
+            imdb_id = item_imdb_id()
+            kind, what = trailer_source(imdb_trailer(imdb_id) if imdb_id else None, path, installed, enabled)
+        if not home.getProperty('nc.trailer'):
+            kind = 'gone'  # Back while IMDb answered
+        if kind == 'offer':
+            xbmc.executebuiltin(what)
+        if kind == 'imdb':
+            _play_url_windowed(what)
+        if kind == 'play':
+            xbmc.executebuiltin(play_windowed(what))
+        if kind in ('imdb', 'play'):
             started, seconds = _trailer_follow(home)
     finally:
         home.clearProperty('nc.trailer')
         if xbmc.getCondVisibility('Control.HasFocus(9099)'):
             _focus('SetFocus(9008)')
     try:
-        if not played:
+        if kind == 'none':
+            _no_trailer(title)
+        if kind not in ('imdb', 'play'):
             return
         # the page closed under it, or Back came while the plugin still resolved it: a trailer
         # that plays (or starts late) without its page stops
@@ -1195,6 +1352,21 @@ def trailer():
         _trailer_lists_rest()
     finally:
         home.clearProperty('nc.trailer.lists')
+
+
+def _play_url_windowed(url):
+    """URL without the switch to the player, by Python's player: PlayMedia asked IMDb's host for
+    its signed URLs without the signature, which IMDb answers with 403 (Kodi 21)."""
+    import xbmc
+    import xbmcgui
+    xbmc.Player().play(url, xbmcgui.ListItem(path=url), True)
+
+
+def _no_trailer(title):
+    """A short notification under the movie's title: it has no trailer."""
+    import xbmc
+    import xbmcgui
+    xbmcgui.Dialog().notification(title, xbmc.getInfoLabel('$LOCALIZE[31750]'), xbmcgui.NOTIFICATION_INFO, 3000, False)
 
 
 TRAILER_RELOAD = 0.5  # s for Kodi to start reloading the page's lists after the stop

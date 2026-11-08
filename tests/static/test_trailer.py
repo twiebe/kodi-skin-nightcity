@@ -42,15 +42,18 @@ def test_trailer_sits_after_resume_and_from_start():
     assert ids.index('9001') + 1 == ids.index('9002') and ids.index('9002') + 1 == ids.index('9008')
 
 
+IMDB = 'String.StartsWith(ListItem.IMDBNumber,tt) | String.StartsWith(ListItem.UniqueID(imdb),tt)'
+
+
 def test_trailer_shows_on_a_movie_with_a_trailer_it_can_play():
-    """On a movie's page, a library movie or a TMDb title in a chain alike: both have
-    ListItem.Trailer (TMDb Helper's is a YouTube link; without the YouTube add-on the click offers
-    it). Never over
-    a video that plays (a chain from the OSD): the trailer would end it."""
+    """On a movie's page, a library movie or a TMDb title in a chain alike, with an IMDb id (the
+    trailer comes from IMDb, scripts/nightcity.py imdb_trailer) or ListItem.Trailer (TMDb Helper's
+    is a YouTube link; without the YouTube add-on the click offers it). Never over a video that
+    plays (a chain from the OSD): the trailer would end it."""
     params, clicks = _pill('9008')
     visible = params['visible']
-    assert 'String.IsEqual(ListItem.DBType,movie)' in visible
-    assert '!String.IsEmpty(ListItem.Trailer)' in visible
+    assert visible.startswith('String.IsEqual(ListItem.DBType,movie) + ')
+    assert '[!String.IsEmpty(ListItem.Trailer) | {}]'.format(IMDB) in visible
     # without the YouTube add-on too: the click offers it (scripts/nightcity.py trailer)
     assert 'youtube' not in visible
     # it stays while its own trailer plays, and while it has the focus: after Back the player
@@ -103,6 +106,8 @@ def test_keys_while_the_trailer_plays():
 def test_trailer_label_is_english():
     po = (ROOT / 'language' / 'resource.language.en_gb' / 'strings.po').read_text(encoding='utf-8')
     assert 'msgctxt "#31041"\nmsgid "trailer"\n' in po
+    # the notification when neither IMDb nor the item has one (scripts/nightcity.py trailer)
+    assert 'msgctxt "#31750"\nmsgid "No trailer found"\n' in po
 
 
 def test_recommendations_wait_while_a_trailer_plays():

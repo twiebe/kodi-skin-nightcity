@@ -1,0 +1,184 @@
+{
+ "data": {
+  "title": {
+   "latestTrailer": {
+    "id": "vi4150313497",
+    "name": {
+     "value": "Avatar"
+    },
+    "runtime": {
+     "value": 93
+    },
+    "contentType": {
+     "id": "amzn1.imdb.video.contenttype.trailer"
+    },
+    "playbackURLs": [
+     {
+      "displayName": {
+       "value": "1080p"
+      },
+      "videoMimeType": "MP4",
+      "url": "https://imdb-video.media-imdb.com/vi4150313497/1434659529640-260ouz-1661360598638.mp4?Expires=1794240047&Signature=x"
+     },
+     {
+      "displayName": {
+       "value": "AUTO"
+      },
+      "videoMimeType": "M3U8",
+      "url": "https://imdb-video.media-imdb.com/vi4150313497/hls-1661360598638-master.m3u8?Expires=1794240047&Signature=x"
+     },
+     {
+      "displayName": {
+       "value": "SD"
+      },
+      "videoMimeType": "MP4",
+      "url": "https://imdb-video.media-imdb.com/vi4150313497/1434659454657-dx9ykf-1661360598638.mp4?Expires=1794240047&Signature=x"
+     },
+     {
+      "displayName": {
+       "value": "720p"
+      },
+      "videoMimeType": "MP4",
+      "url": "https://imdb-video.media-imdb.com/vi4150313497/1434659379400-8cjq25-1661360598638.mp4?Expires=1794240047&Signature=x"
+     },
+     {
+      "displayName": {
+       "value": "480p"
+      },
+      "videoMimeType": "MP4",
+      "url": "https://imdb-video.media-imdb.com/vi4150313497/1434659607842-pgv4ql-1661360598638.mp4?Expires=1794240047&Signature=x"
+     }
+    ]
+   },
+   "videoStrip": {
+    "edges": [
+     {
+      "node": {
+       "id": "vi4150313497",
+       "name": {
+        "value": "Avatar"
+       },
+       "runtime": {
+        "value": 93
+       },
+       "contentType": {
+        "id": "amzn1.imdb.video.contenttype.trailer"
+       },
+       "playbackURLs": [
+        {
+         "displayName": {
+          "value": "1080p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi4150313497/1434659529640-260ouz-1661360598638.mp4?Expires=1794240047&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "AUTO"
+         },
+         "videoMimeType": "M3U8",
+         "url": "https://imdb-video.media-imdb.com/vi4150313497/hls-1661360598638-master.m3u8?Expires=1794240047&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "SD"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi4150313497/1434659454657-dx9ykf-1661360598638.mp4?Expires=1794240047&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "720p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi4150313497/1434659379400-8cjq25-1661360598638.mp4?Expires=1794240047&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "480p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi4150313497/1434659607842-pgv4ql-1661360598638.mp4?Expires=1794240047&Signature=x"
+        }
+       ]
+      }
+     },
+     {
+      "node": {
+       "id": "vi531039513",
+       "name": {
+        "value": "Avatar: Trailer #2 "
+       },
+       "runtime": {
+        "value": 216
+       },
+       "contentType": {
+        "id": "amzn1.imdb.video.contenttype.trailer"
+       },
+       "playbackURLs": [
+        {
+         "displayName": {
+          "value": "AUTO"
+         },
+         "videoMimeType": "M3U8",
+         "url": "https://imdb-video.media-imdb.com/vi531039513/hls-1440787227614-master.m3u8?Expires=1794240047&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "SD"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi531039513/1434659454657-dx9ykf-1440787227614.mp4?Expires=1794240047&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "480p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi531039513/1434659607842-pgv4ql-1440787227613.mp4?Expires=1794240047&Signature=x"
+        }
+       ]
+      }
+     },
+     {
+      "node": {
+       "id": "vi2804482585",
+       "name": {
+        "value": "Avatar: Trailer #1"
+       },
+       "runtime": {
+        "value": 1178
+       },
+       "contentType": {
+        "id": "amzn1.imdb.video.contenttype.trailer"
+       },
+       "playbackURLs": [
+        {
+         "displayName": {
+          "value": "SD"
+         },
+         "videoMimeType": "WEBM",
+         "url": "https://imdb-video.media-imdb.com/vi2804482585/MV5BMTQ2ODU2MTc4MF5BMTFeQXdlYm1eQW1lNzA0ODUzODk2.webm?Expires=1794240047&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "SD"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi2804482585/MV5BMTAzNjQzMjYzODReQTExXkFtcDReQW1lNzAxOTkwMzMz.mp4?Expires=1794240047&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "SD"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi2804482585/MV5BOTcyODMxOTM4NF5BMTFeQW1wNF5BbWU3MDcwMjk3OTY@.mp4?Expires=1794240047&Signature=x"
+        }
+       ]
+      }
+     }
+    ]
+   }
+  }
+ }
+}

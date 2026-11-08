@@ -1,0 +1,263 @@
+{
+ "data": {
+  "title": {
+   "latestTrailer": {
+    "id": "vi3332425241",
+    "name": {
+     "value": "Final Trailer"
+    },
+    "runtime": {
+     "value": 31
+    },
+    "contentType": {
+     "id": "amzn1.imdb.video.contenttype.trailer"
+    },
+    "playbackURLs": [
+     {
+      "displayName": {
+       "value": "1080p"
+      },
+      "videoMimeType": "MP4",
+      "url": "https://imdb-video.media-imdb.com/vi3332425241/1434659529640-260ouz-1709136917577.mp4?Expires=1794239918&Signature=x"
+     },
+     {
+      "displayName": {
+       "value": "AUTO"
+      },
+      "videoMimeType": "M3U8",
+      "url": "https://imdb-video.media-imdb.com/vi3332425241/hls-1709136917577-master.m3u8?Expires=1794239918&Signature=x"
+     },
+     {
+      "displayName": {
+       "value": "SD"
+      },
+      "videoMimeType": "MP4",
+      "url": "https://imdb-video.media-imdb.com/vi3332425241/1434659454657-dx9ykf-1709136917577.mp4?Expires=1794239918&Signature=x"
+     },
+     {
+      "displayName": {
+       "value": "720p"
+      },
+      "videoMimeType": "MP4",
+      "url": "https://imdb-video.media-imdb.com/vi3332425241/1434659379400-8cjq25-1709136917577.mp4?Expires=1794239918&Signature=x"
+     },
+     {
+      "displayName": {
+       "value": "480p"
+      },
+      "videoMimeType": "MP4",
+      "url": "https://imdb-video.media-imdb.com/vi3332425241/1434659607842-pgv4ql-1709136917577.mp4?Expires=1794239918&Signature=x"
+     }
+    ]
+   },
+   "videoStrip": {
+    "edges": [
+     {
+      "node": {
+       "id": "vi3332425241",
+       "name": {
+        "value": "Final Trailer"
+       },
+       "runtime": {
+        "value": 31
+       },
+       "contentType": {
+        "id": "amzn1.imdb.video.contenttype.trailer"
+       },
+       "playbackURLs": [
+        {
+         "displayName": {
+          "value": "1080p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi3332425241/1434659529640-260ouz-1709136917577.mp4?Expires=1794239918&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "AUTO"
+         },
+         "videoMimeType": "M3U8",
+         "url": "https://imdb-video.media-imdb.com/vi3332425241/hls-1709136917577-master.m3u8?Expires=1794239918&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "SD"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi3332425241/1434659454657-dx9ykf-1709136917577.mp4?Expires=1794239918&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "720p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi3332425241/1434659379400-8cjq25-1709136917577.mp4?Expires=1794239918&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "480p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi3332425241/1434659607842-pgv4ql-1709136917577.mp4?Expires=1794239918&Signature=x"
+        }
+       ]
+      }
+     },
+     {
+      "node": {
+       "id": "vi3137783577",
+       "name": {
+        "value": "Official Trailer"
+       },
+       "runtime": {
+        "value": 160
+       },
+       "contentType": {
+        "id": "amzn1.imdb.video.contenttype.trailer"
+       },
+       "playbackURLs": [
+        {
+         "displayName": {
+          "value": "1080p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi3137783577/1434659529640-260ouz-1702406362869.mp4?Expires=1794239918&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "AUTO"
+         },
+         "videoMimeType": "M3U8",
+         "url": "https://imdb-video.media-imdb.com/vi3137783577/hls-1702406362869-master.m3u8?Expires=1794239918&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "SD"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi3137783577/1434659454657-dx9ykf-1702406362869.mp4?Expires=1794239918&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "720p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi3137783577/1434659379400-8cjq25-1702406362868.mp4?Expires=1794239918&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "480p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi3137783577/1434659607842-pgv4ql-1702406362868.mp4?Expires=1794239918&Signature=x"
+        }
+       ]
+      }
+     },
+     {
+      "node": {
+       "id": "vi1755432729",
+       "name": {
+        "value": "Official Trailer 2"
+       },
+       "runtime": {
+        "value": 184
+       },
+       "contentType": {
+        "id": "amzn1.imdb.video.contenttype.trailer"
+       },
+       "playbackURLs": [
+        {
+         "displayName": {
+          "value": "1080p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi1755432729/1434659529640-260ouz-1688056560183.mp4?Expires=1794239918&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "AUTO"
+         },
+         "videoMimeType": "M3U8",
+         "url": "https://imdb-video.media-imdb.com/vi1755432729/hls-1688056560183-master.m3u8?Expires=1794239918&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "SD"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi1755432729/1434659454657-dx9ykf-1688056560183.mp4?Expires=1794239918&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "720p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi1755432729/1434659379400-8cjq25-1688056560183.mp4?Expires=1794239918&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "480p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi1755432729/1434659607842-pgv4ql-1688056560183.mp4?Expires=1794239918&Signature=x"
+        }
+       ]
+      }
+     },
+     {
+      "node": {
+       "id": "vi4284728345",
+       "name": {
+        "value": "Official Trailer"
+       },
+       "runtime": {
+        "value": 145
+       },
+       "contentType": {
+        "id": "amzn1.imdb.video.contenttype.trailer"
+       },
+       "playbackURLs": [
+        {
+         "displayName": {
+          "value": "1080p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi4284728345/1434659529640-260ouz-1683129943266.mp4?Expires=1794239918&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "SD"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi4284728345/1434659454657-dx9ykf-1683129943266.mp4?Expires=1794239918&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "AUTO"
+         },
+         "videoMimeType": "M3U8",
+         "url": "https://imdb-video.media-imdb.com/vi4284728345/hls-1683129943266-master.m3u8?Expires=1794239918&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "720p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi4284728345/1434659379400-8cjq25-1683129943266.mp4?Expires=1794239918&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "480p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi4284728345/1434659607842-pgv4ql-1683129943266.mp4?Expires=1794239918&Signature=x"
+        }
+       ]
+      }
+     }
+    ]
+   }
+  }
+ }
+}

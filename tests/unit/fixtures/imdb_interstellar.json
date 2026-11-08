@@ -1,0 +1,328 @@
+{
+ "data": {
+  "title": {
+   "latestTrailer": {
+    "id": "vi892845593",
+    "name": {
+     "value": "Interstellar"
+    },
+    "runtime": {
+     "value": 139
+    },
+    "contentType": {
+     "id": "amzn1.imdb.video.contenttype.trailer"
+    },
+    "playbackURLs": [
+     {
+      "displayName": {
+       "value": "1080p"
+      },
+      "videoMimeType": "MP4",
+      "url": "https://imdb-video.media-imdb.com/vi892845593/1434659529640-260ouz-1591117482023.mp4?Expires=1794239911&Signature=x"
+     },
+     {
+      "displayName": {
+       "value": "AUTO"
+      },
+      "videoMimeType": "M3U8",
+      "url": "https://imdb-video.media-imdb.com/vi892845593/hls-1591117482023-master.m3u8?Expires=1794239911&Signature=x"
+     },
+     {
+      "displayName": {
+       "value": "SD"
+      },
+      "videoMimeType": "MP4",
+      "url": "https://imdb-video.media-imdb.com/vi892845593/1434659454657-dx9ykf-1591117482023.mp4?Expires=1794239911&Signature=x"
+     },
+     {
+      "displayName": {
+       "value": "720p"
+      },
+      "videoMimeType": "MP4",
+      "url": "https://imdb-video.media-imdb.com/vi892845593/1434659379400-8cjq25-1591117482023.mp4?Expires=1794239911&Signature=x"
+     },
+     {
+      "displayName": {
+       "value": "480p"
+      },
+      "videoMimeType": "MP4",
+      "url": "https://imdb-video.media-imdb.com/vi892845593/1434659607842-pgv4ql-1591117482022.mp4?Expires=1794239911&Signature=x"
+     }
+    ]
+   },
+   "videoStrip": {
+    "edges": [
+     {
+      "node": {
+       "id": "vi892845593",
+       "name": {
+        "value": "Interstellar"
+       },
+       "runtime": {
+        "value": 139
+       },
+       "contentType": {
+        "id": "amzn1.imdb.video.contenttype.trailer"
+       },
+       "playbackURLs": [
+        {
+         "displayName": {
+          "value": "1080p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi892845593/1434659529640-260ouz-1591117482023.mp4?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "AUTO"
+         },
+         "videoMimeType": "M3U8",
+         "url": "https://imdb-video.media-imdb.com/vi892845593/hls-1591117482023-master.m3u8?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "SD"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi892845593/1434659454657-dx9ykf-1591117482023.mp4?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "720p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi892845593/1434659379400-8cjq25-1591117482023.mp4?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "480p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi892845593/1434659607842-pgv4ql-1591117482022.mp4?Expires=1794239911&Signature=x"
+        }
+       ]
+      }
+     },
+     {
+      "node": {
+       "id": "vi1586278169",
+       "name": {
+        "value": "Trailer #4"
+       },
+       "runtime": {
+        "value": 148
+       },
+       "contentType": {
+        "id": "amzn1.imdb.video.contenttype.trailer"
+       },
+       "playbackURLs": [
+        {
+         "displayName": {
+          "value": "1080p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi1586278169/1434659529640-260ouz-1616202363366.mp4?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "AUTO"
+         },
+         "videoMimeType": "M3U8",
+         "url": "https://imdb-video.media-imdb.com/vi1586278169/hls-1616202363366-master.m3u8?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "SD"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi1586278169/1434659454657-dx9ykf-1616202363366.mp4?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "720p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi1586278169/1434659379400-8cjq25-1616202363366.mp4?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "480p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi1586278169/1434659607842-pgv4ql-1616202363366.mp4?Expires=1794239911&Signature=x"
+        }
+       ]
+      }
+     },
+     {
+      "node": {
+       "id": "vi2284039193",
+       "name": {
+        "value": "Trailer #3"
+       },
+       "runtime": {
+        "value": 154
+       },
+       "contentType": {
+        "id": "amzn1.imdb.video.contenttype.trailer"
+       },
+       "playbackURLs": [
+        {
+         "displayName": {
+          "value": "1080p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi2284039193/1434659529640-260ouz-1616198542203.mp4?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "SD"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi2284039193/1434659454657-dx9ykf-1616198542203.mp4?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "AUTO"
+         },
+         "videoMimeType": "M3U8",
+         "url": "https://imdb-video.media-imdb.com/vi2284039193/hls-1616198542203-master.m3u8?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "720p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi2284039193/1434659379400-8cjq25-1616198542203.mp4?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "480p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi2284039193/1434659607842-pgv4ql-1616198542203.mp4?Expires=1794239911&Signature=x"
+        }
+       ]
+      }
+     },
+     {
+      "node": {
+       "id": "vi2585177369",
+       "name": {
+        "value": "Trailer #1"
+       },
+       "runtime": {
+        "value": 151
+       },
+       "contentType": {
+        "id": "amzn1.imdb.video.contenttype.trailer"
+       },
+       "playbackURLs": [
+        {
+         "displayName": {
+          "value": "SD"
+         },
+         "videoMimeType": "WEBM",
+         "url": "https://imdb-video.media-imdb.com/vi2585177369/MV5BMjA2NDY1MTE4MV5BMTFeQXdlYm1eQW1lODAwNzIxMjgxMQ@@.webm?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "SD"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi2585177369/MV5BMjExNDY2NzQ2NF5BMTFeQW1wNF5BbWU4MDg4MjEyODEx.mp4?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "SD"
+         },
+         "videoMimeType": "WEBM",
+         "url": "https://imdb-video.media-imdb.com/vi2585177369/MV5BMTgwMTg1MTU1OF5BMTFeQXdlYm1eQW1lODAxNjIxMjgxMQ@@.webm?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "SD"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi2585177369/MV5BMTY1MTc1MTI1M15BMTFeQW1wNF5BbWU4MDU4MjEyODEx.mp4?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "720p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi2585177369/MV5BMTY3ODgzNjM3MF5BMTFeQW1wNF5BbWU4MDU5MjEyODEx.mp4?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "480p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi2585177369/MV5BOTU3NjQ0MzY5Nl5BMTFeQW1wNF5BbWU4MDE5MjEyODEx.mp4?Expires=1794239911&Signature=x"
+        }
+       ]
+      }
+     },
+     {
+      "node": {
+       "id": "vi2658773017",
+       "name": {
+        "value": "Official Teaser"
+       },
+       "runtime": {
+        "value": 112
+       },
+       "contentType": {
+        "id": "amzn1.imdb.video.contenttype.trailer"
+       },
+       "playbackURLs": [
+        {
+         "displayName": {
+          "value": "SD"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi2658773017/MV5BMjMxNzM5ODk3MV5BMTFeQW1wNF5BbWU4MDk2Nzg5NzAx.mp4?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "SD"
+         },
+         "videoMimeType": "WEBM",
+         "url": "https://imdb-video.media-imdb.com/vi2658773017/MV5BNjMyNjU2NDYyNV5BMTFeQXdlYm1eQW1lODA4NDc4OTcwMQ@@.webm?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "SD"
+         },
+         "videoMimeType": "WEBM",
+         "url": "https://imdb-video.media-imdb.com/vi2658773017/MV5BMjE0MTA1MjQyNl5BMTFeQXdlYm1eQW1lODA2Njc4OTcwMQ@@.webm?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "SD"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi2658773017/MV5BMTg0NTM1NDgzNl5BMTFeQW1wNF5BbWU4MDM1Nzg5NzAx.mp4?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "720p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi2658773017/MV5BODY0NTA4MzQ5NV5BMTFeQW1wNF5BbWU4MDU1Nzg5NzAx.mp4?Expires=1794239911&Signature=x"
+        },
+        {
+         "displayName": {
+          "value": "480p"
+         },
+         "videoMimeType": "MP4",
+         "url": "https://imdb-video.media-imdb.com/vi2658773017/MV5BMjEwODMzMDE1N15BMTFeQW1wNF5BbWU4MDA3Nzg5NzAx.mp4?Expires=1794239911&Signature=x"
+        }
+       ]
+      }
+     }
+    ]
+   }
+  }
+ }
+}
