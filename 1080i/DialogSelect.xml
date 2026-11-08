@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Select dialog. Kodi ids: 1 heading, 2 item count, 3 simple list, 6 detailed list, 5/8 extra buttons, 7 cancel. -->
+<!-- Select dialog. Kodi ids: 1 heading, 2 item count, 3 simple list, 6 detailed list, 5/8 extra buttons
+     (5: OK of a multi-select), 7 cancel. The skin's filter dialogs (Window(Home).Property(nc.select.ok),
+     scripts/nightcity.py lib_filter) have one OK and no Cancel: a multi-select Kodi's own, a list
+     of choices 9, which closes it; Back still cancels. -->
 <window>
     <depth>DepthDialog</depth>
     <defaultcontrol always="true">3</defaultcontrol>
@@ -27,7 +30,12 @@
             </control>
             <include content="DialogList">
                 <param name="id" value="3"/>
-                <onright>9001</onright>
+                <!-- the skin's filter dialogs (Window(Home).Property(nc.select.ok)): Left one level up, Right stays,
+                     Down past the end to their one OK below; other dialogs keep Right to the buttons -->
+                <onright condition="String.IsEmpty(Window(Home).Property(nc.select.ok))">9001</onright>
+                <onleft condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + Control.IsVisible(5)">SendClick(12000,5)</onleft>
+                <onleft condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)">Action(Back)</onleft>
+                <ondown condition="!String.IsEmpty(Window(Home).Property(nc.select.ok))">9001</ondown>
                 <param name="width" value="1040"/>
                 <param name="height" value="644"/>
                 <param name="left" value="30"/>
@@ -37,7 +45,12 @@
             </include>
             <include content="DialogList">
                 <param name="id" value="6"/>
-                <onright>9001</onright>
+                <!-- the skin's filter dialogs (Window(Home).Property(nc.select.ok)): Left one level up, Right stays,
+                     Down past the end to their one OK below; other dialogs keep Right to the buttons -->
+                <onright condition="String.IsEmpty(Window(Home).Property(nc.select.ok))">9001</onright>
+                <onleft condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + Control.IsVisible(5)">SendClick(12000,5)</onleft>
+                <onleft condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)">Action(Back)</onleft>
+                <ondown condition="!String.IsEmpty(Window(Home).Property(nc.select.ok))">9001</ondown>
                 <param name="width" value="1040"/>
                 <param name="height" value="644"/>
                 <param name="label2" value="$INFO[ListItem.Label2]"/>
@@ -68,9 +81,17 @@
                     <param name="width" value="260"/>
                 </include>
                 <include content="Button">
+                    <param name="id" value="9"/>
+                    <param name="label" value="$LOCALIZE[186]"/>
+                    <param name="width" value="260"/>
+                    <param name="onclick" value="Action(Back)"/>
+                    <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)"/>
+                </include>
+                <include content="Button">
                     <param name="id" value="7"/>
                     <param name="label" value="$LOCALIZE[222]"/>
                     <param name="width" value="260"/>
+                    <param name="visible" value="String.IsEmpty(Window(Home).Property(nc.select.ok))"/>
                 </include>
             </control>
         </control>

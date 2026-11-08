@@ -4,6 +4,7 @@
      page of its next episode (MyVideoNav always opens the show's folder). -->
 <window type="window" id="1110">
     <defaultcontrol always="true">5000</defaultcontrol>
+    <onload>ClearProperty(nc.lib.menu,home)</onload>
     <onload>NotifyAll(nightcity,lib_bar:changed)</onload>
     <!-- the layouts hold once the window is up (LibraryLayoutReady): each open draws every row anew -->
     <onload>NotifyAll(nightcity,lib_layout)</onload>
@@ -27,7 +28,9 @@
             <height>996</height>
             <orientation>vertical</orientation>
             <scrolltime tween="quadratic">200</scrolltime>
-            <onright>5101</onright>
+            <!-- back to the button of the bar that had the focus last (nc.lib.menu), the first after opening -->
+            <onright condition="!String.IsEmpty(Window(Home).Property(nc.lib.menu))">SetFocus($INFO[Window(Home).Property(nc.lib.menu)])</onright>
+            <onright condition="String.IsEmpty(Window(Home).Property(nc.lib.menu))">5101</onright>
             <onup>noop</onup>
             <ondown>noop</ondown>
             <include>ClickRouting</include>
@@ -124,6 +127,7 @@
             <ondown>noop</ondown>
             <include content="PillButton">
                 <param name="id" value="5101"/>
+                <onfocus>SetProperty(nc.lib.menu,5101,home)</onfocus>
                 <param name="onfocus" value="NotifyAll(nightcity,lib_bar:prepare)"/>
                 <param name="width" value="459"/>
                 <param name="label" value="$LOCALIZE[31116]: $VAR[LibrarySortLabel]"/>
@@ -137,6 +141,7 @@
             </include>
             <include content="PillButton">
                 <param name="id" value="5102"/>
+                <onfocus>SetProperty(nc.lib.menu,5102,home)</onfocus>
                 <param name="width" value="459"/>
                 <param name="label" value="$VAR[LibraryDirectionLabel]"/>
                 <param name="onclick" value="Skin.ToggleSetting(nc.sortdesc)"/>
@@ -146,6 +151,7 @@
             <!-- posters or list, for the shown library: a toggle, OK flips it -->
             <include content="PillButton">
                 <param name="id" value="5103"/>
+                <onfocus>SetProperty(nc.lib.menu,5103,home)</onfocus>
                 <param name="width" value="459"/>
                 <param name="label" value="$LOCALIZE[31500]: $VAR[LibraryViewLabel]"/>
                 <param name="onfocus" value="NotifyAll(nightcity,lib_bar:prepare)"/>
@@ -159,6 +165,7 @@
                  dialog builds the grid's path, the header names the choice -->
             <include content="PillButton">
                 <param name="id" value="5104"/>
+                <onfocus>SetProperty(nc.lib.menu,5104,home)</onfocus>
                 <param name="width" value="459"/>
                 <param name="label" value="$LOCALIZE[31502]: $VAR[LibraryFilterLabel]"/>
                 <param name="onfocus" value="NotifyAll(nightcity,lib_bar:prepare)"/>

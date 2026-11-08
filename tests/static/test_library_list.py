@@ -157,3 +157,52 @@ def test_songs_show_format_and_bitrate():
     fmt = re.search(r'<variable name="MusicSongFormat">(.*?)</variable>', variables, re.S).group(1)
     assert 'ListItem.BitRate' in fmt and 'kbit/s' in fmt
     assert 'String.StartsWith(ListItem.FileExtension,flac)">FLAC' in fmt
+
+
+# --- the bar remembers its button, the filter dialogs have one OK --------------------------------
+
+def test_right_from_the_grid_goes_back_to_the_bars_last_button():
+    """Right from the grid lands on the button of the bar that had the focus last (a filter
+    changed there), on the first one when the window just opened."""
+    window = parse(ROOT / '1080i' / 'Custom_1110_Library.xml')
+    grid = next(c for c in window.iter('control') if c.get('id') == '5000')
+    rights = [(r.get('condition'), r.text) for r in grid.findall('onright')]
+    assert rights == [('!String.IsEmpty(Window(Home).Property(nc.lib.menu))', 'SetFocus($INFO[Window(Home).Property(nc.lib.menu)])'),
+                      ('String.IsEmpty(Window(Home).Property(nc.lib.menu))', '5101')]
+    for button in ('5101', '5102', '5103', '5104'):
+        inc = next(i for i in window.iter('include') if i.find("param[@name='id']") is not None
+                   and i.find("param[@name='id']").get('value') == button)
+        assert 'SetProperty(nc.lib.menu,{},home)'.format(button) in [f.text for f in inc.findall('onfocus')]
+    assert 'ClearProperty(nc.lib.menu,home)' in [o.text for o in window.findall('onload')]
+
+
+SELECT_FLAG = 'Window(Home).Property(nc.select.ok)'
+
+
+def test_marked_select_dialogs_have_one_ok_and_left_goes_up():
+    """The filter dialogs (nc.select.ok): only OK, no Cancel; Left confirms one level up (a
+    multi-select confirms, the list of groups closes), Right stays, Down past the end reaches OK."""
+    dialog = parse(ROOT / '1080i' / 'DialogSelect.xml')
+    controls = {c.get('id'): c for c in dialog.iter('control') if c.get('id')}
+    for lst in ('3', '6'):
+        inc = next(i for i in dialog.iter('include') if i.find("param[@name='id']") is not None
+                   and i.find("param[@name='id']").get('value') == lst)
+        moves = {(m.tag, m.get('condition'), m.text) for m in inc if m.tag in ('onleft', 'onright', 'ondown')}
+        assert ('onright', 'String.IsEmpty({})'.format(SELECT_FLAG), '9001') in moves
+        assert ('onleft', '!String.IsEmpty({}) + Control.IsVisible(5)'.format(SELECT_FLAG), 'SendClick(12000,5)') in moves
+        assert ('onleft', '!String.IsEmpty({}) + !Control.IsVisible(5)'.format(SELECT_FLAG), 'Action(Back)') in moves
+        assert ('ondown', '!String.IsEmpty({})'.format(SELECT_FLAG), '9001') in moves
+    cancel = next(i for i in dialog.iter('include') if i.find("param[@name='id']") is not None
+                  and i.find("param[@name='id']").get('value') == '7')
+    assert {p.get('name'): p.get('value') for p in cancel.findall('param')}['visible'] == 'String.IsEmpty({})'.format(SELECT_FLAG)
+    ok = next(i for i in dialog.iter('include') if i.find("param[@name='id']") is not None
+              and i.find("param[@name='id']").get('value') == '9')
+    params = {p.get('name'): p.get('value') for p in ok.findall('param')}
+    assert params['visible'] == '!String.IsEmpty({}) + !Control.IsVisible(5)'.format(SELECT_FLAG)
+    assert params['onclick'] == 'Action(Back)' and params['label'] == '$LOCALIZE[186]'
+
+
+def test_the_script_marks_its_filter_dialogs():
+    source = (ROOT / 'scripts' / 'nightcity.py').read_text(encoding='utf-8')
+    body = source[source.index('def lib_filter():'):source.index('def _bar_command(')]
+    assert "setProperty('nc.select.ok', '1')" in body and "clearProperty('nc.select.ok')" in body

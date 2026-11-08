@@ -2572,12 +2572,22 @@ def lib_filter():
     OK on one its multi-select; every change applies at once, the grid follows behind the
     dialog. Back closes it."""
     import xbmc
-    import xbmcgui
     library = 'tvshows' if _home().getProperty('nc.library') == 'tvshows' else 'movies'
     choice = lib_filter_load(_home().getProperty('nc.libfilter.' + library))
     groups = lib_filter_groups(library)
-    studios = None
     text = lambda string_id: _capital(xbmc.getLocalizedString(string_id))  # noqa: E731
+    # its dialogs have one OK and Left goes one level up (DialogSelect.xml)
+    _home().setProperty('nc.select.ok', '1')
+    try:
+        _lib_filter_dialogs(library, choice, groups, text)
+    finally:
+        _home().clearProperty('nc.select.ok')
+
+
+def _lib_filter_dialogs(library, choice, groups, text):
+    """The list of groups and their multi-selects, until the list closes."""
+    import xbmcgui
+    studios = None
     current = 0
     while True:
         items = []

@@ -155,6 +155,10 @@ def test_the_list_keeps_the_bar_click_and_counter(library):
     wait_for('Control.HasFocus({}) + Integer.IsEqual({},2)'.format(GRID, CURRENT))
 
 
+def true(condition):
+    return cond(condition)[condition]
+
+
 def _select_dialog():
     wait_for('Window.IsActive(selectdialog)', timeout=10)
 
@@ -254,3 +258,40 @@ def test_a_view_chosen_while_closed_draws_every_row_anew(library):
     _open()
     time.sleep(1)
     assert _focused_row_drawn()
+
+
+def test_left_takes_the_filter_dialogs_up_a_level_with_the_choice(library):
+    """One OK, no Cancel; Left in a group's multi-select keeps what is ticked and goes back to the
+    groups, Left there closes the dialog; Right stays in the list."""
+    _open()
+    builtin('SetFocus({})'.format(FILTER))
+    wait_for('Control.HasFocus({})'.format(FILTER))
+    action('select')
+    _select_dialog()
+    wait_for('Control.IsVisible(9) + !Control.IsVisible(7)')  # the groups: their OK only
+    action('select', delay=1)  # resolution
+    wait_for('Window.IsActive(selectdialog) + Integer.IsEqual(Container(3).NumItems,4)')
+    wait_for('Control.IsVisible(5) + !Control.IsVisible(7) + !Control.IsVisible(9)')  # Kodi's OK only
+    action('select')  # 4K
+    action('right')
+    assert true('Control.HasFocus(3)')  # Right stays in the list
+    action('left', delay=1)
+    _select_dialog()
+    wait_for('Integer.IsEqual(Container(6).NumItems,6)')  # the groups again, the choice taken
+    wait_for('!String.IsEmpty(Window(Home).Property(nc.libfilter.movies.path))')
+    action('left', delay=1)
+    wait_for('!Window.IsActive(selectdialog) + String.IsEmpty(Window(Home).Property(nc.select.ok))')
+    _count_is(1)
+    assert _titles() == [ALPHA]
+
+
+def test_the_bar_remembers_its_button(library):
+    """In the list (one column) Right goes to the bar at once: to the button it left."""
+    builtin('Skin.SetString(nc.libview.movies,list)')
+    _open()
+    builtin('SetFocus({})'.format(FILTER))
+    wait_for('Control.HasFocus({})'.format(FILTER))
+    action('left')
+    wait_for('Control.HasFocus({})'.format(GRID))
+    action('right')
+    wait_for('Control.HasFocus({})'.format(FILTER))

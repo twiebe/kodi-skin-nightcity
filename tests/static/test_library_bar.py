@@ -46,7 +46,8 @@ def test_keys_of_the_bar():
 def test_the_order_is_grid_menu_bar():
     """Right goes one step at a time and Left comes back the same way."""
     controls = _controls()
-    assert _actions(controls['5000'], 'onright') == [(None, '5101')]
+    # to the menu's button that had the focus last (test_library_list.py), the first after opening
+    assert _actions(controls['5000'], 'onright')[-1] == ('String.IsEmpty(Window(Home).Property(nc.lib.menu))', '5101')
     menu = controls['5100']
     assert _actions(menu, 'onleft') == [(None, '5000')]
     assert _actions(menu, 'onright') == [('!String.IsEmpty(Window(Home).Property(nc.lib.bar))', BAR)]
