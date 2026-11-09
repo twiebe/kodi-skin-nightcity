@@ -15,6 +15,17 @@
         <include>Background</include>
         <include content="StatusBar">
             <param name="title" value="$LOCALIZE[5]"/>
+            <param name="pathwidth" value="780"/>
+        </include>
+        <!-- Left leaves the rail, back to the system page: the console's only way in from the
+             skin (a settings page coming back is the window before then, so no Window.Previous) -->
+        <include content="LevelHint">
+            <param name="id" value="9059"/>
+            <param name="key" value="←"/>
+            <param name="label" value="$LOCALIZE[31033]"/>
+            <param name="top" value="30"/>
+            <param name="visible" value="!System.HasActiveModalDialog"/>
+            <param name="animate" value="!Player.HasVideo"/>
         </include>
         <!-- the content fades in on open; background and status line stay -->
         <control type="group">
@@ -50,7 +61,7 @@
             <include>SettingsPreviewGroup3</include>
             <include>SettingsPreviewGroup4</include>
             <include>SettingsPreviewGroup5</include>
-            <!-- key hint for the focused side -->
+            <!-- the keys of the rail (the way back is on the path line) -->
             <control type="image">
                 <left>700</left>
                 <top>960</top>

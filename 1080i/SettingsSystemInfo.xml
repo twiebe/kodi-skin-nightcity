@@ -6,6 +6,16 @@
         <include>Background</include>
         <include content="StatusBar">
             <param name="title" value="$LOCALIZE[10007]"/>
+            <param name="pathwidth" value="780"/>
+        </include>
+        <!-- Left from the sections leaves the page -->
+        <include content="LevelHint">
+            <param name="id" value="9059"/>
+            <param name="key" value="←"/>
+            <param name="label" value="$VAR[HintWindowBack]"/>
+            <param name="top" value="30"/>
+            <param name="visible" value="!System.HasActiveModalDialog"/>
+            <param name="animate" value="!Player.HasVideo"/>
         </include>
         <!-- the content fades in on open; background and status line stay -->
         <control type="group">

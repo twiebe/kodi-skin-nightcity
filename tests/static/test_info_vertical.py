@@ -6,6 +6,7 @@ in a TMDb chain. An episode lists its own cast and crew (guest stars included) f
 below the episode list.
 """
 from conftest import ROOT, parse
+from navigation import load
 
 SKIN = ROOT / '1080i'
 EPISODE = 'String.IsEqual(ListItem.DBType,episode)'
@@ -176,8 +177,11 @@ def test_episode_person_click_returns_to_the_selected_episode():
 
 
 def test_episode_hint_names_the_cast_row():
-    hint = next(c for c in _root().iter('control') if '$LOCALIZE[31135]' in (c.findtext('label') or ''))
-    assert '↓ $LOCALIZE[31124]' in hint.findtext('label')
+    hint = next(c for c in load('DialogVideoInfo.xml').iter('control') if '$LOCALIZE[31135]' in (c.findtext('label') or ''))
+    assert '$VAR[HintEpisodeDown]' in hint.findtext('label')
+    down = next(v for v in parse(ROOT / '1080i' / 'Variables.xml').iter('variable') if v.get('name') == 'HintEpisodeDown')
+    assert [(v.get('condition'), v.text) for v in down] == [
+        ('Control.IsVisible(5403) | Control.IsVisible(5401)', '   [COLOR state_text]↓[/COLOR] $LOCALIZE[31124]')]
 
 
 def test_down_from_the_buttons_skips_the_season_tabs():

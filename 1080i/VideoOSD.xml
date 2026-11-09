@@ -211,5 +211,11 @@
             <param name="label" value="$VAR[PlayerChaptersLevel]"/>
             <param name="visible" value="!Window.IsActive(videobookmarks) + !Window.IsActive(1141) + !Control.HasFocus(651) + !Control.HasFocus(652) + !Control.HasFocus(653)"/>
         </include>
+        <!-- a panel above a button: Down goes back to the controls -->
+        <include content="LevelHint">
+            <param name="id" value="691"/>
+            <param name="label" value="$LOCALIZE[31478]"/>
+            <param name="visible" value="Control.HasFocus(651) | Control.HasFocus(652) | Control.HasFocus(653)"/>
+        </include>
     </controls>
 </window>

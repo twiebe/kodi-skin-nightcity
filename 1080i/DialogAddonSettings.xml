@@ -42,6 +42,18 @@
                 <aligny>center</aligny>
                 <label></label>
             </control>
+            <!-- left in the button row: Left from the settings goes back to the categories -->
+            <include content="LevelHint">
+                <param name="id" value="9059"/>
+                <param name="key" value="←"/>
+                <param name="label" value="$LOCALIZE[31176]"/>
+                <param name="left" value="40"/>
+                <param name="top" value="850"/>
+                <param name="width" value="700"/>
+                <param name="height" value="74"/>
+                <param name="align" value="left"/>
+                <param name="visible" value="ControlGroup(5).HasFocus() + Control.IsVisible(3)"/>
+            </include>
             <control type="group">
                 <left>200</left>
                 <top>860</top>

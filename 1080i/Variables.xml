@@ -63,8 +63,64 @@
         <value condition="!String.IsEmpty(Container(9001).ListItem.Path)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":"$INFO[Container(9001).ListItem.Path]"}]},"type":"tvshows"}</value>
         <value>videodb://tvshows/titles/?xsp={"type":"tvshows","limit":1}</value>
     </variable>
-    <!-- Skin settings: a grabbed slot is dark blue; the key hint shows on the rows of the page
-         categories (ids 211 to 428) -->
+    <!-- Key hints (LevelHint, DESIGN.md Key hints) name the level a key leads to. These name a
+         level that depends on where the screen was opened from; "back" only where it cannot
+         be told. -->
+    <!-- the page of Home by its name in the top menu -->
+    <variable name="HintHomePage">
+        <value condition="String.IsEqual(Window(Home).Property(nc.page),movies)">$LOCALIZE[31030]</value>
+        <value condition="String.IsEqual(Window(Home).Property(nc.page),shows)">$LOCALIZE[31031]</value>
+        <value condition="String.IsEqual(Window(Home).Property(nc.page),search)">$LOCALIZE[31032]</value>
+        <value condition="String.IsEqual(Window(Home).Property(nc.page),music)">$LOCALIZE[31405]</value>
+        <value condition="String.IsEqual(Window(Home).Property(nc.page),system)">$LOCALIZE[31033]</value>
+        <value>$LOCALIZE[31006]</value>
+    </variable>
+    <!-- the titles of the library grid (Custom_1110_Library.xml), its filter and details dialogs -->
+    <variable name="HintLibrary">
+        <value condition="String.IsEqual(Window(Home).Property(nc.library),tvshows)">$LOCALIZE[31031]</value>
+        <value>$LOCALIZE[31030]</value>
+    </variable>
+    <!-- a full window: the one it was opened from -->
+    <variable name="HintWindowBack">
+        <value condition="Window.Previous(home)">$VAR[HintHomePage]</value>
+        <value condition="Window.Previous(settings)">$LOCALIZE[5]</value>
+        <value>$LOCALIZE[31470]</value>
+    </variable>
+    <!-- Up from the top of an info page: the page before in a TMDb chain, else the window
+         under it -->
+    <variable name="HintInfoBack">
+        <value condition="!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + Integer.IsGreater(Window(Home).Property(TMDbHelper.Position),1)">$LOCALIZE[31479]</value>
+        <value condition="Window.IsActive(fullscreenvideo)">$LOCALIZE[31055]</value>
+        <value condition="Window.IsActive(visualisation)">$LOCALIZE[31406]</value>
+        <value condition="Window.IsActive(home)">$VAR[HintHomePage]</value>
+        <value condition="Window.IsActive(1110)">$VAR[HintLibrary]</value>
+        <value condition="Window.IsActive(music)">$LOCALIZE[31405]</value>
+        <value condition="Window.IsActive(videos)">$LOCALIZE[3]</value>
+        <value>$LOCALIZE[31470]</value>
+    </variable>
+    <!-- Up from the top of the quick menu dialog: what it lies over -->
+    <variable name="HintQuickMenuBack">
+        <value condition="Window.IsActive(movieinformation) | Window.IsActive(musicinformation)">$LOCALIZE[31011]</value>
+        <value condition="Window.IsActive(fullscreenvideo)">$LOCALIZE[31055]</value>
+        <value condition="Window.IsActive(visualisation)">$LOCALIZE[31406]</value>
+        <value condition="Window.IsActive(home)">$VAR[HintHomePage]</value>
+        <value>$LOCALIZE[31470]</value>
+    </variable>
+    <!-- Left in the skin's select dialogs (nc.select.ok): in a group of the library filter back
+         to its list of groups (nc.select.groups), else the dialog closes onto the library -->
+    <variable name="HintSelectBack">
+        <value condition="Control.IsVisible(5) + !String.IsEmpty(Window(Home).Property(nc.select.groups))">$LOCALIZE[31502]</value>
+        <value condition="Window.IsActive(1110)">$VAR[HintLibrary]</value>
+        <value condition="Window.IsActive(music)">$LOCALIZE[31405]</value>
+        <value>$LOCALIZE[31470]</value>
+    </variable>
+    <!-- Down from the episodes of an info page: cast and crew, when the page has them (TMDb
+         5403 or the library's 5401; Control.IsVisible(50) stays true in a hidden group) -->
+    <variable name="HintEpisodeDown">
+        <value condition="Control.IsVisible(5403) | Control.IsVisible(5401)">   [COLOR state_text]↓[/COLOR] $LOCALIZE[31124]</value>
+    </variable>
+    <!-- Skin settings: a grabbed slot is dark blue; the keys of the rows of the page categories
+         (ids 211 to 428) show under the description -->
     <variable name="HomePagesFocusColor">
         <value condition="!String.IsEmpty(Window.Property(nc.hp.grab))">state_text</value>
         <value>focus</value>

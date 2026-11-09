@@ -244,33 +244,51 @@
         </definition>
     </include>
 
-    <!-- Where the next level lies, quiet like the key hint under the episodes of an info page:
-         one line of muted small caps, centred on the bottom edge (top=1030, the key that leads
-         down) or the top edge (top=140 in the player, Up; an info page puts "Up: back" on its
-         path line). A shadow keeps it readable over bright video. It fades with its window and
-         its condition. -->
+    <!-- A key hint (DESIGN.md, Key hints): the key that leads to another level, in the dimmed
+         blue of a hint, and the level it leads to, muted; one line of small caps. Its places:
+         centred on the path line of a page (top=30) for the way back, Up or Left; centred on
+         the bottom edge (top=1030, the default) for the way on in the player, Down or OK; the
+         player's way up on its top edge (top=140); in a dialog left in its button row (left,
+         width, align left). A shadow keeps it readable over bright video. It fades with its
+         window and its condition. -->
     <include name="LevelHint">
         <param name="id"/>
         <param name="key" default="↓"/>
         <param name="label"/>
         <param name="top" default="1030"/>
+        <param name="left" default="0"/>
+        <param name="width" default="1920"/>
+        <param name="height" default="36"/>
+        <param name="align" default="center"/>
         <param name="visible" default="true"/>
+        <param name="animate" default="true"/>
         <definition>
             <control type="group" id="$PARAM[id]">
-                <left>0</left>
+                <left>$PARAM[left]</left>
                 <top>$PARAM[top]</top>
                 <visible>$PARAM[visible]</visible>
-                <animation effect="fade" time="150">VisibleChange</animation>
+                <!-- in after out: where one hint takes over from another in the same place
+                     (the focus moved to the other side) the two never stand on each other. A
+                     still effect starts the animation at once (test_page_fades, as in
+                     SharedPageFade); the delayed fade holds its start, 0, until it runs. A page
+                     passes animate="!Player.HasVideo": no blending over a playing video. -->
+                <animation type="Visible" condition="$PARAM[animate]">
+                    <effect type="fade" start="100" end="100" time="150"/>
+                    <effect type="fade" start="0" end="100" time="150" delay="150"/>
+                </animation>
+                <animation type="Hidden" condition="$PARAM[animate]">
+                    <effect type="fade" start="100" end="0" time="150"/>
+                </animation>
                 <control type="label">
-                    <width>1920</width>
-                    <height>36</height>
-                    <align>center</align>
+                    <width>$PARAM[width]</width>
+                    <height>$PARAM[height]</height>
+                    <align>$PARAM[align]</align>
                     <aligny>center</aligny>
                     <font>font_caps_small</font>
                     <textcolor>text_mute</textcolor>
                     <shadowcolor>bg</shadowcolor>
                     <include content="LookLabelCase">
-                        <param name="text" value="$PARAM[key] $PARAM[label]"/>
+                        <param name="text" value="[COLOR state_text]$PARAM[key][/COLOR] $PARAM[label]"/>
                     </include>
                 </control>
             </control>
@@ -1105,11 +1123,13 @@
 
     <!-- Top of a full window outside Home: the window title as path line (id 9026), a counter
          such as 12/240 on the right (id 9028; the clock and the weather unless given; with a
-         counter weather="false") -->
+         counter weather="false"); pathwidth="780" keeps the title left of a key hint in the
+         middle (LevelHint, top=30) -->
     <include name="StatusBar">
         <param name="title"/>
         <param name="counter" default="[COLOR text]$INFO[System.Time][/COLOR]"/>
         <param name="weather" default="true"/>
+        <param name="pathwidth" default="1400"/>
         <definition>
             <include content="PathLine">
                 <param name="id" value="9026"/>
@@ -1122,6 +1142,7 @@
                 <param name="left" value="64"/>
                 <param name="top" value="30"/>
                 <param name="width" value="1792"/>
+                <param name="pathwidth" value="$PARAM[pathwidth]"/>
             </include>
         </definition>
     </include>

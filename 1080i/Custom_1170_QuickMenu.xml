@@ -36,5 +36,16 @@
             <animation effect="fade" start="100" end="0" time="160">WindowClose</animation>
             <include>QuickMenuBody</include>
         </control>
+        <!-- Up from the weather, the top of the menu, closes it: under the panel, while the
+             weather has the focus -->
+        <include content="LevelHint">
+            <param name="id" value="1290"/>
+            <param name="key" value="↑"/>
+            <param name="label" value="$VAR[HintQuickMenuBack]"/>
+            <param name="left" value="1232"/>
+            <param name="top" value="896"/>
+            <param name="width" value="640"/>
+            <param name="visible" value="Control.HasFocus(1210)"/>
+        </include>
     </controls>
 </window>

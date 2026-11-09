@@ -298,6 +298,7 @@ def _filter_dialog(monkeypatch, props, answers):
             pass
 
     def select(heading, items, **kwargs):
+        assert props.get('nc.select.groups') == '1'  # the key hint of a group names the groups
         seen.append(([i.label for i in items], props.get('nc.select.clear', '')))
         answer = answers.pop(0)
         return answer(props) if callable(answer) else answer
@@ -335,7 +336,7 @@ def test_the_clear_button_clears_the_filter_and_the_groups_stay(monkeypatch):
     assert seen[0][1] and not seen[1][1]  # Clear only while a filter is set
     assert props['nc.libfilter.movies'] == '{}'
     assert props['nc.libfilter.movies.path'] == ''
-    assert not {'nc.select.clear', 'nc.select.cleared', 'nc.select.ok'} & set(props)
+    assert not {'nc.select.clear', 'nc.select.cleared', 'nc.select.ok', 'nc.select.groups'} & set(props)
 
 
 def test_the_groups_have_no_clear_entry_of_their_own(monkeypatch):

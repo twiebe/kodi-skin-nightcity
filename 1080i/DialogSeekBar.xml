@@ -57,7 +57,7 @@
         <include content="LevelHint">
             <param name="id" value="490"/>
             <param name="key" value="⏎"/>
-            <param name="label" value="$LOCALIZE[31232]"/>
+            <param name="label" value="$LOCALIZE[31478]"/>
             <param name="visible" value="!Window.IsVisible(videoosd) + !Window.IsActive(playerprocessinfo)"/>
         </include>
     </controls>

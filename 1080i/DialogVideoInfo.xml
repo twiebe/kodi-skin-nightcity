@@ -102,14 +102,14 @@
             <param name="width" value="1792"/>
             <param name="pathwidth" value="780"/>
         </include>
-        <!-- Up from the top of the page, the button row, leaves it; in a TMDb chain
-             it goes one page back. Shown all the time like the player's Up hints, in the
-             middle of the path line. -->
+        <!-- Up from the top of the page, the button row, leaves it (in a TMDb chain one page
+             back): shown while the buttons have the focus, in the middle of the path line -->
         <include content="LevelHint">
             <param name="id" value="9059"/>
             <param name="key" value="↑"/>
-            <param name="label" value="$LOCALIZE[31470]"/>
+            <param name="label" value="$VAR[HintInfoBack]"/>
             <param name="top" value="30"/>
+            <param name="visible" value="ControlGroup(9000).HasFocus()"/>
         </include>
 
         <!-- head: episode (follows the episode list), cast on the right -->
@@ -605,15 +605,19 @@
                     </focusedlayout>
                     <content target="videos" sortby="episode">$VAR[InfoEpisodesPath]</content>
                 </control>
-                <control type="label">
-                    <left>64</left>
-                    <top>394</top>
-                    <width>1400</width>
-                    <height>34</height>
-                    <font>font_caps_small</font>
-                    <textcolor>text_mute</textcolor>
-                    <label>[UPPERCASE]←→ $LOCALIZE[31132]   ↑ $LOCALIZE[31131]   ↓ $LOCALIZE[31124]   ⏎ $LOCALIZE[31135][/UPPERCASE]</label>
-                </control>
+                <!-- the keys of the episodes, under them while they have the focus: Up the season
+                     tabs, Down cast and crew (where the page has them), OK selects the episode -->
+                <include content="LevelHint">
+                    <param name="id" value="5190"/>
+                    <param name="key" value="↑"/>
+                    <param name="label" value="$LOCALIZE[31603]$VAR[HintEpisodeDown]   [COLOR state_text]⏎[/COLOR] $LOCALIZE[31135]"/>
+                    <param name="left" value="64"/>
+                    <param name="top" value="394"/>
+                    <param name="width" value="1400"/>
+                    <param name="height" value="34"/>
+                    <param name="align" value="left"/>
+                    <param name="visible" value="Control.HasFocus(5100)"/>
+                </include>
             </control>
             <!-- TMDb credits with tabs: cast or crew of a title or of the selected episode (5500), a
                  person's films, shows or crew jobs (5510). One plugin list per page. -->

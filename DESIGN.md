@@ -19,6 +19,42 @@ The remote moves through levels, not through confirmations.
   In the player's chapter and cast rows it goes to those controls too, on their first button.
   Outside a chain, and on its first page, it is a Back.
 
+### Key hints
+
+Where a key leads to another level and the screen does not show it, a quiet line says so: the
+key, then the level it leads to (`LevelHint` in `Includes_Base.xml`,
+`tests/static/test_level_hints.py`).
+
+- **Keys are glyphs:** ↑ ↓ ← → for the directions, ⏎ for OK, ↑↓ for a move along a list.
+  No key words ("Left", "Up/Down", "OK"). The Back key gets no hint: it always goes back, and
+  every hinted level has an arrow back. Should one ever be needed it is the word Back, not a
+  glyph (↩ looks too much like ⏎).
+- **The label names where the key leads**, not what it does: ↑ chapters, ← categories,
+  ⏎ controls. The player's OSD bar is "controls" everywhere (⏎ from the seek bar, ↑ from the
+  chapter row, ↓ from a panel); "menu" is a column or row of buttons beside a list (the
+  library's, Home's top menu). Where the level depends on how the screen was opened, the
+  hint names it from there (`HintInfoBack`, `HintWindowBack` in `Variables.xml`: the page of
+  Home, the library, the video, the page before in a TMDb chain), "back" only where nothing
+  tells. A footer of keys acting on the spot (skin settings slots: ⏎ choose, → option,
+  ↑↓ move, ⏎ drop; the console: ⏎ open) names the action.
+- **Look:** the key in the dimmed blue of a hint (`state_text`), the label muted
+  (`text_mute`), small caps (`font_caps_small`, `LookLabelCase`), a shadow over video.
+- **One hint per state, for the focused part:** it shows while the focus is where the key
+  works (the info page's ↑ only on its buttons) and fades out when it goes; the next one fades
+  in after it, never on top of it. A window's hint hides under a dialog, and like the pages it
+  does not fade over a playing video.
+- **Places**, nothing else:
+  - the way back (↑, ←) centred on the path line of a page or window (top 30), its title kept
+    left of the middle (`pathwidth` 780);
+  - in the player, which has no path line, the way up on the top edge (top 140) and the way on
+    (↓, ⏎) on the bottom edge (top 1030), also over the music visualisation;
+  - in a dialog at its bottom: left in its button row, or centred under a panel without
+    buttons (the quick menu);
+  - under the row it is about, for the keys of a row (the episodes of an info page) or of a
+    settings page (the console's footer, the skin settings' slots under the description).
+- No hint where the level is in sight anyway: Home's top menu over the rows, the queue under
+  the music OSD, the second pane of the file manager, the tabs over their lists.
+
 ### The position bar of the library grid
 
 All movies and all shows have a faint rail at the far right with a mark of where the grid stands.
@@ -162,7 +198,8 @@ browser.
   heading, like the progress toasts. The text under the heading is `text_dim`, and the skin's
   type icons (info, warning, error) are a hint in
   `state_text`. An add-on's own icon keeps its colours.
-- The keys in a hint line (OK open, Back close) are hints: dimmed blue.
+- The keys in a hint line (⏎ open, ← categories) are hints: dimmed blue, the label after them
+  muted (Key hints above).
 - `state` is border_dim made opaque over the page, so a thin line looks the same on any
   background; text and small marks take `state_text`, the same hue just light enough to read
   (4.5:1).

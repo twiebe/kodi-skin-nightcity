@@ -65,6 +65,18 @@
                 <param name="rowwidth" value="1020"/>
                 <param name="inset" value="10"/>
             </include>
+            <!-- left in the button row: in the skin's filter dialogs Left goes one level up -->
+            <include content="LevelHint">
+                <param name="id" value="9059"/>
+                <param name="key" value="←"/>
+                <param name="label" value="$VAR[HintSelectBack]"/>
+                <param name="left" value="40"/>
+                <param name="top" value="730"/>
+                <param name="width" value="400"/>
+                <param name="height" value="74"/>
+                <param name="align" value="left"/>
+                <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + [Control.HasFocus(3) | Control.HasFocus(6)]"/>
+            </include>
             <control type="grouplist" id="9001">
                 <onleft condition="Control.IsVisible(6)">6</onleft>
                 <onleft>3</onleft>

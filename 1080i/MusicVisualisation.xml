@@ -158,7 +158,7 @@
         <include content="LevelHint">
             <param name="id" value="9090"/>
             <param name="key" value="⏎"/>
-            <param name="label" value="$LOCALIZE[31232]"/>
+            <param name="label" value="$LOCALIZE[31478]"/>
             <param name="visible" value="!Window.IsActive(musicosd)"/>
         </include>
     </controls>

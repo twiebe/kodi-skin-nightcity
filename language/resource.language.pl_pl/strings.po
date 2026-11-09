@@ -448,8 +448,8 @@ msgid "Categories"
 msgstr "Kategorie"
 
 msgctxt "#31178"
-msgid "[COLOR state_text]OK[/COLOR] open   [COLOR state_text]Back[/COLOR] close"
-msgstr "[COLOR state_text]OK[/COLOR] otwórz   [COLOR state_text]Wstecz[/COLOR] zamknij"
+msgid "[COLOR state_text]⏎[/COLOR] open"
+msgstr "[COLOR state_text]⏎[/COLOR] otwórz"
 
 msgctxt "#31181"
 msgid "refresh rate, decoding, resume"
@@ -756,12 +756,12 @@ msgid "Show or hide entries of the main menu. System and power always stay, and 
 msgstr "Pokaż lub ukryj pozycje menu głównego. System i zasilanie zostają zawsze, podobnie jak ostatnia widoczna strona."
 
 msgctxt "#31260"
-msgid "[COLOR state_text]OK[/COLOR] choose   [COLOR state_text]Right[/COLOR] option   [COLOR state_text]Left[/COLOR] back"
-msgstr "[COLOR state_text]OK[/COLOR] wybierz   [COLOR state_text]W prawo[/COLOR] opcje   [COLOR state_text]W lewo[/COLOR] wstecz"
+msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]⏎[/COLOR] wybierz   [COLOR state_text]→[/COLOR] opcje"
 
 msgctxt "#31261"
-msgid "[COLOR state_text]Up/Down[/COLOR] move   [COLOR state_text]OK[/COLOR] drop"
-msgstr "[COLOR state_text]Góra/Dół[/COLOR] przenieś   [COLOR state_text]OK[/COLOR] odłóż"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] przenieś   [COLOR state_text]⏎[/COLOR] odłóż"
 
 msgctxt "#31262"
 msgid "Spotlight, rows and main menu of the home, movies and shows pages."
@@ -1098,6 +1098,14 @@ msgstr "opis"
 msgctxt "#31474"
 msgid "biography"
 msgstr "biografia"
+
+msgctxt "#31478"
+msgid "controls"
+msgstr "sterowanie"
+
+msgctxt "#31479"
+msgid "previous page"
+msgstr "poprzednia strona"
 
 msgctxt "#31477"
 msgid "Home"

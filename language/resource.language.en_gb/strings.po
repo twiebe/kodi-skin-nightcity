@@ -448,7 +448,7 @@ msgid "Categories"
 msgstr ""
 
 msgctxt "#31178"
-msgid "[COLOR state_text]OK[/COLOR] open   [COLOR state_text]Back[/COLOR] close"
+msgid "[COLOR state_text]⏎[/COLOR] open"
 msgstr ""
 
 msgctxt "#31181"
@@ -756,11 +756,11 @@ msgid "Show or hide entries of the main menu. System and power always stay, and 
 msgstr ""
 
 msgctxt "#31260"
-msgid "[COLOR state_text]OK[/COLOR] choose   [COLOR state_text]Right[/COLOR] option   [COLOR state_text]Left[/COLOR] back"
+msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
 msgstr ""
 
 msgctxt "#31261"
-msgid "[COLOR state_text]Up/Down[/COLOR] move   [COLOR state_text]OK[/COLOR] drop"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
 msgstr ""
 
 msgctxt "#31262"
@@ -1099,6 +1099,14 @@ msgstr ""
 
 msgctxt "#31474"
 msgid "biography"
+msgstr ""
+
+msgctxt "#31478"
+msgid "controls"
+msgstr ""
+
+msgctxt "#31479"
+msgid "previous page"
 msgstr ""
 
 msgctxt "#31477"

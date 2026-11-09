@@ -2888,12 +2888,14 @@ def lib_filter():
     choice = lib_filter_load(_home().getProperty('nc.libfilter.' + library))
     groups = lib_filter_groups(library)
     text = lambda string_id: _capital(xbmc.getLocalizedString(string_id))  # noqa: E731
-    # its dialogs have one OK and Left goes one level up (DialogSelect.xml)
+    # its dialogs have one OK and Left goes one level up (DialogSelect.xml); a group's key hint
+    # names the list of groups above it (nc.select.groups, Variables.xml HintSelectBack)
     _home().setProperty('nc.select.ok', '1')
+    _home().setProperty('nc.select.groups', '1')
     try:
         _lib_filter_dialogs(library, choice, groups, text)
     finally:
-        for prop in ('nc.select.ok', 'nc.select.clear', 'nc.select.cleared'):
+        for prop in ('nc.select.ok', 'nc.select.groups', 'nc.select.clear', 'nc.select.cleared'):
             _home().clearProperty(prop)
 
 
