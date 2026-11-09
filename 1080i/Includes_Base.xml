@@ -743,7 +743,7 @@
          disappear. -->
     <include name="Tag">
         <param name="label"/>
-        <param name="color" default="text_dim"/>
+        <param name="color" default="text"/>
         <param name="visible" default="true"/>
         <definition>
             <control type="button">

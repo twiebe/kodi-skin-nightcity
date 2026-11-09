@@ -567,43 +567,43 @@
         </definition>
     </include>
 
-    <!-- A thin outlined tag for one technical fact: the buttons are the plates -->
+    <!-- A tag for one technical fact: the plate of the buttons (surface_alt), light text on it -->
     <include name="LookTag">
         <param name="label"/>
         <definition>
             <font>font_caps_small</font>
-            <texturenofocus border="12" colordiffuse="border_dim">ui/cut_btn.png</texturenofocus>
-            <texturefocus border="12" colordiffuse="border_dim">ui/cut_btn.png</texturefocus>
+            <texturenofocus border="12" colordiffuse="surface_alt">ui/cut_btn_fill.png</texturenofocus>
+            <texturefocus border="12" colordiffuse="surface_alt">ui/cut_btn_fill.png</texturefocus>
             <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
         </definition>
     </include>
 
-    <!-- the details of a list row (LibraryRow): outlines like the tags elsewhere; the focused row's while the list has the
+    <!-- the details of a list row (LibraryRow): plates like the tags elsewhere; the focused row's while the list has the
          focus, the other rows' (Rest) -->
     <variable name="LibraryRowTag">
         <value condition="Control.HasFocus(5000)">focus_text</value>
-        <value>border_dim</value>
+        <value>surface_alt</value>
     </variable>
     <variable name="LibraryRowTagText">
-        <value condition="Control.HasFocus(5000)">focus_text</value>
-        <value>text_dim</value>
+        <value condition="Control.HasFocus(5000)">focus</value>
+        <value>text</value>
     </variable>
     <variable name="LibraryRowTagRest">
-        <value>border_dim</value>
+        <value>surface_alt</value>
     </variable>
     <variable name="LibraryRowTagTextRest">
-        <value>text_dim</value>
+        <value>text</value>
     </variable>
 
     <!-- The plate of a tag as an image, for a list row (no buttons there) -->
     <include name="LookTagImage">
         <param name="width"/>
-        <param name="color" default="border_dim"/>
+        <param name="color" default="surface_alt"/>
         <definition>
             <control type="image">
                 <width>$PARAM[width]</width>
                 <height>32</height>
-                <texture border="12" colordiffuse="$PARAM[color]">ui/cut_btn.png</texture>
+                <texture border="12" colordiffuse="$PARAM[color]">ui/cut_btn_fill.png</texture>
             </control>
         </definition>
     </include>

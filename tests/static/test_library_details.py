@@ -183,10 +183,10 @@ def test_the_focused_row_turns_its_tags_dark():
     inc = next(i for i in row.iter('include') if i.get('content') == 'LibraryRow')
     params = {p.get('name'): p.get('value') for p in inc.findall('param')}
     assert params['tag'] == '$VAR[LibraryRowTag]' and params['tagtext'] == '$VAR[LibraryRowTagText]'
-    # each look its own: Nightcity outlines like the tags elsewhere, Confuse filled chips
+    # each look its own: Nightcity the plates of its buttons, Confuse filled chips
     look = ROOT / '1080i' / 'Includes_Look.xml'
-    assert _variable('LibraryRowTag', look) == [('Control.HasFocus(5000)', 'focus_text'), (None, 'border_dim')]
-    assert _variable('LibraryRowTagText', look) == [('Control.HasFocus(5000)', 'focus_text'), (None, 'text_dim')]
+    assert _variable('LibraryRowTag', look) == [('Control.HasFocus(5000)', 'focus_text'), (None, 'surface_alt')]
+    assert _variable('LibraryRowTagText', look) == [('Control.HasFocus(5000)', 'focus'), (None, 'text')]
     confuse = ROOT / 'skins' / 'confuse' / '1080i' / 'Includes_Look.xml'
     assert _variable('LibraryRowTag', confuse) == [('Control.HasFocus(5000)', 'focus_text'), (None, 'state')]
     assert _variable('LibraryRowTagText', confuse) == [('Control.HasFocus(5000)', 'focus'), (None, 'text')]
