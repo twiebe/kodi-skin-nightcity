@@ -9,20 +9,20 @@
         <value>$INFO[System.TemperatureUnits]</value>
     </variable>
     <!-- One day of the forecast row: day, glyph, high and low, outlook. A card like the others
-         of the skin: plain surface, cut corners and a cyan outline when focused. -->
+         of the skin: the dark plate of the buttons, cut corners and a cyan outline when focused. -->
     <include name="WeatherDay">
         <param name="focused"/>
         <definition>
             <control type="image">
                 <width>236</width>
                 <height>380</height>
-                <texture colordiffuse="surface">ui/white.png</texture>
+                <texture colordiffuse="state">ui/white.png</texture>
                 <visible>!$PARAM[focused]</visible>
             </control>
             <control type="image">
                 <width>236</width>
                 <height>380</height>
-                <texture border="16" colordiffuse="surface">ui/cut_fill.png</texture>
+                <texture border="16" colordiffuse="state">ui/cut_fill.png</texture>
                 <visible>$PARAM[focused]</visible>
             </control>
             <control type="image">
