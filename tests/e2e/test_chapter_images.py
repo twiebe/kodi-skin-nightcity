@@ -67,7 +67,7 @@ def chapter_clip():
 
 def _play(path):
     rpc('Player.Open', {'item': {'file': path}})
-    wait_for('Player.HasVideo', timeout=30)
+    wait_for('Player.HasVideo', timeout=15)
     wait_for('Window.IsActive(fullscreenvideo)')
     action('osd', delay=1)
     wait_for('Window.IsActive(VideoOSD.xml)')

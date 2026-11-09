@@ -31,7 +31,7 @@ def _page(position):
     between the two and did nothing (a Back with no effect, the chain's Position never moving).
     So wait for the page whose path the manager put at that position, then for the manager
     (it polls every 0.5 s; a page closed before it looked hangs the chain 30 s)."""
-    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),{})'.format(position), timeout=30)
+    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),{})'.format(position), timeout=15)
     key = 'Window(Home).Property(TMDbHelper.Path.{})'.format(position)
     query = urllib.parse.parse_qs(urllib.parse.urlsplit(info(key)[key]).query)
     conditions = ['Window.IsActive(movieinformation)']
@@ -217,7 +217,7 @@ def _open_cast_row():
     wait_for("Control.HasFocus(11) | Control.HasFocus(2)")
     action('down', delay=1)
     wait_for('Window.IsActive(1141)')
-    wait_for('Integer.IsGreater(Container(6501).NumItems,0)', timeout=30)
+    wait_for('Integer.IsGreater(Container(6501).NumItems,0)', timeout=15)
 
 
 def _play(movieid):
@@ -287,15 +287,15 @@ def _info_and_person(matrix, crew_index=None):
     # the list loads does nothing
     loaded = ('String.IsEqual(Container(5500).ListItem(0).Property(param.info),{}) + '
               '!Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0)')
-    wait_for(loaded.format('cast'), timeout=30)
+    wait_for(loaded.format('cast'), timeout=15)
     if crew_index is not None:
         builtin('SetFocus(5522)')
         action('select', delay=0.5)
-        wait_for('String.IsEqual(Window(Home).Property(nc.info.tab),crew) + ' + loaded.format('crew'), timeout=30)
+        wait_for('String.IsEqual(Window(Home).Property(nc.info.tab),crew) + ' + loaded.format('crew'), timeout=15)
     builtin('SetFocus(5500,{},absolute)'.format(crew_index or 0))
     action('select')
     _page(2)
-    wait_for('!Container(5510).IsUpdating', timeout=30)
+    wait_for('!Container(5510).IsUpdating', timeout=15)
 
 
 def test_credits_tab_applies_on_focus(matrix):
@@ -305,14 +305,14 @@ def test_credits_tab_applies_on_focus(matrix):
     wait_for('Window.IsActive(movieinformation)', timeout=20)
     loaded = ('String.IsEqual(Container(5500).ListItem(0).Property(param.info),{}) + '
               '!Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0)')
-    wait_for(loaded.format('cast'), timeout=30)
+    wait_for(loaded.format('cast'), timeout=15)
     builtin('SetFocus(5521)')
     wait_for('Control.HasFocus(5521)')
     action('right', delay=0)
-    wait_for('String.IsEqual(Window(Home).Property(nc.info.tab),crew) + ' + loaded.format('crew'), timeout=30)
+    wait_for('String.IsEqual(Window(Home).Property(nc.info.tab),crew) + ' + loaded.format('crew'), timeout=15)
     screenshot('tmdb-crew-on-focus')
     action('left', delay=0)
-    wait_for('String.IsEqual(Window(Home).Property(nc.info.tab),cast) + ' + loaded.format('cast'), timeout=30)
+    wait_for('String.IsEqual(Window(Home).Property(nc.info.tab),cast) + ' + loaded.format('cast'), timeout=15)
     assert _true('Control.HasFocus(5521)')
 
 
@@ -325,7 +325,7 @@ def test_person_tabs_apply_on_focus_after_back_from_a_title(matrix):
     _click_opens(5510, 3)
     _page(3)
     action('back', delay=0)
-    wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),person)', timeout=30)
+    wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),person)', timeout=15)
     _back_in(5510)
     builtin('SetFocus(5523)')
     wait_for('Control.HasFocus(5523)')
@@ -346,7 +346,7 @@ def test_person_without_films_still_reaches_the_tabs(matrix):
     action('select', delay=0.5)
     assert _true('Control.HasFocus(5525)')  # the list is empty yet: the focus stays on the tab
     # once the jobs are in, the focus goes down to them by itself (nc_info_enter)
-    wait_for('Integer.IsGreater(Container(5510).NumItems,0) + !Container(5510).IsUpdating', timeout=30)
+    wait_for('Integer.IsGreater(Container(5510).NumItems,0) + !Container(5510).IsUpdating', timeout=15)
     wait_for('Control.HasFocus(5510)', timeout=2)
 
 
@@ -360,10 +360,10 @@ def _film_in_its_first_second(matrix, key):
     comes after the guard is over goes back as a plain Back: then it tries again."""
     _info_and_person(matrix)
     for _ in range(4):
-        wait_for('Integer.IsGreater(Container(5510).NumItems,0) + !Container(5510).IsUpdating', timeout=30)
+        wait_for('Integer.IsGreater(Container(5510).NumItems,0) + !Container(5510).IsUpdating', timeout=15)
         builtin('SetFocus(5510,0,absolute)')
         _click_opens(5510, 3)
-        wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),movie)', timeout=30)
+        wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),movie)', timeout=15)
         try:
             wait_for(GUARD, timeout=2)
         except AssertionError:
@@ -458,13 +458,13 @@ def test_title_page_starts_its_lists_one_after_another(matrix):
     """A title page opened after another one: its cast list still held the cast of the page
     before, so the similar movies started together with the cast, two interpreters at once."""
     _info_and_person(matrix)
-    wait_for('Integer.IsGreater(Container(5510).NumItems,0)', timeout=30)
+    wait_for('Integer.IsGreater(Container(5510).NumItems,0)', timeout=15)
     # kdev log shows the last matches only: compare times, not counts
     before = max([t for t, _ in _plugin_starts()] or [0])
     builtin('SetFocus(5510,0,absolute)')
     _click_opens(5510, 3)
     _page(3)
-    wait_for('Integer.IsGreater(Container(5300).NumItems,0) + !Container(5300).IsUpdating', timeout=45)
+    wait_for('Integer.IsGreater(Container(5300).NumItems,0) + !Container(5300).IsUpdating', timeout=15)
     starts = [(t, name) for t, name in _plugin_starts() if t > before]
     infos = [name for _, name in starts]
     assert 'info=cast' in infos and 'info=recommendations' in infos, starts
@@ -504,7 +504,7 @@ def test_back_button_names_the_page_and_waits_at_the_left(matrix):
     wait_for('String.IsEqual(Window(Home).Property(nc.page),movies)')
     _info_and_person(matrix)
     assert 'back to movies' in info('Control.GetLabel(9004)')['Control.GetLabel(9004)'].lower()
-    wait_for('Integer.IsGreater(Container(5510).NumItems,0)', timeout=30)
+    wait_for('Integer.IsGreater(Container(5510).NumItems,0)', timeout=15)
     builtin('SetFocus(5510,0,absolute)')
     _click_opens(5510, 3)
     _page(3)
@@ -561,13 +561,13 @@ def test_more_on_a_title_without_library_copy_opens_its_menu(matrix):
     """… on a TMDb title the library lacks: the title's context menu as TMDb Helper lists it,
     loaded on OK only, and the focus back on … once it closes."""
     _info_and_person(matrix)
-    wait_for('Integer.IsGreater(Container(5510).NumItems,3)', timeout=30)
+    wait_for('Integer.IsGreater(Container(5510).NumItems,3)', timeout=15)
     before = max([t for t, _ in _plugin_starts()] or [0])
     builtin('SetFocus(5510,3,absolute)')
     _click_opens(5510, 3)
     _page(3)
     wait_for('!String.IsEmpty(ListItem.Property(tmdb_id)) + String.IsEmpty(ListItem.DBID)')
-    wait_for('!Container(5500).IsUpdating + !Container(5901).IsUpdating + Control.IsVisible(9005)', timeout=30)
+    wait_for('!Container(5500).IsUpdating + !Container(5901).IsUpdating + Control.IsVisible(9005)', timeout=15)
     time.sleep(2)
     assert not _true('Control.IsVisible(9006)')
     details = lambda: [name for t, name in _plugin_starts() if t > before].count('info=details')
@@ -594,7 +594,7 @@ def test_back_in_the_chain_returns_to_the_person_left(matrix):
     """Back reopens the page before as a new page; it goes back to the item it was left from."""
     builtin('NotifyAll(nightcity,info:movie:{})'.format(matrix))
     wait_for('Window.IsActive(movieinformation)', timeout=20)
-    wait_for('Integer.IsGreater(Container(5500).NumItems,3) + !Container(5500).IsUpdating', timeout=30)
+    wait_for('Integer.IsGreater(Container(5500).NumItems,3) + !Container(5500).IsUpdating', timeout=15)
     builtin('SetFocus(5500,2,absolute)')
     wait_for('Integer.IsEqual(Container(5500).CurrentItem,3)')
     person = info('Container(5500).ListItem.Label')['Container(5500).ListItem.Label']
@@ -633,7 +633,7 @@ def test_a_new_chain_opens_the_person_on_the_buttons(matrix):
 def test_back_in_the_chain_returns_to_the_crew_tab(matrix):
     builtin('NotifyAll(nightcity,info:movie:{})'.format(matrix))
     wait_for('Window.IsActive(movieinformation)', timeout=20)
-    wait_for('Integer.IsGreater(Container(5500).NumItems,0) + !Container(5500).IsUpdating', timeout=30)
+    wait_for('Integer.IsGreater(Container(5500).NumItems,0) + !Container(5500).IsUpdating', timeout=15)
     builtin('SetFocus(5522)')  # crew: applies on focus
     wait_for('String.IsEqual(Container(5500).ListItem(0).Property(param.info),crew) + !Container(5500).IsUpdating + '
              'Integer.IsGreater(Container(5500).NumItems,1)', timeout=30)
@@ -757,7 +757,7 @@ def test_back_held_returns_to_the_page_the_chain_started_from(matrix):
     leaves the chain like from its first page."""
     builtin('NotifyAll(nightcity,info:movie:{})'.format(matrix))
     wait_for('Window.IsActive(movieinformation)', timeout=20)
-    wait_for('Integer.IsGreater(Container(5500).NumItems,3) + !Container(5500).IsUpdating', timeout=30)
+    wait_for('Integer.IsGreater(Container(5500).NumItems,3) + !Container(5500).IsUpdating', timeout=15)
     builtin('SetFocus(5500,2,absolute)')
     wait_for('Integer.IsEqual(Container(5500).CurrentItem,3)')
     person = info('Container(5500).ListItem.Label')['Container(5500).ListItem.Label']

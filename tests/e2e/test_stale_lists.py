@@ -57,23 +57,23 @@ def _to_film(index):
     builtin('SetFocus(5510,{},absolute)'.format(index))
     time.sleep(0.5)
     _click_opens(5510, 3)
-    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),3)', timeout=30)
+    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),3)', timeout=15)
 
 
 def test_next_film_never_shows_the_film_before(matrix):
     builtin('NotifyAll(nightcity,info:movie:{})'.format(matrix))
-    wait_for('Window.IsActive(movieinformation)', timeout=30)
+    wait_for('Window.IsActive(movieinformation)', timeout=15)
     _list_in('5500')
     builtin('SetFocus(5500,0,absolute)')
     time.sleep(0.5)
     action('select')
     _page(2)
-    wait_for('Integer.IsGreater(Container(5510).NumItems,40) + !Container(5510).IsUpdating', timeout=30)
+    wait_for('Integer.IsGreater(Container(5510).NumItems,40) + !Container(5510).IsUpdating', timeout=15)
     # films TMDb Helper has not cached yet, or their lists load before anything can be seen
     pick = 5 + int(time.time()) % 30
     _to_film(pick)
     # both lists loaded for the first film
-    wait_for('{} + {}'.format(fresh('5500'), fresh('5300')), timeout=40)
+    wait_for('{} + {}'.format(fresh('5500'), fresh('5300')), timeout=15)
     first = info('ListItem.Label')['ListItem.Label']
     before = {c: content(c) for c in LISTS}
     action('back')
@@ -120,7 +120,7 @@ def test_a_new_search_never_shows_the_search_before(home):
     builtin('SetFocus(9104)')
     wait_for('String.IsEqual(Window(Home).Property(nc.page),search)')
     builtin('NotifyAll(nightcity,search:matrix)')
-    wait_for('Control.IsVisible(9714) + String.IsEqual(Container(9704).ListItem(0).Property(param.query),matrix)', timeout=30)
+    wait_for('Control.IsVisible(9714) + String.IsEqual(Container(9704).ListItem(0).Property(param.query),matrix)', timeout=15)
     builtin('NotifyAll(nightcity,search:alien)')
     stale = ('Control.IsVisible(9714) + !String.IsEqual(Container(9724).ListItem(0).Property(param.query),'
              'Window(Home).Property(nc.search))')
@@ -136,4 +136,4 @@ def test_a_new_search_never_shows_the_search_before(home):
         if _true('Control.IsVisible(9714) + String.IsEqual(Container(9704).ListItem(0).Property(param.query),alien)'):
             break
         time.sleep(0.05)
-    wait_for('Control.IsVisible(9714) + String.IsEqual(Container(9704).ListItem(0).Property(param.query),alien)', timeout=30)
+    wait_for('Control.IsVisible(9714) + String.IsEqual(Container(9704).ListItem(0).Property(param.query),alien)', timeout=15)

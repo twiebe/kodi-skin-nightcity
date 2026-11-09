@@ -29,7 +29,7 @@ def _label(key):
 
 def _move_to(title):
     """Move the movie spotlight (random order) to TITLE."""
-    wait_for('Integer.IsGreater(Container(9000).NumItems,0)', timeout=30)
+    wait_for('Integer.IsGreater(Container(9000).NumItems,0)', timeout=15)
     n = int(_label('Container(9000).NumItems'))
     for start in range(0, n, 100):
         keys = ['Container(9000).ListItemAbsolute({}).Label'.format(i) for i in range(start, min(n, start + 100))]

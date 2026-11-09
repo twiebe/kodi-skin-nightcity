@@ -176,14 +176,14 @@ def test_episode_credits_follow_the_selected_episode(breaking_bad):
     wait_for('String.IsEqual(Window(Home).Property(nc.info.ep.id),{})'.format(second), timeout=20)
     assert _label('Window(Home).Property(nc.info.ep.query)') == 'season={}&episode={}'.format(
         _label('Container(5100).ListItem.Season'), _label('Container(5100).ListItem.Episode'))
-    wait_for('!Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0)', timeout=45)
+    wait_for('!Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0)', timeout=15)
     _down(5500)
     # crew tab: up to the tabs, right loads the episode's crew, OK goes down once it is in
     _up(5521)  # the cast tab of the tab row 5520
     action('right', delay=0.4)
     action('select', delay=0.5)
     wait_for('String.IsEqual(Window(Home).Property(nc.info.tab),crew)')
-    wait_for('!Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0)', timeout=45)
+    wait_for('!Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0)', timeout=15)
     _focus_is(5500)
     screenshot('vertical-episode-crew')
 
@@ -199,20 +199,20 @@ def test_episode_person_opens_in_the_chain_and_back_returns(breaking_bad):
     action('right', delay=0.6)
     person = _label('Container(5500).ListItem.Label')
     action('select')
-    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),2)', timeout=30)
+    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),2)', timeout=15)
     wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),person)', timeout=20)
     assert _label('ListItem.Label') == person
-    wait_for('Integer.IsGreater(Container(5510).NumItems,0)', timeout=30)
+    wait_for('Integer.IsGreater(Container(5510).NumItems,0)', timeout=15)
     screenshot('vertical-person-from-episode')
     # Up on the top of the person page: one page back, the episode
     _focus_is(9004)  # a person page has no play button: close all is the first one
     _up_past_the_text()
-    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),1)', timeout=30)
+    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),1)', timeout=15)
     wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.DBType,episode)', timeout=20)
     assert _label('ListItem.DBID') == episode
     # back on the person left, under the episode of its own show: Kodi reopens the episode
     # without its show id, the season tabs listed every show
-    wait_for('Control.HasFocus(5500) + Integer.IsEqual(Container(5500).CurrentItem,2)', timeout=30)
+    wait_for('Control.HasFocus(5500) + Integer.IsEqual(Container(5500).CurrentItem,2)', timeout=15)
     assert _label('Container(5500).ListItem.Label') == person
     assert _label('Container(5100).ListItem.TVShowTitle') == SHOW
     assert _label('Container(5100).ListItem.DBID') == episode
@@ -246,11 +246,11 @@ def test_tmdb_page_up_from_the_top_steps_back_in_the_chain(matrix):
     _focus_is(9001)
     _down(5500)
     action('select')
-    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),2)', timeout=30)
+    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),2)', timeout=15)
     wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),person)', timeout=20)
     # TMDb Helper polls for the page every half second; Back before it saw the page stalls it
     time.sleep(1.5)
     _focus_is(9004)
     _up_past_the_text()
-    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),1)', timeout=30)
+    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),1)', timeout=15)
     wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.DBID,{})'.format(matrix), timeout=20)

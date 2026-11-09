@@ -31,11 +31,11 @@ def reopen_home():
 def open_page():
     builtin('SetFocus(9107)')
     wait_for('String.IsEqual(Window(Home).Property(nc.page),music)')
-    wait_for('Integer.IsGreater(Container(9002).NumItems,1)', timeout=30)
+    wait_for('Integer.IsGreater(Container(9002).NumItems,1)', timeout=15)
 
 
 def focus_row(row):
-    wait_for('Integer.IsGreater(Container({}).NumItems,0)'.format(row), timeout=30)
+    wait_for('Integer.IsGreater(Container({}).NumItems,0)'.format(row), timeout=15)
     builtin('SetFocus({})'.format(row))
     wait_for('Control.HasFocus({})'.format(row))
 

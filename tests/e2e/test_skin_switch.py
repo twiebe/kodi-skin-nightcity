@@ -55,7 +55,7 @@ def switch_to(skin):
     assert loaded_skin() == skin
     # the service of the skin before needs a second to notice, and clears nc.service then
     time.sleep(3)
-    wait_for('!String.IsEmpty({})'.format(SERVICE), timeout=30)
+    wait_for('!String.IsEmpty({})'.format(SERVICE), timeout=15)
 
 
 def service_starts(skin):

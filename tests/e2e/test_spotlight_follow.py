@@ -27,7 +27,7 @@ def to_page(tab_id, page):
 
 
 def focus_row(row):
-    wait_for('Integer.IsGreater(Container({}).NumItems,0)'.format(row), timeout=30)
+    wait_for('Integer.IsGreater(Container({}).NumItems,0)'.format(row), timeout=15)
     builtin('SetFocus({})'.format(row))
     wait_for('Control.HasFocus({})'.format(row))
 
@@ -43,7 +43,7 @@ def reopen_home():
 def short_interval(home):
     builtin('Skin.SetString(SpotlightInterval,{})'.format(INTERVAL))
     reopen_home()
-    wait_for('Integer.IsGreater(Container(9000).NumItems,2)', timeout=30)
+    wait_for('Integer.IsGreater(Container(9000).NumItems,2)', timeout=15)
     yield
     builtin('Skin.Reset(SpotlightInterval)')
     reopen_home()
@@ -234,7 +234,7 @@ def test_no_spotlight_nothing_to_follow(home):
     builtin('Skin.SetString(SpotlightSource,off)')
     try:
         reopen_home()
-        wait_for('Integer.IsGreater(Container(9202).NumItems,0)', timeout=30)
+        wait_for('Integer.IsGreater(Container(9202).NumItems,0)', timeout=15)
         builtin('SetFocus(9202)')
         wait_for('Control.HasFocus(9202)')
         assert label('ListItem.DBType') == 'movie'
@@ -252,7 +252,7 @@ def test_still_spotlight_shows_the_card(home):
     builtin('Skin.SetString(SpotlightInterval,off)')
     try:
         reopen_home()
-        wait_for('Integer.IsGreater(Container(9202).NumItems,0)', timeout=30)
+        wait_for('Integer.IsGreater(Container(9202).NumItems,0)', timeout=15)
         builtin('SetFocus(9202)')
         wait_for('Control.HasFocus(9202)')
         assert label('ListItem.DBType') == 'movie'
@@ -336,7 +336,7 @@ def trending_row(tmdb_ratings):
     builtin('ReloadSkin()')
     wait_for('Window.IsActive(home)', timeout=20)
     try:
-        wait_for('Integer.IsGreater(Container(9201).NumItems,2)', timeout=30)
+        wait_for('Integer.IsGreater(Container(9201).NumItems,2)', timeout=15)
     except AssertionError:
         pytest.skip('no trending list from TMDb')
     yield

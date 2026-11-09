@@ -58,7 +58,7 @@ def still(home):
 def test_the_hero_shows_where_down_lands(still):
     peek, base = PEEK['home']
     builtin('SetFocus(9101)')
-    wait_for('Control.HasFocus(9101) + [' + loaded(base) + ']', timeout=30)
+    wait_for('Control.HasFocus(9101) + [' + loaded(base) + ']', timeout=15)
     n = first_title_row(base)
     row, group = '{}0{}'.format(base, n), peek + n
     wait_for('Control.IsVisible({}) + Integer.IsEqual(Container({}).Position,0)'.format(group, row))
@@ -92,7 +92,7 @@ def test_the_next_page_shows_its_title_at_once(still):
     wait_for('Control.HasFocus(9101)')
     rpc('Input.Right')
     wait_for('Control.HasFocus(9102) + String.IsEqual(Window(Home).Property(nc.page),movies)')
-    wait_for(loaded(base), timeout=30)
+    wait_for(loaded(base), timeout=15)
     n = first_title_row(base)
     row = '{}0{}'.format(base, n)
     wait_for('Control.IsVisible({})'.format(peek + n))
@@ -105,7 +105,7 @@ def test_the_next_page_shows_its_title_at_once(still):
 def test_left_and_right_only_move_between_the_buttons(still):
     peek, base = PEEK['home']
     builtin('SetFocus(9010)')
-    wait_for('Control.HasFocus(9010) + [' + loaded(base) + ']', timeout=30)
+    wait_for('Control.HasFocus(9010) + [' + loaded(base) + ']', timeout=15)
     n = first_title_row(base)
     row, group = '{}0{}'.format(base, n), peek + n
     wait_for('Control.IsVisible({})'.format(group))
@@ -122,7 +122,7 @@ def test_left_and_right_only_move_between_the_buttons(still):
 def test_info_opens_the_shown_title_and_back_returns_to_the_button(still):
     peek, base = PEEK['home']
     builtin('SetFocus(9011)')
-    wait_for('Control.HasFocus(9011) + [' + loaded(base) + ']', timeout=30)
+    wait_for('Control.HasFocus(9011) + [' + loaded(base) + ']', timeout=15)
     n = first_title_row(base)
     row = '{}0{}'.format(base, n)
     wait_for('Control.IsVisible({})'.format(peek + n))
@@ -148,7 +148,7 @@ def test_the_hero_follows_the_row_the_cursor_was_in(still):
         builtin('SetFocus(9102)')
         wait_for('String.IsEqual(Window(Home).Property(nc.page),movies)')
         first, second = '{}01'.format(base), '{}02'.format(base)
-        wait_for('Integer.IsGreater(Container({}).NumItems,0) + Integer.IsGreater(Container({}).NumItems,0)'.format(first, second), timeout=30)
+        wait_for('Integer.IsGreater(Container({}).NumItems,0) + Integer.IsGreater(Container({}).NumItems,0)'.format(first, second), timeout=15)
         wait_for('Control.IsVisible({})'.format(peek + 1))
         builtin('SetFocus({})'.format(second))
         wait_for('Control.HasFocus({})'.format(second))

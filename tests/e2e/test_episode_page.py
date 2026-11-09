@@ -131,7 +131,7 @@ def _open(show):
 
 
 def _ready():
-    wait_for('!String.IsEmpty(Window(Home).Property(nc.info.ready))', timeout=60)
+    wait_for('!String.IsEmpty(Window(Home).Property(nc.info.ready))', timeout=15)
 
 
 def _page():
@@ -150,7 +150,7 @@ def _absolute(container, field, count):
 def test_the_page_opens_on_the_episode(season_order):
     _open(season_order)
     _ready()
-    wait_for('Integer.IsGreater(Container(5100).NumItems,0)', timeout=60)
+    wait_for('Integer.IsGreater(Container(5100).NumItems,0)', timeout=15)
     time.sleep(1)
     assert _page() == ('10', '10', '3', '3', '5')
 
@@ -183,12 +183,12 @@ def test_slow_seasons_still_open_on_the_episode(season_order):
     kdev('restart')
     kdev('wait')
     _wait_for_service()
-    wait_for('Window.IsActive(home)', timeout=60)
+    wait_for('Window.IsActive(home)', timeout=15)
     _open(season_order)
     # the seasons are still on their way when the 5 s info_select used to wait have run out
     time.sleep(5.5)
     assert info('Container(5200).NumItems')['Container(5200).NumItems'] == '0'
     _ready()
-    wait_for('Integer.IsGreater(Container(5100).NumItems,0)', timeout=60)
+    wait_for('Integer.IsGreater(Container(5100).NumItems,0)', timeout=15)
     time.sleep(1)
     assert _page() == ('10', '10', '3', '3', '5')

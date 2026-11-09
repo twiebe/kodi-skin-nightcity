@@ -34,7 +34,7 @@ def weather():
     before = rpc('Settings.GetSettingValue', {'setting': 'weather.addon'})['value']
     rpc('Settings.SetSettingValue', {'setting': 'weather.addon', 'value': ADDON})
     try:
-        wait_for('Weather.IsFetched + String.IsEqual(Weather.Location,Neon Harbor)', timeout=30)
+        wait_for('Weather.IsFetched + String.IsEqual(Weather.Location,Neon Harbor)', timeout=15)
         yield
     finally:
         rpc('Settings.SetSettingValue', {'setting': 'weather.addon', 'value': before})
@@ -42,7 +42,7 @@ def weather():
         shutil.rmtree(target, ignore_errors=True)
         builtin('UpdateLocalAddons')
         if not before:
-            wait_for('!Weather.IsFetched', timeout=30)
+            wait_for('!Weather.IsFetched', timeout=15)
 
 
 @pytest.fixture
@@ -51,7 +51,7 @@ def page(weather):
     Home, but not `home`: the page needs no library, so no focus in Home's rows either."""
     # after a restart: the skin's startup screen, then Home, then jellyfin-kodi's "Resume the
     # previous sync?" a few seconds later; back answers no (as in `home`)
-    wait_for('!Window.IsActive(startup)', timeout=30)
+    wait_for('!Window.IsActive(startup)', timeout=15)
     builtin('Dialog.Close(all,true)')
     builtin('ReplaceWindow(Home)')
     clear, end = 0, time.time() + 30

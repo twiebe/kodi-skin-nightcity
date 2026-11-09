@@ -60,7 +60,7 @@ def matrix(home):
 def _matrix_page(movieid):
     builtin('NotifyAll(nightcity,info:movie:{})'.format(movieid))
     wait_for('Window.IsActive(movieinformation)', timeout=20)
-    wait_for('Integer.IsGreater(Container(5500).NumItems,0) + !Container(5500).IsUpdating', timeout=45)
+    wait_for('Integer.IsGreater(Container(5500).NumItems,0) + !Container(5500).IsUpdating', timeout=15)
     _focus_is(9001)
 
 
@@ -70,7 +70,7 @@ def _person_page(movieid):
     _matrix_page(movieid)
     builtin('SetFocus(5500,0,absolute)')
     action('select')
-    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),2)', timeout=30)
+    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),2)', timeout=15)
     wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),person)', timeout=20)
     # TMDb Helper polls for the page every half second; Back before it saw the page stalls it
     time.sleep(1.5)
@@ -110,7 +110,7 @@ def test_a_long_biography_opens_in_the_viewer(matrix):
 def test_up_from_the_buttons_steps_back_in_the_chain(matrix):
     _person_page(matrix)
     action('up', delay=1)
-    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),1)', timeout=30)
+    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),1)', timeout=15)
     wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.DBID,{})'.format(matrix), timeout=20)
 
 
@@ -118,7 +118,7 @@ def test_up_from_the_text_button_leaves_too(matrix):
     _person_page(matrix)
     _to_button()
     action('up', delay=1)
-    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),1)', timeout=30)
+    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),1)', timeout=15)
 
 
 def test_a_short_plot_has_the_button_and_up_leaves(matrix):
@@ -151,7 +151,7 @@ def test_no_plot_has_no_button(matrix):
     """A TMDb title without a plot: nothing to open, and Up leaves at once."""
     _person_page(matrix)
     builtin('SetFocus(5510)')
-    wait_for('!Container(5510).IsUpdating + Integer.IsGreater(Container(5510).NumItems,0)', timeout=30)
+    wait_for('!Container(5510).IsUpdating + Integer.IsGreater(Container(5510).NumItems,0)', timeout=15)
     count = int(_label('Container(5510).NumItems'))
     labels = info(*['Container(5510).ListItemAbsolute({}).Plot'.format(i) for i in range(count)])
     empty = [i for i in range(count) if not labels['Container(5510).ListItemAbsolute({}).Plot'.format(i)]]
@@ -159,14 +159,14 @@ def test_no_plot_has_no_button(matrix):
         pytest.skip('every film of the person has a plot')
     builtin('SetFocus(5510,{},absolute)'.format(empty[0]))
     _click_opens(5510, 3)
-    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),3)', timeout=30)
+    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),3)', timeout=15)
     wait_for('Window.IsActive(movieinformation) + !String.IsEqual(ListItem.Property(tmdb_type),person)', timeout=20)
     time.sleep(1.5)
     assert _label('ListItem.Plot') == ''
     assert not cond('Control.IsVisible({})'.format(BUTTON))['Control.IsVisible({})'.format(BUTTON)]
     screenshot('plot-movie-empty')
     action('up', delay=1)
-    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),2)', timeout=30)
+    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),2)', timeout=15)
 
 
 VIEWER = 'Window.IsActive(textviewer)'

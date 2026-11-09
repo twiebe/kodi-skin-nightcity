@@ -300,7 +300,7 @@ def test_movie_info_rows(home):
         if {'tmdb', 'imdb'} & set(details.get('uniqueid') or {}):
             wait_for('Integer.IsGreater(Container(5300).NumItems,0) + !Container(5300).IsUpdating', timeout=30)
         else:
-            wait_for('!Container(5300).IsUpdating', timeout=30)
+            wait_for('!Container(5300).IsUpdating', timeout=15)
             assert label('Container(5300).NumItems') in ('', '0')
         screenshot('info-movie')
     finally:

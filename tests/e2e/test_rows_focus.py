@@ -41,7 +41,7 @@ def _third_page(matrix):
     builtin('NotifyAll(nightcity,info:movie:{})'.format(matrix))
     wait_for('Window.IsActive(movieinformation)', timeout=20)
     # the library page opens first: nothing before it to show
-    wait_for('!Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0)', timeout=30)
+    wait_for('!Container(5500).IsUpdating + Integer.IsGreater(Container(5500).NumItems,0)', timeout=15)
     builtin('SetFocus(5500,0,absolute)')
     action('select')
     _page(2)
@@ -54,7 +54,7 @@ def _third_page(matrix):
         action('right')
     title = info('Container(5510).ListItem.Label')['Container(5510).ListItem.Label']
     _click_opens(5510, 3)
-    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),3)', timeout=30)
+    wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),3)', timeout=15)
     wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),movie)', timeout=20)
     return title
 
@@ -99,5 +99,5 @@ def test_moving_on_forgets_the_waiting_move(matrix):
     action('select', delay=0)
     action('left', delay=0)
     wait_for('String.IsEmpty(Window(Home).Property(nc.info.enter))', timeout=3)
-    wait_for('String.IsEqual(Container(5500).ListItem(0).Property(param.info),cast) + !Container(5500).IsUpdating', timeout=30)
+    wait_for('String.IsEqual(Container(5500).ListItem(0).Property(param.info),cast) + !Container(5500).IsUpdating', timeout=15)
     assert _true('Control.HasFocus(5521)')

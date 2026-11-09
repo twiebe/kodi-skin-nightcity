@@ -99,7 +99,7 @@ def test_context_menu_on_card_shows_every_entry(home_page):
     focus(9102)
     # the first card row itself: the page brings back its last focus, which an earlier test may
     # have left on the genre row; right after the run restarted Kodi the row may still load
-    wait_for('Integer.IsGreater(Container(9401).NumItems,0)', timeout=30)
+    wait_for('Integer.IsGreater(Container(9401).NumItems,0)', timeout=15)
     builtin('SetFocus(9401)')
     wait_for('Control.HasFocus(9401) + !String.IsEmpty(Container(9401).ListItem.Label)')
     open_context_menu()

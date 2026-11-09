@@ -97,7 +97,7 @@ def test_trailer_in_a_chain_keeps_the_chain(trailer):
     """On a page of a TMDb chain the trailer plays over the page; Back ends it there, the chain
     goes on (the manager would take a closing page for Back)."""
     _open(trailer)
-    wait_for('Integer.IsGreater(Container(5500).NumItems,0) + !Container(5500).IsUpdating', timeout=30)
+    wait_for('Integer.IsGreater(Container(5500).NumItems,0) + !Container(5500).IsUpdating', timeout=15)
     builtin('SetFocus(5500,0,absolute)')
     action('select')
     _page(2)
