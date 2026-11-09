@@ -382,13 +382,17 @@
         <value condition="!String.IsEmpty(VideoPlayer.HdrType)">$INFO[VideoPlayer.HdrType]</value>
         <value condition="!String.IsEmpty(VideoPlayer.VideoResolution)">SDR</value>
     </variable>
-    <!-- audio badge: codec as people know it, then the channel layout -->
+    <!-- audio badges: the codec as people know it, short enough for a tag (DTS-MA, Atmos), and the
+         channel layout in a tag of its own -->
     <variable name="PlayerAudioCodec">
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(VideoPlayer.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,aac)">AAC</value>
@@ -407,17 +411,17 @@
         <value condition="String.IsEqual(VideoPlayer.AudioChannels,8)">7.1</value>
         <value condition="!String.IsEmpty(VideoPlayer.AudioChannels)">$INFO[VideoPlayer.AudioChannels]ch</value>
     </variable>
-    <variable name="PlayerAudio">
-        <value>$VAR[PlayerAudioCodec]$VAR[PlayerAudioChannels, ,]</value>
-    </variable>
     <!-- the same for an item: the info page (ListItem), its episode list (5100) and the
          spotlight (9000) -->
     <variable name="ItemAudioCodec">
+        <value condition="String.IsEqual(ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(ListItem.AudioCodec,aac)">AAC</value>
@@ -436,15 +440,15 @@
         <value condition="String.IsEqual(ListItem.AudioChannels,8)">7.1</value>
         <value condition="!String.IsEmpty(ListItem.AudioChannels)">$INFO[ListItem.AudioChannels]ch</value>
     </variable>
-    <variable name="ItemAudio">
-        <value>$VAR[ItemAudioCodec]$VAR[ItemAudioChannels, ,]</value>
-    </variable>
     <variable name="InfoEpisodeAudioCodec">
+        <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(5100).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,aac)">AAC</value>
@@ -463,15 +467,15 @@
         <value condition="String.IsEqual(Container(5100).ListItem.AudioChannels,8)">7.1</value>
         <value condition="!String.IsEmpty(Container(5100).ListItem.AudioChannels)">$INFO[Container(5100).ListItem.AudioChannels]ch</value>
     </variable>
-    <variable name="InfoEpisodeAudio">
-        <value>$VAR[InfoEpisodeAudioCodec]$VAR[InfoEpisodeAudioChannels, ,]</value>
-    </variable>
     <variable name="SpotlightAudioCodec">
+        <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9000).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,aac)">AAC</value>
@@ -490,16 +494,16 @@
         <value condition="String.IsEqual(Container(9000).ListItem.AudioChannels,8)">7.1</value>
         <value condition="!String.IsEmpty(Container(9000).ListItem.AudioChannels)">$INFO[Container(9000).ListItem.AudioChannels]ch</value>
     </variable>
-    <variable name="SpotlightAudio">
-        <value>$VAR[SpotlightAudioCodec]$VAR[SpotlightAudioChannels, ,]</value>
-    </variable>
     <!-- the same for the movies page's spotlight (list 9003) -->
     <variable name="SpotlightAudioCodecMovies">
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9003).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,aac)">AAC</value>
@@ -517,9 +521,6 @@
         <value condition="String.IsEqual(Container(9003).ListItem.AudioChannels,7)">6.1</value>
         <value condition="String.IsEqual(Container(9003).ListItem.AudioChannels,8)">7.1</value>
         <value condition="!String.IsEmpty(Container(9003).ListItem.AudioChannels)">$INFO[Container(9003).ListItem.AudioChannels]ch</value>
-    </variable>
-    <variable name="SpotlightAudioMovies">
-        <value>$VAR[SpotlightAudioCodecMovies]$VAR[SpotlightAudioChannelsMovies, ,]</value>
     </variable>
     <variable name="PlayerPoster">
         <value condition="!String.IsEmpty(Player.Art(tvshow.poster))">$INFO[Player.Art(tvshow.poster)]</value>
@@ -783,15 +784,11 @@
     <variable name="LibraryRowHdr">
         <value condition="$EXP[LibraryDetailHdr]">$VAR[ItemHdr]</value>
     </variable>
-    <!-- the audio of a list row, short enough for a tag: the codec as people know it, cut down, and the
-         channel layout; an Atmos or DTS:X track says only that, since its channels are objects -->
     <variable name="LibraryRowAudio">
-        <value condition="$EXP[LibraryDetailAudio] + String.IsEqual(ListItem.AudioCodec,truehd_atmos)">Atmos</value>
-        <value condition="$EXP[LibraryDetailAudio] + String.IsEqual(ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
-        <value condition="$EXP[LibraryDetailAudio] + String.StartsWith(ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
-        <value condition="$EXP[LibraryDetailAudio] + String.IsEqual(ListItem.AudioCodec,dtshd_ma)">DTS-MA$VAR[ItemAudioChannels, ,]</value>
-        <value condition="$EXP[LibraryDetailAudio] + String.IsEqual(ListItem.AudioCodec,dtshd_hra)">DTS-HR$VAR[ItemAudioChannels, ,]</value>
-        <value condition="$EXP[LibraryDetailAudio]">$VAR[ItemAudio]</value>
+        <value condition="$EXP[LibraryDetailAudio]">$VAR[ItemAudioCodec]</value>
+    </variable>
+    <variable name="LibraryRowChannels">
+        <value condition="$EXP[LibraryDetailChannels]">$VAR[ItemAudioChannels]</value>
     </variable>
     <!-- the detail tags of the focused row: dark on the focus bar, its colour for the text -->
     <variable name="LibraryRowTag">

@@ -21,6 +21,7 @@
     <expression name="LibraryDetailRes">!String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.Contains(Skin.String(nc.libdetails.movies),res)</expression>
     <expression name="LibraryDetailHdr">!String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.Contains(Skin.String(nc.libdetails.movies),hdr)</expression>
     <expression name="LibraryDetailAudio">!String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.Contains(Skin.String(nc.libdetails.movies),audio)</expression>
+    <expression name="LibraryDetailChannels">!String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.Contains(Skin.String(nc.libdetails.movies),channels)</expression>
     <!-- Full screen page: base colour and the petrol glow top right. Never a hole, with or
          without fanart (FanartBackdrop goes on top of this). -->
     <include name="Background">
@@ -395,7 +396,7 @@
                      row; a tag left out slides the ones before it right by its width -->
                 <control type="group">
                     <description>year</description>
-                    <left>246</left>
+                    <left>194</left>
                     <top>12</top>
                     <width>70</width>
                     <height>32</height>
@@ -406,7 +407,8 @@
                     <animation effect="slide" end="208,0" time="0" condition="!$EXP[LibraryDetailStudio]">Conditional</animation>
                     <animation effect="slide" end="88,0" time="0" condition="!$EXP[LibraryDetailRes]">Conditional</animation>
                     <animation effect="slide" end="108,0" time="0" condition="!$EXP[LibraryDetailHdr]">Conditional</animation>
-                    <animation effect="slide" end="152,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <animation effect="slide" end="132,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <animation effect="slide" end="72,0" time="0" condition="!$EXP[LibraryDetailChannels]">Conditional</animation>
                     <visible>$EXP[LibraryDetailYear] + !String.IsEmpty(ListItem.Year)</visible>
                     <include content="LookTagImage">
                         <param name="width" value="70"/>
@@ -424,7 +426,7 @@
                 </control>
                 <control type="group">
                     <description>runtime</description>
-                    <left>324</left>
+                    <left>272</left>
                     <top>12</top>
                     <width>104</width>
                     <height>32</height>
@@ -434,7 +436,8 @@
                     <animation effect="slide" end="208,0" time="0" condition="!$EXP[LibraryDetailStudio]">Conditional</animation>
                     <animation effect="slide" end="88,0" time="0" condition="!$EXP[LibraryDetailRes]">Conditional</animation>
                     <animation effect="slide" end="108,0" time="0" condition="!$EXP[LibraryDetailHdr]">Conditional</animation>
-                    <animation effect="slide" end="152,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <animation effect="slide" end="132,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <animation effect="slide" end="72,0" time="0" condition="!$EXP[LibraryDetailChannels]">Conditional</animation>
                     <visible>$EXP[LibraryDetailRuntime] + !String.IsEmpty(ListItem.Duration)</visible>
                     <include content="LookTagImage">
                         <param name="width" value="104"/>
@@ -452,7 +455,7 @@
                 </control>
                 <control type="group">
                     <description>rating</description>
-                    <left>436</left>
+                    <left>384</left>
                     <top>12</top>
                     <width>80</width>
                     <height>32</height>
@@ -461,7 +464,8 @@
                     <animation effect="slide" end="208,0" time="0" condition="!$EXP[LibraryDetailStudio]">Conditional</animation>
                     <animation effect="slide" end="88,0" time="0" condition="!$EXP[LibraryDetailRes]">Conditional</animation>
                     <animation effect="slide" end="108,0" time="0" condition="!$EXP[LibraryDetailHdr]">Conditional</animation>
-                    <animation effect="slide" end="152,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <animation effect="slide" end="132,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <animation effect="slide" end="72,0" time="0" condition="!$EXP[LibraryDetailChannels]">Conditional</animation>
                     <visible>$EXP[LibraryDetailRating] + !String.IsEmpty(ListItem.Rating)</visible>
                     <include content="LookTagImage">
                         <param name="width" value="80"/>
@@ -479,7 +483,7 @@
                 </control>
                 <control type="group">
                     <description>seasons</description>
-                    <left>524</left>
+                    <left>472</left>
                     <top>12</top>
                     <width>124</width>
                     <height>32</height>
@@ -487,7 +491,8 @@
                     <animation effect="slide" end="208,0" time="0" condition="!$EXP[LibraryDetailStudio]">Conditional</animation>
                     <animation effect="slide" end="88,0" time="0" condition="!$EXP[LibraryDetailRes]">Conditional</animation>
                     <animation effect="slide" end="108,0" time="0" condition="!$EXP[LibraryDetailHdr]">Conditional</animation>
-                    <animation effect="slide" end="152,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <animation effect="slide" end="132,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <animation effect="slide" end="72,0" time="0" condition="!$EXP[LibraryDetailChannels]">Conditional</animation>
                     <visible>$EXP[LibraryDetailSeasons] + Integer.IsGreater(ListItem.Property(TotalSeasons),0)</visible>
                     <include content="LookTagImage">
                         <param name="width" value="124"/>
@@ -505,14 +510,15 @@
                 </control>
                 <control type="group">
                     <description>episodes</description>
-                    <left>656</left>
+                    <left>604</left>
                     <top>12</top>
                     <width>88</width>
                     <height>32</height>
                     <animation effect="slide" end="208,0" time="0" condition="!$EXP[LibraryDetailStudio]">Conditional</animation>
                     <animation effect="slide" end="88,0" time="0" condition="!$EXP[LibraryDetailRes]">Conditional</animation>
                     <animation effect="slide" end="108,0" time="0" condition="!$EXP[LibraryDetailHdr]">Conditional</animation>
-                    <animation effect="slide" end="152,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <animation effect="slide" end="132,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <animation effect="slide" end="72,0" time="0" condition="!$EXP[LibraryDetailChannels]">Conditional</animation>
                     <visible>$EXP[LibraryDetailEpisodes] + !String.IsEmpty(ListItem.Property(TotalEpisodes))</visible>
                     <include content="LookTagImage">
                         <param name="width" value="88"/>
@@ -530,13 +536,14 @@
                 </control>
                 <control type="group">
                     <description>studio</description>
-                    <left>752</left>
+                    <left>700</left>
                     <top>12</top>
                     <width>200</width>
                     <height>32</height>
                     <animation effect="slide" end="88,0" time="0" condition="!$EXP[LibraryDetailRes]">Conditional</animation>
                     <animation effect="slide" end="108,0" time="0" condition="!$EXP[LibraryDetailHdr]">Conditional</animation>
-                    <animation effect="slide" end="152,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <animation effect="slide" end="132,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <animation effect="slide" end="72,0" time="0" condition="!$EXP[LibraryDetailChannels]">Conditional</animation>
                     <visible>$EXP[LibraryDetailStudio] + !String.IsEmpty(ListItem.Studio)</visible>
                     <include content="LookTagImage">
                         <param name="width" value="200"/>
@@ -554,12 +561,13 @@
                 </control>
                 <control type="group">
                     <description>res</description>
-                    <left>960</left>
+                    <left>908</left>
                     <top>12</top>
                     <width>80</width>
                     <height>32</height>
                     <animation effect="slide" end="108,0" time="0" condition="!$EXP[LibraryDetailHdr]">Conditional</animation>
-                    <animation effect="slide" end="152,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <animation effect="slide" end="132,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <animation effect="slide" end="72,0" time="0" condition="!$EXP[LibraryDetailChannels]">Conditional</animation>
                     <visible>$EXP[LibraryDetailRes] + !String.IsEmpty(ListItem.VideoResolution)</visible>
                     <include content="LookTagImage">
                         <param name="width" value="80"/>
@@ -577,11 +585,12 @@
                 </control>
                 <control type="group">
                     <description>hdr</description>
-                    <left>1048</left>
+                    <left>996</left>
                     <top>12</top>
                     <width>100</width>
                     <height>32</height>
-                    <animation effect="slide" end="152,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <animation effect="slide" end="132,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <animation effect="slide" end="72,0" time="0" condition="!$EXP[LibraryDetailChannels]">Conditional</animation>
                     <visible>$EXP[LibraryDetailHdr] + !String.IsEmpty(ListItem.VideoResolution)</visible>
                     <include content="LookTagImage">
                         <param name="width" value="100"/>
@@ -599,23 +608,45 @@
                 </control>
                 <control type="group">
                     <description>audio</description>
-                    <left>1156</left>
+                    <left>1104</left>
                     <top>12</top>
-                    <width>144</width>
+                    <width>124</width>
                     <height>32</height>
+                    <animation effect="slide" end="72,0" time="0" condition="!$EXP[LibraryDetailChannels]">Conditional</animation>
                     <visible>$EXP[LibraryDetailAudio] + !String.IsEmpty(ListItem.AudioCodec)</visible>
                     <include content="LookTagImage">
-                        <param name="width" value="144"/>
+                        <param name="width" value="124"/>
                         <param name="color" value="$PARAM[tag]"/>
                     </include>
                     <control type="label">
-                        <width>144</width>
+                        <width>124</width>
                         <height>32</height>
                         <align>center</align>
                         <aligny>center</aligny>
                         <font>font_tiny</font>
                         <textcolor>$PARAM[tagtext]</textcolor>
                         <label>$VAR[LibraryRowAudio]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <description>channels</description>
+                    <left>1236</left>
+                    <top>12</top>
+                    <width>64</width>
+                    <height>32</height>
+                    <visible>$EXP[LibraryDetailChannels] + !String.IsEmpty(ListItem.AudioChannels)</visible>
+                    <include content="LookTagImage">
+                        <param name="width" value="64"/>
+                        <param name="color" value="$PARAM[tag]"/>
+                    </include>
+                    <control type="label">
+                        <width>64</width>
+                        <height>32</height>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <font>font_tiny</font>
+                        <textcolor>$PARAM[tagtext]</textcolor>
+                        <label>$VAR[LibraryRowChannels]</label>
                     </control>
                 </control>
             </control>

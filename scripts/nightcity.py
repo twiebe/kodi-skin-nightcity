@@ -2768,8 +2768,9 @@ LIB_FILTER_OPTIONS = {
     'hdr': [('sdr', 'SDR', []), ('hdr', 'HDR', LIB_FILTER_HDR), ('hdr10', 'HDR10', ['hdr10']),
             ('hdr10plus', 'HDR10+', ['hdr10plus']), ('dolbyvision', 'Dolby Vision', ['dolbyvision']),
             ('hlg', 'HLG', ['hlg'])],
-    'audio': [('truehd', 'TrueHD', ['truehd']), ('dtshd', 'DTS-HD', ['dtshd_ma', 'dtshd_hra']),
-              ('dts', 'DTS', ['dca', 'dts']), ('eac3', 'DD+', ['eac3']), ('ac3', 'DD', ['ac3']),
+    'audio': [('truehd', 'TrueHD', ['truehd', 'truehd_atmos']),
+              ('dtshd', 'DTS-MA', ['dtshd_ma', 'dtshd_ma_x', 'dtshd_ma_x_imax']), ('dtshra', 'DTS-HR', ['dtshd_hra']),
+              ('dts', 'DTS', ['dca', 'dts']), ('eac3', 'DD+', ['eac3', 'eac3_ddp_atmos']), ('ac3', 'DD', ['ac3']),
               ('aac', 'AAC', ['aac']), ('flac', 'FLAC', ['flac']), ('opus', 'Opus', ['opus']),
               ('mp3', 'MP3', ['mp3']),
               ('pcm', 'PCM', ['pcm', 'pcm_s16le', 'pcm_s24le', 'pcm_s32le', 'pcm_bluray', 'pcm_dvd'])],
@@ -2952,7 +2953,7 @@ def _lib_filter_dialogs(library, choice, groups, text):
 
 LIB_DETAILS = {
     'movies': [('year', 31119), ('runtime', 31600), ('rating', 31121), ('res', 31504), ('hdr', 31505),
-               ('audio', 31506)],
+               ('audio', 31506), ('channels', 31507)],
     'tvshows': [('year', 31119), ('rating', 31121), ('seasons', 31603), ('episodes', 31606), ('studio', 31128)],
 }
 LIB_DETAILS_DEFAULT = {'movies': ['year', 'runtime'], 'tvshows': ['year', 'episodes']}

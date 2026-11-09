@@ -487,8 +487,8 @@ def test_the_details_dialog_chooses_what_a_row_shows(library):
     _open()
     screenshot('library-details-default')
     _details_dialog()
-    wait_for('Integer.IsEqual(Container(3).NumItems,6) + !Control.IsVisible(7)')
-    assert _ticked(6) == [0, 1]
+    wait_for('Integer.IsEqual(Container(3).NumItems,7) + !Control.IsVisible(7)')
+    assert _ticked(7) == [0, 1]
     screenshot('library-details-dialog')
     builtin('SetFocus(3,2,absolute)')  # rating
     wait_for('Integer.IsEqual(Container(3).CurrentItem,3)')
@@ -500,7 +500,7 @@ def test_the_details_dialog_chooses_what_a_row_shows(library):
     assert true('String.IsEmpty(Skin.String(nc.libdetails.tvshows))')
     # Back keeps what there was
     _details_dialog()
-    assert _ticked(6) == [0, 1, 2]
+    assert _ticked(7) == [0, 1, 2]
     action('select')  # year off
     action('back', delay=1)
     wait_for('!Window.IsActive(selectdialog)')
@@ -511,20 +511,20 @@ def test_every_detail_and_none(library):
     builtin('Skin.SetString(nc.libview.movies,list)')
     _open()
     _details_dialog()
-    for i in range(2, 6):
+    for i in range(2, 7):
         builtin('SetFocus(3,{},absolute)'.format(i))
         wait_for('Integer.IsEqual(Container(3).CurrentItem,{})'.format(i + 1))
         action('select')
     builtin('SetFocus(5)')
     wait_for('Control.HasFocus(5)')
     action('select', delay=1)
-    wait_for('!Window.IsActive(selectdialog) + String.IsEqual(Skin.String(nc.libdetails.movies),year.runtime.rating.res.hdr.audio)')
+    wait_for('!Window.IsActive(selectdialog) + String.IsEqual(Skin.String(nc.libdetails.movies),year.runtime.rating.res.hdr.audio.channels)')
     builtin('SetFocus({},0,absolute)'.format(GRID))
     wait_for('Control.HasFocus({})'.format(GRID))
     time.sleep(0.5)
     screenshot('library-details-all')
     _details_dialog()
-    for i in range(6):
+    for i in range(7):
         builtin('SetFocus(3,{},absolute)'.format(i))
         wait_for('Integer.IsEqual(Container(3).CurrentItem,{})'.format(i + 1))
         action('select')

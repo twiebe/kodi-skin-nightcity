@@ -122,7 +122,7 @@ def test_the_details_button_opens_the_dialog_in_the_list_only():
     assert 'lib_details' in _nightcity().COMMANDS
 
 
-ROW_ORDER = ['year', 'runtime', 'rating', 'seasons', 'episodes', 'studio', 'res', 'hdr', 'audio']
+ROW_ORDER = ['year', 'runtime', 'rating', 'seasons', 'episodes', 'studio', 'res', 'hdr', 'audio', 'channels']
 
 
 def _piece(key):
@@ -187,21 +187,11 @@ def test_the_focused_row_turns_its_tags_dark():
     assert _variable('LibraryRowTagText') == [('Control.HasFocus(5000)', 'focus'), (None, 'text')]
 
 
-def test_the_audio_tag_is_short():
-    """An object track says only that; a DTS-HD track drops the HD; the rest as the info page."""
-    def audio(codec):
-        for condition, text in _variable('LibraryRowAudio'):
-            gate, _, test = condition.partition(' + ')
-            assert gate == '$EXP[LibraryDetailAudio]'
-            m = re.match(r'String\.(IsEqual|StartsWith)\(ListItem\.AudioCodec,(\w+)\)$', test)
-            if not test or (codec == m.group(2) if m.group(1) == 'IsEqual' else codec.startswith(m.group(2))):
-                return text
-    assert audio('truehd_atmos') == 'Atmos'
-    assert audio('eac3_ddp_atmos') == 'DD+ Atmos'
-    assert audio('dtshd_ma_x') == audio('dtshd_ma_x_imax') == 'DTS:X'
-    assert audio('dtshd_ma') == 'DTS-MA$VAR[ItemAudioChannels, ,]'
-    assert audio('dtshd_hra') == 'DTS-HR$VAR[ItemAudioChannels, ,]'
-    assert audio('truehd') == audio('eac3') == '$VAR[ItemAudio]'
+def test_codec_and_channels_are_tags_of_their_own():
+    """DTS-MA and 7.1: the names of the info page, each chosen on its own."""
+    assert _variable('LibraryRowAudio') == [('$EXP[LibraryDetailAudio]', '$VAR[ItemAudioCodec]')]
+    assert _variable('LibraryRowChannels') == [('$EXP[LibraryDetailChannels]', '$VAR[ItemAudioChannels]')]
+    assert ('channels', 31507) in _nightcity().LIB_DETAILS['movies']
 
 
 def test_each_detail_shows_only_when_chosen():

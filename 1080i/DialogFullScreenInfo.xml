@@ -47,8 +47,12 @@
                 <param name="visible" value="!String.IsEmpty(VideoPlayer.VideoResolution)"/>
             </include>
             <include content="Tag">
-                <param name="label" value="$INFO[VideoPlayer.AudioLanguage,, ]$VAR[PlayerAudio]"/>
+                <param name="label" value="$INFO[VideoPlayer.AudioLanguage,, ]$VAR[PlayerAudioCodec]"/>
                 <param name="visible" value="!String.IsEmpty(VideoPlayer.AudioCodec)"/>
+            </include>
+            <include content="Tag">
+                <param name="label" value="$VAR[PlayerAudioChannels]"/>
+                <param name="visible" value="!String.IsEmpty(VideoPlayer.AudioChannels)"/>
             </include>
         </control>
         <control type="label">

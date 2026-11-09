@@ -246,7 +246,7 @@ def test_seekbar_shows_details():
                    if i.get('name') == 'PlayerDetails')
     text = ''.join(p.get('value') or '' for p in details.iter('param')) + ''.join(details.itertext())
     for part in ('$VAR[PlayerPoster]', '$VAR[PlayerKicker]', '$INFO[VideoPlayer.Title]', '$VAR[PlayerPlot]',
-                 '$VAR[PlayerResolution]', '$VAR[PlayerHdr]', '$VAR[PlayerAudio]'):
+                 '$VAR[PlayerResolution]', '$VAR[PlayerHdr]', '$VAR[PlayerAudioCodec]', '$VAR[PlayerAudioChannels]'):
         assert part in text, part
 
 
@@ -259,16 +259,21 @@ def test_player_hdr_badge():
 
 
 def test_player_audio_badge():
-    """Codec names as people know them, then the channel layout."""
+    """Codec names as people know them, short enough for a tag, and the channel layout in a tag
+    of its own: DTS-MA and 7.1. A track with objects says so: Atmos, DD+ Atmos, DTS:X."""
     codecs = dict((c, t) for c, t in _variable('PlayerAudioCodec'))
-    for codec, name in (('truehd', 'TrueHD'), ('eac3', 'DD+'), ('ac3', 'DD'), ('dtshd_ma', 'DTS-HD MA'),
-                        ('dtshd_hra', 'DTS-HD HRA'), ('dca', 'DTS'), ('aac', 'AAC'), ('flac', 'FLAC')):
+    for codec, name in (('truehd', 'TrueHD'), ('eac3', 'DD+'), ('ac3', 'DD'), ('dtshd_ma', 'DTS-MA'),
+                        ('dtshd_hra', 'DTS-HR'), ('dca', 'DTS'), ('aac', 'AAC'), ('flac', 'FLAC'),
+                        ('truehd_atmos', 'Atmos'), ('eac3_ddp_atmos', 'DD+ Atmos')):
         assert codecs['String.IsEqual(VideoPlayer.AudioCodec,{})'.format(codec)] == name
+    assert codecs['String.StartsWith(VideoPlayer.AudioCodec,dtshd_ma_x)'] == 'DTS:X'
+    order = [c for c, _ in _variable('PlayerAudioCodec')]
+    assert order.index('String.StartsWith(VideoPlayer.AudioCodec,dtshd_ma_x)') < \
+        order.index('String.IsEqual(VideoPlayer.AudioCodec,dtshd_ma)')
     channels = dict((c, t) for c, t in _variable('PlayerAudioChannels'))
     assert channels['String.IsEqual(VideoPlayer.AudioChannels,6)'] == '5.1'
     assert channels['String.IsEqual(VideoPlayer.AudioChannels,8)'] == '7.1'
     assert channels['String.IsEqual(VideoPlayer.AudioChannels,2)'] == '2.0'
-    assert _variable('PlayerAudio') == [(None, '$VAR[PlayerAudioCodec]$VAR[PlayerAudioChannels, ,]')]
 
 
 def test_info_page_ends_the_claim():

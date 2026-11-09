@@ -3377,9 +3377,6 @@
         <value condition="Integer.IsLess(Container(9201).ListItem.Season,10)">S0$INFO[Container(9201).ListItem.Season]</value>
         <value>S$INFO[Container(9201).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9201">
-        <value>$VAR[ItemAudioCodec9201]$VAR[ItemAudioChannels9201, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9201">
         <value condition="String.IsEqual(Container(9201).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9201).ListItem.AudioChannels,2)">2.0</value>
@@ -3390,11 +3387,14 @@
         <value condition="!String.IsEmpty(Container(9201).ListItem.AudioChannels)">$INFO[Container(9201).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9201">
+        <value condition="String.IsEqual(Container(9201).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9201).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9201).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9201).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9201).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9201).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9201).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9201).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9201).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9201).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9201).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9201).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9201).ListItem.AudioCodec,aac)">AAC</value>
@@ -3435,9 +3435,6 @@
         <value condition="Integer.IsLess(Container(9202).ListItem.Season,10)">S0$INFO[Container(9202).ListItem.Season]</value>
         <value>S$INFO[Container(9202).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9202">
-        <value>$VAR[ItemAudioCodec9202]$VAR[ItemAudioChannels9202, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9202">
         <value condition="String.IsEqual(Container(9202).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9202).ListItem.AudioChannels,2)">2.0</value>
@@ -3448,11 +3445,14 @@
         <value condition="!String.IsEmpty(Container(9202).ListItem.AudioChannels)">$INFO[Container(9202).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9202">
+        <value condition="String.IsEqual(Container(9202).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9202).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9202).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9202).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9202).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9202).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9202).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9202).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9202).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9202).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9202).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9202).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9202).ListItem.AudioCodec,aac)">AAC</value>
@@ -3493,9 +3493,6 @@
         <value condition="Integer.IsLess(Container(9203).ListItem.Season,10)">S0$INFO[Container(9203).ListItem.Season]</value>
         <value>S$INFO[Container(9203).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9203">
-        <value>$VAR[ItemAudioCodec9203]$VAR[ItemAudioChannels9203, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9203">
         <value condition="String.IsEqual(Container(9203).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9203).ListItem.AudioChannels,2)">2.0</value>
@@ -3506,11 +3503,14 @@
         <value condition="!String.IsEmpty(Container(9203).ListItem.AudioChannels)">$INFO[Container(9203).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9203">
+        <value condition="String.IsEqual(Container(9203).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9203).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9203).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9203).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9203).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9203).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9203).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9203).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9203).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9203).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9203).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9203).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9203).ListItem.AudioCodec,aac)">AAC</value>
@@ -3551,9 +3551,6 @@
         <value condition="Integer.IsLess(Container(9204).ListItem.Season,10)">S0$INFO[Container(9204).ListItem.Season]</value>
         <value>S$INFO[Container(9204).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9204">
-        <value>$VAR[ItemAudioCodec9204]$VAR[ItemAudioChannels9204, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9204">
         <value condition="String.IsEqual(Container(9204).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9204).ListItem.AudioChannels,2)">2.0</value>
@@ -3564,11 +3561,14 @@
         <value condition="!String.IsEmpty(Container(9204).ListItem.AudioChannels)">$INFO[Container(9204).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9204">
+        <value condition="String.IsEqual(Container(9204).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9204).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9204).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9204).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9204).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9204).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9204).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9204).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9204).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9204).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9204).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9204).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9204).ListItem.AudioCodec,aac)">AAC</value>
@@ -3609,9 +3609,6 @@
         <value condition="Integer.IsLess(Container(9205).ListItem.Season,10)">S0$INFO[Container(9205).ListItem.Season]</value>
         <value>S$INFO[Container(9205).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9205">
-        <value>$VAR[ItemAudioCodec9205]$VAR[ItemAudioChannels9205, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9205">
         <value condition="String.IsEqual(Container(9205).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9205).ListItem.AudioChannels,2)">2.0</value>
@@ -3622,11 +3619,14 @@
         <value condition="!String.IsEmpty(Container(9205).ListItem.AudioChannels)">$INFO[Container(9205).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9205">
+        <value condition="String.IsEqual(Container(9205).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9205).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9205).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9205).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9205).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9205).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9205).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9205).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9205).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9205).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9205).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9205).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9205).ListItem.AudioCodec,aac)">AAC</value>
@@ -3667,9 +3667,6 @@
         <value condition="Integer.IsLess(Container(9206).ListItem.Season,10)">S0$INFO[Container(9206).ListItem.Season]</value>
         <value>S$INFO[Container(9206).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9206">
-        <value>$VAR[ItemAudioCodec9206]$VAR[ItemAudioChannels9206, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9206">
         <value condition="String.IsEqual(Container(9206).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9206).ListItem.AudioChannels,2)">2.0</value>
@@ -3680,11 +3677,14 @@
         <value condition="!String.IsEmpty(Container(9206).ListItem.AudioChannels)">$INFO[Container(9206).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9206">
+        <value condition="String.IsEqual(Container(9206).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9206).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9206).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9206).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9206).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9206).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9206).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9206).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9206).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9206).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9206).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9206).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9206).ListItem.AudioCodec,aac)">AAC</value>
@@ -3725,9 +3725,6 @@
         <value condition="Integer.IsLess(Container(9207).ListItem.Season,10)">S0$INFO[Container(9207).ListItem.Season]</value>
         <value>S$INFO[Container(9207).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9207">
-        <value>$VAR[ItemAudioCodec9207]$VAR[ItemAudioChannels9207, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9207">
         <value condition="String.IsEqual(Container(9207).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9207).ListItem.AudioChannels,2)">2.0</value>
@@ -3738,11 +3735,14 @@
         <value condition="!String.IsEmpty(Container(9207).ListItem.AudioChannels)">$INFO[Container(9207).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9207">
+        <value condition="String.IsEqual(Container(9207).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9207).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9207).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9207).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9207).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9207).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9207).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9207).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9207).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9207).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9207).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9207).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9207).ListItem.AudioCodec,aac)">AAC</value>
@@ -3783,9 +3783,6 @@
         <value condition="Integer.IsLess(Container(9208).ListItem.Season,10)">S0$INFO[Container(9208).ListItem.Season]</value>
         <value>S$INFO[Container(9208).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9208">
-        <value>$VAR[ItemAudioCodec9208]$VAR[ItemAudioChannels9208, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9208">
         <value condition="String.IsEqual(Container(9208).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9208).ListItem.AudioChannels,2)">2.0</value>
@@ -3796,11 +3793,14 @@
         <value condition="!String.IsEmpty(Container(9208).ListItem.AudioChannels)">$INFO[Container(9208).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9208">
+        <value condition="String.IsEqual(Container(9208).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9208).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9208).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9208).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9208).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9208).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9208).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9208).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9208).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9208).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9208).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9208).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9208).ListItem.AudioCodec,aac)">AAC</value>
@@ -3841,9 +3841,6 @@
         <value condition="Integer.IsLess(Container(9401).ListItem.Season,10)">S0$INFO[Container(9401).ListItem.Season]</value>
         <value>S$INFO[Container(9401).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9401">
-        <value>$VAR[ItemAudioCodec9401]$VAR[ItemAudioChannels9401, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9401">
         <value condition="String.IsEqual(Container(9401).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9401).ListItem.AudioChannels,2)">2.0</value>
@@ -3854,11 +3851,14 @@
         <value condition="!String.IsEmpty(Container(9401).ListItem.AudioChannels)">$INFO[Container(9401).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9401">
+        <value condition="String.IsEqual(Container(9401).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9401).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9401).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9401).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9401).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9401).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9401).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9401).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9401).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9401).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9401).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9401).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9401).ListItem.AudioCodec,aac)">AAC</value>
@@ -3899,9 +3899,6 @@
         <value condition="Integer.IsLess(Container(9402).ListItem.Season,10)">S0$INFO[Container(9402).ListItem.Season]</value>
         <value>S$INFO[Container(9402).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9402">
-        <value>$VAR[ItemAudioCodec9402]$VAR[ItemAudioChannels9402, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9402">
         <value condition="String.IsEqual(Container(9402).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9402).ListItem.AudioChannels,2)">2.0</value>
@@ -3912,11 +3909,14 @@
         <value condition="!String.IsEmpty(Container(9402).ListItem.AudioChannels)">$INFO[Container(9402).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9402">
+        <value condition="String.IsEqual(Container(9402).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9402).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9402).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9402).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9402).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9402).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9402).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9402).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9402).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9402).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9402).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9402).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9402).ListItem.AudioCodec,aac)">AAC</value>
@@ -3957,9 +3957,6 @@
         <value condition="Integer.IsLess(Container(9403).ListItem.Season,10)">S0$INFO[Container(9403).ListItem.Season]</value>
         <value>S$INFO[Container(9403).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9403">
-        <value>$VAR[ItemAudioCodec9403]$VAR[ItemAudioChannels9403, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9403">
         <value condition="String.IsEqual(Container(9403).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9403).ListItem.AudioChannels,2)">2.0</value>
@@ -3970,11 +3967,14 @@
         <value condition="!String.IsEmpty(Container(9403).ListItem.AudioChannels)">$INFO[Container(9403).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9403">
+        <value condition="String.IsEqual(Container(9403).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9403).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9403).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9403).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9403).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9403).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9403).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9403).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9403).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9403).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9403).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9403).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9403).ListItem.AudioCodec,aac)">AAC</value>
@@ -4015,9 +4015,6 @@
         <value condition="Integer.IsLess(Container(9404).ListItem.Season,10)">S0$INFO[Container(9404).ListItem.Season]</value>
         <value>S$INFO[Container(9404).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9404">
-        <value>$VAR[ItemAudioCodec9404]$VAR[ItemAudioChannels9404, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9404">
         <value condition="String.IsEqual(Container(9404).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9404).ListItem.AudioChannels,2)">2.0</value>
@@ -4028,11 +4025,14 @@
         <value condition="!String.IsEmpty(Container(9404).ListItem.AudioChannels)">$INFO[Container(9404).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9404">
+        <value condition="String.IsEqual(Container(9404).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9404).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9404).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9404).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9404).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9404).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9404).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9404).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9404).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9404).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9404).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9404).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9404).ListItem.AudioCodec,aac)">AAC</value>
@@ -4073,9 +4073,6 @@
         <value condition="Integer.IsLess(Container(9405).ListItem.Season,10)">S0$INFO[Container(9405).ListItem.Season]</value>
         <value>S$INFO[Container(9405).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9405">
-        <value>$VAR[ItemAudioCodec9405]$VAR[ItemAudioChannels9405, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9405">
         <value condition="String.IsEqual(Container(9405).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9405).ListItem.AudioChannels,2)">2.0</value>
@@ -4086,11 +4083,14 @@
         <value condition="!String.IsEmpty(Container(9405).ListItem.AudioChannels)">$INFO[Container(9405).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9405">
+        <value condition="String.IsEqual(Container(9405).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9405).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9405).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9405).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9405).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9405).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9405).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9405).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9405).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9405).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9405).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9405).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9405).ListItem.AudioCodec,aac)">AAC</value>
@@ -4131,9 +4131,6 @@
         <value condition="Integer.IsLess(Container(9406).ListItem.Season,10)">S0$INFO[Container(9406).ListItem.Season]</value>
         <value>S$INFO[Container(9406).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9406">
-        <value>$VAR[ItemAudioCodec9406]$VAR[ItemAudioChannels9406, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9406">
         <value condition="String.IsEqual(Container(9406).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9406).ListItem.AudioChannels,2)">2.0</value>
@@ -4144,11 +4141,14 @@
         <value condition="!String.IsEmpty(Container(9406).ListItem.AudioChannels)">$INFO[Container(9406).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9406">
+        <value condition="String.IsEqual(Container(9406).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9406).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9406).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9406).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9406).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9406).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9406).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9406).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9406).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9406).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9406).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9406).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9406).ListItem.AudioCodec,aac)">AAC</value>
@@ -4189,9 +4189,6 @@
         <value condition="Integer.IsLess(Container(9407).ListItem.Season,10)">S0$INFO[Container(9407).ListItem.Season]</value>
         <value>S$INFO[Container(9407).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9407">
-        <value>$VAR[ItemAudioCodec9407]$VAR[ItemAudioChannels9407, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9407">
         <value condition="String.IsEqual(Container(9407).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9407).ListItem.AudioChannels,2)">2.0</value>
@@ -4202,11 +4199,14 @@
         <value condition="!String.IsEmpty(Container(9407).ListItem.AudioChannels)">$INFO[Container(9407).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9407">
+        <value condition="String.IsEqual(Container(9407).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9407).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9407).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9407).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9407).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9407).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9407).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9407).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9407).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9407).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9407).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9407).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9407).ListItem.AudioCodec,aac)">AAC</value>
@@ -4247,9 +4247,6 @@
         <value condition="Integer.IsLess(Container(9408).ListItem.Season,10)">S0$INFO[Container(9408).ListItem.Season]</value>
         <value>S$INFO[Container(9408).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9408">
-        <value>$VAR[ItemAudioCodec9408]$VAR[ItemAudioChannels9408, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9408">
         <value condition="String.IsEqual(Container(9408).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9408).ListItem.AudioChannels,2)">2.0</value>
@@ -4260,11 +4257,14 @@
         <value condition="!String.IsEmpty(Container(9408).ListItem.AudioChannels)">$INFO[Container(9408).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9408">
+        <value condition="String.IsEqual(Container(9408).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9408).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9408).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9408).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9408).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9408).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9408).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9408).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9408).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9408).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9408).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9408).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9408).ListItem.AudioCodec,aac)">AAC</value>
@@ -4305,9 +4305,6 @@
         <value condition="Integer.IsLess(Container(9501).ListItem.Season,10)">S0$INFO[Container(9501).ListItem.Season]</value>
         <value>S$INFO[Container(9501).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9501">
-        <value>$VAR[ItemAudioCodec9501]$VAR[ItemAudioChannels9501, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9501">
         <value condition="String.IsEqual(Container(9501).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9501).ListItem.AudioChannels,2)">2.0</value>
@@ -4318,11 +4315,14 @@
         <value condition="!String.IsEmpty(Container(9501).ListItem.AudioChannels)">$INFO[Container(9501).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9501">
+        <value condition="String.IsEqual(Container(9501).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9501).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9501).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9501).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9501).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9501).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9501).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9501).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9501).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9501).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9501).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9501).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9501).ListItem.AudioCodec,aac)">AAC</value>
@@ -4363,9 +4363,6 @@
         <value condition="Integer.IsLess(Container(9502).ListItem.Season,10)">S0$INFO[Container(9502).ListItem.Season]</value>
         <value>S$INFO[Container(9502).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9502">
-        <value>$VAR[ItemAudioCodec9502]$VAR[ItemAudioChannels9502, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9502">
         <value condition="String.IsEqual(Container(9502).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9502).ListItem.AudioChannels,2)">2.0</value>
@@ -4376,11 +4373,14 @@
         <value condition="!String.IsEmpty(Container(9502).ListItem.AudioChannels)">$INFO[Container(9502).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9502">
+        <value condition="String.IsEqual(Container(9502).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9502).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9502).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9502).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9502).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9502).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9502).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9502).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9502).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9502).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9502).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9502).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9502).ListItem.AudioCodec,aac)">AAC</value>
@@ -4421,9 +4421,6 @@
         <value condition="Integer.IsLess(Container(9503).ListItem.Season,10)">S0$INFO[Container(9503).ListItem.Season]</value>
         <value>S$INFO[Container(9503).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9503">
-        <value>$VAR[ItemAudioCodec9503]$VAR[ItemAudioChannels9503, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9503">
         <value condition="String.IsEqual(Container(9503).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9503).ListItem.AudioChannels,2)">2.0</value>
@@ -4434,11 +4431,14 @@
         <value condition="!String.IsEmpty(Container(9503).ListItem.AudioChannels)">$INFO[Container(9503).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9503">
+        <value condition="String.IsEqual(Container(9503).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9503).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9503).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9503).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9503).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9503).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9503).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9503).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9503).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9503).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9503).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9503).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9503).ListItem.AudioCodec,aac)">AAC</value>
@@ -4479,9 +4479,6 @@
         <value condition="Integer.IsLess(Container(9504).ListItem.Season,10)">S0$INFO[Container(9504).ListItem.Season]</value>
         <value>S$INFO[Container(9504).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9504">
-        <value>$VAR[ItemAudioCodec9504]$VAR[ItemAudioChannels9504, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9504">
         <value condition="String.IsEqual(Container(9504).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9504).ListItem.AudioChannels,2)">2.0</value>
@@ -4492,11 +4489,14 @@
         <value condition="!String.IsEmpty(Container(9504).ListItem.AudioChannels)">$INFO[Container(9504).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9504">
+        <value condition="String.IsEqual(Container(9504).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9504).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9504).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9504).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9504).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9504).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9504).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9504).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9504).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9504).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9504).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9504).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9504).ListItem.AudioCodec,aac)">AAC</value>
@@ -4537,9 +4537,6 @@
         <value condition="Integer.IsLess(Container(9505).ListItem.Season,10)">S0$INFO[Container(9505).ListItem.Season]</value>
         <value>S$INFO[Container(9505).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9505">
-        <value>$VAR[ItemAudioCodec9505]$VAR[ItemAudioChannels9505, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9505">
         <value condition="String.IsEqual(Container(9505).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9505).ListItem.AudioChannels,2)">2.0</value>
@@ -4550,11 +4547,14 @@
         <value condition="!String.IsEmpty(Container(9505).ListItem.AudioChannels)">$INFO[Container(9505).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9505">
+        <value condition="String.IsEqual(Container(9505).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9505).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9505).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9505).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9505).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9505).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9505).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9505).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9505).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9505).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9505).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9505).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9505).ListItem.AudioCodec,aac)">AAC</value>
@@ -4595,9 +4595,6 @@
         <value condition="Integer.IsLess(Container(9506).ListItem.Season,10)">S0$INFO[Container(9506).ListItem.Season]</value>
         <value>S$INFO[Container(9506).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9506">
-        <value>$VAR[ItemAudioCodec9506]$VAR[ItemAudioChannels9506, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9506">
         <value condition="String.IsEqual(Container(9506).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9506).ListItem.AudioChannels,2)">2.0</value>
@@ -4608,11 +4605,14 @@
         <value condition="!String.IsEmpty(Container(9506).ListItem.AudioChannels)">$INFO[Container(9506).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9506">
+        <value condition="String.IsEqual(Container(9506).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9506).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9506).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9506).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9506).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9506).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9506).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9506).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9506).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9506).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9506).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9506).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9506).ListItem.AudioCodec,aac)">AAC</value>
@@ -4653,9 +4653,6 @@
         <value condition="Integer.IsLess(Container(9507).ListItem.Season,10)">S0$INFO[Container(9507).ListItem.Season]</value>
         <value>S$INFO[Container(9507).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9507">
-        <value>$VAR[ItemAudioCodec9507]$VAR[ItemAudioChannels9507, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9507">
         <value condition="String.IsEqual(Container(9507).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9507).ListItem.AudioChannels,2)">2.0</value>
@@ -4666,11 +4663,14 @@
         <value condition="!String.IsEmpty(Container(9507).ListItem.AudioChannels)">$INFO[Container(9507).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9507">
+        <value condition="String.IsEqual(Container(9507).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9507).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9507).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9507).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9507).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9507).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9507).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9507).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9507).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9507).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9507).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9507).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9507).ListItem.AudioCodec,aac)">AAC</value>
@@ -4711,9 +4711,6 @@
         <value condition="Integer.IsLess(Container(9508).ListItem.Season,10)">S0$INFO[Container(9508).ListItem.Season]</value>
         <value>S$INFO[Container(9508).ListItem.Season]</value>
     </variable>
-    <variable name="ItemAudio9508">
-        <value>$VAR[ItemAudioCodec9508]$VAR[ItemAudioChannels9508, ,]</value>
-    </variable>
     <variable name="ItemAudioChannels9508">
         <value condition="String.IsEqual(Container(9508).ListItem.AudioChannels,1)">1.0</value>
         <value condition="String.IsEqual(Container(9508).ListItem.AudioChannels,2)">2.0</value>
@@ -4724,11 +4721,14 @@
         <value condition="!String.IsEmpty(Container(9508).ListItem.AudioChannels)">$INFO[Container(9508).ListItem.AudioChannels]ch</value>
     </variable>
     <variable name="ItemAudioCodec9508">
+        <value condition="String.IsEqual(Container(9508).ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="String.IsEqual(Container(9508).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9508).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
         <value condition="String.IsEqual(Container(9508).ListItem.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(Container(9508).ListItem.AudioCodec,eac3)">DD+</value>
         <value condition="String.IsEqual(Container(9508).ListItem.AudioCodec,ac3)">DD</value>
-        <value condition="String.IsEqual(Container(9508).ListItem.AudioCodec,dtshd_ma)">DTS-HD MA</value>
-        <value condition="String.IsEqual(Container(9508).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
+        <value condition="String.IsEqual(Container(9508).ListItem.AudioCodec,dtshd_ma)">DTS-MA</value>
+        <value condition="String.IsEqual(Container(9508).ListItem.AudioCodec,dtshd_hra)">DTS-HR</value>
         <value condition="String.IsEqual(Container(9508).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9508).ListItem.AudioCodec,dts)">DTS</value>
         <value condition="String.IsEqual(Container(9508).ListItem.AudioCodec,aac)">AAC</value>
@@ -4794,8 +4794,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9201]$VAR[ItemHdr9201, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9201]" />
+                <param name="reslabel" value="$VAR[ItemResolution9201]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9201]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9201]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9201]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9201]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -4837,8 +4839,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9202]$VAR[ItemHdr9202, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9202]" />
+                <param name="reslabel" value="$VAR[ItemResolution9202]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9202]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9202]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9202]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9202]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -4880,8 +4884,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9203]$VAR[ItemHdr9203, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9203]" />
+                <param name="reslabel" value="$VAR[ItemResolution9203]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9203]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9203]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9203]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9203]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -4923,8 +4929,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9204]$VAR[ItemHdr9204, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9204]" />
+                <param name="reslabel" value="$VAR[ItemResolution9204]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9204]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9204]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9204]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9204]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -4966,8 +4974,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9205]$VAR[ItemHdr9205, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9205]" />
+                <param name="reslabel" value="$VAR[ItemResolution9205]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9205]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9205]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9205]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9205]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -5009,8 +5019,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9206]$VAR[ItemHdr9206, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9206]" />
+                <param name="reslabel" value="$VAR[ItemResolution9206]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9206]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9206]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9206]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9206]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -5052,8 +5064,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9207]$VAR[ItemHdr9207, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9207]" />
+                <param name="reslabel" value="$VAR[ItemResolution9207]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9207]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9207]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9207]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9207]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -5095,8 +5109,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9208]$VAR[ItemHdr9208, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9208]" />
+                <param name="reslabel" value="$VAR[ItemResolution9208]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9208]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9208]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9208]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9208]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -5249,8 +5265,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9401]$VAR[ItemHdr9401, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9401]" />
+                <param name="reslabel" value="$VAR[ItemResolution9401]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9401]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9401]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9401]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9401]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -5292,8 +5310,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9402]$VAR[ItemHdr9402, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9402]" />
+                <param name="reslabel" value="$VAR[ItemResolution9402]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9402]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9402]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9402]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9402]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -5335,8 +5355,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9403]$VAR[ItemHdr9403, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9403]" />
+                <param name="reslabel" value="$VAR[ItemResolution9403]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9403]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9403]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9403]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9403]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -5378,8 +5400,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9404]$VAR[ItemHdr9404, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9404]" />
+                <param name="reslabel" value="$VAR[ItemResolution9404]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9404]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9404]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9404]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9404]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -5421,8 +5445,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9405]$VAR[ItemHdr9405, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9405]" />
+                <param name="reslabel" value="$VAR[ItemResolution9405]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9405]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9405]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9405]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9405]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -5464,8 +5490,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9406]$VAR[ItemHdr9406, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9406]" />
+                <param name="reslabel" value="$VAR[ItemResolution9406]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9406]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9406]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9406]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9406]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -5507,8 +5535,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9407]$VAR[ItemHdr9407, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9407]" />
+                <param name="reslabel" value="$VAR[ItemResolution9407]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9407]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9407]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9407]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9407]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -5550,8 +5580,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9408]$VAR[ItemHdr9408, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9408]" />
+                <param name="reslabel" value="$VAR[ItemResolution9408]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9408]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9408]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9408]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9408]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -5704,8 +5736,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9501]$VAR[ItemHdr9501, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9501]" />
+                <param name="reslabel" value="$VAR[ItemResolution9501]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9501]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9501]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9501]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9501]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -5747,8 +5781,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9502]$VAR[ItemHdr9502, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9502]" />
+                <param name="reslabel" value="$VAR[ItemResolution9502]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9502]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9502]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9502]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9502]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -5790,8 +5826,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9503]$VAR[ItemHdr9503, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9503]" />
+                <param name="reslabel" value="$VAR[ItemResolution9503]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9503]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9503]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9503]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9503]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -5833,8 +5871,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9504]$VAR[ItemHdr9504, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9504]" />
+                <param name="reslabel" value="$VAR[ItemResolution9504]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9504]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9504]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9504]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9504]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -5876,8 +5916,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9505]$VAR[ItemHdr9505, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9505]" />
+                <param name="reslabel" value="$VAR[ItemResolution9505]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9505]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9505]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9505]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9505]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -5919,8 +5961,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9506]$VAR[ItemHdr9506, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9506]" />
+                <param name="reslabel" value="$VAR[ItemResolution9506]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9506]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9506]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9506]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9506]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -5962,8 +6006,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9507]$VAR[ItemHdr9507, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9507]" />
+                <param name="reslabel" value="$VAR[ItemResolution9507]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9507]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9507]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9507]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9507]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />
@@ -6005,8 +6051,10 @@
                 <param name="plotid" value="0" />
                 
                 <param name="tech" value="true" />
-                <param name="techlabel" value="$VAR[ItemResolution9508]$VAR[ItemHdr9508, ,]" />
-                <param name="audiolabel" value="$VAR[ItemAudio9508]" />
+                <param name="reslabel" value="$VAR[ItemResolution9508]" />
+                <param name="hdrlabel" value="$VAR[ItemHdr9508]" />
+                <param name="codeclabel" value="$VAR[ItemAudioCodec9508]" />
+                <param name="channelslabel" value="$VAR[ItemAudioChannels9508]" />
                 
                 <param name="tmdb" value="$EXP[FollowKeptIsCard9508]" />
                 <param name="ratingsprefix" value="nc.kept.follow." />

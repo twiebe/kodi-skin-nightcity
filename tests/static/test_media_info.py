@@ -64,19 +64,27 @@ HEADS = [pytest.param(False, 'ListItem', id='movie'), pytest.param(True, EPISODE
 def test_info_heads_show_resolution_hdr_and_audio(episode, item):
     head = _head(episode)
     prefix = 'InfoEpisode' if episode else 'Item'
-    assert _with(head, '$VAR[{}Resolution]$VAR[{}Hdr, ,]'.format(prefix, prefix))
-    assert _with(head, '$VAR[{}Audio]'.format(prefix))
+    for part, there in (('Resolution', 'VideoResolution'), ('Hdr', 'VideoResolution')):
+        tags = _with(head, '$VAR[{}{}]'.format(prefix, part))
+        assert [label for label, _ in tags] == ['[UPPERCASE]$VAR[{}{}][/UPPERCASE]'.format(prefix, part)]
+        assert tags[0][1].endswith('!String.IsEmpty({}.{})'.format(item, there))
+    codec = _with(head, '$VAR[{}AudioCodec]'.format(prefix))
+    channels = _with(head, '$VAR[{}AudioChannels]'.format(prefix))
+    # two tags of their own: DTS-MA and 7.1
+    assert [label for label, _ in codec] == ['[UPPERCASE]$VAR[{}AudioCodec][/UPPERCASE]'.format(prefix)]
+    assert [label for label, _ in channels] == ['[UPPERCASE]$VAR[{}AudioChannels][/UPPERCASE]'.format(prefix)]
+    assert channels[0][1].endswith('!String.IsEmpty({}.AudioChannels)'.format(item))
 
 
 @pytest.mark.parametrize('prefix, item', [('Item', 'ListItem'), ('InfoEpisode', EPISODE),
                                           ('Spotlight', 'Container(9000).ListItem')])
 def test_audio_names_codec_and_layout_like_the_player(prefix, item):
-    """DD+ 5.1 instead of EAC3 6CH, the names the OSD gives the playing track."""
+    """DD+ and 5.1 instead of EAC3 6CH, the names the OSD gives the playing track."""
     for part in ('AudioCodec', 'AudioChannels'):
         assert _variable(prefix + part) == [
             (c and c.replace('VideoPlayer.', item + '.'), t.replace('VideoPlayer.', item + '.'))
             for c, t in _variable('Player' + part)]
-    assert _variable(prefix + 'Audio') == [(None, '$VAR[{0}AudioCodec]$VAR[{0}AudioChannels, ,]'.format(prefix))]
+    assert not [v for v in parse(SKIN / 'Variables.xml').iter('variable') if v.get('name') == prefix + 'Audio']
 
 
 def test_audio_codec_names_cover_jellyfin():
@@ -264,9 +272,10 @@ def test_info_key_names_hdr_and_audio_like_the_osd():
     OSD's names: HDR10 / SDR, DD+ 5.1."""
     tags = {label: visible for label, visible, _ in _labels(navigation.load('DialogFullScreenInfo.xml'))}
     assert tags['[UPPERCASE]$VAR[PlayerHdr][/UPPERCASE]'] == '!String.IsEmpty(VideoPlayer.VideoResolution)'
-    assert tags['[UPPERCASE]$INFO[VideoPlayer.AudioLanguage,, ]$VAR[PlayerAudio][/UPPERCASE]'] == \
+    assert tags['[UPPERCASE]$INFO[VideoPlayer.AudioLanguage,, ]$VAR[PlayerAudioCodec][/UPPERCASE]'] == \
         '!String.IsEmpty(VideoPlayer.AudioCodec)'
-    assert not [label for label in tags if 'VideoPlayer.HdrType' in label or 'AudioChannels' in label]
+    assert tags['[UPPERCASE]$VAR[PlayerAudioChannels][/UPPERCASE]'] == '!String.IsEmpty(VideoPlayer.AudioChannels)'
+    assert not [label for label in tags if 'VideoPlayer.HdrType' in label or 'VideoPlayer.AudioChannels' in label]
 
 
 @pytest.mark.parametrize('episode, item', HEADS)
