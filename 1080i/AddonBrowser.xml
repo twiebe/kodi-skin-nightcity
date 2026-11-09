@@ -9,15 +9,9 @@
             <param name="title" value="$LOCALIZE[24001]$INFO[Container.FolderName,[COLOR text_mute] ▪ [/COLOR],]"/>
         </include>
         <!-- Left from the column goes back to the list; Left on the list is Back, a folder up or out of the window, which no hint can name -->
-        <include content="LevelHint">
+        <include content="LevelHintLeft">
             <param name="id" value="9058"/>
-            <param name="key" value="←"/>
             <param name="label" value="$INFO[Container.FolderName]"/>
-            <param name="left" value="64"/>
-            <param name="top" value="64"/>
-            <param name="width" value="600"/>
-            <param name="height" value="30"/>
-            <param name="align" value="left"/>
             <param name="visible" value="!System.HasActiveModalDialog + ControlGroup(9000).HasFocus()"/>
             <param name="animate" value="!Player.HasVideo"/>
         </include>

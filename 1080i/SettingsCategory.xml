@@ -10,28 +10,16 @@
         </include>
         <!-- Left from the categories (and the level button below them) leaves the page, back to the
              console; not ControlGroup(3), which Kodi reports focused all the time -->
-        <include content="LevelHint">
+        <include content="LevelHintLeft">
             <param name="id" value="9059"/>
-            <param name="key" value="←"/>
             <param name="label" value="$VAR[HintWindowBack]"/>
-            <param name="left" value="64"/>
-            <param name="top" value="64"/>
-            <param name="width" value="600"/>
-            <param name="height" value="30"/>
-            <param name="align" value="left"/>
             <param name="visible" value="!System.HasActiveModalDialog + !ControlGroup(5).HasFocus()"/>
             <param name="animate" value="!Player.HasVideo"/>
         </include>
         <!-- Left from the settings goes back to the categories -->
-        <include content="LevelHint">
+        <include content="LevelHintLeft">
             <param name="id" value="9058"/>
-            <param name="key" value="←"/>
             <param name="label" value="$LOCALIZE[31176]"/>
-            <param name="left" value="64"/>
-            <param name="top" value="64"/>
-            <param name="width" value="600"/>
-            <param name="height" value="30"/>
-            <param name="align" value="left"/>
             <param name="visible" value="!System.HasActiveModalDialog + ControlGroup(5).HasFocus()"/>
             <param name="animate" value="!Player.HasVideo"/>
         </include>

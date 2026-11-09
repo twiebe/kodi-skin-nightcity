@@ -1,9 +1,9 @@
 """Key hints (DESIGN.md, Key hints): where a key leads to another level and the screen does not
 show it, one quiet line names the key, a glyph in the dimmed blue of a hint, and the level it
-leads to, muted. All of them come from the LevelHint include, and each stands at the edge its
-arrow points to: Up at the top (the path line, top 30; the player's top edge, top 140), Down at
-the bottom (top 1030), Left at the left (a page's left margin under its title; a dialog's
-button row). OK and moves on the spot stay with their action.
+leads to, muted. Where it stands follows its key: Up at the top (the path line, top 30; the
+player's top edge, top 140), Left up the left edge, written bottom to top (LevelHintLeft), Down
+and OK in the footer line at the bottom (left 64, top 1030), where the keys of the focused row
+may stand together.
 
 Player levels: the seek bar over the bare video (OK opens the controls; Up and Down skip
 chapters there), the controls (Down: the chapter row), a panel above a button (Down: back to
@@ -14,30 +14,41 @@ import re
 import xml.etree.ElementTree as ET
 
 from conftest import ROOT, layout_files, parse
-from navigation import load, with_look
+from navigation import load
 
 BOTTOM, TOP, PATH = '1030', '140', '30'
 CAST = 'VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)'
 CHAPTERS = '$VAR[PlayerChaptersLevel]'
 CONTROLS = '$LOCALIZE[31478]'
 CATEGORIES = '$LOCALIZE[31176]'
-KEYS = ('↑', '↓', '←', '→', '⏎', '↑↓')
+KEYS = ('↑', '↓', '←', '→', '⏎', '↑↓', '←→')
 GLYPHS = re.compile('[↑↓←→⏎]')
 KEY = '[COLOR state_text]{}[/COLOR]'
 COLOURED_KEY = re.compile(r'\[COLOR state_text\][↑↓←→⏎]+\[/COLOR\]')
 LABEL = re.compile(r'^\[UPPERCASE\]\[COLOR state_text\](\S+)\[/COLOR\] (.+)\[/UPPERCASE\]$')
+# a Left hint: the middle of the screen's left edge, or a dialog's (just outside its frame)
+LEFT_EDGE = ('-276', '525')
+HINTS = ('LevelHint', 'LevelHintLeft')
 
 
 def _controls(name):
     return {c.get('id'): c for c in load(name).iter('control') if c.get('id')}
 
 
+def _turned(group):
+    return any(a.get('effect') == 'rotate' for a in group.findall('animation'))
+
+
 def _hint(name, cid):
-    """(key, label, top, visible) of the hint `cid` in window `name`."""
+    """(key, label, top, visible) of the hint `cid` in window `name`; a turned line's ↑ is a ←
+    on the screen."""
     group = _controls(name)[cid]
     (line,) = group.findall('control')
     assert line.get('type') == 'label', cid
     key, label = LABEL.match(line.findtext('label')).groups()
+    if _turned(group):
+        assert key == '↑', (name, cid)
+        key = '←'
     return key, label, group.findtext('top'), group.findtext('visible')
 
 
@@ -56,50 +67,75 @@ def _variable(name):
     return [(v.get('condition'), v.text) for v in var.findall('value')]
 
 
+def _include(name):
+    return next(i for i in parse(ROOT / '1080i' / 'Includes_Base.xml').iter('include') if i.get('name') == name)
+
+
 def _all_hints():
-    """Every LevelHint of the skin's windows: (file, params)."""
+    """Every key hint of the skin's windows: (file, include, params); a Left hint's key is ←."""
     found = []
     for path in layout_files():
         for inc in parse(path).iter('include'):
-            if inc.get('content') == 'LevelHint':
-                found.append((path.name, {p.get('name'): p.get('value') for p in inc.findall('param')}))
+            if inc.get('content') in HINTS:
+                params = {p.get('name'): p.get('value') for p in inc.findall('param')}
+                if inc.get('content') == 'LevelHintLeft':
+                    params['key'] = '←'
+                found.append((path.name, inc.get('content'), params))
     return found
 
 
 def test_hint_look():
     """The key in the dimmed blue of a hint, the label muted, one line of small caps; a shadow
-    keeps it readable over bright video. Centred across the screen by default, on its bottom
-    edge; it fades out, then in."""
-    include = next(i for i in parse(ROOT / '1080i' / 'Includes_Base.xml').iter('include')
-                   if i.get('name') == 'LevelHint')
+    keeps it readable over bright video. By default in the footer line, left at the margin; it
+    fades out, then in."""
+    include = _include('LevelHint')
     defaults = {p.get('name'): p.get('default') for p in include.findall('param')}
-    assert (defaults['top'], defaults['left'], defaults['width'], defaults['align']) == (BOTTOM, '0', '1920', 'center')
-    group = with_look(include).find('definition/control')
-    assert group.get('type') == 'group'
-    # out before in: two hints taking turns in one place never stand on each other; a still
-    # effect starts the animation at once, the delayed fade holds 0 until it runs
-    anims = {a.get('type'): (a.get('condition'), [(e.get('start'), e.get('end'), e.get('time'), e.get('delay'))
-                                                  for e in a.findall('effect')]) for a in group.findall('animation')}
-    assert anims == {'Visible': ('$PARAM[animate]', [('100', '100', '150', None), ('0', '100', '150', '150')]),
-                     'Hidden': ('$PARAM[animate]', [('100', '0', '150', None)])}
+    assert (defaults['top'], defaults['left'], defaults['width'], defaults['align']) == (BOTTOM, '64', '1792', 'left')
     assert defaults['animate'] == 'true'  # the player's hints fade over the video
+    group = include.find('definition/control')
+    assert group.get('type') == 'group'
+    fade = group.find('include')
+    assert (fade.get('content'), fade.find('param').get('value')) == ('LevelHintFade', '$PARAM[animate]')
     (label,) = group.findall('control')
     assert label.get('type') == 'label'
     assert (label.findtext('width'), label.findtext('align')) == ('$PARAM[width]', '$PARAM[align]')
-    assert label.findtext('font') == 'font_caps_small'
-    assert label.findtext('textcolor') == 'text_mute'
-    assert label.findtext('shadowcolor') == 'bg'
-    assert label.findtext('label') == '[UPPERCASE]{} $PARAM[label][/UPPERCASE]'.format(KEY.format('$PARAM[key]'))
+    assert label.findtext('include') == 'LevelHintText'
+    case = label.find("include[@content='LookLabelCase']/param")
+    assert case.get('value') == '{} $PARAM[label]'.format(KEY.format('$PARAM[key]'))
     assert not list(include.iter('texture')) and 'cut_btn' not in ET.tostring(include, encoding='unicode')
+    text = _include('LevelHintText')
+    assert [(c.tag, c.text) for c in text] == [('aligny', 'center'), ('font', 'font_caps_small'),
+                                              ('textcolor', 'text_mute'), ('shadowcolor', 'bg')]
 
 
-EDGES = {'↑': 'top', '↓': 'bottom', '←': 'left', '→': 'right'}
-# where a hint's container does not start at the top of the screen: the episodes' line lies in
-# the info page's lower grouplist (5400, top 619)
-OFFSET = {('DialogVideoInfo.xml', '5190'): 619}
-# a Left hint whose level lies on the right of the screen: the bar's way back to its menu stands
-# on the menu's top edge, at its left (the menu's left plus the glow's 10 px)
-LEFT_ON_THE_RIGHT = {('Custom_1110_Library.xml', '9058'): '5100', ('MyMusicNav.xml', '9058'): '9060'}
+def test_hints_fade_out_then_in():
+    """Two hints taking turns in one place never stand on each other: a still effect starts the
+    animation at once (test_page_fades), the delayed fade holds 0 until it runs."""
+    anims = {a.get('type'): (a.get('condition'), [(e.get('start'), e.get('end'), e.get('time'), e.get('delay'))
+                                                  for e in a.findall('effect')])
+             for a in _include('LevelHintFade').find('definition').findall('animation')}
+    assert anims == {'Visible': ('$PARAM[animate]', [('100', '100', '150', None), ('0', '100', '150', '150')]),
+                     'Hidden': ('$PARAM[animate]', [('100', '0', '150', None)])}
+
+
+def test_left_hint_runs_up_the_edge():
+    """Left: the line turned a quarter to the left about its centre, so it reads bottom to top
+    along the edge and its ↑ shows as ←. The group has its size, else Kodi turns it about its
+    corner; centred on the left edge by default (its middle at x 24, y 540)."""
+    include = _include('LevelHintLeft')
+    defaults = {p.get('name'): p.get('default') for p in include.findall('param')}
+    assert (defaults['left'], defaults['top']) == LEFT_EDGE
+    group = include.find('definition/control')
+    assert (group.findtext('width'), group.findtext('height')) == ('600', '30')
+    assert int(defaults['left']) + 300 == 24 and int(defaults['top']) + 15 == 540
+    rotate = [a for a in group.findall('animation') if a.get('effect') == 'rotate']
+    assert [(a.get('end'), a.get('center'), a.get('time'), a.get('condition'), a.text) for a in rotate] == [
+        ('90', 'auto', '0', 'true', 'Conditional')]
+    assert group.find('include').get('content') == 'LevelHintFade'
+    (label,) = group.findall('control')
+    assert (label.findtext('width'), label.findtext('height'), label.findtext('align')) == ('600', '30', 'center')
+    assert label.findtext('include') == 'LevelHintText'
+    assert label.find("include[@content='LookLabelCase']/param").get('value') == KEY.format('↑') + ' $PARAM[label]'
 
 
 def _keys(params):
@@ -115,37 +151,37 @@ def test_every_hint_is_a_glyph():
     """Keys are glyphs, no key words."""
     hints = _all_hints()
     assert len(hints) >= 25
-    for name, params in hints:
+    for name, _, params in hints:
         assert params.get('key', '↓') in KEYS, (name, params)
         assert not GLYPHS.search(COLOURED_KEY.sub('', params['label'])), (name, params)
 
 
-def test_a_hint_stands_at_the_edge_its_arrow_points_to():
-    """The key decides the edge: Up at the top, Down at the bottom, Left at the left, Right at
-    the right; one line holds only keys of one edge, besides OK and moves on the spot, which
-    stay with their action (an OK alone at the bottom)."""
-    for name, params in _all_hints():
+# where a hint's container does not start at the top of the screen: the episodes' footer lies
+# in the info page's lower grouplist (5400, top 619)
+OFFSET = {('DialogVideoInfo.xml', '5190'): 619}
+# the dialogs' Left hints: just outside the frame (centre x -22), on the dialog's middle
+DIALOG_LEFT = {'DialogSelect.xml': ('-322', str(820 // 2 - 15)), 'DialogAddonSettings.xml': ('-322', str(940 // 2 - 15))}
+
+
+def test_where_a_hint_stands_follows_its_key():
+    """Up at the top, centred; Left up the left edge (LevelHintLeft), never in a line of its own
+    kind; Down and OK in the footer line, left at the margin, where the keys of the focused row
+    may stand together (the episodes: ←→ episode, ↑ season, ↓ cast, ⏎ select)."""
+    for name, include, params in _all_hints():
         hid = params['id']
-        edges = {EDGES[k] for k in _keys(params) if k in EDGES}
-        assert len(edges) <= 1, (name, hid, edges)
-        edge = edges.pop() if edges else 'bottom'
+        key = params.get('key', '↓')
+        if include == 'LevelHintLeft':
+            want = DIALOG_LEFT.get(name, LEFT_EDGE)
+            assert (params.get('left', LEFT_EDGE[0]), params.get('top', LEFT_EDGE[1])) == want, (name, hid)
+            continue
+        assert key != '←', (name, hid)
         top = int(params.get('top', BOTTOM)) + OFFSET.get((name, hid), 0)
-        left, width = int(params.get('left', '0')), int(params.get('width', '1920'))
-        align = params.get('align', 'center')
-        if edge == 'top':
-            assert top <= int(TOP), (name, hid, top)
-        elif edge == 'bottom':
-            assert top >= 1000, (name, hid, top)
-        elif edge == 'left':
-            assert align == 'left', (name, hid)
-            if (name, hid) in LEFT_ON_THE_RIGHT:
-                menu = _controls(name)[LEFT_ON_THE_RIGHT[(name, hid)]]
-                assert left == int(menu.findtext('left')) + 10, (name, hid)
-                assert top + int(params['height']) <= int(menu.findtext('top')) + 74, (name, hid)
-            else:
-                assert left <= 64, (name, hid, left)
+        if key == '↑':
+            assert top <= int(TOP) and params.get('align') == 'center', (name, hid, top)
         else:
-            assert align == 'right' and left + width >= 1856, (name, hid)
+            assert key in ('↓', '⏎', '←→', '↑↓'), (name, hid)
+            assert top == int(BOTTOM), (name, hid, top)
+            assert (params.get('left', '64'), params.get('align', 'left')) == ('64', 'left'), (name, hid)
 
 
 def test_glyphs_only_in_hints():
@@ -158,19 +194,22 @@ def test_glyphs_only_in_hints():
         for el in root.iter():
             if el.tag in ('label', 'label2', 'value') and GLYPHS.search(el.text or ''):
                 assert False, (path.name, el.text)
+        allowed = set()
+        for inc in root.iter('include'):
+            if inc.get('content') in HINTS:
+                allowed |= set(inc.findall('param'))
+            # the defaults of LevelHint and the turned ↑ of LevelHintLeft
+            if inc.get('name') in HINTS:
+                allowed |= set(inc.iter('param'))
+        for param in root.iter('param'):
+            if GLYPHS.search(param.get('value') or param.get('default') or ''):
+                assert param in allowed and param.get('name') in ('key', 'label', 'text'), (path.name, param.get('value'))
     # a variable may hold a part of a hint, its keys coloured
     for var in parse(ROOT / '1080i' / 'Variables.xml').iter('variable'):
         for value in var.iter('value'):
             if GLYPHS.search(value.text or ''):
                 assert var.get('name').startswith('Hint'), var.get('name')
                 assert not GLYPHS.search(COLOURED_KEY.sub('', value.text)), var.get('name')
-        allowed = set()
-        for inc in root.iter('include'):
-            if inc.get('content') == 'LevelHint':
-                allowed |= set(inc.findall('param'))
-        for param in root.iter('param'):
-            if GLYPHS.search(param.get('value') or ''):
-                assert param in allowed and param.get('name') in ('key', 'label'), (path.name, param.get('value'))
 
 
 FOOTERS = ('31178', '31260', '31261')
@@ -204,7 +243,7 @@ def test_the_player_controls_have_one_name():
     beside a list (Home's top menu, the library's)."""
     assert _string('31478') == 'controls'
     assert _string('31232') == 'menu'
-    for name, params in _all_hints():
+    for name, _, params in _all_hints():
         if name in ('DialogSeekBar.xml', 'MusicVisualisation.xml', 'VideoOSD.xml', 'VideoOSDBookmarks.xml'):
             assert params['label'] != '$LOCALIZE[31232]', (name, params)
 
@@ -309,22 +348,21 @@ def test_info_page_hint_room():
 
 
 def test_episode_keys():
-    """Under the episodes, at the bottom edge, while they have the focus: OK selects, Down goes
-    to cast and crew; the season tabs Up leads to stand right above the row, no hint for them,
-    none for moving along the row."""
+    """The footer line while the episodes have the focus names the keys of the row: Left and
+    Right the episode, Up the season tabs, Down cast and crew (where the page has them), OK
+    selects."""
     key, label, top, visible = _hint('DialogVideoInfo.xml', '5190')
-    assert (key, label) == ('⏎', '$LOCALIZE[31135]$VAR[HintEpisodeDown]')
+    assert key == '←→'
+    assert label == '$LOCALIZE[31132]   {} $LOCALIZE[31131]$VAR[HintEpisodeDown]   {} $LOCALIZE[31135]'.format(
+        KEY.format('↑'), KEY.format('⏎'))
     assert visible == 'Control.HasFocus(5100)'
-    assert int(top) + OFFSET[('DialogVideoInfo.xml', '5190')] >= 1000
+    assert int(top) + OFFSET[('DialogVideoInfo.xml', '5190')] == int(BOTTOM)
     assert _controls('DialogVideoInfo.xml')['5100'].findtext('onup') == '5200'
 
 
-# window: [(hint id, key, label, visible)]; Left in the left margin under the path title, the
-# bar's way back to its menu on the menu's top edge, Up (the weather) on the path line
+# window: [(hint id, key, label, visible)]; Left up the left edge, the bar's way back to its menu
+# too; Up (the weather) on the path line
 MODAL = '!System.HasActiveModalDialog'
-MARGIN = ('64', '64')
-PLACES = {('MyWeather.xml', '9059'): ('0', PATH), ('Custom_1110_Library.xml', '9058'): ('1431', '676'),
-          ('MyMusicNav.xml', '9058'): ('1431', '784')}
 WINDOW_HINTS = {
     'Settings.xml': [('9059', '←', '$LOCALIZE[31033]', 'true')],
     'SettingsCategory.xml': [
@@ -354,9 +392,9 @@ WINDOW_HINTS = {
 
 def test_window_hints():
     """A full window shows its way back for the focused side: Left from a settings page's rows to
-    its categories, from the categories out of the page, in the left margin under the title;
-    Left from the library's menu to its titles there too, from the bar to the menu on the menu;
-    Up out of the weather on the path line, the title kept left of it."""
+    its categories, from the categories out of the page; Left from the library's menu to its
+    titles, from the bar to the menu, all up the left edge; Up out of the weather on the path
+    line, the title kept left of it."""
     for name, hints in WINDOW_HINTS.items():
         controls = _controls(name)
         for cid, key_want, label_want, visible_want in hints:
@@ -366,18 +404,13 @@ def test_window_hints():
             want = MODAL if visible_want == 'true' else '{} + {}'.format(MODAL, visible_want)
             assert [key, label, visible] == [key_want, label_want, want], (name, cid)
             group = controls[cid]
-            place = PLACES.get((name, cid), MARGIN)
-            if place == MARGIN:
-                assert (group.findtext('left'), top) == MARGIN, (name, cid)
-                # the line under the title, above the content
-                assert int(top) >= int(controls['9026'].findtext('top')) + 34, (name, cid)
-            elif top == PATH:
-                assert int(controls['9026'].findtext('width')) <= 780, name
+            if key == '←':
+                assert _turned(group) and (group.findtext('left'), top) == LEFT_EDGE, (name, cid)
             else:
-                assert (group.findtext('left'), top) == place, (name, cid)
+                assert top == PATH and int(controls['9026'].findtext('width')) <= 780, name
             # a page does not blend over a playing video
-            animations = controls[cid].findall('animation')
-            assert animations and all(a.get('condition') == '!Player.HasVideo' for a in animations), (name, cid)
+            fades = [a for a in group.findall('animation') if a.get('type') in ('Visible', 'Hidden')]
+            assert fades and all(a.get('condition') == '!Player.HasVideo' for a in fades), (name, cid)
 
 
 def test_the_keys_of_the_window_hints():
@@ -403,10 +436,13 @@ def test_the_keys_of_the_window_hints():
 
 
 def test_dialog_hints():
-    """Dialogs have their Left hint at the left of the button row, under the list (the buttons
-    stand right): Left from an
-    add-on's settings to its categories; in the skin's select dialogs Left goes one level up,
-    in a group of the library filter to its groups, else onto the library."""
+    """A dialog's Left hint runs up its own left edge, just outside the frame, centred on it:
+    Left from an add-on's settings to its categories; in the skin's select dialogs Left goes one
+    level up, in a group of the library filter to its groups, else onto the library."""
+    for name, (left, top) in DIALOG_LEFT.items():
+        group = _controls(name)['9059']
+        assert _turned(group) and (group.findtext('left'), group.findtext('top')) == (left, top), name
+        assert int(left) + 300 < 0  # the line's middle lies outside the frame
     key, label, top, visible = _hint('DialogAddonSettings.xml', '9059')
     assert (key, label, visible) == ('←', CATEGORIES, 'ControlGroup(5).HasFocus() + Control.IsVisible(3)')
     assert _controls('DialogAddonSettings.xml')['5'].findtext('onleft') == '3'

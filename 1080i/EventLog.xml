@@ -11,28 +11,16 @@
             <param name="title" value="$LOCALIZE[14111]"/>
         </include>
         <!-- Left from the list leaves the page -->
-        <include content="LevelHint">
+        <include content="LevelHintLeft">
             <param name="id" value="9059"/>
-            <param name="key" value="←"/>
             <param name="label" value="$VAR[HintWindowBack]"/>
-            <param name="left" value="64"/>
-            <param name="top" value="64"/>
-            <param name="width" value="600"/>
-            <param name="height" value="30"/>
-            <param name="align" value="left"/>
             <param name="visible" value="!System.HasActiveModalDialog + Control.HasFocus(50)"/>
             <param name="animate" value="!Player.HasVideo"/>
         </include>
         <!-- Left from the column goes back to the events -->
-        <include content="LevelHint">
+        <include content="LevelHintLeft">
             <param name="id" value="9058"/>
-            <param name="key" value="←"/>
             <param name="label" value="$LOCALIZE[14111]"/>
-            <param name="left" value="64"/>
-            <param name="top" value="64"/>
-            <param name="width" value="600"/>
-            <param name="height" value="30"/>
-            <param name="align" value="left"/>
             <param name="visible" value="!System.HasActiveModalDialog + ControlGroup(9000).HasFocus()"/>
             <param name="animate" value="!Player.HasVideo"/>
         </include>

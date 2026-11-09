@@ -20,28 +20,16 @@
             <param name="weather" value="false"/>
         </include>
         <!-- Left from the menu goes back to the titles -->
-        <include content="LevelHint">
+        <include content="LevelHintLeft">
             <param name="id" value="9059"/>
-            <param name="key" value="←"/>
             <param name="label" value="$VAR[HintLibrary]"/>
-            <param name="left" value="64"/>
-            <param name="top" value="64"/>
-            <param name="width" value="600"/>
-            <param name="height" value="30"/>
-            <param name="align" value="left"/>
             <param name="visible" value="!System.HasActiveModalDialog + ControlGroup(5100).HasFocus()"/>
             <param name="animate" value="!Player.HasVideo"/>
         </include>
         <!-- Left from the bar goes back to the menu -->
-        <include content="LevelHint">
+        <include content="LevelHintLeft">
             <param name="id" value="9058"/>
-            <param name="key" value="←"/>
             <param name="label" value="$LOCALIZE[31232]"/>
-            <param name="left" value="1431"/>
-            <param name="top" value="676"/>
-            <param name="width" value="600"/>
-            <param name="height" value="30"/>
-            <param name="align" value="left"/>
             <param name="visible" value="!System.HasActiveModalDialog + Control.HasFocus(5200)"/>
             <param name="animate" value="!Player.HasVideo"/>
         </include>

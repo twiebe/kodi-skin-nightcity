@@ -128,6 +128,9 @@
             <param name="label" value="$LOCALIZE[31478]"/>
             <param name="top" value="140"/>
             <param name="visible" value="!Window.IsActive(1141)"/>
+            <param name="left" value="0"/>
+            <param name="width" value="1920"/>
+            <param name="align" value="center"/>
         </include>
     </controls>
 </window>

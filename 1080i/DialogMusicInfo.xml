@@ -40,6 +40,9 @@
             <param name="label" value="$VAR[HintInfoBack]"/>
             <param name="top" value="30"/>
             <param name="visible" value="ControlGroup(9000).HasFocus()"/>
+            <param name="left" value="0"/>
+            <param name="width" value="1920"/>
+            <param name="align" value="center"/>
         </include>
 
         <!-- head: cover (artist: photo), the text right of it, details on the right -->

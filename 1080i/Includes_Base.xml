@@ -245,21 +245,21 @@
     </include>
 
     <!-- A key hint (DESIGN.md, Key hints): the key that leads to another level, in the dimmed
-         blue of a hint, and the level it leads to, muted; one line of small caps. It stands at
-         the edge its arrow points to: Up at the top (the path line, top=30; the player's top
-         edge, top=140), Down and OK at the bottom (top=1030, the default), Left at the left
-         (left, top, width, align left: on a page under the path title, in a dialog in its
-         button row). A shadow keeps it readable over bright video. It fades with its window
-         and its condition. -->
+         blue of a hint, and the level it leads to, muted; one line of small caps. Up stands at
+         the top: centred on the path line of a page (top=30), on the player's top edge
+         (top=140). Down and OK stand in the footer line at the bottom, left at the margin
+         (left=64, top=1030, align left); a footer may name several keys of the focused row.
+         Left has its own include (LevelHintLeft). A shadow keeps it readable over bright
+         video. It fades with its window and its condition (LevelHintFade). -->
     <include name="LevelHint">
         <param name="id"/>
         <param name="key" default="↓"/>
         <param name="label"/>
         <param name="top" default="1030"/>
-        <param name="left" default="0"/>
-        <param name="width" default="1920"/>
+        <param name="left" default="64"/>
+        <param name="width" default="1792"/>
         <param name="height" default="36"/>
-        <param name="align" default="center"/>
+        <param name="align" default="left"/>
         <param name="visible" default="true"/>
         <param name="animate" default="true"/>
         <definition>
@@ -267,32 +267,80 @@
                 <left>$PARAM[left]</left>
                 <top>$PARAM[top]</top>
                 <visible>$PARAM[visible]</visible>
-                <!-- in after out: where one hint takes over from another in the same place
-                     (the focus moved to the other side) the two never stand on each other. A
-                     still effect starts the animation at once (test_page_fades, as in
-                     SharedPageFade); the delayed fade holds its start, 0, until it runs. A page
-                     passes animate="!Player.HasVideo": no blending over a playing video. -->
-                <animation type="Visible" condition="$PARAM[animate]">
-                    <effect type="fade" start="100" end="100" time="150"/>
-                    <effect type="fade" start="0" end="100" time="150" delay="150"/>
-                </animation>
-                <animation type="Hidden" condition="$PARAM[animate]">
-                    <effect type="fade" start="100" end="0" time="150"/>
-                </animation>
+                <include content="LevelHintFade">
+                    <param name="animate" value="$PARAM[animate]"/>
+                </include>
                 <control type="label">
                     <width>$PARAM[width]</width>
                     <height>$PARAM[height]</height>
                     <align>$PARAM[align]</align>
-                    <aligny>center</aligny>
-                    <font>font_caps_small</font>
-                    <textcolor>text_mute</textcolor>
-                    <shadowcolor>bg</shadowcolor>
+                    <include>LevelHintText</include>
                     <include content="LookLabelCase">
                         <param name="text" value="[COLOR state_text]$PARAM[key][/COLOR] $PARAM[label]"/>
                     </include>
                 </control>
             </control>
         </definition>
+    </include>
+
+    <!-- The way Left leads: written up the left edge, bottom to top, centred on it (top=525, the
+         middle of the screen; a dialog passes its own edge and middle). The line is turned a
+         quarter to the left about its centre, so its key is an Up glyph that shows as Left. The
+         group needs its size: without one Kodi turns it about its corner, off the screen. -->
+    <include name="LevelHintLeft">
+        <param name="id"/>
+        <param name="label"/>
+        <param name="left" default="-276"/>
+        <param name="top" default="525"/>
+        <param name="visible" default="true"/>
+        <param name="animate" default="true"/>
+        <definition>
+            <control type="group" id="$PARAM[id]">
+                <left>$PARAM[left]</left>
+                <top>$PARAM[top]</top>
+                <width>600</width>
+                <height>30</height>
+                <visible>$PARAM[visible]</visible>
+                <animation effect="rotate" end="90" center="auto" time="0" condition="true">Conditional</animation>
+                <include content="LevelHintFade">
+                    <param name="animate" value="$PARAM[animate]"/>
+                </include>
+                <control type="label">
+                    <width>600</width>
+                    <height>30</height>
+                    <align>center</align>
+                    <include>LevelHintText</include>
+                    <include content="LookLabelCase">
+                        <param name="text" value="[COLOR state_text]↑[/COLOR] $PARAM[label]"/>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
+    <!-- in after out: where one hint takes over from another in the same place (the focus moved
+         to the other side) the two never stand on each other. A still effect starts the
+         animation at once (test_page_fades, as in SharedPageFade); the delayed fade holds its
+         start, 0, until it runs. A page passes animate="!Player.HasVideo": no blending over a
+         playing video. -->
+    <include name="LevelHintFade">
+        <param name="animate"/>
+        <definition>
+            <animation type="Visible" condition="$PARAM[animate]">
+                <effect type="fade" start="100" end="100" time="150"/>
+                <effect type="fade" start="0" end="100" time="150" delay="150"/>
+            </animation>
+            <animation type="Hidden" condition="$PARAM[animate]">
+                <effect type="fade" start="100" end="0" time="150"/>
+            </animation>
+        </definition>
+    </include>
+
+    <include name="LevelHintText">
+        <aligny>center</aligny>
+        <font>font_caps_small</font>
+        <textcolor>text_mute</textcolor>
+        <shadowcolor>bg</shadowcolor>
     </include>
 
     <!-- The weather left of a clock at the top right: icon and temperature, white, once a

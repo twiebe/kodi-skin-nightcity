@@ -25,7 +25,8 @@ Where a key leads to another level and the screen does not show it, a quiet line
 key, then the level it leads to (`LevelHint` in `Includes_Base.xml`,
 `tests/static/test_level_hints.py`).
 
-- **Keys are glyphs:** ↑ ↓ ← → for the directions, ⏎ for OK, ↑↓ for a move along a list.
+- **Keys are glyphs:** ↑ ↓ ← → for the directions, ⏎ for OK, ↑↓ and ←→ for a move along a
+  list or row.
   No key words ("Left", "Up/Down", "OK"). The Back key gets no hint: it always goes back, and
   every hinted level has an arrow back. Should one ever be needed it is the word Back, not a
   glyph (↩ looks too much like ⏎).
@@ -43,25 +44,23 @@ key, then the level it leads to (`LevelHint` in `Includes_Base.xml`,
   works (the info page's ↑ only on its buttons) and fades out when it goes; the next one fades
   in after it, never on top of it. A window's hint hides under a dialog, and like the pages it
   does not fade over a playing video.
-- **A hint stands at the edge its arrow points to**, nothing else:
+- **Where a hint stands follows its key**, nothing else:
   - ↑ at the top: centred on the path line of a page (top 30, the title kept left of the
     middle, `pathwidth` 780), on the player's top edge (top 140), on the top edge of the quick
     menu's panel;
-  - ↓ at the bottom: the player's bottom edge (top 1030), the line under the episodes of an
-    info page (they fill the bottom of the screen);
-  - ← at the left: on a page in the left margin, on the line under the path title (left 64,
-    top 64), whether Left goes to a column on the left or out of the window; only where the
-    level lies on the right (the bar of the library and of the music window back to its menu)
-    on that menu's top edge, at its left (left 1431); in a dialog at the left of its button
-    row, under its list;
+  - ← up the left edge, written bottom to top and centred on it (`LevelHintLeft`): on a page
+    the screen's edge and middle, in a dialog its own, just outside its frame. The line is
+    turned a quarter to the left, so it runs along the edge and its key, an ↑ in the text,
+    shows as ←. Also where the level lies on the right (the bar of the library and of the
+    music window back to its menu): the key says which way, the edge stays the same;
+  - ↓ and ⏎ in the footer line at the bottom, left at the margin (left 64, top 1030), in the
+    player too. A footer names the keys of the focused row and may hold several directions:
+    the episodes of an info page have ←→ episode, ↑ season, ↓ cast, ⏎ select;
   - → at the right (none so far);
-  - ⏎ and moves on the spot (↑↓) are no direction: they stay with the action, at the bottom
-    (the seek bar, the visualisation), in the footer of a settings page (the console's, the
-    skin settings' slots) or after the hint they belong to (⏎ select under the episodes).
-  One line may hold several keys only if they share the edge, or are ⏎ and ↑↓.
+  - the footers of a settings page (the console's, the skin settings' slots) stay under their
+    description.
 - No hint where the level is in sight anyway: Home's top menu over the rows, the queue under
-  the music OSD, the second pane of the file manager, the tabs over their lists (the season
-  tabs over the episodes too).
+  the music OSD, the second pane of the file manager, the tabs over their lists.
 
 ### The position bar of the library grid
 

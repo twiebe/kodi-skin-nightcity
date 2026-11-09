@@ -42,16 +42,13 @@
                 <aligny>center</aligny>
                 <label></label>
             </control>
-            <!-- left in the button row: Left from the settings goes back to the categories -->
-            <include content="LevelHint">
+            <!-- up the dialog's left edge, outside its frame, centred on it (940 high): Left from the
+                 settings goes back to the categories -->
+            <include content="LevelHintLeft">
                 <param name="id" value="9059"/>
-                <param name="key" value="←"/>
                 <param name="label" value="$LOCALIZE[31176]"/>
-                <param name="left" value="40"/>
-                <param name="top" value="850"/>
-                <param name="width" value="700"/>
-                <param name="height" value="74"/>
-                <param name="align" value="left"/>
+                <param name="left" value="-322"/>
+                <param name="top" value="455"/>
                 <param name="visible" value="ControlGroup(5).HasFocus() + Control.IsVisible(3)"/>
             </include>
             <control type="group">

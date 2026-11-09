@@ -153,6 +153,9 @@
             <param name="key" value="↑"/>
             <param name="label" value="$VAR[PlayerChaptersLevel]"/>
             <param name="top" value="140"/>
+            <param name="left" value="0"/>
+            <param name="width" value="1920"/>
+            <param name="align" value="center"/>
         </include>
 
         <!-- biography source: off screen but visible, a hidden list never loads -->

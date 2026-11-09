@@ -47,6 +47,7 @@
             <param name="width" value="640"/>
             <param name="height" value="30"/>
             <param name="visible" value="Control.HasFocus(1210)"/>
+            <param name="align" value="center"/>
         </include>
     </controls>
 </window>

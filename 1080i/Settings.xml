@@ -18,15 +18,9 @@
         </include>
         <!-- Left leaves the rail, back to the system page: the console's only way in from the
              skin (a settings page coming back is the window before then, so no Window.Previous) -->
-        <include content="LevelHint">
+        <include content="LevelHintLeft">
             <param name="id" value="9059"/>
-            <param name="key" value="←"/>
             <param name="label" value="$LOCALIZE[31033]"/>
-            <param name="left" value="64"/>
-            <param name="top" value="64"/>
-            <param name="width" value="600"/>
-            <param name="height" value="30"/>
-            <param name="align" value="left"/>
             <param name="visible" value="!System.HasActiveModalDialog"/>
             <param name="animate" value="!Player.HasVideo"/>
         </include>
