@@ -22,7 +22,7 @@ PADDED = {'ui/cut_btn_fill.png': ('ui/cut_btn_glow.png', 12),
           'ui/cut_fill.png': ('ui/cut_fill_glow.png', 16)}
 # plates that do not glow (a button or tile without the focus, the shown page) in a padded
 # control, and their plain borders
-PLAIN_PADS = {'ui/cut_btn_fill_pad.png': 12, 'ui/cut_fill_pad.png': 16}
+PLAIN_PADS = {'ui/cut_btn_fill_pad.png': 12, 'ui/cut_btn_plate_pad.png': 12, 'ui/cut_plate_pad.png': 16}
 PADDED_NAMES = {padded for padded, _ in PADDED.values()} | set(PLAIN_PADS)
 TEXTURE_TAGS = ('texture', 'texturefocus', 'texturenofocus', 'alttexturefocus', 'alttexturenofocus')
 

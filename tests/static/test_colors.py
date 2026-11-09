@@ -5,7 +5,7 @@ import pytest
 from conftest import ROOT, layout_files, parse
 from navigation import with_look
 
-NAMES = {'bg', 'bg_alt', 'petrol', 'surface', 'surface_alt', 'border', 'border_dim', 'text', 'text_dim',
+NAMES = {'bg', 'bg_alt', 'petrol', 'surface', 'surface_alt', 'plate', 'border', 'border_dim', 'text', 'text_dim',
          'text_mute', 'accent', 'accent2', 'accent3', 'focus', 'focus_text', 'glow', 'glitch_a', 'glitch_b',
          'fanart', 'ok', 'warn', 'error', 'scrim', 'dim', 'state', 'state_text', 'state_fade', 'state_faint'}
 PALETTES = ['defaults.xml', 'tokyonight.xml', 'catppuccin.xml']

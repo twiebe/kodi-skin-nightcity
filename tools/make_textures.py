@@ -46,6 +46,22 @@ def cut(size, corner, line=None, corners=('tr', 'bl'), height=None):
     return image
 
 
+# the plate of a button or tile without the focus: one texture, one colour, so the fill is grey
+# and the outline white; the theme's `plate` colour makes the fill surface_alt and the outline
+# a step lighter (colors/*.xml)
+PLATE_FILL = 0.4
+
+
+def plate(size, corner, corners=('tr', 'bl')):
+    """A cut fill in PLATE_FILL grey with a 2 px white outline."""
+    fill = cut(size, corner, corners=corners)
+    line = cut(size, corner, line=2, corners=corners).getchannel('A')
+    grey = Image.new('L', fill.size, round(255 * PLATE_FILL))
+    tone = Image.composite(Image.new('L', fill.size, 255), grey, line)
+    image = Image.merge('RGBA', (tone, tone, tone, fill.getchannel('A')))
+    return image
+
+
 def dogear(size):
     """Triangle in the bottom right corner of a card (the unwatched mark)."""
     big = Image.new('L', (size * SCALE, size * SCALE), 0)
@@ -411,7 +427,9 @@ def main():
     # that grow by GLOW_PAD on each side (border 12 + 10, 16 + 10)
     fill_glow(48, 10, GLOW_PAD, corners=('tr',)).save(UI / 'cut_btn_glow.png')
     fill_glow(64, 14, GLOW_PAD).save(UI / 'cut_fill_glow.png')
-    padded(cut(64, 14), GLOW_PAD).save(UI / 'cut_fill_pad.png')
+    plate(64, 14).save(UI / 'cut_plate.png')
+    padded(plate(64, 14), GLOW_PAD).save(UI / 'cut_plate_pad.png')
+    padded(plate(48, 10, corners=('tr',)), GLOW_PAD).save(UI / 'cut_btn_plate_pad.png')
     # a fill that does not glow (the shown settings category) in a padded control
     padded(cut(48, 10, corners=('tr',)), GLOW_PAD).save(UI / 'cut_btn_fill_pad.png')
     # separator of the padded settings rows: the 1 px line in the middle of GLOW_PAD px above

@@ -295,7 +295,9 @@ def textures():
         'cut_fill_glow.png': shape(84, 84, r_panel, pad=GLOW_PAD, glow=4),
         'cut_glow.png': shape(128, 128, CARD_RADIUS, pad=24, glow=9, strength=0.9, solid=False),
         'cut_pad.png': shape(84, 84, r_panel, pad=GLOW_PAD, line=2),
-        'cut_fill_pad.png': shape(84, 84, r_panel, pad=GLOW_PAD),
+        'cut_plate.png': shape(64, 64, r_panel),
+        'cut_plate_pad.png': shape(84, 84, r_panel, pad=GLOW_PAD),
+        'cut_btn_plate_pad.png': shape(68, 68, r_btn, pad=GLOW_PAD),
         # new: full pills (border = half the pill height, 27 for a 54 px pill, + pad when padded)
         'pill.png': shape(54, 54, 27),
         'pill_pad.png': shape(74, 74, 27, pad=GLOW_PAD),
