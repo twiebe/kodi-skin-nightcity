@@ -328,7 +328,7 @@
         <texturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturefocus>
         <texturenofocus/>
         <alttexturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</alttexturefocus>
-        <alttexturenofocus border="22" colordiffuse="state">ui/cut_btn_fill_pad.png</alttexturenofocus>
+        <alttexturenofocus border="22" colordiffuse="surface_alt">ui/cut_btn_fill_pad.png</alttexturenofocus>
     </include>
 
     <!-- A setting row, 10 px larger on each side than the row it shows for the glow of the
