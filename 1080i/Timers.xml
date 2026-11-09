@@ -280,4 +280,15 @@
         <onstop condition="Window.IsActive(home) + !System.HasActiveModalDialog + ![Control.HasFocus(9109) | ControlGroup(9180).HasFocus]">SetFocus(9109)</onstop>
         <onstop condition="Window.IsActive(home) + !System.HasActiveModalDialog + [Control.HasFocus(9109) | ControlGroup(9180).HasFocus]">SetFocus(9189)</onstop>
     </timer>
+    <!-- The way back from the settings (nc.settings.from, scripts/nightcity.py settings_return)
+         goes once they are left another way: a second outside the settings, the settings page of
+         Home, the quick menu and the way between them (1160). Not at once: on the way in Home
+         shows its old page for a moment. -->
+    <timer>
+        <name>nc_settings_from</name>
+        <description>Forget the way back from the settings once they are left</description>
+        <start reset="true">!String.IsEmpty(Window(Home).Property(nc.settings.from)) + ![[Window.IsActive(home) + String.IsEqual(Window(Home).Property(nc.page),system)] | ControlGroup(9180).HasFocus() | Window.IsActive(settings) | Window.IsActive(systemsettings) | Window.IsActive(servicesettings) | Window.IsActive(playersettings) | Window.IsActive(mediasettings) | Window.IsActive(interfacesettings) | Window.IsActive(pvrsettings) | Window.IsActive(gamesettings) | Window.IsActive(profiles) | Window.IsActive(skinsettings) | Window.IsActive(systeminfo) | Window.IsActive(addonbrowser) | Window.IsActive(addonsettings) | Window.IsActive(addoninformation) | Window.IsActive(eventlog) | Window.IsActive(1170) | Window.IsActive(1160)]</start>
+        <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_settings_from),1) | ![!String.IsEmpty(Window(Home).Property(nc.settings.from)) + ![[Window.IsActive(home) + String.IsEqual(Window(Home).Property(nc.page),system)] | ControlGroup(9180).HasFocus() | Window.IsActive(settings) | Window.IsActive(systemsettings) | Window.IsActive(servicesettings) | Window.IsActive(playersettings) | Window.IsActive(mediasettings) | Window.IsActive(interfacesettings) | Window.IsActive(pvrsettings) | Window.IsActive(gamesettings) | Window.IsActive(profiles) | Window.IsActive(skinsettings) | Window.IsActive(systeminfo) | Window.IsActive(addonbrowser) | Window.IsActive(addonsettings) | Window.IsActive(addoninformation) | Window.IsActive(eventlog) | Window.IsActive(1170) | Window.IsActive(1160)]]</stop>
+        <onstop condition="!String.IsEmpty(Window(Home).Property(nc.settings.from)) + ![[Window.IsActive(home) + String.IsEqual(Window(Home).Property(nc.page),system)] | ControlGroup(9180).HasFocus() | Window.IsActive(settings) | Window.IsActive(systemsettings) | Window.IsActive(servicesettings) | Window.IsActive(playersettings) | Window.IsActive(mediasettings) | Window.IsActive(interfacesettings) | Window.IsActive(pvrsettings) | Window.IsActive(gamesettings) | Window.IsActive(profiles) | Window.IsActive(skinsettings) | Window.IsActive(systeminfo) | Window.IsActive(addonbrowser) | Window.IsActive(addonsettings) | Window.IsActive(addoninformation) | Window.IsActive(eventlog) | Window.IsActive(1170) | Window.IsActive(1160)]">ClearProperty(nc.settings.from,home)</onstop>
+    </timer>
 </timers>

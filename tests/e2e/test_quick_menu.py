@@ -399,3 +399,96 @@ def test_over_the_player(quick):
         rpc('Player.Stop', {'playerid': 1})
         time.sleep(1)
         rpc('VideoLibrary.SetMovieDetails', {'movieid': MOVIE_ID, 'resume': {'position': 0, 'total': 0}})
+
+
+# --- Back held in the settings: back to where the settings link was chosen -----------------------
+
+FROM = 'Window(Home).Property(nc.settings.from)'
+
+
+def _link_settings():
+    """The quick menu is open: its settings link, then a settings window deeper in."""
+    builtin('SetFocus(1230,0,absolute)')
+    wait_for('Control.HasFocus(1230) + Integer.IsEqual(Container(1230).CurrentItem,1)')
+    action('select')
+    closed()
+    wait_for('Window.IsActive(home) + String.IsEqual(Window(Home).Property(nc.page),system)', timeout=5)
+    builtin('ActivateWindow(systemsettings)')
+    wait_for('Window.IsActive(systemsettings)')
+    time.sleep(1.5)  # longer than the timer that forgets the way back outside the settings
+    assert info(FROM)[FROM]
+
+
+@pytest.mark.parametrize('key', ['backspace', 'escape'])
+def test_back_held_in_the_settings_goes_back_to_the_library(quick, key):
+    builtin('SetProperty(nc.library,tvshows,home)')
+    builtin('ActivateWindow(1110)')
+    wait_for('Window.IsActive(1110)')
+    time.sleep(0.5)
+    open_menu()
+    _link_settings()
+    press(key, hold=1000)
+    wait_for('Window.IsActive(1110) + String.IsEqual(Window(Home).Property(nc.library),tvshows) + '
+             '!Window.IsActive(systemsettings)', timeout=5)
+    assert not info(FROM)[FROM]
+    builtin('ActivateWindow(home)')
+
+
+def test_back_held_in_the_settings_goes_back_to_the_page_of_home(quick):
+    builtin('SetFocus(9102)')
+    wait_for('Control.HasFocus(9102) + String.IsEqual(Window(Home).Property(nc.page),movies)')
+    time.sleep(0.5)
+    press(hold=1500)
+    wait_for(on_panel(9109))
+    action('down', 'down')
+    wait_for(on_panel(1220))
+    _link_settings()
+    press('backspace', hold=1000)
+    wait_for('Window.IsActive(home) + !Window.IsActive(systemsettings) + '
+             'String.IsEqual(Window(Home).Property(nc.page),movies) + Control.HasFocus(9102)', timeout=5)
+
+
+def test_back_held_on_the_settings_page_goes_back_too(quick):
+    builtin('SetProperty(nc.library,movies,home)')
+    builtin('ActivateWindow(1110)')
+    wait_for('Window.IsActive(1110)')
+    time.sleep(0.5)
+    open_menu()
+    _link_settings()
+    action('back')
+    wait_for('Window.IsActive(home) + !Window.IsActive(systemsettings)')
+    time.sleep(1.5)
+    press('backspace', hold=1000)
+    wait_for('Window.IsActive(1110) + String.IsEqual(Window(Home).Property(nc.library),movies)', timeout=5)
+    builtin('ActivateWindow(home)')
+
+
+def test_back_held_in_the_settings_goes_back_to_the_video(quick):
+    rpc('Player.Open', {'item': {'movieid': MOVIE_ID}})
+    try:
+        wait_for('Player.HasVideo', timeout=20)
+        wait_for('Window.IsActive(fullscreenvideo)')
+        time.sleep(1)
+        press(hold=1500)
+        wait_for(OPEN)
+        time.sleep(0.5)
+        _link_settings()
+        press('escape', hold=1000)
+        wait_for('Window.IsActive(fullscreenvideo) + !Window.IsActive(systemsettings)', timeout=5)
+    finally:
+        rpc('Player.Stop', {'playerid': 1})
+        time.sleep(1)
+        rpc('VideoLibrary.SetMovieDetails', {'movieid': MOVIE_ID, 'resume': {'position': 0, 'total': 0}})
+
+
+def test_the_way_back_goes_once_the_settings_are_left(quick):
+    builtin('SetProperty(nc.library,movies,home)')
+    builtin('ActivateWindow(1110)')
+    wait_for('Window.IsActive(1110)')
+    time.sleep(0.5)
+    open_menu()
+    _link_settings()
+    builtin('ActivateWindow(1110)')
+    wait_for('Window.IsActive(1110)')
+    wait_for('String.IsEmpty({})'.format(FROM), timeout=5)
+    builtin('ActivateWindow(home)')

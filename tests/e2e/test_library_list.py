@@ -549,3 +549,35 @@ def test_shows_have_their_own_details(library):
     wait_for('!Window.IsActive(selectdialog) + String.IsEqual(Skin.String(nc.libdetails.tvshows),year.seasons.episodes)')
     assert true('String.IsEmpty(Skin.String(nc.libdetails.movies))')
     screenshot('library-details-shows')
+
+
+# --- OK held on Home's movies and shows tabs ------------------------------------------------------
+
+def _press(button, hold=0):
+    """A key through Kodi's keymaps; a hold over Kodi's threshold (500 ms) is a long press."""
+    rpc('Input.ButtonEvent', {'button': button, 'keymap': 'KB', 'holdtime': hold})
+
+
+def _on_tab(tab):
+    builtin('NotifyAll(nightcity,home_keymap)')  # the keymap as the service writes it at startup
+    builtin('ActivateWindow(home)')
+    wait_for('Window.IsActive(home)')
+    time.sleep(1)
+    builtin('SetFocus({})'.format(tab))
+    wait_for('Control.HasFocus({})'.format(tab))
+
+
+@pytest.mark.parametrize('button', ['return', 'enter'])
+@pytest.mark.parametrize('tab, kind', [(9102, 'movies'), (9103, 'tvshows')])
+def test_ok_held_on_the_tab_opens_all_of_them(library, tab, kind, button):
+    _on_tab(tab)
+    _press(button, hold=1000)
+    wait_for('Window.IsActive(1110) + String.IsEqual(Window(Home).Property(nc.library),{})'.format(kind), timeout=10)
+    _count_is(3 if kind == 'movies' else len(library['shows']))
+
+
+def test_ok_on_the_tab_still_goes_down_to_the_page(library):
+    _on_tab(9102)
+    _press('return')
+    wait_for('Window.IsActive(home) + !ControlGroup(9100).HasFocus()', timeout=5)
+    assert true('!Window.IsActive(1110)')

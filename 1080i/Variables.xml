@@ -317,6 +317,15 @@
         <value condition="String.IsEqual(ListItem.DBType,artist)">$INFO[ListItem.Property(Artist_Description)]</value>
         <value>$INFO[ListItem.Property(Album_Description)]</value>
     </variable>
+    <!-- where the quick menu's settings link was chosen (nc.settings.from), in the form
+         scripts/nightcity.py settings_return reads: kind|... -->
+    <variable name="SettingsFrom">
+        <value condition="Window.IsActive(fullscreenvideo)">player</value>
+        <value condition="Window.IsActive(1110)">library|$INFO[Window(Home).Property(nc.library)]</value>
+        <value condition="Window.IsActive(videos)">videos|$INFO[Container.FolderPath]</value>
+        <value condition="Window.IsActive(music)">music|$INFO[Container.FolderPath]</value>
+        <value condition="Window.IsActive(home)">home|$INFO[Window(Home).Property(nc.page)]|$INFO[Window(Home).Property(nc.quick.from)]</value>
+    </variable>
     <variable name="CardArt">
         <value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
         <value>$INFO[ListItem.Art(poster)]</value>

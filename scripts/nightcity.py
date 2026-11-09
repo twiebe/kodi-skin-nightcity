@@ -1688,7 +1688,7 @@ HOME_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
 # setting.
 BACK_KEYMAP_NAME = '0_skin.nightcity.back.xml'
 BACK_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
-<!-- Written by the Nightcity skin: on info pages and the library grid the keys of PreviousMenu are Back, Back held on an info page goes back to where the browsing started, in the player's chapter and cast rows to the player's controls. -->
+<!-- Written by the Nightcity skin: on info pages and the library grid the keys of PreviousMenu are Back, Back held on an info page goes back to where the browsing started, in the player's chapter and cast rows to the player's controls; OK held on Home's movies or shows tab opens all of them. -->
 <keymap>
   <movieinformation>
     <keyboard>
@@ -1731,6 +1731,17 @@ BACK_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
       <rightclick>Back</rightclick>
     </mouse>
   </window1110>
+  <!-- Home: OK held on the movies or shows tab opens all movies or all shows (home_ok_held) -->
+  <home>
+    <keyboard>
+      <return mod="longpress">NotifyAll(nightcity,home_ok_held)</return>
+      <enter mod="longpress">NotifyAll(nightcity,home_ok_held)</enter>
+      <!-- held on Home's settings page: back to where the settings were opened (settings_return) -->
+      <backspace mod="longpress">NotifyAll(nightcity,settings_return:backspace)</backspace>
+      <browser_back mod="longpress">NotifyAll(nightcity,settings_return:browser_back)</browser_back>
+      <escape mod="longpress">NotifyAll(nightcity,settings_return:escape)</escape>
+    </keyboard>
+  </home>
   <music>
     <keyboard>
       <escape>NotifyAll(nightcity,music_bar:escape)</escape>
@@ -1742,8 +1753,80 @@ BACK_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
       <rightclick>NotifyAll(nightcity,music_bar:escape)</rightclick>
     </mouse>
   </music>
-</keymap>
+@@SETTINGS@@</keymap>
 """
+
+
+# the tabs of Home's menu whose OK held opens the library window (BACK_KEYMAP)
+HOME_LIBRARY_TABS = {9102: 'movies', 9103: 'tvshows'}
+
+
+def home_ok_held():
+    """OK held on Home: on the movies or shows tab all movies or all shows (window 1110), else
+    what Kodi does with it, the context menu. CEC remotes send no long presses."""
+    import xbmc
+    for tab, library in HOME_LIBRARY_TABS.items():
+        if xbmc.getCondVisibility('Control.HasFocus({})'.format(tab)):
+            xbmc.executebuiltin('SetProperty(nc.library,{},home)'.format(library))
+            xbmc.executebuiltin('ActivateWindow(1110)')
+            return
+    xbmc.executebuiltin('Action(ContextMenu)')
+
+
+# Kodi's settings windows: Back held goes back to where the quick menu's settings link was chosen
+# (settings_return), however deep in them
+SETTINGS_WINDOWS = ('settings', 'systemsettings', 'servicesettings', 'playersettings', 'mediasettings',
+                    'interfacesettings', 'pvrsettings', 'gamesettings', 'profiles', 'skinsettings', 'systeminfo',
+                    'addonbrowser', 'addonsettings', 'addoninformation', 'eventlog')
+BACK_KEYMAP = BACK_KEYMAP.replace('@@SETTINGS@@', ''.join(
+    '  <{0}>\n    <keyboard>\n'
+    '      <backspace mod="longpress">NotifyAll(nightcity,settings_return:backspace)</backspace>\n'
+    '      <browser_back mod="longpress">NotifyAll(nightcity,settings_return:browser_back)</browser_back>\n'
+    '      <escape mod="longpress">NotifyAll(nightcity,settings_return:escape)</escape>\n'
+    '    </keyboard>\n  </{0}>\n'.format(window) for window in SETTINGS_WINDOWS))
+
+# what Kodi's own keymap does with Back held (keyboard.xml), where the skin has no way back
+KODI_BACK_HELD = {'escape': 'Action(Back)', 'browser_back': 'ActivateWindow(Home)'}
+SETTINGS_PAGE = 'Window.IsActive(home)'
+SETTINGS_PAGE_SHOWN = 'String.IsEqual(Window(Home).Property(nc.page),system)'
+
+
+def settings_return(key):
+    """Back held in Kodi's settings or on Home's settings page: back to where the quick menu's
+    settings link was chosen (nc.settings.from, the link sets it from SettingsFrom in
+    Variables.xml): a page of Home and its focus, the library window, a folder of the video or
+    music window, or the video playing. Kodi forgets its windows on the way there
+    (Custom_1160_HomeKey.xml), so the skin keeps the way. Without one, and on Home's other pages,
+    what Kodi does with KEY held."""
+    import xbmc
+    home = _home()
+    origin = home.getProperty('nc.settings.from')
+    on_home = xbmc.getCondVisibility(SETTINGS_PAGE)
+    if not origin or (on_home and not xbmc.getCondVisibility(SETTINGS_PAGE_SHOWN)):
+        if on_home and key == 'backspace':
+            xbmc.executebuiltin('ActivateWindow(ShutdownMenu)')
+        elif key in KODI_BACK_HELD:
+            xbmc.executebuiltin(KODI_BACK_HELD[key])
+        return
+    home.clearProperty('nc.settings.from')
+    kind, _, rest = origin.partition('|')
+    xbmc.executebuiltin('Dialog.Close(all,true)')
+    if kind == 'home':
+        page, _, focus = rest.partition('|')
+        xbmc.executebuiltin('ActivateWindow(home)')
+        if page:
+            xbmc.executebuiltin('SetProperty(nc.page,{},home)'.format(page))
+        if focus:
+            xbmc.executebuiltin('SetFocus({})'.format(focus))
+    elif kind == 'library':
+        xbmc.executebuiltin('SetProperty(nc.library,{},home)'.format(rest or 'movies'))
+        xbmc.executebuiltin('ActivateWindow(1110)')
+    elif kind in ('videos', 'music'):
+        xbmc.executebuiltin('ActivateWindow({},"{}",return)'.format(kind.capitalize(), rest))
+    elif kind == 'player' and xbmc.getCondVisibility('Player.HasVideo'):
+        xbmc.executebuiltin('ActivateWindow(fullscreenvideo)')
+    else:
+        xbmc.executebuiltin('ActivateWindow(home)')
 
 
 # The keymaps of skin.retrowave, the skin's name before 0.4.45
@@ -3040,7 +3123,7 @@ def music_bar(action, *args):
 
 COMMANDS = {'lib_bar': lib_bar, 'music_bar': music_bar, 'next_episode': next_episode, 'startup': startup, 'genres': genres, 'genre_pick': genre_pick,
             'info_select': info_select, 'info_leave': info_leave, 'info_back': info_back, 'info_forget': info_forget,
-            'back_to_start': back_to_start, 'trailer': trailer,
+            'back_to_start': back_to_start, 'home_ok_held': home_ok_held, 'settings_return': settings_return, 'trailer': trailer,
             'osd_back': osd_back, 'play': play, 'info': info, 'plot': plot, 'player_info': player_info,
             'streams': streams, 'row': row, 'search': search, 'search_recent': search_recent,
             'search_init': search_init, 'search_clear': search_clear, 'search_forget': search_forget, 'colours': colours,

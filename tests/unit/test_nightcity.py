@@ -870,7 +870,7 @@ def test_back_keymap_turns_previous_menu_into_back_on_info_pages():
     import xml.etree.ElementTree as ET
     root = ET.fromstring(nightcity.BACK_KEYMAP)
     # the library grid: test_library_bar.py; the player's chapter and cast rows: Back held only
-    assert [w.tag for w in root] == ['movieinformation', 'videobookmarks', 'window1141', 'window1110', 'music']
+    assert [w.tag for w in root] == ['movieinformation', 'videobookmarks', 'window1141', 'window1110', 'home', 'music'] + SETTINGS_WINDOWS
     keys = {(device.tag, key.tag, key.get('mod')): key.text for device in root.find('movieinformation') for key in device}
     assert {k: v for k, v in keys.items() if not k[2]} == {
         ('keyboard', 'escape', None): 'Back', ('gamepad', 'back', None): 'Back', ('mouse', 'rightclick', None): 'Back'}
@@ -901,6 +901,118 @@ def test_back_keymap_long_back_in_the_player_rows(window):
     keys = {(device.tag, key.tag, key.get('mod')): key.text for device in root.find(window) for key in device}
     assert keys == {('keyboard', k, 'longpress'): 'NotifyAll(nightcity,back_to_start)'
                     for k in ('backspace', 'browser_back', 'escape')}
+
+
+def test_ok_held_on_home_is_one_command():
+    """OK held on Home (Enter and Return on keyboards and IR remotes) goes to the skin, which
+    opens all movies or all shows from their tab and else does what Kodi does, the context menu.
+    Only the long press: a single OK keeps Kodi's own mapping."""
+    import xml.etree.ElementTree as ET
+    root = ET.fromstring(nightcity.BACK_KEYMAP)
+    keys = {(device.tag, key.tag, key.get('mod')): key.text for device in root.find('home') for key in device}
+    held = {k: v for k, v in keys.items() if k[1] in ('return', 'enter')}
+    assert held == {('keyboard', k, 'longpress'): 'NotifyAll(nightcity,home_ok_held)' for k in ('return', 'enter')}
+    assert nightcity.COMMANDS['home_ok_held'] is nightcity.home_ok_held
+
+
+@pytest.mark.parametrize('tab, library', [(9102, 'movies'), (9103, 'tvshows')])
+def test_ok_held_on_the_movies_or_shows_tab_opens_the_library(monkeypatch, tab, library):
+    fake = FakeXbmc({'Control.HasFocus({})'.format(tab)}, {})
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    nightcity.home_ok_held()
+    assert fake.builtins == ['SetProperty(nc.library,{},home)'.format(library), 'ActivateWindow(1110)']
+
+
+def test_ok_held_elsewhere_on_home_is_the_context_menu(monkeypatch):
+    fake = FakeXbmc(set(), {})
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    nightcity.home_ok_held()
+    assert fake.builtins == ['Action(ContextMenu)']
+
+
+SETTINGS_WINDOWS = ['settings', 'systemsettings', 'servicesettings', 'playersettings', 'mediasettings',
+                    'interfacesettings', 'pvrsettings', 'gamesettings', 'profiles', 'skinsettings', 'systeminfo',
+                    'addonbrowser', 'addonsettings', 'addoninformation', 'eventlog']
+BACK_KEYS = ('backspace', 'browser_back', 'escape')
+
+
+@pytest.mark.parametrize('window', SETTINGS_WINDOWS + ['home'])
+def test_back_held_in_the_settings_is_one_command(window):
+    """Back held in Kodi's settings, however deep, and on Home (its settings page): back to where
+    the quick menu's settings link was chosen (settings_return)."""
+    import xml.etree.ElementTree as ET
+    root = ET.fromstring(nightcity.BACK_KEYMAP)
+    keys = {(device.tag, key.tag, key.get('mod')): key.text for device in root.find(window) for key in device}
+    held = {k: v for k, v in keys.items() if k[1] in BACK_KEYS}
+    assert held == {('keyboard', k, 'longpress'): 'NotifyAll(nightcity,settings_return:{})'.format(k) for k in BACK_KEYS}
+    assert nightcity.COMMANDS['settings_return'] is nightcity.settings_return
+
+
+def _settings_return(monkeypatch, key, origin, true=()):
+    fake = FakeXbmc(set(true), {})
+    window = FakeWindow()
+    window.clearProperty = lambda k: window.props.pop(k, None)
+    if origin:
+        window.props['nc.settings.from'] = origin
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    monkeypatch.setattr(nightcity, '_home', lambda: window)
+    nightcity.settings_return(key)
+    return fake.builtins, window.props
+
+
+ON_SETTINGS_PAGE = ('Window.IsActive(home)', 'String.IsEqual(Window(Home).Property(nc.page),system)')
+
+
+def test_back_held_goes_back_to_the_home_page_and_focus_it_came_from(monkeypatch):
+    done, props = _settings_return(monkeypatch, 'backspace', 'home|movies|9102')
+    assert done == ['Dialog.Close(all,true)', 'ActivateWindow(home)', 'SetProperty(nc.page,movies,home)',
+                    'SetFocus(9102)']
+    assert 'nc.settings.from' not in props
+
+
+def test_back_held_on_the_settings_page_of_home_goes_back_too(monkeypatch):
+    done, _ = _settings_return(monkeypatch, 'escape', 'home|movies|9102', ON_SETTINGS_PAGE)
+    assert done[0] == 'Dialog.Close(all,true)' and 'SetFocus(9102)' in done
+
+
+def test_back_held_goes_back_to_the_library(monkeypatch):
+    done, _ = _settings_return(monkeypatch, 'backspace', 'library|tvshows')
+    assert done == ['Dialog.Close(all,true)', 'SetProperty(nc.library,tvshows,home)', 'ActivateWindow(1110)']
+
+
+@pytest.mark.parametrize('kind, window', [('videos', 'Videos'), ('music', 'Music')])
+def test_back_held_goes_back_to_the_folder(monkeypatch, kind, window):
+    path = 'videodb://movies/genres/12/?xsp={"a":1,"b":2}'
+    done, _ = _settings_return(monkeypatch, 'backspace', '{}|{}'.format(kind, path))
+    assert done == ['Dialog.Close(all,true)', 'ActivateWindow({},"{}",return)'.format(window, path)]
+
+
+def test_back_held_goes_back_to_the_video(monkeypatch):
+    done, _ = _settings_return(monkeypatch, 'backspace', 'player', ['Player.HasVideo'])
+    assert done == ['Dialog.Close(all,true)', 'ActivateWindow(fullscreenvideo)']
+
+
+def test_back_held_goes_home_when_the_video_ended(monkeypatch):
+    done, _ = _settings_return(monkeypatch, 'backspace', 'player')
+    assert done == ['Dialog.Close(all,true)', 'ActivateWindow(home)']
+
+
+@pytest.mark.parametrize('key, kodi', [('escape', ['Action(Back)']), ('browser_back', ['ActivateWindow(Home)']),
+                                       ('backspace', [])])
+def test_back_held_without_a_way_back_is_kodis(monkeypatch, key, kodi):
+    """Settings not opened from the quick menu: what Kodi's own keymap does with the long press."""
+    done, _ = _settings_return(monkeypatch, key, '')
+    assert done == kodi
+
+
+@pytest.mark.parametrize('key, kodi', [('escape', ['Action(Back)']), ('browser_back', ['ActivateWindow(Home)']),
+                                       ('backspace', ['ActivateWindow(ShutdownMenu)'])])
+def test_back_held_on_another_page_of_home_is_kodis(monkeypatch, key, kodi):
+    """On Home only the settings page goes back: elsewhere Back held stays Kodi's (Home's backspace
+    held opens the power menu, which the skin turns into its quick menu)."""
+    done, props = _settings_return(monkeypatch, key, 'library|movies', ['Window.IsActive(home)'])
+    assert done == kodi
+    assert props['nc.settings.from'] == 'library|movies'
 
 
 @pytest.mark.parametrize('off', [False, True])

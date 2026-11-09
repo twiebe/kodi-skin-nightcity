@@ -2109,6 +2109,9 @@
                 <item>
                     <label>$LOCALIZE[5]</label>
                     <icon>ui/qm_settings.png</icon>
+                    <!-- where it was chosen, while the window under the menu still answers: Back held
+                         in the settings goes back there (scripts/nightcity.py settings_return) -->
+                    <onclick>SetProperty(nc.settings.from,"$VAR[SettingsFrom]",home)</onclick>
                     <onclick>Dialog.Close(1170,true)</onclick>
                     <onclick>SetProperty(nc.go,system,home)</onclick>
                     <onclick>ActivateWindow(1160)</onclick>

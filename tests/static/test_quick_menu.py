@@ -97,7 +97,9 @@ def test_links_to_settings_and_files():
     clicks = [[a for _, a in actions(i)] for i in items]
     # through the Home key window: it closes an info page, the OSD or a TMDb chain first, the
     # link alone would open its window under a dialog
-    assert clicks == [['Dialog.Close(1170,true)', 'SetProperty(nc.go,{},home)'.format(go), 'ActivateWindow(1160)']
+    # the settings link keeps where it was chosen first (tests/static/test_settings_return.py)
+    assert clicks == [['SetProperty(nc.settings.from,"$VAR[SettingsFrom]",home)'] * (go == 'system')
+                      + ['Dialog.Close(1170,true)', 'SetProperty(nc.go,{},home)'.format(go), 'ActivateWindow(1160)']
                       for go in ('system', 'files')]
     assert (items[0].findtext('label'), items[0].findtext('icon')) == ('$LOCALIZE[5]', 'ui/qm_settings.png')
     assert (items[1].findtext('label'), items[1].findtext('icon')) == ('$LOCALIZE[744]', 'ui/qm_files.png')
