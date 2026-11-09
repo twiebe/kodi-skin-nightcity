@@ -5,6 +5,7 @@ read skin strings only, Kodi works them out once a frame and not per row."""
 import importlib.util
 import itertools
 import re
+import xml.etree.ElementTree as ET
 
 from conftest import ROOT, parse
 from navigation import _evaluate
@@ -128,15 +129,79 @@ def _piece(key):
     return 'LibraryRow' + key.capitalize()
 
 
+def _row():
+    base = parse(ROOT / '1080i' / 'Includes_Base.xml')
+    return next(i for i in base.iter('include') if i.get('name') == 'LibraryRow')
+
+
+def _tags():
+    """The tags of a row, left to right: (key, group)."""
+    return [(g.findtext('description'), g) for g in _row().iter('control')
+            if g.get('type') == 'group' and g.findtext('description') in ROW_ORDER]
+
+
 def test_a_row_shows_its_details_in_a_fixed_order():
     nc = _nightcity()
-    (condition, text), = _variable('LibraryDetails')
-    assert condition is None
-    assert re.findall(r'\$VAR\[(\w+),  ,\]', text) == [_piece(k) for k in ROW_ORDER]
-    assert re.sub(r'\$VAR\[\w+,  ,\]', '', text) == ''
+    tags = _tags()
+    assert [k for k, _ in tags] == ROW_ORDER
+    for key, group in tags:
+        labels = [c.findtext('label') for c in group.iter('control') if c.get('type') == 'label']
+        assert labels == ['$VAR[{}]'.format(_piece(key))], key
+        assert group.findtext('visible').startswith('$EXP[LibraryDetail{}] + '.format(key.capitalize())), key
     for library, details in nc.LIB_DETAILS.items():
         keys = [k for k, _ in details]
         assert keys == [k for k in ROW_ORDER if k in keys], library
+
+
+def test_the_tags_line_up_from_row_to_row():
+    """Every tag has a fixed width and ends where the next begins, less a gap, the last at the
+    right edge; a tag left out slides each one before it right by its width and the gap, so the
+    chosen ones sit flush right whatever the choice."""
+    tags = _tags()
+    sizes = [(int(g.findtext('left')), int(g.findtext('width'))) for _, g in tags]
+    gap = sizes[1][0] - sum(sizes[0])
+    assert gap > 0
+    for (left, width), (nxt, _) in zip(sizes, sizes[1:]):
+        assert left + width + gap == nxt
+    right = sum(sizes[-1])
+    for i, (key, group) in enumerate(tags):
+        slides = {a.get('condition'): a.get('end') for a in group.findall('animation')}
+        assert slides == {'!$EXP[LibraryDetail{}]'.format(k.capitalize()): '{},0'.format(w + gap)
+                          for (k, _), (_, w) in zip(tags[i + 1:], sizes[i + 1:])}, key
+        plate = next(inc for inc in group.iter('include') if inc.get('content') == 'LookTagImage')
+        assert {p.get('name'): p.get('value') for p in plate.findall('param')} == {
+            'width': str(sizes[i][1]), 'color': '$PARAM[tag]'}, key
+        label = next(c for c in group.iter('control') if c.get('type') == 'label')
+        assert label.findtext('width') == str(sizes[i][1]) and label.findtext('align') == 'center', key
+        assert label.findtext('textcolor') == '$PARAM[tagtext]', key
+    assert right == 1300
+
+
+def test_the_focused_row_turns_its_tags_dark():
+    row = [layout for layout in ET.parse(ROOT / '1080i' / 'Custom_1110_Library.xml').getroot().iter('focusedlayout')
+           if (layout.get('condition') or '').endswith(' + $EXP[LibraryAsList]')][0]
+    inc = next(i for i in row.iter('include') if i.get('content') == 'LibraryRow')
+    params = {p.get('name'): p.get('value') for p in inc.findall('param')}
+    assert params['tag'] == '$VAR[LibraryRowTag]' and params['tagtext'] == '$VAR[LibraryRowTagText]'
+    assert _variable('LibraryRowTag') == [('Control.HasFocus(5000)', 'focus_text'), (None, 'state')]
+    assert _variable('LibraryRowTagText') == [('Control.HasFocus(5000)', 'focus'), (None, 'text')]
+
+
+def test_the_audio_tag_is_short():
+    """An object track says only that; a DTS-HD track drops the HD; the rest as the info page."""
+    def audio(codec):
+        for condition, text in _variable('LibraryRowAudio'):
+            gate, _, test = condition.partition(' + ')
+            assert gate == '$EXP[LibraryDetailAudio]'
+            m = re.match(r'String\.(IsEqual|StartsWith)\(ListItem\.AudioCodec,(\w+)\)$', test)
+            if not test or (codec == m.group(2) if m.group(1) == 'IsEqual' else codec.startswith(m.group(2))):
+                return text
+    assert audio('truehd_atmos') == 'Atmos'
+    assert audio('eac3_ddp_atmos') == 'DD+ Atmos'
+    assert audio('dtshd_ma_x') == audio('dtshd_ma_x_imax') == 'DTS:X'
+    assert audio('dtshd_ma') == 'DTS-MA$VAR[ItemAudioChannels, ,]'
+    assert audio('dtshd_hra') == 'DTS-HR$VAR[ItemAudioChannels, ,]'
+    assert audio('truehd') == audio('eac3') == '$VAR[ItemAudio]'
 
 
 def test_each_detail_shows_only_when_chosen():
@@ -152,7 +217,6 @@ def test_each_detail_shows_only_when_chosen():
 def test_the_details_take_the_formats_of_the_info_page():
     assert _variable('LibraryRowRes') == [('$EXP[LibraryDetailRes]', '$VAR[ItemResolution]')]
     assert _variable('LibraryRowHdr') == [('$EXP[LibraryDetailHdr]', '$VAR[ItemHdr]')]
-    assert _variable('LibraryRowAudio') == [('$EXP[LibraryDetailAudio]', '$VAR[ItemAudio]')]
     assert _variable('LibraryRowRuntime') == [('$EXP[LibraryDetailRuntime]', '$INFO[ListItem.Duration(mins),, min]')]
     assert _variable('LibraryRowRating') == [('$EXP[LibraryDetailRating]', '$INFO[ListItem.Rating,★ ,]')]
     episodes = _variable('LibraryRowEpisodes')
@@ -186,12 +250,12 @@ def test_the_choice_of_the_other_library_does_not_count():
     assert [k for k in ROW_ORDER if holds('$EXP[LibraryDetail{}]'.format(k.capitalize()), skin)] == ['year', 'episodes']
 
 
-def test_a_row_has_three_labels_and_no_art():
-    base = parse(ROOT / '1080i' / 'Includes_Base.xml')
-    row = next(i for i in base.iter('include') if i.get('name') == 'LibraryRow')
+def test_a_row_has_labels_and_tag_plates_but_no_art():
+    row = _row()
     labels = [c.findtext('label') for c in row.iter('control') if c.get('type') == 'label']
-    assert labels == ['$VAR[LibraryMark]', '$INFO[ListItem.Label]', '$VAR[LibraryDetails]']
+    assert labels == ['$VAR[LibraryMark]', '$INFO[ListItem.Label]'] + ['$VAR[{}]'.format(_piece(k)) for k in ROW_ORDER]
     assert not [c for c in row.iter('control') if c.get('type') == 'image']
+    assert {i.get('content') for i in row.iter('include') if i.get('content')} == {'LookTagImage'}
 
 
 def test_the_script_marks_the_details_dialog():

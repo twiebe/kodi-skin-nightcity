@@ -326,6 +326,11 @@
         <value condition="Window.IsActive(music)">music|$INFO[Container.FolderPath]</value>
         <value condition="Window.IsActive(home)">home|$INFO[Window(Home).Property(nc.page)]|$INFO[Window(Home).Property(nc.quick.from)]</value>
     </variable>
+    <!-- the focused title's poster beside the library list (LibraryTitle) -->
+    <variable name="LibraryTitlePoster">
+        <value condition="!String.IsEmpty(Container(5000).ListItem.Art(poster))">$INFO[Container(5000).ListItem.Art(poster)]</value>
+        <value>$INFO[Container(5000).ListItem.Art(thumb)]</value>
+    </variable>
     <variable name="CardArt">
         <value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
         <value>$INFO[ListItem.Art(poster)]</value>
@@ -361,6 +366,7 @@
     <variable name="ItemHdr">
         <value condition="String.IsEqual(ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(ListItem.HdrType)">$INFO[ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(ListItem.VideoResolution)">SDR</value>
@@ -752,12 +758,6 @@
         <value condition="$EXP[LibraryAsList]">$LOCALIZE[31501]</value>
         <value>$LOCALIZE[31042]</value>
     </variable>
-    <!-- a row of the list: the details chosen (LibraryDetail... in Includes_Base.xml) in a fixed
-         order, the format as the info page shows it: 1999  136 min  ★ 8.7  4K  DV  TrueHD 7.1. Right
-         aligned, so the gap before the first one never shows -->
-    <variable name="LibraryDetails">
-        <value>$VAR[LibraryRowYear,  ,]$VAR[LibraryRowRuntime,  ,]$VAR[LibraryRowRating,  ,]$VAR[LibraryRowSeasons,  ,]$VAR[LibraryRowEpisodes,  ,]$VAR[LibraryRowStudio,  ,]$VAR[LibraryRowRes,  ,]$VAR[LibraryRowHdr,  ,]$VAR[LibraryRowAudio,  ,]</value>
-    </variable>
     <variable name="LibraryRowYear">
         <value condition="$EXP[LibraryDetailYear]">$INFO[ListItem.Year]</value>
     </variable>
@@ -783,8 +783,24 @@
     <variable name="LibraryRowHdr">
         <value condition="$EXP[LibraryDetailHdr]">$VAR[ItemHdr]</value>
     </variable>
+    <!-- the audio of a list row, short enough for a tag: the codec as people know it, cut down, and the
+         channel layout; an Atmos or DTS:X track says only that, since its channels are objects -->
     <variable name="LibraryRowAudio">
+        <value condition="$EXP[LibraryDetailAudio] + String.IsEqual(ListItem.AudioCodec,truehd_atmos)">Atmos</value>
+        <value condition="$EXP[LibraryDetailAudio] + String.IsEqual(ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="$EXP[LibraryDetailAudio] + String.StartsWith(ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
+        <value condition="$EXP[LibraryDetailAudio] + String.IsEqual(ListItem.AudioCodec,dtshd_ma)">DTS-MA$VAR[ItemAudioChannels, ,]</value>
+        <value condition="$EXP[LibraryDetailAudio] + String.IsEqual(ListItem.AudioCodec,dtshd_hra)">DTS-HR$VAR[ItemAudioChannels, ,]</value>
         <value condition="$EXP[LibraryDetailAudio]">$VAR[ItemAudio]</value>
+    </variable>
+    <!-- the detail tags of the focused row: dark on the focus bar, its colour for the text -->
+    <variable name="LibraryRowTag">
+        <value condition="Control.HasFocus(5000)">focus_text</value>
+        <value>state</value>
+    </variable>
+    <variable name="LibraryRowTagText">
+        <value condition="Control.HasFocus(5000)">focus</value>
+        <value>text</value>
     </variable>
     <variable name="LibraryGridFocusColor">
         <value condition="Control.HasFocus(5000)">focus_text</value>

@@ -342,17 +342,31 @@
                 <font>font_small</font>
                 <textcolor>text_dim</textcolor>
                 <label>$INFO[Container(5000).ListItem.Plot]</label>
+                <visible>!$EXP[LibraryAsList]</visible>
+            </control>
+            <!-- the list has no art in its rows: the poster takes the plot's place -->
+            <control type="group">
+                <left>1431</left>
+                <top>698</top>
+                <height>300</height>
+                <visible>$EXP[LibraryAsList]</visible>
+                <include content="CutCard">
+                    <param name="image" value="$VAR[LibraryTitlePoster]"/>
+                    <param name="item" value="Container(5000).ListItem"/>
+                </include>
             </control>
         </definition>
     </include>
 
     <!-- A row of the library grid as a list: the watched mark, the title and the details chosen for the
-         library (LibraryDetails), on the right. Labels only, no art: the Amlogic box scrolls a long
-         list. 10 px of room around it for the focused row's glow. -->
+         library, as tags on the right. Labels and the tag plate only, no art: the Amlogic box scrolls
+         a long list. 10 px of room around it for the focused row's glow. -->
     <include name="LibraryRow">
         <param name="color"/>
         <param name="mute"/>
         <param name="mark"/>
+        <param name="tag" default="state"/>
+        <param name="tagtext" default="text"/>
         <param name="scroll" default="false"/>
         <definition>
             <control type="group">
@@ -377,15 +391,232 @@
                     <scroll>$PARAM[scroll]</scroll>
                     <label>$INFO[ListItem.Label]</label>
                 </control>
-                <control type="label">
-                    <left>760</left>
-                    <width>540</width>
-                    <height>56</height>
-                    <align>right</align>
-                    <aligny>center</aligny>
-                    <font>font_small</font>
-                    <textcolor>$PARAM[mute]</textcolor>
-                    <label>$VAR[LibraryDetails]</label>
+                <!-- the details chosen, each a tag of its own width, so they line up from row to
+                     row; a tag left out slides the ones before it right by its width -->
+                <control type="group">
+                    <description>year</description>
+                    <left>246</left>
+                    <top>12</top>
+                    <width>70</width>
+                    <height>32</height>
+                    <animation effect="slide" end="112,0" time="0" condition="!$EXP[LibraryDetailRuntime]">Conditional</animation>
+                    <animation effect="slide" end="88,0" time="0" condition="!$EXP[LibraryDetailRating]">Conditional</animation>
+                    <animation effect="slide" end="132,0" time="0" condition="!$EXP[LibraryDetailSeasons]">Conditional</animation>
+                    <animation effect="slide" end="96,0" time="0" condition="!$EXP[LibraryDetailEpisodes]">Conditional</animation>
+                    <animation effect="slide" end="208,0" time="0" condition="!$EXP[LibraryDetailStudio]">Conditional</animation>
+                    <animation effect="slide" end="88,0" time="0" condition="!$EXP[LibraryDetailRes]">Conditional</animation>
+                    <animation effect="slide" end="108,0" time="0" condition="!$EXP[LibraryDetailHdr]">Conditional</animation>
+                    <animation effect="slide" end="152,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <visible>$EXP[LibraryDetailYear] + !String.IsEmpty(ListItem.Year)</visible>
+                    <include content="LookTagImage">
+                        <param name="width" value="70"/>
+                        <param name="color" value="$PARAM[tag]"/>
+                    </include>
+                    <control type="label">
+                        <width>70</width>
+                        <height>32</height>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <font>font_tiny</font>
+                        <textcolor>$PARAM[tagtext]</textcolor>
+                        <label>$VAR[LibraryRowYear]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <description>runtime</description>
+                    <left>324</left>
+                    <top>12</top>
+                    <width>104</width>
+                    <height>32</height>
+                    <animation effect="slide" end="88,0" time="0" condition="!$EXP[LibraryDetailRating]">Conditional</animation>
+                    <animation effect="slide" end="132,0" time="0" condition="!$EXP[LibraryDetailSeasons]">Conditional</animation>
+                    <animation effect="slide" end="96,0" time="0" condition="!$EXP[LibraryDetailEpisodes]">Conditional</animation>
+                    <animation effect="slide" end="208,0" time="0" condition="!$EXP[LibraryDetailStudio]">Conditional</animation>
+                    <animation effect="slide" end="88,0" time="0" condition="!$EXP[LibraryDetailRes]">Conditional</animation>
+                    <animation effect="slide" end="108,0" time="0" condition="!$EXP[LibraryDetailHdr]">Conditional</animation>
+                    <animation effect="slide" end="152,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <visible>$EXP[LibraryDetailRuntime] + !String.IsEmpty(ListItem.Duration)</visible>
+                    <include content="LookTagImage">
+                        <param name="width" value="104"/>
+                        <param name="color" value="$PARAM[tag]"/>
+                    </include>
+                    <control type="label">
+                        <width>104</width>
+                        <height>32</height>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <font>font_tiny</font>
+                        <textcolor>$PARAM[tagtext]</textcolor>
+                        <label>$VAR[LibraryRowRuntime]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <description>rating</description>
+                    <left>436</left>
+                    <top>12</top>
+                    <width>80</width>
+                    <height>32</height>
+                    <animation effect="slide" end="132,0" time="0" condition="!$EXP[LibraryDetailSeasons]">Conditional</animation>
+                    <animation effect="slide" end="96,0" time="0" condition="!$EXP[LibraryDetailEpisodes]">Conditional</animation>
+                    <animation effect="slide" end="208,0" time="0" condition="!$EXP[LibraryDetailStudio]">Conditional</animation>
+                    <animation effect="slide" end="88,0" time="0" condition="!$EXP[LibraryDetailRes]">Conditional</animation>
+                    <animation effect="slide" end="108,0" time="0" condition="!$EXP[LibraryDetailHdr]">Conditional</animation>
+                    <animation effect="slide" end="152,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <visible>$EXP[LibraryDetailRating] + !String.IsEmpty(ListItem.Rating)</visible>
+                    <include content="LookTagImage">
+                        <param name="width" value="80"/>
+                        <param name="color" value="$PARAM[tag]"/>
+                    </include>
+                    <control type="label">
+                        <width>80</width>
+                        <height>32</height>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <font>font_tiny</font>
+                        <textcolor>$PARAM[tagtext]</textcolor>
+                        <label>$VAR[LibraryRowRating]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <description>seasons</description>
+                    <left>524</left>
+                    <top>12</top>
+                    <width>124</width>
+                    <height>32</height>
+                    <animation effect="slide" end="96,0" time="0" condition="!$EXP[LibraryDetailEpisodes]">Conditional</animation>
+                    <animation effect="slide" end="208,0" time="0" condition="!$EXP[LibraryDetailStudio]">Conditional</animation>
+                    <animation effect="slide" end="88,0" time="0" condition="!$EXP[LibraryDetailRes]">Conditional</animation>
+                    <animation effect="slide" end="108,0" time="0" condition="!$EXP[LibraryDetailHdr]">Conditional</animation>
+                    <animation effect="slide" end="152,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <visible>$EXP[LibraryDetailSeasons] + Integer.IsGreater(ListItem.Property(TotalSeasons),0)</visible>
+                    <include content="LookTagImage">
+                        <param name="width" value="124"/>
+                        <param name="color" value="$PARAM[tag]"/>
+                    </include>
+                    <control type="label">
+                        <width>124</width>
+                        <height>32</height>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <font>font_tiny</font>
+                        <textcolor>$PARAM[tagtext]</textcolor>
+                        <label>$VAR[LibraryRowSeasons]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <description>episodes</description>
+                    <left>656</left>
+                    <top>12</top>
+                    <width>88</width>
+                    <height>32</height>
+                    <animation effect="slide" end="208,0" time="0" condition="!$EXP[LibraryDetailStudio]">Conditional</animation>
+                    <animation effect="slide" end="88,0" time="0" condition="!$EXP[LibraryDetailRes]">Conditional</animation>
+                    <animation effect="slide" end="108,0" time="0" condition="!$EXP[LibraryDetailHdr]">Conditional</animation>
+                    <animation effect="slide" end="152,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <visible>$EXP[LibraryDetailEpisodes] + !String.IsEmpty(ListItem.Property(TotalEpisodes))</visible>
+                    <include content="LookTagImage">
+                        <param name="width" value="88"/>
+                        <param name="color" value="$PARAM[tag]"/>
+                    </include>
+                    <control type="label">
+                        <width>88</width>
+                        <height>32</height>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <font>font_tiny</font>
+                        <textcolor>$PARAM[tagtext]</textcolor>
+                        <label>$VAR[LibraryRowEpisodes]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <description>studio</description>
+                    <left>752</left>
+                    <top>12</top>
+                    <width>200</width>
+                    <height>32</height>
+                    <animation effect="slide" end="88,0" time="0" condition="!$EXP[LibraryDetailRes]">Conditional</animation>
+                    <animation effect="slide" end="108,0" time="0" condition="!$EXP[LibraryDetailHdr]">Conditional</animation>
+                    <animation effect="slide" end="152,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <visible>$EXP[LibraryDetailStudio] + !String.IsEmpty(ListItem.Studio)</visible>
+                    <include content="LookTagImage">
+                        <param name="width" value="200"/>
+                        <param name="color" value="$PARAM[tag]"/>
+                    </include>
+                    <control type="label">
+                        <width>200</width>
+                        <height>32</height>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <font>font_tiny</font>
+                        <textcolor>$PARAM[tagtext]</textcolor>
+                        <label>$VAR[LibraryRowStudio]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <description>res</description>
+                    <left>960</left>
+                    <top>12</top>
+                    <width>80</width>
+                    <height>32</height>
+                    <animation effect="slide" end="108,0" time="0" condition="!$EXP[LibraryDetailHdr]">Conditional</animation>
+                    <animation effect="slide" end="152,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <visible>$EXP[LibraryDetailRes] + !String.IsEmpty(ListItem.VideoResolution)</visible>
+                    <include content="LookTagImage">
+                        <param name="width" value="80"/>
+                        <param name="color" value="$PARAM[tag]"/>
+                    </include>
+                    <control type="label">
+                        <width>80</width>
+                        <height>32</height>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <font>font_tiny</font>
+                        <textcolor>$PARAM[tagtext]</textcolor>
+                        <label>$VAR[LibraryRowRes]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <description>hdr</description>
+                    <left>1048</left>
+                    <top>12</top>
+                    <width>100</width>
+                    <height>32</height>
+                    <animation effect="slide" end="152,0" time="0" condition="!$EXP[LibraryDetailAudio]">Conditional</animation>
+                    <visible>$EXP[LibraryDetailHdr] + !String.IsEmpty(ListItem.VideoResolution)</visible>
+                    <include content="LookTagImage">
+                        <param name="width" value="100"/>
+                        <param name="color" value="$PARAM[tag]"/>
+                    </include>
+                    <control type="label">
+                        <width>100</width>
+                        <height>32</height>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <font>font_tiny</font>
+                        <textcolor>$PARAM[tagtext]</textcolor>
+                        <label>$VAR[LibraryRowHdr]</label>
+                    </control>
+                </control>
+                <control type="group">
+                    <description>audio</description>
+                    <left>1156</left>
+                    <top>12</top>
+                    <width>144</width>
+                    <height>32</height>
+                    <visible>$EXP[LibraryDetailAudio] + !String.IsEmpty(ListItem.AudioCodec)</visible>
+                    <include content="LookTagImage">
+                        <param name="width" value="144"/>
+                        <param name="color" value="$PARAM[tag]"/>
+                    </include>
+                    <control type="label">
+                        <width>144</width>
+                        <height>32</height>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <font>font_tiny</font>
+                        <textcolor>$PARAM[tagtext]</textcolor>
+                        <label>$VAR[LibraryRowAudio]</label>
+                    </control>
                 </control>
             </control>
         </definition>

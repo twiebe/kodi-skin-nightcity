@@ -578,6 +578,19 @@
         </definition>
     </include>
 
+    <!-- The plate of a tag as an image, for a list row (no buttons there) -->
+    <include name="LookTagImage">
+        <param name="width"/>
+        <param name="color" default="state"/>
+        <definition>
+            <control type="image">
+                <width>$PARAM[width]</width>
+                <height>32</height>
+                <texture border="12" colordiffuse="$PARAM[color]">ui/cut_btn_fill.png</texture>
+            </control>
+        </definition>
+    </include>
+
     <!-- The small pink line above a title -->
     <include name="LookKicker">
         <param name="label"/>

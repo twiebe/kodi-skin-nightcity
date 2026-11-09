@@ -3407,6 +3407,7 @@
     <variable name="ItemHdr9201">
         <value condition="String.IsEqual(Container(9201).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9201).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9201).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9201).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9201).ListItem.HdrType)">$INFO[Container(9201).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9201).ListItem.VideoResolution)">SDR</value>
@@ -3464,6 +3465,7 @@
     <variable name="ItemHdr9202">
         <value condition="String.IsEqual(Container(9202).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9202).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9202).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9202).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9202).ListItem.HdrType)">$INFO[Container(9202).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9202).ListItem.VideoResolution)">SDR</value>
@@ -3521,6 +3523,7 @@
     <variable name="ItemHdr9203">
         <value condition="String.IsEqual(Container(9203).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9203).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9203).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9203).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9203).ListItem.HdrType)">$INFO[Container(9203).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9203).ListItem.VideoResolution)">SDR</value>
@@ -3578,6 +3581,7 @@
     <variable name="ItemHdr9204">
         <value condition="String.IsEqual(Container(9204).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9204).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9204).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9204).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9204).ListItem.HdrType)">$INFO[Container(9204).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9204).ListItem.VideoResolution)">SDR</value>
@@ -3635,6 +3639,7 @@
     <variable name="ItemHdr9205">
         <value condition="String.IsEqual(Container(9205).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9205).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9205).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9205).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9205).ListItem.HdrType)">$INFO[Container(9205).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9205).ListItem.VideoResolution)">SDR</value>
@@ -3692,6 +3697,7 @@
     <variable name="ItemHdr9206">
         <value condition="String.IsEqual(Container(9206).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9206).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9206).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9206).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9206).ListItem.HdrType)">$INFO[Container(9206).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9206).ListItem.VideoResolution)">SDR</value>
@@ -3749,6 +3755,7 @@
     <variable name="ItemHdr9207">
         <value condition="String.IsEqual(Container(9207).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9207).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9207).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9207).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9207).ListItem.HdrType)">$INFO[Container(9207).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9207).ListItem.VideoResolution)">SDR</value>
@@ -3806,6 +3813,7 @@
     <variable name="ItemHdr9208">
         <value condition="String.IsEqual(Container(9208).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9208).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9208).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9208).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9208).ListItem.HdrType)">$INFO[Container(9208).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9208).ListItem.VideoResolution)">SDR</value>
@@ -3863,6 +3871,7 @@
     <variable name="ItemHdr9401">
         <value condition="String.IsEqual(Container(9401).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9401).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9401).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9401).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9401).ListItem.HdrType)">$INFO[Container(9401).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9401).ListItem.VideoResolution)">SDR</value>
@@ -3920,6 +3929,7 @@
     <variable name="ItemHdr9402">
         <value condition="String.IsEqual(Container(9402).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9402).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9402).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9402).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9402).ListItem.HdrType)">$INFO[Container(9402).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9402).ListItem.VideoResolution)">SDR</value>
@@ -3977,6 +3987,7 @@
     <variable name="ItemHdr9403">
         <value condition="String.IsEqual(Container(9403).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9403).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9403).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9403).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9403).ListItem.HdrType)">$INFO[Container(9403).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9403).ListItem.VideoResolution)">SDR</value>
@@ -4034,6 +4045,7 @@
     <variable name="ItemHdr9404">
         <value condition="String.IsEqual(Container(9404).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9404).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9404).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9404).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9404).ListItem.HdrType)">$INFO[Container(9404).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9404).ListItem.VideoResolution)">SDR</value>
@@ -4091,6 +4103,7 @@
     <variable name="ItemHdr9405">
         <value condition="String.IsEqual(Container(9405).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9405).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9405).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9405).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9405).ListItem.HdrType)">$INFO[Container(9405).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9405).ListItem.VideoResolution)">SDR</value>
@@ -4148,6 +4161,7 @@
     <variable name="ItemHdr9406">
         <value condition="String.IsEqual(Container(9406).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9406).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9406).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9406).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9406).ListItem.HdrType)">$INFO[Container(9406).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9406).ListItem.VideoResolution)">SDR</value>
@@ -4205,6 +4219,7 @@
     <variable name="ItemHdr9407">
         <value condition="String.IsEqual(Container(9407).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9407).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9407).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9407).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9407).ListItem.HdrType)">$INFO[Container(9407).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9407).ListItem.VideoResolution)">SDR</value>
@@ -4262,6 +4277,7 @@
     <variable name="ItemHdr9408">
         <value condition="String.IsEqual(Container(9408).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9408).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9408).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9408).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9408).ListItem.HdrType)">$INFO[Container(9408).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9408).ListItem.VideoResolution)">SDR</value>
@@ -4319,6 +4335,7 @@
     <variable name="ItemHdr9501">
         <value condition="String.IsEqual(Container(9501).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9501).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9501).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9501).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9501).ListItem.HdrType)">$INFO[Container(9501).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9501).ListItem.VideoResolution)">SDR</value>
@@ -4376,6 +4393,7 @@
     <variable name="ItemHdr9502">
         <value condition="String.IsEqual(Container(9502).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9502).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9502).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9502).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9502).ListItem.HdrType)">$INFO[Container(9502).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9502).ListItem.VideoResolution)">SDR</value>
@@ -4433,6 +4451,7 @@
     <variable name="ItemHdr9503">
         <value condition="String.IsEqual(Container(9503).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9503).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9503).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9503).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9503).ListItem.HdrType)">$INFO[Container(9503).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9503).ListItem.VideoResolution)">SDR</value>
@@ -4490,6 +4509,7 @@
     <variable name="ItemHdr9504">
         <value condition="String.IsEqual(Container(9504).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9504).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9504).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9504).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9504).ListItem.HdrType)">$INFO[Container(9504).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9504).ListItem.VideoResolution)">SDR</value>
@@ -4547,6 +4567,7 @@
     <variable name="ItemHdr9505">
         <value condition="String.IsEqual(Container(9505).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9505).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9505).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9505).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9505).ListItem.HdrType)">$INFO[Container(9505).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9505).ListItem.VideoResolution)">SDR</value>
@@ -4604,6 +4625,7 @@
     <variable name="ItemHdr9506">
         <value condition="String.IsEqual(Container(9506).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9506).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9506).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9506).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9506).ListItem.HdrType)">$INFO[Container(9506).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9506).ListItem.VideoResolution)">SDR</value>
@@ -4661,6 +4683,7 @@
     <variable name="ItemHdr9507">
         <value condition="String.IsEqual(Container(9507).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9507).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9507).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9507).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9507).ListItem.HdrType)">$INFO[Container(9507).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9507).ListItem.VideoResolution)">SDR</value>
@@ -4718,6 +4741,7 @@
     <variable name="ItemHdr9508">
         <value condition="String.IsEqual(Container(9508).ListItem.HdrType,dolbyvision)">DV</value>
         <value condition="String.IsEqual(Container(9508).ListItem.HdrType,hdr10)">HDR10</value>
+        <value condition="String.IsEqual(Container(9508).ListItem.HdrType,hdr10plus)">HDR10+</value>
         <value condition="String.IsEqual(Container(9508).ListItem.HdrType,hlg)">HLG</value>
         <value condition="!String.IsEmpty(Container(9508).ListItem.HdrType)">$INFO[Container(9508).ListItem.HdrType]</value>
         <value condition="!String.IsEmpty(Container(9508).ListItem.VideoResolution)">SDR</value>

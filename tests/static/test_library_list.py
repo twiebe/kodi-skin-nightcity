@@ -88,7 +88,7 @@ def test_a_row_names_the_title_and_the_chosen_details():
         assert [i.get('content') for i in layout.iter('include') if i.get('content')] == ['LibraryRow']
         labels = ' '.join(c.findtext('label') or '' for c in row.iter('control'))
         assert '$INFO[ListItem.Label]' in labels
-        assert '$VAR[LibraryDetails]' in labels  # tests/static/test_library_details.py
+        assert '$VAR[LibraryRowYear]' in labels  # the tags: tests/static/test_library_details.py
 
 
 def test_the_focused_row_glows_in_both_looks():
@@ -143,6 +143,23 @@ def test_the_title_column_starts_below_the_menu():
     assert int(_params(kicker)['top']) >= bottom
     tops = [int(c.findtext('top')) + int(c.findtext('height')) for c in include.iter('control') if c.findtext('top')]
     assert max(tops) <= 98 + 900  # the end of the rail
+
+
+def test_the_list_shows_the_poster_where_the_grid_shows_the_plot():
+    """The list has no art in its rows: the focused title's poster takes the plot's place."""
+    base = parse(ROOT / '1080i' / 'Includes_Base.xml')
+    include = next(i for i in base.iter('include') if i.get('name') == 'LibraryTitle')
+    plot = next(c for c in include.iter('control') if 'ListItem.Plot' in (c.findtext('label') or ''))
+    assert plot.findtext('visible') == '!$EXP[LibraryAsList]'
+    group = next(c for c in include.iter('control') if c.get('type') == 'group'
+                 and c.find("include[@content='CutCard']") is not None)
+    assert group.findtext('visible') == '$EXP[LibraryAsList]'
+    card = _params(group.find("include[@content='CutCard']"))
+    assert card['image'] == '$VAR[LibraryTitlePoster]'
+    assert card['item'] == 'Container(5000).ListItem'
+    assert int(group.findtext('top')) + 300 <= 98 + 900  # the end of the rail
+    poster = re.search(r'<variable name="LibraryTitlePoster">(.*?)</variable>', _variables(), re.S).group(1)
+    assert 'Container(5000).ListItem.Art(poster)' in poster
 
 
 def test_songs_show_format_and_bitrate():

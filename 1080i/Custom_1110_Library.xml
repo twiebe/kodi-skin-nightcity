@@ -83,6 +83,8 @@
                     <param name="color" value="$VAR[LibraryGridFocusColor]"/>
                     <param name="mute" value="$VAR[LibraryGridFocusColor]"/>
                     <param name="mark" value="$VAR[LibraryGridFocusColor]"/>
+                    <param name="tag" value="$VAR[LibraryRowTag]"/>
+                    <param name="tagtext" value="$VAR[LibraryRowTagText]"/>
                     <param name="scroll" value="Control.HasFocus(5000)"/>
                 </include>
             </focusedlayout>
