@@ -334,6 +334,20 @@
                 <include content="LookLabelCase">
                     <param name="text" value="$INFO[Container(5000).ListItem.Label]"/>
                 </include>
+                <visible>!$EXP[LibraryAsList]</visible>
+            </control>
+            <!-- the list's title in two lines at most, its row has it whole: room for a large poster -->
+            <control type="textbox">
+                <left>1431</left>
+                <top>510</top>
+                <width>$PARAM[width]</width>
+                <height>116</height>
+                <font>font_title</font>
+                <textcolor>text</textcolor>
+                <include content="LookLabelCase">
+                    <param name="text" value="$INFO[Container(5000).ListItem.Label]"/>
+                </include>
+                <visible>$EXP[LibraryAsList]</visible>
             </control>
             <control type="textbox">
                 <left>1431</left>
@@ -348,12 +362,17 @@
             <!-- the list has no art in its rows: the poster takes the plot's place -->
             <control type="group">
                 <left>1431</left>
-                <top>698</top>
-                <height>300</height>
+                <top>638</top>
+                <height>360</height>
                 <visible>$EXP[LibraryAsList]</visible>
                 <include content="CutCard">
                     <param name="image" value="$VAR[LibraryTitlePoster]"/>
                     <param name="item" value="Container(5000).ListItem"/>
+                    <param name="width" value="240"/>
+                    <param name="height" value="360"/>
+                    <param name="mask" value="ui/mask_240x360.png"/>
+                    <param name="glowwidth" value="288"/>
+                    <param name="glowheight" value="408"/>
                 </include>
             </control>
         </definition>
@@ -715,11 +734,12 @@
         </definition>
     </include>
 
-    <!-- Thin outlined tag for one technical fact (4K, HDR, 5.1), for a horizontal grouplist.
-         Pass a `visible` condition so empty facts disappear. -->
+    <!-- A filled tag for one technical fact (4K, HDR, 5.1), for a horizontal grouplist, its plate
+         the one of a list row's details (LookTagImage). Pass a `visible` condition so empty facts
+         disappear. -->
     <include name="Tag">
         <param name="label"/>
-        <param name="color" default="text_dim"/>
+        <param name="color" default="text"/>
         <param name="visible" default="true"/>
         <definition>
             <control type="button">

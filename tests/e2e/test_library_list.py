@@ -220,15 +220,17 @@ def test_the_filter_dialog_narrows_the_grid_and_the_header_says_so(library):
     builtin('SetFocus({})'.format(FILTER))
     action('select')
     _select_dialog()
-    wait_for('Integer.IsEqual(Container(6).NumItems,6) + Control.IsVisible(10)')
+    wait_for('Integer.IsEqual(Container(6).NumItems,6) + Control.IsVisible(14)')
     _group(5)
     action('down')
     wait_for('Control.HasFocus(9)')
     action('left')
-    wait_for('Control.HasFocus(10)')
+    wait_for('Control.HasFocus(14)')
+    # Kodi writes its yes/no labels into 10 to 12 of every dialog box (GUIDialogBoxBase): not there
+    wait_for('!String.IsEmpty(Control.GetLabel(14))')
     action('select', delay=1)
     wait_for('String.IsEmpty(Window(Home).Property(nc.libfilter.movies.path))')
-    _select('Window.IsActive(selectdialog) + Control.IsVisible(6) + !Control.IsVisible(10)')  # the groups again
+    _select('Window.IsActive(selectdialog) + Control.IsVisible(6) + !Control.IsVisible(14)')  # the groups again
     action('back', delay=1)
     wait_for('!Window.IsActive(selectdialog)')
     _count_is(3)
@@ -264,7 +266,7 @@ def test_shows_filter_by_genre_and_studio(library):
     wait_for('Control.HasFocus({})'.format(FILTER))
     action('select')
     _select_dialog()
-    wait_for('Integer.IsEqual(Container(6).NumItems,2) + !Control.IsVisible(10)')  # genre and studio, nothing chosen yet: no Clear
+    wait_for('Integer.IsEqual(Container(6).NumItems,2) + !Control.IsVisible(14)')  # genre and studio, nothing chosen yet: no Clear
     _group(1)
     action('select', delay=1)
     wait_for('Window.IsActive(selectdialog) + Integer.IsEqual(Container(3).NumItems,1)')
@@ -319,7 +321,7 @@ def test_left_takes_the_filter_dialogs_up_a_level_with_the_choice(library):
     assert true('Control.HasFocus(3)')  # Right stays in the list
     action('left', delay=1)
     _select_dialog()
-    wait_for('Integer.IsEqual(Container(6).NumItems,6) + Control.IsVisible(10)')  # the groups again, the choice taken
+    wait_for('Integer.IsEqual(Container(6).NumItems,6) + Control.IsVisible(14)')  # the groups again, the choice taken
     wait_for('!String.IsEmpty(Window(Home).Property(nc.libfilter.movies.path))')
     action('left', delay=1)
     wait_for('!Window.IsActive(selectdialog) + String.IsEmpty(Window(Home).Property(nc.select.ok))')

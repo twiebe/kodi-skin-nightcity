@@ -226,8 +226,8 @@ def test_the_filter_has_a_clear_button_left_of_ok():
     dialog = parse(ROOT / '1080i' / 'DialogSelect.xml')
     row = next(c for c in dialog.iter('control') if c.get('id') == '9001')
     ids = [i.find("param[@name='id']").get('value') for i in row.findall('include')]
-    assert ids.index('10') < ids.index('9')
-    clear = row.findall('include')[ids.index('10')]
+    assert ids.index('14') < ids.index('9')
+    clear = row.findall('include')[ids.index('14')]
     params = {p.get('name'): p.get('value') for p in clear.findall('param')}
     assert params['label'] == '$LOCALIZE[31508]'
     assert params['visible'] == '!String.IsEmpty({}) + !Control.IsVisible(5)'.format(CLEAR_FLAG)

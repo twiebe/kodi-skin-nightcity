@@ -19,7 +19,7 @@ from PIL import Image, ImageChops, ImageDraw, ImageFilter
 UI = pathlib.Path(__file__).resolve().parents[1] / 'skins' / 'confuse' / 'media' / 'ui'
 SCALE = 8
 CARD_RADIUS = 12  # 8 px at 1280 x 720
-CARD_SIZES = [(200, 300), (290, 435), (360, 540), (320, 180), (400, 225), (160, 220), (200, 200), (280, 280), (360, 360)]
+CARD_SIZES = [(200, 300), (240, 360), (290, 435), (360, 540), (320, 180), (400, 225), (160, 220), (200, 200), (280, 280), (360, 360)]
 GLOW_PAD = 10  # a padded texture keeps this much clear around its shape for the shadow
 
 

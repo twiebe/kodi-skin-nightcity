@@ -567,13 +567,13 @@
         </definition>
     </include>
 
-    <!-- A thin outlined tag for one technical fact -->
+    <!-- A filled tag for one technical fact, light on the dark plate -->
     <include name="LookTag">
         <param name="label"/>
         <definition>
             <font>font_caps_small</font>
-            <texturenofocus border="12" colordiffuse="border_dim">ui/cut_btn.png</texturenofocus>
-            <texturefocus border="12" colordiffuse="border_dim">ui/cut_btn.png</texturefocus>
+            <texturenofocus border="12" colordiffuse="state">ui/cut_btn_fill.png</texturenofocus>
+            <texturefocus border="12" colordiffuse="state">ui/cut_btn_fill.png</texturefocus>
             <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
         </definition>
     </include>

@@ -150,7 +150,7 @@ def radial_glow(width, height, cx, cy, radius):
 
 
 # sizes of the CutCard artwork: poster, big poster, hero poster, episode still, cast photo
-CARD_SIZES = [(200, 300), (290, 435), (360, 540), (320, 180), (160, 220), (200, 200), (280, 280), (360, 360)]
+CARD_SIZES = [(200, 300), (240, 360), (290, 435), (360, 540), (320, 180), (160, 220), (200, 200), (280, 280), (360, 360)]
 
 
 def hamburger(size, bar=5, gap=8):

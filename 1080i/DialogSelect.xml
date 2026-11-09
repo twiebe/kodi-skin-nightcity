@@ -90,9 +90,10 @@
                 </include>
                 <!-- the library filter's list of groups while a filter is set (nc.select.clear, scripts/
                      nightcity.py lib_filter): marks the click and closes the list, the script clears the
-                     filter and opens the list again -->
+                     filter and opens the list again; not 10 to 12, Kodi blanks their labels with its
+                     yes/no choices (GUIDialogBoxBase) -->
                 <include content="Button">
-                    <param name="id" value="10"/>
+                    <param name="id" value="14"/>
                     <param name="label" value="$LOCALIZE[31508]"/>
                     <param name="width" value="360"/>
                     <param name="onclick" value="SetProperty(nc.select.cleared,1,home)"/>
