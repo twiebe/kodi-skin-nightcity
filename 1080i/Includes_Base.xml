@@ -782,7 +782,7 @@
         <param name="textoffsetx" default="34"/>
         <!-- the colour without the focus in a look that ignores `color`: for a button that hides -->
         <param name="rest" default="border_dim"/>
-        <param name="plate" default="plate"/>
+        <param name="plate" default="surface_alt"/>
         <definition>
             <control type="button" id="$PARAM[id]">
                 <visible>$PARAM[visible]</visible>

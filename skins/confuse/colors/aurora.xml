@@ -7,8 +7,6 @@
     <color name="surface_alt">F020253A</color>
     <color name="border">FFFF7A59</color>
     <color name="border_dim">26FFFFFF</color>
-    <!-- Nightcity's button plate; Confuse's pills keep border_dim, this only names the token -->
-    <color name="plate">26FFFFFF</color>
     <color name="state">FF282D42</color>
     <color name="state_text">FFA6A9BA</color>
     <color name="state_fade">A0A6A9BA</color>

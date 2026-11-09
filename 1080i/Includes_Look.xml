@@ -269,7 +269,7 @@
         </definition>
     </include>
 
-    <!-- A card's frame, over its artwork and extras: bright with the focus, faint without -->
+    <!-- A card's frame, over its artwork and extras: with the focus only (and on the current one) -->
     <include name="LookCardFocusRing">
         <param name="width"/>
         <param name="height"/>
@@ -289,13 +289,6 @@
                 <height>$PARAM[height]</height>
                 <texture border="16" colordiffuse="focus">ui/cut.png</texture>
                 <visible>$PARAM[current]</visible>
-            </control>
-            <!-- unfocused the same frame, faint: the corners read on dark artwork too -->
-            <control type="image">
-                <width>$PARAM[width]</width>
-                <height>$PARAM[height]</height>
-                <texture border="16" colordiffuse="border_dim">ui/cut.png</texture>
-                <visible>$PARAM[unfocused]</visible>
             </control>
         </definition>
     </include>
@@ -324,7 +317,7 @@
         <!-- without the focus, in a look that gives a primary button no colour of its own -->
         <param name="rest" default="border_dim"/>
         <!-- the plate without the focus: a button that hides passes no colour (alpha 0) -->
-        <param name="plate" default="plate"/>
+        <param name="plate" default="surface_alt"/>
         <definition>
             <include>LookButtonFill</include>
             <include content="LookButtonOutline">
@@ -336,13 +329,13 @@
     <include name="LookButtonFill">
         <texturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturefocus>
     </include>
-    <!-- A button without the focus: a dark plate with a fine outline, light text on it (a primary
-         one cyan); `plate` colours both (colors/*.xml). -->
+    <!-- A button without the focus: a dark plate, light text on it (a primary one cyan); only the
+         tags are outlines. The name stays from when it was the outline. -->
     <include name="LookButtonOutline">
         <param name="color"/>
-        <param name="plate" default="plate"/>
+        <param name="plate" default="surface_alt"/>
         <definition>
-            <texturenofocus border="22" colordiffuse="$PARAM[plate]">ui/cut_btn_plate_pad.png</texturenofocus>
+            <texturenofocus border="22" colordiffuse="$PARAM[plate]">ui/cut_btn_fill_pad.png</texturenofocus>
         </definition>
     </include>
     <!-- The fill for a button that shows another one's focus: it has no focus itself -->
@@ -379,16 +372,16 @@
         <texture border="22" colordiffuse="accent">ui/cut_btn_glow.png</texture>
     </include>
 
-    <!-- A tile (settings groups, quick menu): the plate of a button, the focused fill with its glow, and both
+    <!-- A tile (settings groups, quick menu): the dark plate, the focused fill with its glow, and both
          for a tile that is a button itself, padded for the glow -->
     <include name="LookTileFrame">
-        <texture border="16" colordiffuse="plate">ui/cut_plate.png</texture>
+        <texture border="16" colordiffuse="surface_alt">ui/cut_fill.png</texture>
     </include>
     <include name="LookTileFocus">
         <texture border="26" colordiffuse="focus">ui/cut_fill_glow.png</texture>
     </include>
     <include name="LookTileButtonTextures">
-        <texturenofocus border="26" colordiffuse="plate">ui/cut_plate_pad.png</texturenofocus>
+        <texturenofocus border="26" colordiffuse="surface_alt">ui/cut_fill_pad.png</texturenofocus>
         <texturefocus border="26" colordiffuse="focus">ui/cut_fill_glow.png</texturefocus>
     </include>
 
@@ -487,12 +480,12 @@
         </definition>
     </include>
 
-    <!-- An entry of the top menu: focused a filled accent button, the shown page a plate like a button -->
+    <!-- An entry of the top menu: focused a filled accent button, the shown page a dark blue plate -->
     <include name="LookMenuTextures">
         <texturefocus border="22" colordiffuse="accent">ui/cut_btn_glow.png</texturefocus>
         <texturenofocus/>
         <alttexturefocus border="22" colordiffuse="accent">ui/cut_btn_glow.png</alttexturefocus>
-        <alttexturenofocus border="22" colordiffuse="plate">ui/cut_btn_plate_pad.png</alttexturenofocus>
+        <alttexturenofocus border="22" colordiffuse="surface_alt">ui/cut_btn_fill_pad.png</alttexturenofocus>
     </include>
 
     <!-- Dialog panel: opaque base (surface alone lets the window behind show through), cut-corner

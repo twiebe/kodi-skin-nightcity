@@ -101,8 +101,8 @@ def test_card_mask_fits_card_not_cropped_image():
 
 def test_every_card_is_cut():
     """Every card has the cut corners, focused or not: its artwork and the plate under it are cut
-    by the card's mask. An unfocused card has a faint frame in border_dim; the focus brings the
-    bright frame and the glow."""
+    by the card's mask. An unfocused card has no frame; the focus
+    brings the bright frame and the glow."""
     card = _card()
     art = [c for c in card.iter('control') if c.get('type') == 'image' and
            '$PARAM[image]' in (c.findtext('texture') or '')]
@@ -112,8 +112,7 @@ def test_every_card_is_cut():
     assert plates and all(c.find('texture').get('diffuse') == '$PARAM[mask]' for c in plates)
     frames = {c.findtext('visible'): c.find('texture').get('colordiffuse')
               for c in card.iter('control') if c.findtext('texture') == 'ui/cut.png'}
-    assert frames == {'$PARAM[focused]': 'focus', '![$PARAM[focused]] + ![$PARAM[current]]': 'border_dim',
-                      '[$PARAM[current]] + ![$PARAM[focused]]': 'focus'}
+    assert frames == {'$PARAM[focused]': 'focus', '[$PARAM[current]] + ![$PARAM[focused]]': 'focus'}
 
 
 DOG_EAR = 22  # px, legs of the unwatched mark

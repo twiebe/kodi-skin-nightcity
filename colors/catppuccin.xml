@@ -5,9 +5,6 @@
     <color name="petrol">FF313244</color>
     <color name="surface">E0313244</color>
     <color name="surface_alt">F045475A</color>
-    <!-- the plate of a button or tile: its texture is grey inside (fill = 0.4 x this, i.e.
-         surface_alt) and white on the outline (tools/make_textures.py plate) -->
-    <color name="plate">F0ACB2E1</color>
     <color name="border">FFCBA6F7</color>
     <color name="border_dim">40CBA6F7</color>
     <color name="state">FF494060</color>

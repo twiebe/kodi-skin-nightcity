@@ -460,9 +460,9 @@
                 <include>ChainBackGuard</include>
                 <itemlayout width="116" height="74">
                     <include content="MorePill">
-                        <param name="texture" value="ui/cut_btn_plate_pad.png"/>
+                        <param name="texture" value="ui/cut_btn_fill_pad.png"/>
                         <param name="color" value="border_dim"/>
-                        <param name="plate" value="plate"/>
+                        <param name="plate" value="surface_alt"/>
                         <param name="textcolor" value="text"/>
                     </include>
                 </itemlayout>
@@ -475,9 +475,9 @@
                         <param name="visible" value="Control.HasFocus(9003)"/>
                     </include>
                     <include content="MorePill">
-                        <param name="texture" value="ui/cut_btn_plate_pad.png"/>
+                        <param name="texture" value="ui/cut_btn_fill_pad.png"/>
                         <param name="color" value="border_dim"/>
-                        <param name="plate" value="plate"/>
+                        <param name="plate" value="surface_alt"/>
                         <param name="textcolor" value="text"/>
                         <param name="visible" value="!Control.HasFocus(9003)"/>
                     </include>
