@@ -363,6 +363,23 @@ LOG_DROP = re.compile(r'DEBUG::|Skipped \d+ duplicate|CWebserver|CheckIdle|GetIm
 
 
 @pytest.fixture(autouse=True)
+def _fps(request):
+    """A test marked fps(N) gets N frames a second while it runs, over kodi-dev's KODI_FPS_CAP
+    (kodi/swapcap.c reads temp/fps_cap of the Kodi folder): for what only shows for a moment.
+    Without the cap in the instance the file does nothing."""
+    marker = request.node.get_closest_marker('fps')
+    path = _data() / 'kodi' / 'temp' / 'fps_cap'
+    if marker:
+        path.write_text(str(marker.args[0]))
+        time.sleep(0.3)  # read again every 0.25 s
+    try:
+        yield
+    finally:
+        if marker:
+            path.unlink(missing_ok=True)
+
+
+@pytest.fixture(autouse=True)
 def _kodi_log_slice(request):
     """The lines of kodi.log a failed test ran against, as a section of its report: the
     window and chain events that explain a timeout, which the assertion alone never does."""
