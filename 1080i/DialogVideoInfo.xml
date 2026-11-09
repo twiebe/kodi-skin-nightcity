@@ -617,7 +617,6 @@
                     <param name="label" value="$LOCALIZE[31132]   [COLOR state_text]↑[/COLOR] $LOCALIZE[31131]$VAR[HintEpisodeDown]   [COLOR state_text]⏎[/COLOR] $LOCALIZE[31135]"/>
                     <!-- 619 (the grouplist) + 411: the footer line -->
                     <param name="top" value="411"/>
-                    <param name="width" value="1400"/>
                     <param name="height" value="34"/>
                     <param name="visible" value="Control.HasFocus(5100)"/>
                 </include>

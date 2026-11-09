@@ -53,8 +53,8 @@ key, then the level it leads to (`LevelHint` in `Includes_Base.xml`,
     turned a quarter to the left, so it runs along the edge and its key, an ↑ in the text,
     shows as ←. Also where the level lies on the right (the bar of the library and of the
     music window back to its menu): the key says which way, the edge stays the same;
-  - ↓ and ⏎ in the footer line at the bottom, left at the margin (left 64, top 1030), in the
-    player too. A footer names the keys of the focused row and may hold several directions:
+  - ↓ and ⏎ in the footer line at the bottom, centred (top 1030), as ↑ is centred at the top; in
+    the player too. A footer names the keys of the focused row and may hold several directions:
     the episodes of an info page have ←→ episode, ↑ season, ↓ cast, ⏎ select;
   - → at the right (none so far);
   - the footers of a settings page (the console's, the skin settings' slots) stay under their

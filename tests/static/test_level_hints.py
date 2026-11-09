@@ -2,7 +2,7 @@
 show it, one quiet line names the key, a glyph in the dimmed blue of a hint, and the level it
 leads to, muted. Where it stands follows its key: Up at the top (the path line, top 30; the
 player's top edge, top 140), Left up the left edge, written bottom to top (LevelHintLeft), Down
-and OK in the footer line at the bottom (left 64, top 1030), where the keys of the focused row
+and OK in the footer line at the bottom (centred, top 1030), where the keys of the focused row
 may stand together.
 
 Player levels: the seek bar over the bare video (OK opens the controls; Up and Down skip
@@ -86,11 +86,11 @@ def _all_hints():
 
 def test_hint_look():
     """The key in the dimmed blue of a hint, the label muted, one line of small caps; a shadow
-    keeps it readable over bright video. By default in the footer line, left at the margin; it
+    keeps it readable over bright video. By default in the footer line, centred; it
     fades out, then in."""
     include = _include('LevelHint')
     defaults = {p.get('name'): p.get('default') for p in include.findall('param')}
-    assert (defaults['top'], defaults['left'], defaults['width'], defaults['align']) == (BOTTOM, '64', '1792', 'left')
+    assert (defaults['top'], defaults['left'], defaults['width'], defaults['align']) == (BOTTOM, '0', '1920', 'center')
     assert defaults['animate'] == 'true'  # the player's hints fade over the video
     group = include.find('definition/control')
     assert group.get('type') == 'group'
@@ -181,7 +181,7 @@ def test_where_a_hint_stands_follows_its_key():
         else:
             assert key in ('↓', '⏎', '←→', '↑↓'), (name, hid)
             assert top == int(BOTTOM), (name, hid, top)
-            assert (params.get('left', '64'), params.get('align', 'left')) == ('64', 'left'), (name, hid)
+            assert (params.get('left', '0'), params.get('width', '1920'), params.get('align', 'center')) == ('0', '1920', 'center'), (name, hid)
 
 
 def test_glyphs_only_in_hints():

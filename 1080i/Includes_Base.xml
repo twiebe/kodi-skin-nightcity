@@ -247,8 +247,8 @@
     <!-- A key hint (DESIGN.md, Key hints): the key that leads to another level, in the dimmed
          blue of a hint, and the level it leads to, muted; one line of small caps. Up stands at
          the top: centred on the path line of a page (top=30), on the player's top edge
-         (top=140). Down and OK stand in the footer line at the bottom, left at the margin
-         (left=64, top=1030, align left); a footer may name several keys of the focused row.
+         (top=140). Down and OK stand in the footer line at the bottom, centred (top=1030); a
+         footer may name several keys of the focused row.
          Left has its own include (LevelHintLeft). A shadow keeps it readable over bright
          video. It fades with its window and its condition (LevelHintFade). -->
     <include name="LevelHint">
@@ -256,10 +256,10 @@
         <param name="key" default="↓"/>
         <param name="label"/>
         <param name="top" default="1030"/>
-        <param name="left" default="64"/>
-        <param name="width" default="1792"/>
+        <param name="left" default="0"/>
+        <param name="width" default="1920"/>
         <param name="height" default="36"/>
-        <param name="align" default="left"/>
+        <param name="align" default="center"/>
         <param name="visible" default="true"/>
         <param name="animate" default="true"/>
         <definition>
