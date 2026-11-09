@@ -13,7 +13,7 @@ DESIGN.md (colour guide, tabs switch on focus, ...); the development setup is in
 ### When to run the e2e tests
 
 The e2e suite checks behaviour (navigation, focus, what a key does), not looks. A full run takes
-about 12 minutes on the kodi-dev pool.
+about 5 minutes on a kodi-dev pool of 12 workers (`./kdev pool up 12`), about 7 on 8.
 
 - **Looks only** (colours, positions, sizes, textures, fonts, strings): unit/static and a
   screenshot. No e2e, also not before a release.
@@ -26,13 +26,22 @@ about 12 minutes on the kodi-dev pool.
 Full run (the pool mounts the main checkout, do not edit it while the run is on):
 
 ```
+.venv/bin/python tools/e2e.py              # -n N for N workers, default every worker that answers
+```
+
+It runs what failed once more on its own (one worker, no load) and names flakes (failed under
+load, passed alone) apart from failures (failed both times); `_build/e2e/history.jsonl` keeps
+every run, and the report lists the tests that flaked most often. Files or `-k` narrow the run.
+The plain pytest call underneath:
+
+```
 KDEV_POOL=1 .venv/bin/python -m pytest tests/e2e -m e2e -n auto --dist loadfile -q -p no:cacheprovider -rfEs
 ```
 
 The chain tests need the fork's TMDb Helper. Each pool copies it from its own template: after a new helper release replace `instances/<pool>/data/kodi-template/addons/plugin.video.themoviedb.helper` in kodi-dev, then `kdev pool reset`. The Jellyfin add-on is mounted from the `/workspaces/jellyfin-kodi` checkout, which must stay on its `release` branch.
 
-A test that fails in the full run but passes when its file is run again on its own is a flake:
-say so in the report, do not hide it.
+A test that fails in the full run but passes when run again on its own is a flake: say so in
+the report, do not hide it. A test that flakes again and again (history) is worth making sturdy.
 
 ### The Confuse skin
 
