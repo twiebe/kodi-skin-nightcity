@@ -36,7 +36,10 @@ key, then the level it leads to (`LevelHint` in `Includes_Base.xml`,
   library's, Home's top menu). Where the level depends on how the screen was opened, the
   hint names it from there (`HintInfoBack`, `HintWindowBack` in `Variables.xml`: the page of
   Home, the library, the video, the page before in a TMDb chain), "back" only where nothing
-  tells. A footer of keys acting on the spot (skin settings slots: ⏎ choose, → option,
+  tells. Where Left is Kodi's Back through folders (the add-on browser's list, the file
+  manager's left pane) it names the folder above as "parent folder", for Kodi does not name it,
+  and the window before at the top of the folders (`HintAddonsBack`, `HintFilesBack`); the file
+  manager's right pane names the left one by its folder, as written over it. A footer of keys acting on the spot (skin settings slots: ⏎ choose, → option,
   ↑↓ move, ⏎ drop; the console: ⏎ open) names the action.
 - **Look:** the key in the dimmed blue of a hint (`state_text`), the label muted
   (`text_mute`), small caps (`font_caps_small`, `LookLabelCase`), a shadow over video.
@@ -60,7 +63,7 @@ key, then the level it leads to (`LevelHint` in `Includes_Base.xml`,
   - the footers of a settings page (the console's, the skin settings' slots) stay under their
     description.
 - No hint where the level is in sight anyway: Home's top menu over the rows, the queue under
-  the music OSD, the second pane of the file manager, the tabs over their lists.
+  the music OSD, the tabs over their lists.
 
 ### The position bar of the library grid
 

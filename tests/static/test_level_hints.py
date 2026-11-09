@@ -377,7 +377,12 @@ WINDOW_HINTS = {
     'EventLog.xml': [
         ('9059', '←', '$VAR[HintWindowBack]', 'Control.HasFocus(50)'),
         ('9058', '←', '$LOCALIZE[14111]', 'ControlGroup(9000).HasFocus()')],
-    'AddonBrowser.xml': [('9058', '←', '$INFO[Container.FolderName]', 'ControlGroup(9000).HasFocus()')],
+    'AddonBrowser.xml': [
+        ('9059', '←', '$VAR[HintAddonsBack]', 'Control.HasFocus(50)'),
+        ('9058', '←', '$INFO[Container.FolderName]', 'ControlGroup(9000).HasFocus()')],
+    'FileManager.xml': [
+        ('9059', '←', '$VAR[HintFilesBack]', 'Control.HasFocus(20)'),
+        ('9058', '←', '$INFO[Control.GetLabel(101)]', 'Control.HasFocus(21)')],
     'SettingsSystemInfo.xml': [('9059', '←', '$VAR[HintWindowBack]', 'true')],
     'MyWeather.xml': [('9059', '↑', '$VAR[HintWindowBack]', 'true')],
     'Custom_1110_Library.xml': [
@@ -425,6 +430,9 @@ def test_the_keys_of_the_window_hints():
             ('EventLog.xml', '50', 'onleft', 'Action(Back)'),
             ('EventLog.xml', '9000', 'onleft', '50'),
             ('AddonBrowser.xml', '9000', 'onleft', '50'),
+            ('AddonBrowser.xml', '50', 'onleft', 'Action(Back)'),
+            ('FileManager.xml', '20', 'onleft', 'Action(Back)'),
+            ('FileManager.xml', '21', 'onleft', '20'),
             ('SettingsSystemInfo.xml', '9000', 'onleft', 'Action(Back)'),
             ('MyWeather.xml', '500', 'onup', 'Action(Back)'),
             ('Custom_1110_Library.xml', '5100', 'onleft', '5000'),
@@ -480,3 +488,15 @@ def test_footers_look_like_the_hints():
         assert (label.findtext('font'), label.findtext('textcolor')) == ('font_caps_small', 'text_mute'), name
         assert label.findtext('label').startswith('[UPPERCASE]'), name
     assert [v for _, v in _variable('HomePagesHint')] == ['$LOCALIZE[31261]', '$LOCALIZE[31260]']
+
+
+def test_back_through_folders():
+    """Where Left is Kodi's Back through folders (the add-on browser's list, the file manager's
+    left pane) the hint names the folder above, "parent folder", since Kodi does not name it,
+    and at the top of the folders the window before, which Back goes to there: the add-on
+    browser's top is addons://, the file manager's pane shows "Root" (Kodi's 20108) over it."""
+    assert _string('31480') == 'parent folder'
+    assert _variable('HintAddonsBack') == [('String.IsEqual(Container.FolderPath,addons://)', '$VAR[HintWindowBack]'),
+                                           (None, '$LOCALIZE[31480]')]
+    assert _variable('HintFilesBack') == [('String.IsEqual(Control.GetLabel(101),$LOCALIZE[20108])', '$VAR[HintWindowBack]'),
+                                          (None, '$LOCALIZE[31480]')]

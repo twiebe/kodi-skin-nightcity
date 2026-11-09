@@ -86,6 +86,16 @@
         <value condition="Window.Previous(settings)">$LOCALIZE[5]</value>
         <value>$LOCALIZE[31470]</value>
     </variable>
+    <!-- Left on a list where it is Back (the add-on browser, the file manager's left pane): a
+         folder up, the window before at the top; Kodi does not name the folder above -->
+    <variable name="HintAddonsBack">
+        <value condition="String.IsEqual(Container.FolderPath,addons://)">$VAR[HintWindowBack]</value>
+        <value>$LOCALIZE[31480]</value>
+    </variable>
+    <variable name="HintFilesBack">
+        <value condition="String.IsEqual(Control.GetLabel(101),$LOCALIZE[20108])">$VAR[HintWindowBack]</value>
+        <value>$LOCALIZE[31480]</value>
+    </variable>
     <!-- Up from the top of an info page: the page before in a TMDb chain, else the window
          under it -->
     <variable name="HintInfoBack">

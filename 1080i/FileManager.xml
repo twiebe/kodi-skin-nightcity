@@ -7,6 +7,21 @@
         <include content="StatusBar">
             <param name="title" value="$LOCALIZE[10003]"/>
         </include>
+        <!-- Left on the left pane is Back: a folder up, out of the window at the top
+             (HintFilesBack) -->
+        <include content="LevelHintLeft">
+            <param name="id" value="9059"/>
+            <param name="label" value="$VAR[HintFilesBack]"/>
+            <param name="visible" value="!System.HasActiveModalDialog + Control.HasFocus(20)"/>
+            <param name="animate" value="!Player.HasVideo"/>
+        </include>
+        <!-- Left from the right pane goes to the left one: its folder, as over it (101) -->
+        <include content="LevelHintLeft">
+            <param name="id" value="9058"/>
+            <param name="label" value="$INFO[Control.GetLabel(101)]"/>
+            <param name="visible" value="!System.HasActiveModalDialog + Control.HasFocus(21)"/>
+            <param name="animate" value="!Player.HasVideo"/>
+        </include>
         <!-- the content fades in on open; background and status line stay -->
         <control type="group">
             <include>WindowFade</include>

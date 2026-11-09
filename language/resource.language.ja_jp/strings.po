@@ -1109,6 +1109,10 @@ msgctxt "#31479"
 msgid "previous page"
 msgstr "前のページ"
 
+msgctxt "#31480"
+msgid "parent folder"
+msgstr "上のフォルダー"
+
 msgctxt "#31477"
 msgid "Home"
 msgstr "ホーム"

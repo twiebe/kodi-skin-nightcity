@@ -1107,6 +1107,10 @@ msgctxt "#31479"
 msgid "previous page"
 msgstr "pagina precedente"
 
+msgctxt "#31480"
+msgid "parent folder"
+msgstr "cartella superiore"
+
 msgctxt "#31477"
 msgid "Home"
 msgstr "Home"
