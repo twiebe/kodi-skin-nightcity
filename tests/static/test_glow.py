@@ -32,7 +32,7 @@ TEXTURE_TAGS = ('texture', 'texturefocus', 'texturenofocus', 'alttexturefocus', 
 # '#n' is the n-th grouplist of a file without id.
 BEFORE = {
     ('AddonBrowser.xml', '9000'): ('1440', '100', '400', '600', '0'),
-    ('Custom_1110_Library.xml', '5100'): ('1431', '108', '439', '334', '16'),
+    ('Custom_1110_Library.xml', '5100'): ('1431', '719', '439', '334', '16'),
     ('Custom_1151_NextEpisode.xml', '1153'): ('856', '952', '1000', '54', '12'),
     ('DialogAddonInfo.xml', '9000'): ('40', '760', '1520', '54', '16'),
     ('DialogAddonSettings.xml', '3'): ('40', '84', '400', '720', '0'),

@@ -3,6 +3,7 @@ and studio (scripts/nightcity.py lib_filter). The grid stays the grid: one panel
 layouts, so the bar, the click and the counter work in both."""
 import importlib.util
 import re
+import xml.etree.ElementTree as ET
 
 from conftest import ROOT, parse
 
@@ -133,22 +134,37 @@ def test_the_filter_makes_the_path_and_the_header():
         assert 'Window(Home).Property(nc.libfilter.{}.label)'.format(library) in title
 
 
-def test_the_title_column_starts_below_the_menu():
+def test_the_title_column_stands_above_the_menu():
+    """Kicker, title and poster or plot on top of the column, the menu below them: its last button
+    ends level with the list's last row, also with four buttons (a vertical grouplist's "right" is
+    its bottom)."""
     menu = _controls()['5100']
-    bottom = int(menu.findtext('top')) + int(menu.findtext('height'))
+    top = int(menu.findtext('top'))
     assert int(menu.findtext('height')) >= 5 * 74 - 4 * 4
+    assert menu.findtext('align') == 'right'
+    panel = _controls()['5000']
+    # the 16th row's tags end 69 px into it (seen on screen); the button is padded 10 px for its glow
+    assert top + int(menu.findtext('height')) - 10 == int(panel.findtext('top')) + 15 * 60 + 69
     base = parse(ROOT / '1080i' / 'Includes_Base.xml')
     include = next(i for i in base.iter('include') if i.get('name') == 'LibraryTitle')
     kicker = next(i for i in include.iter('include') if i.get('content') == 'Kicker')
-    assert int(_params(kicker)['top']) >= bottom
-    tops = [int(c.findtext('top')) + int(c.findtext('height')) for c in include.iter('control') if c.findtext('top')]
-    assert max(tops) <= 98 + 900  # the end of the rail
+    assert int(_params(kicker)['top']) <= 110
+    ends = [int(c.findtext('top')) + int(c.findtext('height')) for c in include.iter('control') if c.findtext('top')]
+    assert max(ends) <= top + 10 - 24  # a gap above the menu's first button (padded 10 px)
 
 
 def test_the_list_shows_the_poster_where_the_grid_shows_the_plot():
-    """The list has no art in its rows: the focused title's poster takes the plot's place."""
+    """The list has no art in its rows: the focused title's poster takes the plot's place, right
+    below the title, however many lines that has (a textbox of auto height in a grouplist)."""
     base = parse(ROOT / '1080i' / 'Includes_Base.xml')
     include = next(i for i in base.iter('include') if i.get('name') == 'LibraryTitle')
+    column = next(c for c in include.iter('control') if c.get('type') == 'grouplist')
+    assert column.findtext('orientation') == 'vertical'
+    children = column.findall('control')
+    titles = [c for c in children if 'ListItem.Label' in ET.tostring(c, encoding='unicode')]
+    assert [c.findtext('height') for c in titles] == ['auto', 'auto']
+    assert children.index(titles[-1]) < len(children) - 2  # plot and poster follow the titles
+    listed = max(int(c.find('height').get('max')) for c in titles if c.findtext('visible') == '$EXP[LibraryAsList]')
     plot = next(c for c in include.iter('control') if 'ListItem.Plot' in (c.findtext('label') or ''))
     assert plot.findtext('visible') == '!$EXP[LibraryAsList]'
     group = next(c for c in include.iter('control') if c.get('type') == 'group'
@@ -157,7 +173,8 @@ def test_the_list_shows_the_poster_where_the_grid_shows_the_plot():
     card = _params(group.find("include[@content='CutCard']"))
     assert card['image'] == '$VAR[LibraryTitlePoster]'
     assert card['item'] == 'Container(5000).ListItem'
-    assert int(group.findtext('top')) + 300 <= 98 + 900  # the end of the rail
+    assert group in children
+    assert listed + int(column.findtext('itemgap')) + int(group.findtext('height')) <= int(column.findtext('height'))
     poster = re.search(r'<variable name="LibraryTitlePoster">(.*?)</variable>', _variables(), re.S).group(1)
     assert 'Container(5000).ListItem.Art(poster)' in poster
 

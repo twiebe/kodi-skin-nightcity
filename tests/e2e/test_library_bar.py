@@ -387,13 +387,13 @@ def _edges_at_the_column_end(path):
     """How much the rows differ at the right end of the wide menu: its frames, or background."""
     image = Image.open(path).convert('L')
     scale = image.width / 1920
-    strip = image.crop((int(1810 * scale), int(100 * scale), int(1850 * scale), int(250 * scale)))
+    strip = image.crop((int(1810 * scale), int(800 * scale), int(1850 * scale), int(1040 * scale)))
     rows = [sum(strip.crop((0, y, strip.width, y + 1)).getdata()) / strip.width for y in range(strip.height)]
     return max(rows) - min(rows)
 
 
 def test_the_menu_is_narrow_only_while_the_bar_has_the_focus(library):
-    """The middle stop: the cursor is far below the buttons, so only the menu can be in this strip."""
+    """The middle stop: the cursor stays clear of the buttons at the foot, so only the menu can be in this strip."""
     _open()
     time.sleep(0.3)
     grid = _edges_at_the_column_end(screenshot('library-bar-menu-wide'))

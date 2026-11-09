@@ -118,10 +118,13 @@
         </control>
         <control type="grouplist" id="5100">
             <left>1421</left>
-            <top>98</top>
+            <top>709</top>
             <width>459</width>
             <height>354</height>
             <orientation>vertical</orientation>
+            <!-- below the focused title, its last button level with the list's last row: "right" is
+                 the bottom in a vertical grouplist, so the posters' four buttons end there too -->
+            <align>right</align>
             <itemgap>-4</itemgap>
             <onleft>5000</onleft>
             <onright condition="!String.IsEmpty(Window(Home).Property(nc.lib.bar))">5200</onright>
