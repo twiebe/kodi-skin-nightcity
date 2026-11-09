@@ -480,40 +480,41 @@ def test_the_details_button_is_on_the_list_only(library):
     builtin('Skin.SetString(nc.libview.movies,list)')
     wait_for('Control.IsVisible({})'.format(DETAILS))
     label = info('Control.GetLabel({})'.format(DETAILS))['Control.GetLabel({})'.format(DETAILS)].lower()
-    assert 'year, runtime' in label, label
+    assert 'runtime, resolution' in label, label
 
 
 def test_the_details_dialog_chooses_what_a_row_shows(library):
-    """Year and runtime by default; Left confirms the ticks, Back leaves them as they were."""
+    """Runtime, resolution and channels by default; Left confirms the ticks, Back leaves them as
+    they were."""
     builtin('Skin.SetString(nc.libview.movies,list)')
     _open()
     screenshot('library-details-default')
     _details_dialog()
     wait_for('Integer.IsEqual(Container(3).NumItems,7) + !Control.IsVisible(7)')
-    assert _ticked(7) == [0, 1]
+    assert _ticked(7) == [1, 3, 6]
     screenshot('library-details-dialog')
     builtin('SetFocus(3,2,absolute)')  # rating
     wait_for('Integer.IsEqual(Container(3).CurrentItem,3)')
     action('select')
     action('left', delay=1)
-    wait_for('!Window.IsActive(selectdialog) + String.IsEqual(Skin.String(nc.libdetails.movies),year.runtime.rating)')
+    wait_for('!Window.IsActive(selectdialog) + String.IsEqual(Skin.String(nc.libdetails.movies),runtime.rating.res.channels)')
     label = info('Control.GetLabel({})'.format(DETAILS))['Control.GetLabel({})'.format(DETAILS)].lower()
     assert 'rating' in label, label
     assert true('String.IsEmpty(Skin.String(nc.libdetails.tvshows))')
     # Back keeps what there was
     _details_dialog()
-    assert _ticked(7) == [0, 1, 2]
-    action('select')  # year off
+    assert _ticked(7) == [1, 2, 3, 6]
+    action('select')  # year on
     action('back', delay=1)
     wait_for('!Window.IsActive(selectdialog)')
-    wait_for('!Window.IsActive(selectdialog) + String.IsEqual(Skin.String(nc.libdetails.movies),year.runtime.rating)')
+    wait_for('!Window.IsActive(selectdialog) + String.IsEqual(Skin.String(nc.libdetails.movies),runtime.rating.res.channels)')
 
 
 def test_every_detail_and_none(library):
     builtin('Skin.SetString(nc.libview.movies,list)')
     _open()
     _details_dialog()
-    for i in range(2, 7):
+    for i in (0, 2, 4, 5):  # the ones the default leaves out
         builtin('SetFocus(3,{},absolute)'.format(i))
         wait_for('Integer.IsEqual(Container(3).CurrentItem,{})'.format(i + 1))
         action('select')

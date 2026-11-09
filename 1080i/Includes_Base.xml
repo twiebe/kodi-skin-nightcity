@@ -10,18 +10,18 @@
     <expression name="LibraryLayoutReady">!String.IsEmpty(Window(Home).Property(nc.lib.layout))</expression>
     <expression name="LibraryAsList">[String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.IsEqual(Skin.String(nc.libview.tvshows),list)] | [!String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.IsEqual(Skin.String(nc.libview.movies),list)]</expression>
     <!-- the details a row of the list shows (scripts/nightcity.py lib_details): the keys in
-         nc.libdetails.<library>, empty for the default (year and runtime, a show's year and episodes).
+         nc.libdetails.<library>, empty for the default (runtime, resolution and channels, a show's year and episodes).
          Skin strings only, so Kodi works them out once a frame, not per row -->
-    <expression name="LibraryDetailYear">[String.IsEqual(Window(Home).Property(nc.library),tvshows) + [String.IsEmpty(Skin.String(nc.libdetails.tvshows)) | String.Contains(Skin.String(nc.libdetails.tvshows),year)]] | [!String.IsEqual(Window(Home).Property(nc.library),tvshows) + [String.IsEmpty(Skin.String(nc.libdetails.movies)) | String.Contains(Skin.String(nc.libdetails.movies),year)]]</expression>
+    <expression name="LibraryDetailYear">[String.IsEqual(Window(Home).Property(nc.library),tvshows) + [String.IsEmpty(Skin.String(nc.libdetails.tvshows)) | String.Contains(Skin.String(nc.libdetails.tvshows),year)]] | [!String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.Contains(Skin.String(nc.libdetails.movies),year)]</expression>
     <expression name="LibraryDetailRuntime">!String.IsEqual(Window(Home).Property(nc.library),tvshows) + [String.IsEmpty(Skin.String(nc.libdetails.movies)) | String.Contains(Skin.String(nc.libdetails.movies),runtime)]</expression>
     <expression name="LibraryDetailRating">[String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.Contains(Skin.String(nc.libdetails.tvshows),rating)] | [!String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.Contains(Skin.String(nc.libdetails.movies),rating)]</expression>
     <expression name="LibraryDetailSeasons">String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.Contains(Skin.String(nc.libdetails.tvshows),seasons)</expression>
     <expression name="LibraryDetailEpisodes">String.IsEqual(Window(Home).Property(nc.library),tvshows) + [String.IsEmpty(Skin.String(nc.libdetails.tvshows)) | String.Contains(Skin.String(nc.libdetails.tvshows),episodes)]</expression>
     <expression name="LibraryDetailStudio">String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.Contains(Skin.String(nc.libdetails.tvshows),studio)</expression>
-    <expression name="LibraryDetailRes">!String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.Contains(Skin.String(nc.libdetails.movies),res)</expression>
+    <expression name="LibraryDetailRes">!String.IsEqual(Window(Home).Property(nc.library),tvshows) + [String.IsEmpty(Skin.String(nc.libdetails.movies)) | String.Contains(Skin.String(nc.libdetails.movies),res)]</expression>
     <expression name="LibraryDetailHdr">!String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.Contains(Skin.String(nc.libdetails.movies),hdr)</expression>
     <expression name="LibraryDetailAudio">!String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.Contains(Skin.String(nc.libdetails.movies),audio)</expression>
-    <expression name="LibraryDetailChannels">!String.IsEqual(Window(Home).Property(nc.library),tvshows) + String.Contains(Skin.String(nc.libdetails.movies),channels)</expression>
+    <expression name="LibraryDetailChannels">!String.IsEqual(Window(Home).Property(nc.library),tvshows) + [String.IsEmpty(Skin.String(nc.libdetails.movies)) | String.Contains(Skin.String(nc.libdetails.movies),channels)]</expression>
     <!-- Full screen page: base colour and the petrol glow top right. Never a hole, with or
          without fanart (FanartBackdrop goes on top of this). -->
     <include name="Background">

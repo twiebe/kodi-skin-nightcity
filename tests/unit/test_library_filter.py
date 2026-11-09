@@ -171,7 +171,7 @@ def test_the_details_each_library_offers_in_the_order_of_the_row():
 
 
 def test_by_default_year_and_runtime_of_a_movie_year_and_episodes_of_a_show():
-    assert nightcity.lib_details_load('movies', '') == ['year', 'runtime']
+    assert nightcity.lib_details_load('movies', '') == ['runtime', 'res', 'channels']
     assert nightcity.lib_details_load('tvshows', '') == ['year', 'episodes']
 
 

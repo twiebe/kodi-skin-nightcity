@@ -2955,7 +2955,7 @@ LIB_DETAILS = {
                ('audio', 31506), ('channels', 31507)],
     'tvshows': [('year', 31119), ('rating', 31121), ('seasons', 31603), ('episodes', 31606), ('studio', 31128)],
 }
-LIB_DETAILS_DEFAULT = {'movies': ['year', 'runtime'], 'tvshows': ['year', 'episodes']}
+LIB_DETAILS_DEFAULT = {'movies': ['runtime', 'res', 'channels'], 'tvshows': ['year', 'episodes']}
 LIB_DETAILS_NONE = 'none'
 
 
