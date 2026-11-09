@@ -15,6 +15,8 @@ pytestmark = pytest.mark.e2e
 
 RUNNING = '!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))'
 IDLE = 'String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))'
+# Jellyfin for Kodi's mark of a finished sync (library.py save_last_sync), by its words: its line moves
+SYNC_MARK = re.compile(r'jellyfin_kodi/library\.py:\d+ --\[ sync/')
 # TMDb Helper's manager has seen the page it opened at the chain's position (the fork's helper)
 SEEN = 'String.IsEqual(Window(Home).Property(TMDbHelper.Position.Seen),Window(Home).Property(TMDbHelper.Position))'
 
@@ -148,16 +150,21 @@ def matrix(home):
     if rpc('Player.GetActivePlayers'):
         offset = _log().stat().st_size
         rpc('Player.Stop', {'playerid': 1})
-        # Jellyfin for Kodi takes the played movie's new state a few seconds later; the library
-        # update that follows reloads every list, a click of the next test in it does nothing
+        # Jellyfin for Kodi takes the played movie's new state a moment later (its sync mark); a
+        # library update after it reloads every list, and a click of the next test in it does
+        # nothing. The echo of our own playback brings no update: then the mark is the end
         end = time.time() + 20
+        synced = None
         while time.time() < end:
             text = _log_since(offset)
-            sync = text.find('jellyfin_kodi/library.py:553 --[ sync/')
-            if sync >= 0 and 'CRecentlyAddedJob::UpdateVideos' in text[sync:]:
+            sync = SYNC_MARK.search(text)
+            if sync and 'CRecentlyAddedJob::UpdateVideos' in text[sync.end():]:
                 break
-            time.sleep(0.5)
-        time.sleep(1)
+            if sync and synced is None:
+                synced = time.time()
+            if synced is not None and time.time() - synced > 1.5:  # the update follows at once
+                break
+            time.sleep(0.2)
     # the OSD's script runs as long as the OSD is open, the info script as long as its page: a
     # test that ends with them open would wait for nothing
     builtin('Dialog.Close(all,true)')
