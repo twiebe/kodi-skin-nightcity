@@ -2799,7 +2799,7 @@ def lib_layout():
 def lib_filter():
     """The filter dialog of the library grid: a list of the groups with what is chosen in each,
     OK on one its multi-select; every change applies at once, the grid follows behind the
-    dialog. Back closes it."""
+    dialog. Its Clear button clears the filter, Back closes it."""
     import xbmc
     library = _lib_library()
     choice = lib_filter_load(_home().getProperty('nc.libfilter.' + library))
@@ -2810,7 +2810,8 @@ def lib_filter():
     try:
         _lib_filter_dialogs(library, choice, groups, text)
     finally:
-        _home().clearProperty('nc.select.ok')
+        for prop in ('nc.select.ok', 'nc.select.clear', 'nc.select.cleared'):
+            _home().clearProperty(prop)
 
 
 def _lib_filter_dialogs(library, choice, groups, text):
@@ -2825,16 +2826,21 @@ def _lib_filter_dialogs(library, choice, groups, text):
             chosen = dict(_lib_filter_chosen(library, {group: choice.get(group)}))
             item.setLabel2(', '.join(label for _, label, _ in chosen.get(group, [])) or text(31503))
             items.append(item)
+        # the Clear button while a filter is set (DialogSelect.xml): it marks the click and closes
+        home = _home()
         if lib_filter_path(library, choice):
-            items.append(xbmcgui.ListItem(text(31508)))
+            home.setProperty('nc.select.clear', '1')
+        else:
+            home.clearProperty('nc.select.clear')
+        home.clearProperty('nc.select.cleared')
         picked = xbmcgui.Dialog().select(text(31502), items, preselect=current, useDetails=True)
-        if picked < 0:
-            return
-        current = picked
-        if picked >= len(groups):  # clear filter
+        if home.getProperty('nc.select.cleared'):
             choice, current = {}, 0
             _lib_filter_apply(library, choice)
             continue
+        if picked < 0:
+            return
+        current = picked
         group = groups[picked]
         if group in LIB_FILTER_FREE:
             if group not in free:

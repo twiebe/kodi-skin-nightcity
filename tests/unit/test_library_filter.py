@@ -280,3 +280,66 @@ def test_a_details_change_redraws_every_row(monkeypatch):
     assert ('clear', 'nc.lib.layout') in calls[written:]
     assert calls.index(('set', 'nc.lib.layout', '1')) > calls.index(('clear', 'nc.lib.layout'))
     assert props['nc.lib.layout'] == '1'
+
+
+def _filter_dialog(monkeypatch, props, answers):
+    """lib_filter against a fake Kodi: ANSWERS are what each select returns, a callable gets the
+    properties first (the Clear button sets one and closes the dialog). Returns what each select
+    saw: its items' labels and whether Clear was shown."""
+    import sys
+    import types
+    seen = []
+
+    class Item:
+        def __init__(self, label):
+            self.label = label
+
+        def setLabel2(self, label):
+            pass
+
+    def select(heading, items, **kwargs):
+        seen.append(([i.label for i in items], props.get('nc.select.clear', '')))
+        answer = answers.pop(0)
+        return answer(props) if callable(answer) else answer
+
+    class Home:
+        def getProperty(self, key):
+            return props.get(key, '')
+
+        def setProperty(self, key, value):
+            props[key] = value
+
+        def clearProperty(self, key):
+            props.pop(key, None)
+    xbmc = types.SimpleNamespace(getLocalizedString=lambda n: str(n), executebuiltin=lambda c: None,
+                                 getInfoLabel=lambda key: '')
+    xbmcgui = types.SimpleNamespace(ListItem=Item, Dialog=lambda: types.SimpleNamespace(select=select))
+    monkeypatch.setitem(sys.modules, 'xbmc', xbmc)
+    monkeypatch.setitem(sys.modules, 'xbmcgui', xbmcgui)
+    monkeypatch.setattr(nightcity, '_home', lambda: Home())
+    monkeypatch.setattr(nightcity, '_lib_library', lambda: 'movies')
+    monkeypatch.setattr(nightcity, 'run_command', lambda *a: None)
+    nightcity.lib_filter()
+    return seen
+
+
+def _clear_button(props):
+    props['nc.select.cleared'] = '1'
+    return -1  # the button closes the dialog as Back does
+
+
+def test_the_clear_button_clears_the_filter_and_the_groups_stay(monkeypatch):
+    props = {'nc.libfilter.movies': json.dumps({'res': ['2160']})}
+    seen = _filter_dialog(monkeypatch, props, [_clear_button, -1])
+    assert len(seen) == 2  # the groups again after Clear, Back then closes
+    assert seen[0][1] and not seen[1][1]  # Clear only while a filter is set
+    assert props['nc.libfilter.movies'] == '{}'
+    assert props['nc.libfilter.movies.path'] == ''
+    assert not {'nc.select.clear', 'nc.select.cleared', 'nc.select.ok'} & set(props)
+
+
+def test_the_groups_have_no_clear_entry_of_their_own(monkeypatch):
+    props = {'nc.libfilter.movies': json.dumps({'res': ['2160']})}
+    seen = _filter_dialog(monkeypatch, props, [-1])
+    assert seen[0][0] == [str(nightcity.LIB_FILTER_NAMES[g]) for g in nightcity.lib_filter_groups('movies')]
+    assert props['nc.libfilter.movies'] == json.dumps({'res': ['2160']})  # Back keeps the filter

@@ -187,7 +187,9 @@ def test_marked_select_dialogs_have_one_ok_and_left_goes_up():
         assert ('onright', 'String.IsEmpty({})'.format(SELECT_FLAG), '9001') in moves
         assert ('onleft', '!String.IsEmpty({}) + Control.IsVisible(5)'.format(SELECT_FLAG), 'SendClick(12000,5)') in moves
         assert ('onleft', '!String.IsEmpty({}) + !Control.IsVisible(5)'.format(SELECT_FLAG), 'Action(Back)') in moves
-        assert ('ondown', '!String.IsEmpty({})'.format(SELECT_FLAG), '9001') in moves
+        # Down to OK, not to Clear left of it
+        assert ('ondown', '!String.IsEmpty({}) + Control.IsVisible(5)'.format(SELECT_FLAG), '5') in moves
+        assert ('ondown', '!String.IsEmpty({}) + !Control.IsVisible(5)'.format(SELECT_FLAG), '9') in moves
     cancel = next(i for i in dialog.iter('include') if i.find("param[@name='id']") is not None
                   and i.find("param[@name='id']").get('value') == '7')
     assert {p.get('name'): p.get('value') for p in cancel.findall('param')}['visible'] == 'String.IsEmpty({})'.format(SELECT_FLAG)
@@ -196,6 +198,24 @@ def test_marked_select_dialogs_have_one_ok_and_left_goes_up():
     params = {p.get('name'): p.get('value') for p in ok.findall('param')}
     assert params['visible'] == '!String.IsEmpty({}) + !Control.IsVisible(5)'.format(SELECT_FLAG)
     assert params['onclick'] == 'Action(Back)' and params['label'] == '$LOCALIZE[186]'
+
+
+CLEAR_FLAG = 'Window(Home).Property(nc.select.clear)'
+
+
+def test_the_filter_has_a_clear_button_left_of_ok():
+    """While a filter is set (nc.select.clear) its list of groups has Clear left of OK: it marks
+    the click (nc.select.cleared) and closes the dialog, the script clears and opens it again."""
+    dialog = parse(ROOT / '1080i' / 'DialogSelect.xml')
+    row = next(c for c in dialog.iter('control') if c.get('id') == '9001')
+    ids = [i.find("param[@name='id']").get('value') for i in row.findall('include')]
+    assert ids.index('10') < ids.index('9')
+    clear = row.findall('include')[ids.index('10')]
+    params = {p.get('name'): p.get('value') for p in clear.findall('param')}
+    assert params['label'] == '$LOCALIZE[31508]'
+    assert params['visible'] == '!String.IsEmpty({}) + !Control.IsVisible(5)'.format(CLEAR_FLAG)
+    assert params['onclick'] == 'SetProperty(nc.select.cleared,1,home)'
+    assert params['onclick2'] == 'Action(Back)'
 
 
 def test_the_script_marks_its_filter_dialogs():
