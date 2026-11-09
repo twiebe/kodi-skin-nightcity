@@ -605,12 +605,13 @@
                     </focusedlayout>
                     <content target="videos" sortby="episode">$VAR[InfoEpisodesPath]</content>
                 </control>
-                <!-- the keys of the episodes, under them while they have the focus: Up the season
-                     tabs, Down cast and crew (where the page has them), OK selects the episode -->
+                <!-- the keys of the episodes, under them at the bottom edge while they have the
+                     focus: OK selects the episode, Down goes to cast and crew (where the page has
+                     them); the season tabs Up leads to stand right above the row -->
                 <include content="LevelHint">
                     <param name="id" value="5190"/>
-                    <param name="key" value="↑"/>
-                    <param name="label" value="$LOCALIZE[31603]$VAR[HintEpisodeDown]   [COLOR state_text]⏎[/COLOR] $LOCALIZE[31135]"/>
+                    <param name="key" value="⏎"/>
+                    <param name="label" value="$LOCALIZE[31135]$VAR[HintEpisodeDown]"/>
                     <param name="left" value="64"/>
                     <param name="top" value="394"/>
                     <param name="width" value="1400"/>

@@ -43,17 +43,25 @@ key, then the level it leads to (`LevelHint` in `Includes_Base.xml`,
   works (the info page's ↑ only on its buttons) and fades out when it goes; the next one fades
   in after it, never on top of it. A window's hint hides under a dialog, and like the pages it
   does not fade over a playing video.
-- **Places**, nothing else:
-  - the way back (↑, ←) centred on the path line of a page or window (top 30), its title kept
-    left of the middle (`pathwidth` 780);
-  - in the player, which has no path line, the way up on the top edge (top 140) and the way on
-    (↓, ⏎) on the bottom edge (top 1030), also over the music visualisation;
-  - in a dialog at its bottom: left in its button row, or centred under a panel without
-    buttons (the quick menu);
-  - under the row it is about, for the keys of a row (the episodes of an info page) or of a
-    settings page (the console's footer, the skin settings' slots under the description).
+- **A hint stands at the edge its arrow points to**, nothing else:
+  - ↑ at the top: centred on the path line of a page (top 30, the title kept left of the
+    middle, `pathwidth` 780), on the player's top edge (top 140), on the top edge of the quick
+    menu's panel;
+  - ↓ at the bottom: the player's bottom edge (top 1030), the line under the episodes of an
+    info page (they fill the bottom of the screen);
+  - ← at the left: on a page in the left margin, on the line under the path title (left 64,
+    top 64), whether Left goes to a column on the left or out of the window; only where the
+    level lies on the right (the bar of the library and of the music window back to its menu)
+    on that menu's top edge, at its left (left 1431); in a dialog at the left of its button
+    row, under its list;
+  - → at the right (none so far);
+  - ⏎ and moves on the spot (↑↓) are no direction: they stay with the action, at the bottom
+    (the seek bar, the visualisation), in the footer of a settings page (the console's, the
+    skin settings' slots) or after the hint they belong to (⏎ select under the episodes).
+  One line may hold several keys only if they share the edge, or are ⏎ and ↑↓.
 - No hint where the level is in sight anyway: Home's top menu over the rows, the queue under
-  the music OSD, the second pane of the file manager, the tabs over their lists.
+  the music OSD, the second pane of the file manager, the tabs over their lists (the season
+  tabs over the episodes too).
 
 ### The position bar of the library grid
 

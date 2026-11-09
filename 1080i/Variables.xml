@@ -104,6 +104,7 @@
         <value condition="Window.IsActive(fullscreenvideo)">$LOCALIZE[31055]</value>
         <value condition="Window.IsActive(visualisation)">$LOCALIZE[31406]</value>
         <value condition="Window.IsActive(home)">$VAR[HintHomePage]</value>
+        <value condition="Window.IsActive(1110)">$VAR[HintLibrary]</value>
         <value>$LOCALIZE[31470]</value>
     </variable>
     <!-- Left in the skin's select dialogs (nc.select.ok): in a group of the library filter back

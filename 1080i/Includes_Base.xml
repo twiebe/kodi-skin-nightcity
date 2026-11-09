@@ -245,12 +245,12 @@
     </include>
 
     <!-- A key hint (DESIGN.md, Key hints): the key that leads to another level, in the dimmed
-         blue of a hint, and the level it leads to, muted; one line of small caps. Its places:
-         centred on the path line of a page (top=30) for the way back, Up or Left; centred on
-         the bottom edge (top=1030, the default) for the way on in the player, Down or OK; the
-         player's way up on its top edge (top=140); in a dialog left in its button row (left,
-         width, align left). A shadow keeps it readable over bright video. It fades with its
-         window and its condition. -->
+         blue of a hint, and the level it leads to, muted; one line of small caps. It stands at
+         the edge its arrow points to: Up at the top (the path line, top=30; the player's top
+         edge, top=140), Down and OK at the bottom (top=1030, the default), Left at the left
+         (left, top, width, align left: on a page under the path title, in a dialog in its
+         button row). A shadow keeps it readable over bright video. It fades with its window
+         and its condition. -->
     <include name="LevelHint">
         <param name="id"/>
         <param name="key" default="↓"/>
