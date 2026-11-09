@@ -128,10 +128,8 @@
                 <param name="kickerid" value="9025"/>
                 <param name="poster" value="false"/>
                 <param name="tech" value="true"/>
-                <param name="reslabel" value="$VAR[InfoEpisodeResolution]"/>
-                <param name="hdrlabel" value="$VAR[InfoEpisodeHdr]"/>
-                <param name="codeclabel" value="$VAR[InfoEpisodeAudioCodec]"/>
-                <param name="channelslabel" value="$VAR[InfoEpisodeAudioChannels]"/>
+                <param name="techlabel" value="$VAR[InfoEpisodeResolution]$VAR[InfoEpisodeHdr, ,]"/>
+                <param name="audiolabel" value="$VAR[InfoEpisodeAudio]"/>
                 <param name="ratingid" value="9043"/>
                 <param name="plotid" value="9051"/>
                 <!-- up to the cast on the right -->
@@ -187,10 +185,8 @@
                 <param name="kickerid" value="9027"/>
                 <!-- the genre is the kicker already -->
                 <param name="tech" value="true"/>
-                <param name="reslabel" value="$VAR[ItemResolution]"/>
-                <param name="hdrlabel" value="$VAR[ItemHdr]"/>
-                <param name="codeclabel" value="$VAR[ItemAudioCodec]"/>
-                <param name="channelslabel" value="$VAR[ItemAudioChannels]"/>
+                <param name="techlabel" value="$VAR[ItemResolution]$VAR[ItemHdr, ,]"/>
+                <param name="audiolabel" value="$VAR[ItemAudio]"/>
                 <param name="ratingid" value="9046"/>
                 <param name="plotid" value="9050"/>
                 <!-- up to the details on the right -->

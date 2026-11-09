@@ -44,7 +44,7 @@ def test_groups_and():
     _, xsp = _xsp(nightcity.lib_filter_path('movies', {'res': ['2160'], 'audio': ['truehd'], 'channels': ['8']}))
     assert xsp['rules']['and'] == [
         {'field': 'videoresolution', 'operator': 'is', 'value': ['2160']},
-        {'field': 'audiocodec', 'operator': 'is', 'value': ['truehd', 'truehd_atmos']},
+        {'field': 'audiocodec', 'operator': 'is', 'value': ['truehd']},
         {'field': 'audiochannels', 'operator': 'is', 'value': ['8']}]
 
 
@@ -69,10 +69,9 @@ def test_sdr_and_an_hdr_type_or():
 
 
 def test_an_audio_format_names_every_codec_kodi_files_it_under():
-    _, xsp = _xsp(nightcity.lib_filter_path('movies', {'audio': ['dtshd', 'dtshra', 'dts']}))
+    _, xsp = _xsp(nightcity.lib_filter_path('movies', {'audio': ['dtshd', 'dts']}))
     assert xsp['rules']['and'] == [
-        {'field': 'audiocodec', 'operator': 'is',
-         'value': ['dtshd_ma', 'dtshd_ma_x', 'dtshd_ma_x_imax', 'dtshd_hra', 'dca', 'dts']}]
+        {'field': 'audiocodec', 'operator': 'is', 'value': ['dtshd_ma', 'dtshd_hra', 'dca', 'dts']}]
 
 
 def test_the_audio_names_match_the_info_page():
@@ -82,7 +81,7 @@ def test_the_audio_names_match_the_info_page():
         if label == 'PCM':
             assert 'String.StartsWith(ListItem.AudioCodec,pcm)">PCM<' in variables
             assert all(v.startswith('pcm') for v in values)
-        else:
+        else:  # DTS-HD stands for DTS-HD MA and DTS-HD HRA
             assert 'String.IsEqual(ListItem.AudioCodec,{})">{}'.format(values[0], label) in variables, label
 
 

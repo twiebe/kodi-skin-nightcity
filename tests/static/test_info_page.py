@@ -100,8 +100,7 @@ def test_episode_info_shows_resolution_hdr_and_audio():
     head = _episode_head()
     assert head['item'] == 'Container(5100).ListItem'
     assert head['tech'] == 'true'
-    assert (head['reslabel'], head['hdrlabel']) == ('$VAR[InfoEpisodeResolution]', '$VAR[InfoEpisodeHdr]')
-    assert (head['codeclabel'], head['channelslabel']) == ('$VAR[InfoEpisodeAudioCodec]', '$VAR[InfoEpisodeAudioChannels]')
+    assert head['techlabel'] == '$VAR[InfoEpisodeResolution]$VAR[InfoEpisodeHdr, ,]'
     spot = 'Container(9000).ListItem'
     episode = 'Container(5100).ListItem'
     for name in ('Resolution', 'Hdr'):
@@ -109,14 +108,9 @@ def test_episode_info_shows_resolution_hdr_and_audio():
             (c.replace(spot, episode), t.replace(spot, episode)) for c, t in _variable('Spotlight' + name)]
 
 
-def test_hero_tech_labels_default_to_the_spotlight():
-    """Resolution, HDR/SDR, codec and channels: four tags of their own, 4K and DV, DTS-MA and 7.1."""
+def test_hero_tech_label_defaults_to_the_spotlight():
     hero = next(i for i in parse(SKIN / 'Includes_Home.xml').iter('include') if i.get('name') == 'HeroBody')
     params = {p.get('name'): p.get('default') for p in hero.findall('param')}
-    parts = ('Resolution', 'Hdr', 'AudioCodec', 'AudioChannels')
-    names = ('reslabel', 'hdrlabel', 'codeclabel', 'channelslabel')
-    assert [params[n] for n in names] == ['$VAR[Spotlight{}]'.format(p) for p in parts]
-    assert 'techlabel' not in params and 'audiolabel' not in params
+    assert params['techlabel'] == '$VAR[SpotlightResolution]$VAR[SpotlightHdr, ,]'
     labels = [p.get('value') for p in hero.iter('param') if p.get('name') == 'label']
-    for name in names:
-        assert '$PARAM[{}]'.format(name) in labels, name
+    assert '$PARAM[techlabel]' in labels

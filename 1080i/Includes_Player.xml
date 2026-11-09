@@ -267,12 +267,8 @@
                         <param name="visible" value="!String.IsEmpty(VideoPlayer.VideoResolution)"/>
                     </include>
                     <include content="Tag">
-                        <param name="label" value="$VAR[PlayerAudioCodec]"/>
+                        <param name="label" value="$VAR[PlayerAudio]"/>
                         <param name="visible" value="!String.IsEmpty(VideoPlayer.AudioCodec)"/>
-                    </include>
-                    <include content="Tag">
-                        <param name="label" value="$VAR[PlayerAudioChannels]"/>
-                        <param name="visible" value="!String.IsEmpty(VideoPlayer.AudioChannels)"/>
                     </include>
                 </control>
                 <!-- ratings of what plays, as the skin service kept them (nc.kept.player.*); the

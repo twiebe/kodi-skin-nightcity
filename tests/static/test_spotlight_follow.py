@@ -55,8 +55,8 @@ def test_followed_hero_reads_the_focused_card():
     assert '<param name="item" value="ListItem"/>' in body
     assert '$VAR[CardArt]' in body  # an episode shows the poster of its show
     assert '<param name="kicker" value="$VAR[FollowKicker]"/>' in body
-    assert '$VAR[ItemResolution]' in body and '$VAR[ItemHdr]' in body  # the Spotlight variables hold one list
-    assert '$VAR[ItemAudioCodec]' in body and '$VAR[ItemAudioChannels]' in body
+    assert '$VAR[ItemResolution]$VAR[ItemHdr, ,]' in body  # the Spotlight variables hold one list
+    assert '$VAR[ItemAudio]' in body
     assert 'nc.kept.follow.' in body
 
 
