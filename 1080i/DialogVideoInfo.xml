@@ -103,13 +103,12 @@
             <param name="pathwidth" value="780"/>
         </include>
         <!-- Up from the top of the page, the button row, leaves it (in a TMDb chain one page
-             back): shown while the buttons have the focus, in the middle of the path line -->
+             back): shown on the whole page, in the middle of the path line -->
         <include content="LevelHint">
             <param name="id" value="9059"/>
             <param name="key" value="↑"/>
             <param name="label" value="$VAR[HintInfoBack]"/>
             <param name="top" value="30"/>
-            <param name="visible" value="ControlGroup(9000).HasFocus()"/>
             <param name="left" value="0"/>
             <param name="width" value="1920"/>
             <param name="align" value="center"/>

@@ -30,7 +30,7 @@ key, then the level it leads to (`LevelHint` in `Includes_Base.xml`,
   No key words ("Left", "Up/Down", "OK"). The Back key gets no hint: it always goes back, and
   every hinted level has an arrow back. Should one ever be needed it is the word Back, not a
   glyph (↩ looks too much like ⏎).
-- **The label names where the key leads**, not what it does: ↑ chapters, ← categories,
+- **The label names where the key leads**, not what it does: ↑ chapters, ← system,
   ⏎ controls. The player's OSD bar is "controls" everywhere (⏎ from the seek bar, ↑ from the
   chapter row, ↓ from a panel); "menu" is a column or row of buttons beside a list (the
   library's, Home's top menu). Where the level depends on how the screen was opened, the
@@ -38,15 +38,26 @@ key, then the level it leads to (`LevelHint` in `Includes_Base.xml`,
   Home, the library, the video, the page before in a TMDb chain), "back" only where nothing
   tells. Where Left is Kodi's Back through folders (the add-on browser's list, the file
   manager's left pane) it names the folder above as "parent folder", for Kodi does not name it,
-  and the window before at the top of the folders (`HintAddonsBack`, `HintFilesBack`); the file
-  manager's right pane names the left one by its folder, as written over it. A footer of keys acting on the spot (skin settings slots: ⏎ choose, → option,
+  and the window before at the top of the folders (`HintAddonsBack`, `HintFilesBack`). A footer
+  of keys acting on the spot (skin settings slots: ⏎ choose, → option,
   ↑↓ move, ⏎ drop; the console: ⏎ open) names the action.
 - **Look:** the key in the dimmed blue of a hint (`state_text`), the label muted
   (`text_mute`), small caps (`font_caps_small`, `LookLabelCase`), a shadow over video.
-- **One hint per state, for the focused part:** it shows while the focus is where the key
-  works (the info page's ↑ only on its buttons) and fades out when it goes; the next one fades
-  in after it, never on top of it. A window's hint hides under a dialog, and like the pages it
-  does not fade over a playing video.
+- **Per page, stable:** a hint belongs to the page, not to the focused element. Each edge's hint
+  says where its key leads from the page's outermost element towards that edge: ← what Left
+  does on the leftmost column or list, ↑ what Up does on the top row, ↓ what Down does on the
+  bottom row. It shows wherever the focus is on the page and does not change when the focus
+  moves. Where that key does nothing on the outermost element, the edge has no hint (the
+  library's grid, the lists of the video and music windows, the categories of add-on
+  settings). The label may follow the page's own state (the folder the add-on browser or file
+  manager is in), never the focus. The player's levels are pages of their own: the seek bar
+  over the bare video, the controls (also while a panel above a button is open), the chapter
+  row, the cast row. A hint fades out and the next one in after it, never on top of it; a
+  window's hint hides under a dialog, and like the pages it does not fade over a playing video.
+- **Exceptions, open for now:** the footer of the episodes on an info page (←→ episode,
+  ↑ season, ↓ cast, ⏎ select) shows the keys of the focused row while it has the focus; the
+  skin settings' slot footer (⏎ choose, → option; ↑↓ move, ⏎ drop) shows on the slot rows,
+  for its keys act on the slot. The console's footer (⏎ open) does not depend on the focus.
 - **Where a hint stands follows its key**, nothing else:
   - ↑ at the top: centred on the path line of a page (top 30, the title kept left of the
     middle, `pathwidth` 780), on the player's top edge (top 140), on the top edge of the quick
@@ -54,11 +65,10 @@ key, then the level it leads to (`LevelHint` in `Includes_Base.xml`,
   - ← up the left edge, written bottom to top and centred on it (`LevelHintLeft`): on a page
     the screen's edge and middle, in a dialog its own, just outside its frame. The line is
     turned a quarter to the left, so it runs along the edge and its key, an ↑ in the text,
-    shows as ←. Also where the level lies on the right (the bar of the library and of the
-    music window back to its menu): the key says which way, the edge stays the same;
+    shows as ←;
   - ↓ and ⏎ in the footer line at the bottom, centred (top 1030), as ↑ is centred at the top; in
-    the player too. A footer names the keys of the focused row and may hold several directions:
-    the episodes of an info page have ←→ episode, ↑ season, ↓ cast, ⏎ select;
+    the player too. The episodes' footer (an exception above) may hold several directions:
+    ←→ episode, ↑ season, ↓ cast, ⏎ select;
   - → at the right (none so far);
   - the footers of a settings page (the console's, the skin settings' slots) stay under their
     description.
@@ -208,7 +218,7 @@ browser.
   heading, like the progress toasts. The text under the heading is `text_dim`, and the skin's
   type icons (info, warning, error) are a hint in
   `state_text`. An add-on's own icon keeps its colours.
-- The keys in a hint line (⏎ open, ← categories) are hints: dimmed blue, the label after them
+- The keys in a hint line (⏎ open, ← system) are hints: dimmed blue, the label after them
   muted (Key hints above).
 - `state` is border_dim made opaque over the page, so a thin line looks the same on any
   background; text and small marks take `state_text`, the same hue just light enough to read

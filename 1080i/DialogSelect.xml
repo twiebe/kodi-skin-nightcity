@@ -66,13 +66,13 @@
                 <param name="inset" value="10"/>
             </include>
             <!-- up the dialog's left edge, outside its frame, centred on it (820 high): in the skin's
-                 filter dialogs Left goes one level up -->
+                 filter dialogs Left on the list goes one level up; shown on the whole dialog -->
             <include content="LevelHintLeft">
                 <param name="id" value="9059"/>
                 <param name="label" value="$VAR[HintSelectBack]"/>
+                <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.select.ok))"/>
                 <param name="left" value="-322"/>
                 <param name="top" value="395"/>
-                <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + [Control.HasFocus(3) | Control.HasFocus(6)]"/>
             </include>
             <control type="grouplist" id="9001">
                 <onleft condition="Control.IsVisible(6)">6</onleft>

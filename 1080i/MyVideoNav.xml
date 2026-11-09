@@ -13,13 +13,6 @@
             <param name="counter" value="$INFO[Container.CurrentItem]/$INFO[Container.NumItems]"/>
             <param name="weather" value="false"/>
         </include>
-        <!-- Left from the menu goes back to the list -->
-        <include content="LevelHintLeft">
-            <param name="id" value="9059"/>
-            <param name="label" value="$INFO[Container.FolderName]"/>
-            <param name="visible" value="!System.HasActiveModalDialog + ControlGroup(9060).HasFocus()"/>
-            <param name="animate" value="!Player.HasVideo"/>
-        </include>
         <control type="list" id="50">
             <left>110</left>
             <top>118</top>

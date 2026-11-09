@@ -5,6 +5,11 @@ player's top edge, top 140), Left up the left edge, written bottom to top (Level
 and OK in the footer line at the bottom (centred, top 1030), where the keys of the focused row
 may stand together.
 
+A hint belongs to its page, not to the focused element: it says where its key leads from the
+page's outermost element towards its edge, wherever the focus is, and an edge whose outermost
+element does nothing with that key has none. The one exception is the episodes' footer, which
+shows the keys of the focused row.
+
 Player levels: the seek bar over the bare video (OK opens the controls; Up and Down skip
 chapters there), the controls (Down: the chapter row), a panel above a button (Down: back to
 the controls), the chapter row (Down: the cast row, Up: the controls), the cast row (Up: the
@@ -20,7 +25,6 @@ BOTTOM, TOP, PATH = '1030', '140', '30'
 CAST = 'VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)'
 CHAPTERS = '$VAR[PlayerChaptersLevel]'
 CONTROLS = '$LOCALIZE[31478]'
-CATEGORIES = '$LOCALIZE[31176]'
 KEYS = ('↑', '↓', '←', '→', '⏎', '↑↓', '←→')
 GLYPHS = re.compile('[↑↓←→⏎]')
 KEY = '[COLOR state_text]{}[/COLOR]'
@@ -150,7 +154,7 @@ def _keys(params):
 def test_every_hint_is_a_glyph():
     """Keys are glyphs, no key words."""
     hints = _all_hints()
-    assert len(hints) >= 25
+    assert len(hints) >= 18
     for name, _, params in hints:
         assert params.get('key', '↓') in KEYS, (name, params)
         assert not GLYPHS.search(COLOURED_KEY.sub('', params['label'])), (name, params)
@@ -160,7 +164,31 @@ def test_every_hint_is_a_glyph():
 # in the info page's lower grouplist (5400, top 619)
 OFFSET = {('DialogVideoInfo.xml', '5190'): 619}
 # the dialogs' Left hints: just outside the frame (centre x -22), on the dialog's middle
-DIALOG_LEFT = {'DialogSelect.xml': ('-322', str(820 // 2 - 15)), 'DialogAddonSettings.xml': ('-322', str(940 // 2 - 15))}
+DIALOG_LEFT = {'DialogSelect.xml': ('-322', str(820 // 2 - 15))}
+FOCUS = re.compile(r'HasFocus|System\.CurrentControl|Container\.HasFocus')
+# the hints that show the keys of the focused row (DESIGN.md: an exception, open for now)
+FOCUSED_ROW = {('DialogVideoInfo.xml', '5190')}
+
+
+def test_a_hint_does_not_follow_the_focus():
+    """Per page, stable: no hint shows or names by the focused element, neither in its condition
+    nor in a Hint variable of its label (the episodes' footer is the exception)."""
+    for name, _, params in _all_hints():
+        if (name, params['id']) in FOCUSED_ROW:
+            continue
+        assert not FOCUS.search(params.get('visible', '')), (name, params['id'], params.get('visible'))
+        for var in re.findall(r'\$VAR\[(Hint\w+)\]', params['label']):
+            assert not [c for c, _ in _variable(var) if c and FOCUS.search(c)], (name, var)
+
+
+def test_no_hint_where_the_outermost_element_does_nothing():
+    """Left on the library's grid and on the lists of the video and music windows does nothing,
+    nor on the categories of an add-on's settings: no Left hint there."""
+    for name in ('Custom_1110_Library.xml', 'MyVideoNav.xml', 'MyMusicNav.xml', 'DialogAddonSettings.xml'):
+        assert not [i for i in parse(ROOT / '1080i' / name).iter('include') if i.get('content') in HINTS], name
+    for name, cid in (('Custom_1110_Library.xml', '5000'), ('MyVideoNav.xml', '50'), ('MyVideoNav.xml', '51'),
+                      ('MyMusicNav.xml', '50'), ('MyMusicNav.xml', '51'), ('DialogAddonSettings.xml', '3')):
+        assert _controls(name)[cid].find('onleft') is None, (name, cid)
 
 
 def test_where_a_hint_stands_follows_its_key():
@@ -262,27 +290,15 @@ def test_visualisation_hint():
 
 
 def test_osd_hint():
-    """The bar: Down opens the chapter row. Hidden while a panel above a button has the focus
-    (Down goes back to the button there) and while a lower level is up."""
+    """The controls: Down from the bar, their bottom, opens the chapter row; shown on the whole
+    of the controls (a panel above a button too), hidden while a lower level is up."""
     key, label, top, visible = _hint('VideoOSD.xml', '690')
     assert (key, label, top) == ('↓', CHAPTERS, BOTTOM)
-    assert visible == ('!Window.IsActive(videobookmarks) + !Window.IsActive(1141)'
-                       ' + !Control.HasFocus(651) + !Control.HasFocus(652) + !Control.HasFocus(653)')
+    assert visible == '!Window.IsActive(videobookmarks) + !Window.IsActive(1141)'
+    assert '691' not in _controls('VideoOSD.xml')  # no hint of the panels' own
     controls = _controls('VideoOSD.xml')
     for row in ('600', '620'):
         assert controls[row].findtext('ondown') == 'ActivateWindow(videobookmarks)', row
-
-
-def test_osd_panel_hint():
-    """A panel above a button (subtitles, audio, video): Down goes back to the controls; the hint
-    stands where the bar's does."""
-    key, label, top, visible = _hint('VideoOSD.xml', '691')
-    assert (key, label, top) == ('↓', CONTROLS, BOTTOM)
-    assert visible == 'Control.HasFocus(651) | Control.HasFocus(652) | Control.HasFocus(653)'
-    player = parse(ROOT / '1080i' / 'Includes_Player.xml')
-    for name in ('TrackPanel', 'VideoPanel'):
-        inc = next(i for i in player.iter('include') if i.get('name') == name)
-        assert '$PARAM[button]' in [d.text for d in inc.iter('ondown')], name
 
 
 def test_chapter_row_hints():
@@ -312,13 +328,12 @@ INFO_PAGES = ('DialogVideoInfo.xml', 'DialogMusicInfo.xml')
 
 
 def test_info_page_hint():
-    """An info page leaves by Up from its buttons, its top: "↑" and where that leads, centred on
-    the path line, while the buttons have the focus (Up from a row below only goes to the row
-    above)."""
+    """An info page leaves by Up from its buttons, its top row: "↑" and where that leads, centred
+    on the path line, on the whole page."""
     for name in INFO_PAGES:
         controls = _controls(name)
         key, label, top, visible = _hint(name, '9059')
-        assert (key, label, visible) == ('↑', '$VAR[HintInfoBack]', 'ControlGroup(9000).HasFocus()'), name
+        assert (key, label, visible) == ('↑', '$VAR[HintInfoBack]', 'true'), name
         assert top == controls['9026'].findtext('top') == PATH, name
         assert controls['9000'].findtext('onup') == 'Action(Back)', name
 
@@ -360,62 +375,41 @@ def test_episode_keys():
     assert _controls('DialogVideoInfo.xml')['5100'].findtext('onup') == '5200'
 
 
-# window: [(hint id, key, label, visible)]; Left up the left edge, the bar's way back to its menu
-# too; Up (the weather) on the path line
+# window: (hint id, key, label), one per page, shown wherever the focus is (only not under a
+# dialog); Left up the left edge, Up (the weather) on the path line
 MODAL = '!System.HasActiveModalDialog'
 WINDOW_HINTS = {
-    'Settings.xml': [('9059', '←', '$LOCALIZE[31033]', 'true')],
-    'SettingsCategory.xml': [
-        ('9059', '←', '$VAR[HintWindowBack]', '!ControlGroup(5).HasFocus()'),
-        ('9058', '←', CATEGORIES, 'ControlGroup(5).HasFocus()')],
-    'SkinSettings.xml': [
-        ('9059', '←', '$VAR[HintWindowBack]', 'ControlGroup(9000).HasFocus()'),
-        ('9058', '←', CATEGORIES, '!ControlGroup(9000).HasFocus()')],
-    'SettingsProfile.xml': [
-        ('9059', '←', '$VAR[HintWindowBack]', 'Control.HasFocus(2)'),
-        ('9058', '←', '$LOCALIZE[13200]', 'ControlGroup(9000).HasFocus()')],
-    'EventLog.xml': [
-        ('9059', '←', '$VAR[HintWindowBack]', 'Control.HasFocus(50)'),
-        ('9058', '←', '$LOCALIZE[14111]', 'ControlGroup(9000).HasFocus()')],
-    'AddonBrowser.xml': [
-        ('9059', '←', '$VAR[HintAddonsBack]', 'Control.HasFocus(50)'),
-        ('9058', '←', '$INFO[Container.FolderName]', 'ControlGroup(9000).HasFocus()')],
-    'FileManager.xml': [
-        ('9059', '←', '$VAR[HintFilesBack]', 'Control.HasFocus(20)'),
-        ('9058', '←', '$INFO[Control.GetLabel(101)]', 'Control.HasFocus(21)')],
-    'SettingsSystemInfo.xml': [('9059', '←', '$VAR[HintWindowBack]', 'true')],
-    'MyWeather.xml': [('9059', '↑', '$VAR[HintWindowBack]', 'true')],
-    'Custom_1110_Library.xml': [
-        ('9059', '←', '$VAR[HintLibrary]', 'ControlGroup(5100).HasFocus()'),
-        ('9058', '←', '$LOCALIZE[31232]', 'Control.HasFocus(5200)')],
-    'MyVideoNav.xml': [('9059', '←', '$INFO[Container.FolderName]', 'ControlGroup(9060).HasFocus()')],
-    'MyMusicNav.xml': [
-        ('9059', '←', '$INFO[Container.FolderName]', 'ControlGroup(9060).HasFocus()'),
-        ('9058', '←', '$LOCALIZE[31232]', 'Control.HasFocus(5200)')],
+    'Settings.xml': ('9059', '←', '$LOCALIZE[31033]'),
+    'SettingsCategory.xml': ('9059', '←', '$VAR[HintWindowBack]'),
+    'SkinSettings.xml': ('9059', '←', '$VAR[HintWindowBack]'),
+    'SettingsProfile.xml': ('9059', '←', '$VAR[HintWindowBack]'),
+    'EventLog.xml': ('9059', '←', '$VAR[HintWindowBack]'),
+    'AddonBrowser.xml': ('9059', '←', '$VAR[HintAddonsBack]'),
+    'FileManager.xml': ('9059', '←', '$VAR[HintFilesBack]'),
+    'SettingsSystemInfo.xml': ('9059', '←', '$VAR[HintWindowBack]'),
+    'MyWeather.xml': ('9059', '↑', '$VAR[HintWindowBack]'),
 }
 
 
 def test_window_hints():
-    """A full window shows its way back for the focused side: Left from a settings page's rows to
-    its categories, from the categories out of the page; Left from the library's menu to its
-    titles, from the bar to the menu, all up the left edge; Up out of the weather on the path
-    line, the title kept left of it."""
-    for name, hints in WINDOW_HINTS.items():
+    """A full window shows the way back of its left column (or its top row: the weather) on the
+    whole page: Left from the categories of a settings page, from the list of the add-on browser,
+    the file manager's left pane; one hint, the same wherever the focus is."""
+    for name, (cid, key_want, label_want) in WINDOW_HINTS.items():
         controls = _controls(name)
-        for cid, key_want, label_want, visible_want in hints:
-            key, label, top, visible = _hint(name, cid)
-            # not over a dialog on top, the select dialog of the library's filter say: the
-            # window keeps its focus under it
-            want = MODAL if visible_want == 'true' else '{} + {}'.format(MODAL, visible_want)
-            assert [key, label, visible] == [key_want, label_want, want], (name, cid)
-            group = controls[cid]
-            if key == '←':
-                assert _turned(group) and (group.findtext('left'), top) == LEFT_EDGE, (name, cid)
-            else:
-                assert top == PATH and int(controls['9026'].findtext('width')) <= 780, name
-            # a page does not blend over a playing video
-            fades = [a for a in group.findall('animation') if a.get('type') in ('Visible', 'Hidden')]
-            assert fades and all(a.get('condition') == '!Player.HasVideo' for a in fades), (name, cid)
+        hints = [i for i in parse(ROOT / '1080i' / name).iter('include') if i.get('content') in HINTS]
+        assert len(hints) == 1, name
+        key, label, top, visible = _hint(name, cid)
+        # not under a dialog on top: the window keeps its focus under it
+        assert [key, label, visible] == [key_want, label_want, MODAL], (name, cid)
+        group = controls[cid]
+        if key == '←':
+            assert _turned(group) and (group.findtext('left'), top) == LEFT_EDGE, (name, cid)
+        else:
+            assert top == PATH and int(controls['9026'].findtext('width')) <= 780, name
+        # a page does not blend over a playing video
+        fades = [a for a in group.findall('animation') if a.get('type') in ('Visible', 'Hidden')]
+        assert fades and all(a.get('condition') == '!Player.HasVideo' for a in fades), (name, cid)
 
 
 def test_the_keys_of_the_window_hints():
@@ -423,40 +417,27 @@ def test_the_keys_of_the_window_hints():
     for name, cid, tag, action in (
             ('Settings.xml', '9200', 'onleft', 'Action(Back)'),
             ('SettingsCategory.xml', '3', 'onleft', 'Action(Back)'),
-            ('SettingsCategory.xml', '5', 'onleft', '3'),
             ('SkinSettings.xml', '9000', 'onleft', 'Action(Back)'),
             ('SettingsProfile.xml', '2', 'onleft', 'Action(Back)'),
-            ('SettingsProfile.xml', '9000', 'onleft', '2'),
             ('EventLog.xml', '50', 'onleft', 'Action(Back)'),
-            ('EventLog.xml', '9000', 'onleft', '50'),
-            ('AddonBrowser.xml', '9000', 'onleft', '50'),
             ('AddonBrowser.xml', '50', 'onleft', 'Action(Back)'),
             ('FileManager.xml', '20', 'onleft', 'Action(Back)'),
-            ('FileManager.xml', '21', 'onleft', '20'),
             ('SettingsSystemInfo.xml', '9000', 'onleft', 'Action(Back)'),
-            ('MyWeather.xml', '500', 'onup', 'Action(Back)'),
-            ('Custom_1110_Library.xml', '5100', 'onleft', '5000'),
-            ('Custom_1110_Library.xml', '5200', 'onleft', '5100'),
-            ('MyMusicNav.xml', '5200', 'onleft', '9060')):
+            ('MyWeather.xml', '500', 'onup', 'Action(Back)')):
         assert action in [a for _, a in _actions(_controls(name)[cid], tag)], (name, cid)
-    for name in ('MyVideoNav.xml', 'MyMusicNav.xml'):
-        assert _actions(_controls(name)['9060'], 'onleft')[-1] == ('', '50'), name
 
 
 def test_dialog_hints():
-    """A dialog's Left hint runs up its own left edge, just outside the frame, centred on it:
-    Left from an add-on's settings to its categories; in the skin's select dialogs Left goes one
-    level up, in a group of the library filter to its groups, else onto the library."""
+    """A dialog's Left hint runs up its own left edge, just outside the frame, centred on it, on
+    the whole dialog: in the skin's select dialogs Left on the list goes one level up, in a group
+    of the library filter to its groups, else onto the library."""
     for name, (left, top) in DIALOG_LEFT.items():
         group = _controls(name)['9059']
         assert _turned(group) and (group.findtext('left'), group.findtext('top')) == (left, top), name
         assert int(left) + 300 < 0  # the line's middle lies outside the frame
-    key, label, top, visible = _hint('DialogAddonSettings.xml', '9059')
-    assert (key, label, visible) == ('←', CATEGORIES, 'ControlGroup(5).HasFocus() + Control.IsVisible(3)')
-    assert _controls('DialogAddonSettings.xml')['5'].findtext('onleft') == '3'
     key, label, top, visible = _hint('DialogSelect.xml', '9059')
     assert (key, label) == ('←', '$VAR[HintSelectBack]')
-    assert visible == '!String.IsEmpty(Window(Home).Property(nc.select.ok)) + [Control.HasFocus(3) | Control.HasFocus(6)]'
+    assert visible == '!String.IsEmpty(Window(Home).Property(nc.select.ok))'
     values = _variable('HintSelectBack')
     assert values[0] == ('Control.IsVisible(5) + !String.IsEmpty(Window(Home).Property(nc.select.groups))', '$LOCALIZE[31502]')
     assert ('Window.IsActive(1110)', '$VAR[HintLibrary]') in values
@@ -466,10 +447,10 @@ def test_dialog_hints():
 
 def test_quick_menu_hint():
     """The quick menu dialog: Up from the weather, its top, closes it; the hint names what it
-    lies over, centred on the panel's top edge, above it."""
+    lies over, centred on the panel's top edge, above it, while the menu is open."""
     controls = _controls('Custom_1170_QuickMenu.xml')
     key, label, top, visible = _hint('Custom_1170_QuickMenu.xml', '1290')
-    assert (key, label, visible) == ('↑', '$VAR[HintQuickMenuBack]', 'Control.HasFocus(1210)')
+    assert (key, label, visible) == ('↑', '$VAR[HintQuickMenuBack]', 'true')
     panel, group = controls['1200'], controls['1290']
     assert group.findtext('left') == panel.findtext('left')
     assert int(top) + int(group.find('control').findtext('height')) <= int(panel.findtext('top'))

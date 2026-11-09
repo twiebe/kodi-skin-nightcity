@@ -21,18 +21,12 @@
         <include content="StatusBar">
             <param name="title" value="$LOCALIZE[166]"/>
         </include>
-        <!-- Left from the categories leaves the page, back to the console -->
+        <!-- the page's way back, wherever the focus is: Left from the categories, the left
+             column, leaves the page, back to the console -->
         <include content="LevelHintLeft">
             <param name="id" value="9059"/>
             <param name="label" value="$VAR[HintWindowBack]"/>
-            <param name="visible" value="!System.HasActiveModalDialog + ControlGroup(9000).HasFocus()"/>
-            <param name="animate" value="!Player.HasVideo"/>
-        </include>
-        <!-- Left from the rows goes back to the categories -->
-        <include content="LevelHintLeft">
-            <param name="id" value="9058"/>
-            <param name="label" value="$LOCALIZE[31176]"/>
-            <param name="visible" value="!System.HasActiveModalDialog + !ControlGroup(9000).HasFocus()"/>
+            <param name="visible" value="!System.HasActiveModalDialog"/>
             <param name="animate" value="!Player.HasVideo"/>
         </include>
         <!-- the content fades in on open; background and status line stay -->

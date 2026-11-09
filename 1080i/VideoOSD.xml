@@ -204,18 +204,12 @@
             <onleft>602</onleft>
             <onright>602</onright>
         </control>
-        <!-- Down from the bar: the chapter row; not while a panel has the focus (Down goes back
-             to its button there) -->
+        <!-- Down from the bar, the bottom of the controls: the chapter row; also while a panel
+             above a button has the focus (per page, not per element) -->
         <include content="LevelHint">
             <param name="id" value="690"/>
             <param name="label" value="$VAR[PlayerChaptersLevel]"/>
-            <param name="visible" value="!Window.IsActive(videobookmarks) + !Window.IsActive(1141) + !Control.HasFocus(651) + !Control.HasFocus(652) + !Control.HasFocus(653)"/>
-        </include>
-        <!-- a panel above a button: Down goes back to the controls -->
-        <include content="LevelHint">
-            <param name="id" value="691"/>
-            <param name="label" value="$LOCALIZE[31478]"/>
-            <param name="visible" value="Control.HasFocus(651) | Control.HasFocus(652) | Control.HasFocus(653)"/>
+            <param name="visible" value="!Window.IsActive(videobookmarks) + !Window.IsActive(1141)"/>
         </include>
     </controls>
 </window>
