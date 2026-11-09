@@ -410,9 +410,8 @@ def main():
     # the focused fills with their glow, and the outlines with the same margin, for buttons
     # that grow by GLOW_PAD on each side (border 12 + 10, 16 + 10)
     fill_glow(48, 10, GLOW_PAD, corners=('tr',)).save(UI / 'cut_btn_glow.png')
-    padded(cut(48, 10, line=2, corners=('tr',)), GLOW_PAD).save(UI / 'cut_btn_pad.png')
     fill_glow(64, 14, GLOW_PAD).save(UI / 'cut_fill_glow.png')
-    padded(cut(64, 14, line=2), GLOW_PAD).save(UI / 'cut_pad.png')
+    padded(cut(64, 14), GLOW_PAD).save(UI / 'cut_fill_pad.png')
     # a fill that does not glow (the shown settings category) in a padded control
     padded(cut(48, 10, corners=('tr',)), GLOW_PAD).save(UI / 'cut_btn_fill_pad.png')
     # separator of the padded settings rows: the 1 px line in the middle of GLOW_PAD px above

@@ -43,8 +43,8 @@ def _expressions():
     return found
 
 
-def _variable(name):
-    for v in parse(ROOT / '1080i' / 'Variables.xml').iter('variable'):
+def _variable(name, path=ROOT / '1080i' / 'Variables.xml'):
+    for v in parse(path).iter('variable'):
         if v.get('name') == name:
             return [(value.get('condition'), value.text or '') for value in v.findall('value')]
     raise AssertionError(name)
@@ -183,8 +183,17 @@ def test_the_focused_row_turns_its_tags_dark():
     inc = next(i for i in row.iter('include') if i.get('content') == 'LibraryRow')
     params = {p.get('name'): p.get('value') for p in inc.findall('param')}
     assert params['tag'] == '$VAR[LibraryRowTag]' and params['tagtext'] == '$VAR[LibraryRowTagText]'
-    assert _variable('LibraryRowTag') == [('Control.HasFocus(5000)', 'focus_text'), (None, 'state')]
-    assert _variable('LibraryRowTagText') == [('Control.HasFocus(5000)', 'focus'), (None, 'text')]
+    # each look its own: Nightcity outlines like the tags elsewhere, Confuse filled chips
+    look = ROOT / '1080i' / 'Includes_Look.xml'
+    assert _variable('LibraryRowTag', look) == [('Control.HasFocus(5000)', 'focus_text'), (None, 'border_dim')]
+    assert _variable('LibraryRowTagText', look) == [('Control.HasFocus(5000)', 'focus_text'), (None, 'text_dim')]
+    confuse = ROOT / 'skins' / 'confuse' / '1080i' / 'Includes_Look.xml'
+    assert _variable('LibraryRowTag', confuse) == [('Control.HasFocus(5000)', 'focus_text'), (None, 'state')]
+    assert _variable('LibraryRowTagText', confuse) == [('Control.HasFocus(5000)', 'focus'), (None, 'text')]
+    # the other rows: the colours without the focus
+    for path in (look, confuse):
+        assert _variable('LibraryRowTagRest', path) == [(None, _variable('LibraryRowTag', path)[1][1])]
+        assert _variable('LibraryRowTagTextRest', path) == [(None, _variable('LibraryRowTagText', path)[1][1])]
 
 
 def test_the_audio_tag_is_short():

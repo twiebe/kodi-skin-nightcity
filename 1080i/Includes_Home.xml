@@ -469,7 +469,7 @@
         <param name="button"/>
         <param name="label"/>
         <param name="color" default="border_dim"/>
-        <param name="textcolor" default="text_dim"/>
+        <param name="textcolor" default="text"/>
         <param name="visible" default="true"/>
         <definition>
             <control type="button">

@@ -323,20 +323,26 @@
         <param name="color" default="border_dim"/>
         <!-- without the focus, in a look that gives a primary button no colour of its own -->
         <param name="rest" default="border_dim"/>
+        <!-- the plate without the focus: a button that hides passes no colour (alpha 0) -->
+        <param name="plate" default="state"/>
         <definition>
             <include>LookButtonFill</include>
             <include content="LookButtonOutline">
                 <param name="color" value="$PARAM[color]"/>
+                <param name="plate" value="$PARAM[plate]"/>
             </include>
         </definition>
     </include>
     <include name="LookButtonFill">
         <texturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturefocus>
     </include>
+    <!-- A button without the focus: a dark plate, light text on it (a primary one cyan); only the
+         tags are outlines. The name stays from when it was the outline. -->
     <include name="LookButtonOutline">
         <param name="color"/>
+        <param name="plate" default="state"/>
         <definition>
-            <texturenofocus border="22" colordiffuse="$PARAM[color]">ui/cut_btn_pad.png</texturenofocus>
+            <texturenofocus border="22" colordiffuse="$PARAM[plate]">ui/cut_btn_fill_pad.png</texturenofocus>
         </definition>
     </include>
     <!-- The fill for a button that shows another one's focus: it has no focus itself -->
@@ -373,16 +379,16 @@
         <texture border="22" colordiffuse="accent">ui/cut_btn_glow.png</texture>
     </include>
 
-    <!-- A tile (settings groups, quick menu): the outline, the focused fill with its glow, and both
+    <!-- A tile (settings groups, quick menu): the dark plate, the focused fill with its glow, and both
          for a tile that is a button itself, padded for the glow -->
     <include name="LookTileFrame">
-        <texture border="16" colordiffuse="border_dim">ui/cut.png</texture>
+        <texture border="16" colordiffuse="state">ui/cut_fill.png</texture>
     </include>
     <include name="LookTileFocus">
         <texture border="26" colordiffuse="focus">ui/cut_fill_glow.png</texture>
     </include>
     <include name="LookTileButtonTextures">
-        <texturenofocus border="26" colordiffuse="border_dim">ui/cut_pad.png</texturenofocus>
+        <texturenofocus border="26" colordiffuse="state">ui/cut_fill_pad.png</texturenofocus>
         <texturefocus border="26" colordiffuse="focus">ui/cut_fill_glow.png</texturefocus>
     </include>
 
@@ -415,12 +421,13 @@
         </control>
     </include>
 
-    <!-- The pill of … on the info page: the caller names the texture and its colour -->
+    <!-- The pill of … on the info page: the caller names the texture and the plate's colour -->
     <include name="LookMorePill">
         <param name="texture"/>
         <param name="color"/>
+        <param name="plate"/>
         <definition>
-            <texture border="22" colordiffuse="$PARAM[color]">$PARAM[texture]</texture>
+            <texture border="22" colordiffuse="$PARAM[plate]">$PARAM[texture]</texture>
         </definition>
     </include>
 
@@ -480,12 +487,12 @@
         </definition>
     </include>
 
-    <!-- An entry of the top menu: focused a filled accent button, the shown page a dark blue outline -->
+    <!-- An entry of the top menu: focused a filled accent button, the shown page a dark blue plate -->
     <include name="LookMenuTextures">
         <texturefocus border="22" colordiffuse="accent">ui/cut_btn_glow.png</texturefocus>
         <texturenofocus/>
         <alttexturefocus border="22" colordiffuse="accent">ui/cut_btn_glow.png</alttexturefocus>
-        <alttexturenofocus border="22" colordiffuse="state">ui/cut_btn_pad.png</alttexturenofocus>
+        <alttexturenofocus border="22" colordiffuse="state">ui/cut_btn_fill_pad.png</alttexturenofocus>
     </include>
 
     <!-- Dialog panel: opaque base (surface alone lets the window behind show through), cut-corner
@@ -567,26 +574,43 @@
         </definition>
     </include>
 
-    <!-- A filled tag for one technical fact, light on the dark plate -->
+    <!-- A thin outlined tag for one technical fact: the buttons are the plates -->
     <include name="LookTag">
         <param name="label"/>
         <definition>
             <font>font_caps_small</font>
-            <texturenofocus border="12" colordiffuse="state">ui/cut_btn_fill.png</texturenofocus>
-            <texturefocus border="12" colordiffuse="state">ui/cut_btn_fill.png</texturefocus>
+            <texturenofocus border="12" colordiffuse="border_dim">ui/cut_btn.png</texturenofocus>
+            <texturefocus border="12" colordiffuse="border_dim">ui/cut_btn.png</texturefocus>
             <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
         </definition>
     </include>
 
+    <!-- the details of a list row (LibraryRow): outlines like the tags elsewhere; the focused row's while the list has the
+         focus, the other rows' (Rest) -->
+    <variable name="LibraryRowTag">
+        <value condition="Control.HasFocus(5000)">focus_text</value>
+        <value>border_dim</value>
+    </variable>
+    <variable name="LibraryRowTagText">
+        <value condition="Control.HasFocus(5000)">focus_text</value>
+        <value>text_dim</value>
+    </variable>
+    <variable name="LibraryRowTagRest">
+        <value>border_dim</value>
+    </variable>
+    <variable name="LibraryRowTagTextRest">
+        <value>text_dim</value>
+    </variable>
+
     <!-- The plate of a tag as an image, for a list row (no buttons there) -->
     <include name="LookTagImage">
         <param name="width"/>
-        <param name="color" default="state"/>
+        <param name="color" default="border_dim"/>
         <definition>
             <control type="image">
                 <width>$PARAM[width]</width>
                 <height>32</height>
-                <texture border="12" colordiffuse="$PARAM[color]">ui/cut_btn_fill.png</texture>
+                <texture border="12" colordiffuse="$PARAM[color]">ui/cut_btn.png</texture>
             </control>
         </definition>
     </include>

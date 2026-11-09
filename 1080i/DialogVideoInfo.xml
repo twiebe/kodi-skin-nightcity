@@ -460,22 +460,25 @@
                 <include>ChainBackGuard</include>
                 <itemlayout width="116" height="74">
                     <include content="MorePill">
-                        <param name="texture" value="ui/cut_btn_pad.png"/>
+                        <param name="texture" value="ui/cut_btn_fill_pad.png"/>
                         <param name="color" value="border_dim"/>
-                        <param name="textcolor" value="text_dim"/>
+                        <param name="plate" value="state"/>
+                        <param name="textcolor" value="text"/>
                     </include>
                 </itemlayout>
                 <focusedlayout width="116" height="74">
                     <include content="MorePill">
                         <param name="texture" value="ui/cut_btn_glow.png"/>
                         <param name="color" value="focus"/>
+                        <param name="plate" value="focus"/>
                         <param name="textcolor" value="focus_text"/>
                         <param name="visible" value="Control.HasFocus(9003)"/>
                     </include>
                     <include content="MorePill">
-                        <param name="texture" value="ui/cut_btn_pad.png"/>
+                        <param name="texture" value="ui/cut_btn_fill_pad.png"/>
                         <param name="color" value="border_dim"/>
-                        <param name="textcolor" value="text_dim"/>
+                        <param name="plate" value="state"/>
+                        <param name="textcolor" value="text"/>
                         <param name="visible" value="!Control.HasFocus(9003)"/>
                     </include>
                 </focusedlayout>

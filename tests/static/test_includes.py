@@ -149,12 +149,14 @@ def test_migrated_files_have_no_framed_labels():
 
 
 def test_pill_button_fill_only_on_focus():
-    """Only the focused button is filled; an unfocused primary button is an accent outline. Both
-    padded for the glow of the fill (test_glow.py)."""
+    """The focused button is the glowing fill, the others stand on a dark plate (`plate`, alpha 0
+    for a button that hides); a primary one only has its text in accent. Both padded for the glow
+    of the fill (test_glow.py)."""
     button = include('PillButton').find('.//control')
     focus, nofocus = button.find('texturefocus'), button.find('texturenofocus')
     assert focus.text == 'ui/cut_btn_glow.png' and focus.get('colordiffuse') == 'focus'
-    assert nofocus.text == 'ui/cut_btn_pad.png' and nofocus.get('colordiffuse') == '$PARAM[color]'
+    assert nofocus.text == 'ui/cut_btn_fill_pad.png' and nofocus.get('colordiffuse') == '$PARAM[plate]'
+    assert params(include('PillButton'))['plate'] == 'state'
     assert button.findtext('textcolor') == '$PARAM[textcolor]'
     assert button.findtext('focusedcolor') == 'focus_text'
     assert params(include('PillButton'))['color'] == 'border_dim'
@@ -566,13 +568,13 @@ def test_system_facts_in_columns():
 
 def test_main_menu_entries_are_buttons():
     """The top menu: the focused entry is a filled accent button with dark text, the shown page
-    a dark blue (state) outline; no underline, no ◢. Padded for the glow (test_glow.py)."""
+    a dark blue (state) plate; no underline, no ◢. Padded for the glow (test_glow.py)."""
     calls = [c for c in include('MainMenu').iter('include') if c.get('content') in ('TabButton', 'MenuButton')]
     assert calls and all(c.get('content') == 'MenuButton' for c in calls)
     button = include('MenuButton').find('.//control')
     assert button.find('texturefocus').text == 'ui/cut_btn_glow.png' and button.find('texturefocus').get('colordiffuse') == 'accent'
     assert button.find('alttexturefocus').text == 'ui/cut_btn_glow.png'
-    assert button.find('alttexturenofocus').text == 'ui/cut_btn_pad.png' and button.find('alttexturenofocus').get('colordiffuse') == 'state'
+    assert button.find('alttexturenofocus').text == 'ui/cut_btn_fill_pad.png' and button.find('alttexturenofocus').get('colordiffuse') == 'state'
     assert not button.find('texturenofocus').text
     assert button.findtext('focusedcolor') == 'focus_text'
     assert '◢' not in button.findtext('altlabel') and 'tab_line' not in ''.join(button.itertext())

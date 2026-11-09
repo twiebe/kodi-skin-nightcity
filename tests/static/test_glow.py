@@ -19,12 +19,11 @@ UI = ROOT / 'media' / 'ui'
 FOCUS = {'focus', 'accent', '$VAR[HomePagesFocusColor]'}
 # plain texture: its padded twin and the plain one's border
 PADDED = {'ui/cut_btn_fill.png': ('ui/cut_btn_glow.png', 12),
-          'ui/cut_fill.png': ('ui/cut_fill_glow.png', 16),
-          'ui/cut_btn.png': ('ui/cut_btn_pad.png', 12),
-          'ui/cut.png': ('ui/cut_pad.png', 16)}
-# a fill that does not glow (the shown settings category) in a padded control
-PLAIN_PAD = 'ui/cut_btn_fill_pad.png'
-PADDED_NAMES = {padded for padded, _ in PADDED.values()} | {PLAIN_PAD}
+          'ui/cut_fill.png': ('ui/cut_fill_glow.png', 16)}
+# plates that do not glow (a button or tile without the focus, the shown page) in a padded
+# control, and their plain borders
+PLAIN_PADS = {'ui/cut_btn_fill_pad.png': 12, 'ui/cut_fill_pad.png': 16}
+PADDED_NAMES = {padded for padded, _ in PADDED.values()} | set(PLAIN_PADS)
 TEXTURE_TAGS = ('texture', 'texturefocus', 'texturenofocus', 'alttexturefocus', 'alttexturenofocus')
 
 # Grouplists of glowing entries as they were before the glow: (left, top, width, height,
@@ -171,7 +170,7 @@ def test_focus_fills_glow():
 def test_padded_textures_have_a_wider_border():
     """The margin is part of the texture's border, so the corner keeps its size."""
     border = {padded: str(plain + GLOW) for padded, plain in PADDED.values()}
-    border[PLAIN_PAD] = str(12 + GLOW)
+    border.update({name: str(plain + GLOW) for name, plain in PLAIN_PADS.items()})
     bad = [(path.name, texture, b) for path in layout_files() for tag, texture, b, _ in textures(path)
            if tag != 'param' and texture in border and b != border[texture]]
     assert bad == []

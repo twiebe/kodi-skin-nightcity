@@ -389,8 +389,8 @@
         <param name="color"/>
         <param name="mute"/>
         <param name="mark"/>
-        <param name="tag" default="state"/>
-        <param name="tagtext" default="text"/>
+        <param name="tag" default="$VAR[LibraryRowTagRest]"/>
+        <param name="tagtext" default="$VAR[LibraryRowTagTextRest]"/>
         <param name="scroll" default="false"/>
         <definition>
             <control type="group">
@@ -738,12 +738,12 @@
         </definition>
     </include>
 
-    <!-- A filled tag for one technical fact (4K, HDR, 5.1), for a horizontal grouplist, its plate
-         the one of a list row's details (LookTagImage). Pass a `visible` condition so empty facts
+    <!-- A tag for one technical fact (4K, HDR, 5.1), for a horizontal grouplist, its plate the one
+         of a list row's details (LookTagImage). Pass a `visible` condition so empty facts
          disappear. -->
     <include name="Tag">
         <param name="label"/>
-        <param name="color" default="text"/>
+        <param name="color" default="text_dim"/>
         <param name="visible" default="true"/>
         <definition>
             <control type="button">
@@ -762,8 +762,9 @@
         </definition>
     </include>
 
-    <!-- Button with a cut top-right corner. Only the focused button is filled; a primary button
-         passes color=accent and textcolor=accent so it stands out without fill. The focused
+    <!-- Button with a cut top-right corner, on a dark plate (`plate`, alpha 0 for a button that
+         hides); the focused one is filled. A primary button passes color=accent and
+         textcolor=accent so it stands out without the focus. The focused
          fill glows: the button is 10 px larger on each side than the pill it shows (padded
          textures), so a fixed width is the pill's + 20 and its grouplist puts it 20 px closer. -->
     <include name="PillButton">
@@ -777,10 +778,11 @@
         <!-- a disabled pill looks the same, it only takes no focus -->
         <param name="enable" default="true"/>
         <param name="color" default="border_dim"/>
-        <param name="textcolor" default="text_dim"/>
+        <param name="textcolor" default="text"/>
         <param name="textoffsetx" default="34"/>
         <!-- the colour without the focus in a look that ignores `color`: for a button that hides -->
         <param name="rest" default="border_dim"/>
+        <param name="plate" default="state"/>
         <definition>
             <control type="button" id="$PARAM[id]">
                 <visible>$PARAM[visible]</visible>
@@ -798,6 +800,7 @@
                 <include content="LookButtonTextures">
                     <param name="color" value="$PARAM[color]"/>
                     <param name="rest" value="$PARAM[rest]"/>
+                    <param name="plate" value="$PARAM[plate]"/>
                 </include>
                 <onclick>$PARAM[onclick]</onclick>
                 <onclick>$PARAM[onclick2]</onclick>
@@ -812,6 +815,7 @@
     <include name="MorePill">
         <param name="texture"/>
         <param name="color"/>
+        <param name="plate"/>
         <param name="textcolor"/>
         <param name="visible" default="true"/>
         <definition>
@@ -823,6 +827,7 @@
                     <include content="LookMorePill">
                         <param name="texture" value="$PARAM[texture]"/>
                         <param name="color" value="$PARAM[color]"/>
+                        <param name="plate" value="$PARAM[plate]"/>
                     </include>
                 </control>
                 <control type="label">
