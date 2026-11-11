@@ -367,14 +367,6 @@ msgctxt "#31155"
 msgid "stats"
 msgstr "통계"
 
-msgctxt "#31157"
-msgid "booting"
-msgstr "부팅 중"
-
-msgctxt "#31158"
-msgid "online"
-msgstr "온라인"
-
 msgctxt "#31159"
 msgid "Playback & media"
 msgstr "재생 및 미디어"

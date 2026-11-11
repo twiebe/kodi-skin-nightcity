@@ -96,7 +96,7 @@ def test_startup_loading_indicator():
     assert '$EXP[StartupOnline]' in visibles and '!$EXP[StartupOnline]' in visibles
     assert READY not in visibles and READY.replace('!', '', 1) not in visibles
     labels = ' '.join(l.text or '' for l in root.iter('label'))
-    assert '$LOCALIZE[31157]' in labels and '$LOCALIZE[31158]' in labels
+    assert 'BOOTING' in labels and 'ONLINE' in labels  # the same in every language, not translated
 
 
 def test_startup_no_foreign_branding():

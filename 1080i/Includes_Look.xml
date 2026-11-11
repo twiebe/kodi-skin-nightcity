@@ -777,7 +777,7 @@
                         <height>32</height>
                         <font>font_num_small</font>
                         <textcolor>text_mute</textcolor>
-                        <label>[UPPERCASE]$LOCALIZE[31157][/UPPERCASE]</label>
+                        <label>BOOTING</label>
                         <visible>$PARAM[waiting]</visible>
                     </control>
                     <control type="label">
@@ -785,7 +785,7 @@
                         <height>32</height>
                         <font>font_num_small</font>
                         <textcolor>state_text</textcolor>
-                        <label>[UPPERCASE]$LOCALIZE[31158][/UPPERCASE]</label>
+                        <label>ONLINE</label>
                         <visible>$PARAM[online]</visible>
                     </control>
                     <control type="label">

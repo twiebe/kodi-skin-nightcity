@@ -92,8 +92,7 @@ user should see before the release.
   ones by hand, the others machine-translated for the languages Kodi covers to 95 % or more, not
   Arabic), worded after Kodi's own translation of each language; the test checks them, also their
   width in fixed buttons. Japanese, Korean and Chinese are shown in the fontset Arial, Kodi's own
-  font. #31157 and #31158 are set in Share Tech Mono, which has no Cyrillic nor Central European
-  letters: those languages keep the English words.
+  font. The loading screen's BOOTING and ONLINE stay English in every language.
 - No em dashes or en dashes anywhere (strings, news, docs, comments, commit messages); use a
   plain hyphen.
 - Match the surrounding XML: includes, naming, comment density.

@@ -67,7 +67,7 @@ def test_loading_page_has_nothing_of_nightcity(confuse_root):
     window = load('Startup.xml', layout=confuse_root / '1080i')
     labels = [c.findtext('label') for c in window.iter('control') if c.get('type') == 'label']
     assert '_' not in labels  # the blinking cursor
-    assert not any('31157' in (label or '') or '31158' in (label or '') for label in labels)  # Booting, Online
+    assert not any(label in ('BOOTING', 'ONLINE') for label in labels)
     assert not any('$VAR[SkinTitle]' in (label or '') for label in labels)  # the wordmark is a texture
     assert not any(c.findtext('font') == 'font_num_small' for c in window.iter('control'))
 

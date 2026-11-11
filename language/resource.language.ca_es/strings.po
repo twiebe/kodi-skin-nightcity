@@ -367,14 +367,6 @@ msgctxt "#31155"
 msgid "stats"
 msgstr "estadístiques"
 
-msgctxt "#31157"
-msgid "booting"
-msgstr "arrencant"
-
-msgctxt "#31158"
-msgid "online"
-msgstr "en línia"
-
 msgctxt "#31159"
 msgid "Playback & media"
 msgstr "Reproducció i mitjans"

@@ -367,14 +367,6 @@ msgctxt "#31155"
 msgid "stats"
 msgstr "статыстыка"
 
-msgctxt "#31157"
-msgid "booting"
-msgstr "booting"
-
-msgctxt "#31158"
-msgid "online"
-msgstr "online"
-
 msgctxt "#31159"
 msgid "Playback & media"
 msgstr "Прайграванне і медыя"
