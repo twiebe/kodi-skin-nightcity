@@ -1,0 +1,1196 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: sv_se\n"
+
+msgctxt "#31002"
+msgid "Spotlight source"
+msgstr "Spotlight-källa"
+
+msgctxt "#31003"
+msgid "All movies"
+msgstr "Alla filmer"
+
+msgctxt "#31004"
+msgid "Unwatched movies"
+msgstr "Osedda filmer"
+
+msgctxt "#31005"
+msgid "Effects"
+msgstr "Effekter"
+
+msgctxt "#31006"
+msgid "home"
+msgstr "hem"
+
+msgctxt "#31010"
+msgid "play"
+msgstr "spela"
+
+msgctxt "#31011"
+msgid "info"
+msgstr "info"
+
+msgctxt "#31012"
+msgid "min"
+msgstr "min"
+
+msgctxt "#31020"
+msgid "on deck"
+msgstr "på tur"
+
+msgctxt "#31021"
+msgid "new movies"
+msgstr "nya filmer"
+
+msgctxt "#31022"
+msgid "new episodes"
+msgstr "nya avsnitt"
+
+msgctxt "#31023"
+msgid "continue watching"
+msgstr "fortsätt titta"
+
+msgctxt "#31030"
+msgid "movies"
+msgstr "filmer"
+
+msgctxt "#31031"
+msgid "shows"
+msgstr "serier"
+
+msgctxt "#31032"
+msgid "search"
+msgstr "sök"
+
+msgctxt "#31033"
+msgid "System"
+msgstr "System"
+
+msgctxt "#31041"
+msgid "trailer"
+msgstr "trailer"
+
+msgctxt "#31042"
+msgid "posters"
+msgstr "affischer"
+
+msgctxt "#31043"
+msgid "resume"
+msgstr "återuppta"
+
+msgctxt "#31050"
+msgid "ends"
+msgstr "slutar"
+
+msgctxt "#31051"
+msgid "pause"
+msgstr "paus"
+
+msgctxt "#31052"
+msgid "stop"
+msgstr "stopp"
+
+msgctxt "#31053"
+msgid "subtitles"
+msgstr "undertexter"
+
+msgctxt "#31054"
+msgid "audio"
+msgstr "ljud"
+
+msgctxt "#31055"
+msgid "video"
+msgstr "video"
+
+msgctxt "#31056"
+msgid "bookmarks"
+msgstr "bokmärken"
+
+msgctxt "#31057"
+msgid "buffering"
+msgstr "buffrar"
+
+msgctxt "#31058"
+msgid "video already has subtitles"
+msgstr "videon har redan undertexter"
+
+msgctxt "#31080"
+msgid "quit kodi"
+msgstr "avsluta kodi"
+
+msgctxt "#31081"
+msgid "power off"
+msgstr "stäng av"
+
+msgctxt "#31082"
+msgid "reboot"
+msgstr "starta om"
+
+msgctxt "#31083"
+msgid "suspend"
+msgstr "vänteläge"
+
+msgctxt "#31084"
+msgid "hibernate"
+msgstr "viloläge"
+
+msgctxt "#31085"
+msgid "shutdown timer"
+msgstr "avstängningstimer"
+
+msgctxt "#31086"
+msgid "cancel shutdown timer"
+msgstr "avbryt avstängningstimer"
+
+msgctxt "#31087"
+msgid "log off"
+msgstr "logga ut"
+
+msgctxt "#31088"
+msgid "reload skin"
+msgstr "ladda om skal"
+
+msgctxt "#31089"
+msgid "power"
+msgstr "ström"
+
+msgctxt "#31090"
+msgid "Hide foreign"
+msgstr "Dölj främmande"
+
+msgctxt "#31091"
+msgid "Hide broken"
+msgstr "Dölj trasiga"
+
+msgctxt "#31094"
+msgid "thumbs"
+msgstr "bilder"
+
+msgctxt "#31095"
+msgid "mute"
+msgstr "ljud av"
+
+msgctxt "#31096"
+msgid "descending"
+msgstr "fallande"
+
+msgctxt "#31100"
+msgid "spotlight"
+msgstr "spotlight"
+
+msgctxt "#31101"
+msgid "all movies"
+msgstr "alla filmer"
+
+msgctxt "#31102"
+msgid "all shows"
+msgstr "alla serier"
+
+msgctxt "#31103"
+msgid "in progress"
+msgstr "påbörjade"
+
+msgctxt "#31104"
+msgid "unwatched"
+msgstr "osedda"
+
+msgctxt "#31105"
+msgid "genres"
+msgstr "genrer"
+
+msgctxt "#31106"
+msgid "episodes"
+msgstr "avsnitt"
+
+msgctxt "#31116"
+msgid "sort"
+msgstr "sortera"
+
+msgctxt "#31117"
+msgid "descending"
+msgstr "fallande"
+
+msgctxt "#31118"
+msgid "title"
+msgstr "titel"
+
+msgctxt "#31119"
+msgid "year"
+msgstr "år"
+
+msgctxt "#31120"
+msgid "added"
+msgstr "tillagd"
+
+msgctxt "#31121"
+msgid "rating"
+msgstr "betyg"
+
+msgctxt "#31122"
+msgid "ascending"
+msgstr "stigande"
+
+msgctxt "#31123"
+msgid "from start"
+msgstr "från början"
+
+msgctxt "#31124"
+msgid "cast"
+msgstr "rollista"
+
+msgctxt "#31125"
+msgid "details"
+msgstr "detaljer"
+
+msgctxt "#31126"
+msgid "director"
+msgstr "regi"
+
+msgctxt "#31127"
+msgid "writer"
+msgstr "manus"
+
+msgctxt "#31128"
+msgid "studio"
+msgstr "studio"
+
+msgctxt "#31129"
+msgid "country"
+msgstr "land"
+
+msgctxt "#31130"
+msgid "similar"
+msgstr "liknande"
+
+msgctxt "#31131"
+msgid "season"
+msgstr "säsong"
+
+msgctxt "#31132"
+msgid "episode"
+msgstr "avsnitt"
+
+msgctxt "#31133"
+msgid "all"
+msgstr "alla"
+
+msgctxt "#31134"
+msgid "specials"
+msgstr "specialavsnitt"
+
+msgctxt "#31135"
+msgid "select"
+msgstr "välj"
+
+msgctxt "#31136"
+msgid "age rating"
+msgstr "åldersgräns"
+
+msgctxt "#31059"
+msgid "ends at"
+msgstr "slutar kl."
+
+msgctxt "#31137"
+msgid "next episode"
+msgstr "nästa avsnitt"
+
+msgctxt "#31138"
+msgid "off"
+msgstr "av"
+
+msgctxt "#31139"
+msgid "all settings"
+msgstr "alla inställningar"
+
+msgctxt "#31140"
+msgid "chapters"
+msgstr "kapitel"
+
+msgctxt "#31141"
+msgid "search for a title"
+msgstr "sök efter en titel"
+
+msgctxt "#31142"
+msgid "actions"
+msgstr "åtgärder"
+
+msgctxt "#31143"
+msgid "power off"
+msgstr "stäng av"
+
+msgctxt "#31144"
+msgid "reboot"
+msgstr "starta om"
+
+msgctxt "#31145"
+msgid "suspend"
+msgstr "vänteläge"
+
+msgctxt "#31146"
+msgid "exit kodi"
+msgstr "avsluta kodi"
+
+msgctxt "#31147"
+msgid "restart kodi"
+msgstr "starta om kodi"
+
+msgctxt "#31148"
+msgid "movies (library)"
+msgstr "filmer (bibliotek)"
+
+msgctxt "#31149"
+msgid "shows (library)"
+msgstr "serier (bibliotek)"
+
+msgctxt "#31150"
+msgid "episodes (library)"
+msgstr "avsnitt (bibliotek)"
+
+msgctxt "#31151"
+msgid "online: movies (tmdb)"
+msgstr "online: filmer (tmdb)"
+
+msgctxt "#31152"
+msgid "online: shows (tmdb)"
+msgstr "online: serier (tmdb)"
+
+msgctxt "#31153"
+msgid "recent"
+msgstr "senaste"
+
+msgctxt "#31154"
+msgid "not available on this device"
+msgstr "inte tillgängligt på den här enheten"
+
+msgctxt "#31155"
+msgid "stats"
+msgstr "statistik"
+
+msgctxt "#31157"
+msgid "booting"
+msgstr "startar"
+
+msgctxt "#31158"
+msgid "online"
+msgstr "online"
+
+msgctxt "#31159"
+msgid "Playback & media"
+msgstr "Uppspelning & media"
+
+msgctxt "#31160"
+msgid "Look & profiles"
+msgstr "Utseende & profiler"
+
+msgctxt "#31161"
+msgid "Add-ons & content"
+msgstr "Tillägg & innehåll"
+
+msgctxt "#31162"
+msgid "System & network"
+msgstr "System & nätverk"
+
+msgctxt "#31163"
+msgid "Tools"
+msgstr "Verktyg"
+
+msgctxt "#31164"
+msgid "How videos, music and pictures play: decoding, refresh rate, discs, audio and subtitle language, subtitles."
+msgstr "Hur video, musik och bilder spelas upp: avkodning, uppdateringsfrekvens, skivor, ljud- och undertextspråk, undertexter."
+
+msgctxt "#31165"
+msgid "How the library collects and shows your media: scanning, file lists, videos, music, pictures."
+msgstr "Hur biblioteket samlar in och visar din media: skanning, fillistor, video, musik, bilder."
+
+msgctxt "#31166"
+msgid "Live TV and recordings from your PVR client: channels, guide, recording, reminders."
+msgstr "Live-TV och inspelningar från din PVR-klient: kanaler, TV-guide, inspelning, påminnelser."
+
+msgctxt "#31167"
+msgid "How Kodi looks and starts: skin, language and region, screensaver, master lock, startup."
+msgstr "Hur Kodi ser ut och startar: skal, språk och region, skärmsläckare, huvudlås, uppstart."
+
+msgctxt "#31168"
+msgid "The options of this skin: the home pages and the look."
+msgstr "Det här skalets alternativ: startsidorna och utseendet."
+
+msgctxt "#31169"
+msgid "Users with their own library, settings and add-ons, and the login screen."
+msgstr "Användare med eget bibliotek, egna inställningar och tillägg, samt inloggningsskärmen."
+
+msgctxt "#31170"
+msgid "Installed add-ons, repositories, install from a zip file, search and updates."
+msgstr "Installerade tillägg, förråd, installera från zip-fil, sökning och uppdateringar."
+
+msgctxt "#31171"
+msgid "Browse sources and folders, copy, move and delete files."
+msgstr "Bläddra i källor och mappar, kopiera, flytta och radera filer."
+
+msgctxt "#31172"
+msgid "The device: display, audio output, input, internet access, power saving, add-on rules, logging."
+msgstr "Enheten: skärm, ljudutgång, inmatning, internetåtkomst, energisparläge, tilläggsregler, loggning."
+
+msgctxt "#31173"
+msgid "What Kodi offers on the network and uses from it: remote control, UPnP, AirPlay, SMB, NFS, caching, weather."
+msgstr "Vad Kodi erbjuder i nätverket och använder därifrån: fjärrstyrning, UPnP, AirPlay, SMB, NFS, cachning, väder."
+
+msgctxt "#31174"
+msgid "Facts about this device: Kodi version, storage, network, video, hardware."
+msgstr "Fakta om den här enheten: Kodi-version, lagring, nätverk, video, hårdvara."
+
+msgctxt "#31175"
+msgid "What happened lately: add-on installs and updates, library scans, errors."
+msgstr "Vad som hänt nyligen: installerade och uppdaterade tillägg, biblioteksskanningar, fel."
+
+msgctxt "#31176"
+msgid "Categories"
+msgstr "Kategorier"
+
+msgctxt "#31178"
+msgid "[COLOR state_text]⏎[/COLOR] open"
+msgstr "[COLOR state_text]⏎[/COLOR] öppna"
+
+msgctxt "#31181"
+msgid "refresh rate, decoding, resume"
+msgstr "uppdateringsfrekvens, avkodning, återuppta"
+
+msgctxt "#31182"
+msgid "crossfade, visualisation, volume adjustment"
+msgstr "övertoning, visualisering, volymjustering"
+
+msgctxt "#31183"
+msgid "DVD, Blu-ray, audio CD"
+msgstr "DVD, Blu-ray, ljud-CD"
+
+msgctxt "#31184"
+msgid "slideshow, transitions"
+msgstr "bildspel, övergångar"
+
+msgctxt "#31185"
+msgid "audio, subtitles and menus"
+msgstr "ljud, undertexter och menyer"
+
+msgctxt "#31186"
+msgid "font, size, download services"
+msgstr "typsnitt, storlek, nedladdningstjänster"
+
+msgctxt "#31187"
+msgid "scan on startup, update, clean up"
+msgstr "skanna vid start, uppdatera, rensa"
+
+msgctxt "#31188"
+msgid "file extensions, hidden files, sorting"
+msgstr "filändelser, dolda filer, sortering"
+
+msgctxt "#31189"
+msgid "select action, plots, thumbnails"
+msgstr "valåtgärd, handlingar, miniatyrer"
+
+msgctxt "#31190"
+msgid "artists, album covers, tags"
+msgstr "artister, albumomslag, taggar"
+
+msgctxt "#31191"
+msgid "thumbnails, EXIF"
+msgstr "miniatyrer, EXIF"
+
+msgctxt "#31192"
+msgid "channel groups, channel icons"
+msgstr "kanalgrupper, kanalikoner"
+
+msgctxt "#31193"
+msgid "channel info, switching"
+msgstr "kanalinfo, kanalbyte"
+
+msgctxt "#31194"
+msgid "days shown, updates"
+msgstr "visade dagar, uppdateringar"
+
+msgctxt "#31195"
+msgid "start, channel switch delay"
+msgstr "start, fördröjning vid kanalbyte"
+
+msgctxt "#31196"
+msgid "margins, folders"
+msgstr "marginaler, mappar"
+
+msgctxt "#31197"
+msgid "reminder before a show"
+msgstr "påminnelse före ett program"
+
+msgctxt "#31198"
+msgid "wake up for recordings"
+msgstr "väck för inspelningar"
+
+msgctxt "#31199"
+msgid "lock by age, PIN"
+msgstr "lås efter ålder, PIN"
+
+msgctxt "#31200"
+msgid "PVR client add-ons"
+msgstr "PVR-klienttillägg"
+
+msgctxt "#31201"
+msgid "skin, theme, colours, fonts"
+msgstr "skal, tema, färger, typsnitt"
+
+msgctxt "#31202"
+msgid "language, region, time, keyboard"
+msgstr "språk, region, tid, tangentbord"
+
+msgctxt "#31203"
+msgid "mode, wait time"
+msgstr "läge, väntetid"
+
+msgctxt "#31204"
+msgid "lock code, protected areas"
+msgstr "låskod, skyddade områden"
+
+msgctxt "#31205"
+msgid "start window, splash screen"
+msgstr "startfönster, startbild"
+
+msgctxt "#31206"
+msgid "resolution, refresh rate, calibration"
+msgstr "upplösning, uppdateringsfrekvens, kalibrering"
+
+msgctxt "#31207"
+msgid "output device, channels, passthrough"
+msgstr "utenhet, kanaler, passthrough"
+
+msgctxt "#31208"
+msgid "devices, mouse, remote"
+msgstr "enheter, mus, fjärrkontroll"
+
+msgctxt "#31209"
+msgid "proxy"
+msgstr "proxy"
+
+msgctxt "#31210"
+msgid "shutdown, display off"
+msgstr "avstängning, skärm av"
+
+msgctxt "#31211"
+msgid "updates, unknown sources"
+msgstr "uppdateringar, okända källor"
+
+msgctxt "#31212"
+msgid "debug log, components"
+msgstr "felsökningslogg, komponenter"
+
+msgctxt "#31213"
+msgid "device name, Zeroconf"
+msgstr "enhetsnamn, Zeroconf"
+
+msgctxt "#31214"
+msgid "web server, remote apps"
+msgstr "webbserver, fjärrappar"
+
+msgctxt "#31215"
+msgid "share library, renderer"
+msgstr "dela bibliotek, renderare"
+
+msgctxt "#31216"
+msgid "receive AirPlay"
+msgstr "ta emot AirPlay"
+
+msgctxt "#31217"
+msgid "Windows shares, WINS"
+msgstr "Windows-resurser, WINS"
+
+msgctxt "#31218"
+msgid "NFS shares"
+msgstr "NFS-resurser"
+
+msgctxt "#31219"
+msgid "buffer, read rate"
+msgstr "buffert, läshastighet"
+
+msgctxt "#31220"
+msgid "weather service"
+msgstr "vädertjänst"
+
+msgctxt "#31221"
+msgid "Spotlight change"
+msgstr "Spotlight-byte"
+
+msgctxt "#31222"
+msgid "Home pages"
+msgstr "Startsidor"
+
+msgctxt "#31224"
+msgid "Rows"
+msgstr "Rader"
+
+msgctxt "#31225"
+msgid "Spotlight"
+msgstr "Spotlight"
+
+msgctxt "#31226"
+msgid "Still"
+msgstr "Stilla"
+
+msgctxt "#31227"
+msgid "All shows"
+msgstr "Alla serier"
+
+msgctxt "#31228"
+msgid "Unwatched shows"
+msgstr "Osedda serier"
+
+msgctxt "#31229"
+msgid "Slot"
+msgstr "Plats"
+
+msgctxt "#31231"
+msgid "Section for slot"
+msgstr "Sektion för plats"
+
+msgctxt "#31232"
+msgid "menu"
+msgstr "meny"
+
+msgctxt "#31233"
+msgid "Continue watching"
+msgstr "Fortsätt titta"
+
+msgctxt "#31234"
+msgid "Next up"
+msgstr "Näst på tur"
+
+msgctxt "#31235"
+msgid "New movies"
+msgstr "Nya filmer"
+
+msgctxt "#31236"
+msgid "New episodes"
+msgstr "Nya avsnitt"
+
+msgctxt "#31237"
+msgid "Random movies"
+msgstr "Slumpade filmer"
+
+msgctxt "#31238"
+msgid "Top rated"
+msgstr "Högst betyg"
+
+msgctxt "#31239"
+msgid "TMDb trending"
+msgstr "TMDb-trender"
+
+msgctxt "#31240"
+msgid "Recently watched"
+msgstr "Nyligen sett"
+
+msgctxt "#31241"
+msgid "Started movies and episodes, the last watched first."
+msgstr "Påbörjade filmer och avsnitt, senast sedda först."
+
+msgctxt "#31242"
+msgid "The shows you are watching. OK opens the next episode."
+msgstr "Serierna du tittar på. OK öppnar nästa avsnitt."
+
+msgctxt "#31243"
+msgid "The movies added to the library last."
+msgstr "Filmerna som lades till i biblioteket senast."
+
+msgctxt "#31244"
+msgid "The shows with the episodes added last."
+msgstr "Serierna med de senast tillagda avsnitten."
+
+msgctxt "#31245"
+msgid "Tabs for the three biggest genres and a picker for all others."
+msgstr "Flikar för de tre största genrerna och en väljare för alla andra."
+
+msgctxt "#31246"
+msgid "A new choice from the whole library every time Home opens."
+msgstr "Ett nytt urval ur hela biblioteket varje gång startsidan öppnas."
+
+msgctxt "#31248"
+msgid "Sorted by rating, from 7.0 up."
+msgstr "Sorterat efter betyg, från 7,0 och uppåt."
+
+msgctxt "#31249"
+msgid "Kodi's favourites, as you set them."
+msgstr "Kodis favoriter, som du har ställt in dem."
+
+msgctxt "#31250"
+msgid "What is trending on TMDb this week."
+msgstr "Det som trendar på TMDb den här veckan."
+
+msgctxt "#31251"
+msgid "What played last, also what you watched to the end."
+msgstr "Det som spelades senast, även det du såg till slutet."
+
+msgctxt "#31252"
+msgid "The movie sets of your library. OK opens a set."
+msgstr "Filmsamlingarna i ditt bibliotek. OK öppnar en samling."
+
+msgctxt "#31253"
+msgid "Episodes you started and did not finish."
+msgstr "Avsnitt du har påbörjat men inte sett klart."
+
+msgctxt "#31254"
+msgid "Free slot. OK picks a section from the catalogue."
+msgstr "Ledig plats. OK väljer en sektion ur katalogen."
+
+msgctxt "#31255"
+msgid "Large artwork with title and plot, in random order. OK or Right picks the source."
+msgstr "Stora bilder med titel och handling, i slumpvis ordning. OK eller Höger väljer källan."
+
+msgctxt "#31256"
+msgid "No spotlight: the page starts with the first row."
+msgstr "Ingen spotlight: sidan börjar med första raden."
+
+msgctxt "#31257"
+msgid "How often the spotlight moves on by itself. OK or Right: 10, 15, 30, 60 s or still (then only by hand)."
+msgstr "Hur ofta spotlighten byter av sig själv. OK eller Höger: 10, 15, 30, 60 s eller stilla (då bara för hand)."
+
+msgctxt "#31258"
+msgid "Home and movies show the same spotlight, so they share this setting."
+msgstr "Hem och filmer visar samma spotlight, så de delar den här inställningen."
+
+msgctxt "#31259"
+msgid "Show or hide entries of the main menu. System and power always stay, and so does the last page shown."
+msgstr "Visa eller dölj poster i huvudmenyn. System och ström finns alltid kvar, liksom den senast visade sidan."
+
+msgctxt "#31260"
+msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]⏎[/COLOR] välj   [COLOR state_text]→[/COLOR] alternativ"
+
+msgctxt "#31261"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] flytta   [COLOR state_text]⏎[/COLOR] släpp"
+
+msgctxt "#31262"
+msgid "Spotlight, rows and main menu of the home, movies and shows pages."
+msgstr "Spotlight, rader och huvudmeny för sidorna hem, filmer och serier."
+
+msgctxt "#31263"
+msgid "swap"
+msgstr "byt"
+
+msgctxt "#31264"
+msgid "Main menu"
+msgstr "Huvudmeny"
+
+msgctxt "#31265"
+msgid "Spotlight and rows of the home page."
+msgstr "Spotlight och rader på startsidan."
+
+msgctxt "#31266"
+msgid "Spotlight and rows of the movies page."
+msgstr "Spotlight och rader på filmsidan."
+
+msgctxt "#31267"
+msgid "Spotlight and rows of the shows page."
+msgstr "Spotlight och rader på seriesidan."
+
+msgctxt "#31268"
+msgid "How the skin draws the focus."
+msgstr "Hur skalet visar fokus."
+
+msgctxt "#31230"
+msgid "frame rate"
+msgstr "bildfrekvens"
+
+msgctxt "#31330"
+msgid "back to video"
+msgstr "tillbaka till video"
+
+msgctxt "#31331"
+msgid "back to home"
+msgstr "tillbaka till hem"
+
+msgctxt "#31332"
+msgid "back to movies"
+msgstr "tillbaka till filmer"
+
+msgctxt "#31333"
+msgid "back to shows"
+msgstr "tillbaka till serier"
+
+msgctxt "#31334"
+msgid "back to search"
+msgstr "tillbaka till sök"
+
+msgctxt "#31335"
+msgid "back to library"
+msgstr "tillbaka till bibliotek"
+
+msgctxt "#31310"
+msgid "Home key opens the home page"
+msgstr "Hem-knappen öppnar startsidan"
+
+msgctxt "#31311"
+msgid "The Home key of the remote always leads to the home page, held down it opens the quick menu. The skin sets up the keymap 0_skin.nightcity.xml in the profile for it; your own keymaps still win."
+msgstr "Hem-knappen på fjärrkontrollen leder alltid till startsidan, hålls den nedtryckt öppnas snabbmenyn. Skalet lägger in tangentmappningen 0_skin.nightcity.xml i profilen för detta; dina egna tangentmappningar går fortfarande före."
+
+msgctxt "#31300"
+msgid "crew"
+msgstr "filmteam"
+
+msgctxt "#31301"
+msgid "back to start"
+msgstr "tillbaka till början"
+
+msgctxt "#31302"
+msgid "person"
+msgstr "person"
+
+msgctxt "#31303"
+msgid "born"
+msgstr "född"
+
+msgctxt "#31304"
+msgid "died"
+msgstr "död"
+
+msgctxt "#31320"
+msgid "quick menu"
+msgstr "snabbmeny"
+
+msgctxt "#31321"
+msgid "set up weather"
+msgstr "ställ in väder"
+
+msgctxt "#31322"
+msgid "more"
+msgstr "mer"
+
+msgctxt "#31323"
+msgid "timer"
+msgstr "timer"
+
+msgctxt "#31336"
+msgid "Remember search terms"
+msgstr "Kom ihåg sökord"
+
+msgctxt "#31337"
+msgid "The search page lists the last five search terms. Switched off, the skin keeps no terms and forgets the ones it has."
+msgstr "Söksidan listar de fem senaste sökorden. Avstängt sparar skalet inga sökord och glömmer de som finns."
+
+msgctxt "#31338"
+msgid "Clear search history"
+msgstr "Rensa sökhistorik"
+
+msgctxt "#31339"
+msgid "Forgets the remembered search terms."
+msgstr "Glömmer de sparade sökorden."
+
+msgctxt "#31340"
+msgid "The colour scheme of the skin, the same choice as under Interface."
+msgstr "Skalets färgschema, samma val som under Gränssnitt."
+
+msgctxt "#31341"
+msgid "forecast"
+msgstr "prognos"
+
+msgctxt "#31360"
+msgid "Hide the controls automatically"
+msgstr "Dölj kontrollerna automatiskt"
+
+msgctxt "#31361"
+msgid "While a video plays, the player controls close by themselves once no key was pressed for the time set below. While paused they stay; the time starts again when playback goes on."
+msgstr "Medan en video spelas stängs spelarkontrollerna av sig själva när ingen knapp har tryckts under den tid som ställs in nedan. Vid paus ligger de kvar; tiden börjar om när uppspelningen fortsätter."
+
+msgctxt "#31362"
+msgid "Hide after"
+msgstr "Dölj efter"
+
+msgctxt "#31363"
+msgid "Time without a key press before the player controls close, 3 to 30 seconds. OK takes the slider, left and right move it, OK lets go."
+msgstr "Tid utan knapptryckning innan spelarkontrollerna stängs, 3 till 30 sekunder. OK tar tag i reglaget, vänster och höger flyttar det, OK släpper."
+
+msgctxt "#31364"
+msgid "The video player: its controls and what it shows while they are up."
+msgstr "Videospelaren: dess kontroller och vad den visar medan de är framme."
+
+msgctxt "#31365"
+msgid "Show the plot"
+msgstr "Visa handlingen"
+
+msgctxt "#31366"
+msgid "The plot of what plays, under its title while the player controls or the seek line are up."
+msgstr "Handlingen för det som spelas, under titeln medan spelarkontrollerna eller sökraden är framme."
+
+msgctxt "#31400"
+msgid "New albums"
+msgstr "Nya album"
+
+msgctxt "#31401"
+msgid "Recently played"
+msgstr "Nyligen spelat"
+
+msgctxt "#31402"
+msgid "Random albums"
+msgstr "Slumpade album"
+
+msgctxt "#31403"
+msgid "Artists"
+msgstr "Artister"
+
+msgctxt "#31404"
+msgid "Genres"
+msgstr "Genrer"
+
+msgctxt "#31405"
+msgid "music"
+msgstr "musik"
+
+msgctxt "#31406"
+msgid "now playing"
+msgstr "spelas nu"
+
+msgctxt "#31407"
+msgid "albums"
+msgstr "album"
+
+msgctxt "#31408"
+msgid "more by"
+msgstr "mer av"
+
+msgctxt "#31409"
+msgid "tracks"
+msgstr "spår"
+
+msgctxt "#31410"
+msgid "up next"
+msgstr "näst på tur"
+
+msgctxt "#31411"
+msgid "shuffle"
+msgstr "blanda"
+
+msgctxt "#31412"
+msgid "repeat"
+msgstr "upprepa"
+
+msgctxt "#31413"
+msgid "repeat all"
+msgstr "upprepa alla"
+
+msgctxt "#31414"
+msgid "repeat one"
+msgstr "upprepa en"
+
+msgctxt "#31420"
+msgid "Network, Bluetooth, updates"
+msgstr "Nätverk, Bluetooth, uppdateringar"
+
+msgctxt "#31440"
+msgid "audience"
+msgstr "publik"
+
+msgctxt "#31441"
+msgid "Ratings only from TMDb Helper"
+msgstr "Betyg endast från TMDb Helper"
+
+msgctxt "#31442"
+msgid "Show only the ratings TMDb Helper fetched for exactly this title. Off: the library's own rating (from Jellyfin) fills in while TMDb Helper has none."
+msgstr "Visa bara de betyg som TMDb Helper hämtat för exakt den här titeln. Av: bibliotekets eget betyg (från Jellyfin) fyller i så länge TMDb Helper inte har något."
+
+msgctxt "#31443"
+msgid "Ratings only on title pages"
+msgstr "Betyg endast på titelsidor"
+
+msgctxt "#31444"
+msgid "Spotlight and rows show no ratings, which saves requests to TMDb. A title's page still shows them."
+msgstr "Spotlight och rader visar inga betyg, vilket sparar förfrågningar till TMDb. En titels sida visar dem fortfarande."
+
+msgctxt "#31445"
+msgid "Ratings"
+msgstr "Betyg"
+
+msgctxt "#31446"
+msgid "Sources"
+msgstr "Källor"
+
+msgctxt "#31447"
+msgid "Which ratings the ratings line of the spotlight and the info page shows, and where they come from."
+msgstr "Vilka betyg betygsraden i spotlighten och på infosidan visar, och var de kommer ifrån."
+
+msgctxt "#31450"
+msgid "IMDb"
+msgstr "IMDb"
+
+msgctxt "#31451"
+msgid "TMDb"
+msgstr "TMDb"
+
+msgctxt "#31452"
+msgid "Rotten Tomatoes critics"
+msgstr "Rotten Tomatoes kritiker"
+
+msgctxt "#31453"
+msgid "Rotten Tomatoes audience"
+msgstr "Rotten Tomatoes publik"
+
+msgctxt "#31454"
+msgid "Metacritic"
+msgstr "Metacritic"
+
+msgctxt "#31455"
+msgid "Trakt"
+msgstr "Trakt"
+
+msgctxt "#31456"
+msgid "Letterboxd"
+msgstr "Letterboxd"
+
+msgctxt "#31457"
+msgid "MDbList"
+msgstr "MDbList"
+
+msgctxt "#31460"
+msgid "IMDb users, 0 to 10, with the Top 250 rank. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "IMDb-användare, 0 till 10, med plats på Topp 250. Kräver en OMDb- eller MDbList-nyckel i TMDb Helper."
+
+msgctxt "#31461"
+msgid "TMDb users, 0 to 10. Needs no key."
+msgstr "TMDb-användare, 0 till 10. Kräver ingen nyckel."
+
+msgctxt "#31462"
+msgid "Tomatometer: the share of positive critic reviews. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Tomatometer: andelen positiva kritikerrecensioner. Kräver en OMDb- eller MDbList-nyckel i TMDb Helper."
+
+msgctxt "#31463"
+msgid "Popcornmeter: the share of positive audience ratings. Needs an MDbList or OMDb key in TMDb Helper."
+msgstr "Popcornmeter: andelen positiva publikbetyg. Kräver en MDbList- eller OMDb-nyckel i TMDb Helper."
+
+msgctxt "#31464"
+msgid "A weighted average of critic reviews, 0 to 100, mostly for theatrical films and big series. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Ett viktat medelvärde av kritikerrecensioner, 0 till 100, mest för biofilmer och stora serier. Kräver en OMDb- eller MDbList-nyckel i TMDb Helper."
+
+msgctxt "#31465"
+msgid "Trakt users, 0 to 10. Needs a connected Trakt account in TMDb Helper: fetched from Trakt, not MDbList."
+msgstr "Trakt-användare, 0 till 10. Kräver ett anslutet Trakt-konto i TMDb Helper: hämtas från Trakt, inte MDbList."
+
+msgctxt "#31466"
+msgid "Letterboxd users, 0 to 5, mostly films. Needs an MDbList key in TMDb Helper."
+msgstr "Letterboxd-användare, 0 till 5, mest filmer. Kräver en MDbList-nyckel i TMDb Helper."
+
+msgctxt "#31467"
+msgid "MDbList score: an average of the other sources, 0 to 100. Needs an MDbList key in TMDb Helper."
+msgstr "MDbList-poäng: ett medelvärde av de andra källorna, 0 till 100. Kräver en MDbList-nyckel i TMDb Helper."
+
+msgctxt "#31469"
+msgid "No description"
+msgstr "Ingen beskrivning"
+
+msgctxt "#31470"
+msgid "back"
+msgstr "tillbaka"
+
+msgctxt "#31471"
+msgid "budget"
+msgstr "budget"
+
+msgctxt "#31472"
+msgid "box office"
+msgstr "intäkter"
+
+msgctxt "#31473"
+msgid "description"
+msgstr "handling"
+
+msgctxt "#31474"
+msgid "biography"
+msgstr "biografi"
+
+msgctxt "#31478"
+msgid "controls"
+msgstr "kontroller"
+
+msgctxt "#31479"
+msgid "previous page"
+msgstr "föregående sida"
+
+msgctxt "#31480"
+msgid "parent folder"
+msgstr "överordnad mapp"
+
+msgctxt "#31477"
+msgid "Home"
+msgstr "Hem"
+
+msgctxt "#31500"
+msgid "view"
+msgstr "vy"
+
+msgctxt "#31501"
+msgid "list"
+msgstr "lista"
+
+msgctxt "#31502"
+msgid "filter"
+msgstr "filter"
+
+msgctxt "#31503"
+msgid "all"
+msgstr "alla"
+
+msgctxt "#31504"
+msgid "resolution"
+msgstr "upplösning"
+
+msgctxt "#31505"
+msgid "dynamic range"
+msgstr "dynamiskt omfång"
+
+msgctxt "#31506"
+msgid "audio format"
+msgstr "ljudformat"
+
+msgctxt "#31507"
+msgid "audio channels"
+msgstr "ljudkanaler"
+
+msgctxt "#31508"
+msgid "clear filter"
+msgstr "rensa filter"
+
+msgctxt "#31600"
+msgid "runtime"
+msgstr "speltid"
+
+msgctxt "#31601"
+msgid "genre"
+msgstr "genre"
+
+msgctxt "#31602"
+msgid "details"
+msgstr "detaljer"
+
+msgctxt "#31603"
+msgid "seasons"
+msgstr "säsonger"
+
+msgctxt "#31604"
+msgid "season"
+msgstr "säsong"
+
+msgctxt "#31605"
+msgid "seasons"
+msgstr "säsonger"
+
+msgctxt "#31606"
+msgid "episodes"
+msgstr "avsnitt"
+
+msgctxt "#31607"
+msgid "none"
+msgstr "inga"
+
+msgctxt "#31700"
+msgid "On Deck"
+msgstr "På tur"
+
+msgctxt "#31701"
+msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
+msgstr "Det du har påbörjat, sedan serierna du tittar på. OK på en serie öppnar nästa avsnitt."
+
+msgctxt "#31750"
+msgid "No trailer found"
+msgstr "Ingen trailer hittades"

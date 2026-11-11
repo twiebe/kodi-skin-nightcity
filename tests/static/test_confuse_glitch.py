@@ -38,7 +38,7 @@ def test_no_setting_and_no_switch():
             assert gone not in text, (path.name, gone)
     ids = [c.get('id') for c in parse(ROOT / '1080i' / 'SkinSettings.xml').iter('control')]
     assert '603' not in ids
-    assert len(LANGUAGES) == 8
+    assert len(LANGUAGES) == 30
     for po in LANGUAGES:
         text = po.read_text(encoding='utf-8')
         assert 'msgctxt "#31475"' not in text and 'msgctxt "#31476"' not in text, po.parent.name

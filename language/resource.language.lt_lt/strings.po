@@ -1,0 +1,1196 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: lt_lt\n"
+
+msgctxt "#31002"
+msgid "Spotlight source"
+msgstr "Akcentų šaltinis"
+
+msgctxt "#31003"
+msgid "All movies"
+msgstr "Visi filmai"
+
+msgctxt "#31004"
+msgid "Unwatched movies"
+msgstr "Nežiūrėti filmai"
+
+msgctxt "#31005"
+msgid "Effects"
+msgstr "Efektai"
+
+msgctxt "#31006"
+msgid "home"
+msgstr "pradžia"
+
+msgctxt "#31010"
+msgid "play"
+msgstr "leisti"
+
+msgctxt "#31011"
+msgid "info"
+msgstr "info"
+
+msgctxt "#31012"
+msgid "min"
+msgstr "min"
+
+msgctxt "#31020"
+msgid "on deck"
+msgstr "toliau"
+
+msgctxt "#31021"
+msgid "new movies"
+msgstr "nauji filmai"
+
+msgctxt "#31022"
+msgid "new episodes"
+msgstr "naujos serijos"
+
+msgctxt "#31023"
+msgid "continue watching"
+msgstr "žiūrėti toliau"
+
+msgctxt "#31030"
+msgid "movies"
+msgstr "filmai"
+
+msgctxt "#31031"
+msgid "shows"
+msgstr "serialai"
+
+msgctxt "#31032"
+msgid "search"
+msgstr "paieška"
+
+msgctxt "#31033"
+msgid "System"
+msgstr "Sistema"
+
+msgctxt "#31041"
+msgid "trailer"
+msgstr "anonsas"
+
+msgctxt "#31042"
+msgid "posters"
+msgstr "plakatai"
+
+msgctxt "#31043"
+msgid "resume"
+msgstr "tęsti"
+
+msgctxt "#31050"
+msgid "ends"
+msgstr "baigsis"
+
+msgctxt "#31051"
+msgid "pause"
+msgstr "pauzė"
+
+msgctxt "#31052"
+msgid "stop"
+msgstr "stop"
+
+msgctxt "#31053"
+msgid "subtitles"
+msgstr "subtitrai"
+
+msgctxt "#31054"
+msgid "audio"
+msgstr "garsas"
+
+msgctxt "#31055"
+msgid "video"
+msgstr "vaizdas"
+
+msgctxt "#31056"
+msgid "bookmarks"
+msgstr "žymės"
+
+msgctxt "#31057"
+msgid "buffering"
+msgstr "buferizuojama"
+
+msgctxt "#31058"
+msgid "video already has subtitles"
+msgstr "vaizdo įrašas jau turi subtitrus"
+
+msgctxt "#31080"
+msgid "quit kodi"
+msgstr "išeiti iš Kodi"
+
+msgctxt "#31081"
+msgid "power off"
+msgstr "išjungti"
+
+msgctxt "#31082"
+msgid "reboot"
+msgstr "perkrauti"
+
+msgctxt "#31083"
+msgid "suspend"
+msgstr "užmigdyti"
+
+msgctxt "#31084"
+msgid "hibernate"
+msgstr "hibernuoti"
+
+msgctxt "#31085"
+msgid "shutdown timer"
+msgstr "išjungimo laikmatis"
+
+msgctxt "#31086"
+msgid "cancel shutdown timer"
+msgstr "atšaukti išjungimo laikmatį"
+
+msgctxt "#31087"
+msgid "log off"
+msgstr "atsijungti"
+
+msgctxt "#31088"
+msgid "reload skin"
+msgstr "perkrauti apvalkalą"
+
+msgctxt "#31089"
+msgid "power"
+msgstr "maitinimas"
+
+msgctxt "#31090"
+msgid "Hide foreign"
+msgstr "Slėpti užsienio"
+
+msgctxt "#31091"
+msgid "Hide broken"
+msgstr "Slėpti sugadintus"
+
+msgctxt "#31094"
+msgid "thumbs"
+msgstr "vaizdai"
+
+msgctxt "#31095"
+msgid "mute"
+msgstr "nutildyti"
+
+msgctxt "#31096"
+msgid "descending"
+msgstr "mažėjančiai"
+
+msgctxt "#31100"
+msgid "spotlight"
+msgstr "akcentai"
+
+msgctxt "#31101"
+msgid "all movies"
+msgstr "visi filmai"
+
+msgctxt "#31102"
+msgid "all shows"
+msgstr "visi serialai"
+
+msgctxt "#31103"
+msgid "in progress"
+msgstr "pradėti"
+
+msgctxt "#31104"
+msgid "unwatched"
+msgstr "nežiūrėti"
+
+msgctxt "#31105"
+msgid "genres"
+msgstr "žanrai"
+
+msgctxt "#31106"
+msgid "episodes"
+msgstr "serijos"
+
+msgctxt "#31116"
+msgid "sort"
+msgstr "rikiavimas"
+
+msgctxt "#31117"
+msgid "descending"
+msgstr "mažėjančiai"
+
+msgctxt "#31118"
+msgid "title"
+msgstr "pavadinimas"
+
+msgctxt "#31119"
+msgid "year"
+msgstr "metai"
+
+msgctxt "#31120"
+msgid "added"
+msgstr "pridėta"
+
+msgctxt "#31121"
+msgid "rating"
+msgstr "įvertinimas"
+
+msgctxt "#31122"
+msgid "ascending"
+msgstr "didėjančiai"
+
+msgctxt "#31123"
+msgid "from start"
+msgstr "nuo pradžios"
+
+msgctxt "#31124"
+msgid "cast"
+msgstr "aktoriai"
+
+msgctxt "#31125"
+msgid "details"
+msgstr "detalės"
+
+msgctxt "#31126"
+msgid "director"
+msgstr "režisierius"
+
+msgctxt "#31127"
+msgid "writer"
+msgstr "scenaristas"
+
+msgctxt "#31128"
+msgid "studio"
+msgstr "studija"
+
+msgctxt "#31129"
+msgid "country"
+msgstr "šalis"
+
+msgctxt "#31130"
+msgid "similar"
+msgstr "panašūs"
+
+msgctxt "#31131"
+msgid "season"
+msgstr "sezonas"
+
+msgctxt "#31132"
+msgid "episode"
+msgstr "serija"
+
+msgctxt "#31133"
+msgid "all"
+msgstr "visi"
+
+msgctxt "#31134"
+msgid "specials"
+msgstr "specialios"
+
+msgctxt "#31135"
+msgid "select"
+msgstr "pasirinkti"
+
+msgctxt "#31136"
+msgid "age rating"
+msgstr "amžiaus cenzas"
+
+msgctxt "#31059"
+msgid "ends at"
+msgstr "baigsis"
+
+msgctxt "#31137"
+msgid "next episode"
+msgstr "kita serija"
+
+msgctxt "#31138"
+msgid "off"
+msgstr "išjungta"
+
+msgctxt "#31139"
+msgid "all settings"
+msgstr "visi nustatymai"
+
+msgctxt "#31140"
+msgid "chapters"
+msgstr "skyriai"
+
+msgctxt "#31141"
+msgid "search for a title"
+msgstr "ieškoti pavadinimo"
+
+msgctxt "#31142"
+msgid "actions"
+msgstr "veiksmai"
+
+msgctxt "#31143"
+msgid "power off"
+msgstr "išjungti"
+
+msgctxt "#31144"
+msgid "reboot"
+msgstr "perkrauti"
+
+msgctxt "#31145"
+msgid "suspend"
+msgstr "užmigdyti"
+
+msgctxt "#31146"
+msgid "exit kodi"
+msgstr "išeiti iš Kodi"
+
+msgctxt "#31147"
+msgid "restart kodi"
+msgstr "perkrauti Kodi"
+
+msgctxt "#31148"
+msgid "movies (library)"
+msgstr "filmai (biblioteka)"
+
+msgctxt "#31149"
+msgid "shows (library)"
+msgstr "serialai (biblioteka)"
+
+msgctxt "#31150"
+msgid "episodes (library)"
+msgstr "serijos (biblioteka)"
+
+msgctxt "#31151"
+msgid "online: movies (tmdb)"
+msgstr "internete: filmai (TMDb)"
+
+msgctxt "#31152"
+msgid "online: shows (tmdb)"
+msgstr "internete: serialai (TMDb)"
+
+msgctxt "#31153"
+msgid "recent"
+msgstr "naujausi"
+
+msgctxt "#31154"
+msgid "not available on this device"
+msgstr "šiame įrenginyje neprieinama"
+
+msgctxt "#31155"
+msgid "stats"
+msgstr "statistika"
+
+msgctxt "#31157"
+msgid "booting"
+msgstr "paleidimas"
+
+msgctxt "#31158"
+msgid "online"
+msgstr "prisijungta"
+
+msgctxt "#31159"
+msgid "Playback & media"
+msgstr "Atkūrimas ir medija"
+
+msgctxt "#31160"
+msgid "Look & profiles"
+msgstr "Išvaizda ir profiliai"
+
+msgctxt "#31161"
+msgid "Add-ons & content"
+msgstr "Priedai ir turinys"
+
+msgctxt "#31162"
+msgid "System & network"
+msgstr "Sistema ir tinklas"
+
+msgctxt "#31163"
+msgid "Tools"
+msgstr "Įrankiai"
+
+msgctxt "#31164"
+msgid "How videos, music and pictures play: decoding, refresh rate, discs, audio and subtitle language, subtitles."
+msgstr "Kaip leidžiami vaizdo įrašai, muzika ir paveikslėliai: dekodavimas, atnaujinimo dažnis, diskai, garso ir subtitrų kalba, subtitrai."
+
+msgctxt "#31165"
+msgid "How the library collects and shows your media: scanning, file lists, videos, music, pictures."
+msgstr "Kaip biblioteka renka ir rodo jūsų mediją: skenavimas, failų sąrašai, vaizdo įrašai, muzika, paveikslėliai."
+
+msgctxt "#31166"
+msgid "Live TV and recordings from your PVR client: channels, guide, recording, reminders."
+msgstr "Tiesioginė TV ir įrašai iš jūsų PVR kliento: kanalai, gidas, įrašymas, priminimai."
+
+msgctxt "#31167"
+msgid "How Kodi looks and starts: skin, language and region, screensaver, master lock, startup."
+msgstr "Kaip Kodi atrodo ir pasileidžia: apvalkalas, kalba ir regionas, ekrano užsklanda, pagrindinis užraktas, paleidimas."
+
+msgctxt "#31168"
+msgid "The options of this skin: the home pages and the look."
+msgstr "Šio apvalkalo parinktys: pradžios puslapiai ir išvaizda."
+
+msgctxt "#31169"
+msgid "Users with their own library, settings and add-ons, and the login screen."
+msgstr "Naudotojai su savo biblioteka, nustatymais ir priedais bei prisijungimo ekranas."
+
+msgctxt "#31170"
+msgid "Installed add-ons, repositories, install from a zip file, search and updates."
+msgstr "Įdiegti priedai, saugyklos, diegimas iš ZIP failo, paieška ir atnaujinimai."
+
+msgctxt "#31171"
+msgid "Browse sources and folders, copy, move and delete files."
+msgstr "Šaltinių ir aplankų naršymas, failų kopijavimas, perkėlimas ir trynimas."
+
+msgctxt "#31172"
+msgid "The device: display, audio output, input, internet access, power saving, add-on rules, logging."
+msgstr "Įrenginys: ekranas, garso išvestis, įvestis, interneto prieiga, energijos taupymas, priedų taisyklės, žurnalai."
+
+msgctxt "#31173"
+msgid "What Kodi offers on the network and uses from it: remote control, UPnP, AirPlay, SMB, NFS, caching, weather."
+msgstr "Ką Kodi siūlo tinkle ir ką iš jo naudoja: nuotolinis valdymas, UPnP, AirPlay, SMB, NFS, podėlis, orai."
+
+msgctxt "#31174"
+msgid "Facts about this device: Kodi version, storage, network, video, hardware."
+msgstr "Faktai apie šį įrenginį: Kodi versija, saugykla, tinklas, vaizdas, aparatinė įranga."
+
+msgctxt "#31175"
+msgid "What happened lately: add-on installs and updates, library scans, errors."
+msgstr "Kas vyko pastaruoju metu: priedų diegimai ir atnaujinimai, bibliotekos skenavimai, klaidos."
+
+msgctxt "#31176"
+msgid "Categories"
+msgstr "Kategorijos"
+
+msgctxt "#31178"
+msgid "[COLOR state_text]⏎[/COLOR] open"
+msgstr "[COLOR state_text]⏎[/COLOR] atidaryti"
+
+msgctxt "#31181"
+msgid "refresh rate, decoding, resume"
+msgstr "atnaujinimo dažnis, dekodavimas, tęsimas"
+
+msgctxt "#31182"
+msgid "crossfade, visualisation, volume adjustment"
+msgstr "perėjimas, vizualizacija, garsumo reguliavimas"
+
+msgctxt "#31183"
+msgid "DVD, Blu-ray, audio CD"
+msgstr "DVD, Blu-ray, garso CD"
+
+msgctxt "#31184"
+msgid "slideshow, transitions"
+msgstr "skaidrių peržiūra, perėjimai"
+
+msgctxt "#31185"
+msgid "audio, subtitles and menus"
+msgstr "garsas, subtitrai ir meniu"
+
+msgctxt "#31186"
+msgid "font, size, download services"
+msgstr "šriftas, dydis, atsisiuntimo paslaugos"
+
+msgctxt "#31187"
+msgid "scan on startup, update, clean up"
+msgstr "skenuoti paleidžiant, atnaujinti, išvalyti"
+
+msgctxt "#31188"
+msgid "file extensions, hidden files, sorting"
+msgstr "failų plėtiniai, paslėpti failai, rikiavimas"
+
+msgctxt "#31189"
+msgid "select action, plots, thumbnails"
+msgstr "pasirinkimo veiksmas, siužetai, miniatiūros"
+
+msgctxt "#31190"
+msgid "artists, album covers, tags"
+msgstr "atlikėjai, albumų viršeliai, žymos"
+
+msgctxt "#31191"
+msgid "thumbnails, EXIF"
+msgstr "miniatiūros, EXIF"
+
+msgctxt "#31192"
+msgid "channel groups, channel icons"
+msgstr "kanalų grupės, kanalų piktogramos"
+
+msgctxt "#31193"
+msgid "channel info, switching"
+msgstr "kanalo informacija, perjungimas"
+
+msgctxt "#31194"
+msgid "days shown, updates"
+msgstr "rodomos dienos, atnaujinimai"
+
+msgctxt "#31195"
+msgid "start, channel switch delay"
+msgstr "paleidimas, kanalo perjungimo delsa"
+
+msgctxt "#31196"
+msgid "margins, folders"
+msgstr "paraštės, aplankai"
+
+msgctxt "#31197"
+msgid "reminder before a show"
+msgstr "priminimas prieš laidą"
+
+msgctxt "#31198"
+msgid "wake up for recordings"
+msgstr "pažadinti įrašymui"
+
+msgctxt "#31199"
+msgid "lock by age, PIN"
+msgstr "užraktas pagal amžių, PIN"
+
+msgctxt "#31200"
+msgid "PVR client add-ons"
+msgstr "PVR klientų priedai"
+
+msgctxt "#31201"
+msgid "skin, theme, colours, fonts"
+msgstr "apvalkalas, tema, spalvos, šriftai"
+
+msgctxt "#31202"
+msgid "language, region, time, keyboard"
+msgstr "kalba, regionas, laikas, klaviatūra"
+
+msgctxt "#31203"
+msgid "mode, wait time"
+msgstr "režimas, laukimo laikas"
+
+msgctxt "#31204"
+msgid "lock code, protected areas"
+msgstr "užrakto kodas, apsaugotos sritys"
+
+msgctxt "#31205"
+msgid "start window, splash screen"
+msgstr "pradinis langas, įžanginis ekranas"
+
+msgctxt "#31206"
+msgid "resolution, refresh rate, calibration"
+msgstr "raiška, atnaujinimo dažnis, kalibravimas"
+
+msgctxt "#31207"
+msgid "output device, channels, passthrough"
+msgstr "išvesties įrenginys, kanalai, passthrough"
+
+msgctxt "#31208"
+msgid "devices, mouse, remote"
+msgstr "įrenginiai, pelė, pultas"
+
+msgctxt "#31209"
+msgid "proxy"
+msgstr "tarpinis serveris"
+
+msgctxt "#31210"
+msgid "shutdown, display off"
+msgstr "išjungimas, ekrano išjungimas"
+
+msgctxt "#31211"
+msgid "updates, unknown sources"
+msgstr "atnaujinimai, nežinomi šaltiniai"
+
+msgctxt "#31212"
+msgid "debug log, components"
+msgstr "derinimo žurnalas, komponentai"
+
+msgctxt "#31213"
+msgid "device name, Zeroconf"
+msgstr "įrenginio pavadinimas, Zeroconf"
+
+msgctxt "#31214"
+msgid "web server, remote apps"
+msgstr "žiniatinklio serveris, valdymo programėlės"
+
+msgctxt "#31215"
+msgid "share library, renderer"
+msgstr "bibliotekos bendrinimas, renderer"
+
+msgctxt "#31216"
+msgid "receive AirPlay"
+msgstr "AirPlay priėmimas"
+
+msgctxt "#31217"
+msgid "Windows shares, WINS"
+msgstr "Windows bendrinimai, WINS"
+
+msgctxt "#31218"
+msgid "NFS shares"
+msgstr "NFS bendrinimai"
+
+msgctxt "#31219"
+msgid "buffer, read rate"
+msgstr "buferis, skaitymo sparta"
+
+msgctxt "#31220"
+msgid "weather service"
+msgstr "orų paslauga"
+
+msgctxt "#31221"
+msgid "Spotlight change"
+msgstr "Akcentų keitimas"
+
+msgctxt "#31222"
+msgid "Home pages"
+msgstr "Pradžios puslapiai"
+
+msgctxt "#31224"
+msgid "Rows"
+msgstr "Eilutės"
+
+msgctxt "#31225"
+msgid "Spotlight"
+msgstr "Akcentai"
+
+msgctxt "#31226"
+msgid "Still"
+msgstr "Nekeisti"
+
+msgctxt "#31227"
+msgid "All shows"
+msgstr "Visi serialai"
+
+msgctxt "#31228"
+msgid "Unwatched shows"
+msgstr "Nežiūrėti serialai"
+
+msgctxt "#31229"
+msgid "Slot"
+msgstr "Vieta"
+
+msgctxt "#31231"
+msgid "Section for slot"
+msgstr "Skiltis vietai"
+
+msgctxt "#31232"
+msgid "menu"
+msgstr "meniu"
+
+msgctxt "#31233"
+msgid "Continue watching"
+msgstr "Žiūrėti toliau"
+
+msgctxt "#31234"
+msgid "Next up"
+msgstr "Toliau"
+
+msgctxt "#31235"
+msgid "New movies"
+msgstr "Nauji filmai"
+
+msgctxt "#31236"
+msgid "New episodes"
+msgstr "Naujos serijos"
+
+msgctxt "#31237"
+msgid "Random movies"
+msgstr "Atsitiktiniai filmai"
+
+msgctxt "#31238"
+msgid "Top rated"
+msgstr "Geriausiai įvertinti"
+
+msgctxt "#31239"
+msgid "TMDb trending"
+msgstr "TMDb populiarūs"
+
+msgctxt "#31240"
+msgid "Recently watched"
+msgstr "Neseniai žiūrėti"
+
+msgctxt "#31241"
+msgid "Started movies and episodes, the last watched first."
+msgstr "Pradėti filmai ir serijos, paskutiniai žiūrėti pirmi."
+
+msgctxt "#31242"
+msgid "The shows you are watching. OK opens the next episode."
+msgstr "Serialai, kuriuos žiūrite. OK atidaro kitą seriją."
+
+msgctxt "#31243"
+msgid "The movies added to the library last."
+msgstr "Paskutiniai į biblioteką pridėti filmai."
+
+msgctxt "#31244"
+msgid "The shows with the episodes added last."
+msgstr "Serialai su paskutinėmis pridėtomis serijomis."
+
+msgctxt "#31245"
+msgid "Tabs for the three biggest genres and a picker for all others."
+msgstr "Kortelės trims didžiausiems žanrams ir parinkiklis visiems kitiems."
+
+msgctxt "#31246"
+msgid "A new choice from the whole library every time Home opens."
+msgstr "Nauja atranka iš visos bibliotekos kaskart atidarius pradžią."
+
+msgctxt "#31248"
+msgid "Sorted by rating, from 7.0 up."
+msgstr "Surikiuota pagal įvertinimą, nuo 7,0."
+
+msgctxt "#31249"
+msgid "Kodi's favourites, as you set them."
+msgstr "Kodi mėgstamiausi, kaip juos nustatėte."
+
+msgctxt "#31250"
+msgid "What is trending on TMDb this week."
+msgstr "Kas šią savaitę populiaru TMDb."
+
+msgctxt "#31251"
+msgid "What played last, also what you watched to the end."
+msgstr "Kas grojo paskutinis, taip pat tai, ką peržiūrėjote iki galo."
+
+msgctxt "#31252"
+msgid "The movie sets of your library. OK opens a set."
+msgstr "Jūsų bibliotekos filmų rinkiniai. OK atidaro rinkinį."
+
+msgctxt "#31253"
+msgid "Episodes you started and did not finish."
+msgstr "Serijos, kurias pradėjote ir nebaigėte."
+
+msgctxt "#31254"
+msgid "Free slot. OK picks a section from the catalogue."
+msgstr "Laisva vieta. OK parenka skiltį iš katalogo."
+
+msgctxt "#31255"
+msgid "Large artwork with title and plot, in random order. OK or Right picks the source."
+msgstr "Didelis vaizdas su pavadinimu ir siužetu, atsitiktine tvarka. OK arba Dešinėn parenka šaltinį."
+
+msgctxt "#31256"
+msgid "No spotlight: the page starts with the first row."
+msgstr "Be akcentų: puslapis prasideda pirma eilute."
+
+msgctxt "#31257"
+msgid "How often the spotlight moves on by itself. OK or Right: 10, 15, 30, 60 s or still (then only by hand)."
+msgstr "Kaip dažnai akcentai keičiasi patys. OK arba Dešinėn: 10, 15, 30, 60 s arba nekeisti (tada tik rankiniu būdu)."
+
+msgctxt "#31258"
+msgid "Home and movies show the same spotlight, so they share this setting."
+msgstr "Pradžia ir filmai rodo tuos pačius akcentus, todėl dalijasi šiuo nustatymu."
+
+msgctxt "#31259"
+msgid "Show or hide entries of the main menu. System and power always stay, and so does the last page shown."
+msgstr "Rodyti arba slėpti pagrindinio meniu įrašus. Sistema ir maitinimas lieka visada, kaip ir paskutinis rodytas puslapis."
+
+msgctxt "#31260"
+msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]⏎[/COLOR] pasirinkti   [COLOR state_text]→[/COLOR] parinktis"
+
+msgctxt "#31261"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] perkelti   [COLOR state_text]⏎[/COLOR] padėti"
+
+msgctxt "#31262"
+msgid "Spotlight, rows and main menu of the home, movies and shows pages."
+msgstr "Pradžios, filmų ir serialų puslapių akcentai, eilutės ir pagrindinis meniu."
+
+msgctxt "#31263"
+msgid "swap"
+msgstr "sukeisti"
+
+msgctxt "#31264"
+msgid "Main menu"
+msgstr "Pagrindinis meniu"
+
+msgctxt "#31265"
+msgid "Spotlight and rows of the home page."
+msgstr "Pradžios puslapio akcentai ir eilutės."
+
+msgctxt "#31266"
+msgid "Spotlight and rows of the movies page."
+msgstr "Filmų puslapio akcentai ir eilutės."
+
+msgctxt "#31267"
+msgid "Spotlight and rows of the shows page."
+msgstr "Serialų puslapio akcentai ir eilutės."
+
+msgctxt "#31268"
+msgid "How the skin draws the focus."
+msgstr "Kaip apvalkalas piešia fokusą."
+
+msgctxt "#31230"
+msgid "frame rate"
+msgstr "kadrų dažnis"
+
+msgctxt "#31330"
+msgid "back to video"
+msgstr "atgal į vaizdą"
+
+msgctxt "#31331"
+msgid "back to home"
+msgstr "atgal į pradžią"
+
+msgctxt "#31332"
+msgid "back to movies"
+msgstr "atgal į filmus"
+
+msgctxt "#31333"
+msgid "back to shows"
+msgstr "atgal į serialus"
+
+msgctxt "#31334"
+msgid "back to search"
+msgstr "atgal į paiešką"
+
+msgctxt "#31335"
+msgid "back to library"
+msgstr "atgal į biblioteką"
+
+msgctxt "#31310"
+msgid "Home key opens the home page"
+msgstr "Mygtukas Home atidaro pradžią"
+
+msgctxt "#31311"
+msgid "The Home key of the remote always leads to the home page, held down it opens the quick menu. The skin sets up the keymap 0_skin.nightcity.xml in the profile for it; your own keymaps still win."
+msgstr "Pulto mygtukas Home visada veda į pradžios puslapį, palaikytas atidaro greitąjį meniu. Tam apvalkalas profilyje sukuria keymap 0_skin.nightcity.xml; jūsų pačių keymap failai vis tiek turi pirmenybę."
+
+msgctxt "#31300"
+msgid "crew"
+msgstr "komanda"
+
+msgctxt "#31301"
+msgid "back to start"
+msgstr "atgal į pirmąjį"
+
+msgctxt "#31302"
+msgid "person"
+msgstr "asmuo"
+
+msgctxt "#31303"
+msgid "born"
+msgstr "gimė"
+
+msgctxt "#31304"
+msgid "died"
+msgstr "mirė"
+
+msgctxt "#31320"
+msgid "quick menu"
+msgstr "greitasis meniu"
+
+msgctxt "#31321"
+msgid "set up weather"
+msgstr "nustatyti orus"
+
+msgctxt "#31322"
+msgid "more"
+msgstr "daugiau"
+
+msgctxt "#31323"
+msgid "timer"
+msgstr "laikmatis"
+
+msgctxt "#31336"
+msgid "Remember search terms"
+msgstr "Įsiminti paieškos žodžius"
+
+msgctxt "#31337"
+msgid "The search page lists the last five search terms. Switched off, the skin keeps no terms and forgets the ones it has."
+msgstr "Paieškos puslapis rodo paskutinius penkis paieškos žodžius. Išjungus apvalkalas nesaugo žodžių ir pamiršta turimus."
+
+msgctxt "#31338"
+msgid "Clear search history"
+msgstr "Išvalyti paieškos istoriją"
+
+msgctxt "#31339"
+msgid "Forgets the remembered search terms."
+msgstr "Pamiršta įsimintus paieškos žodžius."
+
+msgctxt "#31340"
+msgid "The colour scheme of the skin, the same choice as under Interface."
+msgstr "Apvalkalo spalvų schema, tas pats pasirinkimas kaip skiltyje Sąsaja."
+
+msgctxt "#31341"
+msgid "forecast"
+msgstr "prognozė"
+
+msgctxt "#31360"
+msgid "Hide the controls automatically"
+msgstr "Automatiškai slėpti valdiklius"
+
+msgctxt "#31361"
+msgid "While a video plays, the player controls close by themselves once no key was pressed for the time set below. While paused they stay; the time starts again when playback goes on."
+msgstr "Kol leidžiamas vaizdo įrašas, grotuvo valdikliai užsidaro patys, jei žemiau nustatytą laiką nebuvo paspaustas joks mygtukas. Pauzės metu jie lieka; laikas skaičiuojamas iš naujo, kai atkūrimas tęsiasi."
+
+msgctxt "#31362"
+msgid "Hide after"
+msgstr "Slėpti po"
+
+msgctxt "#31363"
+msgid "Time without a key press before the player controls close, 3 to 30 seconds. OK takes the slider, left and right move it, OK lets go."
+msgstr "Laikas be mygtuko paspaudimo, kol užsidaro grotuvo valdikliai, nuo 3 iki 30 sekundžių. OK paima slankiklį, kairėn ir dešinėn jį stumia, OK paleidžia."
+
+msgctxt "#31364"
+msgid "The video player: its controls and what it shows while they are up."
+msgstr "Vaizdo grotuvas: jo valdikliai ir ką jis rodo, kol jie atidaryti."
+
+msgctxt "#31365"
+msgid "Show the plot"
+msgstr "Rodyti siužetą"
+
+msgctxt "#31366"
+msgid "The plot of what plays, under its title while the player controls or the seek line are up."
+msgstr "Leidžiamo turinio siužetas po pavadinimu, kol atidaryti grotuvo valdikliai arba prasukimo juosta."
+
+msgctxt "#31400"
+msgid "New albums"
+msgstr "Nauji albumai"
+
+msgctxt "#31401"
+msgid "Recently played"
+msgstr "Neseniai grota"
+
+msgctxt "#31402"
+msgid "Random albums"
+msgstr "Atsitiktiniai albumai"
+
+msgctxt "#31403"
+msgid "Artists"
+msgstr "Atlikėjai"
+
+msgctxt "#31404"
+msgid "Genres"
+msgstr "Žanrai"
+
+msgctxt "#31405"
+msgid "music"
+msgstr "muzika"
+
+msgctxt "#31406"
+msgid "now playing"
+msgstr "dabar groja"
+
+msgctxt "#31407"
+msgid "albums"
+msgstr "albumai"
+
+msgctxt "#31408"
+msgid "more by"
+msgstr "daugiau iš"
+
+msgctxt "#31409"
+msgid "tracks"
+msgstr "takeliai"
+
+msgctxt "#31410"
+msgid "up next"
+msgstr "toliau"
+
+msgctxt "#31411"
+msgid "shuffle"
+msgstr "maišyti"
+
+msgctxt "#31412"
+msgid "repeat"
+msgstr "kartoti"
+
+msgctxt "#31413"
+msgid "repeat all"
+msgstr "kartoti visus"
+
+msgctxt "#31414"
+msgid "repeat one"
+msgstr "kartoti vieną"
+
+msgctxt "#31420"
+msgid "Network, Bluetooth, updates"
+msgstr "Tinklas, Bluetooth, atnaujinimai"
+
+msgctxt "#31440"
+msgid "audience"
+msgstr "žiūrovai"
+
+msgctxt "#31441"
+msgid "Ratings only from TMDb Helper"
+msgstr "Įvertinimai tik iš TMDb Helper"
+
+msgctxt "#31442"
+msgid "Show only the ratings TMDb Helper fetched for exactly this title. Off: the library's own rating (from Jellyfin) fills in while TMDb Helper has none."
+msgstr "Rodyti tik tuos įvertinimus, kuriuos TMDb Helper gavo būtent šiam pavadinimui. Išjungta: kol TMDb Helper jų neturi, rodomas bibliotekos įvertinimas (iš Jellyfin)."
+
+msgctxt "#31443"
+msgid "Ratings only on title pages"
+msgstr "Įvertinimai tik pavadinimų puslapiuose"
+
+msgctxt "#31444"
+msgid "Spotlight and rows show no ratings, which saves requests to TMDb. A title's page still shows them."
+msgstr "Akcentai ir eilutės nerodo įvertinimų, taip taupomos užklausos į TMDb. Pavadinimo puslapis juos vis tiek rodo."
+
+msgctxt "#31445"
+msgid "Ratings"
+msgstr "Įvertinimai"
+
+msgctxt "#31446"
+msgid "Sources"
+msgstr "Šaltiniai"
+
+msgctxt "#31447"
+msgid "Which ratings the ratings line of the spotlight and the info page shows, and where they come from."
+msgstr "Kuriuos įvertinimus rodo akcentų ir informacijos puslapio įvertinimų eilutė ir iš kur jie gaunami."
+
+msgctxt "#31450"
+msgid "IMDb"
+msgstr "IMDb"
+
+msgctxt "#31451"
+msgid "TMDb"
+msgstr "TMDb"
+
+msgctxt "#31452"
+msgid "Rotten Tomatoes critics"
+msgstr "Rotten Tomatoes kritikai"
+
+msgctxt "#31453"
+msgid "Rotten Tomatoes audience"
+msgstr "Rotten Tomatoes žiūrovai"
+
+msgctxt "#31454"
+msgid "Metacritic"
+msgstr "Metacritic"
+
+msgctxt "#31455"
+msgid "Trakt"
+msgstr "Trakt"
+
+msgctxt "#31456"
+msgid "Letterboxd"
+msgstr "Letterboxd"
+
+msgctxt "#31457"
+msgid "MDbList"
+msgstr "MDbList"
+
+msgctxt "#31460"
+msgid "IMDb users, 0 to 10, with the Top 250 rank. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "IMDb naudotojai, nuo 0 iki 10, su Top 250 vieta. Reikia OMDb arba MDbList rakto TMDb Helper."
+
+msgctxt "#31461"
+msgid "TMDb users, 0 to 10. Needs no key."
+msgstr "TMDb naudotojai, nuo 0 iki 10. Rakto nereikia."
+
+msgctxt "#31462"
+msgid "Tomatometer: the share of positive critic reviews. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Tomatometer: teigiamų kritikų recenzijų dalis. Reikia OMDb arba MDbList rakto TMDb Helper."
+
+msgctxt "#31463"
+msgid "Popcornmeter: the share of positive audience ratings. Needs an MDbList or OMDb key in TMDb Helper."
+msgstr "Popcornmeter: teigiamų žiūrovų įvertinimų dalis. Reikia MDbList arba OMDb rakto TMDb Helper."
+
+msgctxt "#31464"
+msgid "A weighted average of critic reviews, 0 to 100, mostly for theatrical films and big series. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Svertinis kritikų recenzijų vidurkis, nuo 0 iki 100, daugiausia kino filmams ir dideliems serialams. Reikia OMDb arba MDbList rakto TMDb Helper."
+
+msgctxt "#31465"
+msgid "Trakt users, 0 to 10. Needs a connected Trakt account in TMDb Helper: fetched from Trakt, not MDbList."
+msgstr "Trakt naudotojai, nuo 0 iki 10. Reikia prijungtos Trakt paskyros TMDb Helper: gaunama iš Trakt, ne iš MDbList."
+
+msgctxt "#31466"
+msgid "Letterboxd users, 0 to 5, mostly films. Needs an MDbList key in TMDb Helper."
+msgstr "Letterboxd naudotojai, nuo 0 iki 5, daugiausia filmai. Reikia MDbList rakto TMDb Helper."
+
+msgctxt "#31467"
+msgid "MDbList score: an average of the other sources, 0 to 100. Needs an MDbList key in TMDb Helper."
+msgstr "MDbList balas: kitų šaltinių vidurkis, nuo 0 iki 100. Reikia MDbList rakto TMDb Helper."
+
+msgctxt "#31469"
+msgid "No description"
+msgstr "Nėra aprašymo"
+
+msgctxt "#31470"
+msgid "back"
+msgstr "atgal"
+
+msgctxt "#31471"
+msgid "budget"
+msgstr "biudžetas"
+
+msgctxt "#31472"
+msgid "box office"
+msgstr "pajamos"
+
+msgctxt "#31473"
+msgid "description"
+msgstr "aprašymas"
+
+msgctxt "#31474"
+msgid "biography"
+msgstr "biografija"
+
+msgctxt "#31478"
+msgid "controls"
+msgstr "valdikliai"
+
+msgctxt "#31479"
+msgid "previous page"
+msgstr "ankstesnis puslapis"
+
+msgctxt "#31480"
+msgid "parent folder"
+msgstr "aukštesnis aplankas"
+
+msgctxt "#31477"
+msgid "Home"
+msgstr "Pradžia"
+
+msgctxt "#31500"
+msgid "view"
+msgstr "rodinys"
+
+msgctxt "#31501"
+msgid "list"
+msgstr "sąrašas"
+
+msgctxt "#31502"
+msgid "filter"
+msgstr "filtras"
+
+msgctxt "#31503"
+msgid "all"
+msgstr "visi"
+
+msgctxt "#31504"
+msgid "resolution"
+msgstr "raiška"
+
+msgctxt "#31505"
+msgid "dynamic range"
+msgstr "dinaminis diapazonas"
+
+msgctxt "#31506"
+msgid "audio format"
+msgstr "garso formatas"
+
+msgctxt "#31507"
+msgid "audio channels"
+msgstr "garso kanalai"
+
+msgctxt "#31508"
+msgid "clear filter"
+msgstr "išvalyti filtrą"
+
+msgctxt "#31600"
+msgid "runtime"
+msgstr "trukmė"
+
+msgctxt "#31601"
+msgid "genre"
+msgstr "žanras"
+
+msgctxt "#31602"
+msgid "details"
+msgstr "detalės"
+
+msgctxt "#31603"
+msgid "seasons"
+msgstr "sezonai"
+
+msgctxt "#31604"
+msgid "season"
+msgstr "sezonas"
+
+msgctxt "#31605"
+msgid "seasons"
+msgstr "sezonai"
+
+msgctxt "#31606"
+msgid "episodes"
+msgstr "serijos"
+
+msgctxt "#31607"
+msgid "none"
+msgstr "nėra"
+
+msgctxt "#31700"
+msgid "On Deck"
+msgstr "On Deck"
+
+msgctxt "#31701"
+msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
+msgstr "Ką pradėjote, tada serialai, kuriuos žiūrite. OK ant serialo atidaro kitą seriją."
+
+msgctxt "#31750"
+msgid "No trailer found"
+msgstr "Anonsas nerastas"

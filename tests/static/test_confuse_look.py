@@ -9,6 +9,7 @@ from fontTools.ttLib import TTFont
 from PIL import Image, ImageFont
 
 from conftest import ROOT, parse
+from test_translations import LANGUAGES as TRANSLATIONS
 
 OVERLAY = ROOT / 'skins' / 'confuse'
 FONT_BUDGET = 400_000
@@ -23,7 +24,7 @@ LOCALIZE = re.compile(r'\$LOCALIZE\[(\d+)\]')
 
 # Kodi's own fonts (media/Fonts), for the fontset a language the skin fonts lack is shown in
 KODI_FONTS = ROOT.parent / 'xbmc' / 'media' / 'Fonts'
-FONTSET = {'ja_jp': 'Arial'}  # language -> fontset, Default for the others
+FONTSET = {'ja_jp': 'Arial', 'ko_kr': 'Arial', 'zh_cn': 'Arial', 'zh_tw': 'Arial'}  # language -> fontset, Default for the others
 
 
 def fontset_of(lang):
@@ -53,7 +54,7 @@ def used_fonts(root):
     return sorted({root / 'fonts' / name for name, _ in font_defs(root).values()})
 
 
-LANGUAGES = ('en_gb', 'de_de', 'fr_fr', 'es_es', 'it_it', 'pt_br', 'pl_pl', 'ja_jp')
+LANGUAGES = ('en_gb',) + TRANSLATIONS
 
 
 def strings(root, lang='en_gb'):

@@ -3,6 +3,7 @@ import re
 from fontTools.ttLib import TTFont
 
 from conftest import ROOT, layout_files, parse
+from test_confuse_look import fontset_of
 
 NAMES = {'font_tiny', 'font_small', 'font_body', 'font_label', 'font_title', 'font_hero', 'font_wordmark',
          'font_caps', 'font_caps_line', 'font_caps_small', 'font_num', 'font_num_small', 'font_clock', 'font_temp', 'font10', 'font12', 'font13', 'font14'}
@@ -63,9 +64,10 @@ def skin_texts():
 
 
 def po_texts():
-    """The strings of the languages shown in the skin fonts (not Japanese, see test_arial_fontset_is_kodis_own_font)."""
+    """The strings of the languages shown in the skin fonts (not Japanese, Korean and Chinese, see
+    test_arial_fontset_is_kodis_own_font)."""
     for po in ROOT.glob('language/*/strings.po'):
-        if po.parent.name == 'resource.language.ja_jp':
+        if fontset_of(po.parent.name.split('.')[-1]) != 'Default':
             continue
         for m in re.finditer(r'^msgstr "(.*)"$', po.read_text(encoding='utf-8'), re.M):
             yield po.parent.name, m.group(1)
@@ -89,8 +91,24 @@ def test_mono_labels_glyph_coverage():
         for control in parse(path).iter('control'):
             if (control.findtext('font') or '').strip() in mono:
                 for el in control.iter('label'):
-                    missing = sorted(c for c in glyphs(el.text) if ord(c) not in cmap(MONO_FONT))
-                    assert not missing, (path.name, el.text, missing)
+                    for lang, text in localized(el.text):
+                        missing = sorted(c for c in glyphs(text) if ord(c) not in cmap(MONO_FONT))
+                        assert not missing, (path.name, lang, text, missing)
+
+
+def localized(label):
+    """A label as each language shown in the skin fonts reads it: $LOCALIZE[n] of the skin's own
+    strings filled in."""
+    yield 'en_gb', label or ''
+    ids = re.findall(r'\$LOCALIZE\[(3[12]\d{3})\]', label or '')
+    if not ids:
+        return
+    for po in ROOT.glob('language/*/strings.po'):
+        lang = po.parent.name.split('.')[-1]
+        if lang == 'en_gb' or fontset_of(lang) != 'Default':
+            continue
+        text = dict(re.findall(r'msgctxt "#(\d+)"\nmsgid "(?:[^"\\]|\\.)*"\nmsgstr "((?:[^"\\]|\\.)*)"', po.read_text(encoding='utf-8')))
+        yield lang, re.sub(r'\$LOCALIZE\[(\d+)\]', lambda m: text.get(m.group(1), ''), label)
 
 
 def test_wide_font_is_tracked():

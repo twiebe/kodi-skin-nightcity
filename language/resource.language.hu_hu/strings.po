@@ -1,0 +1,1196 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: hu_hu\n"
+
+msgctxt "#31002"
+msgid "Spotlight source"
+msgstr "Kiemelt forrása"
+
+msgctxt "#31003"
+msgid "All movies"
+msgstr "Minden film"
+
+msgctxt "#31004"
+msgid "Unwatched movies"
+msgstr "Nem látott filmek"
+
+msgctxt "#31005"
+msgid "Effects"
+msgstr "Effektek"
+
+msgctxt "#31006"
+msgid "home"
+msgstr "kezdőlap"
+
+msgctxt "#31010"
+msgid "play"
+msgstr "lejátszás"
+
+msgctxt "#31011"
+msgid "info"
+msgstr "info"
+
+msgctxt "#31012"
+msgid "min"
+msgstr "perc"
+
+msgctxt "#31020"
+msgid "on deck"
+msgstr "következik"
+
+msgctxt "#31021"
+msgid "new movies"
+msgstr "új filmek"
+
+msgctxt "#31022"
+msgid "new episodes"
+msgstr "új epizódok"
+
+msgctxt "#31023"
+msgid "continue watching"
+msgstr "nézés folytatása"
+
+msgctxt "#31030"
+msgid "movies"
+msgstr "filmek"
+
+msgctxt "#31031"
+msgid "shows"
+msgstr "sorozatok"
+
+msgctxt "#31032"
+msgid "search"
+msgstr "keresés"
+
+msgctxt "#31033"
+msgid "System"
+msgstr "Rendszer"
+
+msgctxt "#31041"
+msgid "trailer"
+msgstr "előzetes"
+
+msgctxt "#31042"
+msgid "posters"
+msgstr "poszterek"
+
+msgctxt "#31043"
+msgid "resume"
+msgstr "folytatás"
+
+msgctxt "#31050"
+msgid "ends"
+msgstr "vége"
+
+msgctxt "#31051"
+msgid "pause"
+msgstr "szünet"
+
+msgctxt "#31052"
+msgid "stop"
+msgstr "stop"
+
+msgctxt "#31053"
+msgid "subtitles"
+msgstr "feliratok"
+
+msgctxt "#31054"
+msgid "audio"
+msgstr "hang"
+
+msgctxt "#31055"
+msgid "video"
+msgstr "videó"
+
+msgctxt "#31056"
+msgid "bookmarks"
+msgstr "könyvjelzők"
+
+msgctxt "#31057"
+msgid "buffering"
+msgstr "pufferelés"
+
+msgctxt "#31058"
+msgid "video already has subtitles"
+msgstr "a videónak már van felirata"
+
+msgctxt "#31080"
+msgid "quit kodi"
+msgstr "Kodi bezárása"
+
+msgctxt "#31081"
+msgid "power off"
+msgstr "kikapcsolás"
+
+msgctxt "#31082"
+msgid "reboot"
+msgstr "újraindítás"
+
+msgctxt "#31083"
+msgid "suspend"
+msgstr "felfüggesztés"
+
+msgctxt "#31084"
+msgid "hibernate"
+msgstr "hibernálás"
+
+msgctxt "#31085"
+msgid "shutdown timer"
+msgstr "kikapcsolási időzítő"
+
+msgctxt "#31086"
+msgid "cancel shutdown timer"
+msgstr "kikapcsolási időzítő törlése"
+
+msgctxt "#31087"
+msgid "log off"
+msgstr "kijelentkezés"
+
+msgctxt "#31088"
+msgid "reload skin"
+msgstr "felszín újratöltése"
+
+msgctxt "#31089"
+msgid "power"
+msgstr "energia"
+
+msgctxt "#31090"
+msgid "Hide foreign"
+msgstr "Idegen nyelvűek elrejtése"
+
+msgctxt "#31091"
+msgid "Hide broken"
+msgstr "Hibásak elrejtése"
+
+msgctxt "#31094"
+msgid "thumbs"
+msgstr "képek"
+
+msgctxt "#31095"
+msgid "mute"
+msgstr "némítás"
+
+msgctxt "#31096"
+msgid "descending"
+msgstr "csökkenő"
+
+msgctxt "#31100"
+msgid "spotlight"
+msgstr "kiemelt"
+
+msgctxt "#31101"
+msgid "all movies"
+msgstr "minden film"
+
+msgctxt "#31102"
+msgid "all shows"
+msgstr "minden sorozat"
+
+msgctxt "#31103"
+msgid "in progress"
+msgstr "folyamatban"
+
+msgctxt "#31104"
+msgid "unwatched"
+msgstr "nem látott"
+
+msgctxt "#31105"
+msgid "genres"
+msgstr "műfajok"
+
+msgctxt "#31106"
+msgid "episodes"
+msgstr "epizódok"
+
+msgctxt "#31116"
+msgid "sort"
+msgstr "rendezés"
+
+msgctxt "#31117"
+msgid "descending"
+msgstr "csökkenő"
+
+msgctxt "#31118"
+msgid "title"
+msgstr "cím"
+
+msgctxt "#31119"
+msgid "year"
+msgstr "év"
+
+msgctxt "#31120"
+msgid "added"
+msgstr "hozzáadva"
+
+msgctxt "#31121"
+msgid "rating"
+msgstr "értékelés"
+
+msgctxt "#31122"
+msgid "ascending"
+msgstr "növekvő"
+
+msgctxt "#31123"
+msgid "from start"
+msgstr "az elejéről"
+
+msgctxt "#31124"
+msgid "cast"
+msgstr "szereplők"
+
+msgctxt "#31125"
+msgid "details"
+msgstr "részletek"
+
+msgctxt "#31126"
+msgid "director"
+msgstr "rendező"
+
+msgctxt "#31127"
+msgid "writer"
+msgstr "író"
+
+msgctxt "#31128"
+msgid "studio"
+msgstr "stúdió"
+
+msgctxt "#31129"
+msgid "country"
+msgstr "ország"
+
+msgctxt "#31130"
+msgid "similar"
+msgstr "hasonlók"
+
+msgctxt "#31131"
+msgid "season"
+msgstr "évad"
+
+msgctxt "#31132"
+msgid "episode"
+msgstr "epizód"
+
+msgctxt "#31133"
+msgid "all"
+msgstr "mind"
+
+msgctxt "#31134"
+msgid "specials"
+msgstr "különkiadások"
+
+msgctxt "#31135"
+msgid "select"
+msgstr "kiválasztás"
+
+msgctxt "#31136"
+msgid "age rating"
+msgstr "korhatár"
+
+msgctxt "#31059"
+msgid "ends at"
+msgstr "vége:"
+
+msgctxt "#31137"
+msgid "next episode"
+msgstr "következő epizód"
+
+msgctxt "#31138"
+msgid "off"
+msgstr "ki"
+
+msgctxt "#31139"
+msgid "all settings"
+msgstr "minden beállítás"
+
+msgctxt "#31140"
+msgid "chapters"
+msgstr "fejezetek"
+
+msgctxt "#31141"
+msgid "search for a title"
+msgstr "cím keresése"
+
+msgctxt "#31142"
+msgid "actions"
+msgstr "műveletek"
+
+msgctxt "#31143"
+msgid "power off"
+msgstr "kikapcsolás"
+
+msgctxt "#31144"
+msgid "reboot"
+msgstr "újraindítás"
+
+msgctxt "#31145"
+msgid "suspend"
+msgstr "felfüggesztés"
+
+msgctxt "#31146"
+msgid "exit kodi"
+msgstr "Kodi bezárása"
+
+msgctxt "#31147"
+msgid "restart kodi"
+msgstr "Kodi újraindítása"
+
+msgctxt "#31148"
+msgid "movies (library)"
+msgstr "filmek (médiatár)"
+
+msgctxt "#31149"
+msgid "shows (library)"
+msgstr "sorozatok (médiatár)"
+
+msgctxt "#31150"
+msgid "episodes (library)"
+msgstr "epizódok (médiatár)"
+
+msgctxt "#31151"
+msgid "online: movies (tmdb)"
+msgstr "online: filmek (TMDb)"
+
+msgctxt "#31152"
+msgid "online: shows (tmdb)"
+msgstr "online: sorozatok (TMDb)"
+
+msgctxt "#31153"
+msgid "recent"
+msgstr "legutóbbi"
+
+msgctxt "#31154"
+msgid "not available on this device"
+msgstr "ezen az eszközön nem érhető el"
+
+msgctxt "#31155"
+msgid "stats"
+msgstr "statisztika"
+
+msgctxt "#31157"
+msgid "booting"
+msgstr "indul"
+
+msgctxt "#31158"
+msgid "online"
+msgstr "online"
+
+msgctxt "#31159"
+msgid "Playback & media"
+msgstr "Lejátszás és média"
+
+msgctxt "#31160"
+msgid "Look & profiles"
+msgstr "Megjelenés és profilok"
+
+msgctxt "#31161"
+msgid "Add-ons & content"
+msgstr "Kiegészítők és tartalom"
+
+msgctxt "#31162"
+msgid "System & network"
+msgstr "Rendszer és hálózat"
+
+msgctxt "#31163"
+msgid "Tools"
+msgstr "Eszközök"
+
+msgctxt "#31164"
+msgid "How videos, music and pictures play: decoding, refresh rate, discs, audio and subtitle language, subtitles."
+msgstr "Hogyan játszódnak le a videók, a zene és a képek: dekódolás, képfrissítés, lemezek, hang- és feliratnyelv, feliratok."
+
+msgctxt "#31165"
+msgid "How the library collects and shows your media: scanning, file lists, videos, music, pictures."
+msgstr "Hogyan gyűjti és mutatja a médiatár a médiáidat: keresés, fájllisták, videók, zene, képek."
+
+msgctxt "#31166"
+msgid "Live TV and recordings from your PVR client: channels, guide, recording, reminders."
+msgstr "Élő TV és felvételek a PVR kliensből: csatornák, műsorújság, felvétel, emlékeztetők."
+
+msgctxt "#31167"
+msgid "How Kodi looks and starts: skin, language and region, screensaver, master lock, startup."
+msgstr "Hogyan néz ki és indul a Kodi: felszín, nyelv és régió, képernyővédő, mesterzár, indítás."
+
+msgctxt "#31168"
+msgid "The options of this skin: the home pages and the look."
+msgstr "A felszín beállításai: a kezdőlapok és a megjelenés."
+
+msgctxt "#31169"
+msgid "Users with their own library, settings and add-ons, and the login screen."
+msgstr "Felhasználók saját médiatárral, beállításokkal és kiegészítőkkel, valamint a bejelentkezési képernyő."
+
+msgctxt "#31170"
+msgid "Installed add-ons, repositories, install from a zip file, search and updates."
+msgstr "Telepített kiegészítők, tárolók, telepítés ZIP fájlból, keresés és frissítések."
+
+msgctxt "#31171"
+msgid "Browse sources and folders, copy, move and delete files."
+msgstr "Források és mappák böngészése, fájlok másolása, áthelyezése és törlése."
+
+msgctxt "#31172"
+msgid "The device: display, audio output, input, internet access, power saving, add-on rules, logging."
+msgstr "Az eszköz: kijelző, hangkimenet, bevitel, internet-hozzáférés, energiatakarékosság, kiegészítő-szabályok, naplózás."
+
+msgctxt "#31173"
+msgid "What Kodi offers on the network and uses from it: remote control, UPnP, AirPlay, SMB, NFS, caching, weather."
+msgstr "Mit kínál a Kodi a hálózaton, és mit használ onnan: távvezérlés, UPnP, AirPlay, SMB, NFS, gyorsítótár, időjárás."
+
+msgctxt "#31174"
+msgid "Facts about this device: Kodi version, storage, network, video, hardware."
+msgstr "Adatok az eszközről: Kodi verzió, tárhely, hálózat, videó, hardver."
+
+msgctxt "#31175"
+msgid "What happened lately: add-on installs and updates, library scans, errors."
+msgstr "Mi történt mostanában: kiegészítők telepítése és frissítése, médiatár-keresések, hibák."
+
+msgctxt "#31176"
+msgid "Categories"
+msgstr "Kategóriák"
+
+msgctxt "#31178"
+msgid "[COLOR state_text]⏎[/COLOR] open"
+msgstr "[COLOR state_text]⏎[/COLOR] megnyitás"
+
+msgctxt "#31181"
+msgid "refresh rate, decoding, resume"
+msgstr "képfrissítés, dekódolás, folytatás"
+
+msgctxt "#31182"
+msgid "crossfade, visualisation, volume adjustment"
+msgstr "áttűnés, vizualizáció, hangerő-igazítás"
+
+msgctxt "#31183"
+msgid "DVD, Blu-ray, audio CD"
+msgstr "DVD, Blu-ray, audio CD"
+
+msgctxt "#31184"
+msgid "slideshow, transitions"
+msgstr "diavetítés, áttűnések"
+
+msgctxt "#31185"
+msgid "audio, subtitles and menus"
+msgstr "hang, feliratok és menük"
+
+msgctxt "#31186"
+msgid "font, size, download services"
+msgstr "betűtípus, méret, letöltési szolgáltatások"
+
+msgctxt "#31187"
+msgid "scan on startup, update, clean up"
+msgstr "keresés indításkor, frissítés, tisztítás"
+
+msgctxt "#31188"
+msgid "file extensions, hidden files, sorting"
+msgstr "fájlkiterjesztések, rejtett fájlok, rendezés"
+
+msgctxt "#31189"
+msgid "select action, plots, thumbnails"
+msgstr "kiválasztási művelet, cselekmények, bélyegképek"
+
+msgctxt "#31190"
+msgid "artists, album covers, tags"
+msgstr "előadók, albumborítók, címkék"
+
+msgctxt "#31191"
+msgid "thumbnails, EXIF"
+msgstr "bélyegképek, EXIF"
+
+msgctxt "#31192"
+msgid "channel groups, channel icons"
+msgstr "csatornacsoportok, csatornaikonok"
+
+msgctxt "#31193"
+msgid "channel info, switching"
+msgstr "csatornainfó, váltás"
+
+msgctxt "#31194"
+msgid "days shown, updates"
+msgstr "megjelenített napok, frissítések"
+
+msgctxt "#31195"
+msgid "start, channel switch delay"
+msgstr "indítás, csatornaváltási késleltetés"
+
+msgctxt "#31196"
+msgid "margins, folders"
+msgstr "ráhagyások, mappák"
+
+msgctxt "#31197"
+msgid "reminder before a show"
+msgstr "emlékeztető műsor előtt"
+
+msgctxt "#31198"
+msgid "wake up for recordings"
+msgstr "ébresztés felvételhez"
+
+msgctxt "#31199"
+msgid "lock by age, PIN"
+msgstr "korhatár szerinti zár, PIN"
+
+msgctxt "#31200"
+msgid "PVR client add-ons"
+msgstr "PVR kliens kiegészítők"
+
+msgctxt "#31201"
+msgid "skin, theme, colours, fonts"
+msgstr "felszín, téma, színek, betűtípusok"
+
+msgctxt "#31202"
+msgid "language, region, time, keyboard"
+msgstr "nyelv, régió, idő, billentyűzet"
+
+msgctxt "#31203"
+msgid "mode, wait time"
+msgstr "mód, várakozási idő"
+
+msgctxt "#31204"
+msgid "lock code, protected areas"
+msgstr "zárkód, védett területek"
+
+msgctxt "#31205"
+msgid "start window, splash screen"
+msgstr "kezdőablak, nyitókép"
+
+msgctxt "#31206"
+msgid "resolution, refresh rate, calibration"
+msgstr "felbontás, képfrissítés, kalibrálás"
+
+msgctxt "#31207"
+msgid "output device, channels, passthrough"
+msgstr "kimeneti eszköz, csatornák, passthrough"
+
+msgctxt "#31208"
+msgid "devices, mouse, remote"
+msgstr "eszközök, egér, távirányító"
+
+msgctxt "#31209"
+msgid "proxy"
+msgstr "proxy"
+
+msgctxt "#31210"
+msgid "shutdown, display off"
+msgstr "leállítás, kijelző kikapcsolása"
+
+msgctxt "#31211"
+msgid "updates, unknown sources"
+msgstr "frissítések, ismeretlen források"
+
+msgctxt "#31212"
+msgid "debug log, components"
+msgstr "hibakeresési napló, összetevők"
+
+msgctxt "#31213"
+msgid "device name, Zeroconf"
+msgstr "eszköznév, Zeroconf"
+
+msgctxt "#31214"
+msgid "web server, remote apps"
+msgstr "webszerver, távvezérlő alkalmazások"
+
+msgctxt "#31215"
+msgid "share library, renderer"
+msgstr "médiatár megosztása, renderer"
+
+msgctxt "#31216"
+msgid "receive AirPlay"
+msgstr "AirPlay fogadása"
+
+msgctxt "#31217"
+msgid "Windows shares, WINS"
+msgstr "Windows megosztások, WINS"
+
+msgctxt "#31218"
+msgid "NFS shares"
+msgstr "NFS megosztások"
+
+msgctxt "#31219"
+msgid "buffer, read rate"
+msgstr "puffer, olvasási sebesség"
+
+msgctxt "#31220"
+msgid "weather service"
+msgstr "időjárás-szolgáltatás"
+
+msgctxt "#31221"
+msgid "Spotlight change"
+msgstr "Kiemelt váltása"
+
+msgctxt "#31222"
+msgid "Home pages"
+msgstr "Kezdőlapok"
+
+msgctxt "#31224"
+msgid "Rows"
+msgstr "Sorok"
+
+msgctxt "#31225"
+msgid "Spotlight"
+msgstr "Kiemelt"
+
+msgctxt "#31226"
+msgid "Still"
+msgstr "Álló"
+
+msgctxt "#31227"
+msgid "All shows"
+msgstr "Minden sorozat"
+
+msgctxt "#31228"
+msgid "Unwatched shows"
+msgstr "Nem látott sorozatok"
+
+msgctxt "#31229"
+msgid "Slot"
+msgstr "Hely"
+
+msgctxt "#31231"
+msgid "Section for slot"
+msgstr "Szakasz a helyhez"
+
+msgctxt "#31232"
+msgid "menu"
+msgstr "menü"
+
+msgctxt "#31233"
+msgid "Continue watching"
+msgstr "Nézés folytatása"
+
+msgctxt "#31234"
+msgid "Next up"
+msgstr "Következik"
+
+msgctxt "#31235"
+msgid "New movies"
+msgstr "Új filmek"
+
+msgctxt "#31236"
+msgid "New episodes"
+msgstr "Új epizódok"
+
+msgctxt "#31237"
+msgid "Random movies"
+msgstr "Véletlen filmek"
+
+msgctxt "#31238"
+msgid "Top rated"
+msgstr "Legjobbra értékelt"
+
+msgctxt "#31239"
+msgid "TMDb trending"
+msgstr "TMDb felkapott"
+
+msgctxt "#31240"
+msgid "Recently watched"
+msgstr "Nemrég nézett"
+
+msgctxt "#31241"
+msgid "Started movies and episodes, the last watched first."
+msgstr "Elkezdett filmek és epizódok, a legutóbb nézett elöl."
+
+msgctxt "#31242"
+msgid "The shows you are watching. OK opens the next episode."
+msgstr "A sorozatok, amelyeket nézel. Az OK megnyitja a következő epizódot."
+
+msgctxt "#31243"
+msgid "The movies added to the library last."
+msgstr "A médiatárhoz legutóbb hozzáadott filmek."
+
+msgctxt "#31244"
+msgid "The shows with the episodes added last."
+msgstr "A legutóbb hozzáadott epizódok sorozatai."
+
+msgctxt "#31245"
+msgid "Tabs for the three biggest genres and a picker for all others."
+msgstr "Fülek a három legnagyobb műfajhoz és egy választó az összes többihez."
+
+msgctxt "#31246"
+msgid "A new choice from the whole library every time Home opens."
+msgstr "Új válogatás az egész médiatárból a kezdőlap minden megnyitásakor."
+
+msgctxt "#31248"
+msgid "Sorted by rating, from 7.0 up."
+msgstr "Értékelés szerint rendezve, 7,0-tól felfelé."
+
+msgctxt "#31249"
+msgid "Kodi's favourites, as you set them."
+msgstr "A Kodi kedvencei, ahogy beállítottad őket."
+
+msgctxt "#31250"
+msgid "What is trending on TMDb this week."
+msgstr "Ami ezen a héten felkapott a TMDb-n."
+
+msgctxt "#31251"
+msgid "What played last, also what you watched to the end."
+msgstr "Ami legutóbb ment, a végéig nézettek is."
+
+msgctxt "#31252"
+msgid "The movie sets of your library. OK opens a set."
+msgstr "A médiatár filmgyűjteményei. Az OK megnyit egy gyűjteményt."
+
+msgctxt "#31253"
+msgid "Episodes you started and did not finish."
+msgstr "Elkezdett, de be nem fejezett epizódok."
+
+msgctxt "#31254"
+msgid "Free slot. OK picks a section from the catalogue."
+msgstr "Szabad hely. Az OK szakaszt választ a katalógusból."
+
+msgctxt "#31255"
+msgid "Large artwork with title and plot, in random order. OK or Right picks the source."
+msgstr "Nagy kép címmel és cselekménnyel, véletlen sorrendben. OK vagy Jobbra: a forrás választása."
+
+msgctxt "#31256"
+msgid "No spotlight: the page starts with the first row."
+msgstr "Nincs kiemelt: az oldal az első sorral kezdődik."
+
+msgctxt "#31257"
+msgid "How often the spotlight moves on by itself. OK or Right: 10, 15, 30, 60 s or still (then only by hand)."
+msgstr "Milyen gyakran vált magától a kiemelt. OK vagy Jobbra: 10, 15, 30, 60 mp vagy álló (akkor csak kézzel)."
+
+msgctxt "#31258"
+msgid "Home and movies show the same spotlight, so they share this setting."
+msgstr "A kezdőlap és a filmek ugyanazt a kiemeltet mutatják, így ez a beállítás közös."
+
+msgctxt "#31259"
+msgid "Show or hide entries of the main menu. System and power always stay, and so does the last page shown."
+msgstr "A főmenü elemeinek megjelenítése vagy elrejtése. A Rendszer és az Energia mindig marad, ahogy az utoljára mutatott oldal is."
+
+msgctxt "#31260"
+msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]⏎[/COLOR] választás   [COLOR state_text]→[/COLOR] opció"
+
+msgctxt "#31261"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] mozgatás   [COLOR state_text]⏎[/COLOR] lerakás"
+
+msgctxt "#31262"
+msgid "Spotlight, rows and main menu of the home, movies and shows pages."
+msgstr "A kezdőlap, a filmek és a sorozatok oldalának kiemeltje, sorai és főmenüje."
+
+msgctxt "#31263"
+msgid "swap"
+msgstr "csere"
+
+msgctxt "#31264"
+msgid "Main menu"
+msgstr "Főmenü"
+
+msgctxt "#31265"
+msgid "Spotlight and rows of the home page."
+msgstr "A kezdőlap kiemeltje és sorai."
+
+msgctxt "#31266"
+msgid "Spotlight and rows of the movies page."
+msgstr "A filmek oldalának kiemeltje és sorai."
+
+msgctxt "#31267"
+msgid "Spotlight and rows of the shows page."
+msgstr "A sorozatok oldalának kiemeltje és sorai."
+
+msgctxt "#31268"
+msgid "How the skin draws the focus."
+msgstr "Hogyan rajzolja a felszín a fókuszt."
+
+msgctxt "#31230"
+msgid "frame rate"
+msgstr "képkockasebesség"
+
+msgctxt "#31330"
+msgid "back to video"
+msgstr "vissza a videóhoz"
+
+msgctxt "#31331"
+msgid "back to home"
+msgstr "vissza a kezdőlapra"
+
+msgctxt "#31332"
+msgid "back to movies"
+msgstr "vissza a filmekhez"
+
+msgctxt "#31333"
+msgid "back to shows"
+msgstr "vissza a sorozatokhoz"
+
+msgctxt "#31334"
+msgid "back to search"
+msgstr "vissza a kereséshez"
+
+msgctxt "#31335"
+msgid "back to library"
+msgstr "vissza a médiatárhoz"
+
+msgctxt "#31310"
+msgid "Home key opens the home page"
+msgstr "A Home gomb a kezdőlapot nyitja meg"
+
+msgctxt "#31311"
+msgid "The Home key of the remote always leads to the home page, held down it opens the quick menu. The skin sets up the keymap 0_skin.nightcity.xml in the profile for it; your own keymaps still win."
+msgstr "A távirányító Home gombja mindig a kezdőlapra visz, nyomva tartva a gyorsmenüt nyitja meg. Ehhez a felszín a profilban létrehozza a 0_skin.nightcity.xml keymapet; a saját keymapjeid továbbra is elsőbbséget élveznek."
+
+msgctxt "#31300"
+msgid "crew"
+msgstr "stáb"
+
+msgctxt "#31301"
+msgid "back to start"
+msgstr "vissza az elejére"
+
+msgctxt "#31302"
+msgid "person"
+msgstr "személy"
+
+msgctxt "#31303"
+msgid "born"
+msgstr "született"
+
+msgctxt "#31304"
+msgid "died"
+msgstr "elhunyt"
+
+msgctxt "#31320"
+msgid "quick menu"
+msgstr "gyorsmenü"
+
+msgctxt "#31321"
+msgid "set up weather"
+msgstr "időjárás beállítása"
+
+msgctxt "#31322"
+msgid "more"
+msgstr "több"
+
+msgctxt "#31323"
+msgid "timer"
+msgstr "időzítő"
+
+msgctxt "#31336"
+msgid "Remember search terms"
+msgstr "Keresőkifejezések megjegyzése"
+
+msgctxt "#31337"
+msgid "The search page lists the last five search terms. Switched off, the skin keeps no terms and forgets the ones it has."
+msgstr "A keresőoldal az utolsó öt keresőkifejezést mutatja. Kikapcsolva a felszín nem tárol kifejezéseket, és elfelejti a meglévőket."
+
+msgctxt "#31338"
+msgid "Clear search history"
+msgstr "Keresési előzmények törlése"
+
+msgctxt "#31339"
+msgid "Forgets the remembered search terms."
+msgstr "Elfelejti a megjegyzett keresőkifejezéseket."
+
+msgctxt "#31340"
+msgid "The colour scheme of the skin, the same choice as under Interface."
+msgstr "A felszín színsémája, ugyanaz a választás, mint a Felület alatt."
+
+msgctxt "#31341"
+msgid "forecast"
+msgstr "előrejelzés"
+
+msgctxt "#31360"
+msgid "Hide the controls automatically"
+msgstr "Vezérlők automatikus elrejtése"
+
+msgctxt "#31361"
+msgid "While a video plays, the player controls close by themselves once no key was pressed for the time set below. While paused they stay; the time starts again when playback goes on."
+msgstr "Videó lejátszása közben a lejátszó vezérlői maguktól bezáródnak, ha az alább beállított ideig nem nyomtak gombot. Szüneteltetéskor maradnak; az idő újraindul, amikor a lejátszás folytatódik."
+
+msgctxt "#31362"
+msgid "Hide after"
+msgstr "Elrejtés ennyi után"
+
+msgctxt "#31363"
+msgid "Time without a key press before the player controls close, 3 to 30 seconds. OK takes the slider, left and right move it, OK lets go."
+msgstr "Gombnyomás nélküli idő, mielőtt a lejátszó vezérlői bezáródnak, 3-30 másodperc. Az OK megfogja a csúszkát, a balra és jobbra mozgatja, az OK elengedi."
+
+msgctxt "#31364"
+msgid "The video player: its controls and what it shows while they are up."
+msgstr "A videólejátszó: a vezérlői és amit mutat, amíg nyitva vannak."
+
+msgctxt "#31365"
+msgid "Show the plot"
+msgstr "Cselekmény mutatása"
+
+msgctxt "#31366"
+msgid "The plot of what plays, under its title while the player controls or the seek line are up."
+msgstr "A lejátszott tartalom cselekménye a címe alatt, amíg a lejátszó vezérlői vagy a tekerősáv nyitva vannak."
+
+msgctxt "#31400"
+msgid "New albums"
+msgstr "Új albumok"
+
+msgctxt "#31401"
+msgid "Recently played"
+msgstr "Nemrég játszott"
+
+msgctxt "#31402"
+msgid "Random albums"
+msgstr "Véletlen albumok"
+
+msgctxt "#31403"
+msgid "Artists"
+msgstr "Előadók"
+
+msgctxt "#31404"
+msgid "Genres"
+msgstr "Műfajok"
+
+msgctxt "#31405"
+msgid "music"
+msgstr "zene"
+
+msgctxt "#31406"
+msgid "now playing"
+msgstr "most szól"
+
+msgctxt "#31407"
+msgid "albums"
+msgstr "albumok"
+
+msgctxt "#31408"
+msgid "more by"
+msgstr "további tőle"
+
+msgctxt "#31409"
+msgid "tracks"
+msgstr "számok"
+
+msgctxt "#31410"
+msgid "up next"
+msgstr "következik"
+
+msgctxt "#31411"
+msgid "shuffle"
+msgstr "keverés"
+
+msgctxt "#31412"
+msgid "repeat"
+msgstr "ismétlés"
+
+msgctxt "#31413"
+msgid "repeat all"
+msgstr "összes ismétlése"
+
+msgctxt "#31414"
+msgid "repeat one"
+msgstr "egy ismétlése"
+
+msgctxt "#31420"
+msgid "Network, Bluetooth, updates"
+msgstr "Hálózat, Bluetooth, frissítések"
+
+msgctxt "#31440"
+msgid "audience"
+msgstr "közönség"
+
+msgctxt "#31441"
+msgid "Ratings only from TMDb Helper"
+msgstr "Értékelések csak a TMDb Helperből"
+
+msgctxt "#31442"
+msgid "Show only the ratings TMDb Helper fetched for exactly this title. Off: the library's own rating (from Jellyfin) fills in while TMDb Helper has none."
+msgstr "Csak azokat az értékeléseket mutatja, amelyeket a TMDb Helper pontosan ehhez a címhez lekért. Ki: a médiatár saját értékelése (a Jellyfinből) ugrik be, amíg a TMDb Helpernek nincs."
+
+msgctxt "#31443"
+msgid "Ratings only on title pages"
+msgstr "Értékelések csak a címoldalakon"
+
+msgctxt "#31444"
+msgid "Spotlight and rows show no ratings, which saves requests to TMDb. A title's page still shows them."
+msgstr "A kiemelt és a sorok nem mutatnak értékelést, ez kéréseket takarít meg a TMDb felé. Egy cím oldala továbbra is mutatja."
+
+msgctxt "#31445"
+msgid "Ratings"
+msgstr "Értékelések"
+
+msgctxt "#31446"
+msgid "Sources"
+msgstr "Források"
+
+msgctxt "#31447"
+msgid "Which ratings the ratings line of the spotlight and the info page shows, and where they come from."
+msgstr "Mely értékeléseket mutatja a kiemelt és az infóoldal értékelési sora, és honnan származnak."
+
+msgctxt "#31450"
+msgid "IMDb"
+msgstr "IMDb"
+
+msgctxt "#31451"
+msgid "TMDb"
+msgstr "TMDb"
+
+msgctxt "#31452"
+msgid "Rotten Tomatoes critics"
+msgstr "Rotten Tomatoes kritikusok"
+
+msgctxt "#31453"
+msgid "Rotten Tomatoes audience"
+msgstr "Rotten Tomatoes közönség"
+
+msgctxt "#31454"
+msgid "Metacritic"
+msgstr "Metacritic"
+
+msgctxt "#31455"
+msgid "Trakt"
+msgstr "Trakt"
+
+msgctxt "#31456"
+msgid "Letterboxd"
+msgstr "Letterboxd"
+
+msgctxt "#31457"
+msgid "MDbList"
+msgstr "MDbList"
+
+msgctxt "#31460"
+msgid "IMDb users, 0 to 10, with the Top 250 rank. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "IMDb felhasználók, 0-10, a Top 250 helyezéssel. OMDb vagy MDbList kulcs kell a TMDb Helperben."
+
+msgctxt "#31461"
+msgid "TMDb users, 0 to 10. Needs no key."
+msgstr "TMDb felhasználók, 0-10. Nem kell kulcs."
+
+msgctxt "#31462"
+msgid "Tomatometer: the share of positive critic reviews. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Tomatometer: a pozitív kritikusi vélemények aránya. OMDb vagy MDbList kulcs kell a TMDb Helperben."
+
+msgctxt "#31463"
+msgid "Popcornmeter: the share of positive audience ratings. Needs an MDbList or OMDb key in TMDb Helper."
+msgstr "Popcornmeter: a pozitív közönségértékelések aránya. MDbList vagy OMDb kulcs kell a TMDb Helperben."
+
+msgctxt "#31464"
+msgid "A weighted average of critic reviews, 0 to 100, mostly for theatrical films and big series. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "A kritikusi vélemények súlyozott átlaga, 0-100, főleg mozifilmekhez és nagy sorozatokhoz. OMDb vagy MDbList kulcs kell a TMDb Helperben."
+
+msgctxt "#31465"
+msgid "Trakt users, 0 to 10. Needs a connected Trakt account in TMDb Helper: fetched from Trakt, not MDbList."
+msgstr "Trakt felhasználók, 0-10. Összekapcsolt Trakt fiók kell a TMDb Helperben: a Traktról jön, nem az MDbListről."
+
+msgctxt "#31466"
+msgid "Letterboxd users, 0 to 5, mostly films. Needs an MDbList key in TMDb Helper."
+msgstr "Letterboxd felhasználók, 0-5, főleg filmek. MDbList kulcs kell a TMDb Helperben."
+
+msgctxt "#31467"
+msgid "MDbList score: an average of the other sources, 0 to 100. Needs an MDbList key in TMDb Helper."
+msgstr "MDbList pontszám: a többi forrás átlaga, 0-100. MDbList kulcs kell a TMDb Helperben."
+
+msgctxt "#31469"
+msgid "No description"
+msgstr "Nincs leírás"
+
+msgctxt "#31470"
+msgid "back"
+msgstr "vissza"
+
+msgctxt "#31471"
+msgid "budget"
+msgstr "költségvetés"
+
+msgctxt "#31472"
+msgid "box office"
+msgstr "bevétel"
+
+msgctxt "#31473"
+msgid "description"
+msgstr "leírás"
+
+msgctxt "#31474"
+msgid "biography"
+msgstr "életrajz"
+
+msgctxt "#31478"
+msgid "controls"
+msgstr "vezérlők"
+
+msgctxt "#31479"
+msgid "previous page"
+msgstr "előző oldal"
+
+msgctxt "#31480"
+msgid "parent folder"
+msgstr "szülőmappa"
+
+msgctxt "#31477"
+msgid "Home"
+msgstr "Kezdőlap"
+
+msgctxt "#31500"
+msgid "view"
+msgstr "nézet"
+
+msgctxt "#31501"
+msgid "list"
+msgstr "lista"
+
+msgctxt "#31502"
+msgid "filter"
+msgstr "szűrő"
+
+msgctxt "#31503"
+msgid "all"
+msgstr "mind"
+
+msgctxt "#31504"
+msgid "resolution"
+msgstr "felbontás"
+
+msgctxt "#31505"
+msgid "dynamic range"
+msgstr "dinamikatartomány"
+
+msgctxt "#31506"
+msgid "audio format"
+msgstr "hangformátum"
+
+msgctxt "#31507"
+msgid "audio channels"
+msgstr "hangcsatornák"
+
+msgctxt "#31508"
+msgid "clear filter"
+msgstr "szűrő törlése"
+
+msgctxt "#31600"
+msgid "runtime"
+msgstr "hossz"
+
+msgctxt "#31601"
+msgid "genre"
+msgstr "műfaj"
+
+msgctxt "#31602"
+msgid "details"
+msgstr "részletek"
+
+msgctxt "#31603"
+msgid "seasons"
+msgstr "évadok"
+
+msgctxt "#31604"
+msgid "season"
+msgstr "évad"
+
+msgctxt "#31605"
+msgid "seasons"
+msgstr "évadok"
+
+msgctxt "#31606"
+msgid "episodes"
+msgstr "epizódok"
+
+msgctxt "#31607"
+msgid "none"
+msgstr "nincs"
+
+msgctxt "#31700"
+msgid "On Deck"
+msgstr "On Deck"
+
+msgctxt "#31701"
+msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
+msgstr "Amit elkezdtél, utána a sorozatok, amelyeket nézel. Az OK egy sorozaton megnyitja a következő epizódot."
+
+msgctxt "#31750"
+msgid "No trailer found"
+msgstr "Nem található előzetes"

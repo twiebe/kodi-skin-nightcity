@@ -1,0 +1,1196 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: et_ee\n"
+
+msgctxt "#31002"
+msgid "Spotlight source"
+msgstr "Esiletõstu allikas"
+
+msgctxt "#31003"
+msgid "All movies"
+msgstr "Kõik filmid"
+
+msgctxt "#31004"
+msgid "Unwatched movies"
+msgstr "Vaatamata filmid"
+
+msgctxt "#31005"
+msgid "Effects"
+msgstr "Efektid"
+
+msgctxt "#31006"
+msgid "home"
+msgstr "avaleht"
+
+msgctxt "#31010"
+msgid "play"
+msgstr "esita"
+
+msgctxt "#31011"
+msgid "info"
+msgstr "info"
+
+msgctxt "#31012"
+msgid "min"
+msgstr "min"
+
+msgctxt "#31020"
+msgid "on deck"
+msgstr "järgmisena"
+
+msgctxt "#31021"
+msgid "new movies"
+msgstr "uued filmid"
+
+msgctxt "#31022"
+msgid "new episodes"
+msgstr "uued osad"
+
+msgctxt "#31023"
+msgid "continue watching"
+msgstr "jätka vaatamist"
+
+msgctxt "#31030"
+msgid "movies"
+msgstr "filmid"
+
+msgctxt "#31031"
+msgid "shows"
+msgstr "sarjad"
+
+msgctxt "#31032"
+msgid "search"
+msgstr "otsi"
+
+msgctxt "#31033"
+msgid "System"
+msgstr "Süsteem"
+
+msgctxt "#31041"
+msgid "trailer"
+msgstr "treiler"
+
+msgctxt "#31042"
+msgid "posters"
+msgstr "plakatid"
+
+msgctxt "#31043"
+msgid "resume"
+msgstr "jätka"
+
+msgctxt "#31050"
+msgid "ends"
+msgstr "lõpeb"
+
+msgctxt "#31051"
+msgid "pause"
+msgstr "paus"
+
+msgctxt "#31052"
+msgid "stop"
+msgstr "stopp"
+
+msgctxt "#31053"
+msgid "subtitles"
+msgstr "subtiitrid"
+
+msgctxt "#31054"
+msgid "audio"
+msgstr "heli"
+
+msgctxt "#31055"
+msgid "video"
+msgstr "video"
+
+msgctxt "#31056"
+msgid "bookmarks"
+msgstr "järjehoidjad"
+
+msgctxt "#31057"
+msgid "buffering"
+msgstr "puhverdamine"
+
+msgctxt "#31058"
+msgid "video already has subtitles"
+msgstr "videol on juba subtiitrid"
+
+msgctxt "#31080"
+msgid "quit kodi"
+msgstr "sulge Kodi"
+
+msgctxt "#31081"
+msgid "power off"
+msgstr "lülita välja"
+
+msgctxt "#31082"
+msgid "reboot"
+msgstr "taaskäivita"
+
+msgctxt "#31083"
+msgid "suspend"
+msgstr "uinak"
+
+msgctxt "#31084"
+msgid "hibernate"
+msgstr "talveuni"
+
+msgctxt "#31085"
+msgid "shutdown timer"
+msgstr "väljalülitustaimer"
+
+msgctxt "#31086"
+msgid "cancel shutdown timer"
+msgstr "tühista väljalülitustaimer"
+
+msgctxt "#31087"
+msgid "log off"
+msgstr "logi välja"
+
+msgctxt "#31088"
+msgid "reload skin"
+msgstr "laadi rüü uuesti"
+
+msgctxt "#31089"
+msgid "power"
+msgstr "toide"
+
+msgctxt "#31090"
+msgid "Hide foreign"
+msgstr "Peida võõrkeelsed"
+
+msgctxt "#31091"
+msgid "Hide broken"
+msgstr "Peida vigased"
+
+msgctxt "#31094"
+msgid "thumbs"
+msgstr "pisipildid"
+
+msgctxt "#31095"
+msgid "mute"
+msgstr "vaigista"
+
+msgctxt "#31096"
+msgid "descending"
+msgstr "kahanev"
+
+msgctxt "#31100"
+msgid "spotlight"
+msgstr "esiletõst"
+
+msgctxt "#31101"
+msgid "all movies"
+msgstr "kõik filmid"
+
+msgctxt "#31102"
+msgid "all shows"
+msgstr "kõik sarjad"
+
+msgctxt "#31103"
+msgid "in progress"
+msgstr "pooleli"
+
+msgctxt "#31104"
+msgid "unwatched"
+msgstr "vaatamata"
+
+msgctxt "#31105"
+msgid "genres"
+msgstr "žanrid"
+
+msgctxt "#31106"
+msgid "episodes"
+msgstr "osad"
+
+msgctxt "#31116"
+msgid "sort"
+msgstr "sortimine"
+
+msgctxt "#31117"
+msgid "descending"
+msgstr "kahanev"
+
+msgctxt "#31118"
+msgid "title"
+msgstr "pealkiri"
+
+msgctxt "#31119"
+msgid "year"
+msgstr "aasta"
+
+msgctxt "#31120"
+msgid "added"
+msgstr "lisatud"
+
+msgctxt "#31121"
+msgid "rating"
+msgstr "hinnang"
+
+msgctxt "#31122"
+msgid "ascending"
+msgstr "kasvav"
+
+msgctxt "#31123"
+msgid "from start"
+msgstr "algusest"
+
+msgctxt "#31124"
+msgid "cast"
+msgstr "osatäitjad"
+
+msgctxt "#31125"
+msgid "details"
+msgstr "üksikasjad"
+
+msgctxt "#31126"
+msgid "director"
+msgstr "režissöör"
+
+msgctxt "#31127"
+msgid "writer"
+msgstr "stsenarist"
+
+msgctxt "#31128"
+msgid "studio"
+msgstr "stuudio"
+
+msgctxt "#31129"
+msgid "country"
+msgstr "riik"
+
+msgctxt "#31130"
+msgid "similar"
+msgstr "sarnased"
+
+msgctxt "#31131"
+msgid "season"
+msgstr "hooaeg"
+
+msgctxt "#31132"
+msgid "episode"
+msgstr "osa"
+
+msgctxt "#31133"
+msgid "all"
+msgstr "kõik"
+
+msgctxt "#31134"
+msgid "specials"
+msgstr "eriosad"
+
+msgctxt "#31135"
+msgid "select"
+msgstr "vali"
+
+msgctxt "#31136"
+msgid "age rating"
+msgstr "vanusepiirang"
+
+msgctxt "#31059"
+msgid "ends at"
+msgstr "lõpeb kell"
+
+msgctxt "#31137"
+msgid "next episode"
+msgstr "järgmine osa"
+
+msgctxt "#31138"
+msgid "off"
+msgstr "väljas"
+
+msgctxt "#31139"
+msgid "all settings"
+msgstr "kõik seaded"
+
+msgctxt "#31140"
+msgid "chapters"
+msgstr "peatükid"
+
+msgctxt "#31141"
+msgid "search for a title"
+msgstr "otsi pealkirja"
+
+msgctxt "#31142"
+msgid "actions"
+msgstr "toimingud"
+
+msgctxt "#31143"
+msgid "power off"
+msgstr "lülita välja"
+
+msgctxt "#31144"
+msgid "reboot"
+msgstr "taaskäivita"
+
+msgctxt "#31145"
+msgid "suspend"
+msgstr "uinak"
+
+msgctxt "#31146"
+msgid "exit kodi"
+msgstr "sulge Kodi"
+
+msgctxt "#31147"
+msgid "restart kodi"
+msgstr "taaskäivita Kodi"
+
+msgctxt "#31148"
+msgid "movies (library)"
+msgstr "filmid (kogu)"
+
+msgctxt "#31149"
+msgid "shows (library)"
+msgstr "sarjad (kogu)"
+
+msgctxt "#31150"
+msgid "episodes (library)"
+msgstr "osad (kogu)"
+
+msgctxt "#31151"
+msgid "online: movies (tmdb)"
+msgstr "võrgus: filmid (TMDb)"
+
+msgctxt "#31152"
+msgid "online: shows (tmdb)"
+msgstr "võrgus: sarjad (TMDb)"
+
+msgctxt "#31153"
+msgid "recent"
+msgstr "hiljutised"
+
+msgctxt "#31154"
+msgid "not available on this device"
+msgstr "pole selles seadmes saadaval"
+
+msgctxt "#31155"
+msgid "stats"
+msgstr "statistika"
+
+msgctxt "#31157"
+msgid "booting"
+msgstr "käivitus"
+
+msgctxt "#31158"
+msgid "online"
+msgstr "võrgus"
+
+msgctxt "#31159"
+msgid "Playback & media"
+msgstr "Taasesitus ja meedia"
+
+msgctxt "#31160"
+msgid "Look & profiles"
+msgstr "Välimus ja profiilid"
+
+msgctxt "#31161"
+msgid "Add-ons & content"
+msgstr "Lisad ja sisu"
+
+msgctxt "#31162"
+msgid "System & network"
+msgstr "Süsteem ja võrk"
+
+msgctxt "#31163"
+msgid "Tools"
+msgstr "Tööriistad"
+
+msgctxt "#31164"
+msgid "How videos, music and pictures play: decoding, refresh rate, discs, audio and subtitle language, subtitles."
+msgstr "Kuidas videod, muusika ja pildid esitatakse: dekodeerimine, värskendussagedus, kettad, heli- ja subtiitrite keel, subtiitrid."
+
+msgctxt "#31165"
+msgid "How the library collects and shows your media: scanning, file lists, videos, music, pictures."
+msgstr "Kuidas kogu sinu meediat kogub ja näitab: skannimine, faililoendid, videod, muusika, pildid."
+
+msgctxt "#31166"
+msgid "Live TV and recordings from your PVR client: channels, guide, recording, reminders."
+msgstr "Otse-TV ja salvestused sinu PVR-kliendist: kanalid, kava, salvestamine, meeldetuletused."
+
+msgctxt "#31167"
+msgid "How Kodi looks and starts: skin, language and region, screensaver, master lock, startup."
+msgstr "Kuidas Kodi välja näeb ja käivitub: rüü, keel ja piirkond, ekraanisäästja, ülemlukk, käivitus."
+
+msgctxt "#31168"
+msgid "The options of this skin: the home pages and the look."
+msgstr "Selle rüü valikud: avalehed ja välimus."
+
+msgctxt "#31169"
+msgid "Users with their own library, settings and add-ons, and the login screen."
+msgstr "Kasutajad oma kogu, seadete ja lisadega ning sisselogimisekraan."
+
+msgctxt "#31170"
+msgid "Installed add-ons, repositories, install from a zip file, search and updates."
+msgstr "Paigaldatud lisad, hoidlad, paigaldus ZIP-failist, otsing ja uuendused."
+
+msgctxt "#31171"
+msgid "Browse sources and folders, copy, move and delete files."
+msgstr "Allikate ja kaustade sirvimine, failide kopeerimine, teisaldamine ja kustutamine."
+
+msgctxt "#31172"
+msgid "The device: display, audio output, input, internet access, power saving, add-on rules, logging."
+msgstr "Seade: ekraan, heliväljund, sisend, internetiühendus, energiasääst, lisade reeglid, logimine."
+
+msgctxt "#31173"
+msgid "What Kodi offers on the network and uses from it: remote control, UPnP, AirPlay, SMB, NFS, caching, weather."
+msgstr "Mida Kodi võrgus pakub ja sealt kasutab: kaugjuhtimine, UPnP, AirPlay, SMB, NFS, puhverdamine, ilm."
+
+msgctxt "#31174"
+msgid "Facts about this device: Kodi version, storage, network, video, hardware."
+msgstr "Faktid selle seadme kohta: Kodi versioon, salvestusruum, võrk, video, riistvara."
+
+msgctxt "#31175"
+msgid "What happened lately: add-on installs and updates, library scans, errors."
+msgstr "Mis hiljuti juhtus: lisade paigaldused ja uuendused, kogu skannimised, vead."
+
+msgctxt "#31176"
+msgid "Categories"
+msgstr "Kategooriad"
+
+msgctxt "#31178"
+msgid "[COLOR state_text]⏎[/COLOR] open"
+msgstr "[COLOR state_text]⏎[/COLOR] ava"
+
+msgctxt "#31181"
+msgid "refresh rate, decoding, resume"
+msgstr "värskendussagedus, dekodeerimine, jätkamine"
+
+msgctxt "#31182"
+msgid "crossfade, visualisation, volume adjustment"
+msgstr "ülehajutus, visualiseerimine, helitugevuse kohandus"
+
+msgctxt "#31183"
+msgid "DVD, Blu-ray, audio CD"
+msgstr "DVD, Blu-ray, audio-CD"
+
+msgctxt "#31184"
+msgid "slideshow, transitions"
+msgstr "slaidiesitlus, üleminekud"
+
+msgctxt "#31185"
+msgid "audio, subtitles and menus"
+msgstr "heli, subtiitrid ja menüüd"
+
+msgctxt "#31186"
+msgid "font, size, download services"
+msgstr "font, suurus, allalaadimisteenused"
+
+msgctxt "#31187"
+msgid "scan on startup, update, clean up"
+msgstr "skannimine käivitusel, uuendus, puhastus"
+
+msgctxt "#31188"
+msgid "file extensions, hidden files, sorting"
+msgstr "faililaiendid, peidetud failid, sortimine"
+
+msgctxt "#31189"
+msgid "select action, plots, thumbnails"
+msgstr "valiku toiming, sisukokkuvõtted, pisipildid"
+
+msgctxt "#31190"
+msgid "artists, album covers, tags"
+msgstr "esitajad, albumikaaned, sildid"
+
+msgctxt "#31191"
+msgid "thumbnails, EXIF"
+msgstr "pisipildid, EXIF"
+
+msgctxt "#31192"
+msgid "channel groups, channel icons"
+msgstr "kanalirühmad, kanalite ikoonid"
+
+msgctxt "#31193"
+msgid "channel info, switching"
+msgstr "kanali info, vahetamine"
+
+msgctxt "#31194"
+msgid "days shown, updates"
+msgstr "näidatavad päevad, uuendused"
+
+msgctxt "#31195"
+msgid "start, channel switch delay"
+msgstr "käivitus, kanalivahetuse viivitus"
+
+msgctxt "#31196"
+msgid "margins, folders"
+msgstr "varud, kaustad"
+
+msgctxt "#31197"
+msgid "reminder before a show"
+msgstr "meeldetuletus enne saadet"
+
+msgctxt "#31198"
+msgid "wake up for recordings"
+msgstr "äratus salvestuste jaoks"
+
+msgctxt "#31199"
+msgid "lock by age, PIN"
+msgstr "vanuselukk, PIN"
+
+msgctxt "#31200"
+msgid "PVR client add-ons"
+msgstr "PVR-kliendi lisad"
+
+msgctxt "#31201"
+msgid "skin, theme, colours, fonts"
+msgstr "rüü, teema, värvid, fondid"
+
+msgctxt "#31202"
+msgid "language, region, time, keyboard"
+msgstr "keel, piirkond, aeg, klaviatuur"
+
+msgctxt "#31203"
+msgid "mode, wait time"
+msgstr "režiim, ooteaeg"
+
+msgctxt "#31204"
+msgid "lock code, protected areas"
+msgstr "lukukood, kaitstud alad"
+
+msgctxt "#31205"
+msgid "start window, splash screen"
+msgstr "algaken, avakuva"
+
+msgctxt "#31206"
+msgid "resolution, refresh rate, calibration"
+msgstr "eraldusvõime, värskendussagedus, kalibreerimine"
+
+msgctxt "#31207"
+msgid "output device, channels, passthrough"
+msgstr "väljundseade, kanalid, passthrough"
+
+msgctxt "#31208"
+msgid "devices, mouse, remote"
+msgstr "seadmed, hiir, pult"
+
+msgctxt "#31209"
+msgid "proxy"
+msgstr "puhverserver"
+
+msgctxt "#31210"
+msgid "shutdown, display off"
+msgstr "väljalülitus, ekraan välja"
+
+msgctxt "#31211"
+msgid "updates, unknown sources"
+msgstr "uuendused, tundmatud allikad"
+
+msgctxt "#31212"
+msgid "debug log, components"
+msgstr "silumislogi, komponendid"
+
+msgctxt "#31213"
+msgid "device name, Zeroconf"
+msgstr "seadme nimi, Zeroconf"
+
+msgctxt "#31214"
+msgid "web server, remote apps"
+msgstr "veebiserver, kaugjuhtimisrakendused"
+
+msgctxt "#31215"
+msgid "share library, renderer"
+msgstr "kogu jagamine, renderdaja"
+
+msgctxt "#31216"
+msgid "receive AirPlay"
+msgstr "AirPlay vastuvõtt"
+
+msgctxt "#31217"
+msgid "Windows shares, WINS"
+msgstr "Windowsi jagamised, WINS"
+
+msgctxt "#31218"
+msgid "NFS shares"
+msgstr "NFS-jagamised"
+
+msgctxt "#31219"
+msgid "buffer, read rate"
+msgstr "puhver, lugemiskiirus"
+
+msgctxt "#31220"
+msgid "weather service"
+msgstr "ilmateenus"
+
+msgctxt "#31221"
+msgid "Spotlight change"
+msgstr "Esiletõstu vahetus"
+
+msgctxt "#31222"
+msgid "Home pages"
+msgstr "Avalehed"
+
+msgctxt "#31224"
+msgid "Rows"
+msgstr "Read"
+
+msgctxt "#31225"
+msgid "Spotlight"
+msgstr "Esiletõst"
+
+msgctxt "#31226"
+msgid "Still"
+msgstr "Paigal"
+
+msgctxt "#31227"
+msgid "All shows"
+msgstr "Kõik sarjad"
+
+msgctxt "#31228"
+msgid "Unwatched shows"
+msgstr "Vaatamata sarjad"
+
+msgctxt "#31229"
+msgid "Slot"
+msgstr "Koht"
+
+msgctxt "#31231"
+msgid "Section for slot"
+msgstr "Koha jaotis"
+
+msgctxt "#31232"
+msgid "menu"
+msgstr "menüü"
+
+msgctxt "#31233"
+msgid "Continue watching"
+msgstr "Jätka vaatamist"
+
+msgctxt "#31234"
+msgid "Next up"
+msgstr "Järgmisena"
+
+msgctxt "#31235"
+msgid "New movies"
+msgstr "Uued filmid"
+
+msgctxt "#31236"
+msgid "New episodes"
+msgstr "Uued osad"
+
+msgctxt "#31237"
+msgid "Random movies"
+msgstr "Juhuslikud filmid"
+
+msgctxt "#31238"
+msgid "Top rated"
+msgstr "Parimad hinnangud"
+
+msgctxt "#31239"
+msgid "TMDb trending"
+msgstr "TMDb trendid"
+
+msgctxt "#31240"
+msgid "Recently watched"
+msgstr "Hiljuti vaadatud"
+
+msgctxt "#31241"
+msgid "Started movies and episodes, the last watched first."
+msgstr "Alustatud filmid ja osad, viimati vaadatud eespool."
+
+msgctxt "#31242"
+msgid "The shows you are watching. OK opens the next episode."
+msgstr "Sarjad, mida vaatad. OK avab järgmise osa."
+
+msgctxt "#31243"
+msgid "The movies added to the library last."
+msgstr "Viimati kogusse lisatud filmid."
+
+msgctxt "#31244"
+msgid "The shows with the episodes added last."
+msgstr "Viimati lisatud osadega sarjad."
+
+msgctxt "#31245"
+msgid "Tabs for the three biggest genres and a picker for all others."
+msgstr "Vahekaardid kolmele suurimale žanrile ja valija kõigile teistele."
+
+msgctxt "#31246"
+msgid "A new choice from the whole library every time Home opens."
+msgstr "Uus valik kogu kogust iga kord, kui avaleht avaneb."
+
+msgctxt "#31248"
+msgid "Sorted by rating, from 7.0 up."
+msgstr "Sorditud hinnangu järgi, alates 7,0."
+
+msgctxt "#31249"
+msgid "Kodi's favourites, as you set them."
+msgstr "Kodi lemmikud, nii nagu need seadsid."
+
+msgctxt "#31250"
+msgid "What is trending on TMDb this week."
+msgstr "Mis on sel nädalal TMDb-s trendis."
+
+msgctxt "#31251"
+msgid "What played last, also what you watched to the end."
+msgstr "Mis viimati mängis, ka see, mida vaatasid lõpuni."
+
+msgctxt "#31252"
+msgid "The movie sets of your library. OK opens a set."
+msgstr "Sinu kogu filmikogumikud. OK avab kogumiku."
+
+msgctxt "#31253"
+msgid "Episodes you started and did not finish."
+msgstr "Osad, mida alustasid ja ei lõpetanud."
+
+msgctxt "#31254"
+msgid "Free slot. OK picks a section from the catalogue."
+msgstr "Vaba koht. OK valib kataloogist jaotise."
+
+msgctxt "#31255"
+msgid "Large artwork with title and plot, in random order. OK or Right picks the source."
+msgstr "Suur pilt pealkirja ja sisuga, juhuslikus järjekorras. OK või Paremale valib allika."
+
+msgctxt "#31256"
+msgid "No spotlight: the page starts with the first row."
+msgstr "Esiletõstuta: leht algab esimese reaga."
+
+msgctxt "#31257"
+msgid "How often the spotlight moves on by itself. OK or Right: 10, 15, 30, 60 s or still (then only by hand)."
+msgstr "Kui tihti esiletõst ise vahetub. OK või Paremale: 10, 15, 30, 60 s või paigal (siis ainult käsitsi)."
+
+msgctxt "#31258"
+msgid "Home and movies show the same spotlight, so they share this setting."
+msgstr "Avaleht ja filmid näitavad sama esiletõstu, seega jagavad nad seda seadet."
+
+msgctxt "#31259"
+msgid "Show or hide entries of the main menu. System and power always stay, and so does the last page shown."
+msgstr "Näita või peida peamenüü kirjeid. Süsteem ja toide jäävad alati, samuti viimati näidatud leht."
+
+msgctxt "#31260"
+msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]⏎[/COLOR] vali   [COLOR state_text]→[/COLOR] valik"
+
+msgctxt "#31261"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] liiguta   [COLOR state_text]⏎[/COLOR] aseta"
+
+msgctxt "#31262"
+msgid "Spotlight, rows and main menu of the home, movies and shows pages."
+msgstr "Avalehe, filmide ja sarjade lehtede esiletõst, read ja peamenüü."
+
+msgctxt "#31263"
+msgid "swap"
+msgstr "vaheta"
+
+msgctxt "#31264"
+msgid "Main menu"
+msgstr "Peamenüü"
+
+msgctxt "#31265"
+msgid "Spotlight and rows of the home page."
+msgstr "Avalehe esiletõst ja read."
+
+msgctxt "#31266"
+msgid "Spotlight and rows of the movies page."
+msgstr "Filmide lehe esiletõst ja read."
+
+msgctxt "#31267"
+msgid "Spotlight and rows of the shows page."
+msgstr "Sarjade lehe esiletõst ja read."
+
+msgctxt "#31268"
+msgid "How the skin draws the focus."
+msgstr "Kuidas rüü fookust joonistab."
+
+msgctxt "#31230"
+msgid "frame rate"
+msgstr "kaadrisagedus"
+
+msgctxt "#31330"
+msgid "back to video"
+msgstr "tagasi videosse"
+
+msgctxt "#31331"
+msgid "back to home"
+msgstr "tagasi avalehele"
+
+msgctxt "#31332"
+msgid "back to movies"
+msgstr "tagasi filmidesse"
+
+msgctxt "#31333"
+msgid "back to shows"
+msgstr "tagasi sarjadesse"
+
+msgctxt "#31334"
+msgid "back to search"
+msgstr "tagasi otsingusse"
+
+msgctxt "#31335"
+msgid "back to library"
+msgstr "tagasi kogusse"
+
+msgctxt "#31310"
+msgid "Home key opens the home page"
+msgstr "Home-klahv avab avalehe"
+
+msgctxt "#31311"
+msgid "The Home key of the remote always leads to the home page, held down it opens the quick menu. The skin sets up the keymap 0_skin.nightcity.xml in the profile for it; your own keymaps still win."
+msgstr "Puldi Home-klahv viib alati avalehele, all hoides avab kiirmenüü. Rüü seab selleks profiilis üles klahvikaardi 0_skin.nightcity.xml; sinu enda klahvikaardid on endiselt eelistatud."
+
+msgctxt "#31300"
+msgid "crew"
+msgstr "meeskond"
+
+msgctxt "#31301"
+msgid "back to start"
+msgstr "tagasi algusse"
+
+msgctxt "#31302"
+msgid "person"
+msgstr "isik"
+
+msgctxt "#31303"
+msgid "born"
+msgstr "sündinud"
+
+msgctxt "#31304"
+msgid "died"
+msgstr "surnud"
+
+msgctxt "#31320"
+msgid "quick menu"
+msgstr "kiirmenüü"
+
+msgctxt "#31321"
+msgid "set up weather"
+msgstr "seadista ilm"
+
+msgctxt "#31322"
+msgid "more"
+msgstr "veel"
+
+msgctxt "#31323"
+msgid "timer"
+msgstr "taimer"
+
+msgctxt "#31336"
+msgid "Remember search terms"
+msgstr "Jäta otsingusõnad meelde"
+
+msgctxt "#31337"
+msgid "The search page lists the last five search terms. Switched off, the skin keeps no terms and forgets the ones it has."
+msgstr "Otsingulehel on viimased viis otsingusõna. Välja lülitatuna ei hoia rüü ühtegi sõna ja unustab olemasolevad."
+
+msgctxt "#31338"
+msgid "Clear search history"
+msgstr "Kustuta otsinguajalugu"
+
+msgctxt "#31339"
+msgid "Forgets the remembered search terms."
+msgstr "Unustab meeldejäetud otsingusõnad."
+
+msgctxt "#31340"
+msgid "The colour scheme of the skin, the same choice as under Interface."
+msgstr "Rüü värviskeem, sama valik mis Liidese all."
+
+msgctxt "#31341"
+msgid "forecast"
+msgstr "prognoos"
+
+msgctxt "#31360"
+msgid "Hide the controls automatically"
+msgstr "Peida juhtnupud automaatselt"
+
+msgctxt "#31361"
+msgid "While a video plays, the player controls close by themselves once no key was pressed for the time set below. While paused they stay; the time starts again when playback goes on."
+msgstr "Video esitamise ajal sulguvad mängija juhtnupud ise, kui allpool seatud aja jooksul ühtegi klahvi ei vajutatud. Pausi ajal jäävad need alles; aeg algab uuesti, kui esitus jätkub."
+
+msgctxt "#31362"
+msgid "Hide after"
+msgstr "Peida pärast"
+
+msgctxt "#31363"
+msgid "Time without a key press before the player controls close, 3 to 30 seconds. OK takes the slider, left and right move it, OK lets go."
+msgstr "Aeg ilma klahvivajutuseta, enne kui mängija juhtnupud sulguvad, 3 kuni 30 sekundit. OK haarab liuguri, vasak ja parem liigutavad seda, OK laseb lahti."
+
+msgctxt "#31364"
+msgid "The video player: its controls and what it shows while they are up."
+msgstr "Videomängija: selle juhtnupud ja mida see näitab, kui need on avatud."
+
+msgctxt "#31365"
+msgid "Show the plot"
+msgstr "Näita sisu"
+
+msgctxt "#31366"
+msgid "The plot of what plays, under its title while the player controls or the seek line are up."
+msgstr "Esitatava sisukokkuvõte pealkirja all, kui mängija juhtnupud või kerimisriba on avatud."
+
+msgctxt "#31400"
+msgid "New albums"
+msgstr "Uued albumid"
+
+msgctxt "#31401"
+msgid "Recently played"
+msgstr "Hiljuti mängitud"
+
+msgctxt "#31402"
+msgid "Random albums"
+msgstr "Juhuslikud albumid"
+
+msgctxt "#31403"
+msgid "Artists"
+msgstr "Esitajad"
+
+msgctxt "#31404"
+msgid "Genres"
+msgstr "Žanrid"
+
+msgctxt "#31405"
+msgid "music"
+msgstr "muusika"
+
+msgctxt "#31406"
+msgid "now playing"
+msgstr "praegu mängib"
+
+msgctxt "#31407"
+msgid "albums"
+msgstr "albumid"
+
+msgctxt "#31408"
+msgid "more by"
+msgstr "veel esitajalt"
+
+msgctxt "#31409"
+msgid "tracks"
+msgstr "lood"
+
+msgctxt "#31410"
+msgid "up next"
+msgstr "järgmisena"
+
+msgctxt "#31411"
+msgid "shuffle"
+msgstr "segamini"
+
+msgctxt "#31412"
+msgid "repeat"
+msgstr "korda"
+
+msgctxt "#31413"
+msgid "repeat all"
+msgstr "korda kõiki"
+
+msgctxt "#31414"
+msgid "repeat one"
+msgstr "korda ühte"
+
+msgctxt "#31420"
+msgid "Network, Bluetooth, updates"
+msgstr "Võrk, Bluetooth, uuendused"
+
+msgctxt "#31440"
+msgid "audience"
+msgstr "publik"
+
+msgctxt "#31441"
+msgid "Ratings only from TMDb Helper"
+msgstr "Hinnangud ainult TMDb Helperist"
+
+msgctxt "#31442"
+msgid "Show only the ratings TMDb Helper fetched for exactly this title. Off: the library's own rating (from Jellyfin) fills in while TMDb Helper has none."
+msgstr "Näita ainult hinnanguid, mille TMDb Helper just selle pealkirja jaoks tõi. Väljas: kogu enda hinnang (Jellyfinist) asendab neid, kuni TMDb Helperil pole ühtegi."
+
+msgctxt "#31443"
+msgid "Ratings only on title pages"
+msgstr "Hinnangud ainult pealkirjalehtedel"
+
+msgctxt "#31444"
+msgid "Spotlight and rows show no ratings, which saves requests to TMDb. A title's page still shows them."
+msgstr "Esiletõst ja read ei näita hinnanguid, mis säästab päringuid TMDb-le. Pealkirja leht näitab neid endiselt."
+
+msgctxt "#31445"
+msgid "Ratings"
+msgstr "Hinnangud"
+
+msgctxt "#31446"
+msgid "Sources"
+msgstr "Allikad"
+
+msgctxt "#31447"
+msgid "Which ratings the ratings line of the spotlight and the info page shows, and where they come from."
+msgstr "Milliseid hinnanguid näitab esiletõstu ja infolehe hinnangurida ning kust need pärinevad."
+
+msgctxt "#31450"
+msgid "IMDb"
+msgstr "IMDb"
+
+msgctxt "#31451"
+msgid "TMDb"
+msgstr "TMDb"
+
+msgctxt "#31452"
+msgid "Rotten Tomatoes critics"
+msgstr "Rotten Tomatoes kriitikud"
+
+msgctxt "#31453"
+msgid "Rotten Tomatoes audience"
+msgstr "Rotten Tomatoes publik"
+
+msgctxt "#31454"
+msgid "Metacritic"
+msgstr "Metacritic"
+
+msgctxt "#31455"
+msgid "Trakt"
+msgstr "Trakt"
+
+msgctxt "#31456"
+msgid "Letterboxd"
+msgstr "Letterboxd"
+
+msgctxt "#31457"
+msgid "MDbList"
+msgstr "MDbList"
+
+msgctxt "#31460"
+msgid "IMDb users, 0 to 10, with the Top 250 rank. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "IMDb kasutajad, 0 kuni 10, koos Top 250 kohaga. Vajab TMDb Helperis OMDb või MDbList võtit."
+
+msgctxt "#31461"
+msgid "TMDb users, 0 to 10. Needs no key."
+msgstr "TMDb kasutajad, 0 kuni 10. Võtit pole vaja."
+
+msgctxt "#31462"
+msgid "Tomatometer: the share of positive critic reviews. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Tomatometer: positiivsete kriitikute arvustuste osakaal. Vajab TMDb Helperis OMDb või MDbList võtit."
+
+msgctxt "#31463"
+msgid "Popcornmeter: the share of positive audience ratings. Needs an MDbList or OMDb key in TMDb Helper."
+msgstr "Popcornmeter: positiivsete publikuhinnangute osakaal. Vajab TMDb Helperis MDbList või OMDb võtit."
+
+msgctxt "#31464"
+msgid "A weighted average of critic reviews, 0 to 100, mostly for theatrical films and big series. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Kriitikute arvustuste kaalutud keskmine, 0 kuni 100, peamiselt kinofilmidele ja suurtele sarjadele. Vajab TMDb Helperis OMDb või MDbList võtit."
+
+msgctxt "#31465"
+msgid "Trakt users, 0 to 10. Needs a connected Trakt account in TMDb Helper: fetched from Trakt, not MDbList."
+msgstr "Trakt kasutajad, 0 kuni 10. Vajab TMDb Helperis ühendatud Trakt kontot: tuuakse Traktist, mitte MDbListist."
+
+msgctxt "#31466"
+msgid "Letterboxd users, 0 to 5, mostly films. Needs an MDbList key in TMDb Helper."
+msgstr "Letterboxd kasutajad, 0 kuni 5, peamiselt filmid. Vajab TMDb Helperis MDbList võtit."
+
+msgctxt "#31467"
+msgid "MDbList score: an average of the other sources, 0 to 100. Needs an MDbList key in TMDb Helper."
+msgstr "MDbList skoor: teiste allikate keskmine, 0 kuni 100. Vajab TMDb Helperis MDbList võtit."
+
+msgctxt "#31469"
+msgid "No description"
+msgstr "Kirjeldus puudub"
+
+msgctxt "#31470"
+msgid "back"
+msgstr "tagasi"
+
+msgctxt "#31471"
+msgid "budget"
+msgstr "eelarve"
+
+msgctxt "#31472"
+msgid "box office"
+msgstr "kassatulu"
+
+msgctxt "#31473"
+msgid "description"
+msgstr "kirjeldus"
+
+msgctxt "#31474"
+msgid "biography"
+msgstr "elulugu"
+
+msgctxt "#31478"
+msgid "controls"
+msgstr "juhtnupud"
+
+msgctxt "#31479"
+msgid "previous page"
+msgstr "eelmine leht"
+
+msgctxt "#31480"
+msgid "parent folder"
+msgstr "ülemkaust"
+
+msgctxt "#31477"
+msgid "Home"
+msgstr "Avaleht"
+
+msgctxt "#31500"
+msgid "view"
+msgstr "vaade"
+
+msgctxt "#31501"
+msgid "list"
+msgstr "loend"
+
+msgctxt "#31502"
+msgid "filter"
+msgstr "filter"
+
+msgctxt "#31503"
+msgid "all"
+msgstr "kõik"
+
+msgctxt "#31504"
+msgid "resolution"
+msgstr "eraldusvõime"
+
+msgctxt "#31505"
+msgid "dynamic range"
+msgstr "dünaamiline ulatus"
+
+msgctxt "#31506"
+msgid "audio format"
+msgstr "heliformaat"
+
+msgctxt "#31507"
+msgid "audio channels"
+msgstr "helikanalid"
+
+msgctxt "#31508"
+msgid "clear filter"
+msgstr "tühjenda filter"
+
+msgctxt "#31600"
+msgid "runtime"
+msgstr "kestus"
+
+msgctxt "#31601"
+msgid "genre"
+msgstr "žanr"
+
+msgctxt "#31602"
+msgid "details"
+msgstr "üksikasjad"
+
+msgctxt "#31603"
+msgid "seasons"
+msgstr "hooajad"
+
+msgctxt "#31604"
+msgid "season"
+msgstr "hooaeg"
+
+msgctxt "#31605"
+msgid "seasons"
+msgstr "hooajad"
+
+msgctxt "#31606"
+msgid "episodes"
+msgstr "osad"
+
+msgctxt "#31607"
+msgid "none"
+msgstr "puudub"
+
+msgctxt "#31700"
+msgid "On Deck"
+msgstr "On Deck"
+
+msgctxt "#31701"
+msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
+msgstr "Mida alustasid, siis sarjad, mida vaatad. OK sarjal avab järgmise osa."
+
+msgctxt "#31750"
+msgid "No trailer found"
+msgstr "Treilerit ei leitud"

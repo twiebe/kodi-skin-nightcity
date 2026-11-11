@@ -1,0 +1,1196 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ca_es\n"
+
+msgctxt "#31002"
+msgid "Spotlight source"
+msgstr "Font del destacat"
+
+msgctxt "#31003"
+msgid "All movies"
+msgstr "Totes les pel·lícules"
+
+msgctxt "#31004"
+msgid "Unwatched movies"
+msgstr "Pel·lícules no vistes"
+
+msgctxt "#31005"
+msgid "Effects"
+msgstr "Efectes"
+
+msgctxt "#31006"
+msgid "home"
+msgstr "inici"
+
+msgctxt "#31010"
+msgid "play"
+msgstr "reprodueix"
+
+msgctxt "#31011"
+msgid "info"
+msgstr "info"
+
+msgctxt "#31012"
+msgid "min"
+msgstr "min"
+
+msgctxt "#31020"
+msgid "on deck"
+msgstr "pendents"
+
+msgctxt "#31021"
+msgid "new movies"
+msgstr "pel·lícules noves"
+
+msgctxt "#31022"
+msgid "new episodes"
+msgstr "episodis nous"
+
+msgctxt "#31023"
+msgid "continue watching"
+msgstr "continua veient"
+
+msgctxt "#31030"
+msgid "movies"
+msgstr "pel·lícules"
+
+msgctxt "#31031"
+msgid "shows"
+msgstr "sèries"
+
+msgctxt "#31032"
+msgid "search"
+msgstr "cerca"
+
+msgctxt "#31033"
+msgid "System"
+msgstr "Sistema"
+
+msgctxt "#31041"
+msgid "trailer"
+msgstr "tràiler"
+
+msgctxt "#31042"
+msgid "posters"
+msgstr "pòsters"
+
+msgctxt "#31043"
+msgid "resume"
+msgstr "reprèn"
+
+msgctxt "#31050"
+msgid "ends"
+msgstr "acaba"
+
+msgctxt "#31051"
+msgid "pause"
+msgstr "pausa"
+
+msgctxt "#31052"
+msgid "stop"
+msgstr "atura"
+
+msgctxt "#31053"
+msgid "subtitles"
+msgstr "subtítols"
+
+msgctxt "#31054"
+msgid "audio"
+msgstr "àudio"
+
+msgctxt "#31055"
+msgid "video"
+msgstr "vídeo"
+
+msgctxt "#31056"
+msgid "bookmarks"
+msgstr "marcadors"
+
+msgctxt "#31057"
+msgid "buffering"
+msgstr "carregant memòria intermèdia"
+
+msgctxt "#31058"
+msgid "video already has subtitles"
+msgstr "el vídeo ja té subtítols"
+
+msgctxt "#31080"
+msgid "quit kodi"
+msgstr "surt del Kodi"
+
+msgctxt "#31081"
+msgid "power off"
+msgstr "apaga"
+
+msgctxt "#31082"
+msgid "reboot"
+msgstr "reinicia"
+
+msgctxt "#31083"
+msgid "suspend"
+msgstr "suspèn"
+
+msgctxt "#31084"
+msgid "hibernate"
+msgstr "hiberna"
+
+msgctxt "#31085"
+msgid "shutdown timer"
+msgstr "temporitzador d'apagada"
+
+msgctxt "#31086"
+msgid "cancel shutdown timer"
+msgstr "cancel·la el temporitzador d'apagada"
+
+msgctxt "#31087"
+msgid "log off"
+msgstr "tanca la sessió"
+
+msgctxt "#31088"
+msgid "reload skin"
+msgstr "recarrega l'aparença"
+
+msgctxt "#31089"
+msgid "power"
+msgstr "energia"
+
+msgctxt "#31090"
+msgid "Hide foreign"
+msgstr "Amaga les estrangeres"
+
+msgctxt "#31091"
+msgid "Hide broken"
+msgstr "Amaga les malmeses"
+
+msgctxt "#31094"
+msgid "thumbs"
+msgstr "imatges"
+
+msgctxt "#31095"
+msgid "mute"
+msgstr "silencia"
+
+msgctxt "#31096"
+msgid "descending"
+msgstr "descendent"
+
+msgctxt "#31100"
+msgid "spotlight"
+msgstr "destacat"
+
+msgctxt "#31101"
+msgid "all movies"
+msgstr "totes les pel·lícules"
+
+msgctxt "#31102"
+msgid "all shows"
+msgstr "totes les sèries"
+
+msgctxt "#31103"
+msgid "in progress"
+msgstr "en curs"
+
+msgctxt "#31104"
+msgid "unwatched"
+msgstr "no vistos"
+
+msgctxt "#31105"
+msgid "genres"
+msgstr "gèneres"
+
+msgctxt "#31106"
+msgid "episodes"
+msgstr "episodis"
+
+msgctxt "#31116"
+msgid "sort"
+msgstr "ordre"
+
+msgctxt "#31117"
+msgid "descending"
+msgstr "descendent"
+
+msgctxt "#31118"
+msgid "title"
+msgstr "títol"
+
+msgctxt "#31119"
+msgid "year"
+msgstr "any"
+
+msgctxt "#31120"
+msgid "added"
+msgstr "afegit"
+
+msgctxt "#31121"
+msgid "rating"
+msgstr "valoració"
+
+msgctxt "#31122"
+msgid "ascending"
+msgstr "ascendent"
+
+msgctxt "#31123"
+msgid "from start"
+msgstr "des de l'inici"
+
+msgctxt "#31124"
+msgid "cast"
+msgstr "repartiment"
+
+msgctxt "#31125"
+msgid "details"
+msgstr "detalls"
+
+msgctxt "#31126"
+msgid "director"
+msgstr "director"
+
+msgctxt "#31127"
+msgid "writer"
+msgstr "guió"
+
+msgctxt "#31128"
+msgid "studio"
+msgstr "estudi"
+
+msgctxt "#31129"
+msgid "country"
+msgstr "país"
+
+msgctxt "#31130"
+msgid "similar"
+msgstr "semblants"
+
+msgctxt "#31131"
+msgid "season"
+msgstr "temporada"
+
+msgctxt "#31132"
+msgid "episode"
+msgstr "episodi"
+
+msgctxt "#31133"
+msgid "all"
+msgstr "tot"
+
+msgctxt "#31134"
+msgid "specials"
+msgstr "especials"
+
+msgctxt "#31135"
+msgid "select"
+msgstr "selecciona"
+
+msgctxt "#31136"
+msgid "age rating"
+msgstr "classificació per edats"
+
+msgctxt "#31059"
+msgid "ends at"
+msgstr "acaba a les"
+
+msgctxt "#31137"
+msgid "next episode"
+msgstr "episodi següent"
+
+msgctxt "#31138"
+msgid "off"
+msgstr "desactivat"
+
+msgctxt "#31139"
+msgid "all settings"
+msgstr "tots els paràmetres"
+
+msgctxt "#31140"
+msgid "chapters"
+msgstr "capítols"
+
+msgctxt "#31141"
+msgid "search for a title"
+msgstr "cerca un títol"
+
+msgctxt "#31142"
+msgid "actions"
+msgstr "accions"
+
+msgctxt "#31143"
+msgid "power off"
+msgstr "apaga"
+
+msgctxt "#31144"
+msgid "reboot"
+msgstr "reinicia"
+
+msgctxt "#31145"
+msgid "suspend"
+msgstr "suspèn"
+
+msgctxt "#31146"
+msgid "exit kodi"
+msgstr "surt del Kodi"
+
+msgctxt "#31147"
+msgid "restart kodi"
+msgstr "reinicia el Kodi"
+
+msgctxt "#31148"
+msgid "movies (library)"
+msgstr "pel·lícules (biblioteca)"
+
+msgctxt "#31149"
+msgid "shows (library)"
+msgstr "sèries (biblioteca)"
+
+msgctxt "#31150"
+msgid "episodes (library)"
+msgstr "episodis (biblioteca)"
+
+msgctxt "#31151"
+msgid "online: movies (tmdb)"
+msgstr "en línia: pel·lícules (TMDb)"
+
+msgctxt "#31152"
+msgid "online: shows (tmdb)"
+msgstr "en línia: sèries (TMDb)"
+
+msgctxt "#31153"
+msgid "recent"
+msgstr "recents"
+
+msgctxt "#31154"
+msgid "not available on this device"
+msgstr "no disponible en aquest dispositiu"
+
+msgctxt "#31155"
+msgid "stats"
+msgstr "estadístiques"
+
+msgctxt "#31157"
+msgid "booting"
+msgstr "arrencant"
+
+msgctxt "#31158"
+msgid "online"
+msgstr "en línia"
+
+msgctxt "#31159"
+msgid "Playback & media"
+msgstr "Reproducció i mitjans"
+
+msgctxt "#31160"
+msgid "Look & profiles"
+msgstr "Aparença i perfils"
+
+msgctxt "#31161"
+msgid "Add-ons & content"
+msgstr "Complements i contingut"
+
+msgctxt "#31162"
+msgid "System & network"
+msgstr "Sistema i xarxa"
+
+msgctxt "#31163"
+msgid "Tools"
+msgstr "Eines"
+
+msgctxt "#31164"
+msgid "How videos, music and pictures play: decoding, refresh rate, discs, audio and subtitle language, subtitles."
+msgstr "Com es reprodueixen els vídeos, la música i les imatges: descodificació, freqüència de refresc, discs, idioma de l'àudio i dels subtítols, subtítols."
+
+msgctxt "#31165"
+msgid "How the library collects and shows your media: scanning, file lists, videos, music, pictures."
+msgstr "Com la biblioteca recull i mostra els mitjans: escaneig, llistes de fitxers, vídeos, música, imatges."
+
+msgctxt "#31166"
+msgid "Live TV and recordings from your PVR client: channels, guide, recording, reminders."
+msgstr "TV en directe i enregistraments del client PVR: canals, guia, enregistrament, recordatoris."
+
+msgctxt "#31167"
+msgid "How Kodi looks and starts: skin, language and region, screensaver, master lock, startup."
+msgstr "Com es veu i arrenca el Kodi: aparença, idioma i regió, estalvi de pantalla, bloqueig mestre, inici."
+
+msgctxt "#31168"
+msgid "The options of this skin: the home pages and the look."
+msgstr "Les opcions d'aquesta aparença: les pàgines d'inici i l'aspecte."
+
+msgctxt "#31169"
+msgid "Users with their own library, settings and add-ons, and the login screen."
+msgstr "Usuaris amb biblioteca, paràmetres i complements propis, i la pantalla d'inici de sessió."
+
+msgctxt "#31170"
+msgid "Installed add-ons, repositories, install from a zip file, search and updates."
+msgstr "Complements instal·lats, repositoris, instal·lació des d'un fitxer zip, cerca i actualitzacions."
+
+msgctxt "#31171"
+msgid "Browse sources and folders, copy, move and delete files."
+msgstr "Navega per fonts i carpetes, copia, mou i elimina fitxers."
+
+msgctxt "#31172"
+msgid "The device: display, audio output, input, internet access, power saving, add-on rules, logging."
+msgstr "El dispositiu: pantalla, sortida d'àudio, entrada, accés a internet, estalvi d'energia, regles de complements, registre."
+
+msgctxt "#31173"
+msgid "What Kodi offers on the network and uses from it: remote control, UPnP, AirPlay, SMB, NFS, caching, weather."
+msgstr "El que el Kodi ofereix a la xarxa i el que n'utilitza: control remot, UPnP, AirPlay, SMB, NFS, memòria cau, temps."
+
+msgctxt "#31174"
+msgid "Facts about this device: Kodi version, storage, network, video, hardware."
+msgstr "Dades d'aquest dispositiu: versió del Kodi, emmagatzematge, xarxa, vídeo, maquinari."
+
+msgctxt "#31175"
+msgid "What happened lately: add-on installs and updates, library scans, errors."
+msgstr "El que ha passat darrerament: instal·lacions i actualitzacions de complements, escanejos de la biblioteca, errors."
+
+msgctxt "#31176"
+msgid "Categories"
+msgstr "Categories"
+
+msgctxt "#31178"
+msgid "[COLOR state_text]⏎[/COLOR] open"
+msgstr "[COLOR state_text]⏎[/COLOR] obre"
+
+msgctxt "#31181"
+msgid "refresh rate, decoding, resume"
+msgstr "freqüència de refresc, descodificació, represa"
+
+msgctxt "#31182"
+msgid "crossfade, visualisation, volume adjustment"
+msgstr "fosa encadenada, visualització, ajust del volum"
+
+msgctxt "#31183"
+msgid "DVD, Blu-ray, audio CD"
+msgstr "DVD, Blu-ray, CD d'àudio"
+
+msgctxt "#31184"
+msgid "slideshow, transitions"
+msgstr "presentació, transicions"
+
+msgctxt "#31185"
+msgid "audio, subtitles and menus"
+msgstr "àudio, subtítols i menús"
+
+msgctxt "#31186"
+msgid "font, size, download services"
+msgstr "tipus de lletra, mida, serveis de baixada"
+
+msgctxt "#31187"
+msgid "scan on startup, update, clean up"
+msgstr "escaneja en iniciar, actualitza, neteja"
+
+msgctxt "#31188"
+msgid "file extensions, hidden files, sorting"
+msgstr "extensions de fitxer, fitxers ocults, ordenació"
+
+msgctxt "#31189"
+msgid "select action, plots, thumbnails"
+msgstr "acció en seleccionar, trames, miniatures"
+
+msgctxt "#31190"
+msgid "artists, album covers, tags"
+msgstr "artistes, portades d'àlbum, etiquetes"
+
+msgctxt "#31191"
+msgid "thumbnails, EXIF"
+msgstr "miniatures, EXIF"
+
+msgctxt "#31192"
+msgid "channel groups, channel icons"
+msgstr "grups de canals, icones de canal"
+
+msgctxt "#31193"
+msgid "channel info, switching"
+msgstr "info del canal, canvi de canal"
+
+msgctxt "#31194"
+msgid "days shown, updates"
+msgstr "dies mostrats, actualitzacions"
+
+msgctxt "#31195"
+msgid "start, channel switch delay"
+msgstr "inici, retard en canviar de canal"
+
+msgctxt "#31196"
+msgid "margins, folders"
+msgstr "marges, carpetes"
+
+msgctxt "#31197"
+msgid "reminder before a show"
+msgstr "recordatori abans d'un programa"
+
+msgctxt "#31198"
+msgid "wake up for recordings"
+msgstr "desperta per als enregistraments"
+
+msgctxt "#31199"
+msgid "lock by age, PIN"
+msgstr "bloqueig per edat, PIN"
+
+msgctxt "#31200"
+msgid "PVR client add-ons"
+msgstr "Complements de client PVR"
+
+msgctxt "#31201"
+msgid "skin, theme, colours, fonts"
+msgstr "aparença, tema, colors, tipus de lletra"
+
+msgctxt "#31202"
+msgid "language, region, time, keyboard"
+msgstr "idioma, regió, hora, teclat"
+
+msgctxt "#31203"
+msgid "mode, wait time"
+msgstr "mode, temps d'espera"
+
+msgctxt "#31204"
+msgid "lock code, protected areas"
+msgstr "codi de bloqueig, àrees protegides"
+
+msgctxt "#31205"
+msgid "start window, splash screen"
+msgstr "finestra d'inici, pantalla de presentació"
+
+msgctxt "#31206"
+msgid "resolution, refresh rate, calibration"
+msgstr "resolució, freqüència de refresc, calibratge"
+
+msgctxt "#31207"
+msgid "output device, channels, passthrough"
+msgstr "dispositiu de sortida, canals, passthrough"
+
+msgctxt "#31208"
+msgid "devices, mouse, remote"
+msgstr "dispositius, ratolí, comandament"
+
+msgctxt "#31209"
+msgid "proxy"
+msgstr "servidor intermediari"
+
+msgctxt "#31210"
+msgid "shutdown, display off"
+msgstr "apagada, pantalla apagada"
+
+msgctxt "#31211"
+msgid "updates, unknown sources"
+msgstr "actualitzacions, fonts desconegudes"
+
+msgctxt "#31212"
+msgid "debug log, components"
+msgstr "registre de depuració, components"
+
+msgctxt "#31213"
+msgid "device name, Zeroconf"
+msgstr "nom del dispositiu, Zeroconf"
+
+msgctxt "#31214"
+msgid "web server, remote apps"
+msgstr "servidor web, aplicacions remotes"
+
+msgctxt "#31215"
+msgid "share library, renderer"
+msgstr "comparteix la biblioteca, renderitzador"
+
+msgctxt "#31216"
+msgid "receive AirPlay"
+msgstr "rep AirPlay"
+
+msgctxt "#31217"
+msgid "Windows shares, WINS"
+msgstr "recursos compartits de Windows, WINS"
+
+msgctxt "#31218"
+msgid "NFS shares"
+msgstr "recursos compartits NFS"
+
+msgctxt "#31219"
+msgid "buffer, read rate"
+msgstr "memòria intermèdia, velocitat de lectura"
+
+msgctxt "#31220"
+msgid "weather service"
+msgstr "servei del temps"
+
+msgctxt "#31221"
+msgid "Spotlight change"
+msgstr "Canvi del destacat"
+
+msgctxt "#31222"
+msgid "Home pages"
+msgstr "Pàgines d'inici"
+
+msgctxt "#31224"
+msgid "Rows"
+msgstr "Files"
+
+msgctxt "#31225"
+msgid "Spotlight"
+msgstr "Destacat"
+
+msgctxt "#31226"
+msgid "Still"
+msgstr "Fix"
+
+msgctxt "#31227"
+msgid "All shows"
+msgstr "Totes les sèries"
+
+msgctxt "#31228"
+msgid "Unwatched shows"
+msgstr "Sèries no vistes"
+
+msgctxt "#31229"
+msgid "Slot"
+msgstr "Posició"
+
+msgctxt "#31231"
+msgid "Section for slot"
+msgstr "Secció per a la posició"
+
+msgctxt "#31232"
+msgid "menu"
+msgstr "menú"
+
+msgctxt "#31233"
+msgid "Continue watching"
+msgstr "Continua veient"
+
+msgctxt "#31234"
+msgid "Next up"
+msgstr "A continuació"
+
+msgctxt "#31235"
+msgid "New movies"
+msgstr "Pel·lícules noves"
+
+msgctxt "#31236"
+msgid "New episodes"
+msgstr "Episodis nous"
+
+msgctxt "#31237"
+msgid "Random movies"
+msgstr "Pel·lícules aleatòries"
+
+msgctxt "#31238"
+msgid "Top rated"
+msgstr "Més ben valorades"
+
+msgctxt "#31239"
+msgid "TMDb trending"
+msgstr "Tendències a TMDb"
+
+msgctxt "#31240"
+msgid "Recently watched"
+msgstr "Vistos recentment"
+
+msgctxt "#31241"
+msgid "Started movies and episodes, the last watched first."
+msgstr "Pel·lícules i episodis començats, el darrer vist primer."
+
+msgctxt "#31242"
+msgid "The shows you are watching. OK opens the next episode."
+msgstr "Les sèries que esteu veient. OK obre l'episodi següent."
+
+msgctxt "#31243"
+msgid "The movies added to the library last."
+msgstr "Les darreres pel·lícules afegides a la biblioteca."
+
+msgctxt "#31244"
+msgid "The shows with the episodes added last."
+msgstr "Les sèries amb els darrers episodis afegits."
+
+msgctxt "#31245"
+msgid "Tabs for the three biggest genres and a picker for all others."
+msgstr "Pestanyes per als tres gèneres més grans i un selector per a tots els altres."
+
+msgctxt "#31246"
+msgid "A new choice from the whole library every time Home opens."
+msgstr "Una selecció nova de tota la biblioteca cada vegada que s'obre l'inici."
+
+msgctxt "#31248"
+msgid "Sorted by rating, from 7.0 up."
+msgstr "Ordenades per valoració, a partir de 7,0."
+
+msgctxt "#31249"
+msgid "Kodi's favourites, as you set them."
+msgstr "Els preferits del Kodi, tal com els heu configurat."
+
+msgctxt "#31250"
+msgid "What is trending on TMDb this week."
+msgstr "El que és tendència a TMDb aquesta setmana."
+
+msgctxt "#31251"
+msgid "What played last, also what you watched to the end."
+msgstr "El darrer que s'ha reproduït, també el que heu vist fins al final."
+
+msgctxt "#31252"
+msgid "The movie sets of your library. OK opens a set."
+msgstr "Les col·leccions de pel·lícules de la biblioteca. OK obre una col·lecció."
+
+msgctxt "#31253"
+msgid "Episodes you started and did not finish."
+msgstr "Episodis que heu començat i no heu acabat."
+
+msgctxt "#31254"
+msgid "Free slot. OK picks a section from the catalogue."
+msgstr "Posició lliure. OK tria una secció del catàleg."
+
+msgctxt "#31255"
+msgid "Large artwork with title and plot, in random order. OK or Right picks the source."
+msgstr "Imatges grans amb títol i trama, en ordre aleatori. OK o Dreta tria la font."
+
+msgctxt "#31256"
+msgid "No spotlight: the page starts with the first row."
+msgstr "Sense destacat: la pàgina comença amb la primera fila."
+
+msgctxt "#31257"
+msgid "How often the spotlight moves on by itself. OK or Right: 10, 15, 30, 60 s or still (then only by hand)."
+msgstr "Cada quant canvia el destacat tot sol. OK o Dreta: 10, 15, 30, 60 s o fix (llavors només a mà)."
+
+msgctxt "#31258"
+msgid "Home and movies show the same spotlight, so they share this setting."
+msgstr "L'inici i les pel·lícules mostren el mateix destacat, així que comparteixen aquest paràmetre."
+
+msgctxt "#31259"
+msgid "Show or hide entries of the main menu. System and power always stay, and so does the last page shown."
+msgstr "Mostra o amaga entrades del menú principal. Sistema i energia sempre es queden, igual que la darrera pàgina visible."
+
+msgctxt "#31260"
+msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]⏎[/COLOR] tria   [COLOR state_text]→[/COLOR] opció"
+
+msgctxt "#31261"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] mou   [COLOR state_text]⏎[/COLOR] deixa"
+
+msgctxt "#31262"
+msgid "Spotlight, rows and main menu of the home, movies and shows pages."
+msgstr "Destacat, files i menú principal de les pàgines d'inici, pel·lícules i sèries."
+
+msgctxt "#31263"
+msgid "swap"
+msgstr "intercanvia"
+
+msgctxt "#31264"
+msgid "Main menu"
+msgstr "Menú principal"
+
+msgctxt "#31265"
+msgid "Spotlight and rows of the home page."
+msgstr "Destacat i files de la pàgina d'inici."
+
+msgctxt "#31266"
+msgid "Spotlight and rows of the movies page."
+msgstr "Destacat i files de la pàgina de pel·lícules."
+
+msgctxt "#31267"
+msgid "Spotlight and rows of the shows page."
+msgstr "Destacat i files de la pàgina de sèries."
+
+msgctxt "#31268"
+msgid "How the skin draws the focus."
+msgstr "Com dibuixa l'aparença el focus."
+
+msgctxt "#31230"
+msgid "frame rate"
+msgstr "fotogrames per segon"
+
+msgctxt "#31330"
+msgid "back to video"
+msgstr "al vídeo"
+
+msgctxt "#31331"
+msgid "back to home"
+msgstr "a l'inici"
+
+msgctxt "#31332"
+msgid "back to movies"
+msgstr "a pel·lícules"
+
+msgctxt "#31333"
+msgid "back to shows"
+msgstr "a sèries"
+
+msgctxt "#31334"
+msgid "back to search"
+msgstr "a la cerca"
+
+msgctxt "#31335"
+msgid "back to library"
+msgstr "a la biblioteca"
+
+msgctxt "#31310"
+msgid "Home key opens the home page"
+msgstr "La tecla Inici obre la pàgina d'inici"
+
+msgctxt "#31311"
+msgid "The Home key of the remote always leads to the home page, held down it opens the quick menu. The skin sets up the keymap 0_skin.nightcity.xml in the profile for it; your own keymaps still win."
+msgstr "La tecla Inici del comandament sempre porta a la pàgina d'inici; mantinguda premuda obre el menú ràpid. Per a això l'aparença crea el keymap 0_skin.nightcity.xml al perfil; els vostres keymaps continuen tenint prioritat."
+
+msgctxt "#31300"
+msgid "crew"
+msgstr "equip tècnic"
+
+msgctxt "#31301"
+msgid "back to start"
+msgstr "al principi"
+
+msgctxt "#31302"
+msgid "person"
+msgstr "persona"
+
+msgctxt "#31303"
+msgid "born"
+msgstr "naixement"
+
+msgctxt "#31304"
+msgid "died"
+msgstr "defunció"
+
+msgctxt "#31320"
+msgid "quick menu"
+msgstr "menú ràpid"
+
+msgctxt "#31321"
+msgid "set up weather"
+msgstr "configura el temps"
+
+msgctxt "#31322"
+msgid "more"
+msgstr "més"
+
+msgctxt "#31323"
+msgid "timer"
+msgstr "temporitzador"
+
+msgctxt "#31336"
+msgid "Remember search terms"
+msgstr "Recorda els termes de cerca"
+
+msgctxt "#31337"
+msgid "The search page lists the last five search terms. Switched off, the skin keeps no terms and forgets the ones it has."
+msgstr "La pàgina de cerca mostra els cinc darrers termes cercats. Si es desactiva, l'aparença no desa cap terme i oblida els que té."
+
+msgctxt "#31338"
+msgid "Clear search history"
+msgstr "Neteja l'historial de cerca"
+
+msgctxt "#31339"
+msgid "Forgets the remembered search terms."
+msgstr "Oblida els termes de cerca recordats."
+
+msgctxt "#31340"
+msgid "The colour scheme of the skin, the same choice as under Interface."
+msgstr "L'esquema de colors de l'aparença, la mateixa opció que a Interfície."
+
+msgctxt "#31341"
+msgid "forecast"
+msgstr "predicció"
+
+msgctxt "#31360"
+msgid "Hide the controls automatically"
+msgstr "Amaga els controls automàticament"
+
+msgctxt "#31361"
+msgid "While a video plays, the player controls close by themselves once no key was pressed for the time set below. While paused they stay; the time starts again when playback goes on."
+msgstr "Mentre es reprodueix un vídeo, els controls del reproductor es tanquen sols si no es prem cap tecla durant el temps indicat a sota. En pausa es mantenen; el temps torna a començar quan es reprèn la reproducció."
+
+msgctxt "#31362"
+msgid "Hide after"
+msgstr "Amaga després de"
+
+msgctxt "#31363"
+msgid "Time without a key press before the player controls close, 3 to 30 seconds. OK takes the slider, left and right move it, OK lets go."
+msgstr "Temps sense prémer cap tecla abans que es tanquin els controls del reproductor, de 3 a 30 segons. OK agafa el control lliscant, esquerra i dreta el mouen, OK el deixa anar."
+
+msgctxt "#31364"
+msgid "The video player: its controls and what it shows while they are up."
+msgstr "El reproductor de vídeo: els seus controls i el que mostra mentre són visibles."
+
+msgctxt "#31365"
+msgid "Show the plot"
+msgstr "Mostra la trama"
+
+msgctxt "#31366"
+msgid "The plot of what plays, under its title while the player controls or the seek line are up."
+msgstr "La trama del que es reprodueix, sota el títol, mentre els controls del reproductor o la barra de cerca són visibles."
+
+msgctxt "#31400"
+msgid "New albums"
+msgstr "Àlbums nous"
+
+msgctxt "#31401"
+msgid "Recently played"
+msgstr "Reproduït recentment"
+
+msgctxt "#31402"
+msgid "Random albums"
+msgstr "Àlbums aleatoris"
+
+msgctxt "#31403"
+msgid "Artists"
+msgstr "Artistes"
+
+msgctxt "#31404"
+msgid "Genres"
+msgstr "Gèneres"
+
+msgctxt "#31405"
+msgid "music"
+msgstr "música"
+
+msgctxt "#31406"
+msgid "now playing"
+msgstr "en reproducció"
+
+msgctxt "#31407"
+msgid "albums"
+msgstr "àlbums"
+
+msgctxt "#31408"
+msgid "more by"
+msgstr "més de"
+
+msgctxt "#31409"
+msgid "tracks"
+msgstr "pistes"
+
+msgctxt "#31410"
+msgid "up next"
+msgstr "a continuació"
+
+msgctxt "#31411"
+msgid "shuffle"
+msgstr "aleatori"
+
+msgctxt "#31412"
+msgid "repeat"
+msgstr "repeteix"
+
+msgctxt "#31413"
+msgid "repeat all"
+msgstr "repeteix-ho tot"
+
+msgctxt "#31414"
+msgid "repeat one"
+msgstr "repeteix-ne una"
+
+msgctxt "#31420"
+msgid "Network, Bluetooth, updates"
+msgstr "Xarxa, Bluetooth, actualitzacions"
+
+msgctxt "#31440"
+msgid "audience"
+msgstr "públic"
+
+msgctxt "#31441"
+msgid "Ratings only from TMDb Helper"
+msgstr "Valoracions només de TMDb Helper"
+
+msgctxt "#31442"
+msgid "Show only the ratings TMDb Helper fetched for exactly this title. Off: the library's own rating (from Jellyfin) fills in while TMDb Helper has none."
+msgstr "Mostra només les valoracions que TMDb Helper ha obtingut exactament per a aquest títol. Desactivat: la valoració pròpia de la biblioteca (de Jellyfin) la substitueix mentre TMDb Helper no en tingui cap."
+
+msgctxt "#31443"
+msgid "Ratings only on title pages"
+msgstr "Valoracions només a les pàgines de títol"
+
+msgctxt "#31444"
+msgid "Spotlight and rows show no ratings, which saves requests to TMDb. A title's page still shows them."
+msgstr "El destacat i les files no mostren valoracions, cosa que estalvia peticions a TMDb. La pàgina d'un títol les continua mostrant."
+
+msgctxt "#31445"
+msgid "Ratings"
+msgstr "Valoracions"
+
+msgctxt "#31446"
+msgid "Sources"
+msgstr "Fonts"
+
+msgctxt "#31447"
+msgid "Which ratings the ratings line of the spotlight and the info page shows, and where they come from."
+msgstr "Quines valoracions mostra la línia de valoracions del destacat i de la pàgina d'info, i d'on provenen."
+
+msgctxt "#31450"
+msgid "IMDb"
+msgstr "IMDb"
+
+msgctxt "#31451"
+msgid "TMDb"
+msgstr "TMDb"
+
+msgctxt "#31452"
+msgid "Rotten Tomatoes critics"
+msgstr "Rotten Tomatoes crítica"
+
+msgctxt "#31453"
+msgid "Rotten Tomatoes audience"
+msgstr "Rotten Tomatoes públic"
+
+msgctxt "#31454"
+msgid "Metacritic"
+msgstr "Metacritic"
+
+msgctxt "#31455"
+msgid "Trakt"
+msgstr "Trakt"
+
+msgctxt "#31456"
+msgid "Letterboxd"
+msgstr "Letterboxd"
+
+msgctxt "#31457"
+msgid "MDbList"
+msgstr "MDbList"
+
+msgctxt "#31460"
+msgid "IMDb users, 0 to 10, with the Top 250 rank. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Usuaris d'IMDb, de 0 a 10, amb la posició al Top 250. Cal una clau d'OMDb o MDbList a TMDb Helper."
+
+msgctxt "#31461"
+msgid "TMDb users, 0 to 10. Needs no key."
+msgstr "Usuaris de TMDb, de 0 a 10. No cal cap clau."
+
+msgctxt "#31462"
+msgid "Tomatometer: the share of positive critic reviews. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Tomatometer: el percentatge de crítiques professionals positives. Cal una clau d'OMDb o MDbList a TMDb Helper."
+
+msgctxt "#31463"
+msgid "Popcornmeter: the share of positive audience ratings. Needs an MDbList or OMDb key in TMDb Helper."
+msgstr "Popcornmeter: el percentatge de valoracions positives del públic. Cal una clau de MDbList o OMDb a TMDb Helper."
+
+msgctxt "#31464"
+msgid "A weighted average of critic reviews, 0 to 100, mostly for theatrical films and big series. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Una mitjana ponderada de crítiques professionals, de 0 a 100, sobretot per a pel·lícules de cinema i grans sèries. Cal una clau d'OMDb o MDbList a TMDb Helper."
+
+msgctxt "#31465"
+msgid "Trakt users, 0 to 10. Needs a connected Trakt account in TMDb Helper: fetched from Trakt, not MDbList."
+msgstr "Usuaris de Trakt, de 0 a 10. Cal un compte de Trakt connectat a TMDb Helper: s'obté de Trakt, no de MDbList."
+
+msgctxt "#31466"
+msgid "Letterboxd users, 0 to 5, mostly films. Needs an MDbList key in TMDb Helper."
+msgstr "Usuaris de Letterboxd, de 0 a 5, sobretot pel·lícules. Cal una clau de MDbList a TMDb Helper."
+
+msgctxt "#31467"
+msgid "MDbList score: an average of the other sources, 0 to 100. Needs an MDbList key in TMDb Helper."
+msgstr "Puntuació de MDbList: una mitjana de les altres fonts, de 0 a 100. Cal una clau de MDbList a TMDb Helper."
+
+msgctxt "#31469"
+msgid "No description"
+msgstr "Sense descripció"
+
+msgctxt "#31470"
+msgid "back"
+msgstr "enrere"
+
+msgctxt "#31471"
+msgid "budget"
+msgstr "pressupost"
+
+msgctxt "#31472"
+msgid "box office"
+msgstr "taquilla"
+
+msgctxt "#31473"
+msgid "description"
+msgstr "trama"
+
+msgctxt "#31474"
+msgid "biography"
+msgstr "biografia"
+
+msgctxt "#31478"
+msgid "controls"
+msgstr "controls"
+
+msgctxt "#31479"
+msgid "previous page"
+msgstr "pàgina anterior"
+
+msgctxt "#31480"
+msgid "parent folder"
+msgstr "carpeta superior"
+
+msgctxt "#31477"
+msgid "Home"
+msgstr "Inici"
+
+msgctxt "#31500"
+msgid "view"
+msgstr "vista"
+
+msgctxt "#31501"
+msgid "list"
+msgstr "llista"
+
+msgctxt "#31502"
+msgid "filter"
+msgstr "filtre"
+
+msgctxt "#31503"
+msgid "all"
+msgstr "tots"
+
+msgctxt "#31504"
+msgid "resolution"
+msgstr "resolució"
+
+msgctxt "#31505"
+msgid "dynamic range"
+msgstr "rang dinàmic"
+
+msgctxt "#31506"
+msgid "audio format"
+msgstr "format d'àudio"
+
+msgctxt "#31507"
+msgid "audio channels"
+msgstr "canals d'àudio"
+
+msgctxt "#31508"
+msgid "clear filter"
+msgstr "esborra el filtre"
+
+msgctxt "#31600"
+msgid "runtime"
+msgstr "durada"
+
+msgctxt "#31601"
+msgid "genre"
+msgstr "gènere"
+
+msgctxt "#31602"
+msgid "details"
+msgstr "detalls"
+
+msgctxt "#31603"
+msgid "seasons"
+msgstr "temporades"
+
+msgctxt "#31604"
+msgid "season"
+msgstr "temporada"
+
+msgctxt "#31605"
+msgid "seasons"
+msgstr "temporades"
+
+msgctxt "#31606"
+msgid "episodes"
+msgstr "episodis"
+
+msgctxt "#31607"
+msgid "none"
+msgstr "cap"
+
+msgctxt "#31700"
+msgid "On Deck"
+msgstr "On Deck"
+
+msgctxt "#31701"
+msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
+msgstr "Els títols començats i després les sèries que esteu veient. OK en una sèrie obre l'episodi següent."
+
+msgctxt "#31750"
+msgid "No trailer found"
+msgstr "No s'ha trobat cap tràiler"

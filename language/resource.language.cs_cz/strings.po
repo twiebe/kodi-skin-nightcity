@@ -1,0 +1,1196 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: cs_cz\n"
+
+msgctxt "#31002"
+msgid "Spotlight source"
+msgstr "Zdroj výběru"
+
+msgctxt "#31003"
+msgid "All movies"
+msgstr "Všechny filmy"
+
+msgctxt "#31004"
+msgid "Unwatched movies"
+msgstr "Nezhlédnuté filmy"
+
+msgctxt "#31005"
+msgid "Effects"
+msgstr "Efekty"
+
+msgctxt "#31006"
+msgid "home"
+msgstr "domů"
+
+msgctxt "#31010"
+msgid "play"
+msgstr "přehrát"
+
+msgctxt "#31011"
+msgid "info"
+msgstr "info"
+
+msgctxt "#31012"
+msgid "min"
+msgstr "min"
+
+msgctxt "#31020"
+msgid "on deck"
+msgstr "na řadě"
+
+msgctxt "#31021"
+msgid "new movies"
+msgstr "nové filmy"
+
+msgctxt "#31022"
+msgid "new episodes"
+msgstr "nové epizody"
+
+msgctxt "#31023"
+msgid "continue watching"
+msgstr "pokračovat ve sledování"
+
+msgctxt "#31030"
+msgid "movies"
+msgstr "filmy"
+
+msgctxt "#31031"
+msgid "shows"
+msgstr "seriály"
+
+msgctxt "#31032"
+msgid "search"
+msgstr "hledat"
+
+msgctxt "#31033"
+msgid "System"
+msgstr "Systém"
+
+msgctxt "#31041"
+msgid "trailer"
+msgstr "upoutávka"
+
+msgctxt "#31042"
+msgid "posters"
+msgstr "plakáty"
+
+msgctxt "#31043"
+msgid "resume"
+msgstr "pokračovat"
+
+msgctxt "#31050"
+msgid "ends"
+msgstr "končí"
+
+msgctxt "#31051"
+msgid "pause"
+msgstr "pauza"
+
+msgctxt "#31052"
+msgid "stop"
+msgstr "stop"
+
+msgctxt "#31053"
+msgid "subtitles"
+msgstr "titulky"
+
+msgctxt "#31054"
+msgid "audio"
+msgstr "zvuk"
+
+msgctxt "#31055"
+msgid "video"
+msgstr "video"
+
+msgctxt "#31056"
+msgid "bookmarks"
+msgstr "záložky"
+
+msgctxt "#31057"
+msgid "buffering"
+msgstr "načítání"
+
+msgctxt "#31058"
+msgid "video already has subtitles"
+msgstr "video už má titulky"
+
+msgctxt "#31080"
+msgid "quit kodi"
+msgstr "ukončit Kodi"
+
+msgctxt "#31081"
+msgid "power off"
+msgstr "vypnout"
+
+msgctxt "#31082"
+msgid "reboot"
+msgstr "restartovat"
+
+msgctxt "#31083"
+msgid "suspend"
+msgstr "uspat"
+
+msgctxt "#31084"
+msgid "hibernate"
+msgstr "hibernovat"
+
+msgctxt "#31085"
+msgid "shutdown timer"
+msgstr "časovač vypnutí"
+
+msgctxt "#31086"
+msgid "cancel shutdown timer"
+msgstr "zrušit časovač vypnutí"
+
+msgctxt "#31087"
+msgid "log off"
+msgstr "odhlásit"
+
+msgctxt "#31088"
+msgid "reload skin"
+msgstr "znovu načíst vzhled"
+
+msgctxt "#31089"
+msgid "power"
+msgstr "napájení"
+
+msgctxt "#31090"
+msgid "Hide foreign"
+msgstr "Skrýt cizojazyčné"
+
+msgctxt "#31091"
+msgid "Hide broken"
+msgstr "Skrýt vadné"
+
+msgctxt "#31094"
+msgid "thumbs"
+msgstr "náhledy"
+
+msgctxt "#31095"
+msgid "mute"
+msgstr "ztlumit"
+
+msgctxt "#31096"
+msgid "descending"
+msgstr "sestupně"
+
+msgctxt "#31100"
+msgid "spotlight"
+msgstr "výběr"
+
+msgctxt "#31101"
+msgid "all movies"
+msgstr "všechny filmy"
+
+msgctxt "#31102"
+msgid "all shows"
+msgstr "všechny seriály"
+
+msgctxt "#31103"
+msgid "in progress"
+msgstr "rozkoukané"
+
+msgctxt "#31104"
+msgid "unwatched"
+msgstr "nezhlédnuté"
+
+msgctxt "#31105"
+msgid "genres"
+msgstr "žánry"
+
+msgctxt "#31106"
+msgid "episodes"
+msgstr "epizody"
+
+msgctxt "#31116"
+msgid "sort"
+msgstr "řazení"
+
+msgctxt "#31117"
+msgid "descending"
+msgstr "sestupně"
+
+msgctxt "#31118"
+msgid "title"
+msgstr "název"
+
+msgctxt "#31119"
+msgid "year"
+msgstr "rok"
+
+msgctxt "#31120"
+msgid "added"
+msgstr "přidáno"
+
+msgctxt "#31121"
+msgid "rating"
+msgstr "hodnocení"
+
+msgctxt "#31122"
+msgid "ascending"
+msgstr "vzestupně"
+
+msgctxt "#31123"
+msgid "from start"
+msgstr "od začátku"
+
+msgctxt "#31124"
+msgid "cast"
+msgstr "obsazení"
+
+msgctxt "#31125"
+msgid "details"
+msgstr "podrobnosti"
+
+msgctxt "#31126"
+msgid "director"
+msgstr "režie"
+
+msgctxt "#31127"
+msgid "writer"
+msgstr "scénář"
+
+msgctxt "#31128"
+msgid "studio"
+msgstr "studio"
+
+msgctxt "#31129"
+msgid "country"
+msgstr "země"
+
+msgctxt "#31130"
+msgid "similar"
+msgstr "podobné"
+
+msgctxt "#31131"
+msgid "season"
+msgstr "řada"
+
+msgctxt "#31132"
+msgid "episode"
+msgstr "epizoda"
+
+msgctxt "#31133"
+msgid "all"
+msgstr "vše"
+
+msgctxt "#31134"
+msgid "specials"
+msgstr "speciály"
+
+msgctxt "#31135"
+msgid "select"
+msgstr "vybrat"
+
+msgctxt "#31136"
+msgid "age rating"
+msgstr "přístupnost"
+
+msgctxt "#31059"
+msgid "ends at"
+msgstr "končí v"
+
+msgctxt "#31137"
+msgid "next episode"
+msgstr "další epizoda"
+
+msgctxt "#31138"
+msgid "off"
+msgstr "vyp."
+
+msgctxt "#31139"
+msgid "all settings"
+msgstr "všechna nastavení"
+
+msgctxt "#31140"
+msgid "chapters"
+msgstr "kapitoly"
+
+msgctxt "#31141"
+msgid "search for a title"
+msgstr "hledat název"
+
+msgctxt "#31142"
+msgid "actions"
+msgstr "akce"
+
+msgctxt "#31143"
+msgid "power off"
+msgstr "vypnout"
+
+msgctxt "#31144"
+msgid "reboot"
+msgstr "restartovat"
+
+msgctxt "#31145"
+msgid "suspend"
+msgstr "uspat"
+
+msgctxt "#31146"
+msgid "exit kodi"
+msgstr "ukončit Kodi"
+
+msgctxt "#31147"
+msgid "restart kodi"
+msgstr "restartovat Kodi"
+
+msgctxt "#31148"
+msgid "movies (library)"
+msgstr "filmy (knihovna)"
+
+msgctxt "#31149"
+msgid "shows (library)"
+msgstr "seriály (knihovna)"
+
+msgctxt "#31150"
+msgid "episodes (library)"
+msgstr "epizody (knihovna)"
+
+msgctxt "#31151"
+msgid "online: movies (tmdb)"
+msgstr "online: filmy (TMDb)"
+
+msgctxt "#31152"
+msgid "online: shows (tmdb)"
+msgstr "online: seriály (TMDb)"
+
+msgctxt "#31153"
+msgid "recent"
+msgstr "nedávné"
+
+msgctxt "#31154"
+msgid "not available on this device"
+msgstr "na tomto zařízení není k dispozici"
+
+msgctxt "#31155"
+msgid "stats"
+msgstr "statistiky"
+
+msgctxt "#31157"
+msgid "booting"
+msgstr "start"
+
+msgctxt "#31158"
+msgid "online"
+msgstr "online"
+
+msgctxt "#31159"
+msgid "Playback & media"
+msgstr "Přehrávání a média"
+
+msgctxt "#31160"
+msgid "Look & profiles"
+msgstr "Vzhled a profily"
+
+msgctxt "#31161"
+msgid "Add-ons & content"
+msgstr "Doplňky a obsah"
+
+msgctxt "#31162"
+msgid "System & network"
+msgstr "Systém a síť"
+
+msgctxt "#31163"
+msgid "Tools"
+msgstr "Nástroje"
+
+msgctxt "#31164"
+msgid "How videos, music and pictures play: decoding, refresh rate, discs, audio and subtitle language, subtitles."
+msgstr "Jak se přehrávají videa, hudba a obrázky: dekódování, obnovovací frekvence, disky, jazyk zvuku a titulků, titulky."
+
+msgctxt "#31165"
+msgid "How the library collects and shows your media: scanning, file lists, videos, music, pictures."
+msgstr "Jak knihovna shromažďuje a zobrazuje vaše média: prohledávání, seznamy souborů, videa, hudba, obrázky."
+
+msgctxt "#31166"
+msgid "Live TV and recordings from your PVR client: channels, guide, recording, reminders."
+msgstr "Živá TV a nahrávky z vašeho PVR klienta: kanály, průvodce, nahrávání, připomenutí."
+
+msgctxt "#31167"
+msgid "How Kodi looks and starts: skin, language and region, screensaver, master lock, startup."
+msgstr "Jak Kodi vypadá a startuje: vzhled, jazyk a region, spořič obrazovky, hlavní zámek, spuštění."
+
+msgctxt "#31168"
+msgid "The options of this skin: the home pages and the look."
+msgstr "Možnosti tohoto vzhledu: domovské stránky a vzhled."
+
+msgctxt "#31169"
+msgid "Users with their own library, settings and add-ons, and the login screen."
+msgstr "Uživatelé s vlastní knihovnou, nastavením a doplňky a přihlašovací obrazovka."
+
+msgctxt "#31170"
+msgid "Installed add-ons, repositories, install from a zip file, search and updates."
+msgstr "Nainstalované doplňky, repozitáře, instalace ze ZIP souboru, hledání a aktualizace."
+
+msgctxt "#31171"
+msgid "Browse sources and folders, copy, move and delete files."
+msgstr "Procházení zdrojů a složek, kopírování, přesun a mazání souborů."
+
+msgctxt "#31172"
+msgid "The device: display, audio output, input, internet access, power saving, add-on rules, logging."
+msgstr "Zařízení: displej, zvukový výstup, vstup, přístup k internetu, úspora energie, pravidla doplňků, protokolování."
+
+msgctxt "#31173"
+msgid "What Kodi offers on the network and uses from it: remote control, UPnP, AirPlay, SMB, NFS, caching, weather."
+msgstr "Co Kodi v síti nabízí a co z ní využívá: dálkové ovládání, UPnP, AirPlay, SMB, NFS, mezipaměť, počasí."
+
+msgctxt "#31174"
+msgid "Facts about this device: Kodi version, storage, network, video, hardware."
+msgstr "Údaje o tomto zařízení: verze Kodi, úložiště, síť, video, hardware."
+
+msgctxt "#31175"
+msgid "What happened lately: add-on installs and updates, library scans, errors."
+msgstr "Co se nedávno stalo: instalace a aktualizace doplňků, prohledávání knihovny, chyby."
+
+msgctxt "#31176"
+msgid "Categories"
+msgstr "Kategorie"
+
+msgctxt "#31178"
+msgid "[COLOR state_text]⏎[/COLOR] open"
+msgstr "[COLOR state_text]⏎[/COLOR] otevřít"
+
+msgctxt "#31181"
+msgid "refresh rate, decoding, resume"
+msgstr "obnovovací frekvence, dekódování, pokračování"
+
+msgctxt "#31182"
+msgid "crossfade, visualisation, volume adjustment"
+msgstr "prolínání, vizualizace, úprava hlasitosti"
+
+msgctxt "#31183"
+msgid "DVD, Blu-ray, audio CD"
+msgstr "DVD, Blu-ray, audio CD"
+
+msgctxt "#31184"
+msgid "slideshow, transitions"
+msgstr "prezentace, přechody"
+
+msgctxt "#31185"
+msgid "audio, subtitles and menus"
+msgstr "zvuk, titulky a nabídky"
+
+msgctxt "#31186"
+msgid "font, size, download services"
+msgstr "písmo, velikost, služby stahování"
+
+msgctxt "#31187"
+msgid "scan on startup, update, clean up"
+msgstr "prohledat při spuštění, aktualizace, pročištění"
+
+msgctxt "#31188"
+msgid "file extensions, hidden files, sorting"
+msgstr "přípony souborů, skryté soubory, řazení"
+
+msgctxt "#31189"
+msgid "select action, plots, thumbnails"
+msgstr "akce výběru, děje, náhledy"
+
+msgctxt "#31190"
+msgid "artists, album covers, tags"
+msgstr "umělci, obaly alb, štítky"
+
+msgctxt "#31191"
+msgid "thumbnails, EXIF"
+msgstr "náhledy, EXIF"
+
+msgctxt "#31192"
+msgid "channel groups, channel icons"
+msgstr "skupiny kanálů, ikony kanálů"
+
+msgctxt "#31193"
+msgid "channel info, switching"
+msgstr "informace o kanálu, přepínání"
+
+msgctxt "#31194"
+msgid "days shown, updates"
+msgstr "zobrazené dny, aktualizace"
+
+msgctxt "#31195"
+msgid "start, channel switch delay"
+msgstr "start, zpoždění přepnutí kanálu"
+
+msgctxt "#31196"
+msgid "margins, folders"
+msgstr "okraje, složky"
+
+msgctxt "#31197"
+msgid "reminder before a show"
+msgstr "připomenutí před pořadem"
+
+msgctxt "#31198"
+msgid "wake up for recordings"
+msgstr "probuzení kvůli nahrávání"
+
+msgctxt "#31199"
+msgid "lock by age, PIN"
+msgstr "zámek podle věku, PIN"
+
+msgctxt "#31200"
+msgid "PVR client add-ons"
+msgstr "doplňky PVR klientů"
+
+msgctxt "#31201"
+msgid "skin, theme, colours, fonts"
+msgstr "vzhled, motiv, barvy, písma"
+
+msgctxt "#31202"
+msgid "language, region, time, keyboard"
+msgstr "jazyk, region, čas, klávesnice"
+
+msgctxt "#31203"
+msgid "mode, wait time"
+msgstr "režim, čekací doba"
+
+msgctxt "#31204"
+msgid "lock code, protected areas"
+msgstr "kód zámku, chráněné oblasti"
+
+msgctxt "#31205"
+msgid "start window, splash screen"
+msgstr "úvodní okno, úvodní obrazovka"
+
+msgctxt "#31206"
+msgid "resolution, refresh rate, calibration"
+msgstr "rozlišení, obnovovací frekvence, kalibrace"
+
+msgctxt "#31207"
+msgid "output device, channels, passthrough"
+msgstr "výstupní zařízení, kanály, passthrough"
+
+msgctxt "#31208"
+msgid "devices, mouse, remote"
+msgstr "zařízení, myš, dálkový ovladač"
+
+msgctxt "#31209"
+msgid "proxy"
+msgstr "proxy"
+
+msgctxt "#31210"
+msgid "shutdown, display off"
+msgstr "vypnutí, vypnutí displeje"
+
+msgctxt "#31211"
+msgid "updates, unknown sources"
+msgstr "aktualizace, neznámé zdroje"
+
+msgctxt "#31212"
+msgid "debug log, components"
+msgstr "ladicí protokol, komponenty"
+
+msgctxt "#31213"
+msgid "device name, Zeroconf"
+msgstr "název zařízení, Zeroconf"
+
+msgctxt "#31214"
+msgid "web server, remote apps"
+msgstr "webový server, aplikace pro ovládání"
+
+msgctxt "#31215"
+msgid "share library, renderer"
+msgstr "sdílení knihovny, renderer"
+
+msgctxt "#31216"
+msgid "receive AirPlay"
+msgstr "příjem AirPlay"
+
+msgctxt "#31217"
+msgid "Windows shares, WINS"
+msgstr "sdílení Windows, WINS"
+
+msgctxt "#31218"
+msgid "NFS shares"
+msgstr "sdílení NFS"
+
+msgctxt "#31219"
+msgid "buffer, read rate"
+msgstr "vyrovnávací paměť, rychlost čtení"
+
+msgctxt "#31220"
+msgid "weather service"
+msgstr "služba počasí"
+
+msgctxt "#31221"
+msgid "Spotlight change"
+msgstr "Změna výběru"
+
+msgctxt "#31222"
+msgid "Home pages"
+msgstr "Domovské stránky"
+
+msgctxt "#31224"
+msgid "Rows"
+msgstr "Řádky"
+
+msgctxt "#31225"
+msgid "Spotlight"
+msgstr "Výběr"
+
+msgctxt "#31226"
+msgid "Still"
+msgstr "Bez změny"
+
+msgctxt "#31227"
+msgid "All shows"
+msgstr "Všechny seriály"
+
+msgctxt "#31228"
+msgid "Unwatched shows"
+msgstr "Nezhlédnuté seriály"
+
+msgctxt "#31229"
+msgid "Slot"
+msgstr "Pozice"
+
+msgctxt "#31231"
+msgid "Section for slot"
+msgstr "Sekce pro pozici"
+
+msgctxt "#31232"
+msgid "menu"
+msgstr "nabídka"
+
+msgctxt "#31233"
+msgid "Continue watching"
+msgstr "Pokračovat ve sledování"
+
+msgctxt "#31234"
+msgid "Next up"
+msgstr "Na řadě"
+
+msgctxt "#31235"
+msgid "New movies"
+msgstr "Nové filmy"
+
+msgctxt "#31236"
+msgid "New episodes"
+msgstr "Nové epizody"
+
+msgctxt "#31237"
+msgid "Random movies"
+msgstr "Náhodné filmy"
+
+msgctxt "#31238"
+msgid "Top rated"
+msgstr "Nejlépe hodnocené"
+
+msgctxt "#31239"
+msgid "TMDb trending"
+msgstr "TMDb trendy"
+
+msgctxt "#31240"
+msgid "Recently watched"
+msgstr "Nedávno zhlédnuté"
+
+msgctxt "#31241"
+msgid "Started movies and episodes, the last watched first."
+msgstr "Rozkoukané filmy a epizody, naposledy sledované první."
+
+msgctxt "#31242"
+msgid "The shows you are watching. OK opens the next episode."
+msgstr "Seriály, které sledujete. OK otevře další epizodu."
+
+msgctxt "#31243"
+msgid "The movies added to the library last."
+msgstr "Filmy naposledy přidané do knihovny."
+
+msgctxt "#31244"
+msgid "The shows with the episodes added last."
+msgstr "Seriály s naposledy přidanými epizodami."
+
+msgctxt "#31245"
+msgid "Tabs for the three biggest genres and a picker for all others."
+msgstr "Karty pro tři největší žánry a výběr pro všechny ostatní."
+
+msgctxt "#31246"
+msgid "A new choice from the whole library every time Home opens."
+msgstr "Nový výběr z celé knihovny při každém otevření domovské stránky."
+
+msgctxt "#31248"
+msgid "Sorted by rating, from 7.0 up."
+msgstr "Seřazeno podle hodnocení, od 7,0 výš."
+
+msgctxt "#31249"
+msgid "Kodi's favourites, as you set them."
+msgstr "Oblíbené položky Kodi, tak jak jste je nastavili."
+
+msgctxt "#31250"
+msgid "What is trending on TMDb this week."
+msgstr "Co je tento týden populární na TMDb."
+
+msgctxt "#31251"
+msgid "What played last, also what you watched to the end."
+msgstr "Co se přehrávalo naposledy, i to, co jste dokoukali."
+
+msgctxt "#31252"
+msgid "The movie sets of your library. OK opens a set."
+msgstr "Filmové kolekce vaší knihovny. OK otevře kolekci."
+
+msgctxt "#31253"
+msgid "Episodes you started and did not finish."
+msgstr "Epizody, které jste začali a nedokoukali."
+
+msgctxt "#31254"
+msgid "Free slot. OK picks a section from the catalogue."
+msgstr "Volná pozice. OK vybere sekci z katalogu."
+
+msgctxt "#31255"
+msgid "Large artwork with title and plot, in random order. OK or Right picks the source."
+msgstr "Velké obrázky s názvem a dějem v náhodném pořadí. OK nebo Vpravo vybere zdroj."
+
+msgctxt "#31256"
+msgid "No spotlight: the page starts with the first row."
+msgstr "Bez výběru: stránka začíná prvním řádkem."
+
+msgctxt "#31257"
+msgid "How often the spotlight moves on by itself. OK or Right: 10, 15, 30, 60 s or still (then only by hand)."
+msgstr "Jak často se výběr sám mění. OK nebo Vpravo: 10, 15, 30, 60 s nebo bez změny (pak jen ručně)."
+
+msgctxt "#31258"
+msgid "Home and movies show the same spotlight, so they share this setting."
+msgstr "Domů a filmy ukazují stejný výběr, proto sdílejí toto nastavení."
+
+msgctxt "#31259"
+msgid "Show or hide entries of the main menu. System and power always stay, and so does the last page shown."
+msgstr "Zobrazit nebo skrýt položky hlavní nabídky. Systém a napájení zůstávají vždy, stejně jako naposledy zobrazená stránka."
+
+msgctxt "#31260"
+msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]⏎[/COLOR] vybrat   [COLOR state_text]→[/COLOR] volba"
+
+msgctxt "#31261"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] přesunout   [COLOR state_text]⏎[/COLOR] pustit"
+
+msgctxt "#31262"
+msgid "Spotlight, rows and main menu of the home, movies and shows pages."
+msgstr "Výběr, řádky a hlavní nabídka stránek domů, filmy a seriály."
+
+msgctxt "#31263"
+msgid "swap"
+msgstr "prohodit"
+
+msgctxt "#31264"
+msgid "Main menu"
+msgstr "Hlavní nabídka"
+
+msgctxt "#31265"
+msgid "Spotlight and rows of the home page."
+msgstr "Výběr a řádky domovské stránky."
+
+msgctxt "#31266"
+msgid "Spotlight and rows of the movies page."
+msgstr "Výběr a řádky stránky filmů."
+
+msgctxt "#31267"
+msgid "Spotlight and rows of the shows page."
+msgstr "Výběr a řádky stránky seriálů."
+
+msgctxt "#31268"
+msgid "How the skin draws the focus."
+msgstr "Jak vzhled vykresluje fokus."
+
+msgctxt "#31230"
+msgid "frame rate"
+msgstr "snímková frekvence"
+
+msgctxt "#31330"
+msgid "back to video"
+msgstr "zpět k videu"
+
+msgctxt "#31331"
+msgid "back to home"
+msgstr "zpět domů"
+
+msgctxt "#31332"
+msgid "back to movies"
+msgstr "zpět k filmům"
+
+msgctxt "#31333"
+msgid "back to shows"
+msgstr "zpět k seriálům"
+
+msgctxt "#31334"
+msgid "back to search"
+msgstr "zpět k hledání"
+
+msgctxt "#31335"
+msgid "back to library"
+msgstr "zpět do knihovny"
+
+msgctxt "#31310"
+msgid "Home key opens the home page"
+msgstr "Tlačítko Home otevře domovskou stránku"
+
+msgctxt "#31311"
+msgid "The Home key of the remote always leads to the home page, held down it opens the quick menu. The skin sets up the keymap 0_skin.nightcity.xml in the profile for it; your own keymaps still win."
+msgstr "Tlačítko Home na dálkovém ovladači vždy vede na domovskou stránku, podržené otevře rychlou nabídku. Vzhled k tomu v profilu vytvoří keymapu 0_skin.nightcity.xml; vaše vlastní keymapy mají dál přednost."
+
+msgctxt "#31300"
+msgid "crew"
+msgstr "štáb"
+
+msgctxt "#31301"
+msgid "back to start"
+msgstr "zpět na začátek"
+
+msgctxt "#31302"
+msgid "person"
+msgstr "osoba"
+
+msgctxt "#31303"
+msgid "born"
+msgstr "narozen(a)"
+
+msgctxt "#31304"
+msgid "died"
+msgstr "zemřel(a)"
+
+msgctxt "#31320"
+msgid "quick menu"
+msgstr "rychlá nabídka"
+
+msgctxt "#31321"
+msgid "set up weather"
+msgstr "nastavit počasí"
+
+msgctxt "#31322"
+msgid "more"
+msgstr "více"
+
+msgctxt "#31323"
+msgid "timer"
+msgstr "časovač"
+
+msgctxt "#31336"
+msgid "Remember search terms"
+msgstr "Pamatovat hledané výrazy"
+
+msgctxt "#31337"
+msgid "The search page lists the last five search terms. Switched off, the skin keeps no terms and forgets the ones it has."
+msgstr "Stránka hledání ukazuje posledních pět hledaných výrazů. Když je vypnuto, vzhled žádné výrazy neukládá a zapomene ty, které má."
+
+msgctxt "#31338"
+msgid "Clear search history"
+msgstr "Vymazat historii hledání"
+
+msgctxt "#31339"
+msgid "Forgets the remembered search terms."
+msgstr "Zapomene zapamatované hledané výrazy."
+
+msgctxt "#31340"
+msgid "The colour scheme of the skin, the same choice as under Interface."
+msgstr "Barevné schéma vzhledu, stejná volba jako v Rozhraní."
+
+msgctxt "#31341"
+msgid "forecast"
+msgstr "předpověď"
+
+msgctxt "#31360"
+msgid "Hide the controls automatically"
+msgstr "Automaticky skrývat ovládání"
+
+msgctxt "#31361"
+msgid "While a video plays, the player controls close by themselves once no key was pressed for the time set below. While paused they stay; the time starts again when playback goes on."
+msgstr "Během přehrávání videa se ovládání přehrávače samo zavře, jakmile po níže nastavenou dobu nebylo stisknuto žádné tlačítko. Při pauze zůstává; doba se počítá znovu, když přehrávání pokračuje."
+
+msgctxt "#31362"
+msgid "Hide after"
+msgstr "Skrýt po"
+
+msgctxt "#31363"
+msgid "Time without a key press before the player controls close, 3 to 30 seconds. OK takes the slider, left and right move it, OK lets go."
+msgstr "Doba bez stisku tlačítka, než se ovládání přehrávače zavře, 3 až 30 sekund. OK uchopí posuvník, vlevo a vpravo ho posouvají, OK ho pustí."
+
+msgctxt "#31364"
+msgid "The video player: its controls and what it shows while they are up."
+msgstr "Přehrávač videa: jeho ovládání a co ukazuje, když je otevřené."
+
+msgctxt "#31365"
+msgid "Show the plot"
+msgstr "Zobrazit děj"
+
+msgctxt "#31366"
+msgid "The plot of what plays, under its title while the player controls or the seek line are up."
+msgstr "Děj toho, co se přehrává, pod názvem, když je otevřené ovládání přehrávače nebo lišta posunu."
+
+msgctxt "#31400"
+msgid "New albums"
+msgstr "Nová alba"
+
+msgctxt "#31401"
+msgid "Recently played"
+msgstr "Nedávno přehrávané"
+
+msgctxt "#31402"
+msgid "Random albums"
+msgstr "Náhodná alba"
+
+msgctxt "#31403"
+msgid "Artists"
+msgstr "Umělci"
+
+msgctxt "#31404"
+msgid "Genres"
+msgstr "Žánry"
+
+msgctxt "#31405"
+msgid "music"
+msgstr "hudba"
+
+msgctxt "#31406"
+msgid "now playing"
+msgstr "právě hraje"
+
+msgctxt "#31407"
+msgid "albums"
+msgstr "alba"
+
+msgctxt "#31408"
+msgid "more by"
+msgstr "další od"
+
+msgctxt "#31409"
+msgid "tracks"
+msgstr "skladby"
+
+msgctxt "#31410"
+msgid "up next"
+msgstr "na řadě"
+
+msgctxt "#31411"
+msgid "shuffle"
+msgstr "náhodně"
+
+msgctxt "#31412"
+msgid "repeat"
+msgstr "opakovat"
+
+msgctxt "#31413"
+msgid "repeat all"
+msgstr "opakovat vše"
+
+msgctxt "#31414"
+msgid "repeat one"
+msgstr "opakovat jednu"
+
+msgctxt "#31420"
+msgid "Network, Bluetooth, updates"
+msgstr "Síť, Bluetooth, aktualizace"
+
+msgctxt "#31440"
+msgid "audience"
+msgstr "diváci"
+
+msgctxt "#31441"
+msgid "Ratings only from TMDb Helper"
+msgstr "Hodnocení jen z TMDb Helper"
+
+msgctxt "#31442"
+msgid "Show only the ratings TMDb Helper fetched for exactly this title. Off: the library's own rating (from Jellyfin) fills in while TMDb Helper has none."
+msgstr "Zobrazit jen hodnocení, která TMDb Helper načetl přesně pro tento titul. Vypnuto: dokud TMDb Helper žádné nemá, použije se vlastní hodnocení knihovny (z Jellyfin)."
+
+msgctxt "#31443"
+msgid "Ratings only on title pages"
+msgstr "Hodnocení jen na stránkách titulů"
+
+msgctxt "#31444"
+msgid "Spotlight and rows show no ratings, which saves requests to TMDb. A title's page still shows them."
+msgstr "Výběr a řádky neukazují hodnocení, což šetří dotazy na TMDb. Stránka titulu je ukazuje dál."
+
+msgctxt "#31445"
+msgid "Ratings"
+msgstr "Hodnocení"
+
+msgctxt "#31446"
+msgid "Sources"
+msgstr "Zdroje"
+
+msgctxt "#31447"
+msgid "Which ratings the ratings line of the spotlight and the info page shows, and where they come from."
+msgstr "Která hodnocení ukazuje řádek hodnocení ve výběru a na stránce informací a odkud pocházejí."
+
+msgctxt "#31450"
+msgid "IMDb"
+msgstr "IMDb"
+
+msgctxt "#31451"
+msgid "TMDb"
+msgstr "TMDb"
+
+msgctxt "#31452"
+msgid "Rotten Tomatoes critics"
+msgstr "Rotten Tomatoes kritici"
+
+msgctxt "#31453"
+msgid "Rotten Tomatoes audience"
+msgstr "Rotten Tomatoes diváci"
+
+msgctxt "#31454"
+msgid "Metacritic"
+msgstr "Metacritic"
+
+msgctxt "#31455"
+msgid "Trakt"
+msgstr "Trakt"
+
+msgctxt "#31456"
+msgid "Letterboxd"
+msgstr "Letterboxd"
+
+msgctxt "#31457"
+msgid "MDbList"
+msgstr "MDbList"
+
+msgctxt "#31460"
+msgid "IMDb users, 0 to 10, with the Top 250 rank. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Uživatelé IMDb, 0 až 10, s pořadím v Top 250. Vyžaduje klíč OMDb nebo MDbList v TMDb Helper."
+
+msgctxt "#31461"
+msgid "TMDb users, 0 to 10. Needs no key."
+msgstr "Uživatelé TMDb, 0 až 10. Nevyžaduje klíč."
+
+msgctxt "#31462"
+msgid "Tomatometer: the share of positive critic reviews. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Tomatometer: podíl kladných recenzí kritiků. Vyžaduje klíč OMDb nebo MDbList v TMDb Helper."
+
+msgctxt "#31463"
+msgid "Popcornmeter: the share of positive audience ratings. Needs an MDbList or OMDb key in TMDb Helper."
+msgstr "Popcornmeter: podíl kladných hodnocení diváků. Vyžaduje klíč MDbList nebo OMDb v TMDb Helper."
+
+msgctxt "#31464"
+msgid "A weighted average of critic reviews, 0 to 100, mostly for theatrical films and big series. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Vážený průměr recenzí kritiků, 0 až 100, hlavně pro kinofilmy a velké seriály. Vyžaduje klíč OMDb nebo MDbList v TMDb Helper."
+
+msgctxt "#31465"
+msgid "Trakt users, 0 to 10. Needs a connected Trakt account in TMDb Helper: fetched from Trakt, not MDbList."
+msgstr "Uživatelé Trakt, 0 až 10. Vyžaduje připojený účet Trakt v TMDb Helper: načítá se z Trakt, ne z MDbList."
+
+msgctxt "#31466"
+msgid "Letterboxd users, 0 to 5, mostly films. Needs an MDbList key in TMDb Helper."
+msgstr "Uživatelé Letterboxd, 0 až 5, hlavně filmy. Vyžaduje klíč MDbList v TMDb Helper."
+
+msgctxt "#31467"
+msgid "MDbList score: an average of the other sources, 0 to 100. Needs an MDbList key in TMDb Helper."
+msgstr "Skóre MDbList: průměr ostatních zdrojů, 0 až 100. Vyžaduje klíč MDbList v TMDb Helper."
+
+msgctxt "#31469"
+msgid "No description"
+msgstr "Bez popisu"
+
+msgctxt "#31470"
+msgid "back"
+msgstr "zpět"
+
+msgctxt "#31471"
+msgid "budget"
+msgstr "rozpočet"
+
+msgctxt "#31472"
+msgid "box office"
+msgstr "tržby"
+
+msgctxt "#31473"
+msgid "description"
+msgstr "popis"
+
+msgctxt "#31474"
+msgid "biography"
+msgstr "životopis"
+
+msgctxt "#31478"
+msgid "controls"
+msgstr "ovládání"
+
+msgctxt "#31479"
+msgid "previous page"
+msgstr "předchozí stránka"
+
+msgctxt "#31480"
+msgid "parent folder"
+msgstr "nadřazená složka"
+
+msgctxt "#31477"
+msgid "Home"
+msgstr "Domů"
+
+msgctxt "#31500"
+msgid "view"
+msgstr "zobrazení"
+
+msgctxt "#31501"
+msgid "list"
+msgstr "seznam"
+
+msgctxt "#31502"
+msgid "filter"
+msgstr "filtr"
+
+msgctxt "#31503"
+msgid "all"
+msgstr "vše"
+
+msgctxt "#31504"
+msgid "resolution"
+msgstr "rozlišení"
+
+msgctxt "#31505"
+msgid "dynamic range"
+msgstr "dynamický rozsah"
+
+msgctxt "#31506"
+msgid "audio format"
+msgstr "formát zvuku"
+
+msgctxt "#31507"
+msgid "audio channels"
+msgstr "zvukové kanály"
+
+msgctxt "#31508"
+msgid "clear filter"
+msgstr "zrušit filtr"
+
+msgctxt "#31600"
+msgid "runtime"
+msgstr "délka"
+
+msgctxt "#31601"
+msgid "genre"
+msgstr "žánr"
+
+msgctxt "#31602"
+msgid "details"
+msgstr "podrobnosti"
+
+msgctxt "#31603"
+msgid "seasons"
+msgstr "řady"
+
+msgctxt "#31604"
+msgid "season"
+msgstr "řada"
+
+msgctxt "#31605"
+msgid "seasons"
+msgstr "řady"
+
+msgctxt "#31606"
+msgid "episodes"
+msgstr "epizody"
+
+msgctxt "#31607"
+msgid "none"
+msgstr "žádné"
+
+msgctxt "#31700"
+msgid "On Deck"
+msgstr "On Deck"
+
+msgctxt "#31701"
+msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
+msgstr "Co jste začali, potom seriály, které sledujete. OK na seriálu otevře další epizodu."
+
+msgctxt "#31750"
+msgid "No trailer found"
+msgstr "Upoutávka nenalezena"

@@ -1,0 +1,1196 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ko_kr\n"
+
+msgctxt "#31002"
+msgid "Spotlight source"
+msgstr "스포트라이트 소스"
+
+msgctxt "#31003"
+msgid "All movies"
+msgstr "모든 영화"
+
+msgctxt "#31004"
+msgid "Unwatched movies"
+msgstr "시청하지 않은 영화"
+
+msgctxt "#31005"
+msgid "Effects"
+msgstr "효과"
+
+msgctxt "#31006"
+msgid "home"
+msgstr "홈"
+
+msgctxt "#31010"
+msgid "play"
+msgstr "재생"
+
+msgctxt "#31011"
+msgid "info"
+msgstr "정보"
+
+msgctxt "#31012"
+msgid "min"
+msgstr "분"
+
+msgctxt "#31020"
+msgid "on deck"
+msgstr "다음 볼 항목"
+
+msgctxt "#31021"
+msgid "new movies"
+msgstr "새 영화"
+
+msgctxt "#31022"
+msgid "new episodes"
+msgstr "새 에피소드"
+
+msgctxt "#31023"
+msgid "continue watching"
+msgstr "이어서 보기"
+
+msgctxt "#31030"
+msgid "movies"
+msgstr "영화"
+
+msgctxt "#31031"
+msgid "shows"
+msgstr "TV 쇼"
+
+msgctxt "#31032"
+msgid "search"
+msgstr "검색"
+
+msgctxt "#31033"
+msgid "System"
+msgstr "시스템"
+
+msgctxt "#31041"
+msgid "trailer"
+msgstr "예고편"
+
+msgctxt "#31042"
+msgid "posters"
+msgstr "포스터"
+
+msgctxt "#31043"
+msgid "resume"
+msgstr "이어서"
+
+msgctxt "#31050"
+msgid "ends"
+msgstr "종료"
+
+msgctxt "#31051"
+msgid "pause"
+msgstr "일시정지"
+
+msgctxt "#31052"
+msgid "stop"
+msgstr "정지"
+
+msgctxt "#31053"
+msgid "subtitles"
+msgstr "자막"
+
+msgctxt "#31054"
+msgid "audio"
+msgstr "오디오"
+
+msgctxt "#31055"
+msgid "video"
+msgstr "비디오"
+
+msgctxt "#31056"
+msgid "bookmarks"
+msgstr "북마크"
+
+msgctxt "#31057"
+msgid "buffering"
+msgstr "버퍼링"
+
+msgctxt "#31058"
+msgid "video already has subtitles"
+msgstr "비디오에 이미 자막이 있습니다"
+
+msgctxt "#31080"
+msgid "quit kodi"
+msgstr "Kodi 종료"
+
+msgctxt "#31081"
+msgid "power off"
+msgstr "전원 끄기"
+
+msgctxt "#31082"
+msgid "reboot"
+msgstr "재부팅"
+
+msgctxt "#31083"
+msgid "suspend"
+msgstr "절전"
+
+msgctxt "#31084"
+msgid "hibernate"
+msgstr "최대 절전"
+
+msgctxt "#31085"
+msgid "shutdown timer"
+msgstr "종료 타이머"
+
+msgctxt "#31086"
+msgid "cancel shutdown timer"
+msgstr "종료 타이머 취소"
+
+msgctxt "#31087"
+msgid "log off"
+msgstr "로그오프"
+
+msgctxt "#31088"
+msgid "reload skin"
+msgstr "스킨 다시 불러오기"
+
+msgctxt "#31089"
+msgid "power"
+msgstr "전원"
+
+msgctxt "#31090"
+msgid "Hide foreign"
+msgstr "외국어 숨기기"
+
+msgctxt "#31091"
+msgid "Hide broken"
+msgstr "손상된 항목 숨기기"
+
+msgctxt "#31094"
+msgid "thumbs"
+msgstr "썸네일"
+
+msgctxt "#31095"
+msgid "mute"
+msgstr "음소거"
+
+msgctxt "#31096"
+msgid "descending"
+msgstr "내림차순"
+
+msgctxt "#31100"
+msgid "spotlight"
+msgstr "스포트라이트"
+
+msgctxt "#31101"
+msgid "all movies"
+msgstr "모든 영화"
+
+msgctxt "#31102"
+msgid "all shows"
+msgstr "모든 TV 쇼"
+
+msgctxt "#31103"
+msgid "in progress"
+msgstr "보는 중"
+
+msgctxt "#31104"
+msgid "unwatched"
+msgstr "시청 안 함"
+
+msgctxt "#31105"
+msgid "genres"
+msgstr "장르"
+
+msgctxt "#31106"
+msgid "episodes"
+msgstr "에피소드"
+
+msgctxt "#31116"
+msgid "sort"
+msgstr "정렬"
+
+msgctxt "#31117"
+msgid "descending"
+msgstr "내림차순"
+
+msgctxt "#31118"
+msgid "title"
+msgstr "제목"
+
+msgctxt "#31119"
+msgid "year"
+msgstr "연도"
+
+msgctxt "#31120"
+msgid "added"
+msgstr "추가일"
+
+msgctxt "#31121"
+msgid "rating"
+msgstr "평점"
+
+msgctxt "#31122"
+msgid "ascending"
+msgstr "오름차순"
+
+msgctxt "#31123"
+msgid "from start"
+msgstr "처음부터"
+
+msgctxt "#31124"
+msgid "cast"
+msgstr "출연진"
+
+msgctxt "#31125"
+msgid "details"
+msgstr "상세 정보"
+
+msgctxt "#31126"
+msgid "director"
+msgstr "감독"
+
+msgctxt "#31127"
+msgid "writer"
+msgstr "각본"
+
+msgctxt "#31128"
+msgid "studio"
+msgstr "스튜디오"
+
+msgctxt "#31129"
+msgid "country"
+msgstr "국가"
+
+msgctxt "#31130"
+msgid "similar"
+msgstr "비슷한 작품"
+
+msgctxt "#31131"
+msgid "season"
+msgstr "시즌"
+
+msgctxt "#31132"
+msgid "episode"
+msgstr "에피소드"
+
+msgctxt "#31133"
+msgid "all"
+msgstr "전체"
+
+msgctxt "#31134"
+msgid "specials"
+msgstr "스페셜"
+
+msgctxt "#31135"
+msgid "select"
+msgstr "선택"
+
+msgctxt "#31136"
+msgid "age rating"
+msgstr "연령 등급"
+
+msgctxt "#31059"
+msgid "ends at"
+msgstr "종료 시각"
+
+msgctxt "#31137"
+msgid "next episode"
+msgstr "다음 에피소드"
+
+msgctxt "#31138"
+msgid "off"
+msgstr "끔"
+
+msgctxt "#31139"
+msgid "all settings"
+msgstr "모든 설정"
+
+msgctxt "#31140"
+msgid "chapters"
+msgstr "챕터"
+
+msgctxt "#31141"
+msgid "search for a title"
+msgstr "제목으로 검색"
+
+msgctxt "#31142"
+msgid "actions"
+msgstr "동작"
+
+msgctxt "#31143"
+msgid "power off"
+msgstr "전원 끄기"
+
+msgctxt "#31144"
+msgid "reboot"
+msgstr "재부팅"
+
+msgctxt "#31145"
+msgid "suspend"
+msgstr "절전"
+
+msgctxt "#31146"
+msgid "exit kodi"
+msgstr "Kodi 종료"
+
+msgctxt "#31147"
+msgid "restart kodi"
+msgstr "Kodi 다시 시작"
+
+msgctxt "#31148"
+msgid "movies (library)"
+msgstr "영화 (라이브러리)"
+
+msgctxt "#31149"
+msgid "shows (library)"
+msgstr "TV 쇼 (라이브러리)"
+
+msgctxt "#31150"
+msgid "episodes (library)"
+msgstr "에피소드 (라이브러리)"
+
+msgctxt "#31151"
+msgid "online: movies (tmdb)"
+msgstr "온라인: 영화 (TMDb)"
+
+msgctxt "#31152"
+msgid "online: shows (tmdb)"
+msgstr "온라인: TV 쇼 (TMDb)"
+
+msgctxt "#31153"
+msgid "recent"
+msgstr "최근 검색"
+
+msgctxt "#31154"
+msgid "not available on this device"
+msgstr "이 장치에서는 사용할 수 없습니다"
+
+msgctxt "#31155"
+msgid "stats"
+msgstr "통계"
+
+msgctxt "#31157"
+msgid "booting"
+msgstr "부팅 중"
+
+msgctxt "#31158"
+msgid "online"
+msgstr "온라인"
+
+msgctxt "#31159"
+msgid "Playback & media"
+msgstr "재생 및 미디어"
+
+msgctxt "#31160"
+msgid "Look & profiles"
+msgstr "화면 및 프로필"
+
+msgctxt "#31161"
+msgid "Add-ons & content"
+msgstr "애드온 및 콘텐츠"
+
+msgctxt "#31162"
+msgid "System & network"
+msgstr "시스템 및 네트워크"
+
+msgctxt "#31163"
+msgid "Tools"
+msgstr "도구"
+
+msgctxt "#31164"
+msgid "How videos, music and pictures play: decoding, refresh rate, discs, audio and subtitle language, subtitles."
+msgstr "비디오, 음악, 사진의 재생 방식: 디코딩, 주사율, 디스크, 오디오 및 자막 언어, 자막."
+
+msgctxt "#31165"
+msgid "How the library collects and shows your media: scanning, file lists, videos, music, pictures."
+msgstr "라이브러리가 미디어를 모으고 보여 주는 방식: 스캔, 파일 목록, 비디오, 음악, 사진."
+
+msgctxt "#31166"
+msgid "Live TV and recordings from your PVR client: channels, guide, recording, reminders."
+msgstr "PVR 클라이언트의 라이브 TV와 녹화: 채널, 편성표, 녹화, 알림."
+
+msgctxt "#31167"
+msgid "How Kodi looks and starts: skin, language and region, screensaver, master lock, startup."
+msgstr "Kodi의 모양과 시작: 스킨, 언어 및 지역, 화면 보호기, 마스터 잠금, 시작."
+
+msgctxt "#31168"
+msgid "The options of this skin: the home pages and the look."
+msgstr "이 스킨의 옵션: 홈 페이지와 모양."
+
+msgctxt "#31169"
+msgid "Users with their own library, settings and add-ons, and the login screen."
+msgstr "각자의 라이브러리, 설정, 애드온을 가진 사용자와 로그인 화면."
+
+msgctxt "#31170"
+msgid "Installed add-ons, repositories, install from a zip file, search and updates."
+msgstr "설치된 애드온, 저장소, zip 파일로 설치, 검색 및 업데이트."
+
+msgctxt "#31171"
+msgid "Browse sources and folders, copy, move and delete files."
+msgstr "소스와 폴더 탐색, 파일 복사, 이동 및 삭제."
+
+msgctxt "#31172"
+msgid "The device: display, audio output, input, internet access, power saving, add-on rules, logging."
+msgstr "장치: 디스플레이, 오디오 출력, 입력, 인터넷 연결, 절전, 애드온 규칙, 로그."
+
+msgctxt "#31173"
+msgid "What Kodi offers on the network and uses from it: remote control, UPnP, AirPlay, SMB, NFS, caching, weather."
+msgstr "Kodi가 네트워크에 제공하고 네트워크에서 사용하는 것: 원격 제어, UPnP, AirPlay, SMB, NFS, 캐시, 날씨."
+
+msgctxt "#31174"
+msgid "Facts about this device: Kodi version, storage, network, video, hardware."
+msgstr "이 장치에 대한 정보: Kodi 버전, 저장 공간, 네트워크, 비디오, 하드웨어."
+
+msgctxt "#31175"
+msgid "What happened lately: add-on installs and updates, library scans, errors."
+msgstr "최근에 일어난 일: 애드온 설치 및 업데이트, 라이브러리 스캔, 오류."
+
+msgctxt "#31176"
+msgid "Categories"
+msgstr "카테고리"
+
+msgctxt "#31178"
+msgid "[COLOR state_text]⏎[/COLOR] open"
+msgstr "[COLOR state_text]⏎[/COLOR] 열기"
+
+msgctxt "#31181"
+msgid "refresh rate, decoding, resume"
+msgstr "주사율, 디코딩, 이어서 보기"
+
+msgctxt "#31182"
+msgid "crossfade, visualisation, volume adjustment"
+msgstr "크로스페이드, 시각화, 볼륨 조정"
+
+msgctxt "#31183"
+msgid "DVD, Blu-ray, audio CD"
+msgstr "DVD, 블루레이, 오디오 CD"
+
+msgctxt "#31184"
+msgid "slideshow, transitions"
+msgstr "슬라이드쇼, 전환 효과"
+
+msgctxt "#31185"
+msgid "audio, subtitles and menus"
+msgstr "오디오, 자막 및 메뉴"
+
+msgctxt "#31186"
+msgid "font, size, download services"
+msgstr "글꼴, 크기, 다운로드 서비스"
+
+msgctxt "#31187"
+msgid "scan on startup, update, clean up"
+msgstr "시작 시 스캔, 업데이트, 정리"
+
+msgctxt "#31188"
+msgid "file extensions, hidden files, sorting"
+msgstr "파일 확장자, 숨김 파일, 정렬"
+
+msgctxt "#31189"
+msgid "select action, plots, thumbnails"
+msgstr "선택 동작, 줄거리, 썸네일"
+
+msgctxt "#31190"
+msgid "artists, album covers, tags"
+msgstr "아티스트, 앨범 커버, 태그"
+
+msgctxt "#31191"
+msgid "thumbnails, EXIF"
+msgstr "썸네일, EXIF"
+
+msgctxt "#31192"
+msgid "channel groups, channel icons"
+msgstr "채널 그룹, 채널 아이콘"
+
+msgctxt "#31193"
+msgid "channel info, switching"
+msgstr "채널 정보, 채널 전환"
+
+msgctxt "#31194"
+msgid "days shown, updates"
+msgstr "표시 일수, 업데이트"
+
+msgctxt "#31195"
+msgid "start, channel switch delay"
+msgstr "시작, 채널 전환 지연"
+
+msgctxt "#31196"
+msgid "margins, folders"
+msgstr "여유 시간, 폴더"
+
+msgctxt "#31197"
+msgid "reminder before a show"
+msgstr "방송 전 알림"
+
+msgctxt "#31198"
+msgid "wake up for recordings"
+msgstr "녹화를 위해 깨우기"
+
+msgctxt "#31199"
+msgid "lock by age, PIN"
+msgstr "연령별 잠금, PIN"
+
+msgctxt "#31200"
+msgid "PVR client add-ons"
+msgstr "PVR 클라이언트 애드온"
+
+msgctxt "#31201"
+msgid "skin, theme, colours, fonts"
+msgstr "스킨, 테마, 색상, 글꼴"
+
+msgctxt "#31202"
+msgid "language, region, time, keyboard"
+msgstr "언어, 지역, 시간, 키보드"
+
+msgctxt "#31203"
+msgid "mode, wait time"
+msgstr "모드, 대기 시간"
+
+msgctxt "#31204"
+msgid "lock code, protected areas"
+msgstr "잠금 코드, 보호 영역"
+
+msgctxt "#31205"
+msgid "start window, splash screen"
+msgstr "시작 창, 시작 화면"
+
+msgctxt "#31206"
+msgid "resolution, refresh rate, calibration"
+msgstr "해상도, 주사율, 보정"
+
+msgctxt "#31207"
+msgid "output device, channels, passthrough"
+msgstr "출력 장치, 채널, 패스스루"
+
+msgctxt "#31208"
+msgid "devices, mouse, remote"
+msgstr "장치, 마우스, 리모컨"
+
+msgctxt "#31209"
+msgid "proxy"
+msgstr "프록시"
+
+msgctxt "#31210"
+msgid "shutdown, display off"
+msgstr "종료, 화면 끄기"
+
+msgctxt "#31211"
+msgid "updates, unknown sources"
+msgstr "업데이트, 알 수 없는 소스"
+
+msgctxt "#31212"
+msgid "debug log, components"
+msgstr "디버그 로그, 구성 요소"
+
+msgctxt "#31213"
+msgid "device name, Zeroconf"
+msgstr "장치 이름, Zeroconf"
+
+msgctxt "#31214"
+msgid "web server, remote apps"
+msgstr "웹 서버, 원격 앱"
+
+msgctxt "#31215"
+msgid "share library, renderer"
+msgstr "라이브러리 공유, 렌더러"
+
+msgctxt "#31216"
+msgid "receive AirPlay"
+msgstr "AirPlay 수신"
+
+msgctxt "#31217"
+msgid "Windows shares, WINS"
+msgstr "Windows 공유, WINS"
+
+msgctxt "#31218"
+msgid "NFS shares"
+msgstr "NFS 공유"
+
+msgctxt "#31219"
+msgid "buffer, read rate"
+msgstr "버퍼, 읽기 속도"
+
+msgctxt "#31220"
+msgid "weather service"
+msgstr "날씨 서비스"
+
+msgctxt "#31221"
+msgid "Spotlight change"
+msgstr "스포트라이트 전환"
+
+msgctxt "#31222"
+msgid "Home pages"
+msgstr "홈 페이지"
+
+msgctxt "#31224"
+msgid "Rows"
+msgstr "줄"
+
+msgctxt "#31225"
+msgid "Spotlight"
+msgstr "스포트라이트"
+
+msgctxt "#31226"
+msgid "Still"
+msgstr "고정"
+
+msgctxt "#31227"
+msgid "All shows"
+msgstr "모든 TV 쇼"
+
+msgctxt "#31228"
+msgid "Unwatched shows"
+msgstr "시청하지 않은 TV 쇼"
+
+msgctxt "#31229"
+msgid "Slot"
+msgstr "슬롯"
+
+msgctxt "#31231"
+msgid "Section for slot"
+msgstr "슬롯의 섹션"
+
+msgctxt "#31232"
+msgid "menu"
+msgstr "메뉴"
+
+msgctxt "#31233"
+msgid "Continue watching"
+msgstr "이어서 보기"
+
+msgctxt "#31234"
+msgid "Next up"
+msgstr "다음 볼 항목"
+
+msgctxt "#31235"
+msgid "New movies"
+msgstr "새 영화"
+
+msgctxt "#31236"
+msgid "New episodes"
+msgstr "새 에피소드"
+
+msgctxt "#31237"
+msgid "Random movies"
+msgstr "무작위 영화"
+
+msgctxt "#31238"
+msgid "Top rated"
+msgstr "높은 평점"
+
+msgctxt "#31239"
+msgid "TMDb trending"
+msgstr "TMDb 트렌드"
+
+msgctxt "#31240"
+msgid "Recently watched"
+msgstr "최근 시청"
+
+msgctxt "#31241"
+msgid "Started movies and episodes, the last watched first."
+msgstr "시청을 시작한 영화와 에피소드, 마지막으로 본 항목부터."
+
+msgctxt "#31242"
+msgid "The shows you are watching. OK opens the next episode."
+msgstr "보고 있는 TV 쇼. OK를 누르면 다음 에피소드가 열립니다."
+
+msgctxt "#31243"
+msgid "The movies added to the library last."
+msgstr "라이브러리에 마지막으로 추가된 영화."
+
+msgctxt "#31244"
+msgid "The shows with the episodes added last."
+msgstr "에피소드가 마지막으로 추가된 TV 쇼."
+
+msgctxt "#31245"
+msgid "Tabs for the three biggest genres and a picker for all others."
+msgstr "가장 큰 세 장르의 탭과 나머지 장르를 고르는 목록."
+
+msgctxt "#31246"
+msgid "A new choice from the whole library every time Home opens."
+msgstr "홈을 열 때마다 전체 라이브러리에서 새로 고른 항목."
+
+msgctxt "#31248"
+msgid "Sorted by rating, from 7.0 up."
+msgstr "평점순으로 정렬, 7.0 이상."
+
+msgctxt "#31249"
+msgid "Kodi's favourites, as you set them."
+msgstr "설정한 대로의 Kodi 즐겨찾기."
+
+msgctxt "#31250"
+msgid "What is trending on TMDb this week."
+msgstr "이번 주 TMDb에서 인기 있는 작품."
+
+msgctxt "#31251"
+msgid "What played last, also what you watched to the end."
+msgstr "마지막으로 재생한 항목, 끝까지 본 항목도 포함."
+
+msgctxt "#31252"
+msgid "The movie sets of your library. OK opens a set."
+msgstr "라이브러리의 영화 세트. OK를 누르면 세트가 열립니다."
+
+msgctxt "#31253"
+msgid "Episodes you started and did not finish."
+msgstr "시청을 시작했지만 끝내지 않은 에피소드."
+
+msgctxt "#31254"
+msgid "Free slot. OK picks a section from the catalogue."
+msgstr "빈 슬롯. OK를 누르면 카탈로그에서 섹션을 고릅니다."
+
+msgctxt "#31255"
+msgid "Large artwork with title and plot, in random order. OK or Right picks the source."
+msgstr "제목과 줄거리가 있는 큰 아트워크, 무작위 순서. OK 또는 오른쪽으로 소스를 고릅니다."
+
+msgctxt "#31256"
+msgid "No spotlight: the page starts with the first row."
+msgstr "스포트라이트 없음: 페이지가 첫 번째 줄부터 시작됩니다."
+
+msgctxt "#31257"
+msgid "How often the spotlight moves on by itself. OK or Right: 10, 15, 30, 60 s or still (then only by hand)."
+msgstr "스포트라이트가 저절로 넘어가는 간격. OK 또는 오른쪽: 10, 15, 30, 60초 또는 고정(이때는 직접 넘김)."
+
+msgctxt "#31258"
+msgid "Home and movies show the same spotlight, so they share this setting."
+msgstr "홈과 영화는 같은 스포트라이트를 보여 주므로 이 설정을 공유합니다."
+
+msgctxt "#31259"
+msgid "Show or hide entries of the main menu. System and power always stay, and so does the last page shown."
+msgstr "메인 메뉴 항목을 표시하거나 숨깁니다. 시스템과 전원은 항상 남으며, 마지막으로 표시된 페이지도 남습니다."
+
+msgctxt "#31260"
+msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]⏎[/COLOR] 선택   [COLOR state_text]→[/COLOR] 옵션"
+
+msgctxt "#31261"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] 이동   [COLOR state_text]⏎[/COLOR] 놓기"
+
+msgctxt "#31262"
+msgid "Spotlight, rows and main menu of the home, movies and shows pages."
+msgstr "홈, 영화, TV 쇼 페이지의 스포트라이트, 줄, 메인 메뉴."
+
+msgctxt "#31263"
+msgid "swap"
+msgstr "바꾸기"
+
+msgctxt "#31264"
+msgid "Main menu"
+msgstr "메인 메뉴"
+
+msgctxt "#31265"
+msgid "Spotlight and rows of the home page."
+msgstr "홈 페이지의 스포트라이트와 줄."
+
+msgctxt "#31266"
+msgid "Spotlight and rows of the movies page."
+msgstr "영화 페이지의 스포트라이트와 줄."
+
+msgctxt "#31267"
+msgid "Spotlight and rows of the shows page."
+msgstr "TV 쇼 페이지의 스포트라이트와 줄."
+
+msgctxt "#31268"
+msgid "How the skin draws the focus."
+msgstr "스킨이 포커스를 표시하는 방식."
+
+msgctxt "#31230"
+msgid "frame rate"
+msgstr "프레임 레이트"
+
+msgctxt "#31330"
+msgid "back to video"
+msgstr "비디오로"
+
+msgctxt "#31331"
+msgid "back to home"
+msgstr "홈으로"
+
+msgctxt "#31332"
+msgid "back to movies"
+msgstr "영화로"
+
+msgctxt "#31333"
+msgid "back to shows"
+msgstr "TV 쇼로"
+
+msgctxt "#31334"
+msgid "back to search"
+msgstr "검색으로"
+
+msgctxt "#31335"
+msgid "back to library"
+msgstr "라이브러리로"
+
+msgctxt "#31310"
+msgid "Home key opens the home page"
+msgstr "홈 키로 홈 페이지 열기"
+
+msgctxt "#31311"
+msgid "The Home key of the remote always leads to the home page, held down it opens the quick menu. The skin sets up the keymap 0_skin.nightcity.xml in the profile for it; your own keymaps still win."
+msgstr "리모컨의 홈 키는 항상 홈 페이지로 이동하며, 길게 누르면 빠른 메뉴가 열립니다. 이를 위해 스킨이 프로필에 키맵 0_skin.nightcity.xml을 만듭니다. 직접 만든 키맵이 계속 우선합니다."
+
+msgctxt "#31300"
+msgid "crew"
+msgstr "제작진"
+
+msgctxt "#31301"
+msgid "back to start"
+msgstr "처음으로"
+
+msgctxt "#31302"
+msgid "person"
+msgstr "인물"
+
+msgctxt "#31303"
+msgid "born"
+msgstr "출생"
+
+msgctxt "#31304"
+msgid "died"
+msgstr "사망"
+
+msgctxt "#31320"
+msgid "quick menu"
+msgstr "빠른 메뉴"
+
+msgctxt "#31321"
+msgid "set up weather"
+msgstr "날씨 설정"
+
+msgctxt "#31322"
+msgid "more"
+msgstr "더 보기"
+
+msgctxt "#31323"
+msgid "timer"
+msgstr "타이머"
+
+msgctxt "#31336"
+msgid "Remember search terms"
+msgstr "검색어 기억"
+
+msgctxt "#31337"
+msgid "The search page lists the last five search terms. Switched off, the skin keeps no terms and forgets the ones it has."
+msgstr "검색 페이지에 최근 검색어 다섯 개가 표시됩니다. 끄면 스킨이 검색어를 저장하지 않고 저장된 검색어도 지웁니다."
+
+msgctxt "#31338"
+msgid "Clear search history"
+msgstr "검색 기록 지우기"
+
+msgctxt "#31339"
+msgid "Forgets the remembered search terms."
+msgstr "기억된 검색어를 지웁니다."
+
+msgctxt "#31340"
+msgid "The colour scheme of the skin, the same choice as under Interface."
+msgstr "스킨의 색 구성표로, 인터페이스에서 고르는 것과 같습니다."
+
+msgctxt "#31341"
+msgid "forecast"
+msgstr "예보"
+
+msgctxt "#31360"
+msgid "Hide the controls automatically"
+msgstr "컨트롤 자동 숨기기"
+
+msgctxt "#31361"
+msgid "While a video plays, the player controls close by themselves once no key was pressed for the time set below. While paused they stay; the time starts again when playback goes on."
+msgstr "비디오 재생 중 아래에서 설정한 시간 동안 아무 키도 누르지 않으면 플레이어 컨트롤이 저절로 닫힙니다. 일시정지 중에는 그대로 남고, 재생이 다시 시작되면 시간을 새로 셉니다."
+
+msgctxt "#31362"
+msgid "Hide after"
+msgstr "숨기기까지"
+
+msgctxt "#31363"
+msgid "Time without a key press before the player controls close, 3 to 30 seconds. OK takes the slider, left and right move it, OK lets go."
+msgstr "플레이어 컨트롤이 닫히기 전 키 입력이 없는 시간, 3~30초. OK로 슬라이더를 잡고 왼쪽과 오른쪽으로 움직이며 OK로 놓습니다."
+
+msgctxt "#31364"
+msgid "The video player: its controls and what it shows while they are up."
+msgstr "비디오 플레이어: 컨트롤과 컨트롤이 열려 있는 동안 표시하는 내용."
+
+msgctxt "#31365"
+msgid "Show the plot"
+msgstr "줄거리 표시"
+
+msgctxt "#31366"
+msgid "The plot of what plays, under its title while the player controls or the seek line are up."
+msgstr "플레이어 컨트롤이나 탐색 막대가 열려 있는 동안 재생 중인 작품의 줄거리를 제목 아래에 표시합니다."
+
+msgctxt "#31400"
+msgid "New albums"
+msgstr "새 앨범"
+
+msgctxt "#31401"
+msgid "Recently played"
+msgstr "최근 재생"
+
+msgctxt "#31402"
+msgid "Random albums"
+msgstr "무작위 앨범"
+
+msgctxt "#31403"
+msgid "Artists"
+msgstr "아티스트"
+
+msgctxt "#31404"
+msgid "Genres"
+msgstr "장르"
+
+msgctxt "#31405"
+msgid "music"
+msgstr "음악"
+
+msgctxt "#31406"
+msgid "now playing"
+msgstr "지금 재생 중"
+
+msgctxt "#31407"
+msgid "albums"
+msgstr "앨범"
+
+msgctxt "#31408"
+msgid "more by"
+msgstr "다른 작품:"
+
+msgctxt "#31409"
+msgid "tracks"
+msgstr "트랙"
+
+msgctxt "#31410"
+msgid "up next"
+msgstr "다음 곡"
+
+msgctxt "#31411"
+msgid "shuffle"
+msgstr "셔플"
+
+msgctxt "#31412"
+msgid "repeat"
+msgstr "반복"
+
+msgctxt "#31413"
+msgid "repeat all"
+msgstr "전체 반복"
+
+msgctxt "#31414"
+msgid "repeat one"
+msgstr "한 곡 반복"
+
+msgctxt "#31420"
+msgid "Network, Bluetooth, updates"
+msgstr "네트워크, 블루투스, 업데이트"
+
+msgctxt "#31440"
+msgid "audience"
+msgstr "관객"
+
+msgctxt "#31441"
+msgid "Ratings only from TMDb Helper"
+msgstr "TMDb Helper 평점만"
+
+msgctxt "#31442"
+msgid "Show only the ratings TMDb Helper fetched for exactly this title. Off: the library's own rating (from Jellyfin) fills in while TMDb Helper has none."
+msgstr "TMDb Helper가 바로 이 작품에 대해 가져온 평점만 표시합니다. 끔: TMDb Helper에 평점이 없는 동안 라이브러리 자체 평점(Jellyfin)으로 채웁니다."
+
+msgctxt "#31443"
+msgid "Ratings only on title pages"
+msgstr "작품 페이지에만 평점"
+
+msgctxt "#31444"
+msgid "Spotlight and rows show no ratings, which saves requests to TMDb. A title's page still shows them."
+msgstr "스포트라이트와 줄에 평점을 표시하지 않아 TMDb 요청을 줄입니다. 작품 페이지에는 계속 표시됩니다."
+
+msgctxt "#31445"
+msgid "Ratings"
+msgstr "평점"
+
+msgctxt "#31446"
+msgid "Sources"
+msgstr "소스"
+
+msgctxt "#31447"
+msgid "Which ratings the ratings line of the spotlight and the info page shows, and where they come from."
+msgstr "스포트라이트와 정보 페이지의 평점 줄에 어떤 평점을 표시하고 어디서 가져오는지."
+
+msgctxt "#31450"
+msgid "IMDb"
+msgstr "IMDb"
+
+msgctxt "#31451"
+msgid "TMDb"
+msgstr "TMDb"
+
+msgctxt "#31452"
+msgid "Rotten Tomatoes critics"
+msgstr "Rotten Tomatoes 평론가"
+
+msgctxt "#31453"
+msgid "Rotten Tomatoes audience"
+msgstr "Rotten Tomatoes 관객"
+
+msgctxt "#31454"
+msgid "Metacritic"
+msgstr "Metacritic"
+
+msgctxt "#31455"
+msgid "Trakt"
+msgstr "Trakt"
+
+msgctxt "#31456"
+msgid "Letterboxd"
+msgstr "Letterboxd"
+
+msgctxt "#31457"
+msgid "MDbList"
+msgstr "MDbList"
+
+msgctxt "#31460"
+msgid "IMDb users, 0 to 10, with the Top 250 rank. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "IMDb 사용자 평점, 0~10, Top 250 순위 포함. TMDb Helper에 OMDb 또는 MDbList 키가 필요합니다."
+
+msgctxt "#31461"
+msgid "TMDb users, 0 to 10. Needs no key."
+msgstr "TMDb 사용자 평점, 0~10. 키가 필요 없습니다."
+
+msgctxt "#31462"
+msgid "Tomatometer: the share of positive critic reviews. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "토마토미터: 긍정적인 평론가 리뷰의 비율. TMDb Helper에 OMDb 또는 MDbList 키가 필요합니다."
+
+msgctxt "#31463"
+msgid "Popcornmeter: the share of positive audience ratings. Needs an MDbList or OMDb key in TMDb Helper."
+msgstr "팝콘미터: 긍정적인 관객 평가의 비율. TMDb Helper에 MDbList 또는 OMDb 키가 필요합니다."
+
+msgctxt "#31464"
+msgid "A weighted average of critic reviews, 0 to 100, mostly for theatrical films and big series. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "평론가 리뷰의 가중 평균, 0~100, 주로 극장 영화와 대형 시리즈. TMDb Helper에 OMDb 또는 MDbList 키가 필요합니다."
+
+msgctxt "#31465"
+msgid "Trakt users, 0 to 10. Needs a connected Trakt account in TMDb Helper: fetched from Trakt, not MDbList."
+msgstr "Trakt 사용자 평점, 0~10. TMDb Helper에 연결된 Trakt 계정이 필요합니다: MDbList가 아닌 Trakt에서 가져옵니다."
+
+msgctxt "#31466"
+msgid "Letterboxd users, 0 to 5, mostly films. Needs an MDbList key in TMDb Helper."
+msgstr "Letterboxd 사용자 평점, 0~5, 주로 영화. TMDb Helper에 MDbList 키가 필요합니다."
+
+msgctxt "#31467"
+msgid "MDbList score: an average of the other sources, 0 to 100. Needs an MDbList key in TMDb Helper."
+msgstr "MDbList 점수: 다른 소스의 평균, 0~100. TMDb Helper에 MDbList 키가 필요합니다."
+
+msgctxt "#31469"
+msgid "No description"
+msgstr "설명 없음"
+
+msgctxt "#31470"
+msgid "back"
+msgstr "뒤로"
+
+msgctxt "#31471"
+msgid "budget"
+msgstr "제작비"
+
+msgctxt "#31472"
+msgid "box office"
+msgstr "흥행 수입"
+
+msgctxt "#31473"
+msgid "description"
+msgstr "줄거리"
+
+msgctxt "#31474"
+msgid "biography"
+msgstr "약력"
+
+msgctxt "#31478"
+msgid "controls"
+msgstr "조작"
+
+msgctxt "#31479"
+msgid "previous page"
+msgstr "이전 페이지"
+
+msgctxt "#31480"
+msgid "parent folder"
+msgstr "상위 폴더"
+
+msgctxt "#31477"
+msgid "Home"
+msgstr "홈"
+
+msgctxt "#31500"
+msgid "view"
+msgstr "보기"
+
+msgctxt "#31501"
+msgid "list"
+msgstr "목록"
+
+msgctxt "#31502"
+msgid "filter"
+msgstr "필터"
+
+msgctxt "#31503"
+msgid "all"
+msgstr "전체"
+
+msgctxt "#31504"
+msgid "resolution"
+msgstr "해상도"
+
+msgctxt "#31505"
+msgid "dynamic range"
+msgstr "다이내믹 레인지"
+
+msgctxt "#31506"
+msgid "audio format"
+msgstr "오디오 형식"
+
+msgctxt "#31507"
+msgid "audio channels"
+msgstr "오디오 채널"
+
+msgctxt "#31508"
+msgid "clear filter"
+msgstr "필터 지우기"
+
+msgctxt "#31600"
+msgid "runtime"
+msgstr "상영 시간"
+
+msgctxt "#31601"
+msgid "genre"
+msgstr "장르"
+
+msgctxt "#31602"
+msgid "details"
+msgstr "상세 정보"
+
+msgctxt "#31603"
+msgid "seasons"
+msgstr "시즌"
+
+msgctxt "#31604"
+msgid "season"
+msgstr "시즌"
+
+msgctxt "#31605"
+msgid "seasons"
+msgstr "시즌"
+
+msgctxt "#31606"
+msgid "episodes"
+msgstr "에피소드"
+
+msgctxt "#31607"
+msgid "none"
+msgstr "없음"
+
+msgctxt "#31700"
+msgid "On Deck"
+msgstr "On Deck"
+
+msgctxt "#31701"
+msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
+msgstr "시청을 시작한 작품, 그다음 보고 있는 TV 쇼. TV 쇼에서 OK를 누르면 다음 에피소드가 열립니다."
+
+msgctxt "#31750"
+msgid "No trailer found"
+msgstr "예고편을 찾을 수 없습니다"

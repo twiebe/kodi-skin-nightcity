@@ -1,0 +1,1196 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: zh_cn\n"
+
+msgctxt "#31002"
+msgid "Spotlight source"
+msgstr "精选来源"
+
+msgctxt "#31003"
+msgid "All movies"
+msgstr "所有电影"
+
+msgctxt "#31004"
+msgid "Unwatched movies"
+msgstr "未观看电影"
+
+msgctxt "#31005"
+msgid "Effects"
+msgstr "效果"
+
+msgctxt "#31006"
+msgid "home"
+msgstr "主页"
+
+msgctxt "#31010"
+msgid "play"
+msgstr "播放"
+
+msgctxt "#31011"
+msgid "info"
+msgstr "信息"
+
+msgctxt "#31012"
+msgid "min"
+msgstr "分钟"
+
+msgctxt "#31020"
+msgid "on deck"
+msgstr "待看"
+
+msgctxt "#31021"
+msgid "new movies"
+msgstr "新电影"
+
+msgctxt "#31022"
+msgid "new episodes"
+msgstr "新剧集"
+
+msgctxt "#31023"
+msgid "continue watching"
+msgstr "继续观看"
+
+msgctxt "#31030"
+msgid "movies"
+msgstr "电影"
+
+msgctxt "#31031"
+msgid "shows"
+msgstr "电视剧"
+
+msgctxt "#31032"
+msgid "search"
+msgstr "搜索"
+
+msgctxt "#31033"
+msgid "System"
+msgstr "系统"
+
+msgctxt "#31041"
+msgid "trailer"
+msgstr "预告片"
+
+msgctxt "#31042"
+msgid "posters"
+msgstr "海报"
+
+msgctxt "#31043"
+msgid "resume"
+msgstr "继续"
+
+msgctxt "#31050"
+msgid "ends"
+msgstr "结束"
+
+msgctxt "#31051"
+msgid "pause"
+msgstr "暂停"
+
+msgctxt "#31052"
+msgid "stop"
+msgstr "停止"
+
+msgctxt "#31053"
+msgid "subtitles"
+msgstr "字幕"
+
+msgctxt "#31054"
+msgid "audio"
+msgstr "音频"
+
+msgctxt "#31055"
+msgid "video"
+msgstr "视频"
+
+msgctxt "#31056"
+msgid "bookmarks"
+msgstr "书签"
+
+msgctxt "#31057"
+msgid "buffering"
+msgstr "缓冲中"
+
+msgctxt "#31058"
+msgid "video already has subtitles"
+msgstr "视频已有字幕"
+
+msgctxt "#31080"
+msgid "quit kodi"
+msgstr "退出 Kodi"
+
+msgctxt "#31081"
+msgid "power off"
+msgstr "关机"
+
+msgctxt "#31082"
+msgid "reboot"
+msgstr "重启"
+
+msgctxt "#31083"
+msgid "suspend"
+msgstr "待机"
+
+msgctxt "#31084"
+msgid "hibernate"
+msgstr "休眠"
+
+msgctxt "#31085"
+msgid "shutdown timer"
+msgstr "关机定时器"
+
+msgctxt "#31086"
+msgid "cancel shutdown timer"
+msgstr "取消关机定时器"
+
+msgctxt "#31087"
+msgid "log off"
+msgstr "注销"
+
+msgctxt "#31088"
+msgid "reload skin"
+msgstr "重新加载皮肤"
+
+msgctxt "#31089"
+msgid "power"
+msgstr "电源"
+
+msgctxt "#31090"
+msgid "Hide foreign"
+msgstr "隐藏外语片"
+
+msgctxt "#31091"
+msgid "Hide broken"
+msgstr "隐藏损坏项"
+
+msgctxt "#31094"
+msgid "thumbs"
+msgstr "缩略图"
+
+msgctxt "#31095"
+msgid "mute"
+msgstr "静音"
+
+msgctxt "#31096"
+msgid "descending"
+msgstr "降序"
+
+msgctxt "#31100"
+msgid "spotlight"
+msgstr "精选"
+
+msgctxt "#31101"
+msgid "all movies"
+msgstr "所有电影"
+
+msgctxt "#31102"
+msgid "all shows"
+msgstr "所有电视剧"
+
+msgctxt "#31103"
+msgid "in progress"
+msgstr "观看中"
+
+msgctxt "#31104"
+msgid "unwatched"
+msgstr "未观看"
+
+msgctxt "#31105"
+msgid "genres"
+msgstr "类型"
+
+msgctxt "#31106"
+msgid "episodes"
+msgstr "剧集"
+
+msgctxt "#31116"
+msgid "sort"
+msgstr "排序"
+
+msgctxt "#31117"
+msgid "descending"
+msgstr "降序"
+
+msgctxt "#31118"
+msgid "title"
+msgstr "标题"
+
+msgctxt "#31119"
+msgid "year"
+msgstr "年份"
+
+msgctxt "#31120"
+msgid "added"
+msgstr "添加日期"
+
+msgctxt "#31121"
+msgid "rating"
+msgstr "评分"
+
+msgctxt "#31122"
+msgid "ascending"
+msgstr "升序"
+
+msgctxt "#31123"
+msgid "from start"
+msgstr "从头开始"
+
+msgctxt "#31124"
+msgid "cast"
+msgstr "演员"
+
+msgctxt "#31125"
+msgid "details"
+msgstr "详情"
+
+msgctxt "#31126"
+msgid "director"
+msgstr "导演"
+
+msgctxt "#31127"
+msgid "writer"
+msgstr "编剧"
+
+msgctxt "#31128"
+msgid "studio"
+msgstr "制片厂"
+
+msgctxt "#31129"
+msgid "country"
+msgstr "国家"
+
+msgctxt "#31130"
+msgid "similar"
+msgstr "相似作品"
+
+msgctxt "#31131"
+msgid "season"
+msgstr "季"
+
+msgctxt "#31132"
+msgid "episode"
+msgstr "集"
+
+msgctxt "#31133"
+msgid "all"
+msgstr "全部"
+
+msgctxt "#31134"
+msgid "specials"
+msgstr "特别篇"
+
+msgctxt "#31135"
+msgid "select"
+msgstr "选择"
+
+msgctxt "#31136"
+msgid "age rating"
+msgstr "年龄分级"
+
+msgctxt "#31059"
+msgid "ends at"
+msgstr "结束于"
+
+msgctxt "#31137"
+msgid "next episode"
+msgstr "下一集"
+
+msgctxt "#31138"
+msgid "off"
+msgstr "关"
+
+msgctxt "#31139"
+msgid "all settings"
+msgstr "所有设置"
+
+msgctxt "#31140"
+msgid "chapters"
+msgstr "章节"
+
+msgctxt "#31141"
+msgid "search for a title"
+msgstr "搜索标题"
+
+msgctxt "#31142"
+msgid "actions"
+msgstr "操作"
+
+msgctxt "#31143"
+msgid "power off"
+msgstr "关机"
+
+msgctxt "#31144"
+msgid "reboot"
+msgstr "重启"
+
+msgctxt "#31145"
+msgid "suspend"
+msgstr "待机"
+
+msgctxt "#31146"
+msgid "exit kodi"
+msgstr "退出 Kodi"
+
+msgctxt "#31147"
+msgid "restart kodi"
+msgstr "重启 Kodi"
+
+msgctxt "#31148"
+msgid "movies (library)"
+msgstr "电影 (媒体库)"
+
+msgctxt "#31149"
+msgid "shows (library)"
+msgstr "电视剧 (媒体库)"
+
+msgctxt "#31150"
+msgid "episodes (library)"
+msgstr "剧集 (媒体库)"
+
+msgctxt "#31151"
+msgid "online: movies (tmdb)"
+msgstr "在线: 电影 (TMDb)"
+
+msgctxt "#31152"
+msgid "online: shows (tmdb)"
+msgstr "在线: 电视剧 (TMDb)"
+
+msgctxt "#31153"
+msgid "recent"
+msgstr "最近搜索"
+
+msgctxt "#31154"
+msgid "not available on this device"
+msgstr "此设备上不可用"
+
+msgctxt "#31155"
+msgid "stats"
+msgstr "统计"
+
+msgctxt "#31157"
+msgid "booting"
+msgstr "启动中"
+
+msgctxt "#31158"
+msgid "online"
+msgstr "在线"
+
+msgctxt "#31159"
+msgid "Playback & media"
+msgstr "播放和媒体"
+
+msgctxt "#31160"
+msgid "Look & profiles"
+msgstr "外观和配置文件"
+
+msgctxt "#31161"
+msgid "Add-ons & content"
+msgstr "插件和内容"
+
+msgctxt "#31162"
+msgid "System & network"
+msgstr "系统和网络"
+
+msgctxt "#31163"
+msgid "Tools"
+msgstr "工具"
+
+msgctxt "#31164"
+msgid "How videos, music and pictures play: decoding, refresh rate, discs, audio and subtitle language, subtitles."
+msgstr "视频、音乐和图片如何播放：解码、刷新率、光盘、音频和字幕语言、字幕。"
+
+msgctxt "#31165"
+msgid "How the library collects and shows your media: scanning, file lists, videos, music, pictures."
+msgstr "媒体库如何收集和显示你的媒体：扫描、文件列表、视频、音乐、图片。"
+
+msgctxt "#31166"
+msgid "Live TV and recordings from your PVR client: channels, guide, recording, reminders."
+msgstr "来自 PVR 客户端的电视直播和录像：频道、节目指南、录像、提醒。"
+
+msgctxt "#31167"
+msgid "How Kodi looks and starts: skin, language and region, screensaver, master lock, startup."
+msgstr "Kodi 的外观和启动：皮肤、语言和区域、屏幕保护程序、主锁、启动。"
+
+msgctxt "#31168"
+msgid "The options of this skin: the home pages and the look."
+msgstr "此皮肤的选项：主页和外观。"
+
+msgctxt "#31169"
+msgid "Users with their own library, settings and add-ons, and the login screen."
+msgstr "拥有各自媒体库、设置和插件的用户，以及登录界面。"
+
+msgctxt "#31170"
+msgid "Installed add-ons, repositories, install from a zip file, search and updates."
+msgstr "已安装的插件、插件库、从 zip 文件安装、搜索和更新。"
+
+msgctxt "#31171"
+msgid "Browse sources and folders, copy, move and delete files."
+msgstr "浏览来源和文件夹，复制、移动和删除文件。"
+
+msgctxt "#31172"
+msgid "The device: display, audio output, input, internet access, power saving, add-on rules, logging."
+msgstr "设备：显示、音频输出、输入、互联网访问、节能、插件规则、日志。"
+
+msgctxt "#31173"
+msgid "What Kodi offers on the network and uses from it: remote control, UPnP, AirPlay, SMB, NFS, caching, weather."
+msgstr "Kodi 在网络上提供和使用的服务：远程控制、UPnP、AirPlay、SMB、NFS、缓存、天气。"
+
+msgctxt "#31174"
+msgid "Facts about this device: Kodi version, storage, network, video, hardware."
+msgstr "关于此设备的信息：Kodi 版本、存储、网络、视频、硬件。"
+
+msgctxt "#31175"
+msgid "What happened lately: add-on installs and updates, library scans, errors."
+msgstr "最近发生的事：插件安装和更新、媒体库扫描、错误。"
+
+msgctxt "#31176"
+msgid "Categories"
+msgstr "类别"
+
+msgctxt "#31178"
+msgid "[COLOR state_text]⏎[/COLOR] open"
+msgstr "[COLOR state_text]⏎[/COLOR] 打开"
+
+msgctxt "#31181"
+msgid "refresh rate, decoding, resume"
+msgstr "刷新率、解码、继续播放"
+
+msgctxt "#31182"
+msgid "crossfade, visualisation, volume adjustment"
+msgstr "交叉淡入淡出、可视化效果、音量调整"
+
+msgctxt "#31183"
+msgid "DVD, Blu-ray, audio CD"
+msgstr "DVD、蓝光、音频 CD"
+
+msgctxt "#31184"
+msgid "slideshow, transitions"
+msgstr "幻灯片、过渡效果"
+
+msgctxt "#31185"
+msgid "audio, subtitles and menus"
+msgstr "音频、字幕和菜单"
+
+msgctxt "#31186"
+msgid "font, size, download services"
+msgstr "字体、大小、下载服务"
+
+msgctxt "#31187"
+msgid "scan on startup, update, clean up"
+msgstr "启动时扫描、更新、清理"
+
+msgctxt "#31188"
+msgid "file extensions, hidden files, sorting"
+msgstr "文件扩展名、隐藏文件、排序"
+
+msgctxt "#31189"
+msgid "select action, plots, thumbnails"
+msgstr "选择操作、剧情、缩略图"
+
+msgctxt "#31190"
+msgid "artists, album covers, tags"
+msgstr "艺术家、专辑封面、标签"
+
+msgctxt "#31191"
+msgid "thumbnails, EXIF"
+msgstr "缩略图、EXIF"
+
+msgctxt "#31192"
+msgid "channel groups, channel icons"
+msgstr "频道组、频道图标"
+
+msgctxt "#31193"
+msgid "channel info, switching"
+msgstr "频道信息、切换"
+
+msgctxt "#31194"
+msgid "days shown, updates"
+msgstr "显示天数、更新"
+
+msgctxt "#31195"
+msgid "start, channel switch delay"
+msgstr "开始、频道切换延迟"
+
+msgctxt "#31196"
+msgid "margins, folders"
+msgstr "余量、文件夹"
+
+msgctxt "#31197"
+msgid "reminder before a show"
+msgstr "节目开始前提醒"
+
+msgctxt "#31198"
+msgid "wake up for recordings"
+msgstr "为录像唤醒"
+
+msgctxt "#31199"
+msgid "lock by age, PIN"
+msgstr "按年龄锁定、PIN"
+
+msgctxt "#31200"
+msgid "PVR client add-ons"
+msgstr "PVR 客户端插件"
+
+msgctxt "#31201"
+msgid "skin, theme, colours, fonts"
+msgstr "皮肤、主题、颜色、字体"
+
+msgctxt "#31202"
+msgid "language, region, time, keyboard"
+msgstr "语言、区域、时间、键盘"
+
+msgctxt "#31203"
+msgid "mode, wait time"
+msgstr "模式、等待时间"
+
+msgctxt "#31204"
+msgid "lock code, protected areas"
+msgstr "锁定码、受保护区域"
+
+msgctxt "#31205"
+msgid "start window, splash screen"
+msgstr "启动窗口、启动画面"
+
+msgctxt "#31206"
+msgid "resolution, refresh rate, calibration"
+msgstr "分辨率、刷新率、校准"
+
+msgctxt "#31207"
+msgid "output device, channels, passthrough"
+msgstr "输出设备、声道、直通"
+
+msgctxt "#31208"
+msgid "devices, mouse, remote"
+msgstr "设备、鼠标、遥控器"
+
+msgctxt "#31209"
+msgid "proxy"
+msgstr "代理"
+
+msgctxt "#31210"
+msgid "shutdown, display off"
+msgstr "关机、关闭显示"
+
+msgctxt "#31211"
+msgid "updates, unknown sources"
+msgstr "更新、未知来源"
+
+msgctxt "#31212"
+msgid "debug log, components"
+msgstr "调试日志、组件"
+
+msgctxt "#31213"
+msgid "device name, Zeroconf"
+msgstr "设备名称、Zeroconf"
+
+msgctxt "#31214"
+msgid "web server, remote apps"
+msgstr "网页服务器、遥控应用"
+
+msgctxt "#31215"
+msgid "share library, renderer"
+msgstr "共享媒体库、渲染器"
+
+msgctxt "#31216"
+msgid "receive AirPlay"
+msgstr "接收 AirPlay"
+
+msgctxt "#31217"
+msgid "Windows shares, WINS"
+msgstr "Windows 共享、WINS"
+
+msgctxt "#31218"
+msgid "NFS shares"
+msgstr "NFS 共享"
+
+msgctxt "#31219"
+msgid "buffer, read rate"
+msgstr "缓冲、读取速率"
+
+msgctxt "#31220"
+msgid "weather service"
+msgstr "天气服务"
+
+msgctxt "#31221"
+msgid "Spotlight change"
+msgstr "精选切换"
+
+msgctxt "#31222"
+msgid "Home pages"
+msgstr "主页"
+
+msgctxt "#31224"
+msgid "Rows"
+msgstr "行"
+
+msgctxt "#31225"
+msgid "Spotlight"
+msgstr "精选"
+
+msgctxt "#31226"
+msgid "Still"
+msgstr "固定"
+
+msgctxt "#31227"
+msgid "All shows"
+msgstr "所有电视剧"
+
+msgctxt "#31228"
+msgid "Unwatched shows"
+msgstr "未观看电视剧"
+
+msgctxt "#31229"
+msgid "Slot"
+msgstr "位置"
+
+msgctxt "#31231"
+msgid "Section for slot"
+msgstr "位置的区块"
+
+msgctxt "#31232"
+msgid "menu"
+msgstr "菜单"
+
+msgctxt "#31233"
+msgid "Continue watching"
+msgstr "继续观看"
+
+msgctxt "#31234"
+msgid "Next up"
+msgstr "接下来"
+
+msgctxt "#31235"
+msgid "New movies"
+msgstr "新电影"
+
+msgctxt "#31236"
+msgid "New episodes"
+msgstr "新剧集"
+
+msgctxt "#31237"
+msgid "Random movies"
+msgstr "随机电影"
+
+msgctxt "#31238"
+msgid "Top rated"
+msgstr "高分"
+
+msgctxt "#31239"
+msgid "TMDb trending"
+msgstr "TMDb 趋势"
+
+msgctxt "#31240"
+msgid "Recently watched"
+msgstr "最近观看"
+
+msgctxt "#31241"
+msgid "Started movies and episodes, the last watched first."
+msgstr "已开始的电影和剧集，最后观看的排在最前。"
+
+msgctxt "#31242"
+msgid "The shows you are watching. OK opens the next episode."
+msgstr "你正在看的电视剧。按 OK 打开下一集。"
+
+msgctxt "#31243"
+msgid "The movies added to the library last."
+msgstr "最近添加到媒体库的电影。"
+
+msgctxt "#31244"
+msgid "The shows with the episodes added last."
+msgstr "最近添加了剧集的电视剧。"
+
+msgctxt "#31245"
+msgid "Tabs for the three biggest genres and a picker for all others."
+msgstr "三个最大类型的标签页，以及选择其他所有类型的列表。"
+
+msgctxt "#31246"
+msgid "A new choice from the whole library every time Home opens."
+msgstr "每次打开主页时从整个媒体库中重新挑选。"
+
+msgctxt "#31248"
+msgid "Sorted by rating, from 7.0 up."
+msgstr "按评分排序，7.0 分以上。"
+
+msgctxt "#31249"
+msgid "Kodi's favourites, as you set them."
+msgstr "Kodi 的收藏夹，按你的设置排列。"
+
+msgctxt "#31250"
+msgid "What is trending on TMDb this week."
+msgstr "本周 TMDb 上的热门作品。"
+
+msgctxt "#31251"
+msgid "What played last, also what you watched to the end."
+msgstr "最近播放的内容，也包括已看完的。"
+
+msgctxt "#31252"
+msgid "The movie sets of your library. OK opens a set."
+msgstr "媒体库中的电影集。按 OK 打开电影集。"
+
+msgctxt "#31253"
+msgid "Episodes you started and did not finish."
+msgstr "已开始但未看完的剧集。"
+
+msgctxt "#31254"
+msgid "Free slot. OK picks a section from the catalogue."
+msgstr "空位置。按 OK 从目录中选择区块。"
+
+msgctxt "#31255"
+msgid "Large artwork with title and plot, in random order. OK or Right picks the source."
+msgstr "带标题和剧情的大幅图片，随机顺序。按 OK 或右键选择来源。"
+
+msgctxt "#31256"
+msgid "No spotlight: the page starts with the first row."
+msgstr "无精选：页面从第一行开始。"
+
+msgctxt "#31257"
+msgid "How often the spotlight moves on by itself. OK or Right: 10, 15, 30, 60 s or still (then only by hand)."
+msgstr "精选自动切换的间隔。OK 或右键：10、15、30、60 秒或固定（此时只能手动切换）。"
+
+msgctxt "#31258"
+msgid "Home and movies show the same spotlight, so they share this setting."
+msgstr "主页和电影显示同一个精选，因此共用此设置。"
+
+msgctxt "#31259"
+msgid "Show or hide entries of the main menu. System and power always stay, and so does the last page shown."
+msgstr "显示或隐藏主菜单的项目。系统和电源始终保留，最后显示的页面也会保留。"
+
+msgctxt "#31260"
+msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]⏎[/COLOR] 选择   [COLOR state_text]→[/COLOR] 选项"
+
+msgctxt "#31261"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] 移动   [COLOR state_text]⏎[/COLOR] 放下"
+
+msgctxt "#31262"
+msgid "Spotlight, rows and main menu of the home, movies and shows pages."
+msgstr "主页、电影和电视剧页面的精选、行和主菜单。"
+
+msgctxt "#31263"
+msgid "swap"
+msgstr "交换"
+
+msgctxt "#31264"
+msgid "Main menu"
+msgstr "主菜单"
+
+msgctxt "#31265"
+msgid "Spotlight and rows of the home page."
+msgstr "主页的精选和行。"
+
+msgctxt "#31266"
+msgid "Spotlight and rows of the movies page."
+msgstr "电影页面的精选和行。"
+
+msgctxt "#31267"
+msgid "Spotlight and rows of the shows page."
+msgstr "电视剧页面的精选和行。"
+
+msgctxt "#31268"
+msgid "How the skin draws the focus."
+msgstr "皮肤如何显示焦点。"
+
+msgctxt "#31230"
+msgid "frame rate"
+msgstr "帧率"
+
+msgctxt "#31330"
+msgid "back to video"
+msgstr "返回视频"
+
+msgctxt "#31331"
+msgid "back to home"
+msgstr "返回主页"
+
+msgctxt "#31332"
+msgid "back to movies"
+msgstr "返回电影"
+
+msgctxt "#31333"
+msgid "back to shows"
+msgstr "返回电视剧"
+
+msgctxt "#31334"
+msgid "back to search"
+msgstr "返回搜索"
+
+msgctxt "#31335"
+msgid "back to library"
+msgstr "返回媒体库"
+
+msgctxt "#31310"
+msgid "Home key opens the home page"
+msgstr "主页键打开主页"
+
+msgctxt "#31311"
+msgid "The Home key of the remote always leads to the home page, held down it opens the quick menu. The skin sets up the keymap 0_skin.nightcity.xml in the profile for it; your own keymaps still win."
+msgstr "遥控器的主页键总是回到主页，长按则打开快捷菜单。为此皮肤会在配置文件中创建键位映射 0_skin.nightcity.xml；你自己的键位映射仍然优先。"
+
+msgctxt "#31300"
+msgid "crew"
+msgstr "剧组"
+
+msgctxt "#31301"
+msgid "back to start"
+msgstr "回到开头"
+
+msgctxt "#31302"
+msgid "person"
+msgstr "人物"
+
+msgctxt "#31303"
+msgid "born"
+msgstr "出生"
+
+msgctxt "#31304"
+msgid "died"
+msgstr "逝世"
+
+msgctxt "#31320"
+msgid "quick menu"
+msgstr "快捷菜单"
+
+msgctxt "#31321"
+msgid "set up weather"
+msgstr "设置天气"
+
+msgctxt "#31322"
+msgid "more"
+msgstr "更多"
+
+msgctxt "#31323"
+msgid "timer"
+msgstr "定时器"
+
+msgctxt "#31336"
+msgid "Remember search terms"
+msgstr "记住搜索词"
+
+msgctxt "#31337"
+msgid "The search page lists the last five search terms. Switched off, the skin keeps no terms and forgets the ones it has."
+msgstr "搜索页面列出最近五个搜索词。关闭后，皮肤不再保存搜索词，并忘掉已保存的搜索词。"
+
+msgctxt "#31338"
+msgid "Clear search history"
+msgstr "清除搜索历史"
+
+msgctxt "#31339"
+msgid "Forgets the remembered search terms."
+msgstr "忘掉已记住的搜索词。"
+
+msgctxt "#31340"
+msgid "The colour scheme of the skin, the same choice as under Interface."
+msgstr "皮肤的配色方案，与界面设置中的选项相同。"
+
+msgctxt "#31341"
+msgid "forecast"
+msgstr "预报"
+
+msgctxt "#31360"
+msgid "Hide the controls automatically"
+msgstr "自动隐藏控制栏"
+
+msgctxt "#31361"
+msgid "While a video plays, the player controls close by themselves once no key was pressed for the time set below. While paused they stay; the time starts again when playback goes on."
+msgstr "视频播放时，如果在下面设置的时间内没有按键，播放器控制栏会自动关闭。暂停时它会保留；继续播放时重新计时。"
+
+msgctxt "#31362"
+msgid "Hide after"
+msgstr "隐藏时间"
+
+msgctxt "#31363"
+msgid "Time without a key press before the player controls close, 3 to 30 seconds. OK takes the slider, left and right move it, OK lets go."
+msgstr "播放器控制栏关闭前无按键的时间，3 到 30 秒。按 OK 抓住滑块，左右移动，再按 OK 放开。"
+
+msgctxt "#31364"
+msgid "The video player: its controls and what it shows while they are up."
+msgstr "视频播放器：它的控制栏以及控制栏打开时显示的内容。"
+
+msgctxt "#31365"
+msgid "Show the plot"
+msgstr "显示剧情"
+
+msgctxt "#31366"
+msgid "The plot of what plays, under its title while the player controls or the seek line are up."
+msgstr "在播放器控制栏或进度条打开时，于标题下方显示正在播放内容的剧情。"
+
+msgctxt "#31400"
+msgid "New albums"
+msgstr "新专辑"
+
+msgctxt "#31401"
+msgid "Recently played"
+msgstr "最近播放"
+
+msgctxt "#31402"
+msgid "Random albums"
+msgstr "随机专辑"
+
+msgctxt "#31403"
+msgid "Artists"
+msgstr "艺术家"
+
+msgctxt "#31404"
+msgid "Genres"
+msgstr "类型"
+
+msgctxt "#31405"
+msgid "music"
+msgstr "音乐"
+
+msgctxt "#31406"
+msgid "now playing"
+msgstr "正在播放"
+
+msgctxt "#31407"
+msgid "albums"
+msgstr "专辑"
+
+msgctxt "#31408"
+msgid "more by"
+msgstr "更多作品:"
+
+msgctxt "#31409"
+msgid "tracks"
+msgstr "曲目"
+
+msgctxt "#31410"
+msgid "up next"
+msgstr "下一首"
+
+msgctxt "#31411"
+msgid "shuffle"
+msgstr "随机"
+
+msgctxt "#31412"
+msgid "repeat"
+msgstr "重复"
+
+msgctxt "#31413"
+msgid "repeat all"
+msgstr "全部重复"
+
+msgctxt "#31414"
+msgid "repeat one"
+msgstr "单曲重复"
+
+msgctxt "#31420"
+msgid "Network, Bluetooth, updates"
+msgstr "网络、蓝牙、更新"
+
+msgctxt "#31440"
+msgid "audience"
+msgstr "观众"
+
+msgctxt "#31441"
+msgid "Ratings only from TMDb Helper"
+msgstr "仅用 TMDb Helper 的评分"
+
+msgctxt "#31442"
+msgid "Show only the ratings TMDb Helper fetched for exactly this title. Off: the library's own rating (from Jellyfin) fills in while TMDb Helper has none."
+msgstr "只显示 TMDb Helper 为这部作品获取的评分。关闭：TMDb Helper 没有评分时，用媒体库自己的评分（来自 Jellyfin）补上。"
+
+msgctxt "#31443"
+msgid "Ratings only on title pages"
+msgstr "仅在作品页面显示评分"
+
+msgctxt "#31444"
+msgid "Spotlight and rows show no ratings, which saves requests to TMDb. A title's page still shows them."
+msgstr "精选和行不显示评分，可减少对 TMDb 的请求。作品页面仍会显示评分。"
+
+msgctxt "#31445"
+msgid "Ratings"
+msgstr "评分"
+
+msgctxt "#31446"
+msgid "Sources"
+msgstr "来源"
+
+msgctxt "#31447"
+msgid "Which ratings the ratings line of the spotlight and the info page shows, and where they come from."
+msgstr "精选和信息页面的评分行显示哪些评分，以及评分的来源。"
+
+msgctxt "#31450"
+msgid "IMDb"
+msgstr "IMDb"
+
+msgctxt "#31451"
+msgid "TMDb"
+msgstr "TMDb"
+
+msgctxt "#31452"
+msgid "Rotten Tomatoes critics"
+msgstr "Rotten Tomatoes 影评人"
+
+msgctxt "#31453"
+msgid "Rotten Tomatoes audience"
+msgstr "Rotten Tomatoes 观众"
+
+msgctxt "#31454"
+msgid "Metacritic"
+msgstr "Metacritic"
+
+msgctxt "#31455"
+msgid "Trakt"
+msgstr "Trakt"
+
+msgctxt "#31456"
+msgid "Letterboxd"
+msgstr "Letterboxd"
+
+msgctxt "#31457"
+msgid "MDbList"
+msgstr "MDbList"
+
+msgctxt "#31460"
+msgid "IMDb users, 0 to 10, with the Top 250 rank. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "IMDb 用户评分，0 到 10，附 Top 250 排名。需要在 TMDb Helper 中设置 OMDb 或 MDbList 密钥。"
+
+msgctxt "#31461"
+msgid "TMDb users, 0 to 10. Needs no key."
+msgstr "TMDb 用户评分，0 到 10。无需密钥。"
+
+msgctxt "#31462"
+msgid "Tomatometer: the share of positive critic reviews. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "新鲜度：影评人好评的比例。需要在 TMDb Helper 中设置 OMDb 或 MDbList 密钥。"
+
+msgctxt "#31463"
+msgid "Popcornmeter: the share of positive audience ratings. Needs an MDbList or OMDb key in TMDb Helper."
+msgstr "爆米花指数：观众好评的比例。需要在 TMDb Helper 中设置 MDbList 或 OMDb 密钥。"
+
+msgctxt "#31464"
+msgid "A weighted average of critic reviews, 0 to 100, mostly for theatrical films and big series. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "影评人评价的加权平均值，0 到 100，主要针对院线电影和大型剧集。需要在 TMDb Helper 中设置 OMDb 或 MDbList 密钥。"
+
+msgctxt "#31465"
+msgid "Trakt users, 0 to 10. Needs a connected Trakt account in TMDb Helper: fetched from Trakt, not MDbList."
+msgstr "Trakt 用户评分，0 到 10。需要在 TMDb Helper 中连接 Trakt 帐户：从 Trakt 获取，而非 MDbList。"
+
+msgctxt "#31466"
+msgid "Letterboxd users, 0 to 5, mostly films. Needs an MDbList key in TMDb Helper."
+msgstr "Letterboxd 用户评分，0 到 5，主要是电影。需要在 TMDb Helper 中设置 MDbList 密钥。"
+
+msgctxt "#31467"
+msgid "MDbList score: an average of the other sources, 0 to 100. Needs an MDbList key in TMDb Helper."
+msgstr "MDbList 分数：其他来源的平均值，0 到 100。需要在 TMDb Helper 中设置 MDbList 密钥。"
+
+msgctxt "#31469"
+msgid "No description"
+msgstr "无简介"
+
+msgctxt "#31470"
+msgid "back"
+msgstr "返回"
+
+msgctxt "#31471"
+msgid "budget"
+msgstr "预算"
+
+msgctxt "#31472"
+msgid "box office"
+msgstr "票房"
+
+msgctxt "#31473"
+msgid "description"
+msgstr "简介"
+
+msgctxt "#31474"
+msgid "biography"
+msgstr "生平"
+
+msgctxt "#31478"
+msgid "controls"
+msgstr "控制"
+
+msgctxt "#31479"
+msgid "previous page"
+msgstr "上一页"
+
+msgctxt "#31480"
+msgid "parent folder"
+msgstr "上级文件夹"
+
+msgctxt "#31477"
+msgid "Home"
+msgstr "主页"
+
+msgctxt "#31500"
+msgid "view"
+msgstr "视图"
+
+msgctxt "#31501"
+msgid "list"
+msgstr "列表"
+
+msgctxt "#31502"
+msgid "filter"
+msgstr "筛选"
+
+msgctxt "#31503"
+msgid "all"
+msgstr "全部"
+
+msgctxt "#31504"
+msgid "resolution"
+msgstr "分辨率"
+
+msgctxt "#31505"
+msgid "dynamic range"
+msgstr "动态范围"
+
+msgctxt "#31506"
+msgid "audio format"
+msgstr "音频格式"
+
+msgctxt "#31507"
+msgid "audio channels"
+msgstr "音频声道"
+
+msgctxt "#31508"
+msgid "clear filter"
+msgstr "清除筛选"
+
+msgctxt "#31600"
+msgid "runtime"
+msgstr "片长"
+
+msgctxt "#31601"
+msgid "genre"
+msgstr "类型"
+
+msgctxt "#31602"
+msgid "details"
+msgstr "详情"
+
+msgctxt "#31603"
+msgid "seasons"
+msgstr "季"
+
+msgctxt "#31604"
+msgid "season"
+msgstr "季"
+
+msgctxt "#31605"
+msgid "seasons"
+msgstr "季"
+
+msgctxt "#31606"
+msgid "episodes"
+msgstr "集"
+
+msgctxt "#31607"
+msgid "none"
+msgstr "无"
+
+msgctxt "#31700"
+msgid "On Deck"
+msgstr "On Deck"
+
+msgctxt "#31701"
+msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
+msgstr "已开始的内容，然后是你正在看的电视剧。在电视剧上按 OK 打开下一集。"
+
+msgctxt "#31750"
+msgid "No trailer found"
+msgstr "未找到预告片"

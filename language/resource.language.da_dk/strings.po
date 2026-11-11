@@ -1,0 +1,1196 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: da_dk\n"
+
+msgctxt "#31002"
+msgid "Spotlight source"
+msgstr "Spotlight-kilde"
+
+msgctxt "#31003"
+msgid "All movies"
+msgstr "Alle film"
+
+msgctxt "#31004"
+msgid "Unwatched movies"
+msgstr "Usete film"
+
+msgctxt "#31005"
+msgid "Effects"
+msgstr "Effekter"
+
+msgctxt "#31006"
+msgid "home"
+msgstr "hjem"
+
+msgctxt "#31010"
+msgid "play"
+msgstr "afspil"
+
+msgctxt "#31011"
+msgid "info"
+msgstr "info"
+
+msgctxt "#31012"
+msgid "min"
+msgstr "min"
+
+msgctxt "#31020"
+msgid "on deck"
+msgstr "næste"
+
+msgctxt "#31021"
+msgid "new movies"
+msgstr "nye film"
+
+msgctxt "#31022"
+msgid "new episodes"
+msgstr "nye afsnit"
+
+msgctxt "#31023"
+msgid "continue watching"
+msgstr "fortsæt med at se"
+
+msgctxt "#31030"
+msgid "movies"
+msgstr "film"
+
+msgctxt "#31031"
+msgid "shows"
+msgstr "serier"
+
+msgctxt "#31032"
+msgid "search"
+msgstr "søg"
+
+msgctxt "#31033"
+msgid "System"
+msgstr "System"
+
+msgctxt "#31041"
+msgid "trailer"
+msgstr "trailer"
+
+msgctxt "#31042"
+msgid "posters"
+msgstr "plakater"
+
+msgctxt "#31043"
+msgid "resume"
+msgstr "genoptag"
+
+msgctxt "#31050"
+msgid "ends"
+msgstr "slutter"
+
+msgctxt "#31051"
+msgid "pause"
+msgstr "pause"
+
+msgctxt "#31052"
+msgid "stop"
+msgstr "stop"
+
+msgctxt "#31053"
+msgid "subtitles"
+msgstr "undertekster"
+
+msgctxt "#31054"
+msgid "audio"
+msgstr "lyd"
+
+msgctxt "#31055"
+msgid "video"
+msgstr "video"
+
+msgctxt "#31056"
+msgid "bookmarks"
+msgstr "bogmærker"
+
+msgctxt "#31057"
+msgid "buffering"
+msgstr "buffer"
+
+msgctxt "#31058"
+msgid "video already has subtitles"
+msgstr "videoen har allerede undertekster"
+
+msgctxt "#31080"
+msgid "quit kodi"
+msgstr "afslut kodi"
+
+msgctxt "#31081"
+msgid "power off"
+msgstr "sluk"
+
+msgctxt "#31082"
+msgid "reboot"
+msgstr "genstart"
+
+msgctxt "#31083"
+msgid "suspend"
+msgstr "dvale"
+
+msgctxt "#31084"
+msgid "hibernate"
+msgstr "dyb dvale"
+
+msgctxt "#31085"
+msgid "shutdown timer"
+msgstr "sluk-timer"
+
+msgctxt "#31086"
+msgid "cancel shutdown timer"
+msgstr "annuller sluk-timer"
+
+msgctxt "#31087"
+msgid "log off"
+msgstr "log af"
+
+msgctxt "#31088"
+msgid "reload skin"
+msgstr "genindlæs skin"
+
+msgctxt "#31089"
+msgid "power"
+msgstr "strøm"
+
+msgctxt "#31090"
+msgid "Hide foreign"
+msgstr "Skjul fremmedsprog"
+
+msgctxt "#31091"
+msgid "Hide broken"
+msgstr "Skjul defekte"
+
+msgctxt "#31094"
+msgid "thumbs"
+msgstr "billeder"
+
+msgctxt "#31095"
+msgid "mute"
+msgstr "lydløs"
+
+msgctxt "#31096"
+msgid "descending"
+msgstr "faldende"
+
+msgctxt "#31100"
+msgid "spotlight"
+msgstr "spotlight"
+
+msgctxt "#31101"
+msgid "all movies"
+msgstr "alle film"
+
+msgctxt "#31102"
+msgid "all shows"
+msgstr "alle serier"
+
+msgctxt "#31103"
+msgid "in progress"
+msgstr "igangværende"
+
+msgctxt "#31104"
+msgid "unwatched"
+msgstr "usete"
+
+msgctxt "#31105"
+msgid "genres"
+msgstr "genrer"
+
+msgctxt "#31106"
+msgid "episodes"
+msgstr "afsnit"
+
+msgctxt "#31116"
+msgid "sort"
+msgstr "sortering"
+
+msgctxt "#31117"
+msgid "descending"
+msgstr "faldende"
+
+msgctxt "#31118"
+msgid "title"
+msgstr "titel"
+
+msgctxt "#31119"
+msgid "year"
+msgstr "år"
+
+msgctxt "#31120"
+msgid "added"
+msgstr "tilføjet"
+
+msgctxt "#31121"
+msgid "rating"
+msgstr "vurdering"
+
+msgctxt "#31122"
+msgid "ascending"
+msgstr "stigende"
+
+msgctxt "#31123"
+msgid "from start"
+msgstr "fra start"
+
+msgctxt "#31124"
+msgid "cast"
+msgstr "medvirkende"
+
+msgctxt "#31125"
+msgid "details"
+msgstr "detaljer"
+
+msgctxt "#31126"
+msgid "director"
+msgstr "instruktør"
+
+msgctxt "#31127"
+msgid "writer"
+msgstr "manuskript"
+
+msgctxt "#31128"
+msgid "studio"
+msgstr "studie"
+
+msgctxt "#31129"
+msgid "country"
+msgstr "land"
+
+msgctxt "#31130"
+msgid "similar"
+msgstr "lignende"
+
+msgctxt "#31131"
+msgid "season"
+msgstr "sæson"
+
+msgctxt "#31132"
+msgid "episode"
+msgstr "afsnit"
+
+msgctxt "#31133"
+msgid "all"
+msgstr "alle"
+
+msgctxt "#31134"
+msgid "specials"
+msgstr "specials"
+
+msgctxt "#31135"
+msgid "select"
+msgstr "vælg"
+
+msgctxt "#31136"
+msgid "age rating"
+msgstr "aldersgrænse"
+
+msgctxt "#31059"
+msgid "ends at"
+msgstr "slutter kl."
+
+msgctxt "#31137"
+msgid "next episode"
+msgstr "næste afsnit"
+
+msgctxt "#31138"
+msgid "off"
+msgstr "fra"
+
+msgctxt "#31139"
+msgid "all settings"
+msgstr "alle indstillinger"
+
+msgctxt "#31140"
+msgid "chapters"
+msgstr "kapitler"
+
+msgctxt "#31141"
+msgid "search for a title"
+msgstr "søg efter en titel"
+
+msgctxt "#31142"
+msgid "actions"
+msgstr "handlinger"
+
+msgctxt "#31143"
+msgid "power off"
+msgstr "sluk"
+
+msgctxt "#31144"
+msgid "reboot"
+msgstr "genstart"
+
+msgctxt "#31145"
+msgid "suspend"
+msgstr "dvale"
+
+msgctxt "#31146"
+msgid "exit kodi"
+msgstr "afslut kodi"
+
+msgctxt "#31147"
+msgid "restart kodi"
+msgstr "genstart kodi"
+
+msgctxt "#31148"
+msgid "movies (library)"
+msgstr "film (bibliotek)"
+
+msgctxt "#31149"
+msgid "shows (library)"
+msgstr "serier (bibliotek)"
+
+msgctxt "#31150"
+msgid "episodes (library)"
+msgstr "afsnit (bibliotek)"
+
+msgctxt "#31151"
+msgid "online: movies (tmdb)"
+msgstr "online: film (tmdb)"
+
+msgctxt "#31152"
+msgid "online: shows (tmdb)"
+msgstr "online: serier (tmdb)"
+
+msgctxt "#31153"
+msgid "recent"
+msgstr "seneste"
+
+msgctxt "#31154"
+msgid "not available on this device"
+msgstr "ikke tilgængelig på denne enhed"
+
+msgctxt "#31155"
+msgid "stats"
+msgstr "statistik"
+
+msgctxt "#31157"
+msgid "booting"
+msgstr "starter"
+
+msgctxt "#31158"
+msgid "online"
+msgstr "online"
+
+msgctxt "#31159"
+msgid "Playback & media"
+msgstr "Afspilning & medier"
+
+msgctxt "#31160"
+msgid "Look & profiles"
+msgstr "Udseende & profiler"
+
+msgctxt "#31161"
+msgid "Add-ons & content"
+msgstr "Add-ons & indhold"
+
+msgctxt "#31162"
+msgid "System & network"
+msgstr "System & netværk"
+
+msgctxt "#31163"
+msgid "Tools"
+msgstr "Værktøjer"
+
+msgctxt "#31164"
+msgid "How videos, music and pictures play: decoding, refresh rate, discs, audio and subtitle language, subtitles."
+msgstr "Hvordan videoer, musik og billeder afspilles: afkodning, opdateringshastighed, diske, lyd- og undertekstsprog, undertekster."
+
+msgctxt "#31165"
+msgid "How the library collects and shows your media: scanning, file lists, videos, music, pictures."
+msgstr "Hvordan biblioteket samler og viser dine medier: scanning, fillister, videoer, musik, billeder."
+
+msgctxt "#31166"
+msgid "Live TV and recordings from your PVR client: channels, guide, recording, reminders."
+msgstr "Live-tv og optagelser fra din PVR-klient: kanaler, guide, optagelse, påmindelser."
+
+msgctxt "#31167"
+msgid "How Kodi looks and starts: skin, language and region, screensaver, master lock, startup."
+msgstr "Hvordan Kodi ser ud og starter: skin, sprog og region, pauseskærm, masterlås, opstart."
+
+msgctxt "#31168"
+msgid "The options of this skin: the home pages and the look."
+msgstr "Dette skins indstillinger: startsiderne og udseendet."
+
+msgctxt "#31169"
+msgid "Users with their own library, settings and add-ons, and the login screen."
+msgstr "Brugere med eget bibliotek, egne indstillinger og add-ons samt loginskærmen."
+
+msgctxt "#31170"
+msgid "Installed add-ons, repositories, install from a zip file, search and updates."
+msgstr "Installerede add-ons, kilder, installation fra zip-fil, søgning og opdateringer."
+
+msgctxt "#31171"
+msgid "Browse sources and folders, copy, move and delete files."
+msgstr "Gennemse kilder og mapper, kopier, flyt og slet filer."
+
+msgctxt "#31172"
+msgid "The device: display, audio output, input, internet access, power saving, add-on rules, logging."
+msgstr "Enheden: skærm, lydudgang, input, internetadgang, strømbesparelse, add-on-regler, logning."
+
+msgctxt "#31173"
+msgid "What Kodi offers on the network and uses from it: remote control, UPnP, AirPlay, SMB, NFS, caching, weather."
+msgstr "Hvad Kodi tilbyder på netværket og bruger fra det: fjernbetjening, UPnP, AirPlay, SMB, NFS, caching, vejr."
+
+msgctxt "#31174"
+msgid "Facts about this device: Kodi version, storage, network, video, hardware."
+msgstr "Fakta om denne enhed: Kodi-version, lager, netværk, video, hardware."
+
+msgctxt "#31175"
+msgid "What happened lately: add-on installs and updates, library scans, errors."
+msgstr "Hvad der er sket for nylig: installationer og opdateringer af add-ons, biblioteksscanninger, fejl."
+
+msgctxt "#31176"
+msgid "Categories"
+msgstr "Kategorier"
+
+msgctxt "#31178"
+msgid "[COLOR state_text]⏎[/COLOR] open"
+msgstr "[COLOR state_text]⏎[/COLOR] åbn"
+
+msgctxt "#31181"
+msgid "refresh rate, decoding, resume"
+msgstr "opdateringshastighed, afkodning, genoptag"
+
+msgctxt "#31182"
+msgid "crossfade, visualisation, volume adjustment"
+msgstr "overtoning, visualisering, lydstyrkejustering"
+
+msgctxt "#31183"
+msgid "DVD, Blu-ray, audio CD"
+msgstr "DVD, Blu-ray, lyd-cd"
+
+msgctxt "#31184"
+msgid "slideshow, transitions"
+msgstr "diasshow, overgange"
+
+msgctxt "#31185"
+msgid "audio, subtitles and menus"
+msgstr "lyd, undertekster og menuer"
+
+msgctxt "#31186"
+msgid "font, size, download services"
+msgstr "skrifttype, størrelse, downloadtjenester"
+
+msgctxt "#31187"
+msgid "scan on startup, update, clean up"
+msgstr "scan ved opstart, opdater, ryd op"
+
+msgctxt "#31188"
+msgid "file extensions, hidden files, sorting"
+msgstr "filtypenavne, skjulte filer, sortering"
+
+msgctxt "#31189"
+msgid "select action, plots, thumbnails"
+msgstr "valghandling, resuméer, miniaturer"
+
+msgctxt "#31190"
+msgid "artists, album covers, tags"
+msgstr "kunstnere, albumcovers, tags"
+
+msgctxt "#31191"
+msgid "thumbnails, EXIF"
+msgstr "miniaturer, EXIF"
+
+msgctxt "#31192"
+msgid "channel groups, channel icons"
+msgstr "kanalgrupper, kanalikoner"
+
+msgctxt "#31193"
+msgid "channel info, switching"
+msgstr "kanalinfo, kanalskift"
+
+msgctxt "#31194"
+msgid "days shown, updates"
+msgstr "viste dage, opdateringer"
+
+msgctxt "#31195"
+msgid "start, channel switch delay"
+msgstr "start, forsinkelse ved kanalskift"
+
+msgctxt "#31196"
+msgid "margins, folders"
+msgstr "margener, mapper"
+
+msgctxt "#31197"
+msgid "reminder before a show"
+msgstr "påmindelse før en udsendelse"
+
+msgctxt "#31198"
+msgid "wake up for recordings"
+msgstr "væk til optagelser"
+
+msgctxt "#31199"
+msgid "lock by age, PIN"
+msgstr "lås efter alder, PIN"
+
+msgctxt "#31200"
+msgid "PVR client add-ons"
+msgstr "PVR-klient-add-ons"
+
+msgctxt "#31201"
+msgid "skin, theme, colours, fonts"
+msgstr "skin, tema, farver, skrifttyper"
+
+msgctxt "#31202"
+msgid "language, region, time, keyboard"
+msgstr "sprog, region, tid, tastatur"
+
+msgctxt "#31203"
+msgid "mode, wait time"
+msgstr "tilstand, ventetid"
+
+msgctxt "#31204"
+msgid "lock code, protected areas"
+msgstr "låsekode, beskyttede områder"
+
+msgctxt "#31205"
+msgid "start window, splash screen"
+msgstr "startvindue, startbillede"
+
+msgctxt "#31206"
+msgid "resolution, refresh rate, calibration"
+msgstr "opløsning, opdateringshastighed, kalibrering"
+
+msgctxt "#31207"
+msgid "output device, channels, passthrough"
+msgstr "outputenhed, kanaler, passthrough"
+
+msgctxt "#31208"
+msgid "devices, mouse, remote"
+msgstr "enheder, mus, fjernbetjening"
+
+msgctxt "#31209"
+msgid "proxy"
+msgstr "proxy"
+
+msgctxt "#31210"
+msgid "shutdown, display off"
+msgstr "nedlukning, skærm slukket"
+
+msgctxt "#31211"
+msgid "updates, unknown sources"
+msgstr "opdateringer, ukendte kilder"
+
+msgctxt "#31212"
+msgid "debug log, components"
+msgstr "fejlfindingslog, komponenter"
+
+msgctxt "#31213"
+msgid "device name, Zeroconf"
+msgstr "enhedsnavn, Zeroconf"
+
+msgctxt "#31214"
+msgid "web server, remote apps"
+msgstr "webserver, fjernbetjeningsapps"
+
+msgctxt "#31215"
+msgid "share library, renderer"
+msgstr "del bibliotek, renderer"
+
+msgctxt "#31216"
+msgid "receive AirPlay"
+msgstr "modtag AirPlay"
+
+msgctxt "#31217"
+msgid "Windows shares, WINS"
+msgstr "Windows-delinger, WINS"
+
+msgctxt "#31218"
+msgid "NFS shares"
+msgstr "NFS-delinger"
+
+msgctxt "#31219"
+msgid "buffer, read rate"
+msgstr "buffer, læsehastighed"
+
+msgctxt "#31220"
+msgid "weather service"
+msgstr "vejrtjeneste"
+
+msgctxt "#31221"
+msgid "Spotlight change"
+msgstr "Spotlight-skift"
+
+msgctxt "#31222"
+msgid "Home pages"
+msgstr "Startsider"
+
+msgctxt "#31224"
+msgid "Rows"
+msgstr "Rækker"
+
+msgctxt "#31225"
+msgid "Spotlight"
+msgstr "Spotlight"
+
+msgctxt "#31226"
+msgid "Still"
+msgstr "Stille"
+
+msgctxt "#31227"
+msgid "All shows"
+msgstr "Alle serier"
+
+msgctxt "#31228"
+msgid "Unwatched shows"
+msgstr "Usete serier"
+
+msgctxt "#31229"
+msgid "Slot"
+msgstr "Plads"
+
+msgctxt "#31231"
+msgid "Section for slot"
+msgstr "Sektion for plads"
+
+msgctxt "#31232"
+msgid "menu"
+msgstr "menu"
+
+msgctxt "#31233"
+msgid "Continue watching"
+msgstr "Fortsæt med at se"
+
+msgctxt "#31234"
+msgid "Next up"
+msgstr "Næste"
+
+msgctxt "#31235"
+msgid "New movies"
+msgstr "Nye film"
+
+msgctxt "#31236"
+msgid "New episodes"
+msgstr "Nye afsnit"
+
+msgctxt "#31237"
+msgid "Random movies"
+msgstr "Tilfældige film"
+
+msgctxt "#31238"
+msgid "Top rated"
+msgstr "Bedst vurderet"
+
+msgctxt "#31239"
+msgid "TMDb trending"
+msgstr "TMDb-trends"
+
+msgctxt "#31240"
+msgid "Recently watched"
+msgstr "Senest set"
+
+msgctxt "#31241"
+msgid "Started movies and episodes, the last watched first."
+msgstr "Påbegyndte film og afsnit, det senest sete først."
+
+msgctxt "#31242"
+msgid "The shows you are watching. OK opens the next episode."
+msgstr "De serier, du følger. OK åbner næste afsnit."
+
+msgctxt "#31243"
+msgid "The movies added to the library last."
+msgstr "De film, der senest er føjet til biblioteket."
+
+msgctxt "#31244"
+msgid "The shows with the episodes added last."
+msgstr "Serierne med de senest tilføjede afsnit."
+
+msgctxt "#31245"
+msgid "Tabs for the three biggest genres and a picker for all others."
+msgstr "Faner for de tre største genrer og en vælger til alle andre."
+
+msgctxt "#31246"
+msgid "A new choice from the whole library every time Home opens."
+msgstr "Et nyt udvalg fra hele biblioteket, hver gang Hjem åbnes."
+
+msgctxt "#31248"
+msgid "Sorted by rating, from 7.0 up."
+msgstr "Sorteret efter vurdering, fra 7,0 og op."
+
+msgctxt "#31249"
+msgid "Kodi's favourites, as you set them."
+msgstr "Kodis favoritter, som du har oprettet dem."
+
+msgctxt "#31250"
+msgid "What is trending on TMDb this week."
+msgstr "Hvad der er populært på TMDb i denne uge."
+
+msgctxt "#31251"
+msgid "What played last, also what you watched to the end."
+msgstr "Hvad der blev afspillet sidst, også det, du så til ende."
+
+msgctxt "#31252"
+msgid "The movie sets of your library. OK opens a set."
+msgstr "Filmsættene i dit bibliotek. OK åbner et sæt."
+
+msgctxt "#31253"
+msgid "Episodes you started and did not finish."
+msgstr "Afsnit, du har startet og ikke set færdig."
+
+msgctxt "#31254"
+msgid "Free slot. OK picks a section from the catalogue."
+msgstr "Ledig plads. OK vælger en sektion fra kataloget."
+
+msgctxt "#31255"
+msgid "Large artwork with title and plot, in random order. OK or Right picks the source."
+msgstr "Store billeder med titel og resumé i tilfældig rækkefølge. OK eller Højre vælger kilden."
+
+msgctxt "#31256"
+msgid "No spotlight: the page starts with the first row."
+msgstr "Intet spotlight: siden starter med første række."
+
+msgctxt "#31257"
+msgid "How often the spotlight moves on by itself. OK or Right: 10, 15, 30, 60 s or still (then only by hand)."
+msgstr "Hvor ofte spotlightet skifter af sig selv. OK eller Højre: 10, 15, 30, 60 s eller stille (så kun manuelt)."
+
+msgctxt "#31258"
+msgid "Home and movies show the same spotlight, so they share this setting."
+msgstr "Hjem og film viser samme spotlight, så de deler denne indstilling."
+
+msgctxt "#31259"
+msgid "Show or hide entries of the main menu. System and power always stay, and so does the last page shown."
+msgstr "Vis eller skjul punkter i hovedmenuen. System og strøm bliver altid, og det samme gør den sidst viste side."
+
+msgctxt "#31260"
+msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]⏎[/COLOR] vælg   [COLOR state_text]→[/COLOR] valgmulighed"
+
+msgctxt "#31261"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] flyt   [COLOR state_text]⏎[/COLOR] slip"
+
+msgctxt "#31262"
+msgid "Spotlight, rows and main menu of the home, movies and shows pages."
+msgstr "Spotlight, rækker og hovedmenu på siderne hjem, film og serier."
+
+msgctxt "#31263"
+msgid "swap"
+msgstr "byt"
+
+msgctxt "#31264"
+msgid "Main menu"
+msgstr "Hovedmenu"
+
+msgctxt "#31265"
+msgid "Spotlight and rows of the home page."
+msgstr "Spotlight og rækker på startsiden."
+
+msgctxt "#31266"
+msgid "Spotlight and rows of the movies page."
+msgstr "Spotlight og rækker på filmsiden."
+
+msgctxt "#31267"
+msgid "Spotlight and rows of the shows page."
+msgstr "Spotlight og rækker på seriesiden."
+
+msgctxt "#31268"
+msgid "How the skin draws the focus."
+msgstr "Hvordan skinnet viser fokus."
+
+msgctxt "#31230"
+msgid "frame rate"
+msgstr "billedhastighed"
+
+msgctxt "#31330"
+msgid "back to video"
+msgstr "tilbage til video"
+
+msgctxt "#31331"
+msgid "back to home"
+msgstr "tilbage til hjem"
+
+msgctxt "#31332"
+msgid "back to movies"
+msgstr "tilbage til film"
+
+msgctxt "#31333"
+msgid "back to shows"
+msgstr "tilbage til serier"
+
+msgctxt "#31334"
+msgid "back to search"
+msgstr "tilbage til søgning"
+
+msgctxt "#31335"
+msgid "back to library"
+msgstr "tilbage til bibliotek"
+
+msgctxt "#31310"
+msgid "Home key opens the home page"
+msgstr "Hjem-tasten åbner startsiden"
+
+msgctxt "#31311"
+msgid "The Home key of the remote always leads to the home page, held down it opens the quick menu. The skin sets up the keymap 0_skin.nightcity.xml in the profile for it; your own keymaps still win."
+msgstr "Fjernbetjeningens Hjem-tast fører altid til startsiden, holdt nede åbner den hurtigmenuen. Skinnet opretter tastaturkortet 0_skin.nightcity.xml i profilen til det; dine egne tastaturkort har stadig forrang."
+
+msgctxt "#31300"
+msgid "crew"
+msgstr "crew"
+
+msgctxt "#31301"
+msgid "back to start"
+msgstr "tilbage til start"
+
+msgctxt "#31302"
+msgid "person"
+msgstr "person"
+
+msgctxt "#31303"
+msgid "born"
+msgstr "født"
+
+msgctxt "#31304"
+msgid "died"
+msgstr "død"
+
+msgctxt "#31320"
+msgid "quick menu"
+msgstr "hurtigmenu"
+
+msgctxt "#31321"
+msgid "set up weather"
+msgstr "opsæt vejr"
+
+msgctxt "#31322"
+msgid "more"
+msgstr "mere"
+
+msgctxt "#31323"
+msgid "timer"
+msgstr "timer"
+
+msgctxt "#31336"
+msgid "Remember search terms"
+msgstr "Husk søgeord"
+
+msgctxt "#31337"
+msgid "The search page lists the last five search terms. Switched off, the skin keeps no terms and forgets the ones it has."
+msgstr "Søgesiden viser de sidste fem søgeord. Slået fra gemmer skinnet ingen søgeord og glemmer dem, det har."
+
+msgctxt "#31338"
+msgid "Clear search history"
+msgstr "Ryd søgehistorik"
+
+msgctxt "#31339"
+msgid "Forgets the remembered search terms."
+msgstr "Glemmer de gemte søgeord."
+
+msgctxt "#31340"
+msgid "The colour scheme of the skin, the same choice as under Interface."
+msgstr "Skinnets farveskema, samme valg som under Brugerflade."
+
+msgctxt "#31341"
+msgid "forecast"
+msgstr "vejrudsigt"
+
+msgctxt "#31360"
+msgid "Hide the controls automatically"
+msgstr "Skjul betjeningen automatisk"
+
+msgctxt "#31361"
+msgid "While a video plays, the player controls close by themselves once no key was pressed for the time set below. While paused they stay; the time starts again when playback goes on."
+msgstr "Mens en video afspilles, lukker afspillerens betjening af sig selv, når der ikke er trykket på en tast i den tid, der er sat nedenfor. Ved pause bliver den; tiden starter forfra, når afspilningen fortsætter."
+
+msgctxt "#31362"
+msgid "Hide after"
+msgstr "Skjul efter"
+
+msgctxt "#31363"
+msgid "Time without a key press before the player controls close, 3 to 30 seconds. OK takes the slider, left and right move it, OK lets go."
+msgstr "Tid uden tastetryk, før afspillerens betjening lukker, 3 til 30 sekunder. OK tager skyderen, venstre og højre flytter den, OK slipper."
+
+msgctxt "#31364"
+msgid "The video player: its controls and what it shows while they are up."
+msgstr "Videoafspilleren: dens betjening og hvad den viser, mens den er fremme."
+
+msgctxt "#31365"
+msgid "Show the plot"
+msgstr "Vis resumé"
+
+msgctxt "#31366"
+msgid "The plot of what plays, under its title while the player controls or the seek line are up."
+msgstr "Resuméet af det, der afspilles, under titlen, mens afspillerens betjening eller søgelinjen er fremme."
+
+msgctxt "#31400"
+msgid "New albums"
+msgstr "Nye albummer"
+
+msgctxt "#31401"
+msgid "Recently played"
+msgstr "Senest afspillet"
+
+msgctxt "#31402"
+msgid "Random albums"
+msgstr "Tilfældige albummer"
+
+msgctxt "#31403"
+msgid "Artists"
+msgstr "Kunstnere"
+
+msgctxt "#31404"
+msgid "Genres"
+msgstr "Genrer"
+
+msgctxt "#31405"
+msgid "music"
+msgstr "musik"
+
+msgctxt "#31406"
+msgid "now playing"
+msgstr "afspiller nu"
+
+msgctxt "#31407"
+msgid "albums"
+msgstr "albummer"
+
+msgctxt "#31408"
+msgid "more by"
+msgstr "mere af"
+
+msgctxt "#31409"
+msgid "tracks"
+msgstr "numre"
+
+msgctxt "#31410"
+msgid "up next"
+msgstr "næste"
+
+msgctxt "#31411"
+msgid "shuffle"
+msgstr "bland"
+
+msgctxt "#31412"
+msgid "repeat"
+msgstr "gentag"
+
+msgctxt "#31413"
+msgid "repeat all"
+msgstr "gentag alle"
+
+msgctxt "#31414"
+msgid "repeat one"
+msgstr "gentag én"
+
+msgctxt "#31420"
+msgid "Network, Bluetooth, updates"
+msgstr "Netværk, Bluetooth, opdateringer"
+
+msgctxt "#31440"
+msgid "audience"
+msgstr "publikum"
+
+msgctxt "#31441"
+msgid "Ratings only from TMDb Helper"
+msgstr "Kun vurderinger fra TMDb Helper"
+
+msgctxt "#31442"
+msgid "Show only the ratings TMDb Helper fetched for exactly this title. Off: the library's own rating (from Jellyfin) fills in while TMDb Helper has none."
+msgstr "Vis kun de vurderinger, TMDb Helper har hentet for præcis denne titel. Fra: bibliotekets egen vurdering (fra Jellyfin) træder til, så længe TMDb Helper ingen har."
+
+msgctxt "#31443"
+msgid "Ratings only on title pages"
+msgstr "Kun vurderinger på titelsider"
+
+msgctxt "#31444"
+msgid "Spotlight and rows show no ratings, which saves requests to TMDb. A title's page still shows them."
+msgstr "Spotlight og rækker viser ingen vurderinger, hvilket sparer forespørgsler til TMDb. En titels side viser dem stadig."
+
+msgctxt "#31445"
+msgid "Ratings"
+msgstr "Vurderinger"
+
+msgctxt "#31446"
+msgid "Sources"
+msgstr "Kilder"
+
+msgctxt "#31447"
+msgid "Which ratings the ratings line of the spotlight and the info page shows, and where they come from."
+msgstr "Hvilke vurderinger vurderingslinjen i spotlightet og på infosiden viser, og hvor de kommer fra."
+
+msgctxt "#31450"
+msgid "IMDb"
+msgstr "IMDb"
+
+msgctxt "#31451"
+msgid "TMDb"
+msgstr "TMDb"
+
+msgctxt "#31452"
+msgid "Rotten Tomatoes critics"
+msgstr "Rotten Tomatoes kritikere"
+
+msgctxt "#31453"
+msgid "Rotten Tomatoes audience"
+msgstr "Rotten Tomatoes publikum"
+
+msgctxt "#31454"
+msgid "Metacritic"
+msgstr "Metacritic"
+
+msgctxt "#31455"
+msgid "Trakt"
+msgstr "Trakt"
+
+msgctxt "#31456"
+msgid "Letterboxd"
+msgstr "Letterboxd"
+
+msgctxt "#31457"
+msgid "MDbList"
+msgstr "MDbList"
+
+msgctxt "#31460"
+msgid "IMDb users, 0 to 10, with the Top 250 rank. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "IMDb-brugere, 0 til 10, med Top 250-placering. Kræver en OMDb- eller MDbList-nøgle i TMDb Helper."
+
+msgctxt "#31461"
+msgid "TMDb users, 0 to 10. Needs no key."
+msgstr "TMDb-brugere, 0 til 10. Kræver ingen nøgle."
+
+msgctxt "#31462"
+msgid "Tomatometer: the share of positive critic reviews. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Tomatometer: andelen af positive anmeldelser fra kritikere. Kræver en OMDb- eller MDbList-nøgle i TMDb Helper."
+
+msgctxt "#31463"
+msgid "Popcornmeter: the share of positive audience ratings. Needs an MDbList or OMDb key in TMDb Helper."
+msgstr "Popcornmeter: andelen af positive publikumsvurderinger. Kræver en MDbList- eller OMDb-nøgle i TMDb Helper."
+
+msgctxt "#31464"
+msgid "A weighted average of critic reviews, 0 to 100, mostly for theatrical films and big series. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Et vægtet gennemsnit af anmeldelser, 0 til 100, mest for biograffilm og store serier. Kræver en OMDb- eller MDbList-nøgle i TMDb Helper."
+
+msgctxt "#31465"
+msgid "Trakt users, 0 to 10. Needs a connected Trakt account in TMDb Helper: fetched from Trakt, not MDbList."
+msgstr "Trakt-brugere, 0 til 10. Kræver en tilknyttet Trakt-konto i TMDb Helper: hentet fra Trakt, ikke MDbList."
+
+msgctxt "#31466"
+msgid "Letterboxd users, 0 to 5, mostly films. Needs an MDbList key in TMDb Helper."
+msgstr "Letterboxd-brugere, 0 til 5, mest film. Kræver en MDbList-nøgle i TMDb Helper."
+
+msgctxt "#31467"
+msgid "MDbList score: an average of the other sources, 0 to 100. Needs an MDbList key in TMDb Helper."
+msgstr "MDbList-score: et gennemsnit af de andre kilder, 0 til 100. Kræver en MDbList-nøgle i TMDb Helper."
+
+msgctxt "#31469"
+msgid "No description"
+msgstr "Ingen beskrivelse"
+
+msgctxt "#31470"
+msgid "back"
+msgstr "tilbage"
+
+msgctxt "#31471"
+msgid "budget"
+msgstr "budget"
+
+msgctxt "#31472"
+msgid "box office"
+msgstr "indtjening"
+
+msgctxt "#31473"
+msgid "description"
+msgstr "resumé"
+
+msgctxt "#31474"
+msgid "biography"
+msgstr "biografi"
+
+msgctxt "#31478"
+msgid "controls"
+msgstr "betjening"
+
+msgctxt "#31479"
+msgid "previous page"
+msgstr "forrige side"
+
+msgctxt "#31480"
+msgid "parent folder"
+msgstr "overordnet mappe"
+
+msgctxt "#31477"
+msgid "Home"
+msgstr "Hjem"
+
+msgctxt "#31500"
+msgid "view"
+msgstr "visning"
+
+msgctxt "#31501"
+msgid "list"
+msgstr "liste"
+
+msgctxt "#31502"
+msgid "filter"
+msgstr "filter"
+
+msgctxt "#31503"
+msgid "all"
+msgstr "alle"
+
+msgctxt "#31504"
+msgid "resolution"
+msgstr "opløsning"
+
+msgctxt "#31505"
+msgid "dynamic range"
+msgstr "dynamikområde"
+
+msgctxt "#31506"
+msgid "audio format"
+msgstr "lydformat"
+
+msgctxt "#31507"
+msgid "audio channels"
+msgstr "lydkanaler"
+
+msgctxt "#31508"
+msgid "clear filter"
+msgstr "ryd filter"
+
+msgctxt "#31600"
+msgid "runtime"
+msgstr "spilletid"
+
+msgctxt "#31601"
+msgid "genre"
+msgstr "genre"
+
+msgctxt "#31602"
+msgid "details"
+msgstr "detaljer"
+
+msgctxt "#31603"
+msgid "seasons"
+msgstr "sæsoner"
+
+msgctxt "#31604"
+msgid "season"
+msgstr "sæson"
+
+msgctxt "#31605"
+msgid "seasons"
+msgstr "sæsoner"
+
+msgctxt "#31606"
+msgid "episodes"
+msgstr "afsnit"
+
+msgctxt "#31607"
+msgid "none"
+msgstr "ingen"
+
+msgctxt "#31700"
+msgid "On Deck"
+msgstr "On Deck"
+
+msgctxt "#31701"
+msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
+msgstr "Det, du har startet, og derefter de serier, du følger. OK på en serie åbner næste afsnit."
+
+msgctxt "#31750"
+msgid "No trailer found"
+msgstr "Ingen trailer fundet"

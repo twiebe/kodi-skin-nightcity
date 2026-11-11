@@ -1,0 +1,1196 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: id_id\n"
+
+msgctxt "#31002"
+msgid "Spotlight source"
+msgstr "Sumber sorotan"
+
+msgctxt "#31003"
+msgid "All movies"
+msgstr "Semua film"
+
+msgctxt "#31004"
+msgid "Unwatched movies"
+msgstr "Film belum ditonton"
+
+msgctxt "#31005"
+msgid "Effects"
+msgstr "Efek"
+
+msgctxt "#31006"
+msgid "home"
+msgstr "beranda"
+
+msgctxt "#31010"
+msgid "play"
+msgstr "putar"
+
+msgctxt "#31011"
+msgid "info"
+msgstr "info"
+
+msgctxt "#31012"
+msgid "min"
+msgstr "mnt"
+
+msgctxt "#31020"
+msgid "on deck"
+msgstr "berikutnya"
+
+msgctxt "#31021"
+msgid "new movies"
+msgstr "film baru"
+
+msgctxt "#31022"
+msgid "new episodes"
+msgstr "episode baru"
+
+msgctxt "#31023"
+msgid "continue watching"
+msgstr "lanjut menonton"
+
+msgctxt "#31030"
+msgid "movies"
+msgstr "film"
+
+msgctxt "#31031"
+msgid "shows"
+msgstr "acara TV"
+
+msgctxt "#31032"
+msgid "search"
+msgstr "cari"
+
+msgctxt "#31033"
+msgid "System"
+msgstr "Sistem"
+
+msgctxt "#31041"
+msgid "trailer"
+msgstr "trailer"
+
+msgctxt "#31042"
+msgid "posters"
+msgstr "poster"
+
+msgctxt "#31043"
+msgid "resume"
+msgstr "lanjutkan"
+
+msgctxt "#31050"
+msgid "ends"
+msgstr "selesai"
+
+msgctxt "#31051"
+msgid "pause"
+msgstr "jeda"
+
+msgctxt "#31052"
+msgid "stop"
+msgstr "stop"
+
+msgctxt "#31053"
+msgid "subtitles"
+msgstr "subtitel"
+
+msgctxt "#31054"
+msgid "audio"
+msgstr "audio"
+
+msgctxt "#31055"
+msgid "video"
+msgstr "video"
+
+msgctxt "#31056"
+msgid "bookmarks"
+msgstr "penanda"
+
+msgctxt "#31057"
+msgid "buffering"
+msgstr "menyangga"
+
+msgctxt "#31058"
+msgid "video already has subtitles"
+msgstr "video sudah punya subtitel"
+
+msgctxt "#31080"
+msgid "quit kodi"
+msgstr "keluar dari Kodi"
+
+msgctxt "#31081"
+msgid "power off"
+msgstr "matikan"
+
+msgctxt "#31082"
+msgid "reboot"
+msgstr "mulai ulang"
+
+msgctxt "#31083"
+msgid "suspend"
+msgstr "tangguhkan"
+
+msgctxt "#31084"
+msgid "hibernate"
+msgstr "hibernasi"
+
+msgctxt "#31085"
+msgid "shutdown timer"
+msgstr "pewaktu mati"
+
+msgctxt "#31086"
+msgid "cancel shutdown timer"
+msgstr "batalkan pewaktu mati"
+
+msgctxt "#31087"
+msgid "log off"
+msgstr "keluar profil"
+
+msgctxt "#31088"
+msgid "reload skin"
+msgstr "muat ulang skin"
+
+msgctxt "#31089"
+msgid "power"
+msgstr "daya"
+
+msgctxt "#31090"
+msgid "Hide foreign"
+msgstr "Sembunyikan asing"
+
+msgctxt "#31091"
+msgid "Hide broken"
+msgstr "Sembunyikan rusak"
+
+msgctxt "#31094"
+msgid "thumbs"
+msgstr "miniatur"
+
+msgctxt "#31095"
+msgid "mute"
+msgstr "bisu"
+
+msgctxt "#31096"
+msgid "descending"
+msgstr "menurun"
+
+msgctxt "#31100"
+msgid "spotlight"
+msgstr "sorotan"
+
+msgctxt "#31101"
+msgid "all movies"
+msgstr "semua film"
+
+msgctxt "#31102"
+msgid "all shows"
+msgstr "semua acara TV"
+
+msgctxt "#31103"
+msgid "in progress"
+msgstr "sedang ditonton"
+
+msgctxt "#31104"
+msgid "unwatched"
+msgstr "belum ditonton"
+
+msgctxt "#31105"
+msgid "genres"
+msgstr "genre"
+
+msgctxt "#31106"
+msgid "episodes"
+msgstr "episode"
+
+msgctxt "#31116"
+msgid "sort"
+msgstr "urutan"
+
+msgctxt "#31117"
+msgid "descending"
+msgstr "menurun"
+
+msgctxt "#31118"
+msgid "title"
+msgstr "judul"
+
+msgctxt "#31119"
+msgid "year"
+msgstr "tahun"
+
+msgctxt "#31120"
+msgid "added"
+msgstr "ditambahkan"
+
+msgctxt "#31121"
+msgid "rating"
+msgstr "rating"
+
+msgctxt "#31122"
+msgid "ascending"
+msgstr "menaik"
+
+msgctxt "#31123"
+msgid "from start"
+msgstr "dari awal"
+
+msgctxt "#31124"
+msgid "cast"
+msgstr "pemeran"
+
+msgctxt "#31125"
+msgid "details"
+msgstr "detail"
+
+msgctxt "#31126"
+msgid "director"
+msgstr "sutradara"
+
+msgctxt "#31127"
+msgid "writer"
+msgstr "penulis"
+
+msgctxt "#31128"
+msgid "studio"
+msgstr "studio"
+
+msgctxt "#31129"
+msgid "country"
+msgstr "negara"
+
+msgctxt "#31130"
+msgid "similar"
+msgstr "serupa"
+
+msgctxt "#31131"
+msgid "season"
+msgstr "musim"
+
+msgctxt "#31132"
+msgid "episode"
+msgstr "episode"
+
+msgctxt "#31133"
+msgid "all"
+msgstr "semua"
+
+msgctxt "#31134"
+msgid "specials"
+msgstr "spesial"
+
+msgctxt "#31135"
+msgid "select"
+msgstr "pilih"
+
+msgctxt "#31136"
+msgid "age rating"
+msgstr "rating usia"
+
+msgctxt "#31059"
+msgid "ends at"
+msgstr "selesai pukul"
+
+msgctxt "#31137"
+msgid "next episode"
+msgstr "episode berikutnya"
+
+msgctxt "#31138"
+msgid "off"
+msgstr "mati"
+
+msgctxt "#31139"
+msgid "all settings"
+msgstr "semua pengaturan"
+
+msgctxt "#31140"
+msgid "chapters"
+msgstr "bab"
+
+msgctxt "#31141"
+msgid "search for a title"
+msgstr "cari judul"
+
+msgctxt "#31142"
+msgid "actions"
+msgstr "tindakan"
+
+msgctxt "#31143"
+msgid "power off"
+msgstr "matikan"
+
+msgctxt "#31144"
+msgid "reboot"
+msgstr "mulai ulang"
+
+msgctxt "#31145"
+msgid "suspend"
+msgstr "tangguhkan"
+
+msgctxt "#31146"
+msgid "exit kodi"
+msgstr "keluar dari Kodi"
+
+msgctxt "#31147"
+msgid "restart kodi"
+msgstr "mulai ulang Kodi"
+
+msgctxt "#31148"
+msgid "movies (library)"
+msgstr "film (pustaka)"
+
+msgctxt "#31149"
+msgid "shows (library)"
+msgstr "acara TV (pustaka)"
+
+msgctxt "#31150"
+msgid "episodes (library)"
+msgstr "episode (pustaka)"
+
+msgctxt "#31151"
+msgid "online: movies (tmdb)"
+msgstr "online: film (TMDb)"
+
+msgctxt "#31152"
+msgid "online: shows (tmdb)"
+msgstr "online: acara TV (TMDb)"
+
+msgctxt "#31153"
+msgid "recent"
+msgstr "terbaru"
+
+msgctxt "#31154"
+msgid "not available on this device"
+msgstr "tidak tersedia di perangkat ini"
+
+msgctxt "#31155"
+msgid "stats"
+msgstr "statistik"
+
+msgctxt "#31157"
+msgid "booting"
+msgstr "memulai"
+
+msgctxt "#31158"
+msgid "online"
+msgstr "online"
+
+msgctxt "#31159"
+msgid "Playback & media"
+msgstr "Pemutaran & media"
+
+msgctxt "#31160"
+msgid "Look & profiles"
+msgstr "Tampilan & profil"
+
+msgctxt "#31161"
+msgid "Add-ons & content"
+msgstr "Pengaya & konten"
+
+msgctxt "#31162"
+msgid "System & network"
+msgstr "Sistem & jaringan"
+
+msgctxt "#31163"
+msgid "Tools"
+msgstr "Alat"
+
+msgctxt "#31164"
+msgid "How videos, music and pictures play: decoding, refresh rate, discs, audio and subtitle language, subtitles."
+msgstr "Cara video, musik, dan gambar diputar: dekode, refresh rate, disk, bahasa audio dan subtitel, subtitel."
+
+msgctxt "#31165"
+msgid "How the library collects and shows your media: scanning, file lists, videos, music, pictures."
+msgstr "Cara pustaka mengumpulkan dan menampilkan media Anda: pemindaian, daftar file, video, musik, gambar."
+
+msgctxt "#31166"
+msgid "Live TV and recordings from your PVR client: channels, guide, recording, reminders."
+msgstr "TV langsung dan rekaman dari klien PVR Anda: saluran, panduan, perekaman, pengingat."
+
+msgctxt "#31167"
+msgid "How Kodi looks and starts: skin, language and region, screensaver, master lock, startup."
+msgstr "Tampilan dan awal mula Kodi: skin, bahasa dan wilayah, screensaver, kunci utama, startup."
+
+msgctxt "#31168"
+msgid "The options of this skin: the home pages and the look."
+msgstr "Opsi skin ini: halaman beranda dan tampilannya."
+
+msgctxt "#31169"
+msgid "Users with their own library, settings and add-ons, and the login screen."
+msgstr "Pengguna dengan pustaka, pengaturan, dan pengaya sendiri, serta layar masuk."
+
+msgctxt "#31170"
+msgid "Installed add-ons, repositories, install from a zip file, search and updates."
+msgstr "Pengaya terpasang, repositori, pasang dari file zip, pencarian dan pembaruan."
+
+msgctxt "#31171"
+msgid "Browse sources and folders, copy, move and delete files."
+msgstr "Jelajahi sumber dan folder, salin, pindahkan, dan hapus file."
+
+msgctxt "#31172"
+msgid "The device: display, audio output, input, internet access, power saving, add-on rules, logging."
+msgstr "Perangkat: layar, output audio, input, akses internet, hemat daya, aturan pengaya, log."
+
+msgctxt "#31173"
+msgid "What Kodi offers on the network and uses from it: remote control, UPnP, AirPlay, SMB, NFS, caching, weather."
+msgstr "Apa yang Kodi tawarkan di jaringan dan gunakan darinya: kendali jarak jauh, UPnP, AirPlay, SMB, NFS, cache, cuaca."
+
+msgctxt "#31174"
+msgid "Facts about this device: Kodi version, storage, network, video, hardware."
+msgstr "Fakta tentang perangkat ini: versi Kodi, penyimpanan, jaringan, video, perangkat keras."
+
+msgctxt "#31175"
+msgid "What happened lately: add-on installs and updates, library scans, errors."
+msgstr "Apa yang terjadi belakangan ini: pemasangan dan pembaruan pengaya, pemindaian pustaka, galat."
+
+msgctxt "#31176"
+msgid "Categories"
+msgstr "Kategori"
+
+msgctxt "#31178"
+msgid "[COLOR state_text]⏎[/COLOR] open"
+msgstr "[COLOR state_text]⏎[/COLOR] buka"
+
+msgctxt "#31181"
+msgid "refresh rate, decoding, resume"
+msgstr "refresh rate, dekode, lanjutkan"
+
+msgctxt "#31182"
+msgid "crossfade, visualisation, volume adjustment"
+msgstr "crossfade, visualisasi, penyesuaian volume"
+
+msgctxt "#31183"
+msgid "DVD, Blu-ray, audio CD"
+msgstr "DVD, Blu-ray, CD audio"
+
+msgctxt "#31184"
+msgid "slideshow, transitions"
+msgstr "tayangan slide, transisi"
+
+msgctxt "#31185"
+msgid "audio, subtitles and menus"
+msgstr "audio, subtitel, dan menu"
+
+msgctxt "#31186"
+msgid "font, size, download services"
+msgstr "font, ukuran, layanan unduhan"
+
+msgctxt "#31187"
+msgid "scan on startup, update, clean up"
+msgstr "pindai saat mulai, perbarui, bersihkan"
+
+msgctxt "#31188"
+msgid "file extensions, hidden files, sorting"
+msgstr "ekstensi file, file tersembunyi, urutan"
+
+msgctxt "#31189"
+msgid "select action, plots, thumbnails"
+msgstr "tindakan pilih, plot, gambar kecil"
+
+msgctxt "#31190"
+msgid "artists, album covers, tags"
+msgstr "artis, sampul album, tag"
+
+msgctxt "#31191"
+msgid "thumbnails, EXIF"
+msgstr "gambar kecil, EXIF"
+
+msgctxt "#31192"
+msgid "channel groups, channel icons"
+msgstr "grup saluran, ikon saluran"
+
+msgctxt "#31193"
+msgid "channel info, switching"
+msgstr "info saluran, perpindahan"
+
+msgctxt "#31194"
+msgid "days shown, updates"
+msgstr "hari yang ditampilkan, pembaruan"
+
+msgctxt "#31195"
+msgid "start, channel switch delay"
+msgstr "mulai, jeda pindah saluran"
+
+msgctxt "#31196"
+msgid "margins, folders"
+msgstr "margin, folder"
+
+msgctxt "#31197"
+msgid "reminder before a show"
+msgstr "pengingat sebelum acara"
+
+msgctxt "#31198"
+msgid "wake up for recordings"
+msgstr "bangun untuk rekaman"
+
+msgctxt "#31199"
+msgid "lock by age, PIN"
+msgstr "kunci berdasarkan usia, PIN"
+
+msgctxt "#31200"
+msgid "PVR client add-ons"
+msgstr "pengaya klien PVR"
+
+msgctxt "#31201"
+msgid "skin, theme, colours, fonts"
+msgstr "skin, tema, warna, font"
+
+msgctxt "#31202"
+msgid "language, region, time, keyboard"
+msgstr "bahasa, wilayah, waktu, keyboard"
+
+msgctxt "#31203"
+msgid "mode, wait time"
+msgstr "mode, waktu tunggu"
+
+msgctxt "#31204"
+msgid "lock code, protected areas"
+msgstr "kode kunci, area terlindungi"
+
+msgctxt "#31205"
+msgid "start window, splash screen"
+msgstr "jendela awal, layar pembuka"
+
+msgctxt "#31206"
+msgid "resolution, refresh rate, calibration"
+msgstr "resolusi, refresh rate, kalibrasi"
+
+msgctxt "#31207"
+msgid "output device, channels, passthrough"
+msgstr "perangkat output, saluran, passthrough"
+
+msgctxt "#31208"
+msgid "devices, mouse, remote"
+msgstr "perangkat, mouse, remote"
+
+msgctxt "#31209"
+msgid "proxy"
+msgstr "proxy"
+
+msgctxt "#31210"
+msgid "shutdown, display off"
+msgstr "matikan, layar mati"
+
+msgctxt "#31211"
+msgid "updates, unknown sources"
+msgstr "pembaruan, sumber tidak dikenal"
+
+msgctxt "#31212"
+msgid "debug log, components"
+msgstr "log debug, komponen"
+
+msgctxt "#31213"
+msgid "device name, Zeroconf"
+msgstr "nama perangkat, Zeroconf"
+
+msgctxt "#31214"
+msgid "web server, remote apps"
+msgstr "server web, aplikasi remote"
+
+msgctxt "#31215"
+msgid "share library, renderer"
+msgstr "bagikan pustaka, renderer"
+
+msgctxt "#31216"
+msgid "receive AirPlay"
+msgstr "terima AirPlay"
+
+msgctxt "#31217"
+msgid "Windows shares, WINS"
+msgstr "berbagi Windows, WINS"
+
+msgctxt "#31218"
+msgid "NFS shares"
+msgstr "berbagi NFS"
+
+msgctxt "#31219"
+msgid "buffer, read rate"
+msgstr "buffer, kecepatan baca"
+
+msgctxt "#31220"
+msgid "weather service"
+msgstr "layanan cuaca"
+
+msgctxt "#31221"
+msgid "Spotlight change"
+msgstr "Pergantian sorotan"
+
+msgctxt "#31222"
+msgid "Home pages"
+msgstr "Halaman beranda"
+
+msgctxt "#31224"
+msgid "Rows"
+msgstr "Baris"
+
+msgctxt "#31225"
+msgid "Spotlight"
+msgstr "Sorotan"
+
+msgctxt "#31226"
+msgid "Still"
+msgstr "Diam"
+
+msgctxt "#31227"
+msgid "All shows"
+msgstr "Semua acara TV"
+
+msgctxt "#31228"
+msgid "Unwatched shows"
+msgstr "Acara TV belum ditonton"
+
+msgctxt "#31229"
+msgid "Slot"
+msgstr "Slot"
+
+msgctxt "#31231"
+msgid "Section for slot"
+msgstr "Bagian untuk slot"
+
+msgctxt "#31232"
+msgid "menu"
+msgstr "menu"
+
+msgctxt "#31233"
+msgid "Continue watching"
+msgstr "Lanjut menonton"
+
+msgctxt "#31234"
+msgid "Next up"
+msgstr "Berikutnya"
+
+msgctxt "#31235"
+msgid "New movies"
+msgstr "Film baru"
+
+msgctxt "#31236"
+msgid "New episodes"
+msgstr "Episode baru"
+
+msgctxt "#31237"
+msgid "Random movies"
+msgstr "Film acak"
+
+msgctxt "#31238"
+msgid "Top rated"
+msgstr "Rating tertinggi"
+
+msgctxt "#31239"
+msgid "TMDb trending"
+msgstr "Tren TMDb"
+
+msgctxt "#31240"
+msgid "Recently watched"
+msgstr "Baru ditonton"
+
+msgctxt "#31241"
+msgid "Started movies and episodes, the last watched first."
+msgstr "Film dan episode yang sudah dimulai, yang terakhir ditonton lebih dulu."
+
+msgctxt "#31242"
+msgid "The shows you are watching. OK opens the next episode."
+msgstr "Acara TV yang sedang Anda tonton. OK membuka episode berikutnya."
+
+msgctxt "#31243"
+msgid "The movies added to the library last."
+msgstr "Film yang terakhir ditambahkan ke pustaka."
+
+msgctxt "#31244"
+msgid "The shows with the episodes added last."
+msgstr "Acara TV dengan episode yang terakhir ditambahkan."
+
+msgctxt "#31245"
+msgid "Tabs for the three biggest genres and a picker for all others."
+msgstr "Tab untuk tiga genre terbesar dan pemilih untuk semua lainnya."
+
+msgctxt "#31246"
+msgid "A new choice from the whole library every time Home opens."
+msgstr "Pilihan baru dari seluruh pustaka setiap kali Beranda dibuka."
+
+msgctxt "#31248"
+msgid "Sorted by rating, from 7.0 up."
+msgstr "Diurutkan menurut rating, mulai 7,0."
+
+msgctxt "#31249"
+msgid "Kodi's favourites, as you set them."
+msgstr "Favorit Kodi, sesuai yang Anda atur."
+
+msgctxt "#31250"
+msgid "What is trending on TMDb this week."
+msgstr "Yang sedang tren di TMDb minggu ini."
+
+msgctxt "#31251"
+msgid "What played last, also what you watched to the end."
+msgstr "Yang terakhir diputar, termasuk yang Anda tonton sampai habis."
+
+msgctxt "#31252"
+msgid "The movie sets of your library. OK opens a set."
+msgstr "Set film di pustaka Anda. OK membuka sebuah set."
+
+msgctxt "#31253"
+msgid "Episodes you started and did not finish."
+msgstr "Episode yang Anda mulai dan belum selesai."
+
+msgctxt "#31254"
+msgid "Free slot. OK picks a section from the catalogue."
+msgstr "Slot kosong. OK memilih bagian dari katalog."
+
+msgctxt "#31255"
+msgid "Large artwork with title and plot, in random order. OK or Right picks the source."
+msgstr "Gambar besar dengan judul dan plot, dalam urutan acak. OK atau Kanan memilih sumber."
+
+msgctxt "#31256"
+msgid "No spotlight: the page starts with the first row."
+msgstr "Tanpa sorotan: halaman dimulai dengan baris pertama."
+
+msgctxt "#31257"
+msgid "How often the spotlight moves on by itself. OK or Right: 10, 15, 30, 60 s or still (then only by hand)."
+msgstr "Seberapa sering sorotan berganti sendiri. OK atau Kanan: 10, 15, 30, 60 dtk atau diam (lalu hanya secara manual)."
+
+msgctxt "#31258"
+msgid "Home and movies show the same spotlight, so they share this setting."
+msgstr "Beranda dan film menampilkan sorotan yang sama, jadi keduanya berbagi pengaturan ini."
+
+msgctxt "#31259"
+msgid "Show or hide entries of the main menu. System and power always stay, and so does the last page shown."
+msgstr "Tampilkan atau sembunyikan entri menu utama. Sistem dan daya selalu ada, begitu juga halaman terakhir yang ditampilkan."
+
+msgctxt "#31260"
+msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]⏎[/COLOR] pilih   [COLOR state_text]→[/COLOR] opsi"
+
+msgctxt "#31261"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] pindah   [COLOR state_text]⏎[/COLOR] taruh"
+
+msgctxt "#31262"
+msgid "Spotlight, rows and main menu of the home, movies and shows pages."
+msgstr "Sorotan, baris, dan menu utama halaman beranda, film, dan acara TV."
+
+msgctxt "#31263"
+msgid "swap"
+msgstr "tukar"
+
+msgctxt "#31264"
+msgid "Main menu"
+msgstr "Menu utama"
+
+msgctxt "#31265"
+msgid "Spotlight and rows of the home page."
+msgstr "Sorotan dan baris halaman beranda."
+
+msgctxt "#31266"
+msgid "Spotlight and rows of the movies page."
+msgstr "Sorotan dan baris halaman film."
+
+msgctxt "#31267"
+msgid "Spotlight and rows of the shows page."
+msgstr "Sorotan dan baris halaman acara TV."
+
+msgctxt "#31268"
+msgid "How the skin draws the focus."
+msgstr "Cara skin menampilkan fokus."
+
+msgctxt "#31230"
+msgid "frame rate"
+msgstr "frame rate"
+
+msgctxt "#31330"
+msgid "back to video"
+msgstr "kembali ke video"
+
+msgctxt "#31331"
+msgid "back to home"
+msgstr "kembali ke beranda"
+
+msgctxt "#31332"
+msgid "back to movies"
+msgstr "kembali ke film"
+
+msgctxt "#31333"
+msgid "back to shows"
+msgstr "kembali ke acara TV"
+
+msgctxt "#31334"
+msgid "back to search"
+msgstr "kembali ke pencarian"
+
+msgctxt "#31335"
+msgid "back to library"
+msgstr "kembali ke pustaka"
+
+msgctxt "#31310"
+msgid "Home key opens the home page"
+msgstr "Tombol Home membuka beranda"
+
+msgctxt "#31311"
+msgid "The Home key of the remote always leads to the home page, held down it opens the quick menu. The skin sets up the keymap 0_skin.nightcity.xml in the profile for it; your own keymaps still win."
+msgstr "Tombol Home pada remote selalu menuju beranda, jika ditahan membuka menu cepat. Untuk itu skin membuat keymap 0_skin.nightcity.xml di profil; keymap Anda sendiri tetap diutamakan."
+
+msgctxt "#31300"
+msgid "crew"
+msgstr "kru"
+
+msgctxt "#31301"
+msgid "back to start"
+msgstr "kembali ke awal"
+
+msgctxt "#31302"
+msgid "person"
+msgstr "orang"
+
+msgctxt "#31303"
+msgid "born"
+msgstr "lahir"
+
+msgctxt "#31304"
+msgid "died"
+msgstr "wafat"
+
+msgctxt "#31320"
+msgid "quick menu"
+msgstr "menu cepat"
+
+msgctxt "#31321"
+msgid "set up weather"
+msgstr "atur cuaca"
+
+msgctxt "#31322"
+msgid "more"
+msgstr "lainnya"
+
+msgctxt "#31323"
+msgid "timer"
+msgstr "pewaktu"
+
+msgctxt "#31336"
+msgid "Remember search terms"
+msgstr "Ingat kata pencarian"
+
+msgctxt "#31337"
+msgid "The search page lists the last five search terms. Switched off, the skin keeps no terms and forgets the ones it has."
+msgstr "Halaman pencarian menampilkan lima kata pencarian terakhir. Jika dimatikan, skin tidak menyimpan kata dan melupakan yang sudah ada."
+
+msgctxt "#31338"
+msgid "Clear search history"
+msgstr "Hapus riwayat pencarian"
+
+msgctxt "#31339"
+msgid "Forgets the remembered search terms."
+msgstr "Melupakan kata pencarian yang diingat."
+
+msgctxt "#31340"
+msgid "The colour scheme of the skin, the same choice as under Interface."
+msgstr "Skema warna skin, pilihan yang sama seperti di Antarmuka."
+
+msgctxt "#31341"
+msgid "forecast"
+msgstr "prakiraan"
+
+msgctxt "#31360"
+msgid "Hide the controls automatically"
+msgstr "Sembunyikan kontrol otomatis"
+
+msgctxt "#31361"
+msgid "While a video plays, the player controls close by themselves once no key was pressed for the time set below. While paused they stay; the time starts again when playback goes on."
+msgstr "Saat video diputar, kontrol pemutar menutup sendiri jika tidak ada tombol ditekan selama waktu yang diatur di bawah. Saat dijeda kontrol tetap ada; waktu dimulai lagi saat pemutaran berlanjut."
+
+msgctxt "#31362"
+msgid "Hide after"
+msgstr "Sembunyikan setelah"
+
+msgctxt "#31363"
+msgid "Time without a key press before the player controls close, 3 to 30 seconds. OK takes the slider, left and right move it, OK lets go."
+msgstr "Waktu tanpa tekan tombol sebelum kontrol pemutar menutup, 3 hingga 30 detik. OK memegang slider, kiri dan kanan menggesernya, OK melepasnya."
+
+msgctxt "#31364"
+msgid "The video player: its controls and what it shows while they are up."
+msgstr "Pemutar video: kontrolnya dan apa yang ditampilkan saat kontrol terbuka."
+
+msgctxt "#31365"
+msgid "Show the plot"
+msgstr "Tampilkan plot"
+
+msgctxt "#31366"
+msgid "The plot of what plays, under its title while the player controls or the seek line are up."
+msgstr "Plot dari yang diputar, di bawah judulnya saat kontrol pemutar atau garis pencarian terbuka."
+
+msgctxt "#31400"
+msgid "New albums"
+msgstr "Album baru"
+
+msgctxt "#31401"
+msgid "Recently played"
+msgstr "Baru diputar"
+
+msgctxt "#31402"
+msgid "Random albums"
+msgstr "Album acak"
+
+msgctxt "#31403"
+msgid "Artists"
+msgstr "Artis"
+
+msgctxt "#31404"
+msgid "Genres"
+msgstr "Genre"
+
+msgctxt "#31405"
+msgid "music"
+msgstr "musik"
+
+msgctxt "#31406"
+msgid "now playing"
+msgstr "sedang diputar"
+
+msgctxt "#31407"
+msgid "albums"
+msgstr "album"
+
+msgctxt "#31408"
+msgid "more by"
+msgstr "lainnya dari"
+
+msgctxt "#31409"
+msgid "tracks"
+msgstr "trek"
+
+msgctxt "#31410"
+msgid "up next"
+msgstr "berikutnya"
+
+msgctxt "#31411"
+msgid "shuffle"
+msgstr "acak"
+
+msgctxt "#31412"
+msgid "repeat"
+msgstr "ulangi"
+
+msgctxt "#31413"
+msgid "repeat all"
+msgstr "ulangi semua"
+
+msgctxt "#31414"
+msgid "repeat one"
+msgstr "ulangi satu"
+
+msgctxt "#31420"
+msgid "Network, Bluetooth, updates"
+msgstr "Jaringan, Bluetooth, pembaruan"
+
+msgctxt "#31440"
+msgid "audience"
+msgstr "penonton"
+
+msgctxt "#31441"
+msgid "Ratings only from TMDb Helper"
+msgstr "Rating hanya dari TMDb Helper"
+
+msgctxt "#31442"
+msgid "Show only the ratings TMDb Helper fetched for exactly this title. Off: the library's own rating (from Jellyfin) fills in while TMDb Helper has none."
+msgstr "Tampilkan hanya rating yang diambil TMDb Helper untuk judul ini secara tepat. Mati: rating pustaka sendiri (dari Jellyfin) mengisi selama TMDb Helper belum punya."
+
+msgctxt "#31443"
+msgid "Ratings only on title pages"
+msgstr "Rating hanya di halaman judul"
+
+msgctxt "#31444"
+msgid "Spotlight and rows show no ratings, which saves requests to TMDb. A title's page still shows them."
+msgstr "Sorotan dan baris tidak menampilkan rating, sehingga menghemat permintaan ke TMDb. Halaman judul tetap menampilkannya."
+
+msgctxt "#31445"
+msgid "Ratings"
+msgstr "Rating"
+
+msgctxt "#31446"
+msgid "Sources"
+msgstr "Sumber"
+
+msgctxt "#31447"
+msgid "Which ratings the ratings line of the spotlight and the info page shows, and where they come from."
+msgstr "Rating apa yang ditampilkan baris rating sorotan dan halaman info, dan dari mana asalnya."
+
+msgctxt "#31450"
+msgid "IMDb"
+msgstr "IMDb"
+
+msgctxt "#31451"
+msgid "TMDb"
+msgstr "TMDb"
+
+msgctxt "#31452"
+msgid "Rotten Tomatoes critics"
+msgstr "Kritikus Rotten Tomatoes"
+
+msgctxt "#31453"
+msgid "Rotten Tomatoes audience"
+msgstr "Penonton Rotten Tomatoes"
+
+msgctxt "#31454"
+msgid "Metacritic"
+msgstr "Metacritic"
+
+msgctxt "#31455"
+msgid "Trakt"
+msgstr "Trakt"
+
+msgctxt "#31456"
+msgid "Letterboxd"
+msgstr "Letterboxd"
+
+msgctxt "#31457"
+msgid "MDbList"
+msgstr "MDbList"
+
+msgctxt "#31460"
+msgid "IMDb users, 0 to 10, with the Top 250 rank. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Pengguna IMDb, 0 hingga 10, dengan peringkat Top 250. Perlu kunci OMDb atau MDbList di TMDb Helper."
+
+msgctxt "#31461"
+msgid "TMDb users, 0 to 10. Needs no key."
+msgstr "Pengguna TMDb, 0 hingga 10. Tidak perlu kunci."
+
+msgctxt "#31462"
+msgid "Tomatometer: the share of positive critic reviews. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Tomatometer: porsi ulasan kritikus yang positif. Perlu kunci OMDb atau MDbList di TMDb Helper."
+
+msgctxt "#31463"
+msgid "Popcornmeter: the share of positive audience ratings. Needs an MDbList or OMDb key in TMDb Helper."
+msgstr "Popcornmeter: porsi rating penonton yang positif. Perlu kunci MDbList atau OMDb di TMDb Helper."
+
+msgctxt "#31464"
+msgid "A weighted average of critic reviews, 0 to 100, mostly for theatrical films and big series. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Rata-rata tertimbang ulasan kritikus, 0 hingga 100, sebagian besar untuk film bioskop dan serial besar. Perlu kunci OMDb atau MDbList di TMDb Helper."
+
+msgctxt "#31465"
+msgid "Trakt users, 0 to 10. Needs a connected Trakt account in TMDb Helper: fetched from Trakt, not MDbList."
+msgstr "Pengguna Trakt, 0 hingga 10. Perlu akun Trakt yang terhubung di TMDb Helper: diambil dari Trakt, bukan MDbList."
+
+msgctxt "#31466"
+msgid "Letterboxd users, 0 to 5, mostly films. Needs an MDbList key in TMDb Helper."
+msgstr "Pengguna Letterboxd, 0 hingga 5, sebagian besar film. Perlu kunci MDbList di TMDb Helper."
+
+msgctxt "#31467"
+msgid "MDbList score: an average of the other sources, 0 to 100. Needs an MDbList key in TMDb Helper."
+msgstr "Skor MDbList: rata-rata dari sumber lain, 0 hingga 100. Perlu kunci MDbList di TMDb Helper."
+
+msgctxt "#31469"
+msgid "No description"
+msgstr "Tidak ada deskripsi"
+
+msgctxt "#31470"
+msgid "back"
+msgstr "kembali"
+
+msgctxt "#31471"
+msgid "budget"
+msgstr "anggaran"
+
+msgctxt "#31472"
+msgid "box office"
+msgstr "box office"
+
+msgctxt "#31473"
+msgid "description"
+msgstr "deskripsi"
+
+msgctxt "#31474"
+msgid "biography"
+msgstr "biografi"
+
+msgctxt "#31478"
+msgid "controls"
+msgstr "kontrol"
+
+msgctxt "#31479"
+msgid "previous page"
+msgstr "halaman sebelumnya"
+
+msgctxt "#31480"
+msgid "parent folder"
+msgstr "folder induk"
+
+msgctxt "#31477"
+msgid "Home"
+msgstr "Beranda"
+
+msgctxt "#31500"
+msgid "view"
+msgstr "tampilan"
+
+msgctxt "#31501"
+msgid "list"
+msgstr "daftar"
+
+msgctxt "#31502"
+msgid "filter"
+msgstr "filter"
+
+msgctxt "#31503"
+msgid "all"
+msgstr "semua"
+
+msgctxt "#31504"
+msgid "resolution"
+msgstr "resolusi"
+
+msgctxt "#31505"
+msgid "dynamic range"
+msgstr "rentang dinamis"
+
+msgctxt "#31506"
+msgid "audio format"
+msgstr "format audio"
+
+msgctxt "#31507"
+msgid "audio channels"
+msgstr "saluran audio"
+
+msgctxt "#31508"
+msgid "clear filter"
+msgstr "hapus filter"
+
+msgctxt "#31600"
+msgid "runtime"
+msgstr "durasi"
+
+msgctxt "#31601"
+msgid "genre"
+msgstr "genre"
+
+msgctxt "#31602"
+msgid "details"
+msgstr "detail"
+
+msgctxt "#31603"
+msgid "seasons"
+msgstr "musim"
+
+msgctxt "#31604"
+msgid "season"
+msgstr "musim"
+
+msgctxt "#31605"
+msgid "seasons"
+msgstr "musim"
+
+msgctxt "#31606"
+msgid "episodes"
+msgstr "episode"
+
+msgctxt "#31607"
+msgid "none"
+msgstr "tidak ada"
+
+msgctxt "#31700"
+msgid "On Deck"
+msgstr "On Deck"
+
+msgctxt "#31701"
+msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
+msgstr "Yang sudah Anda mulai, lalu acara TV yang sedang Anda tonton. OK pada acara TV membuka episode berikutnya."
+
+msgctxt "#31750"
+msgid "No trailer found"
+msgstr "Trailer tidak ditemukan"

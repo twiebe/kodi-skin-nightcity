@@ -1,0 +1,1196 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: af_za\n"
+
+msgctxt "#31002"
+msgid "Spotlight source"
+msgstr "Kollig-bron"
+
+msgctxt "#31003"
+msgid "All movies"
+msgstr "Alle flieks"
+
+msgctxt "#31004"
+msgid "Unwatched movies"
+msgstr "Ongekykte flieks"
+
+msgctxt "#31005"
+msgid "Effects"
+msgstr "Effekte"
+
+msgctxt "#31006"
+msgid "home"
+msgstr "tuis"
+
+msgctxt "#31010"
+msgid "play"
+msgstr "speel"
+
+msgctxt "#31011"
+msgid "info"
+msgstr "info"
+
+msgctxt "#31012"
+msgid "min"
+msgstr "min"
+
+msgctxt "#31020"
+msgid "on deck"
+msgstr "volgende"
+
+msgctxt "#31021"
+msgid "new movies"
+msgstr "nuwe flieks"
+
+msgctxt "#31022"
+msgid "new episodes"
+msgstr "nuwe episodes"
+
+msgctxt "#31023"
+msgid "continue watching"
+msgstr "kyk verder"
+
+msgctxt "#31030"
+msgid "movies"
+msgstr "flieks"
+
+msgctxt "#31031"
+msgid "shows"
+msgstr "reekse"
+
+msgctxt "#31032"
+msgid "search"
+msgstr "soek"
+
+msgctxt "#31033"
+msgid "System"
+msgstr "Stelsel"
+
+msgctxt "#31041"
+msgid "trailer"
+msgstr "voorskou"
+
+msgctxt "#31042"
+msgid "posters"
+msgstr "plakkate"
+
+msgctxt "#31043"
+msgid "resume"
+msgstr "hervat"
+
+msgctxt "#31050"
+msgid "ends"
+msgstr "eindig"
+
+msgctxt "#31051"
+msgid "pause"
+msgstr "pouse"
+
+msgctxt "#31052"
+msgid "stop"
+msgstr "stop"
+
+msgctxt "#31053"
+msgid "subtitles"
+msgstr "onderskrifte"
+
+msgctxt "#31054"
+msgid "audio"
+msgstr "oudio"
+
+msgctxt "#31055"
+msgid "video"
+msgstr "video"
+
+msgctxt "#31056"
+msgid "bookmarks"
+msgstr "boekmerke"
+
+msgctxt "#31057"
+msgid "buffering"
+msgstr "buffer"
+
+msgctxt "#31058"
+msgid "video already has subtitles"
+msgstr "video het reeds onderskrifte"
+
+msgctxt "#31080"
+msgid "quit kodi"
+msgstr "verlaat Kodi"
+
+msgctxt "#31081"
+msgid "power off"
+msgstr "skakel af"
+
+msgctxt "#31082"
+msgid "reboot"
+msgstr "herbegin"
+
+msgctxt "#31083"
+msgid "suspend"
+msgstr "sluimer"
+
+msgctxt "#31084"
+msgid "hibernate"
+msgstr "hiberneer"
+
+msgctxt "#31085"
+msgid "shutdown timer"
+msgstr "afskakeltydhouer"
+
+msgctxt "#31086"
+msgid "cancel shutdown timer"
+msgstr "kanselleer afskakeltydhouer"
+
+msgctxt "#31087"
+msgid "log off"
+msgstr "teken af"
+
+msgctxt "#31088"
+msgid "reload skin"
+msgstr "herlaai oortreksel"
+
+msgctxt "#31089"
+msgid "power"
+msgstr "krag"
+
+msgctxt "#31090"
+msgid "Hide foreign"
+msgstr "Versteek vreemdtalige"
+
+msgctxt "#31091"
+msgid "Hide broken"
+msgstr "Versteek gebrekkige"
+
+msgctxt "#31094"
+msgid "thumbs"
+msgstr "duimnaels"
+
+msgctxt "#31095"
+msgid "mute"
+msgstr "stilte"
+
+msgctxt "#31096"
+msgid "descending"
+msgstr "dalend"
+
+msgctxt "#31100"
+msgid "spotlight"
+msgstr "kollig"
+
+msgctxt "#31101"
+msgid "all movies"
+msgstr "alle flieks"
+
+msgctxt "#31102"
+msgid "all shows"
+msgstr "alle reekse"
+
+msgctxt "#31103"
+msgid "in progress"
+msgstr "aan die gang"
+
+msgctxt "#31104"
+msgid "unwatched"
+msgstr "ongekyk"
+
+msgctxt "#31105"
+msgid "genres"
+msgstr "genres"
+
+msgctxt "#31106"
+msgid "episodes"
+msgstr "episodes"
+
+msgctxt "#31116"
+msgid "sort"
+msgstr "sorteer"
+
+msgctxt "#31117"
+msgid "descending"
+msgstr "dalend"
+
+msgctxt "#31118"
+msgid "title"
+msgstr "titel"
+
+msgctxt "#31119"
+msgid "year"
+msgstr "jaar"
+
+msgctxt "#31120"
+msgid "added"
+msgstr "bygevoeg"
+
+msgctxt "#31121"
+msgid "rating"
+msgstr "gradering"
+
+msgctxt "#31122"
+msgid "ascending"
+msgstr "stygend"
+
+msgctxt "#31123"
+msgid "from start"
+msgstr "van begin"
+
+msgctxt "#31124"
+msgid "cast"
+msgstr "rolverdeling"
+
+msgctxt "#31125"
+msgid "details"
+msgstr "besonderhede"
+
+msgctxt "#31126"
+msgid "director"
+msgstr "regisseur"
+
+msgctxt "#31127"
+msgid "writer"
+msgstr "skrywer"
+
+msgctxt "#31128"
+msgid "studio"
+msgstr "ateljee"
+
+msgctxt "#31129"
+msgid "country"
+msgstr "land"
+
+msgctxt "#31130"
+msgid "similar"
+msgstr "soortgelyk"
+
+msgctxt "#31131"
+msgid "season"
+msgstr "seisoen"
+
+msgctxt "#31132"
+msgid "episode"
+msgstr "episode"
+
+msgctxt "#31133"
+msgid "all"
+msgstr "alle"
+
+msgctxt "#31134"
+msgid "specials"
+msgstr "spesiale"
+
+msgctxt "#31135"
+msgid "select"
+msgstr "kies"
+
+msgctxt "#31136"
+msgid "age rating"
+msgstr "ouderdomsgradering"
+
+msgctxt "#31059"
+msgid "ends at"
+msgstr "eindig om"
+
+msgctxt "#31137"
+msgid "next episode"
+msgstr "volgende episode"
+
+msgctxt "#31138"
+msgid "off"
+msgstr "af"
+
+msgctxt "#31139"
+msgid "all settings"
+msgstr "alle verstellings"
+
+msgctxt "#31140"
+msgid "chapters"
+msgstr "hoofstukke"
+
+msgctxt "#31141"
+msgid "search for a title"
+msgstr "soek 'n titel"
+
+msgctxt "#31142"
+msgid "actions"
+msgstr "aksies"
+
+msgctxt "#31143"
+msgid "power off"
+msgstr "skakel af"
+
+msgctxt "#31144"
+msgid "reboot"
+msgstr "herbegin"
+
+msgctxt "#31145"
+msgid "suspend"
+msgstr "sluimer"
+
+msgctxt "#31146"
+msgid "exit kodi"
+msgstr "verlaat Kodi"
+
+msgctxt "#31147"
+msgid "restart kodi"
+msgstr "herbegin Kodi"
+
+msgctxt "#31148"
+msgid "movies (library)"
+msgstr "flieks (biblioteek)"
+
+msgctxt "#31149"
+msgid "shows (library)"
+msgstr "reekse (biblioteek)"
+
+msgctxt "#31150"
+msgid "episodes (library)"
+msgstr "episodes (biblioteek)"
+
+msgctxt "#31151"
+msgid "online: movies (tmdb)"
+msgstr "aanlyn: flieks (TMDb)"
+
+msgctxt "#31152"
+msgid "online: shows (tmdb)"
+msgstr "aanlyn: reekse (TMDb)"
+
+msgctxt "#31153"
+msgid "recent"
+msgstr "onlangs"
+
+msgctxt "#31154"
+msgid "not available on this device"
+msgstr "nie op hierdie toestel beskikbaar nie"
+
+msgctxt "#31155"
+msgid "stats"
+msgstr "statistiek"
+
+msgctxt "#31157"
+msgid "booting"
+msgstr "begin"
+
+msgctxt "#31158"
+msgid "online"
+msgstr "aanlyn"
+
+msgctxt "#31159"
+msgid "Playback & media"
+msgstr "Afspeel & media"
+
+msgctxt "#31160"
+msgid "Look & profiles"
+msgstr "Voorkoms & profiele"
+
+msgctxt "#31161"
+msgid "Add-ons & content"
+msgstr "Byvoegsels & inhoud"
+
+msgctxt "#31162"
+msgid "System & network"
+msgstr "Stelsel & netwerk"
+
+msgctxt "#31163"
+msgid "Tools"
+msgstr "Gereedskap"
+
+msgctxt "#31164"
+msgid "How videos, music and pictures play: decoding, refresh rate, discs, audio and subtitle language, subtitles."
+msgstr "Hoe video's, musiek en prente speel: dekodering, herlaaitempo, skywe, oudio- en onderskriftaal, onderskrifte."
+
+msgctxt "#31165"
+msgid "How the library collects and shows your media: scanning, file lists, videos, music, pictures."
+msgstr "Hoe die biblioteek jou media versamel en wys: skandering, lêerlyste, video's, musiek, prente."
+
+msgctxt "#31166"
+msgid "Live TV and recordings from your PVR client: channels, guide, recording, reminders."
+msgstr "Regstreekse TV en opnames van jou PVR-kliënt: kanale, gids, opneem, herinneringe."
+
+msgctxt "#31167"
+msgid "How Kodi looks and starts: skin, language and region, screensaver, master lock, startup."
+msgstr "Hoe Kodi lyk en begin: oortreksel, taal en streek, skermbeveiliger, meesterslot, opstart."
+
+msgctxt "#31168"
+msgid "The options of this skin: the home pages and the look."
+msgstr "Die opsies van hierdie oortreksel: die tuisblaaie en die voorkoms."
+
+msgctxt "#31169"
+msgid "Users with their own library, settings and add-ons, and the login screen."
+msgstr "Gebruikers met hul eie biblioteek, verstellings en byvoegsels, en die intekenskerm."
+
+msgctxt "#31170"
+msgid "Installed add-ons, repositories, install from a zip file, search and updates."
+msgstr "Geïnstalleerde byvoegsels, bewaarplekke, installeer vanaf 'n zip-lêer, soek en bywerkings."
+
+msgctxt "#31171"
+msgid "Browse sources and folders, copy, move and delete files."
+msgstr "Blaai deur bronne en vouers, kopieer, skuif en vee lêers uit."
+
+msgctxt "#31172"
+msgid "The device: display, audio output, input, internet access, power saving, add-on rules, logging."
+msgstr "Die toestel: skerm, oudio-uitset, toevoer, internettoegang, kragbesparing, byvoegselreëls, logboek."
+
+msgctxt "#31173"
+msgid "What Kodi offers on the network and uses from it: remote control, UPnP, AirPlay, SMB, NFS, caching, weather."
+msgstr "Wat Kodi op die netwerk aanbied en daarvan gebruik: afstandbeheer, UPnP, AirPlay, SMB, NFS, kas, weer."
+
+msgctxt "#31174"
+msgid "Facts about this device: Kodi version, storage, network, video, hardware."
+msgstr "Feite oor hierdie toestel: Kodi-weergawe, berging, netwerk, video, hardeware."
+
+msgctxt "#31175"
+msgid "What happened lately: add-on installs and updates, library scans, errors."
+msgstr "Wat onlangs gebeur het: byvoegsel-installasies en bywerkings, biblioteekskanderings, foute."
+
+msgctxt "#31176"
+msgid "Categories"
+msgstr "Kategorieë"
+
+msgctxt "#31178"
+msgid "[COLOR state_text]⏎[/COLOR] open"
+msgstr "[COLOR state_text]⏎[/COLOR] open"
+
+msgctxt "#31181"
+msgid "refresh rate, decoding, resume"
+msgstr "herlaaitempo, dekodering, hervat"
+
+msgctxt "#31182"
+msgid "crossfade, visualisation, volume adjustment"
+msgstr "oorvloei, visualisering, volume-aanpassing"
+
+msgctxt "#31183"
+msgid "DVD, Blu-ray, audio CD"
+msgstr "DVD, Blu-ray, oudio-CD"
+
+msgctxt "#31184"
+msgid "slideshow, transitions"
+msgstr "skyfievertoning, oorgange"
+
+msgctxt "#31185"
+msgid "audio, subtitles and menus"
+msgstr "oudio, onderskrifte en kieslyste"
+
+msgctxt "#31186"
+msgid "font, size, download services"
+msgstr "lettertipe, grootte, aflaaidienste"
+
+msgctxt "#31187"
+msgid "scan on startup, update, clean up"
+msgstr "skandeer met opstart, bywerk, opruim"
+
+msgctxt "#31188"
+msgid "file extensions, hidden files, sorting"
+msgstr "lêeruitbreidings, versteekte lêers, sortering"
+
+msgctxt "#31189"
+msgid "select action, plots, thumbnails"
+msgstr "kiesaksie, intriges, duimnaels"
+
+msgctxt "#31190"
+msgid "artists, album covers, tags"
+msgstr "kunstenaars, albumomslae, etikette"
+
+msgctxt "#31191"
+msgid "thumbnails, EXIF"
+msgstr "duimnaels, EXIF"
+
+msgctxt "#31192"
+msgid "channel groups, channel icons"
+msgstr "kanaalgroepe, kanaalikone"
+
+msgctxt "#31193"
+msgid "channel info, switching"
+msgstr "kanaalinfo, oorskakel"
+
+msgctxt "#31194"
+msgid "days shown, updates"
+msgstr "dae gewys, bywerkings"
+
+msgctxt "#31195"
+msgid "start, channel switch delay"
+msgstr "begin, kanaalwisselvertraging"
+
+msgctxt "#31196"
+msgid "margins, folders"
+msgstr "marges, vouers"
+
+msgctxt "#31197"
+msgid "reminder before a show"
+msgstr "herinnering voor 'n program"
+
+msgctxt "#31198"
+msgid "wake up for recordings"
+msgstr "wakker word vir opnames"
+
+msgctxt "#31199"
+msgid "lock by age, PIN"
+msgstr "slot volgens ouderdom, PIN"
+
+msgctxt "#31200"
+msgid "PVR client add-ons"
+msgstr "PVR-kliëntbyvoegsels"
+
+msgctxt "#31201"
+msgid "skin, theme, colours, fonts"
+msgstr "oortreksel, tema, kleure, lettertipes"
+
+msgctxt "#31202"
+msgid "language, region, time, keyboard"
+msgstr "taal, streek, tyd, sleutelbord"
+
+msgctxt "#31203"
+msgid "mode, wait time"
+msgstr "modus, wagtyd"
+
+msgctxt "#31204"
+msgid "lock code, protected areas"
+msgstr "slotkode, beskermde areas"
+
+msgctxt "#31205"
+msgid "start window, splash screen"
+msgstr "beginvenster, spatskerm"
+
+msgctxt "#31206"
+msgid "resolution, refresh rate, calibration"
+msgstr "resolusie, herlaaitempo, kalibrasie"
+
+msgctxt "#31207"
+msgid "output device, channels, passthrough"
+msgstr "uitsettoestel, kanale, deurlaat"
+
+msgctxt "#31208"
+msgid "devices, mouse, remote"
+msgstr "toestelle, muis, afstandbeheer"
+
+msgctxt "#31209"
+msgid "proxy"
+msgstr "instaanbediener"
+
+msgctxt "#31210"
+msgid "shutdown, display off"
+msgstr "afskakel, skerm af"
+
+msgctxt "#31211"
+msgid "updates, unknown sources"
+msgstr "bywerkings, onbekende bronne"
+
+msgctxt "#31212"
+msgid "debug log, components"
+msgstr "ontfoutlog, komponente"
+
+msgctxt "#31213"
+msgid "device name, Zeroconf"
+msgstr "toestelnaam, Zeroconf"
+
+msgctxt "#31214"
+msgid "web server, remote apps"
+msgstr "webbediener, afstandbeheer-toeps"
+
+msgctxt "#31215"
+msgid "share library, renderer"
+msgstr "deel biblioteek, weergewer"
+
+msgctxt "#31216"
+msgid "receive AirPlay"
+msgstr "ontvang AirPlay"
+
+msgctxt "#31217"
+msgid "Windows shares, WINS"
+msgstr "Windows-gedeeltes, WINS"
+
+msgctxt "#31218"
+msgid "NFS shares"
+msgstr "NFS-gedeeltes"
+
+msgctxt "#31219"
+msgid "buffer, read rate"
+msgstr "buffer, leestempo"
+
+msgctxt "#31220"
+msgid "weather service"
+msgstr "weerdiens"
+
+msgctxt "#31221"
+msgid "Spotlight change"
+msgstr "Kollig-wisseling"
+
+msgctxt "#31222"
+msgid "Home pages"
+msgstr "Tuisblaaie"
+
+msgctxt "#31224"
+msgid "Rows"
+msgstr "Rye"
+
+msgctxt "#31225"
+msgid "Spotlight"
+msgstr "Kollig"
+
+msgctxt "#31226"
+msgid "Still"
+msgstr "Stil"
+
+msgctxt "#31227"
+msgid "All shows"
+msgstr "Alle reekse"
+
+msgctxt "#31228"
+msgid "Unwatched shows"
+msgstr "Ongekykte reekse"
+
+msgctxt "#31229"
+msgid "Slot"
+msgstr "Gleuf"
+
+msgctxt "#31231"
+msgid "Section for slot"
+msgstr "Afdeling vir gleuf"
+
+msgctxt "#31232"
+msgid "menu"
+msgstr "kieslys"
+
+msgctxt "#31233"
+msgid "Continue watching"
+msgstr "Kyk verder"
+
+msgctxt "#31234"
+msgid "Next up"
+msgstr "Volgende"
+
+msgctxt "#31235"
+msgid "New movies"
+msgstr "Nuwe flieks"
+
+msgctxt "#31236"
+msgid "New episodes"
+msgstr "Nuwe episodes"
+
+msgctxt "#31237"
+msgid "Random movies"
+msgstr "Lukraak flieks"
+
+msgctxt "#31238"
+msgid "Top rated"
+msgstr "Hoogs gegradeer"
+
+msgctxt "#31239"
+msgid "TMDb trending"
+msgstr "TMDb-gewild"
+
+msgctxt "#31240"
+msgid "Recently watched"
+msgstr "Onlangs gekyk"
+
+msgctxt "#31241"
+msgid "Started movies and episodes, the last watched first."
+msgstr "Begonne flieks en episodes, die laaste gekykte eerste."
+
+msgctxt "#31242"
+msgid "The shows you are watching. OK opens the next episode."
+msgstr "Die reekse wat jy kyk. OK open die volgende episode."
+
+msgctxt "#31243"
+msgid "The movies added to the library last."
+msgstr "Die flieks wat laaste by die biblioteek gevoeg is."
+
+msgctxt "#31244"
+msgid "The shows with the episodes added last."
+msgstr "Die reekse met die episodes wat laaste bygevoeg is."
+
+msgctxt "#31245"
+msgid "Tabs for the three biggest genres and a picker for all others."
+msgstr "Oortjies vir die drie grootste genres en 'n kieser vir al die ander."
+
+msgctxt "#31246"
+msgid "A new choice from the whole library every time Home opens."
+msgstr "Elke keer as Tuis oopmaak, 'n nuwe keuse uit die hele biblioteek."
+
+msgctxt "#31248"
+msgid "Sorted by rating, from 7.0 up."
+msgstr "Gesorteer volgens gradering, vanaf 7,0."
+
+msgctxt "#31249"
+msgid "Kodi's favourites, as you set them."
+msgstr "Kodi se gunstelinge, soos jy hulle opgestel het."
+
+msgctxt "#31250"
+msgid "What is trending on TMDb this week."
+msgstr "Wat hierdie week gewild is op TMDb."
+
+msgctxt "#31251"
+msgid "What played last, also what you watched to the end."
+msgstr "Wat laaste gespeel het, ook wat jy tot die einde gekyk het."
+
+msgctxt "#31252"
+msgid "The movie sets of your library. OK opens a set."
+msgstr "Die fliekstelle van jou biblioteek. OK open 'n stel."
+
+msgctxt "#31253"
+msgid "Episodes you started and did not finish."
+msgstr "Episodes wat jy begin en nie klaar gekyk het nie."
+
+msgctxt "#31254"
+msgid "Free slot. OK picks a section from the catalogue."
+msgstr "Vrye gleuf. OK kies 'n afdeling uit die katalogus."
+
+msgctxt "#31255"
+msgid "Large artwork with title and plot, in random order. OK or Right picks the source."
+msgstr "Groot kunswerk met titel en intrige, in lukrake volgorde. OK of Regs kies die bron."
+
+msgctxt "#31256"
+msgid "No spotlight: the page starts with the first row."
+msgstr "Geen kollig nie: die blad begin met die eerste ry."
+
+msgctxt "#31257"
+msgid "How often the spotlight moves on by itself. OK or Right: 10, 15, 30, 60 s or still (then only by hand)."
+msgstr "Hoe gereeld die kollig vanself aanbeweeg. OK of Regs: 10, 15, 30, 60 s of stil (dan net met die hand)."
+
+msgctxt "#31258"
+msgid "Home and movies show the same spotlight, so they share this setting."
+msgstr "Tuis en flieks wys dieselfde kollig, dus deel hulle hierdie verstelling."
+
+msgctxt "#31259"
+msgid "Show or hide entries of the main menu. System and power always stay, and so does the last page shown."
+msgstr "Wys of versteek inskrywings van die hoofkieslys. Stelsel en krag bly altyd, net soos die laaste blad wat gewys is."
+
+msgctxt "#31260"
+msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]⏎[/COLOR] kies   [COLOR state_text]→[/COLOR] opsie"
+
+msgctxt "#31261"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] skuif   [COLOR state_text]⏎[/COLOR] los"
+
+msgctxt "#31262"
+msgid "Spotlight, rows and main menu of the home, movies and shows pages."
+msgstr "Kollig, rye en hoofkieslys van die tuis-, flieks- en reeksblaaie."
+
+msgctxt "#31263"
+msgid "swap"
+msgstr "ruil"
+
+msgctxt "#31264"
+msgid "Main menu"
+msgstr "Hoofkieslys"
+
+msgctxt "#31265"
+msgid "Spotlight and rows of the home page."
+msgstr "Kollig en rye van die tuisblad."
+
+msgctxt "#31266"
+msgid "Spotlight and rows of the movies page."
+msgstr "Kollig en rye van die fliekblad."
+
+msgctxt "#31267"
+msgid "Spotlight and rows of the shows page."
+msgstr "Kollig en rye van die reeksblad."
+
+msgctxt "#31268"
+msgid "How the skin draws the focus."
+msgstr "Hoe die oortreksel die fokus teken."
+
+msgctxt "#31230"
+msgid "frame rate"
+msgstr "raamtempo"
+
+msgctxt "#31330"
+msgid "back to video"
+msgstr "terug na video"
+
+msgctxt "#31331"
+msgid "back to home"
+msgstr "terug na tuis"
+
+msgctxt "#31332"
+msgid "back to movies"
+msgstr "terug na flieks"
+
+msgctxt "#31333"
+msgid "back to shows"
+msgstr "terug na reekse"
+
+msgctxt "#31334"
+msgid "back to search"
+msgstr "terug na soek"
+
+msgctxt "#31335"
+msgid "back to library"
+msgstr "terug na biblioteek"
+
+msgctxt "#31310"
+msgid "Home key opens the home page"
+msgstr "Tuis-knoppie open die tuisblad"
+
+msgctxt "#31311"
+msgid "The Home key of the remote always leads to the home page, held down it opens the quick menu. The skin sets up the keymap 0_skin.nightcity.xml in the profile for it; your own keymaps still win."
+msgstr "Die Tuis-knoppie van die afstandbeheer lei altyd na die tuisblad, ingehou open dit die kitskieslys. Die oortreksel stel daarvoor die sleutelkaart 0_skin.nightcity.xml in die profiel op; jou eie sleutelkaarte geniet steeds voorrang."
+
+msgctxt "#31300"
+msgid "crew"
+msgstr "span"
+
+msgctxt "#31301"
+msgid "back to start"
+msgstr "terug na begin"
+
+msgctxt "#31302"
+msgid "person"
+msgstr "persoon"
+
+msgctxt "#31303"
+msgid "born"
+msgstr "gebore"
+
+msgctxt "#31304"
+msgid "died"
+msgstr "oorlede"
+
+msgctxt "#31320"
+msgid "quick menu"
+msgstr "kitskieslys"
+
+msgctxt "#31321"
+msgid "set up weather"
+msgstr "stel weer op"
+
+msgctxt "#31322"
+msgid "more"
+msgstr "meer"
+
+msgctxt "#31323"
+msgid "timer"
+msgstr "tydhouer"
+
+msgctxt "#31336"
+msgid "Remember search terms"
+msgstr "Onthou soekterme"
+
+msgctxt "#31337"
+msgid "The search page lists the last five search terms. Switched off, the skin keeps no terms and forgets the ones it has."
+msgstr "Die soekblad lys die laaste vyf soekterme. Afgeskakel hou die oortreksel geen terme nie en vergeet die wat dit het."
+
+msgctxt "#31338"
+msgid "Clear search history"
+msgstr "Vee soekgeskiedenis uit"
+
+msgctxt "#31339"
+msgid "Forgets the remembered search terms."
+msgstr "Vergeet die onthoude soekterme."
+
+msgctxt "#31340"
+msgid "The colour scheme of the skin, the same choice as under Interface."
+msgstr "Die kleurskema van die oortreksel, dieselfde keuse as onder Koppelvlak."
+
+msgctxt "#31341"
+msgid "forecast"
+msgstr "voorspelling"
+
+msgctxt "#31360"
+msgid "Hide the controls automatically"
+msgstr "Versteek die kontroles outomaties"
+
+msgctxt "#31361"
+msgid "While a video plays, the player controls close by themselves once no key was pressed for the time set below. While paused they stay; the time starts again when playback goes on."
+msgstr "Terwyl 'n video speel, maak die spelerkontroles vanself toe sodra geen knoppie vir die tyd hieronder gedruk is nie. Tydens pouse bly hulle; die tyd begin weer wanneer afspeel voortgaan."
+
+msgctxt "#31362"
+msgid "Hide after"
+msgstr "Versteek na"
+
+msgctxt "#31363"
+msgid "Time without a key press before the player controls close, 3 to 30 seconds. OK takes the slider, left and right move it, OK lets go."
+msgstr "Tyd sonder 'n knoppiedruk voordat die spelerkontroles toemaak, 3 tot 30 sekondes. OK gryp die skuifbalk, links en regs skuif dit, OK los dit."
+
+msgctxt "#31364"
+msgid "The video player: its controls and what it shows while they are up."
+msgstr "Die videospeler: sy kontroles en wat dit wys terwyl hulle oop is."
+
+msgctxt "#31365"
+msgid "Show the plot"
+msgstr "Wys die intrige"
+
+msgctxt "#31366"
+msgid "The plot of what plays, under its title while the player controls or the seek line are up."
+msgstr "Die intrige van wat speel, onder sy titel terwyl die spelerkontroles of die soeklyn oop is."
+
+msgctxt "#31400"
+msgid "New albums"
+msgstr "Nuwe albums"
+
+msgctxt "#31401"
+msgid "Recently played"
+msgstr "Onlangs gespeel"
+
+msgctxt "#31402"
+msgid "Random albums"
+msgstr "Lukraak albums"
+
+msgctxt "#31403"
+msgid "Artists"
+msgstr "Kunstenaars"
+
+msgctxt "#31404"
+msgid "Genres"
+msgstr "Genres"
+
+msgctxt "#31405"
+msgid "music"
+msgstr "musiek"
+
+msgctxt "#31406"
+msgid "now playing"
+msgstr "speel nou"
+
+msgctxt "#31407"
+msgid "albums"
+msgstr "albums"
+
+msgctxt "#31408"
+msgid "more by"
+msgstr "meer deur"
+
+msgctxt "#31409"
+msgid "tracks"
+msgstr "snitte"
+
+msgctxt "#31410"
+msgid "up next"
+msgstr "volgende"
+
+msgctxt "#31411"
+msgid "shuffle"
+msgstr "skommel"
+
+msgctxt "#31412"
+msgid "repeat"
+msgstr "herhaal"
+
+msgctxt "#31413"
+msgid "repeat all"
+msgstr "herhaal alles"
+
+msgctxt "#31414"
+msgid "repeat one"
+msgstr "herhaal een"
+
+msgctxt "#31420"
+msgid "Network, Bluetooth, updates"
+msgstr "Netwerk, Bluetooth, bywerkings"
+
+msgctxt "#31440"
+msgid "audience"
+msgstr "gehoor"
+
+msgctxt "#31441"
+msgid "Ratings only from TMDb Helper"
+msgstr "Graderings net van TMDb Helper"
+
+msgctxt "#31442"
+msgid "Show only the ratings TMDb Helper fetched for exactly this title. Off: the library's own rating (from Jellyfin) fills in while TMDb Helper has none."
+msgstr "Wys net die graderings wat TMDb Helper vir presies hierdie titel gehaal het. Af: die biblioteek se eie gradering (van Jellyfin) vul in solank TMDb Helper geen het nie."
+
+msgctxt "#31443"
+msgid "Ratings only on title pages"
+msgstr "Graderings net op titelblaaie"
+
+msgctxt "#31444"
+msgid "Spotlight and rows show no ratings, which saves requests to TMDb. A title's page still shows them."
+msgstr "Kollig en rye wys geen graderings nie, wat versoeke aan TMDb spaar. 'n Titel se blad wys hulle steeds."
+
+msgctxt "#31445"
+msgid "Ratings"
+msgstr "Graderings"
+
+msgctxt "#31446"
+msgid "Sources"
+msgstr "Bronne"
+
+msgctxt "#31447"
+msgid "Which ratings the ratings line of the spotlight and the info page shows, and where they come from."
+msgstr "Watter graderings die graderingslyn van die kollig en die inligtingsblad wys, en waar hulle vandaan kom."
+
+msgctxt "#31450"
+msgid "IMDb"
+msgstr "IMDb"
+
+msgctxt "#31451"
+msgid "TMDb"
+msgstr "TMDb"
+
+msgctxt "#31452"
+msgid "Rotten Tomatoes critics"
+msgstr "Rotten Tomatoes-kritici"
+
+msgctxt "#31453"
+msgid "Rotten Tomatoes audience"
+msgstr "Rotten Tomatoes-gehoor"
+
+msgctxt "#31454"
+msgid "Metacritic"
+msgstr "Metacritic"
+
+msgctxt "#31455"
+msgid "Trakt"
+msgstr "Trakt"
+
+msgctxt "#31456"
+msgid "Letterboxd"
+msgstr "Letterboxd"
+
+msgctxt "#31457"
+msgid "MDbList"
+msgstr "MDbList"
+
+msgctxt "#31460"
+msgid "IMDb users, 0 to 10, with the Top 250 rank. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "IMDb-gebruikers, 0 tot 10, met die Top 250-rang. Benodig 'n OMDb- of MDbList-sleutel in TMDb Helper."
+
+msgctxt "#31461"
+msgid "TMDb users, 0 to 10. Needs no key."
+msgstr "TMDb-gebruikers, 0 tot 10. Benodig geen sleutel nie."
+
+msgctxt "#31462"
+msgid "Tomatometer: the share of positive critic reviews. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Tomatometer: die deel positiewe kritiese resensies. Benodig 'n OMDb- of MDbList-sleutel in TMDb Helper."
+
+msgctxt "#31463"
+msgid "Popcornmeter: the share of positive audience ratings. Needs an MDbList or OMDb key in TMDb Helper."
+msgstr "Popcornmeter: die deel positiewe gehoorgraderings. Benodig 'n MDbList- of OMDb-sleutel in TMDb Helper."
+
+msgctxt "#31464"
+msgid "A weighted average of critic reviews, 0 to 100, mostly for theatrical films and big series. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Geweegde gemiddelde van kritiese resensies, 0 tot 100, meestal vir teaterflieks en groot reekse. Benodig 'n OMDb- of MDbList-sleutel in TMDb Helper."
+
+msgctxt "#31465"
+msgid "Trakt users, 0 to 10. Needs a connected Trakt account in TMDb Helper: fetched from Trakt, not MDbList."
+msgstr "Trakt-gebruikers, 0 tot 10. Benodig 'n gekoppelde Trakt-rekening in TMDb Helper: van Trakt gehaal, nie MDbList nie."
+
+msgctxt "#31466"
+msgid "Letterboxd users, 0 to 5, mostly films. Needs an MDbList key in TMDb Helper."
+msgstr "Letterboxd-gebruikers, 0 tot 5, meestal flieks. Benodig 'n MDbList-sleutel in TMDb Helper."
+
+msgctxt "#31467"
+msgid "MDbList score: an average of the other sources, 0 to 100. Needs an MDbList key in TMDb Helper."
+msgstr "MDbList-telling: 'n gemiddelde van die ander bronne, 0 tot 100. Benodig 'n MDbList-sleutel in TMDb Helper."
+
+msgctxt "#31469"
+msgid "No description"
+msgstr "Geen beskrywing nie"
+
+msgctxt "#31470"
+msgid "back"
+msgstr "terug"
+
+msgctxt "#31471"
+msgid "budget"
+msgstr "begroting"
+
+msgctxt "#31472"
+msgid "box office"
+msgstr "loket"
+
+msgctxt "#31473"
+msgid "description"
+msgstr "beskrywing"
+
+msgctxt "#31474"
+msgid "biography"
+msgstr "biografie"
+
+msgctxt "#31478"
+msgid "controls"
+msgstr "kontroles"
+
+msgctxt "#31479"
+msgid "previous page"
+msgstr "vorige blad"
+
+msgctxt "#31480"
+msgid "parent folder"
+msgstr "ouervouer"
+
+msgctxt "#31477"
+msgid "Home"
+msgstr "Tuis"
+
+msgctxt "#31500"
+msgid "view"
+msgstr "aansig"
+
+msgctxt "#31501"
+msgid "list"
+msgstr "lys"
+
+msgctxt "#31502"
+msgid "filter"
+msgstr "filter"
+
+msgctxt "#31503"
+msgid "all"
+msgstr "alle"
+
+msgctxt "#31504"
+msgid "resolution"
+msgstr "resolusie"
+
+msgctxt "#31505"
+msgid "dynamic range"
+msgstr "dinamiese omvang"
+
+msgctxt "#31506"
+msgid "audio format"
+msgstr "oudioformaat"
+
+msgctxt "#31507"
+msgid "audio channels"
+msgstr "oudiokanale"
+
+msgctxt "#31508"
+msgid "clear filter"
+msgstr "vee filter uit"
+
+msgctxt "#31600"
+msgid "runtime"
+msgstr "speeltyd"
+
+msgctxt "#31601"
+msgid "genre"
+msgstr "genre"
+
+msgctxt "#31602"
+msgid "details"
+msgstr "besonderhede"
+
+msgctxt "#31603"
+msgid "seasons"
+msgstr "seisoene"
+
+msgctxt "#31604"
+msgid "season"
+msgstr "seisoen"
+
+msgctxt "#31605"
+msgid "seasons"
+msgstr "seisoene"
+
+msgctxt "#31606"
+msgid "episodes"
+msgstr "episodes"
+
+msgctxt "#31607"
+msgid "none"
+msgstr "geen"
+
+msgctxt "#31700"
+msgid "On Deck"
+msgstr "On Deck"
+
+msgctxt "#31701"
+msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
+msgstr "Wat jy begin het, dan die reekse wat jy kyk. OK op 'n reeks open die volgende episode."
+
+msgctxt "#31750"
+msgid "No trailer found"
+msgstr "Geen voorskou gevind nie"

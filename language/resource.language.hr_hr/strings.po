@@ -1,0 +1,1196 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: hr_hr\n"
+
+msgctxt "#31002"
+msgid "Spotlight source"
+msgstr "Izvor istaknutog"
+
+msgctxt "#31003"
+msgid "All movies"
+msgstr "Svi filmovi"
+
+msgctxt "#31004"
+msgid "Unwatched movies"
+msgstr "Neodgledani filmovi"
+
+msgctxt "#31005"
+msgid "Effects"
+msgstr "Efekti"
+
+msgctxt "#31006"
+msgid "home"
+msgstr "početna"
+
+msgctxt "#31010"
+msgid "play"
+msgstr "reproduciraj"
+
+msgctxt "#31011"
+msgid "info"
+msgstr "info"
+
+msgctxt "#31012"
+msgid "min"
+msgstr "min"
+
+msgctxt "#31020"
+msgid "on deck"
+msgstr "na redu"
+
+msgctxt "#31021"
+msgid "new movies"
+msgstr "novi filmovi"
+
+msgctxt "#31022"
+msgid "new episodes"
+msgstr "nove epizode"
+
+msgctxt "#31023"
+msgid "continue watching"
+msgstr "nastavi gledati"
+
+msgctxt "#31030"
+msgid "movies"
+msgstr "filmovi"
+
+msgctxt "#31031"
+msgid "shows"
+msgstr "serije"
+
+msgctxt "#31032"
+msgid "search"
+msgstr "traži"
+
+msgctxt "#31033"
+msgid "System"
+msgstr "Sustav"
+
+msgctxt "#31041"
+msgid "trailer"
+msgstr "najava"
+
+msgctxt "#31042"
+msgid "posters"
+msgstr "plakati"
+
+msgctxt "#31043"
+msgid "resume"
+msgstr "nastavi"
+
+msgctxt "#31050"
+msgid "ends"
+msgstr "završava"
+
+msgctxt "#31051"
+msgid "pause"
+msgstr "pauza"
+
+msgctxt "#31052"
+msgid "stop"
+msgstr "stop"
+
+msgctxt "#31053"
+msgid "subtitles"
+msgstr "podnaslovi"
+
+msgctxt "#31054"
+msgid "audio"
+msgstr "zvuk"
+
+msgctxt "#31055"
+msgid "video"
+msgstr "video"
+
+msgctxt "#31056"
+msgid "bookmarks"
+msgstr "zabilješke"
+
+msgctxt "#31057"
+msgid "buffering"
+msgstr "međuspremanje"
+
+msgctxt "#31058"
+msgid "video already has subtitles"
+msgstr "video već ima podnaslove"
+
+msgctxt "#31080"
+msgid "quit kodi"
+msgstr "zatvori Kodi"
+
+msgctxt "#31081"
+msgid "power off"
+msgstr "isključi"
+
+msgctxt "#31082"
+msgid "reboot"
+msgstr "ponovno pokreni"
+
+msgctxt "#31083"
+msgid "suspend"
+msgstr "stanje mirovanja"
+
+msgctxt "#31084"
+msgid "hibernate"
+msgstr "hibernacija"
+
+msgctxt "#31085"
+msgid "shutdown timer"
+msgstr "odbrojavanje isključivanja"
+
+msgctxt "#31086"
+msgid "cancel shutdown timer"
+msgstr "otkaži odbrojavanje isključivanja"
+
+msgctxt "#31087"
+msgid "log off"
+msgstr "odjava"
+
+msgctxt "#31088"
+msgid "reload skin"
+msgstr "ponovno učitaj presvlaku"
+
+msgctxt "#31089"
+msgid "power"
+msgstr "napajanje"
+
+msgctxt "#31090"
+msgid "Hide foreign"
+msgstr "Sakrij strane"
+
+msgctxt "#31091"
+msgid "Hide broken"
+msgstr "Sakrij neispravne"
+
+msgctxt "#31094"
+msgid "thumbs"
+msgstr "sličice"
+
+msgctxt "#31095"
+msgid "mute"
+msgstr "utišaj"
+
+msgctxt "#31096"
+msgid "descending"
+msgstr "silazno"
+
+msgctxt "#31100"
+msgid "spotlight"
+msgstr "istaknuto"
+
+msgctxt "#31101"
+msgid "all movies"
+msgstr "svi filmovi"
+
+msgctxt "#31102"
+msgid "all shows"
+msgstr "sve serije"
+
+msgctxt "#31103"
+msgid "in progress"
+msgstr "započeto"
+
+msgctxt "#31104"
+msgid "unwatched"
+msgstr "neodgledano"
+
+msgctxt "#31105"
+msgid "genres"
+msgstr "žanrovi"
+
+msgctxt "#31106"
+msgid "episodes"
+msgstr "epizode"
+
+msgctxt "#31116"
+msgid "sort"
+msgstr "poredak"
+
+msgctxt "#31117"
+msgid "descending"
+msgstr "silazno"
+
+msgctxt "#31118"
+msgid "title"
+msgstr "naslov"
+
+msgctxt "#31119"
+msgid "year"
+msgstr "godina"
+
+msgctxt "#31120"
+msgid "added"
+msgstr "dodano"
+
+msgctxt "#31121"
+msgid "rating"
+msgstr "ocjena"
+
+msgctxt "#31122"
+msgid "ascending"
+msgstr "uzlazno"
+
+msgctxt "#31123"
+msgid "from start"
+msgstr "od početka"
+
+msgctxt "#31124"
+msgid "cast"
+msgstr "glumci"
+
+msgctxt "#31125"
+msgid "details"
+msgstr "detalji"
+
+msgctxt "#31126"
+msgid "director"
+msgstr "redatelj"
+
+msgctxt "#31127"
+msgid "writer"
+msgstr "scenarist"
+
+msgctxt "#31128"
+msgid "studio"
+msgstr "studio"
+
+msgctxt "#31129"
+msgid "country"
+msgstr "zemlja"
+
+msgctxt "#31130"
+msgid "similar"
+msgstr "slično"
+
+msgctxt "#31131"
+msgid "season"
+msgstr "sezona"
+
+msgctxt "#31132"
+msgid "episode"
+msgstr "epizoda"
+
+msgctxt "#31133"
+msgid "all"
+msgstr "sve"
+
+msgctxt "#31134"
+msgid "specials"
+msgstr "specijali"
+
+msgctxt "#31135"
+msgid "select"
+msgstr "odaberi"
+
+msgctxt "#31136"
+msgid "age rating"
+msgstr "dobna ocjena"
+
+msgctxt "#31059"
+msgid "ends at"
+msgstr "završava u"
+
+msgctxt "#31137"
+msgid "next episode"
+msgstr "sljedeća epizoda"
+
+msgctxt "#31138"
+msgid "off"
+msgstr "isklj."
+
+msgctxt "#31139"
+msgid "all settings"
+msgstr "sve postavke"
+
+msgctxt "#31140"
+msgid "chapters"
+msgstr "poglavlja"
+
+msgctxt "#31141"
+msgid "search for a title"
+msgstr "traži naslov"
+
+msgctxt "#31142"
+msgid "actions"
+msgstr "radnje"
+
+msgctxt "#31143"
+msgid "power off"
+msgstr "isključi"
+
+msgctxt "#31144"
+msgid "reboot"
+msgstr "ponovno pokreni"
+
+msgctxt "#31145"
+msgid "suspend"
+msgstr "stanje mirovanja"
+
+msgctxt "#31146"
+msgid "exit kodi"
+msgstr "zatvori Kodi"
+
+msgctxt "#31147"
+msgid "restart kodi"
+msgstr "ponovno pokreni Kodi"
+
+msgctxt "#31148"
+msgid "movies (library)"
+msgstr "filmovi (zbirka)"
+
+msgctxt "#31149"
+msgid "shows (library)"
+msgstr "serije (zbirka)"
+
+msgctxt "#31150"
+msgid "episodes (library)"
+msgstr "epizode (zbirka)"
+
+msgctxt "#31151"
+msgid "online: movies (tmdb)"
+msgstr "na mreži: filmovi (TMDb)"
+
+msgctxt "#31152"
+msgid "online: shows (tmdb)"
+msgstr "na mreži: serije (TMDb)"
+
+msgctxt "#31153"
+msgid "recent"
+msgstr "nedavno"
+
+msgctxt "#31154"
+msgid "not available on this device"
+msgstr "nije dostupno na ovom uređaju"
+
+msgctxt "#31155"
+msgid "stats"
+msgstr "statistika"
+
+msgctxt "#31157"
+msgid "booting"
+msgstr "pokretanje"
+
+msgctxt "#31158"
+msgid "online"
+msgstr "online"
+
+msgctxt "#31159"
+msgid "Playback & media"
+msgstr "Reprodukcija i mediji"
+
+msgctxt "#31160"
+msgid "Look & profiles"
+msgstr "Izgled i profili"
+
+msgctxt "#31161"
+msgid "Add-ons & content"
+msgstr "Dodaci i sadržaj"
+
+msgctxt "#31162"
+msgid "System & network"
+msgstr "Sustav i mreža"
+
+msgctxt "#31163"
+msgid "Tools"
+msgstr "Alati"
+
+msgctxt "#31164"
+msgid "How videos, music and pictures play: decoding, refresh rate, discs, audio and subtitle language, subtitles."
+msgstr "Kako se reproduciraju videozapisi, glazba i slike: dekodiranje, frekvencija osvježavanja, diskovi, jezik zvuka i podnaslova, podnaslovi."
+
+msgctxt "#31165"
+msgid "How the library collects and shows your media: scanning, file lists, videos, music, pictures."
+msgstr "Kako zbirka prikuplja i prikazuje vaše medije: pretraživanje, popisi datoteka, videozapisi, glazba, slike."
+
+msgctxt "#31166"
+msgid "Live TV and recordings from your PVR client: channels, guide, recording, reminders."
+msgstr "TV uživo i snimke s vašeg PVR klijenta: kanali, vodič, snimanje, podsjetnici."
+
+msgctxt "#31167"
+msgid "How Kodi looks and starts: skin, language and region, screensaver, master lock, startup."
+msgstr "Kako Kodi izgleda i pokreće se: presvlaka, jezik i regija, čuvar zaslona, glavno zaključavanje, pokretanje."
+
+msgctxt "#31168"
+msgid "The options of this skin: the home pages and the look."
+msgstr "Mogućnosti ove presvlake: početne stranice i izgled."
+
+msgctxt "#31169"
+msgid "Users with their own library, settings and add-ons, and the login screen."
+msgstr "Korisnici s vlastitom zbirkom, postavkama i dodacima te zaslon prijave."
+
+msgctxt "#31170"
+msgid "Installed add-ons, repositories, install from a zip file, search and updates."
+msgstr "Instalirani dodaci, repozitoriji, instalacija iz ZIP datoteke, pretraga i nadopune."
+
+msgctxt "#31171"
+msgid "Browse sources and folders, copy, move and delete files."
+msgstr "Pregledavanje izvora i mapa, kopiranje, premještanje i brisanje datoteka."
+
+msgctxt "#31172"
+msgid "The device: display, audio output, input, internet access, power saving, add-on rules, logging."
+msgstr "Uređaj: zaslon, zvučni izlaz, ulaz, pristup internetu, štednja energije, pravila dodataka, zapisivanje."
+
+msgctxt "#31173"
+msgid "What Kodi offers on the network and uses from it: remote control, UPnP, AirPlay, SMB, NFS, caching, weather."
+msgstr "Što Kodi nudi na mreži i što s nje koristi: daljinsko upravljanje, UPnP, AirPlay, SMB, NFS, predmemorija, vremenska prognoza."
+
+msgctxt "#31174"
+msgid "Facts about this device: Kodi version, storage, network, video, hardware."
+msgstr "Podaci o ovom uređaju: inačica Kodija, pohrana, mreža, video, hardver."
+
+msgctxt "#31175"
+msgid "What happened lately: add-on installs and updates, library scans, errors."
+msgstr "Što se nedavno dogodilo: instalacije i nadopune dodataka, pretraživanja zbirke, greške."
+
+msgctxt "#31176"
+msgid "Categories"
+msgstr "Kategorije"
+
+msgctxt "#31178"
+msgid "[COLOR state_text]⏎[/COLOR] open"
+msgstr "[COLOR state_text]⏎[/COLOR] otvori"
+
+msgctxt "#31181"
+msgid "refresh rate, decoding, resume"
+msgstr "frekvencija osvježavanja, dekodiranje, nastavak"
+
+msgctxt "#31182"
+msgid "crossfade, visualisation, volume adjustment"
+msgstr "pretapanje, vizualizacija, prilagodba glasnoće"
+
+msgctxt "#31183"
+msgid "DVD, Blu-ray, audio CD"
+msgstr "DVD, Blu-ray, audio CD"
+
+msgctxt "#31184"
+msgid "slideshow, transitions"
+msgstr "prikaz slajdova, prijelazi"
+
+msgctxt "#31185"
+msgid "audio, subtitles and menus"
+msgstr "zvuk, podnaslovi i izbornici"
+
+msgctxt "#31186"
+msgid "font, size, download services"
+msgstr "slova, veličina, usluge preuzimanja"
+
+msgctxt "#31187"
+msgid "scan on startup, update, clean up"
+msgstr "pretraga pri pokretanju, nadopuna, čišćenje"
+
+msgctxt "#31188"
+msgid "file extensions, hidden files, sorting"
+msgstr "nastavci datoteka, skrivene datoteke, poredak"
+
+msgctxt "#31189"
+msgid "select action, plots, thumbnails"
+msgstr "radnja odabira, radnje filmova, minijature"
+
+msgctxt "#31190"
+msgid "artists, album covers, tags"
+msgstr "izvođači, omoti albuma, oznake"
+
+msgctxt "#31191"
+msgid "thumbnails, EXIF"
+msgstr "minijature, EXIF"
+
+msgctxt "#31192"
+msgid "channel groups, channel icons"
+msgstr "grupe kanala, ikone kanala"
+
+msgctxt "#31193"
+msgid "channel info, switching"
+msgstr "podaci o kanalu, promjena"
+
+msgctxt "#31194"
+msgid "days shown, updates"
+msgstr "prikazani dani, nadopune"
+
+msgctxt "#31195"
+msgid "start, channel switch delay"
+msgstr "pokretanje, odgoda promjene kanala"
+
+msgctxt "#31196"
+msgid "margins, folders"
+msgstr "margine, mape"
+
+msgctxt "#31197"
+msgid "reminder before a show"
+msgstr "podsjetnik prije emisije"
+
+msgctxt "#31198"
+msgid "wake up for recordings"
+msgstr "buđenje za snimanja"
+
+msgctxt "#31199"
+msgid "lock by age, PIN"
+msgstr "zaključavanje po dobi, PIN"
+
+msgctxt "#31200"
+msgid "PVR client add-ons"
+msgstr "dodaci PVR klijenata"
+
+msgctxt "#31201"
+msgid "skin, theme, colours, fonts"
+msgstr "presvlaka, tema, boje, slova"
+
+msgctxt "#31202"
+msgid "language, region, time, keyboard"
+msgstr "jezik, regija, vrijeme, tipkovnica"
+
+msgctxt "#31203"
+msgid "mode, wait time"
+msgstr "način, vrijeme čekanja"
+
+msgctxt "#31204"
+msgid "lock code, protected areas"
+msgstr "kôd zaključavanja, zaštićena područja"
+
+msgctxt "#31205"
+msgid "start window, splash screen"
+msgstr "početni prozor, uvodni zaslon"
+
+msgctxt "#31206"
+msgid "resolution, refresh rate, calibration"
+msgstr "razlučivost, frekvencija osvježavanja, kalibracija"
+
+msgctxt "#31207"
+msgid "output device, channels, passthrough"
+msgstr "izlazni uređaj, kanali, passthrough"
+
+msgctxt "#31208"
+msgid "devices, mouse, remote"
+msgstr "uređaji, miš, daljinski upravljač"
+
+msgctxt "#31209"
+msgid "proxy"
+msgstr "proxy"
+
+msgctxt "#31210"
+msgid "shutdown, display off"
+msgstr "isključivanje, isključivanje zaslona"
+
+msgctxt "#31211"
+msgid "updates, unknown sources"
+msgstr "nadopune, nepoznati izvori"
+
+msgctxt "#31212"
+msgid "debug log, components"
+msgstr "zapis otklanjanja grešaka, komponente"
+
+msgctxt "#31213"
+msgid "device name, Zeroconf"
+msgstr "naziv uređaja, Zeroconf"
+
+msgctxt "#31214"
+msgid "web server, remote apps"
+msgstr "web poslužitelj, aplikacije za upravljanje"
+
+msgctxt "#31215"
+msgid "share library, renderer"
+msgstr "dijeljenje zbirke, renderer"
+
+msgctxt "#31216"
+msgid "receive AirPlay"
+msgstr "primanje AirPlaya"
+
+msgctxt "#31217"
+msgid "Windows shares, WINS"
+msgstr "Windows dijeljenja, WINS"
+
+msgctxt "#31218"
+msgid "NFS shares"
+msgstr "NFS dijeljenja"
+
+msgctxt "#31219"
+msgid "buffer, read rate"
+msgstr "međuspremnik, brzina čitanja"
+
+msgctxt "#31220"
+msgid "weather service"
+msgstr "usluga vremenske prognoze"
+
+msgctxt "#31221"
+msgid "Spotlight change"
+msgstr "Promjena istaknutog"
+
+msgctxt "#31222"
+msgid "Home pages"
+msgstr "Početne stranice"
+
+msgctxt "#31224"
+msgid "Rows"
+msgstr "Redovi"
+
+msgctxt "#31225"
+msgid "Spotlight"
+msgstr "Istaknuto"
+
+msgctxt "#31226"
+msgid "Still"
+msgstr "Bez promjene"
+
+msgctxt "#31227"
+msgid "All shows"
+msgstr "Sve serije"
+
+msgctxt "#31228"
+msgid "Unwatched shows"
+msgstr "Neodgledane serije"
+
+msgctxt "#31229"
+msgid "Slot"
+msgstr "Mjesto"
+
+msgctxt "#31231"
+msgid "Section for slot"
+msgstr "Odjeljak za mjesto"
+
+msgctxt "#31232"
+msgid "menu"
+msgstr "izbornik"
+
+msgctxt "#31233"
+msgid "Continue watching"
+msgstr "Nastavi gledati"
+
+msgctxt "#31234"
+msgid "Next up"
+msgstr "Na redu"
+
+msgctxt "#31235"
+msgid "New movies"
+msgstr "Novi filmovi"
+
+msgctxt "#31236"
+msgid "New episodes"
+msgstr "Nove epizode"
+
+msgctxt "#31237"
+msgid "Random movies"
+msgstr "Nasumični filmovi"
+
+msgctxt "#31238"
+msgid "Top rated"
+msgstr "Najbolje ocijenjeno"
+
+msgctxt "#31239"
+msgid "TMDb trending"
+msgstr "TMDb u trendu"
+
+msgctxt "#31240"
+msgid "Recently watched"
+msgstr "Nedavno gledano"
+
+msgctxt "#31241"
+msgid "Started movies and episodes, the last watched first."
+msgstr "Započeti filmovi i epizode, zadnje gledano prvo."
+
+msgctxt "#31242"
+msgid "The shows you are watching. OK opens the next episode."
+msgstr "Serije koje gledate. OK otvara sljedeću epizodu."
+
+msgctxt "#31243"
+msgid "The movies added to the library last."
+msgstr "Filmovi zadnji dodani u zbirku."
+
+msgctxt "#31244"
+msgid "The shows with the episodes added last."
+msgstr "Serije sa zadnje dodanim epizodama."
+
+msgctxt "#31245"
+msgid "Tabs for the three biggest genres and a picker for all others."
+msgstr "Kartice za tri najveća žanra i izbornik za sve ostale."
+
+msgctxt "#31246"
+msgid "A new choice from the whole library every time Home opens."
+msgstr "Novi izbor iz cijele zbirke pri svakom otvaranju početne stranice."
+
+msgctxt "#31248"
+msgid "Sorted by rating, from 7.0 up."
+msgstr "Poredano po ocjeni, od 7,0 naviše."
+
+msgctxt "#31249"
+msgid "Kodi's favourites, as you set them."
+msgstr "Kodijevi favoriti, kako ste ih postavili."
+
+msgctxt "#31250"
+msgid "What is trending on TMDb this week."
+msgstr "Što je ovaj tjedan u trendu na TMDb."
+
+msgctxt "#31251"
+msgid "What played last, also what you watched to the end."
+msgstr "Što se zadnje reproduciralo, i ono što ste odgledali do kraja."
+
+msgctxt "#31252"
+msgid "The movie sets of your library. OK opens a set."
+msgstr "Filmske kolekcije vaše zbirke. OK otvara kolekciju."
+
+msgctxt "#31253"
+msgid "Episodes you started and did not finish."
+msgstr "Epizode koje ste započeli i niste završili."
+
+msgctxt "#31254"
+msgid "Free slot. OK picks a section from the catalogue."
+msgstr "Slobodno mjesto. OK bira odjeljak iz kataloga."
+
+msgctxt "#31255"
+msgid "Large artwork with title and plot, in random order. OK or Right picks the source."
+msgstr "Velike slike s naslovom i radnjom, nasumičnim redom. OK ili Desno bira izvor."
+
+msgctxt "#31256"
+msgid "No spotlight: the page starts with the first row."
+msgstr "Bez istaknutog: stranica počinje prvim redom."
+
+msgctxt "#31257"
+msgid "How often the spotlight moves on by itself. OK or Right: 10, 15, 30, 60 s or still (then only by hand)."
+msgstr "Koliko se često istaknuto samo mijenja. OK ili Desno: 10, 15, 30, 60 s ili bez promjene (tada samo ručno)."
+
+msgctxt "#31258"
+msgid "Home and movies show the same spotlight, so they share this setting."
+msgstr "Početna i filmovi prikazuju isto istaknuto, pa dijele ovu postavku."
+
+msgctxt "#31259"
+msgid "Show or hide entries of the main menu. System and power always stay, and so does the last page shown."
+msgstr "Prikaži ili sakrij stavke glavnog izbornika. Sustav i napajanje uvijek ostaju, kao i zadnja prikazana stranica."
+
+msgctxt "#31260"
+msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]⏎[/COLOR] odaberi   [COLOR state_text]→[/COLOR] opcija"
+
+msgctxt "#31261"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] premjesti   [COLOR state_text]⏎[/COLOR] spusti"
+
+msgctxt "#31262"
+msgid "Spotlight, rows and main menu of the home, movies and shows pages."
+msgstr "Istaknuto, redovi i glavni izbornik stranica početna, filmovi i serije."
+
+msgctxt "#31263"
+msgid "swap"
+msgstr "zamijeni"
+
+msgctxt "#31264"
+msgid "Main menu"
+msgstr "Glavni izbornik"
+
+msgctxt "#31265"
+msgid "Spotlight and rows of the home page."
+msgstr "Istaknuto i redovi početne stranice."
+
+msgctxt "#31266"
+msgid "Spotlight and rows of the movies page."
+msgstr "Istaknuto i redovi stranice filmova."
+
+msgctxt "#31267"
+msgid "Spotlight and rows of the shows page."
+msgstr "Istaknuto i redovi stranice serija."
+
+msgctxt "#31268"
+msgid "How the skin draws the focus."
+msgstr "Kako presvlaka prikazuje fokus."
+
+msgctxt "#31230"
+msgid "frame rate"
+msgstr "broj sličica"
+
+msgctxt "#31330"
+msgid "back to video"
+msgstr "natrag na video"
+
+msgctxt "#31331"
+msgid "back to home"
+msgstr "natrag na početnu"
+
+msgctxt "#31332"
+msgid "back to movies"
+msgstr "natrag na filmove"
+
+msgctxt "#31333"
+msgid "back to shows"
+msgstr "natrag na serije"
+
+msgctxt "#31334"
+msgid "back to search"
+msgstr "natrag na pretragu"
+
+msgctxt "#31335"
+msgid "back to library"
+msgstr "natrag na zbirku"
+
+msgctxt "#31310"
+msgid "Home key opens the home page"
+msgstr "Tipka Home otvara početnu stranicu"
+
+msgctxt "#31311"
+msgid "The Home key of the remote always leads to the home page, held down it opens the quick menu. The skin sets up the keymap 0_skin.nightcity.xml in the profile for it; your own keymaps still win."
+msgstr "Tipka Home na daljinskom upravljaču uvijek vodi na početnu stranicu, a kad se drži otvara brzi izbornik. Presvlaka za to u profilu postavlja keymap 0_skin.nightcity.xml; vaši vlastiti keymapovi i dalje imaju prednost."
+
+msgctxt "#31300"
+msgid "crew"
+msgstr "ekipa"
+
+msgctxt "#31301"
+msgid "back to start"
+msgstr "natrag na početak"
+
+msgctxt "#31302"
+msgid "person"
+msgstr "osoba"
+
+msgctxt "#31303"
+msgid "born"
+msgstr "rođen(a)"
+
+msgctxt "#31304"
+msgid "died"
+msgstr "umro/la"
+
+msgctxt "#31320"
+msgid "quick menu"
+msgstr "brzi izbornik"
+
+msgctxt "#31321"
+msgid "set up weather"
+msgstr "postavi prognozu"
+
+msgctxt "#31322"
+msgid "more"
+msgstr "više"
+
+msgctxt "#31323"
+msgid "timer"
+msgstr "timer"
+
+msgctxt "#31336"
+msgid "Remember search terms"
+msgstr "Pamti pojmove pretrage"
+
+msgctxt "#31337"
+msgid "The search page lists the last five search terms. Switched off, the skin keeps no terms and forgets the ones it has."
+msgstr "Stranica pretrage prikazuje zadnjih pet pojmova pretrage. Kad je isključeno, presvlaka ne čuva pojmove i zaboravlja one koje ima."
+
+msgctxt "#31338"
+msgid "Clear search history"
+msgstr "Očisti povijest pretrage"
+
+msgctxt "#31339"
+msgid "Forgets the remembered search terms."
+msgstr "Zaboravlja zapamćene pojmove pretrage."
+
+msgctxt "#31340"
+msgid "The colour scheme of the skin, the same choice as under Interface."
+msgstr "Shema boja presvlake, isti izbor kao pod Sučelje."
+
+msgctxt "#31341"
+msgid "forecast"
+msgstr "prognoza"
+
+msgctxt "#31360"
+msgid "Hide the controls automatically"
+msgstr "Automatski sakrij kontrole"
+
+msgctxt "#31361"
+msgid "While a video plays, the player controls close by themselves once no key was pressed for the time set below. While paused they stay; the time starts again when playback goes on."
+msgstr "Dok se video reproducira, kontrole reproduktora same se zatvaraju kad se tijekom dolje postavljenog vremena ne pritisne nijedna tipka. Pri pauzi ostaju; vrijeme kreće ispočetka kad se reprodukcija nastavi."
+
+msgctxt "#31362"
+msgid "Hide after"
+msgstr "Sakrij nakon"
+
+msgctxt "#31363"
+msgid "Time without a key press before the player controls close, 3 to 30 seconds. OK takes the slider, left and right move it, OK lets go."
+msgstr "Vrijeme bez pritiska tipke prije zatvaranja kontrola reproduktora, 3 do 30 sekundi. OK hvata klizač, lijevo i desno ga pomiču, OK ga pušta."
+
+msgctxt "#31364"
+msgid "The video player: its controls and what it shows while they are up."
+msgstr "Video reproduktor: njegove kontrole i što prikazuje dok su otvorene."
+
+msgctxt "#31365"
+msgid "Show the plot"
+msgstr "Prikaži radnju"
+
+msgctxt "#31366"
+msgid "The plot of what plays, under its title while the player controls or the seek line are up."
+msgstr "Radnja onoga što se reproducira, ispod naslova, dok su otvorene kontrole reproduktora ili traka premotavanja."
+
+msgctxt "#31400"
+msgid "New albums"
+msgstr "Novi albumi"
+
+msgctxt "#31401"
+msgid "Recently played"
+msgstr "Nedavno slušano"
+
+msgctxt "#31402"
+msgid "Random albums"
+msgstr "Nasumični albumi"
+
+msgctxt "#31403"
+msgid "Artists"
+msgstr "Izvođači"
+
+msgctxt "#31404"
+msgid "Genres"
+msgstr "Žanrovi"
+
+msgctxt "#31405"
+msgid "music"
+msgstr "glazba"
+
+msgctxt "#31406"
+msgid "now playing"
+msgstr "sada svira"
+
+msgctxt "#31407"
+msgid "albums"
+msgstr "albumi"
+
+msgctxt "#31408"
+msgid "more by"
+msgstr "još od"
+
+msgctxt "#31409"
+msgid "tracks"
+msgstr "pjesme"
+
+msgctxt "#31410"
+msgid "up next"
+msgstr "sljedeće"
+
+msgctxt "#31411"
+msgid "shuffle"
+msgstr "nasumično"
+
+msgctxt "#31412"
+msgid "repeat"
+msgstr "ponavljanje"
+
+msgctxt "#31413"
+msgid "repeat all"
+msgstr "ponovi sve"
+
+msgctxt "#31414"
+msgid "repeat one"
+msgstr "ponovi jednu"
+
+msgctxt "#31420"
+msgid "Network, Bluetooth, updates"
+msgstr "Mreža, Bluetooth, nadopune"
+
+msgctxt "#31440"
+msgid "audience"
+msgstr "publika"
+
+msgctxt "#31441"
+msgid "Ratings only from TMDb Helper"
+msgstr "Ocjene samo iz TMDb Helpera"
+
+msgctxt "#31442"
+msgid "Show only the ratings TMDb Helper fetched for exactly this title. Off: the library's own rating (from Jellyfin) fills in while TMDb Helper has none."
+msgstr "Prikaži samo ocjene koje je TMDb Helper dohvatio upravo za ovaj naslov. Isključeno: vlastita ocjena zbirke (iz Jellyfina) uskače dok TMDb Helper nema nijednu."
+
+msgctxt "#31443"
+msgid "Ratings only on title pages"
+msgstr "Ocjene samo na stranicama naslova"
+
+msgctxt "#31444"
+msgid "Spotlight and rows show no ratings, which saves requests to TMDb. A title's page still shows them."
+msgstr "Istaknuto i redovi ne prikazuju ocjene, što štedi upite prema TMDb. Stranica naslova ih i dalje prikazuje."
+
+msgctxt "#31445"
+msgid "Ratings"
+msgstr "Ocjene"
+
+msgctxt "#31446"
+msgid "Sources"
+msgstr "Izvori"
+
+msgctxt "#31447"
+msgid "Which ratings the ratings line of the spotlight and the info page shows, and where they come from."
+msgstr "Koje ocjene prikazuje redak ocjena istaknutog i stranice informacija i odakle dolaze."
+
+msgctxt "#31450"
+msgid "IMDb"
+msgstr "IMDb"
+
+msgctxt "#31451"
+msgid "TMDb"
+msgstr "TMDb"
+
+msgctxt "#31452"
+msgid "Rotten Tomatoes critics"
+msgstr "Rotten Tomatoes kritičari"
+
+msgctxt "#31453"
+msgid "Rotten Tomatoes audience"
+msgstr "Rotten Tomatoes publika"
+
+msgctxt "#31454"
+msgid "Metacritic"
+msgstr "Metacritic"
+
+msgctxt "#31455"
+msgid "Trakt"
+msgstr "Trakt"
+
+msgctxt "#31456"
+msgid "Letterboxd"
+msgstr "Letterboxd"
+
+msgctxt "#31457"
+msgid "MDbList"
+msgstr "MDbList"
+
+msgctxt "#31460"
+msgid "IMDb users, 0 to 10, with the Top 250 rank. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Korisnici IMDb-a, 0 do 10, s mjestom na Top 250. Potreban je OMDb ili MDbList ključ u TMDb Helperu."
+
+msgctxt "#31461"
+msgid "TMDb users, 0 to 10. Needs no key."
+msgstr "Korisnici TMDb-a, 0 do 10. Ključ nije potreban."
+
+msgctxt "#31462"
+msgid "Tomatometer: the share of positive critic reviews. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Tomatometer: udio pozitivnih kritika. Potreban je OMDb ili MDbList ključ u TMDb Helperu."
+
+msgctxt "#31463"
+msgid "Popcornmeter: the share of positive audience ratings. Needs an MDbList or OMDb key in TMDb Helper."
+msgstr "Popcornmeter: udio pozitivnih ocjena publike. Potreban je MDbList ili OMDb ključ u TMDb Helperu."
+
+msgctxt "#31464"
+msgid "A weighted average of critic reviews, 0 to 100, mostly for theatrical films and big series. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Ponderirani prosjek kritika, 0 do 100, uglavnom za kino filmove i velike serije. Potreban je OMDb ili MDbList ključ u TMDb Helperu."
+
+msgctxt "#31465"
+msgid "Trakt users, 0 to 10. Needs a connected Trakt account in TMDb Helper: fetched from Trakt, not MDbList."
+msgstr "Korisnici Trakta, 0 do 10. Potreban je povezani Trakt račun u TMDb Helperu: dohvaća se s Trakta, ne s MDbLista."
+
+msgctxt "#31466"
+msgid "Letterboxd users, 0 to 5, mostly films. Needs an MDbList key in TMDb Helper."
+msgstr "Korisnici Letterboxda, 0 do 5, uglavnom filmovi. Potreban je MDbList ključ u TMDb Helperu."
+
+msgctxt "#31467"
+msgid "MDbList score: an average of the other sources, 0 to 100. Needs an MDbList key in TMDb Helper."
+msgstr "MDbList ocjena: prosjek ostalih izvora, 0 do 100. Potreban je MDbList ključ u TMDb Helperu."
+
+msgctxt "#31469"
+msgid "No description"
+msgstr "Nema opisa"
+
+msgctxt "#31470"
+msgid "back"
+msgstr "natrag"
+
+msgctxt "#31471"
+msgid "budget"
+msgstr "budžet"
+
+msgctxt "#31472"
+msgid "box office"
+msgstr "zarada"
+
+msgctxt "#31473"
+msgid "description"
+msgstr "opis"
+
+msgctxt "#31474"
+msgid "biography"
+msgstr "životopis"
+
+msgctxt "#31478"
+msgid "controls"
+msgstr "kontrole"
+
+msgctxt "#31479"
+msgid "previous page"
+msgstr "prethodna stranica"
+
+msgctxt "#31480"
+msgid "parent folder"
+msgstr "nadređena mapa"
+
+msgctxt "#31477"
+msgid "Home"
+msgstr "Početna"
+
+msgctxt "#31500"
+msgid "view"
+msgstr "prikaz"
+
+msgctxt "#31501"
+msgid "list"
+msgstr "popis"
+
+msgctxt "#31502"
+msgid "filter"
+msgstr "filtar"
+
+msgctxt "#31503"
+msgid "all"
+msgstr "sve"
+
+msgctxt "#31504"
+msgid "resolution"
+msgstr "razlučivost"
+
+msgctxt "#31505"
+msgid "dynamic range"
+msgstr "dinamički raspon"
+
+msgctxt "#31506"
+msgid "audio format"
+msgstr "format zvuka"
+
+msgctxt "#31507"
+msgid "audio channels"
+msgstr "zvučni kanali"
+
+msgctxt "#31508"
+msgid "clear filter"
+msgstr "očisti filtar"
+
+msgctxt "#31600"
+msgid "runtime"
+msgstr "trajanje"
+
+msgctxt "#31601"
+msgid "genre"
+msgstr "žanr"
+
+msgctxt "#31602"
+msgid "details"
+msgstr "detalji"
+
+msgctxt "#31603"
+msgid "seasons"
+msgstr "sezone"
+
+msgctxt "#31604"
+msgid "season"
+msgstr "sezona"
+
+msgctxt "#31605"
+msgid "seasons"
+msgstr "sezone"
+
+msgctxt "#31606"
+msgid "episodes"
+msgstr "epizode"
+
+msgctxt "#31607"
+msgid "none"
+msgstr "ništa"
+
+msgctxt "#31700"
+msgid "On Deck"
+msgstr "On Deck"
+
+msgctxt "#31701"
+msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
+msgstr "Što ste započeli, zatim serije koje gledate. OK na seriji otvara sljedeću epizodu."
+
+msgctxt "#31750"
+msgid "No trailer found"
+msgstr "Najava nije pronađena"

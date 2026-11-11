@@ -1,0 +1,1196 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: uk_ua\n"
+
+msgctxt "#31002"
+msgid "Spotlight source"
+msgstr "Джерело вітрини"
+
+msgctxt "#31003"
+msgid "All movies"
+msgstr "Усі фільми"
+
+msgctxt "#31004"
+msgid "Unwatched movies"
+msgstr "Непереглянуті фільми"
+
+msgctxt "#31005"
+msgid "Effects"
+msgstr "Ефекти"
+
+msgctxt "#31006"
+msgid "home"
+msgstr "головна"
+
+msgctxt "#31010"
+msgid "play"
+msgstr "відтворити"
+
+msgctxt "#31011"
+msgid "info"
+msgstr "інфо"
+
+msgctxt "#31012"
+msgid "min"
+msgstr "хв"
+
+msgctxt "#31020"
+msgid "on deck"
+msgstr "на черзі"
+
+msgctxt "#31021"
+msgid "new movies"
+msgstr "нові фільми"
+
+msgctxt "#31022"
+msgid "new episodes"
+msgstr "нові епізоди"
+
+msgctxt "#31023"
+msgid "continue watching"
+msgstr "продовжити перегляд"
+
+msgctxt "#31030"
+msgid "movies"
+msgstr "фільми"
+
+msgctxt "#31031"
+msgid "shows"
+msgstr "серіали"
+
+msgctxt "#31032"
+msgid "search"
+msgstr "пошук"
+
+msgctxt "#31033"
+msgid "System"
+msgstr "Система"
+
+msgctxt "#31041"
+msgid "trailer"
+msgstr "трейлер"
+
+msgctxt "#31042"
+msgid "posters"
+msgstr "постери"
+
+msgctxt "#31043"
+msgid "resume"
+msgstr "продовжити"
+
+msgctxt "#31050"
+msgid "ends"
+msgstr "кінець"
+
+msgctxt "#31051"
+msgid "pause"
+msgstr "пауза"
+
+msgctxt "#31052"
+msgid "stop"
+msgstr "стоп"
+
+msgctxt "#31053"
+msgid "subtitles"
+msgstr "субтитри"
+
+msgctxt "#31054"
+msgid "audio"
+msgstr "аудіо"
+
+msgctxt "#31055"
+msgid "video"
+msgstr "відео"
+
+msgctxt "#31056"
+msgid "bookmarks"
+msgstr "закладки"
+
+msgctxt "#31057"
+msgid "buffering"
+msgstr "буферизація"
+
+msgctxt "#31058"
+msgid "video already has subtitles"
+msgstr "відео вже має субтитри"
+
+msgctxt "#31080"
+msgid "quit kodi"
+msgstr "вийти з Kodi"
+
+msgctxt "#31081"
+msgid "power off"
+msgstr "вимкнути"
+
+msgctxt "#31082"
+msgid "reboot"
+msgstr "перезавантажити"
+
+msgctxt "#31083"
+msgid "suspend"
+msgstr "сон"
+
+msgctxt "#31084"
+msgid "hibernate"
+msgstr "глибокий сон"
+
+msgctxt "#31085"
+msgid "shutdown timer"
+msgstr "таймер вимкнення"
+
+msgctxt "#31086"
+msgid "cancel shutdown timer"
+msgstr "скасувати таймер вимкнення"
+
+msgctxt "#31087"
+msgid "log off"
+msgstr "вийти з профілю"
+
+msgctxt "#31088"
+msgid "reload skin"
+msgstr "перезавантажити обкладинку"
+
+msgctxt "#31089"
+msgid "power"
+msgstr "живлення"
+
+msgctxt "#31090"
+msgid "Hide foreign"
+msgstr "Сховати іншомовні"
+
+msgctxt "#31091"
+msgid "Hide broken"
+msgstr "Сховати пошкоджені"
+
+msgctxt "#31094"
+msgid "thumbs"
+msgstr "ескізи"
+
+msgctxt "#31095"
+msgid "mute"
+msgstr "без звуку"
+
+msgctxt "#31096"
+msgid "descending"
+msgstr "за спаданням"
+
+msgctxt "#31100"
+msgid "spotlight"
+msgstr "вітрина"
+
+msgctxt "#31101"
+msgid "all movies"
+msgstr "усі фільми"
+
+msgctxt "#31102"
+msgid "all shows"
+msgstr "усі серіали"
+
+msgctxt "#31103"
+msgid "in progress"
+msgstr "розпочаті"
+
+msgctxt "#31104"
+msgid "unwatched"
+msgstr "непереглянуті"
+
+msgctxt "#31105"
+msgid "genres"
+msgstr "жанри"
+
+msgctxt "#31106"
+msgid "episodes"
+msgstr "епізоди"
+
+msgctxt "#31116"
+msgid "sort"
+msgstr "сортування"
+
+msgctxt "#31117"
+msgid "descending"
+msgstr "за спаданням"
+
+msgctxt "#31118"
+msgid "title"
+msgstr "назва"
+
+msgctxt "#31119"
+msgid "year"
+msgstr "рік"
+
+msgctxt "#31120"
+msgid "added"
+msgstr "додано"
+
+msgctxt "#31121"
+msgid "rating"
+msgstr "рейтинг"
+
+msgctxt "#31122"
+msgid "ascending"
+msgstr "за зростанням"
+
+msgctxt "#31123"
+msgid "from start"
+msgstr "з початку"
+
+msgctxt "#31124"
+msgid "cast"
+msgstr "у ролях"
+
+msgctxt "#31125"
+msgid "details"
+msgstr "подробиці"
+
+msgctxt "#31126"
+msgid "director"
+msgstr "режисер"
+
+msgctxt "#31127"
+msgid "writer"
+msgstr "сценарист"
+
+msgctxt "#31128"
+msgid "studio"
+msgstr "студія"
+
+msgctxt "#31129"
+msgid "country"
+msgstr "країна"
+
+msgctxt "#31130"
+msgid "similar"
+msgstr "схожі"
+
+msgctxt "#31131"
+msgid "season"
+msgstr "сезон"
+
+msgctxt "#31132"
+msgid "episode"
+msgstr "епізод"
+
+msgctxt "#31133"
+msgid "all"
+msgstr "усі"
+
+msgctxt "#31134"
+msgid "specials"
+msgstr "спецвипуски"
+
+msgctxt "#31135"
+msgid "select"
+msgstr "вибрати"
+
+msgctxt "#31136"
+msgid "age rating"
+msgstr "віковий рейтинг"
+
+msgctxt "#31059"
+msgid "ends at"
+msgstr "кінець о"
+
+msgctxt "#31137"
+msgid "next episode"
+msgstr "наступний епізод"
+
+msgctxt "#31138"
+msgid "off"
+msgstr "вимк."
+
+msgctxt "#31139"
+msgid "all settings"
+msgstr "усі налаштування"
+
+msgctxt "#31140"
+msgid "chapters"
+msgstr "розділи"
+
+msgctxt "#31141"
+msgid "search for a title"
+msgstr "пошук за назвою"
+
+msgctxt "#31142"
+msgid "actions"
+msgstr "дії"
+
+msgctxt "#31143"
+msgid "power off"
+msgstr "вимкнути"
+
+msgctxt "#31144"
+msgid "reboot"
+msgstr "перезавантажити"
+
+msgctxt "#31145"
+msgid "suspend"
+msgstr "сон"
+
+msgctxt "#31146"
+msgid "exit kodi"
+msgstr "вийти з Kodi"
+
+msgctxt "#31147"
+msgid "restart kodi"
+msgstr "перезапустити Kodi"
+
+msgctxt "#31148"
+msgid "movies (library)"
+msgstr "фільми (медіатека)"
+
+msgctxt "#31149"
+msgid "shows (library)"
+msgstr "серіали (медіатека)"
+
+msgctxt "#31150"
+msgid "episodes (library)"
+msgstr "епізоди (медіатека)"
+
+msgctxt "#31151"
+msgid "online: movies (tmdb)"
+msgstr "онлайн: фільми (TMDb)"
+
+msgctxt "#31152"
+msgid "online: shows (tmdb)"
+msgstr "онлайн: серіали (TMDb)"
+
+msgctxt "#31153"
+msgid "recent"
+msgstr "нещодавні"
+
+msgctxt "#31154"
+msgid "not available on this device"
+msgstr "недоступно на цьому пристрої"
+
+msgctxt "#31155"
+msgid "stats"
+msgstr "статистика"
+
+msgctxt "#31157"
+msgid "booting"
+msgstr "booting"
+
+msgctxt "#31158"
+msgid "online"
+msgstr "online"
+
+msgctxt "#31159"
+msgid "Playback & media"
+msgstr "Відтворення і медіа"
+
+msgctxt "#31160"
+msgid "Look & profiles"
+msgstr "Вигляд і профілі"
+
+msgctxt "#31161"
+msgid "Add-ons & content"
+msgstr "Додатки і вміст"
+
+msgctxt "#31162"
+msgid "System & network"
+msgstr "Система і мережа"
+
+msgctxt "#31163"
+msgid "Tools"
+msgstr "Інструменти"
+
+msgctxt "#31164"
+msgid "How videos, music and pictures play: decoding, refresh rate, discs, audio and subtitle language, subtitles."
+msgstr "Як відтворюються відео, музика і зображення: декодування, частота оновлення, диски, мова аудіо і субтитрів, субтитри."
+
+msgctxt "#31165"
+msgid "How the library collects and shows your media: scanning, file lists, videos, music, pictures."
+msgstr "Як медіатека збирає і показує ваші медіа: сканування, списки файлів, відео, музика, зображення."
+
+msgctxt "#31166"
+msgid "Live TV and recordings from your PVR client: channels, guide, recording, reminders."
+msgstr "Ефірне ТБ і записи з PVR-клієнта: канали, телегід, запис, нагадування."
+
+msgctxt "#31167"
+msgid "How Kodi looks and starts: skin, language and region, screensaver, master lock, startup."
+msgstr "Як Kodi виглядає і запускається: обкладинка, мова і регіон, заставка, головне блокування, запуск."
+
+msgctxt "#31168"
+msgid "The options of this skin: the home pages and the look."
+msgstr "Параметри цієї обкладинки: головні сторінки і вигляд."
+
+msgctxt "#31169"
+msgid "Users with their own library, settings and add-ons, and the login screen."
+msgstr "Користувачі з власною медіатекою, налаштуваннями і додатками, а також екран входу."
+
+msgctxt "#31170"
+msgid "Installed add-ons, repositories, install from a zip file, search and updates."
+msgstr "Встановлені додатки, сховища, встановлення з zip-файлу, пошук і оновлення."
+
+msgctxt "#31171"
+msgid "Browse sources and folders, copy, move and delete files."
+msgstr "Перегляд джерел і папок, копіювання, переміщення і видалення файлів."
+
+msgctxt "#31172"
+msgid "The device: display, audio output, input, internet access, power saving, add-on rules, logging."
+msgstr "Пристрій: екран, аудіовихід, введення, доступ до інтернету, енергозбереження, правила додатків, журнал."
+
+msgctxt "#31173"
+msgid "What Kodi offers on the network and uses from it: remote control, UPnP, AirPlay, SMB, NFS, caching, weather."
+msgstr "Що Kodi пропонує в мережі і що бере з неї: дистанційне керування, UPnP, AirPlay, SMB, NFS, кешування, погода."
+
+msgctxt "#31174"
+msgid "Facts about this device: Kodi version, storage, network, video, hardware."
+msgstr "Відомості про пристрій: версія Kodi, сховище, мережа, відео, обладнання."
+
+msgctxt "#31175"
+msgid "What happened lately: add-on installs and updates, library scans, errors."
+msgstr "Що сталося нещодавно: встановлення і оновлення додатків, сканування медіатеки, помилки."
+
+msgctxt "#31176"
+msgid "Categories"
+msgstr "Категорії"
+
+msgctxt "#31178"
+msgid "[COLOR state_text]⏎[/COLOR] open"
+msgstr "[COLOR state_text]⏎[/COLOR] відкрити"
+
+msgctxt "#31181"
+msgid "refresh rate, decoding, resume"
+msgstr "частота оновлення, декодування, продовження"
+
+msgctxt "#31182"
+msgid "crossfade, visualisation, volume adjustment"
+msgstr "плавний перехід, візуалізація, регулювання гучності"
+
+msgctxt "#31183"
+msgid "DVD, Blu-ray, audio CD"
+msgstr "DVD, Blu-ray, аудіо-CD"
+
+msgctxt "#31184"
+msgid "slideshow, transitions"
+msgstr "слайд-шоу, переходи"
+
+msgctxt "#31185"
+msgid "audio, subtitles and menus"
+msgstr "аудіо, субтитри і меню"
+
+msgctxt "#31186"
+msgid "font, size, download services"
+msgstr "шрифт, розмір, служби завантаження"
+
+msgctxt "#31187"
+msgid "scan on startup, update, clean up"
+msgstr "сканування під час запуску, оновлення, очищення"
+
+msgctxt "#31188"
+msgid "file extensions, hidden files, sorting"
+msgstr "розширення файлів, приховані файли, сортування"
+
+msgctxt "#31189"
+msgid "select action, plots, thumbnails"
+msgstr "дія вибору, сюжети, мініатюри"
+
+msgctxt "#31190"
+msgid "artists, album covers, tags"
+msgstr "виконавці, обкладинки альбомів, теги"
+
+msgctxt "#31191"
+msgid "thumbnails, EXIF"
+msgstr "мініатюри, EXIF"
+
+msgctxt "#31192"
+msgid "channel groups, channel icons"
+msgstr "групи каналів, значки каналів"
+
+msgctxt "#31193"
+msgid "channel info, switching"
+msgstr "інформація про канал, перемикання"
+
+msgctxt "#31194"
+msgid "days shown, updates"
+msgstr "показані дні, оновлення"
+
+msgctxt "#31195"
+msgid "start, channel switch delay"
+msgstr "запуск, затримка перемикання каналів"
+
+msgctxt "#31196"
+msgid "margins, folders"
+msgstr "відступи, папки"
+
+msgctxt "#31197"
+msgid "reminder before a show"
+msgstr "нагадування перед передачею"
+
+msgctxt "#31198"
+msgid "wake up for recordings"
+msgstr "пробудження для запису"
+
+msgctxt "#31199"
+msgid "lock by age, PIN"
+msgstr "блокування за віком, PIN"
+
+msgctxt "#31200"
+msgid "PVR client add-ons"
+msgstr "додатки PVR-клієнтів"
+
+msgctxt "#31201"
+msgid "skin, theme, colours, fonts"
+msgstr "обкладинка, тема, кольори, шрифти"
+
+msgctxt "#31202"
+msgid "language, region, time, keyboard"
+msgstr "мова, регіон, час, клавіатура"
+
+msgctxt "#31203"
+msgid "mode, wait time"
+msgstr "режим, час очікування"
+
+msgctxt "#31204"
+msgid "lock code, protected areas"
+msgstr "код блокування, захищені розділи"
+
+msgctxt "#31205"
+msgid "start window, splash screen"
+msgstr "початкове вікно, екран завантаження"
+
+msgctxt "#31206"
+msgid "resolution, refresh rate, calibration"
+msgstr "роздільність, частота оновлення, калібрування"
+
+msgctxt "#31207"
+msgid "output device, channels, passthrough"
+msgstr "пристрій виведення, канали, passthrough"
+
+msgctxt "#31208"
+msgid "devices, mouse, remote"
+msgstr "пристрої, миша, пульт"
+
+msgctxt "#31209"
+msgid "proxy"
+msgstr "проксі"
+
+msgctxt "#31210"
+msgid "shutdown, display off"
+msgstr "вимкнення, вимкнення екрана"
+
+msgctxt "#31211"
+msgid "updates, unknown sources"
+msgstr "оновлення, невідомі джерела"
+
+msgctxt "#31212"
+msgid "debug log, components"
+msgstr "журнал налагодження, компоненти"
+
+msgctxt "#31213"
+msgid "device name, Zeroconf"
+msgstr "назва пристрою, Zeroconf"
+
+msgctxt "#31214"
+msgid "web server, remote apps"
+msgstr "вебсервер, програми керування"
+
+msgctxt "#31215"
+msgid "share library, renderer"
+msgstr "спільна медіатека, рендерер"
+
+msgctxt "#31216"
+msgid "receive AirPlay"
+msgstr "приймання AirPlay"
+
+msgctxt "#31217"
+msgid "Windows shares, WINS"
+msgstr "спільні ресурси Windows, WINS"
+
+msgctxt "#31218"
+msgid "NFS shares"
+msgstr "спільні ресурси NFS"
+
+msgctxt "#31219"
+msgid "buffer, read rate"
+msgstr "буфер, швидкість читання"
+
+msgctxt "#31220"
+msgid "weather service"
+msgstr "служба погоди"
+
+msgctxt "#31221"
+msgid "Spotlight change"
+msgstr "Зміна вітрини"
+
+msgctxt "#31222"
+msgid "Home pages"
+msgstr "Головні сторінки"
+
+msgctxt "#31224"
+msgid "Rows"
+msgstr "Ряди"
+
+msgctxt "#31225"
+msgid "Spotlight"
+msgstr "Вітрина"
+
+msgctxt "#31226"
+msgid "Still"
+msgstr "Без зміни"
+
+msgctxt "#31227"
+msgid "All shows"
+msgstr "Усі серіали"
+
+msgctxt "#31228"
+msgid "Unwatched shows"
+msgstr "Непереглянуті серіали"
+
+msgctxt "#31229"
+msgid "Slot"
+msgstr "Місце"
+
+msgctxt "#31231"
+msgid "Section for slot"
+msgstr "Розділ для місця"
+
+msgctxt "#31232"
+msgid "menu"
+msgstr "меню"
+
+msgctxt "#31233"
+msgid "Continue watching"
+msgstr "Продовжити перегляд"
+
+msgctxt "#31234"
+msgid "Next up"
+msgstr "Далі"
+
+msgctxt "#31235"
+msgid "New movies"
+msgstr "Нові фільми"
+
+msgctxt "#31236"
+msgid "New episodes"
+msgstr "Нові епізоди"
+
+msgctxt "#31237"
+msgid "Random movies"
+msgstr "Випадкові фільми"
+
+msgctxt "#31238"
+msgid "Top rated"
+msgstr "Найкращі за рейтингом"
+
+msgctxt "#31239"
+msgid "TMDb trending"
+msgstr "Тренди TMDb"
+
+msgctxt "#31240"
+msgid "Recently watched"
+msgstr "Нещодавно переглянуті"
+
+msgctxt "#31241"
+msgid "Started movies and episodes, the last watched first."
+msgstr "Розпочаті фільми й епізоди, спершу останні переглянуті."
+
+msgctxt "#31242"
+msgid "The shows you are watching. OK opens the next episode."
+msgstr "Серіали, які ви дивитеся. OK відкриває наступний епізод."
+
+msgctxt "#31243"
+msgid "The movies added to the library last."
+msgstr "Фільми, останніми додані до медіатеки."
+
+msgctxt "#31244"
+msgid "The shows with the episodes added last."
+msgstr "Серіали з останніми доданими епізодами."
+
+msgctxt "#31245"
+msgid "Tabs for the three biggest genres and a picker for all others."
+msgstr "Вкладки для трьох найбільших жанрів і вибір для всіх інших."
+
+msgctxt "#31246"
+msgid "A new choice from the whole library every time Home opens."
+msgstr "Нова добірка з усієї медіатеки щоразу, коли відкривається головна."
+
+msgctxt "#31248"
+msgid "Sorted by rating, from 7.0 up."
+msgstr "За рейтингом, від 7,0 і вище."
+
+msgctxt "#31249"
+msgid "Kodi's favourites, as you set them."
+msgstr "Обране Kodi, як ви його налаштували."
+
+msgctxt "#31250"
+msgid "What is trending on TMDb this week."
+msgstr "Що в тренді на TMDb цього тижня."
+
+msgctxt "#31251"
+msgid "What played last, also what you watched to the end."
+msgstr "Що відтворювалося останнім, зокрема переглянуте до кінця."
+
+msgctxt "#31252"
+msgid "The movie sets of your library. OK opens a set."
+msgstr "Кіноцикли вашої медіатеки. OK відкриває цикл."
+
+msgctxt "#31253"
+msgid "Episodes you started and did not finish."
+msgstr "Розпочаті й не доглянуті епізоди."
+
+msgctxt "#31254"
+msgid "Free slot. OK picks a section from the catalogue."
+msgstr "Вільне місце. OK вибирає розділ із каталогу."
+
+msgctxt "#31255"
+msgid "Large artwork with title and plot, in random order. OK or Right picks the source."
+msgstr "Великі зображення з назвою і сюжетом у випадковому порядку. OK або Вправо вибирає джерело."
+
+msgctxt "#31256"
+msgid "No spotlight: the page starts with the first row."
+msgstr "Без вітрини: сторінка починається з першого ряду."
+
+msgctxt "#31257"
+msgid "How often the spotlight moves on by itself. OK or Right: 10, 15, 30, 60 s or still (then only by hand)."
+msgstr "Як часто вітрина змінюється сама. OK або Вправо: 10, 15, 30, 60 с або без зміни (тоді лише вручну)."
+
+msgctxt "#31258"
+msgid "Home and movies show the same spotlight, so they share this setting."
+msgstr "Головна і фільми показують одну й ту саму вітрину, тож це налаштування в них спільне."
+
+msgctxt "#31259"
+msgid "Show or hide entries of the main menu. System and power always stay, and so does the last page shown."
+msgstr "Показати або сховати пункти головного меню. Система і живлення залишаються завжди, як і остання показана сторінка."
+
+msgctxt "#31260"
+msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]⏎[/COLOR] вибрати   [COLOR state_text]→[/COLOR] параметр"
+
+msgctxt "#31261"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] перемістити   [COLOR state_text]⏎[/COLOR] покласти"
+
+msgctxt "#31262"
+msgid "Spotlight, rows and main menu of the home, movies and shows pages."
+msgstr "Вітрина, ряди і головне меню сторінок головна, фільми і серіали."
+
+msgctxt "#31263"
+msgid "swap"
+msgstr "поміняти"
+
+msgctxt "#31264"
+msgid "Main menu"
+msgstr "Головне меню"
+
+msgctxt "#31265"
+msgid "Spotlight and rows of the home page."
+msgstr "Вітрина і ряди головної сторінки."
+
+msgctxt "#31266"
+msgid "Spotlight and rows of the movies page."
+msgstr "Вітрина і ряди сторінки фільмів."
+
+msgctxt "#31267"
+msgid "Spotlight and rows of the shows page."
+msgstr "Вітрина і ряди сторінки серіалів."
+
+msgctxt "#31268"
+msgid "How the skin draws the focus."
+msgstr "Як обкладинка показує фокус."
+
+msgctxt "#31230"
+msgid "frame rate"
+msgstr "частота кадрів"
+
+msgctxt "#31330"
+msgid "back to video"
+msgstr "назад до відео"
+
+msgctxt "#31331"
+msgid "back to home"
+msgstr "на головну"
+
+msgctxt "#31332"
+msgid "back to movies"
+msgstr "до фільмів"
+
+msgctxt "#31333"
+msgid "back to shows"
+msgstr "до серіалів"
+
+msgctxt "#31334"
+msgid "back to search"
+msgstr "до пошуку"
+
+msgctxt "#31335"
+msgid "back to library"
+msgstr "до медіатеки"
+
+msgctxt "#31310"
+msgid "Home key opens the home page"
+msgstr "Кнопка Home відкриває головну"
+
+msgctxt "#31311"
+msgid "The Home key of the remote always leads to the home page, held down it opens the quick menu. The skin sets up the keymap 0_skin.nightcity.xml in the profile for it; your own keymaps still win."
+msgstr "Кнопка Home на пульті завжди веде на головну сторінку, а якщо її утримувати, відкриває швидке меню. Для цього обкладинка створює в профілі розкладку 0_skin.nightcity.xml; ваші власні розкладки й надалі мають перевагу."
+
+msgctxt "#31300"
+msgid "crew"
+msgstr "знімальна група"
+
+msgctxt "#31301"
+msgid "back to start"
+msgstr "на початок"
+
+msgctxt "#31302"
+msgid "person"
+msgstr "особа"
+
+msgctxt "#31303"
+msgid "born"
+msgstr "народження"
+
+msgctxt "#31304"
+msgid "died"
+msgstr "смерть"
+
+msgctxt "#31320"
+msgid "quick menu"
+msgstr "швидке меню"
+
+msgctxt "#31321"
+msgid "set up weather"
+msgstr "налаштувати погоду"
+
+msgctxt "#31322"
+msgid "more"
+msgstr "ще"
+
+msgctxt "#31323"
+msgid "timer"
+msgstr "таймер"
+
+msgctxt "#31336"
+msgid "Remember search terms"
+msgstr "Запам'ятовувати пошукові запити"
+
+msgctxt "#31337"
+msgid "The search page lists the last five search terms. Switched off, the skin keeps no terms and forgets the ones it has."
+msgstr "Сторінка пошуку показує п'ять останніх запитів. Якщо вимкнено, обкладинка не зберігає запити і забуває збережені."
+
+msgctxt "#31338"
+msgid "Clear search history"
+msgstr "Очистити історію пошуку"
+
+msgctxt "#31339"
+msgid "Forgets the remembered search terms."
+msgstr "Забуває збережені пошукові запити."
+
+msgctxt "#31340"
+msgid "The colour scheme of the skin, the same choice as under Interface."
+msgstr "Колірна схема обкладинки, той самий вибір, що й у розділі Інтерфейс."
+
+msgctxt "#31341"
+msgid "forecast"
+msgstr "прогноз"
+
+msgctxt "#31360"
+msgid "Hide the controls automatically"
+msgstr "Ховати керування автоматично"
+
+msgctxt "#31361"
+msgid "While a video plays, the player controls close by themselves once no key was pressed for the time set below. While paused they stay; the time starts again when playback goes on."
+msgstr "Під час відтворення відео елементи керування програвачем закриваються самі, якщо протягом заданого нижче часу не натиснуто жодної кнопки. На паузі вони залишаються; відлік починається знову, коли відтворення триває."
+
+msgctxt "#31362"
+msgid "Hide after"
+msgstr "Сховати через"
+
+msgctxt "#31363"
+msgid "Time without a key press before the player controls close, 3 to 30 seconds. OK takes the slider, left and right move it, OK lets go."
+msgstr "Час без натискання кнопок до закриття керування програвачем, від 3 до 30 секунд. OK бере повзунок, вліво і вправо рухають його, OK відпускає."
+
+msgctxt "#31364"
+msgid "The video player: its controls and what it shows while they are up."
+msgstr "Відеопрогравач: його керування і те, що він показує, поки воно відкрите."
+
+msgctxt "#31365"
+msgid "Show the plot"
+msgstr "Показувати сюжет"
+
+msgctxt "#31366"
+msgid "The plot of what plays, under its title while the player controls or the seek line are up."
+msgstr "Сюжет того, що відтворюється, під назвою, поки відкрите керування програвачем або смуга перемотування."
+
+msgctxt "#31400"
+msgid "New albums"
+msgstr "Нові альбоми"
+
+msgctxt "#31401"
+msgid "Recently played"
+msgstr "Нещодавно прослухані"
+
+msgctxt "#31402"
+msgid "Random albums"
+msgstr "Випадкові альбоми"
+
+msgctxt "#31403"
+msgid "Artists"
+msgstr "Виконавці"
+
+msgctxt "#31404"
+msgid "Genres"
+msgstr "Жанри"
+
+msgctxt "#31405"
+msgid "music"
+msgstr "музика"
+
+msgctxt "#31406"
+msgid "now playing"
+msgstr "зараз грає"
+
+msgctxt "#31407"
+msgid "albums"
+msgstr "альбоми"
+
+msgctxt "#31408"
+msgid "more by"
+msgstr "ще від"
+
+msgctxt "#31409"
+msgid "tracks"
+msgstr "треки"
+
+msgctxt "#31410"
+msgid "up next"
+msgstr "далі"
+
+msgctxt "#31411"
+msgid "shuffle"
+msgstr "перемішати"
+
+msgctxt "#31412"
+msgid "repeat"
+msgstr "повтор"
+
+msgctxt "#31413"
+msgid "repeat all"
+msgstr "повтор усіх"
+
+msgctxt "#31414"
+msgid "repeat one"
+msgstr "повтор одного"
+
+msgctxt "#31420"
+msgid "Network, Bluetooth, updates"
+msgstr "Мережа, Bluetooth, оновлення"
+
+msgctxt "#31440"
+msgid "audience"
+msgstr "глядачі"
+
+msgctxt "#31441"
+msgid "Ratings only from TMDb Helper"
+msgstr "Рейтинги лише від TMDb Helper"
+
+msgctxt "#31442"
+msgid "Show only the ratings TMDb Helper fetched for exactly this title. Off: the library's own rating (from Jellyfin) fills in while TMDb Helper has none."
+msgstr "Показувати лише рейтинги, які TMDb Helper отримав саме для цієї назви. Вимк.: поки в TMDb Helper їх немає, замість них показується власний рейтинг медіатеки (з Jellyfin)."
+
+msgctxt "#31443"
+msgid "Ratings only on title pages"
+msgstr "Рейтинги лише в картках"
+
+msgctxt "#31444"
+msgid "Spotlight and rows show no ratings, which saves requests to TMDb. A title's page still shows them."
+msgstr "Вітрина і ряди не показують рейтинги, це заощаджує запити до TMDb. У картці назви вони й надалі видні."
+
+msgctxt "#31445"
+msgid "Ratings"
+msgstr "Рейтинги"
+
+msgctxt "#31446"
+msgid "Sources"
+msgstr "Джерела"
+
+msgctxt "#31447"
+msgid "Which ratings the ratings line of the spotlight and the info page shows, and where they come from."
+msgstr "Які рейтинги показує рядок рейтингів вітрини та інформаційної сторінки і звідки вони беруться."
+
+msgctxt "#31450"
+msgid "IMDb"
+msgstr "IMDb"
+
+msgctxt "#31451"
+msgid "TMDb"
+msgstr "TMDb"
+
+msgctxt "#31452"
+msgid "Rotten Tomatoes critics"
+msgstr "Rotten Tomatoes: критики"
+
+msgctxt "#31453"
+msgid "Rotten Tomatoes audience"
+msgstr "Rotten Tomatoes: глядачі"
+
+msgctxt "#31454"
+msgid "Metacritic"
+msgstr "Metacritic"
+
+msgctxt "#31455"
+msgid "Trakt"
+msgstr "Trakt"
+
+msgctxt "#31456"
+msgid "Letterboxd"
+msgstr "Letterboxd"
+
+msgctxt "#31457"
+msgid "MDbList"
+msgstr "MDbList"
+
+msgctxt "#31460"
+msgid "IMDb users, 0 to 10, with the Top 250 rank. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Користувачі IMDb, від 0 до 10, з місцем у Top 250. Потрібен ключ OMDb або MDbList у TMDb Helper."
+
+msgctxt "#31461"
+msgid "TMDb users, 0 to 10. Needs no key."
+msgstr "Користувачі TMDb, від 0 до 10. Ключ не потрібен."
+
+msgctxt "#31462"
+msgid "Tomatometer: the share of positive critic reviews. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Tomatometer: частка позитивних рецензій критиків. Потрібен ключ OMDb або MDbList у TMDb Helper."
+
+msgctxt "#31463"
+msgid "Popcornmeter: the share of positive audience ratings. Needs an MDbList or OMDb key in TMDb Helper."
+msgstr "Popcornmeter: частка позитивних оцінок глядачів. Потрібен ключ MDbList або OMDb у TMDb Helper."
+
+msgctxt "#31464"
+msgid "A weighted average of critic reviews, 0 to 100, mostly for theatrical films and big series. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Зважене середнє рецензій критиків, від 0 до 100, переважно для фільмів із кінопрокату і великих серіалів. Потрібен ключ OMDb або MDbList у TMDb Helper."
+
+msgctxt "#31465"
+msgid "Trakt users, 0 to 10. Needs a connected Trakt account in TMDb Helper: fetched from Trakt, not MDbList."
+msgstr "Користувачі Trakt, від 0 до 10. Потрібен під'єднаний обліковий запис Trakt у TMDb Helper: дані беруться з Trakt, а не з MDbList."
+
+msgctxt "#31466"
+msgid "Letterboxd users, 0 to 5, mostly films. Needs an MDbList key in TMDb Helper."
+msgstr "Користувачі Letterboxd, від 0 до 5, переважно фільми. Потрібен ключ MDbList у TMDb Helper."
+
+msgctxt "#31467"
+msgid "MDbList score: an average of the other sources, 0 to 100. Needs an MDbList key in TMDb Helper."
+msgstr "Оцінка MDbList: середнє за іншими джерелами, від 0 до 100. Потрібен ключ MDbList у TMDb Helper."
+
+msgctxt "#31469"
+msgid "No description"
+msgstr "Немає опису"
+
+msgctxt "#31470"
+msgid "back"
+msgstr "назад"
+
+msgctxt "#31471"
+msgid "budget"
+msgstr "бюджет"
+
+msgctxt "#31472"
+msgid "box office"
+msgstr "касові збори"
+
+msgctxt "#31473"
+msgid "description"
+msgstr "опис"
+
+msgctxt "#31474"
+msgid "biography"
+msgstr "біографія"
+
+msgctxt "#31478"
+msgid "controls"
+msgstr "керування"
+
+msgctxt "#31479"
+msgid "previous page"
+msgstr "попередня сторінка"
+
+msgctxt "#31480"
+msgid "parent folder"
+msgstr "батьківська папка"
+
+msgctxt "#31477"
+msgid "Home"
+msgstr "Головна"
+
+msgctxt "#31500"
+msgid "view"
+msgstr "вигляд"
+
+msgctxt "#31501"
+msgid "list"
+msgstr "список"
+
+msgctxt "#31502"
+msgid "filter"
+msgstr "фільтр"
+
+msgctxt "#31503"
+msgid "all"
+msgstr "усі"
+
+msgctxt "#31504"
+msgid "resolution"
+msgstr "роздільність"
+
+msgctxt "#31505"
+msgid "dynamic range"
+msgstr "динамічний діапазон"
+
+msgctxt "#31506"
+msgid "audio format"
+msgstr "аудіоформат"
+
+msgctxt "#31507"
+msgid "audio channels"
+msgstr "аудіоканали"
+
+msgctxt "#31508"
+msgid "clear filter"
+msgstr "скинути фільтр"
+
+msgctxt "#31600"
+msgid "runtime"
+msgstr "час"
+
+msgctxt "#31601"
+msgid "genre"
+msgstr "жанр"
+
+msgctxt "#31602"
+msgid "details"
+msgstr "подробиці"
+
+msgctxt "#31603"
+msgid "seasons"
+msgstr "сезони"
+
+msgctxt "#31604"
+msgid "season"
+msgstr "сезон"
+
+msgctxt "#31605"
+msgid "seasons"
+msgstr "сезони"
+
+msgctxt "#31606"
+msgid "episodes"
+msgstr "епізоди"
+
+msgctxt "#31607"
+msgid "none"
+msgstr "немає"
+
+msgctxt "#31700"
+msgid "On Deck"
+msgstr "On Deck"
+
+msgctxt "#31701"
+msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
+msgstr "Розпочате, потім серіали, які ви дивитеся. OK на серіалі відкриває наступний епізод."
+
+msgctxt "#31750"
+msgid "No trailer found"
+msgstr "Трейлер не знайдено"

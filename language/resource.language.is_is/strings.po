@@ -1,0 +1,1196 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: is_is\n"
+
+msgctxt "#31002"
+msgid "Spotlight source"
+msgstr "Uppspretta kastljóss"
+
+msgctxt "#31003"
+msgid "All movies"
+msgstr "Allar kvikmyndir"
+
+msgctxt "#31004"
+msgid "Unwatched movies"
+msgstr "Óskoðaðar kvikmyndir"
+
+msgctxt "#31005"
+msgid "Effects"
+msgstr "Áhrif"
+
+msgctxt "#31006"
+msgid "home"
+msgstr "heim"
+
+msgctxt "#31010"
+msgid "play"
+msgstr "spila"
+
+msgctxt "#31011"
+msgid "info"
+msgstr "upplýsingar"
+
+msgctxt "#31012"
+msgid "min"
+msgstr "mín"
+
+msgctxt "#31020"
+msgid "on deck"
+msgstr "næst á dagskrá"
+
+msgctxt "#31021"
+msgid "new movies"
+msgstr "nýjar kvikmyndir"
+
+msgctxt "#31022"
+msgid "new episodes"
+msgstr "nýir þættir"
+
+msgctxt "#31023"
+msgid "continue watching"
+msgstr "halda áfram að horfa"
+
+msgctxt "#31030"
+msgid "movies"
+msgstr "kvikmyndir"
+
+msgctxt "#31031"
+msgid "shows"
+msgstr "þáttaraðir"
+
+msgctxt "#31032"
+msgid "search"
+msgstr "leita"
+
+msgctxt "#31033"
+msgid "System"
+msgstr "Kerfi"
+
+msgctxt "#31041"
+msgid "trailer"
+msgstr "stikla"
+
+msgctxt "#31042"
+msgid "posters"
+msgstr "veggspjöld"
+
+msgctxt "#31043"
+msgid "resume"
+msgstr "halda áfram"
+
+msgctxt "#31050"
+msgid "ends"
+msgstr "lýkur"
+
+msgctxt "#31051"
+msgid "pause"
+msgstr "hlé"
+
+msgctxt "#31052"
+msgid "stop"
+msgstr "stöðva"
+
+msgctxt "#31053"
+msgid "subtitles"
+msgstr "skjátextar"
+
+msgctxt "#31054"
+msgid "audio"
+msgstr "hljóð"
+
+msgctxt "#31055"
+msgid "video"
+msgstr "myndskeið"
+
+msgctxt "#31056"
+msgid "bookmarks"
+msgstr "bókamerki"
+
+msgctxt "#31057"
+msgid "buffering"
+msgstr "biðminni"
+
+msgctxt "#31058"
+msgid "video already has subtitles"
+msgstr "myndskeiðið er þegar með skjátexta"
+
+msgctxt "#31080"
+msgid "quit kodi"
+msgstr "hætta í Kodi"
+
+msgctxt "#31081"
+msgid "power off"
+msgstr "slökkva"
+
+msgctxt "#31082"
+msgid "reboot"
+msgstr "endurræsa"
+
+msgctxt "#31083"
+msgid "suspend"
+msgstr "svæfa"
+
+msgctxt "#31084"
+msgid "hibernate"
+msgstr "leggja í dvala"
+
+msgctxt "#31085"
+msgid "shutdown timer"
+msgstr "slökkvitímastillir"
+
+msgctxt "#31086"
+msgid "cancel shutdown timer"
+msgstr "hætta við slökkvitímastilli"
+
+msgctxt "#31087"
+msgid "log off"
+msgstr "skrá út"
+
+msgctxt "#31088"
+msgid "reload skin"
+msgstr "endurhlaða skinni"
+
+msgctxt "#31089"
+msgid "power"
+msgstr "orka"
+
+msgctxt "#31090"
+msgid "Hide foreign"
+msgstr "Fela erlend"
+
+msgctxt "#31091"
+msgid "Hide broken"
+msgstr "Fela biluð"
+
+msgctxt "#31094"
+msgid "thumbs"
+msgstr "myndir"
+
+msgctxt "#31095"
+msgid "mute"
+msgstr "þagga"
+
+msgctxt "#31096"
+msgid "descending"
+msgstr "lækkandi"
+
+msgctxt "#31100"
+msgid "spotlight"
+msgstr "kastljós"
+
+msgctxt "#31101"
+msgid "all movies"
+msgstr "allar kvikmyndir"
+
+msgctxt "#31102"
+msgid "all shows"
+msgstr "allar þáttaraðir"
+
+msgctxt "#31103"
+msgid "in progress"
+msgstr "í gangi"
+
+msgctxt "#31104"
+msgid "unwatched"
+msgstr "óskoðað"
+
+msgctxt "#31105"
+msgid "genres"
+msgstr "tegundir"
+
+msgctxt "#31106"
+msgid "episodes"
+msgstr "þættir"
+
+msgctxt "#31116"
+msgid "sort"
+msgstr "röðun"
+
+msgctxt "#31117"
+msgid "descending"
+msgstr "lækkandi"
+
+msgctxt "#31118"
+msgid "title"
+msgstr "titill"
+
+msgctxt "#31119"
+msgid "year"
+msgstr "ár"
+
+msgctxt "#31120"
+msgid "added"
+msgstr "bætt við"
+
+msgctxt "#31121"
+msgid "rating"
+msgstr "einkunn"
+
+msgctxt "#31122"
+msgid "ascending"
+msgstr "hækkandi"
+
+msgctxt "#31123"
+msgid "from start"
+msgstr "frá byrjun"
+
+msgctxt "#31124"
+msgid "cast"
+msgstr "leikarar"
+
+msgctxt "#31125"
+msgid "details"
+msgstr "nánar"
+
+msgctxt "#31126"
+msgid "director"
+msgstr "leikstjóri"
+
+msgctxt "#31127"
+msgid "writer"
+msgstr "handrit"
+
+msgctxt "#31128"
+msgid "studio"
+msgstr "kvikmyndaver"
+
+msgctxt "#31129"
+msgid "country"
+msgstr "land"
+
+msgctxt "#31130"
+msgid "similar"
+msgstr "svipað"
+
+msgctxt "#31131"
+msgid "season"
+msgstr "sería"
+
+msgctxt "#31132"
+msgid "episode"
+msgstr "þáttur"
+
+msgctxt "#31133"
+msgid "all"
+msgstr "allt"
+
+msgctxt "#31134"
+msgid "specials"
+msgstr "aukaefni"
+
+msgctxt "#31135"
+msgid "select"
+msgstr "velja"
+
+msgctxt "#31136"
+msgid "age rating"
+msgstr "aldursmat"
+
+msgctxt "#31059"
+msgid "ends at"
+msgstr "lýkur kl."
+
+msgctxt "#31137"
+msgid "next episode"
+msgstr "næsti þáttur"
+
+msgctxt "#31138"
+msgid "off"
+msgstr "af"
+
+msgctxt "#31139"
+msgid "all settings"
+msgstr "allar stillingar"
+
+msgctxt "#31140"
+msgid "chapters"
+msgstr "kaflar"
+
+msgctxt "#31141"
+msgid "search for a title"
+msgstr "leita að titli"
+
+msgctxt "#31142"
+msgid "actions"
+msgstr "aðgerðir"
+
+msgctxt "#31143"
+msgid "power off"
+msgstr "slökkva"
+
+msgctxt "#31144"
+msgid "reboot"
+msgstr "endurræsa"
+
+msgctxt "#31145"
+msgid "suspend"
+msgstr "svæfa"
+
+msgctxt "#31146"
+msgid "exit kodi"
+msgstr "hætta í Kodi"
+
+msgctxt "#31147"
+msgid "restart kodi"
+msgstr "endurræsa Kodi"
+
+msgctxt "#31148"
+msgid "movies (library)"
+msgstr "kvikmyndir (safn)"
+
+msgctxt "#31149"
+msgid "shows (library)"
+msgstr "þáttaraðir (safn)"
+
+msgctxt "#31150"
+msgid "episodes (library)"
+msgstr "þættir (safn)"
+
+msgctxt "#31151"
+msgid "online: movies (tmdb)"
+msgstr "á netinu: kvikmyndir (TMDb)"
+
+msgctxt "#31152"
+msgid "online: shows (tmdb)"
+msgstr "á netinu: þáttaraðir (TMDb)"
+
+msgctxt "#31153"
+msgid "recent"
+msgstr "nýlegt"
+
+msgctxt "#31154"
+msgid "not available on this device"
+msgstr "ekki tiltækt á þessu tæki"
+
+msgctxt "#31155"
+msgid "stats"
+msgstr "tölfræði"
+
+msgctxt "#31157"
+msgid "booting"
+msgstr "ræsir"
+
+msgctxt "#31158"
+msgid "online"
+msgstr "tengt"
+
+msgctxt "#31159"
+msgid "Playback & media"
+msgstr "Afspilun og miðlar"
+
+msgctxt "#31160"
+msgid "Look & profiles"
+msgstr "Útlit og notendur"
+
+msgctxt "#31161"
+msgid "Add-ons & content"
+msgstr "Viðbætur og efni"
+
+msgctxt "#31162"
+msgid "System & network"
+msgstr "Kerfi og net"
+
+msgctxt "#31163"
+msgid "Tools"
+msgstr "Verkfæri"
+
+msgctxt "#31164"
+msgid "How videos, music and pictures play: decoding, refresh rate, discs, audio and subtitle language, subtitles."
+msgstr "Hvernig myndskeið, tónlist og myndir spilast: afkóðun, endurnýjunartíðni, diskar, tungumál hljóðs og skjátexta, skjátextar."
+
+msgctxt "#31165"
+msgid "How the library collects and shows your media: scanning, file lists, videos, music, pictures."
+msgstr "Hvernig safnið safnar og birtir miðlana þína: skönnun, skráalistar, myndskeið, tónlist, myndir."
+
+msgctxt "#31166"
+msgid "Live TV and recordings from your PVR client: channels, guide, recording, reminders."
+msgstr "Sjónvarp í beinni og upptökur frá PVR-biðlaranum: rásir, dagskrá, upptaka, áminningar."
+
+msgctxt "#31167"
+msgid "How Kodi looks and starts: skin, language and region, screensaver, master lock, startup."
+msgstr "Hvernig Kodi lítur út og ræsist: skinn, tungumál og svæði, skjáhvíla, aðallás, ræsing."
+
+msgctxt "#31168"
+msgid "The options of this skin: the home pages and the look."
+msgstr "Valkostir þessa skinns: heimasíðurnar og útlitið."
+
+msgctxt "#31169"
+msgid "Users with their own library, settings and add-ons, and the login screen."
+msgstr "Notendur með eigið safn, stillingar og viðbætur, og innskráningarskjárinn."
+
+msgctxt "#31170"
+msgid "Installed add-ons, repositories, install from a zip file, search and updates."
+msgstr "Uppsettar viðbætur, hugbúnaðarsöfn, setja upp úr zip-skrá, leit og uppfærslur."
+
+msgctxt "#31171"
+msgid "Browse sources and folders, copy, move and delete files."
+msgstr "Skoða veitur og möppur, afrita, færa og eyða skrám."
+
+msgctxt "#31172"
+msgid "The device: display, audio output, input, internet access, power saving, add-on rules, logging."
+msgstr "Tækið: skjár, hljóðúttak, inntak, netaðgangur, orkusparnaður, reglur viðbóta, atvikaskráning."
+
+msgctxt "#31173"
+msgid "What Kodi offers on the network and uses from it: remote control, UPnP, AirPlay, SMB, NFS, caching, weather."
+msgstr "Hvað Kodi býður á netinu og notar þaðan: fjarstýring, UPnP, AirPlay, SMB, NFS, skyndiminni, veður."
+
+msgctxt "#31174"
+msgid "Facts about this device: Kodi version, storage, network, video, hardware."
+msgstr "Upplýsingar um þetta tæki: útgáfa Kodi, geymsla, net, myndskeið, vélbúnaður."
+
+msgctxt "#31175"
+msgid "What happened lately: add-on installs and updates, library scans, errors."
+msgstr "Hvað gerðist nýlega: uppsetning og uppfærslur viðbóta, skannanir safns, villur."
+
+msgctxt "#31176"
+msgid "Categories"
+msgstr "Flokkar"
+
+msgctxt "#31178"
+msgid "[COLOR state_text]⏎[/COLOR] open"
+msgstr "[COLOR state_text]⏎[/COLOR] opna"
+
+msgctxt "#31181"
+msgid "refresh rate, decoding, resume"
+msgstr "endurnýjunartíðni, afkóðun, halda áfram"
+
+msgctxt "#31182"
+msgid "crossfade, visualisation, volume adjustment"
+msgstr "víxlun, sjónræn upplifun, hljóðstyrkur"
+
+msgctxt "#31183"
+msgid "DVD, Blu-ray, audio CD"
+msgstr "DVD, Blu-ray, hljóðdiskur"
+
+msgctxt "#31184"
+msgid "slideshow, transitions"
+msgstr "skyggnusýning, skiptingar"
+
+msgctxt "#31185"
+msgid "audio, subtitles and menus"
+msgstr "hljóð, skjátextar og valmyndir"
+
+msgctxt "#31186"
+msgid "font, size, download services"
+msgstr "letur, stærð, niðurhalsþjónustur"
+
+msgctxt "#31187"
+msgid "scan on startup, update, clean up"
+msgstr "skanna við ræsingu, uppfæra, hreinsa"
+
+msgctxt "#31188"
+msgid "file extensions, hidden files, sorting"
+msgstr "skráaendingar, faldar skrár, röðun"
+
+msgctxt "#31189"
+msgid "select action, plots, thumbnails"
+msgstr "valaðgerð, söguþræðir, smámyndir"
+
+msgctxt "#31190"
+msgid "artists, album covers, tags"
+msgstr "flytjendur, plötuumslög, merki"
+
+msgctxt "#31191"
+msgid "thumbnails, EXIF"
+msgstr "smámyndir, EXIF"
+
+msgctxt "#31192"
+msgid "channel groups, channel icons"
+msgstr "rásahópar, rásatákn"
+
+msgctxt "#31193"
+msgid "channel info, switching"
+msgstr "rásaupplýsingar, rásaskipti"
+
+msgctxt "#31194"
+msgid "days shown, updates"
+msgstr "sýndir dagar, uppfærslur"
+
+msgctxt "#31195"
+msgid "start, channel switch delay"
+msgstr "ræsing, töf við rásaskipti"
+
+msgctxt "#31196"
+msgid "margins, folders"
+msgstr "spássíur, möppur"
+
+msgctxt "#31197"
+msgid "reminder before a show"
+msgstr "áminning fyrir þátt"
+
+msgctxt "#31198"
+msgid "wake up for recordings"
+msgstr "vakna fyrir upptökur"
+
+msgctxt "#31199"
+msgid "lock by age, PIN"
+msgstr "læsing eftir aldri, PIN"
+
+msgctxt "#31200"
+msgid "PVR client add-ons"
+msgstr "PVR-biðlaraviðbætur"
+
+msgctxt "#31201"
+msgid "skin, theme, colours, fonts"
+msgstr "skinn, þema, litir, letur"
+
+msgctxt "#31202"
+msgid "language, region, time, keyboard"
+msgstr "tungumál, svæði, tími, lyklaborð"
+
+msgctxt "#31203"
+msgid "mode, wait time"
+msgstr "hamur, biðtími"
+
+msgctxt "#31204"
+msgid "lock code, protected areas"
+msgstr "læsingarkóði, varin svæði"
+
+msgctxt "#31205"
+msgid "start window, splash screen"
+msgstr "upphafsgluggi, upphafsskjár"
+
+msgctxt "#31206"
+msgid "resolution, refresh rate, calibration"
+msgstr "upplausn, endurnýjunartíðni, kvörðun"
+
+msgctxt "#31207"
+msgid "output device, channels, passthrough"
+msgstr "úttakstæki, rásir, gegnumstreymi"
+
+msgctxt "#31208"
+msgid "devices, mouse, remote"
+msgstr "tæki, mús, fjarstýring"
+
+msgctxt "#31209"
+msgid "proxy"
+msgstr "milliþjónn"
+
+msgctxt "#31210"
+msgid "shutdown, display off"
+msgstr "slökkva, slökkva á skjá"
+
+msgctxt "#31211"
+msgid "updates, unknown sources"
+msgstr "uppfærslur, óþekktar veitur"
+
+msgctxt "#31212"
+msgid "debug log, components"
+msgstr "aflúsunarskrá, íhlutir"
+
+msgctxt "#31213"
+msgid "device name, Zeroconf"
+msgstr "heiti tækis, Zeroconf"
+
+msgctxt "#31214"
+msgid "web server, remote apps"
+msgstr "vefþjónn, fjarstýringarforrit"
+
+msgctxt "#31215"
+msgid "share library, renderer"
+msgstr "deila safni, myndgerð"
+
+msgctxt "#31216"
+msgid "receive AirPlay"
+msgstr "taka á móti AirPlay"
+
+msgctxt "#31217"
+msgid "Windows shares, WINS"
+msgstr "Windows-sameignir, WINS"
+
+msgctxt "#31218"
+msgid "NFS shares"
+msgstr "NFS-sameignir"
+
+msgctxt "#31219"
+msgid "buffer, read rate"
+msgstr "biðminni, leshraði"
+
+msgctxt "#31220"
+msgid "weather service"
+msgstr "veðurþjónusta"
+
+msgctxt "#31221"
+msgid "Spotlight change"
+msgstr "Kastljósskipti"
+
+msgctxt "#31222"
+msgid "Home pages"
+msgstr "Heimasíður"
+
+msgctxt "#31224"
+msgid "Rows"
+msgstr "Raðir"
+
+msgctxt "#31225"
+msgid "Spotlight"
+msgstr "Kastljós"
+
+msgctxt "#31226"
+msgid "Still"
+msgstr "Kyrrt"
+
+msgctxt "#31227"
+msgid "All shows"
+msgstr "Allar þáttaraðir"
+
+msgctxt "#31228"
+msgid "Unwatched shows"
+msgstr "Óskoðaðar þáttaraðir"
+
+msgctxt "#31229"
+msgid "Slot"
+msgstr "Sæti"
+
+msgctxt "#31231"
+msgid "Section for slot"
+msgstr "Hluti fyrir sæti"
+
+msgctxt "#31232"
+msgid "menu"
+msgstr "valmynd"
+
+msgctxt "#31233"
+msgid "Continue watching"
+msgstr "Halda áfram að horfa"
+
+msgctxt "#31234"
+msgid "Next up"
+msgstr "Næst á dagskrá"
+
+msgctxt "#31235"
+msgid "New movies"
+msgstr "Nýjar kvikmyndir"
+
+msgctxt "#31236"
+msgid "New episodes"
+msgstr "Nýir þættir"
+
+msgctxt "#31237"
+msgid "Random movies"
+msgstr "Handahófskenndar kvikmyndir"
+
+msgctxt "#31238"
+msgid "Top rated"
+msgstr "Hæsta einkunn"
+
+msgctxt "#31239"
+msgid "TMDb trending"
+msgstr "Vinsælt á TMDb"
+
+msgctxt "#31240"
+msgid "Recently watched"
+msgstr "Nýlega horft"
+
+msgctxt "#31241"
+msgid "Started movies and episodes, the last watched first."
+msgstr "Byrjaðar kvikmyndir og þættir, síðast skoðað fyrst."
+
+msgctxt "#31242"
+msgid "The shows you are watching. OK opens the next episode."
+msgstr "Þáttaraðirnar sem þú ert að horfa á. Í lagi opnar næsta þátt."
+
+msgctxt "#31243"
+msgid "The movies added to the library last."
+msgstr "Kvikmyndirnar sem síðast var bætt í safnið."
+
+msgctxt "#31244"
+msgid "The shows with the episodes added last."
+msgstr "Þáttaraðirnar með þáttunum sem síðast var bætt við."
+
+msgctxt "#31245"
+msgid "Tabs for the three biggest genres and a picker for all others."
+msgstr "Flipar fyrir þrjár stærstu tegundirnar og val fyrir allar hinar."
+
+msgctxt "#31246"
+msgid "A new choice from the whole library every time Home opens."
+msgstr "Nýtt úrval úr öllu safninu í hvert sinn sem Heim opnast."
+
+msgctxt "#31248"
+msgid "Sorted by rating, from 7.0 up."
+msgstr "Raðað eftir einkunn, frá 7,0 og upp."
+
+msgctxt "#31249"
+msgid "Kodi's favourites, as you set them."
+msgstr "Eftirlæti Kodi, eins og þú settir þau upp."
+
+msgctxt "#31250"
+msgid "What is trending on TMDb this week."
+msgstr "Hvað er vinsælt á TMDb þessa vikuna."
+
+msgctxt "#31251"
+msgid "What played last, also what you watched to the end."
+msgstr "Hvað spilaðist síðast, líka það sem þú horfðir á til enda."
+
+msgctxt "#31252"
+msgid "The movie sets of your library. OK opens a set."
+msgstr "Kvikmyndasettin í safninu þínu. Í lagi opnar sett."
+
+msgctxt "#31253"
+msgid "Episodes you started and did not finish."
+msgstr "Þættir sem þú byrjaðir á og kláraðir ekki."
+
+msgctxt "#31254"
+msgid "Free slot. OK picks a section from the catalogue."
+msgstr "Laust sæti. Í lagi velur hluta úr listanum."
+
+msgctxt "#31255"
+msgid "Large artwork with title and plot, in random order. OK or Right picks the source."
+msgstr "Stórar myndir með titli og söguþræði, í handahófskenndri röð. Í lagi eða Hægri velur uppsprettuna."
+
+msgctxt "#31256"
+msgid "No spotlight: the page starts with the first row."
+msgstr "Ekkert kastljós: síðan byrjar á fyrstu röðinni."
+
+msgctxt "#31257"
+msgid "How often the spotlight moves on by itself. OK or Right: 10, 15, 30, 60 s or still (then only by hand)."
+msgstr "Hversu oft kastljósið skiptir sjálfkrafa. Í lagi eða Hægri: 10, 15, 30, 60 s eða kyrrt (þá aðeins handvirkt)."
+
+msgctxt "#31258"
+msgid "Home and movies show the same spotlight, so they share this setting."
+msgstr "Heim og kvikmyndir sýna sama kastljósið og deila því þessari stillingu."
+
+msgctxt "#31259"
+msgid "Show or hide entries of the main menu. System and power always stay, and so does the last page shown."
+msgstr "Birta eða fela atriði í aðalvalmyndinni. Kerfi og orka haldast alltaf, og sömuleiðis síðasta síðan sem birtist."
+
+msgctxt "#31260"
+msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]⏎[/COLOR] velja   [COLOR state_text]→[/COLOR] valkostur"
+
+msgctxt "#31261"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] færa   [COLOR state_text]⏎[/COLOR] sleppa"
+
+msgctxt "#31262"
+msgid "Spotlight, rows and main menu of the home, movies and shows pages."
+msgstr "Kastljós, raðir og aðalvalmynd síðnanna heim, kvikmyndir og þáttaraðir."
+
+msgctxt "#31263"
+msgid "swap"
+msgstr "víxla"
+
+msgctxt "#31264"
+msgid "Main menu"
+msgstr "Aðalvalmynd"
+
+msgctxt "#31265"
+msgid "Spotlight and rows of the home page."
+msgstr "Kastljós og raðir heimasíðunnar."
+
+msgctxt "#31266"
+msgid "Spotlight and rows of the movies page."
+msgstr "Kastljós og raðir kvikmyndasíðunnar."
+
+msgctxt "#31267"
+msgid "Spotlight and rows of the shows page."
+msgstr "Kastljós og raðir þáttaraðasíðunnar."
+
+msgctxt "#31268"
+msgid "How the skin draws the focus."
+msgstr "Hvernig skinnið sýnir virkni."
+
+msgctxt "#31230"
+msgid "frame rate"
+msgstr "rammatíðni"
+
+msgctxt "#31330"
+msgid "back to video"
+msgstr "aftur í myndskeið"
+
+msgctxt "#31331"
+msgid "back to home"
+msgstr "aftur heim"
+
+msgctxt "#31332"
+msgid "back to movies"
+msgstr "aftur í kvikmyndir"
+
+msgctxt "#31333"
+msgid "back to shows"
+msgstr "aftur í þáttaraðir"
+
+msgctxt "#31334"
+msgid "back to search"
+msgstr "aftur í leit"
+
+msgctxt "#31335"
+msgid "back to library"
+msgstr "aftur í safn"
+
+msgctxt "#31310"
+msgid "Home key opens the home page"
+msgstr "Heim-hnappur opnar heimasíðuna"
+
+msgctxt "#31311"
+msgid "The Home key of the remote always leads to the home page, held down it opens the quick menu. The skin sets up the keymap 0_skin.nightcity.xml in the profile for it; your own keymaps still win."
+msgstr "Heim-hnappur fjarstýringarinnar leiðir alltaf á heimasíðuna, og sé honum haldið niðri opnar hann flýtivalmyndina. Skinnið setur upp lyklavörpunina 0_skin.nightcity.xml í notandasniðinu fyrir þetta; þínar eigin lyklavarpanir hafa samt forgang."
+
+msgctxt "#31300"
+msgid "crew"
+msgstr "tökulið"
+
+msgctxt "#31301"
+msgid "back to start"
+msgstr "aftur á byrjun"
+
+msgctxt "#31302"
+msgid "person"
+msgstr "manneskja"
+
+msgctxt "#31303"
+msgid "born"
+msgstr "fædd(ur)"
+
+msgctxt "#31304"
+msgid "died"
+msgstr "dáin(n)"
+
+msgctxt "#31320"
+msgid "quick menu"
+msgstr "flýtivalmynd"
+
+msgctxt "#31321"
+msgid "set up weather"
+msgstr "setja upp veður"
+
+msgctxt "#31322"
+msgid "more"
+msgstr "meira"
+
+msgctxt "#31323"
+msgid "timer"
+msgstr "tímastillir"
+
+msgctxt "#31336"
+msgid "Remember search terms"
+msgstr "Muna leitarorð"
+
+msgctxt "#31337"
+msgid "The search page lists the last five search terms. Switched off, the skin keeps no terms and forgets the ones it has."
+msgstr "Leitarsíðan sýnir síðustu fimm leitarorðin. Sé slökkt á þessu geymir skinnið engin orð og gleymir þeim sem það hefur."
+
+msgctxt "#31338"
+msgid "Clear search history"
+msgstr "Hreinsa leitarferil"
+
+msgctxt "#31339"
+msgid "Forgets the remembered search terms."
+msgstr "Gleymir vistuðu leitarorðunum."
+
+msgctxt "#31340"
+msgid "The colour scheme of the skin, the same choice as under Interface."
+msgstr "Litastef skinnsins, sama val og undir Viðmót."
+
+msgctxt "#31341"
+msgid "forecast"
+msgstr "veðurspá"
+
+msgctxt "#31360"
+msgid "Hide the controls automatically"
+msgstr "Fela stjórnhnappa sjálfkrafa"
+
+msgctxt "#31361"
+msgid "While a video plays, the player controls close by themselves once no key was pressed for the time set below. While paused they stay; the time starts again when playback goes on."
+msgstr "Meðan myndskeið spilast lokast stjórnhnappar spilarans sjálfkrafa þegar ekki hefur verið ýtt á hnapp í þann tíma sem stilltur er hér fyrir neðan. Í hléi haldast þeir; tíminn byrjar aftur þegar afspilun heldur áfram."
+
+msgctxt "#31362"
+msgid "Hide after"
+msgstr "Fela eftir"
+
+msgctxt "#31363"
+msgid "Time without a key press before the player controls close, 3 to 30 seconds. OK takes the slider, left and right move it, OK lets go."
+msgstr "Tími án hnappaþrýstings áður en stjórnhnappar spilarans lokast, 3 til 30 sekúndur. Í lagi grípur sleðann, vinstri og hægri færa hann, Í lagi sleppir."
+
+msgctxt "#31364"
+msgid "The video player: its controls and what it shows while they are up."
+msgstr "Myndspilarinn: stjórnhnappar hans og það sem hann sýnir meðan þeir eru opnir."
+
+msgctxt "#31365"
+msgid "Show the plot"
+msgstr "Sýna söguþráð"
+
+msgctxt "#31366"
+msgid "The plot of what plays, under its title while the player controls or the seek line are up."
+msgstr "Söguþráður þess sem spilast, undir titlinum meðan stjórnhnappar spilarans eða leitarstikan eru opin."
+
+msgctxt "#31400"
+msgid "New albums"
+msgstr "Nýjar plötur"
+
+msgctxt "#31401"
+msgid "Recently played"
+msgstr "Nýlega spilað"
+
+msgctxt "#31402"
+msgid "Random albums"
+msgstr "Handahófskenndar plötur"
+
+msgctxt "#31403"
+msgid "Artists"
+msgstr "Flytjendur"
+
+msgctxt "#31404"
+msgid "Genres"
+msgstr "Tegundir"
+
+msgctxt "#31405"
+msgid "music"
+msgstr "tónlist"
+
+msgctxt "#31406"
+msgid "now playing"
+msgstr "í spilun"
+
+msgctxt "#31407"
+msgid "albums"
+msgstr "plötur"
+
+msgctxt "#31408"
+msgid "more by"
+msgstr "meira frá"
+
+msgctxt "#31409"
+msgid "tracks"
+msgstr "lög"
+
+msgctxt "#31410"
+msgid "up next"
+msgstr "næst"
+
+msgctxt "#31411"
+msgid "shuffle"
+msgstr "stokka"
+
+msgctxt "#31412"
+msgid "repeat"
+msgstr "endurtaka"
+
+msgctxt "#31413"
+msgid "repeat all"
+msgstr "endurtaka allt"
+
+msgctxt "#31414"
+msgid "repeat one"
+msgstr "endurtaka eitt"
+
+msgctxt "#31420"
+msgid "Network, Bluetooth, updates"
+msgstr "Net, Bluetooth, uppfærslur"
+
+msgctxt "#31440"
+msgid "audience"
+msgstr "áhorfendur"
+
+msgctxt "#31441"
+msgid "Ratings only from TMDb Helper"
+msgstr "Aðeins einkunnir frá TMDb Helper"
+
+msgctxt "#31442"
+msgid "Show only the ratings TMDb Helper fetched for exactly this title. Off: the library's own rating (from Jellyfin) fills in while TMDb Helper has none."
+msgstr "Sýna aðeins einkunnirnar sem TMDb Helper sótti fyrir nákvæmlega þennan titil. Slökkt: eigin einkunn safnsins (frá Jellyfin) kemur í staðinn meðan TMDb Helper hefur enga."
+
+msgctxt "#31443"
+msgid "Ratings only on title pages"
+msgstr "Einkunnir aðeins á titilsíðum"
+
+msgctxt "#31444"
+msgid "Spotlight and rows show no ratings, which saves requests to TMDb. A title's page still shows them."
+msgstr "Kastljós og raðir sýna engar einkunnir, sem sparar fyrirspurnir til TMDb. Síða titils sýnir þær samt."
+
+msgctxt "#31445"
+msgid "Ratings"
+msgstr "Einkunnir"
+
+msgctxt "#31446"
+msgid "Sources"
+msgstr "Uppsprettur"
+
+msgctxt "#31447"
+msgid "Which ratings the ratings line of the spotlight and the info page shows, and where they come from."
+msgstr "Hvaða einkunnir einkunnalína kastljóssins og upplýsingasíðunnar sýnir, og hvaðan þær koma."
+
+msgctxt "#31450"
+msgid "IMDb"
+msgstr "IMDb"
+
+msgctxt "#31451"
+msgid "TMDb"
+msgstr "TMDb"
+
+msgctxt "#31452"
+msgid "Rotten Tomatoes critics"
+msgstr "Rotten Tomatoes gagnrýnendur"
+
+msgctxt "#31453"
+msgid "Rotten Tomatoes audience"
+msgstr "Rotten Tomatoes áhorfendur"
+
+msgctxt "#31454"
+msgid "Metacritic"
+msgstr "Metacritic"
+
+msgctxt "#31455"
+msgid "Trakt"
+msgstr "Trakt"
+
+msgctxt "#31456"
+msgid "Letterboxd"
+msgstr "Letterboxd"
+
+msgctxt "#31457"
+msgid "MDbList"
+msgstr "MDbList"
+
+msgctxt "#31460"
+msgid "IMDb users, 0 to 10, with the Top 250 rank. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "IMDb-notendur, 0 til 10, með sætinu á Top 250. Þarf OMDb- eða MDbList-lykil í TMDb Helper."
+
+msgctxt "#31461"
+msgid "TMDb users, 0 to 10. Needs no key."
+msgstr "TMDb-notendur, 0 til 10. Þarf engan lykil."
+
+msgctxt "#31462"
+msgid "Tomatometer: the share of positive critic reviews. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Tomatometer: hlutfall jákvæðra dóma gagnrýnenda. Þarf OMDb- eða MDbList-lykil í TMDb Helper."
+
+msgctxt "#31463"
+msgid "Popcornmeter: the share of positive audience ratings. Needs an MDbList or OMDb key in TMDb Helper."
+msgstr "Popcornmeter: hlutfall jákvæðra einkunna áhorfenda. Þarf MDbList- eða OMDb-lykil í TMDb Helper."
+
+msgctxt "#31464"
+msgid "A weighted average of critic reviews, 0 to 100, mostly for theatrical films and big series. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Vegið meðaltal dóma gagnrýnenda, 0 til 100, aðallega fyrir bíómyndir og stórar þáttaraðir. Þarf OMDb- eða MDbList-lykil í TMDb Helper."
+
+msgctxt "#31465"
+msgid "Trakt users, 0 to 10. Needs a connected Trakt account in TMDb Helper: fetched from Trakt, not MDbList."
+msgstr "Trakt-notendur, 0 til 10. Þarf tengdan Trakt-aðgang í TMDb Helper: sótt frá Trakt, ekki MDbList."
+
+msgctxt "#31466"
+msgid "Letterboxd users, 0 to 5, mostly films. Needs an MDbList key in TMDb Helper."
+msgstr "Letterboxd-notendur, 0 til 5, aðallega kvikmyndir. Þarf MDbList-lykil í TMDb Helper."
+
+msgctxt "#31467"
+msgid "MDbList score: an average of the other sources, 0 to 100. Needs an MDbList key in TMDb Helper."
+msgstr "MDbList-skor: meðaltal hinna uppsprettnanna, 0 til 100. Þarf MDbList-lykil í TMDb Helper."
+
+msgctxt "#31469"
+msgid "No description"
+msgstr "Engin lýsing"
+
+msgctxt "#31470"
+msgid "back"
+msgstr "til baka"
+
+msgctxt "#31471"
+msgid "budget"
+msgstr "fjárhagsáætlun"
+
+msgctxt "#31472"
+msgid "box office"
+msgstr "miðasala"
+
+msgctxt "#31473"
+msgid "description"
+msgstr "lýsing"
+
+msgctxt "#31474"
+msgid "biography"
+msgstr "æviágrip"
+
+msgctxt "#31478"
+msgid "controls"
+msgstr "stjórnhnappar"
+
+msgctxt "#31479"
+msgid "previous page"
+msgstr "fyrri síða"
+
+msgctxt "#31480"
+msgid "parent folder"
+msgstr "yfirmappa"
+
+msgctxt "#31477"
+msgid "Home"
+msgstr "Heim"
+
+msgctxt "#31500"
+msgid "view"
+msgstr "sýn"
+
+msgctxt "#31501"
+msgid "list"
+msgstr "listi"
+
+msgctxt "#31502"
+msgid "filter"
+msgstr "sía"
+
+msgctxt "#31503"
+msgid "all"
+msgstr "allt"
+
+msgctxt "#31504"
+msgid "resolution"
+msgstr "upplausn"
+
+msgctxt "#31505"
+msgid "dynamic range"
+msgstr "birtusvið"
+
+msgctxt "#31506"
+msgid "audio format"
+msgstr "hljóðsnið"
+
+msgctxt "#31507"
+msgid "audio channels"
+msgstr "hljóðrásir"
+
+msgctxt "#31508"
+msgid "clear filter"
+msgstr "hreinsa síu"
+
+msgctxt "#31600"
+msgid "runtime"
+msgstr "lengd"
+
+msgctxt "#31601"
+msgid "genre"
+msgstr "tegund"
+
+msgctxt "#31602"
+msgid "details"
+msgstr "nánar"
+
+msgctxt "#31603"
+msgid "seasons"
+msgstr "seríur"
+
+msgctxt "#31604"
+msgid "season"
+msgstr "sería"
+
+msgctxt "#31605"
+msgid "seasons"
+msgstr "seríur"
+
+msgctxt "#31606"
+msgid "episodes"
+msgstr "þættir"
+
+msgctxt "#31607"
+msgid "none"
+msgstr "ekkert"
+
+msgctxt "#31700"
+msgid "On Deck"
+msgstr "On Deck"
+
+msgctxt "#31701"
+msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
+msgstr "Það sem þú byrjaðir á, síðan þáttaraðirnar sem þú ert að horfa á. Í lagi á þáttaröð opnar næsta þátt."
+
+msgctxt "#31750"
+msgid "No trailer found"
+msgstr "Engin stikla fannst"

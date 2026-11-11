@@ -96,7 +96,8 @@ def _lay_out(overlay, dest):
         english = strings.parent.name == 'resource.language.en_gb'
         # a translation's msgid changes with the English one: Kodi shows the English string where
         # they differ (LocalizeStrings.cpp:50-60, an id re-used in English)
-        strings.write_text(_sentence_case(text) if english else _first_capital(_sentence_case(text)), encoding='utf-8')
+        strings.write_text(_sentence_case(text) if english else
+                           _first_capital(_sentence_case(text), strings.parent.name.split('.')[-1]), encoding='utf-8')
     for path, text in texts.items():
         fixed = text
         for name in sorted(wrapped):
@@ -107,11 +108,14 @@ def _lay_out(overlay, dest):
             path.write_text(fixed, encoding='utf-8')
 
 
-def _first_capital(po):
+def _first_capital(po, lang):
     """A translation the same way: Nightcity's strings follow the English, small where it is small,
-    and here the first letter is a capital. A unit after a number stays as it is."""
+    and here the first letter is a capital. A unit after a number stays as it is. Turkish writes
+    the capital of i with a dot."""
+    def upper(c):
+        return '\u0130' if lang == 'tr_tr' and c == 'i' else c.upper()
     return re.sub(r'(msgctxt "#(\d+)"\nmsgid "(?:[^"\\]|\\.)*"\nmsgstr ")(.)',
-                  lambda m: m.group(0) if m.group(2) in LOWERCASE_STRINGS else m.group(1) + m.group(3).upper(), po)
+                  lambda m: m.group(0) if m.group(2) in LOWERCASE_STRINGS else m.group(1) + upper(m.group(3)), po)
 
 
 def _sentence_case(po):

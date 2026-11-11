@@ -1,5 +1,6 @@
-"""The translations: German, French, Spanish, Italian, Brazilian Portuguese, Polish and Japanese, one
-file each for both skins. Each has every English string, in the same order, with the same markup; Confuse
+"""The translations: the seven done by hand (German, French, Spanish, Italian, Brazilian Portuguese,
+Polish and Japanese) and the 22 machine-translated ones Kodi covers well itself, one file each for
+both skins. Each has every English string, in the same order, with the same markup; Confuse
 gives them a capital first letter like its English."""
 import re
 
@@ -7,7 +8,9 @@ import pytest
 
 from conftest import ROOT, parse
 
-LANGUAGES = ('de_de', 'fr_fr', 'es_es', 'it_it', 'pt_br', 'pl_pl', 'ja_jp')
+LANGUAGES = ('de_de', 'fr_fr', 'es_es', 'it_it', 'pt_br', 'pl_pl', 'ja_jp',
+             'nl_nl', 'sv_se', 'da_dk', 'fi_fi', 'cs_cz', 'sk_sk', 'hu_hu', 'tr_tr', 'hr_hr', 'lt_lt', 'et_ee',
+             'is_is', 'af_za', 'ca_es', 'id_id', 'es_mx', 'ru_ru', 'uk_ua', 'be_by', 'ko_kr', 'zh_cn', 'zh_tw')
 ENTRY = re.compile(r'msgctxt "#(\d+)"\nmsgid "((?:[^"\\]|\\.)*)"\nmsgstr "((?:[^"\\]|\\.)*)"')
 TOKEN = re.compile(r'\[/?[A-Z]+(?: [a-z_]+)?\]|%[sd]|\{\d*\}')
 
@@ -58,7 +61,7 @@ def test_names_stay_names(lang):
 def test_unit_after_a_number_stays_small():
     for lang in LANGUAGES:
         tr = dict((i, t) for i, _, t in entries(lang))['31012']
-        assert not tr[:1].isupper(), (lang, tr)  # Japanese has no case
+        assert not tr[:1].isupper(), (lang, tr)  # Japanese, Korean and Chinese have no case
 
 
 def test_confuse_capitalises_translations(confuse_root):

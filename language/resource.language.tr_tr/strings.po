@@ -1,0 +1,1196 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: tr_tr\n"
+
+msgctxt "#31002"
+msgid "Spotlight source"
+msgstr "Vitrin kaynağı"
+
+msgctxt "#31003"
+msgid "All movies"
+msgstr "Tüm filmler"
+
+msgctxt "#31004"
+msgid "Unwatched movies"
+msgstr "İzlenmemiş filmler"
+
+msgctxt "#31005"
+msgid "Effects"
+msgstr "Efektler"
+
+msgctxt "#31006"
+msgid "home"
+msgstr "ana sayfa"
+
+msgctxt "#31010"
+msgid "play"
+msgstr "oynat"
+
+msgctxt "#31011"
+msgid "info"
+msgstr "bilgi"
+
+msgctxt "#31012"
+msgid "min"
+msgstr "dk"
+
+msgctxt "#31020"
+msgid "on deck"
+msgstr "sıradakiler"
+
+msgctxt "#31021"
+msgid "new movies"
+msgstr "yeni filmler"
+
+msgctxt "#31022"
+msgid "new episodes"
+msgstr "yeni bölümler"
+
+msgctxt "#31023"
+msgid "continue watching"
+msgstr "izlemeye devam et"
+
+msgctxt "#31030"
+msgid "movies"
+msgstr "filmler"
+
+msgctxt "#31031"
+msgid "shows"
+msgstr "diziler"
+
+msgctxt "#31032"
+msgid "search"
+msgstr "ara"
+
+msgctxt "#31033"
+msgid "System"
+msgstr "Sistem"
+
+msgctxt "#31041"
+msgid "trailer"
+msgstr "fragman"
+
+msgctxt "#31042"
+msgid "posters"
+msgstr "afişler"
+
+msgctxt "#31043"
+msgid "resume"
+msgstr "devam et"
+
+msgctxt "#31050"
+msgid "ends"
+msgstr "bitiş"
+
+msgctxt "#31051"
+msgid "pause"
+msgstr "duraklat"
+
+msgctxt "#31052"
+msgid "stop"
+msgstr "durdur"
+
+msgctxt "#31053"
+msgid "subtitles"
+msgstr "altyazılar"
+
+msgctxt "#31054"
+msgid "audio"
+msgstr "ses"
+
+msgctxt "#31055"
+msgid "video"
+msgstr "video"
+
+msgctxt "#31056"
+msgid "bookmarks"
+msgstr "yer imleri"
+
+msgctxt "#31057"
+msgid "buffering"
+msgstr "arabelleğe alınıyor"
+
+msgctxt "#31058"
+msgid "video already has subtitles"
+msgstr "videonun zaten altyazısı var"
+
+msgctxt "#31080"
+msgid "quit kodi"
+msgstr "Kodi'den çık"
+
+msgctxt "#31081"
+msgid "power off"
+msgstr "kapat"
+
+msgctxt "#31082"
+msgid "reboot"
+msgstr "yeniden başlat"
+
+msgctxt "#31083"
+msgid "suspend"
+msgstr "askıya al"
+
+msgctxt "#31084"
+msgid "hibernate"
+msgstr "hazırda beklet"
+
+msgctxt "#31085"
+msgid "shutdown timer"
+msgstr "kapatma zamanlayıcısı"
+
+msgctxt "#31086"
+msgid "cancel shutdown timer"
+msgstr "kapatma zamanlayıcısını iptal et"
+
+msgctxt "#31087"
+msgid "log off"
+msgstr "oturumu kapat"
+
+msgctxt "#31088"
+msgid "reload skin"
+msgstr "dış görünümü yeniden yükle"
+
+msgctxt "#31089"
+msgid "power"
+msgstr "güç"
+
+msgctxt "#31090"
+msgid "Hide foreign"
+msgstr "Yabancıları gizle"
+
+msgctxt "#31091"
+msgid "Hide broken"
+msgstr "Bozukları gizle"
+
+msgctxt "#31094"
+msgid "thumbs"
+msgstr "önizleme"
+
+msgctxt "#31095"
+msgid "mute"
+msgstr "sessiz"
+
+msgctxt "#31096"
+msgid "descending"
+msgstr "azalan"
+
+msgctxt "#31100"
+msgid "spotlight"
+msgstr "vitrin"
+
+msgctxt "#31101"
+msgid "all movies"
+msgstr "tüm filmler"
+
+msgctxt "#31102"
+msgid "all shows"
+msgstr "tüm diziler"
+
+msgctxt "#31103"
+msgid "in progress"
+msgstr "devam edenler"
+
+msgctxt "#31104"
+msgid "unwatched"
+msgstr "izlenmemiş"
+
+msgctxt "#31105"
+msgid "genres"
+msgstr "türler"
+
+msgctxt "#31106"
+msgid "episodes"
+msgstr "bölümler"
+
+msgctxt "#31116"
+msgid "sort"
+msgstr "sırala"
+
+msgctxt "#31117"
+msgid "descending"
+msgstr "azalan"
+
+msgctxt "#31118"
+msgid "title"
+msgstr "başlık"
+
+msgctxt "#31119"
+msgid "year"
+msgstr "yıl"
+
+msgctxt "#31120"
+msgid "added"
+msgstr "eklenme"
+
+msgctxt "#31121"
+msgid "rating"
+msgstr "puan"
+
+msgctxt "#31122"
+msgid "ascending"
+msgstr "artan"
+
+msgctxt "#31123"
+msgid "from start"
+msgstr "baştan"
+
+msgctxt "#31124"
+msgid "cast"
+msgstr "oyuncular"
+
+msgctxt "#31125"
+msgid "details"
+msgstr "ayrıntılar"
+
+msgctxt "#31126"
+msgid "director"
+msgstr "yönetmen"
+
+msgctxt "#31127"
+msgid "writer"
+msgstr "senarist"
+
+msgctxt "#31128"
+msgid "studio"
+msgstr "stüdyo"
+
+msgctxt "#31129"
+msgid "country"
+msgstr "ülke"
+
+msgctxt "#31130"
+msgid "similar"
+msgstr "benzerleri"
+
+msgctxt "#31131"
+msgid "season"
+msgstr "sezon"
+
+msgctxt "#31132"
+msgid "episode"
+msgstr "bölüm"
+
+msgctxt "#31133"
+msgid "all"
+msgstr "tümü"
+
+msgctxt "#31134"
+msgid "specials"
+msgstr "özel bölümler"
+
+msgctxt "#31135"
+msgid "select"
+msgstr "seç"
+
+msgctxt "#31136"
+msgid "age rating"
+msgstr "yaş sınırı"
+
+msgctxt "#31059"
+msgid "ends at"
+msgstr "bitiş saati"
+
+msgctxt "#31137"
+msgid "next episode"
+msgstr "sonraki bölüm"
+
+msgctxt "#31138"
+msgid "off"
+msgstr "kapalı"
+
+msgctxt "#31139"
+msgid "all settings"
+msgstr "tüm ayarlar"
+
+msgctxt "#31140"
+msgid "chapters"
+msgstr "bölümler"
+
+msgctxt "#31141"
+msgid "search for a title"
+msgstr "başlık ara"
+
+msgctxt "#31142"
+msgid "actions"
+msgstr "eylemler"
+
+msgctxt "#31143"
+msgid "power off"
+msgstr "kapat"
+
+msgctxt "#31144"
+msgid "reboot"
+msgstr "yeniden başlat"
+
+msgctxt "#31145"
+msgid "suspend"
+msgstr "askıya al"
+
+msgctxt "#31146"
+msgid "exit kodi"
+msgstr "Kodi'den çık"
+
+msgctxt "#31147"
+msgid "restart kodi"
+msgstr "Kodi'yi yeniden başlat"
+
+msgctxt "#31148"
+msgid "movies (library)"
+msgstr "filmler (kütüphane)"
+
+msgctxt "#31149"
+msgid "shows (library)"
+msgstr "diziler (kütüphane)"
+
+msgctxt "#31150"
+msgid "episodes (library)"
+msgstr "bölümler (kütüphane)"
+
+msgctxt "#31151"
+msgid "online: movies (tmdb)"
+msgstr "çevrimiçi: filmler (TMDb)"
+
+msgctxt "#31152"
+msgid "online: shows (tmdb)"
+msgstr "çevrimiçi: diziler (TMDb)"
+
+msgctxt "#31153"
+msgid "recent"
+msgstr "son aramalar"
+
+msgctxt "#31154"
+msgid "not available on this device"
+msgstr "bu cihazda kullanılamaz"
+
+msgctxt "#31155"
+msgid "stats"
+msgstr "istatistik"
+
+msgctxt "#31157"
+msgid "booting"
+msgstr "booting"
+
+msgctxt "#31158"
+msgid "online"
+msgstr "çevrimiçi"
+
+msgctxt "#31159"
+msgid "Playback & media"
+msgstr "Oynatma ve medya"
+
+msgctxt "#31160"
+msgid "Look & profiles"
+msgstr "Görünüm ve profiller"
+
+msgctxt "#31161"
+msgid "Add-ons & content"
+msgstr "Eklentiler ve içerik"
+
+msgctxt "#31162"
+msgid "System & network"
+msgstr "Sistem ve ağ"
+
+msgctxt "#31163"
+msgid "Tools"
+msgstr "Araçlar"
+
+msgctxt "#31164"
+msgid "How videos, music and pictures play: decoding, refresh rate, discs, audio and subtitle language, subtitles."
+msgstr "Video, müzik ve resimlerin nasıl oynatıldığı: kod çözme, yenileme hızı, diskler, ses ve altyazı dili, altyazılar."
+
+msgctxt "#31165"
+msgid "How the library collects and shows your media: scanning, file lists, videos, music, pictures."
+msgstr "Kütüphanenin medyanızı nasıl topladığı ve gösterdiği: tarama, dosya listeleri, videolar, müzik, resimler."
+
+msgctxt "#31166"
+msgid "Live TV and recordings from your PVR client: channels, guide, recording, reminders."
+msgstr "PVR istemcinizden canlı TV ve kayıtlar: kanallar, rehber, kayıt, hatırlatıcılar."
+
+msgctxt "#31167"
+msgid "How Kodi looks and starts: skin, language and region, screensaver, master lock, startup."
+msgstr "Kodi'nin görünümü ve açılışı: dış görünüm, dil ve bölge, ekran koruyucu, ana kilit, başlangıç."
+
+msgctxt "#31168"
+msgid "The options of this skin: the home pages and the look."
+msgstr "Bu dış görünümün seçenekleri: ana sayfalar ve görünüm."
+
+msgctxt "#31169"
+msgid "Users with their own library, settings and add-ons, and the login screen."
+msgstr "Kendi kütüphanesi, ayarları ve eklentileri olan kullanıcılar ve giriş ekranı."
+
+msgctxt "#31170"
+msgid "Installed add-ons, repositories, install from a zip file, search and updates."
+msgstr "Yüklü eklentiler, depolar, zip dosyasından yükleme, arama ve güncellemeler."
+
+msgctxt "#31171"
+msgid "Browse sources and folders, copy, move and delete files."
+msgstr "Kaynaklara ve klasörlere göz atma, dosyaları kopyalama, taşıma ve silme."
+
+msgctxt "#31172"
+msgid "The device: display, audio output, input, internet access, power saving, add-on rules, logging."
+msgstr "Cihaz: ekran, ses çıkışı, giriş, internet erişimi, güç tasarrufu, eklenti kuralları, günlük kaydı."
+
+msgctxt "#31173"
+msgid "What Kodi offers on the network and uses from it: remote control, UPnP, AirPlay, SMB, NFS, caching, weather."
+msgstr "Kodi'nin ağda sunduğu ve ağdan kullandığı şeyler: uzaktan kontrol, UPnP, AirPlay, SMB, NFS, önbellek, hava durumu."
+
+msgctxt "#31174"
+msgid "Facts about this device: Kodi version, storage, network, video, hardware."
+msgstr "Bu cihaz hakkında bilgiler: Kodi sürümü, depolama, ağ, video, donanım."
+
+msgctxt "#31175"
+msgid "What happened lately: add-on installs and updates, library scans, errors."
+msgstr "Son olanlar: eklenti yüklemeleri ve güncellemeleri, kütüphane taramaları, hatalar."
+
+msgctxt "#31176"
+msgid "Categories"
+msgstr "Kategoriler"
+
+msgctxt "#31178"
+msgid "[COLOR state_text]⏎[/COLOR] open"
+msgstr "[COLOR state_text]⏎[/COLOR] aç"
+
+msgctxt "#31181"
+msgid "refresh rate, decoding, resume"
+msgstr "yenileme hızı, kod çözme, devam etme"
+
+msgctxt "#31182"
+msgid "crossfade, visualisation, volume adjustment"
+msgstr "çapraz geçiş, görselleştirme, ses düzeyi ayarı"
+
+msgctxt "#31183"
+msgid "DVD, Blu-ray, audio CD"
+msgstr "DVD, Blu-ray, ses CD'si"
+
+msgctxt "#31184"
+msgid "slideshow, transitions"
+msgstr "slayt gösterisi, geçişler"
+
+msgctxt "#31185"
+msgid "audio, subtitles and menus"
+msgstr "ses, altyazılar ve menüler"
+
+msgctxt "#31186"
+msgid "font, size, download services"
+msgstr "yazı tipi, boyut, indirme hizmetleri"
+
+msgctxt "#31187"
+msgid "scan on startup, update, clean up"
+msgstr "açılışta tarama, güncelleme, temizleme"
+
+msgctxt "#31188"
+msgid "file extensions, hidden files, sorting"
+msgstr "dosya uzantıları, gizli dosyalar, sıralama"
+
+msgctxt "#31189"
+msgid "select action, plots, thumbnails"
+msgstr "seçim eylemi, özetler, küçük resimler"
+
+msgctxt "#31190"
+msgid "artists, album covers, tags"
+msgstr "sanatçılar, albüm kapakları, etiketler"
+
+msgctxt "#31191"
+msgid "thumbnails, EXIF"
+msgstr "küçük resimler, EXIF"
+
+msgctxt "#31192"
+msgid "channel groups, channel icons"
+msgstr "kanal grupları, kanal simgeleri"
+
+msgctxt "#31193"
+msgid "channel info, switching"
+msgstr "kanal bilgisi, kanal değiştirme"
+
+msgctxt "#31194"
+msgid "days shown, updates"
+msgstr "gösterilen günler, güncellemeler"
+
+msgctxt "#31195"
+msgid "start, channel switch delay"
+msgstr "başlangıç, kanal değiştirme gecikmesi"
+
+msgctxt "#31196"
+msgid "margins, folders"
+msgstr "kayıt payları, klasörler"
+
+msgctxt "#31197"
+msgid "reminder before a show"
+msgstr "programdan önce hatırlatıcı"
+
+msgctxt "#31198"
+msgid "wake up for recordings"
+msgstr "kayıtlar için uyandırma"
+
+msgctxt "#31199"
+msgid "lock by age, PIN"
+msgstr "yaşa göre kilit, PIN"
+
+msgctxt "#31200"
+msgid "PVR client add-ons"
+msgstr "PVR istemci eklentileri"
+
+msgctxt "#31201"
+msgid "skin, theme, colours, fonts"
+msgstr "dış görünüm, tema, renkler, yazı tipleri"
+
+msgctxt "#31202"
+msgid "language, region, time, keyboard"
+msgstr "dil, bölge, saat, klavye"
+
+msgctxt "#31203"
+msgid "mode, wait time"
+msgstr "mod, bekleme süresi"
+
+msgctxt "#31204"
+msgid "lock code, protected areas"
+msgstr "kilit kodu, korumalı alanlar"
+
+msgctxt "#31205"
+msgid "start window, splash screen"
+msgstr "başlangıç penceresi, açılış ekranı"
+
+msgctxt "#31206"
+msgid "resolution, refresh rate, calibration"
+msgstr "çözünürlük, yenileme hızı, kalibrasyon"
+
+msgctxt "#31207"
+msgid "output device, channels, passthrough"
+msgstr "çıkış aygıtı, kanallar, passthrough"
+
+msgctxt "#31208"
+msgid "devices, mouse, remote"
+msgstr "aygıtlar, fare, uzaktan kumanda"
+
+msgctxt "#31209"
+msgid "proxy"
+msgstr "proxy"
+
+msgctxt "#31210"
+msgid "shutdown, display off"
+msgstr "kapatma, ekranı kapatma"
+
+msgctxt "#31211"
+msgid "updates, unknown sources"
+msgstr "güncellemeler, bilinmeyen kaynaklar"
+
+msgctxt "#31212"
+msgid "debug log, components"
+msgstr "hata ayıklama günlüğü, bileşenler"
+
+msgctxt "#31213"
+msgid "device name, Zeroconf"
+msgstr "cihaz adı, Zeroconf"
+
+msgctxt "#31214"
+msgid "web server, remote apps"
+msgstr "web sunucusu, uzaktan kontrol uygulamaları"
+
+msgctxt "#31215"
+msgid "share library, renderer"
+msgstr "kütüphane paylaşımı, oynatıcı"
+
+msgctxt "#31216"
+msgid "receive AirPlay"
+msgstr "AirPlay alma"
+
+msgctxt "#31217"
+msgid "Windows shares, WINS"
+msgstr "Windows paylaşımları, WINS"
+
+msgctxt "#31218"
+msgid "NFS shares"
+msgstr "NFS paylaşımları"
+
+msgctxt "#31219"
+msgid "buffer, read rate"
+msgstr "arabellek, okuma hızı"
+
+msgctxt "#31220"
+msgid "weather service"
+msgstr "hava durumu hizmeti"
+
+msgctxt "#31221"
+msgid "Spotlight change"
+msgstr "Vitrin değişimi"
+
+msgctxt "#31222"
+msgid "Home pages"
+msgstr "Ana sayfalar"
+
+msgctxt "#31224"
+msgid "Rows"
+msgstr "Satırlar"
+
+msgctxt "#31225"
+msgid "Spotlight"
+msgstr "Vitrin"
+
+msgctxt "#31226"
+msgid "Still"
+msgstr "Sabit"
+
+msgctxt "#31227"
+msgid "All shows"
+msgstr "Tüm diziler"
+
+msgctxt "#31228"
+msgid "Unwatched shows"
+msgstr "İzlenmemiş diziler"
+
+msgctxt "#31229"
+msgid "Slot"
+msgstr "Yuva"
+
+msgctxt "#31231"
+msgid "Section for slot"
+msgstr "Yuva için bölüm"
+
+msgctxt "#31232"
+msgid "menu"
+msgstr "menü"
+
+msgctxt "#31233"
+msgid "Continue watching"
+msgstr "İzlemeye devam et"
+
+msgctxt "#31234"
+msgid "Next up"
+msgstr "Sıradaki"
+
+msgctxt "#31235"
+msgid "New movies"
+msgstr "Yeni filmler"
+
+msgctxt "#31236"
+msgid "New episodes"
+msgstr "Yeni bölümler"
+
+msgctxt "#31237"
+msgid "Random movies"
+msgstr "Rastgele filmler"
+
+msgctxt "#31238"
+msgid "Top rated"
+msgstr "En yüksek puanlı"
+
+msgctxt "#31239"
+msgid "TMDb trending"
+msgstr "TMDb'de trend"
+
+msgctxt "#31240"
+msgid "Recently watched"
+msgstr "Son izlenenler"
+
+msgctxt "#31241"
+msgid "Started movies and episodes, the last watched first."
+msgstr "Başlanan filmler ve bölümler, en son izlenen önce."
+
+msgctxt "#31242"
+msgid "The shows you are watching. OK opens the next episode."
+msgstr "İzlediğiniz diziler. OK sonraki bölümü açar."
+
+msgctxt "#31243"
+msgid "The movies added to the library last."
+msgstr "Kütüphaneye en son eklenen filmler."
+
+msgctxt "#31244"
+msgid "The shows with the episodes added last."
+msgstr "En son bölüm eklenen diziler."
+
+msgctxt "#31245"
+msgid "Tabs for the three biggest genres and a picker for all others."
+msgstr "En büyük üç tür için sekmeler ve diğer tümü için bir seçici."
+
+msgctxt "#31246"
+msgid "A new choice from the whole library every time Home opens."
+msgstr "Ana sayfa her açıldığında tüm kütüphaneden yeni bir seçki."
+
+msgctxt "#31248"
+msgid "Sorted by rating, from 7.0 up."
+msgstr "Puana göre sıralı, 7,0 ve üzeri."
+
+msgctxt "#31249"
+msgid "Kodi's favourites, as you set them."
+msgstr "Kodi'nin favorileri, sizin ayarladığınız gibi."
+
+msgctxt "#31250"
+msgid "What is trending on TMDb this week."
+msgstr "Bu hafta TMDb'de trend olanlar."
+
+msgctxt "#31251"
+msgid "What played last, also what you watched to the end."
+msgstr "En son oynatılanlar, sonuna kadar izlenenler de dahil."
+
+msgctxt "#31252"
+msgid "The movie sets of your library. OK opens a set."
+msgstr "Kütüphanenizdeki film kümeleri. OK bir kümeyi açar."
+
+msgctxt "#31253"
+msgid "Episodes you started and did not finish."
+msgstr "Başlayıp bitirmediğiniz bölümler."
+
+msgctxt "#31254"
+msgid "Free slot. OK picks a section from the catalogue."
+msgstr "Boş yuva. OK katalogdan bir bölüm seçer."
+
+msgctxt "#31255"
+msgid "Large artwork with title and plot, in random order. OK or Right picks the source."
+msgstr "Başlık ve özetle büyük görseller, rastgele sırayla. OK veya Sağ kaynağı seçer."
+
+msgctxt "#31256"
+msgid "No spotlight: the page starts with the first row."
+msgstr "Vitrin yok: sayfa ilk satırla başlar."
+
+msgctxt "#31257"
+msgid "How often the spotlight moves on by itself. OK or Right: 10, 15, 30, 60 s or still (then only by hand)."
+msgstr "Vitrinin kendiliğinden ne sıklıkla değiştiği. OK veya Sağ: 10, 15, 30, 60 sn veya sabit (o zaman yalnızca elle)."
+
+msgctxt "#31258"
+msgid "Home and movies show the same spotlight, so they share this setting."
+msgstr "Ana sayfa ve filmler aynı vitrini gösterir, bu yüzden bu ayarı paylaşırlar."
+
+msgctxt "#31259"
+msgid "Show or hide entries of the main menu. System and power always stay, and so does the last page shown."
+msgstr "Ana menünün ögelerini göster veya gizle. Sistem ve güç her zaman kalır, son gösterilen sayfa da öyle."
+
+msgctxt "#31260"
+msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]⏎[/COLOR] seç   [COLOR state_text]→[/COLOR] seçenek"
+
+msgctxt "#31261"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] taşı   [COLOR state_text]⏎[/COLOR] bırak"
+
+msgctxt "#31262"
+msgid "Spotlight, rows and main menu of the home, movies and shows pages."
+msgstr "Ana sayfa, filmler ve diziler sayfalarının vitrini, satırları ve ana menüsü."
+
+msgctxt "#31263"
+msgid "swap"
+msgstr "değiştir"
+
+msgctxt "#31264"
+msgid "Main menu"
+msgstr "Ana menü"
+
+msgctxt "#31265"
+msgid "Spotlight and rows of the home page."
+msgstr "Ana sayfanın vitrini ve satırları."
+
+msgctxt "#31266"
+msgid "Spotlight and rows of the movies page."
+msgstr "Filmler sayfasının vitrini ve satırları."
+
+msgctxt "#31267"
+msgid "Spotlight and rows of the shows page."
+msgstr "Diziler sayfasının vitrini ve satırları."
+
+msgctxt "#31268"
+msgid "How the skin draws the focus."
+msgstr "Dış görünümün odağı nasıl gösterdiği."
+
+msgctxt "#31230"
+msgid "frame rate"
+msgstr "kare hızı"
+
+msgctxt "#31330"
+msgid "back to video"
+msgstr "videoya dön"
+
+msgctxt "#31331"
+msgid "back to home"
+msgstr "ana sayfaya dön"
+
+msgctxt "#31332"
+msgid "back to movies"
+msgstr "filmlere dön"
+
+msgctxt "#31333"
+msgid "back to shows"
+msgstr "dizilere dön"
+
+msgctxt "#31334"
+msgid "back to search"
+msgstr "aramaya dön"
+
+msgctxt "#31335"
+msgid "back to library"
+msgstr "kütüphaneye dön"
+
+msgctxt "#31310"
+msgid "Home key opens the home page"
+msgstr "Home tuşu ana sayfayı açar"
+
+msgctxt "#31311"
+msgid "The Home key of the remote always leads to the home page, held down it opens the quick menu. The skin sets up the keymap 0_skin.nightcity.xml in the profile for it; your own keymaps still win."
+msgstr "Uzaktan kumandanın Home tuşu her zaman ana sayfaya götürür, basılı tutulursa hızlı menüyü açar. Bunun için dış görünüm profilde 0_skin.nightcity.xml tuş haritasını oluşturur; kendi tuş haritalarınız yine önceliklidir."
+
+msgctxt "#31300"
+msgid "crew"
+msgstr "ekip"
+
+msgctxt "#31301"
+msgid "back to start"
+msgstr "başa dön"
+
+msgctxt "#31302"
+msgid "person"
+msgstr "kişi"
+
+msgctxt "#31303"
+msgid "born"
+msgstr "doğum"
+
+msgctxt "#31304"
+msgid "died"
+msgstr "ölüm"
+
+msgctxt "#31320"
+msgid "quick menu"
+msgstr "hızlı menü"
+
+msgctxt "#31321"
+msgid "set up weather"
+msgstr "hava durumunu ayarla"
+
+msgctxt "#31322"
+msgid "more"
+msgstr "daha fazla"
+
+msgctxt "#31323"
+msgid "timer"
+msgstr "zamanlayıcı"
+
+msgctxt "#31336"
+msgid "Remember search terms"
+msgstr "Arama terimlerini hatırla"
+
+msgctxt "#31337"
+msgid "The search page lists the last five search terms. Switched off, the skin keeps no terms and forgets the ones it has."
+msgstr "Arama sayfası son beş arama terimini listeler. Kapalıyken dış görünüm terim saklamaz ve kayıtlı olanları unutur."
+
+msgctxt "#31338"
+msgid "Clear search history"
+msgstr "Arama geçmişini temizle"
+
+msgctxt "#31339"
+msgid "Forgets the remembered search terms."
+msgstr "Hatırlanan arama terimlerini unutur."
+
+msgctxt "#31340"
+msgid "The colour scheme of the skin, the same choice as under Interface."
+msgstr "Dış görünümün renk şeması, Arayüz altındakiyle aynı seçim."
+
+msgctxt "#31341"
+msgid "forecast"
+msgstr "tahmin"
+
+msgctxt "#31360"
+msgid "Hide the controls automatically"
+msgstr "Kontrolleri otomatik gizle"
+
+msgctxt "#31361"
+msgid "While a video plays, the player controls close by themselves once no key was pressed for the time set below. While paused they stay; the time starts again when playback goes on."
+msgstr "Bir video oynarken, aşağıda ayarlanan süre boyunca hiçbir tuşa basılmazsa oynatıcı kontrolleri kendiliğinden kapanır. Duraklatıldığında açık kalırlar; oynatma sürünce süre yeniden başlar."
+
+msgctxt "#31362"
+msgid "Hide after"
+msgstr "Gizleme süresi"
+
+msgctxt "#31363"
+msgid "Time without a key press before the player controls close, 3 to 30 seconds. OK takes the slider, left and right move it, OK lets go."
+msgstr "Oynatıcı kontrolleri kapanmadan önce tuşa basılmayan süre, 3 ile 30 saniye arası. OK kaydırıcıyı tutar, sol ve sağ onu hareket ettirir, OK bırakır."
+
+msgctxt "#31364"
+msgid "The video player: its controls and what it shows while they are up."
+msgstr "Video oynatıcı: kontrolleri ve bunlar açıkken gösterdikleri."
+
+msgctxt "#31365"
+msgid "Show the plot"
+msgstr "Özeti göster"
+
+msgctxt "#31366"
+msgid "The plot of what plays, under its title while the player controls or the seek line are up."
+msgstr "Oynatılanın özeti, oynatıcı kontrolleri veya arama çubuğu açıkken başlığının altında."
+
+msgctxt "#31400"
+msgid "New albums"
+msgstr "Yeni albümler"
+
+msgctxt "#31401"
+msgid "Recently played"
+msgstr "Son çalınanlar"
+
+msgctxt "#31402"
+msgid "Random albums"
+msgstr "Rastgele albümler"
+
+msgctxt "#31403"
+msgid "Artists"
+msgstr "Sanatçılar"
+
+msgctxt "#31404"
+msgid "Genres"
+msgstr "Türler"
+
+msgctxt "#31405"
+msgid "music"
+msgstr "müzik"
+
+msgctxt "#31406"
+msgid "now playing"
+msgstr "şimdi çalıyor"
+
+msgctxt "#31407"
+msgid "albums"
+msgstr "albümler"
+
+msgctxt "#31408"
+msgid "more by"
+msgstr "diğerleri:"
+
+msgctxt "#31409"
+msgid "tracks"
+msgstr "parçalar"
+
+msgctxt "#31410"
+msgid "up next"
+msgstr "sıradaki"
+
+msgctxt "#31411"
+msgid "shuffle"
+msgstr "karıştır"
+
+msgctxt "#31412"
+msgid "repeat"
+msgstr "tekrarla"
+
+msgctxt "#31413"
+msgid "repeat all"
+msgstr "tümünü tekrarla"
+
+msgctxt "#31414"
+msgid "repeat one"
+msgstr "birini tekrarla"
+
+msgctxt "#31420"
+msgid "Network, Bluetooth, updates"
+msgstr "Ağ, Bluetooth, güncellemeler"
+
+msgctxt "#31440"
+msgid "audience"
+msgstr "izleyici"
+
+msgctxt "#31441"
+msgid "Ratings only from TMDb Helper"
+msgstr "Puanlar yalnızca TMDb Helper'dan"
+
+msgctxt "#31442"
+msgid "Show only the ratings TMDb Helper fetched for exactly this title. Off: the library's own rating (from Jellyfin) fills in while TMDb Helper has none."
+msgstr "Yalnızca TMDb Helper'ın tam olarak bu başlık için getirdiği puanları göster. Kapalı: TMDb Helper'da puan yokken kütüphanenin kendi puanı (Jellyfin'den) yerini alır."
+
+msgctxt "#31443"
+msgid "Ratings only on title pages"
+msgstr "Puanlar yalnızca başlık sayfalarında"
+
+msgctxt "#31444"
+msgid "Spotlight and rows show no ratings, which saves requests to TMDb. A title's page still shows them."
+msgstr "Vitrin ve satırlar puan göstermez, bu da TMDb'ye yapılan istekleri azaltır. Bir başlığın sayfası onları yine gösterir."
+
+msgctxt "#31445"
+msgid "Ratings"
+msgstr "Puanlar"
+
+msgctxt "#31446"
+msgid "Sources"
+msgstr "Kaynaklar"
+
+msgctxt "#31447"
+msgid "Which ratings the ratings line of the spotlight and the info page shows, and where they come from."
+msgstr "Vitrinin ve bilgi sayfasının puan satırının hangi puanları gösterdiği ve bunların nereden geldiği."
+
+msgctxt "#31450"
+msgid "IMDb"
+msgstr "IMDb"
+
+msgctxt "#31451"
+msgid "TMDb"
+msgstr "TMDb"
+
+msgctxt "#31452"
+msgid "Rotten Tomatoes critics"
+msgstr "Rotten Tomatoes eleştirmen"
+
+msgctxt "#31453"
+msgid "Rotten Tomatoes audience"
+msgstr "Rotten Tomatoes izleyici"
+
+msgctxt "#31454"
+msgid "Metacritic"
+msgstr "Metacritic"
+
+msgctxt "#31455"
+msgid "Trakt"
+msgstr "Trakt"
+
+msgctxt "#31456"
+msgid "Letterboxd"
+msgstr "Letterboxd"
+
+msgctxt "#31457"
+msgid "MDbList"
+msgstr "MDbList"
+
+msgctxt "#31460"
+msgid "IMDb users, 0 to 10, with the Top 250 rank. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "IMDb kullanıcıları, 0 ile 10 arası, Top 250 sırasıyla. TMDb Helper'da bir OMDb veya MDbList anahtarı gerekir."
+
+msgctxt "#31461"
+msgid "TMDb users, 0 to 10. Needs no key."
+msgstr "TMDb kullanıcıları, 0 ile 10 arası. Anahtar gerekmez."
+
+msgctxt "#31462"
+msgid "Tomatometer: the share of positive critic reviews. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Tomatometer: olumlu eleştirmen yorumlarının oranı. TMDb Helper'da bir OMDb veya MDbList anahtarı gerekir."
+
+msgctxt "#31463"
+msgid "Popcornmeter: the share of positive audience ratings. Needs an MDbList or OMDb key in TMDb Helper."
+msgstr "Popcornmeter: olumlu izleyici puanlarının oranı. TMDb Helper'da bir MDbList veya OMDb anahtarı gerekir."
+
+msgctxt "#31464"
+msgid "A weighted average of critic reviews, 0 to 100, mostly for theatrical films and big series. Needs an OMDb or MDbList key in TMDb Helper."
+msgstr "Eleştirmen yorumlarının ağırlıklı ortalaması, 0 ile 100 arası, çoğunlukla sinema filmleri ve büyük diziler için. TMDb Helper'da bir OMDb veya MDbList anahtarı gerekir."
+
+msgctxt "#31465"
+msgid "Trakt users, 0 to 10. Needs a connected Trakt account in TMDb Helper: fetched from Trakt, not MDbList."
+msgstr "Trakt kullanıcıları, 0 ile 10 arası. TMDb Helper'da bağlı bir Trakt hesabı gerekir: MDbList'ten değil, Trakt'tan getirilir."
+
+msgctxt "#31466"
+msgid "Letterboxd users, 0 to 5, mostly films. Needs an MDbList key in TMDb Helper."
+msgstr "Letterboxd kullanıcıları, 0 ile 5 arası, çoğunlukla filmler. TMDb Helper'da bir MDbList anahtarı gerekir."
+
+msgctxt "#31467"
+msgid "MDbList score: an average of the other sources, 0 to 100. Needs an MDbList key in TMDb Helper."
+msgstr "MDbList puanı: diğer kaynakların ortalaması, 0 ile 100 arası. TMDb Helper'da bir MDbList anahtarı gerekir."
+
+msgctxt "#31469"
+msgid "No description"
+msgstr "Açıklama yok"
+
+msgctxt "#31470"
+msgid "back"
+msgstr "geri"
+
+msgctxt "#31471"
+msgid "budget"
+msgstr "bütçe"
+
+msgctxt "#31472"
+msgid "box office"
+msgstr "gişe"
+
+msgctxt "#31473"
+msgid "description"
+msgstr "açıklama"
+
+msgctxt "#31474"
+msgid "biography"
+msgstr "biyografi"
+
+msgctxt "#31478"
+msgid "controls"
+msgstr "kontroller"
+
+msgctxt "#31479"
+msgid "previous page"
+msgstr "önceki sayfa"
+
+msgctxt "#31480"
+msgid "parent folder"
+msgstr "üst klasör"
+
+msgctxt "#31477"
+msgid "Home"
+msgstr "Ana sayfa"
+
+msgctxt "#31500"
+msgid "view"
+msgstr "görünüm"
+
+msgctxt "#31501"
+msgid "list"
+msgstr "liste"
+
+msgctxt "#31502"
+msgid "filter"
+msgstr "filtre"
+
+msgctxt "#31503"
+msgid "all"
+msgstr "tümü"
+
+msgctxt "#31504"
+msgid "resolution"
+msgstr "çözünürlük"
+
+msgctxt "#31505"
+msgid "dynamic range"
+msgstr "dinamik aralık"
+
+msgctxt "#31506"
+msgid "audio format"
+msgstr "ses biçimi"
+
+msgctxt "#31507"
+msgid "audio channels"
+msgstr "ses kanalları"
+
+msgctxt "#31508"
+msgid "clear filter"
+msgstr "filtreyi temizle"
+
+msgctxt "#31600"
+msgid "runtime"
+msgstr "süre"
+
+msgctxt "#31601"
+msgid "genre"
+msgstr "tür"
+
+msgctxt "#31602"
+msgid "details"
+msgstr "ayrıntılar"
+
+msgctxt "#31603"
+msgid "seasons"
+msgstr "sezonlar"
+
+msgctxt "#31604"
+msgid "season"
+msgstr "sezon"
+
+msgctxt "#31605"
+msgid "seasons"
+msgstr "sezonlar"
+
+msgctxt "#31606"
+msgid "episodes"
+msgstr "bölümler"
+
+msgctxt "#31607"
+msgid "none"
+msgstr "yok"
+
+msgctxt "#31700"
+msgid "On Deck"
+msgstr "On Deck"
+
+msgctxt "#31701"
+msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
+msgstr "Başladıklarınız, ardından izlediğiniz diziler. Bir dizide OK sonraki bölümü açar."
+
+msgctxt "#31750"
+msgid "No trailer found"
+msgstr "Fragman bulunamadı"
