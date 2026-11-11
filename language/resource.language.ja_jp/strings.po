@@ -787,8 +787,6 @@ msgctxt "#31230"
 msgid "frame rate"
 msgstr "フレームレート"
 
-# TMDb navigation
-
 msgctxt "#31330"
 msgid "back to video"
 msgstr "ビデオに戻る"

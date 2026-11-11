@@ -39,6 +39,17 @@ def test_every_string_is_translated_in_order(lang):
 
 
 @pytest.mark.parametrize('lang', LANGUAGES)
+def test_file_is_as_tools_strings_writes_it(lang):
+    """Nothing but header and entries, in the English order: tools/strings.py apply changes nothing."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location('strings_tool', ROOT / 'tools' / 'strings.py')
+    tool = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(tool)
+    path = ROOT / 'language' / 'resource.language.{}'.format(lang) / 'strings.po'
+    assert path.read_text(encoding='utf-8') == tool.render(lang)
+
+
+@pytest.mark.parametrize('lang', LANGUAGES)
 def test_markup_and_placeholders_stay(lang):
     for i, en, tr in entries(lang):
         assert sorted(TOKEN.findall(tr)) == sorted(TOKEN.findall(en)), (i, en, tr)

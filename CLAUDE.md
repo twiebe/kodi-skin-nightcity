@@ -93,6 +93,10 @@ user should see before the release.
   Arabic), worded after Kodi's own translation of each language; the test checks them, also their
   width in fixed buttons. Japanese, Korean and Chinese are shown in the fontset Arial, Kodi's own
   font. The loading screen's BOOTING and ONLINE stay English in every language.
+  After adding or changing English strings: `python tools/strings.py todo` lists what each
+  language lacks (and what changed, with the old wording) in `_build/strings/todo.tsv`; fill in
+  its translation column and put it in with `python tools/strings.py apply _build/strings/todo.tsv`,
+  which also keeps every file in the English order and drops strings the English lost.
 - No em dashes or en dashes anywhere (strings, news, docs, comments, commit messages); use a
   plain hyphen.
 - Match the surrounding XML: includes, naming, comment density.
