@@ -43,14 +43,30 @@ def _move_to(title):
     pytest.skip('no {} in this Kodi'.format(title))
 
 
+def _reopen_home():
+    """Home reads the spotlight's interval when it opens; the focus back on the hero's play button."""
+    builtin('ReplaceWindow(Settings)')
+    wait_for('Window.IsActive(settings)')
+    builtin('ReplaceWindow(Home)')
+    wait_for('Window.IsActive(home)')
+    builtin('SetFocus(9010)')
+    wait_for('Control.HasFocus(9010)')
+
+
 @pytest.fixture
 def no_spotlight_setting():
-    """The TMDb source on (off by default, the only one kodi-dev has without keys)."""
+    """The TMDb source on (off by default, the only one kodi-dev has without keys), and the
+    spotlight turning every 60 s: it turns also while its buttons have the focus, and at the
+    default 15 s it moved on from The Matrix under load while a test still looked at its ratings."""
     builtin('Skin.Reset(nc.ratings.titleonly)')
     builtin('Skin.SetBool(nc.ratings.show.tmdb)')
+    builtin('Skin.SetString(SpotlightInterval,60)')
+    _reopen_home()
     yield
     builtin('Skin.Reset(nc.ratings.titleonly)')
     builtin('Skin.Reset(nc.ratings.show.tmdb)')
+    builtin('Skin.Reset(SpotlightInterval)')
+    _reopen_home()
 
 
 def test_hero_keeps_its_ratings_once_fetched(home, no_spotlight_setting):

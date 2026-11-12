@@ -66,6 +66,23 @@ def results(junit):
     return found
 
 
+def failures(junit):
+    """{nodeid: the end of its failure text} of a JUnit XML file, for the history: what a flake
+    looked like once round one's file is gone."""
+    found = {}
+    if not junit.is_file():
+        return found
+    for case in ET.parse(junit).iter('testcase'):
+        element = case.find('failure')
+        if element is None:
+            element = case.find('error')
+        if element is not None:
+            nodeid = '{}.py::{}'.format(case.get('classname', '').replace('.', '/'), case.get('name'))
+            text = (element.get('message') or '') + '\n' + (element.text or '')
+            found[nodeid] = text.strip()[-1500:]
+    return found
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__.split('\n\n')[0])
     parser.add_argument('-n', dest='workers', default='auto')
@@ -78,6 +95,7 @@ def main():
     first.unlink(missing_ok=True)
     crashes = pytest([*selection, '-m', 'e2e', '-n', options.workers, '--dist', 'loadfile'], first)
     round1 = results(first)
+    reasons = failures(first)
     failed = sorted(t for t, outcome in round1.items() if outcome == 'failed')
 
     round2 = {}
@@ -93,7 +111,8 @@ def main():
     counts = collections.Counter(round1.values())
     record = {'time': time.strftime('%Y-%m-%d %H:%M:%S'), 'seconds': round(time.time() - start),
               'workers': options.workers, 'selection': selection, 'passed': counts['passed'],
-              'skipped': counts['skipped'], 'flaky': flaky, 'failed': broken, 'kodi_crashes': crashes}
+              'skipped': counts['skipped'], 'flaky': flaky, 'failed': broken, 'kodi_crashes': crashes,
+              'reasons': {t: reasons.get(t, '') for t in failed}}
     with open(HISTORY, 'a') as handle:
         handle.write(json.dumps(record) + '\n')
 
