@@ -343,7 +343,7 @@
         <definition>
             <aspectratio scalediffuse="false">scale</aspectratio>
             <fadetime>$PARAM[fadetime]</fadetime>
-            <texture diffuse="$PARAM[mask]" background="true">$PARAM[image]</texture>
+            <texture diffuse="$PARAM[mask]" background="true" mipmap="true">$PARAM[image]</texture>
         </definition>
     </include>
     <include name="LookCardArtFocused">
@@ -353,7 +353,7 @@
         <definition>
             <aspectratio scalediffuse="false">scale</aspectratio>
             <fadetime>$PARAM[fadetime]</fadetime>
-            <texture diffuse="$PARAM[mask]" background="true">$PARAM[image]</texture>
+            <texture diffuse="$PARAM[mask]" background="true" mipmap="true">$PARAM[image]</texture>
         </definition>
     </include>
 

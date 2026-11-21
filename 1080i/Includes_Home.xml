@@ -87,12 +87,12 @@
                     <control type="image">
                         <width>10</width>
                         <height>10</height>
-                        <texture background="true">$INFO[ListItem.Art(poster)]</texture>
+                        <texture background="true" mipmap="true">$INFO[ListItem.Art(poster)]</texture>
                     </control>
                     <control type="image">
                         <width>10</width>
                         <height>10</height>
-                        <texture background="true">$INFO[ListItem.Art(clearlogo)]</texture>
+                        <texture background="true" mipmap="true">$INFO[ListItem.Art(clearlogo)]</texture>
                     </control>
                 </itemlayout>
                 <focusedlayout width="10" height="10">
@@ -104,12 +104,12 @@
                     <control type="image">
                         <width>10</width>
                         <height>10</height>
-                        <texture background="true">$INFO[ListItem.Art(poster)]</texture>
+                        <texture background="true" mipmap="true">$INFO[ListItem.Art(poster)]</texture>
                     </control>
                     <control type="image">
                         <width>10</width>
                         <height>10</height>
-                        <texture background="true">$INFO[ListItem.Art(clearlogo)]</texture>
+                        <texture background="true" mipmap="true">$INFO[ListItem.Art(clearlogo)]</texture>
                     </control>
                 </focusedlayout>
                 <content target="$PARAM[target]">$PARAM[content]</content>
@@ -356,7 +356,7 @@
                     <aspectratio aligny="bottom" align="left">keep</aspectratio>
                     <!-- a title change crossfades poster, logo and backdrop -->
                     <fadetime>400</fadetime>
-                    <texture background="true">$INFO[$PARAM[item].Art(clearlogo)]</texture>
+                    <texture background="true" mipmap="true">$INFO[$PARAM[item].Art(clearlogo)]</texture>
                     <visible>!String.IsEmpty($PARAM[item].Art(clearlogo))</visible>
                 </control>
                 <include content="GlitchTitle">
