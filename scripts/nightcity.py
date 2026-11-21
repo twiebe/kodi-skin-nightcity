@@ -2885,10 +2885,10 @@ def _lib_filter_dialogs(library, choice, groups, text):
 
 
 # --- the details of a row of the list -------------------------------------------------------------
-# The details button of window 1110 opens a multi-select of what a row of the list shows, per library
+# The details button of window 1110 (and of a plugin's list in MyVideoNav.xml) opens a multi-select of what a row of the list shows, per library
 # in the skin string nc.libdetails.<library>: the keys in the row's order with dots between them (a
 # comma would end the value of Skin.SetString), 'none' for none, empty for the default. The skin reads it with String.Contains (Includes_Base.xml LibraryDetail...), so
-# no key is part of another. Home's nc.libdetails.label names the choice on the button.
+# no key is part of another. Home's nc.libdetails.label.<library> names the choice on the button.
 
 LIB_DETAILS = {
     'movies': [('year', 31119), ('runtime', 31600), ('rating', 31121), ('res', 31504), ('hdr', 31505),
@@ -2918,15 +2918,22 @@ def lib_details_label(library, keys, text):
 
 
 def _lib_library():
-    return 'tvshows' if _home().getProperty('nc.library') == 'tvshows' else 'movies'
+    """The library window's library; in the video window (a plugin's list) the shows for a list of
+    shows, the movies for any other (Includes_Base.xml LibraryShows)."""
+    import xbmc
+    if xbmc.getCondVisibility('Window.IsActive(1110)'):
+        return 'tvshows' if _home().getProperty('nc.library') == 'tvshows' else 'movies'
+    return 'tvshows' if xbmc.getCondVisibility('Container.Content(tvshows)') else 'movies'
 
 
 def _lib_details_name():
-    """The choice of the shown library on the details button, in the language of the moment."""
+    """The choice of each library on the details button, in the language of the moment: a plugin's
+    list loads after its window opened, the button picks by its content (Variables.xml
+    LibraryDetailsLabel)."""
     import xbmc
-    library = _lib_library()
-    keys = lib_details_load(library, xbmc.getInfoLabel('Skin.String(nc.libdetails.{})'.format(library)))
-    _home().setProperty('nc.libdetails.label', lib_details_label(library, keys, xbmc.getLocalizedString))
+    for library in LIB_DETAILS:
+        keys = lib_details_load(library, xbmc.getInfoLabel('Skin.String(nc.libdetails.{})'.format(library)))
+        _home().setProperty('nc.libdetails.label.' + library, lib_details_label(library, keys, xbmc.getLocalizedString))
 
 
 def lib_details():
@@ -2948,8 +2955,8 @@ def lib_details():
         return
     value = lib_details_dump(library, [details[i][0] for i in selected])
     xbmc.executebuiltin('Skin.SetString(nc.libdetails.{},{})'.format(library, value))
-    _home().setProperty('nc.libdetails.label', lib_details_label(library, lib_details_load(library, value),
-                                                                 xbmc.getLocalizedString))
+    _home().setProperty('nc.libdetails.label.' + library, lib_details_label(library, lib_details_load(library, value),
+                                                                           xbmc.getLocalizedString))
     # the rows drawn before keep their details until their layout lets go (lib_layout): once off and
     # on, so every row shows the new ones at once, not only after the cursor moved
     _home().clearProperty('nc.lib.layout')

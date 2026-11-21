@@ -825,6 +825,11 @@
         <value condition="$EXP[LibraryAsList]">$LOCALIZE[31501]</value>
         <value>$LOCALIZE[31042]</value>
     </variable>
+    <!-- the details chosen, on the details button of the library and of a plugin's list -->
+    <variable name="LibraryDetailsLabel">
+        <value condition="$EXP[LibraryShows]">$INFO[Window(Home).Property(nc.libdetails.label.tvshows)]</value>
+        <value>$INFO[Window(Home).Property(nc.libdetails.label.movies)]</value>
+    </variable>
     <variable name="LibraryRowYear">
         <value condition="$EXP[LibraryDetailYear]">$INFO[ListItem.Year]</value>
     </variable>

@@ -184,7 +184,7 @@
                 <param name="id" value="5105"/>
                 <onfocus>SetProperty(nc.lib.menu,5105,home)</onfocus>
                 <param name="width" value="459"/>
-                <param name="label" value="$LOCALIZE[31602]: $INFO[Window(Home).Property(nc.libdetails.label)]"/>
+                <param name="label" value="$LOCALIZE[31602]: $VAR[LibraryDetailsLabel]"/>
                 <param name="visible" value="$EXP[LibraryAsList]"/>
                 <param name="onfocus" value="NotifyAll(nightcity,lib_bar:prepare)"/>
                 <param name="onclick" value="NotifyAll(nightcity,lib_details)"/>

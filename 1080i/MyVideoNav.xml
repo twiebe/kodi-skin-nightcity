@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Video library: view 50 is a list with a detail pane, view 51 a poster wall. -->
+<!-- Video library: view 50 is a list with a detail pane, view 51 a poster wall. A plugin's list of
+     movies or shows (JellyCon) has the rows of the library's list (LibraryRow) in view 50, with the
+     details chosen for the movies or the shows. -->
 <window>
     <defaultcontrol always="true">50</defaultcontrol>
     <views>50,51</views>
+    <!-- the library's rows hold once the window is up, as in the library (Custom_1110_Library.xml) -->
+    <onload>NotifyAll(nightcity,lib_layout)</onload>
+    <onunload>ClearProperty(nc.lib.layout,home)</onunload>
     <controls>
         <include>Background</include>
         <include content="FanartBackdrop">
@@ -13,18 +18,53 @@
             <param name="counter" value="$INFO[Container.CurrentItem]/$INFO[Container.NumItems]"/>
             <param name="weather" value="false"/>
         </include>
+        <!-- as wide as the library's list and at its left edge, for its rows; the plain row 70 px in -->
         <control type="list" id="50">
-            <left>110</left>
+            <left>40</left>
             <top>118</top>
-            <width>1260</width>
+            <width>1368</width>
             <height>916</height>
             <viewtype label="535">list</viewtype>
             <scrolltime tween="quadratic">200</scrolltime>
             <onright>9060</onright>
-            <itemlayout width="1240" height="56">
+            <itemlayout width="1368" height="60" condition="[Container.Content(movies) | Container.Content(tvshows)] + !$EXP[LibraryLayoutReady]"/>
+            <focusedlayout width="1368" height="60" condition="[Container.Content(movies) | Container.Content(tvshows)] + !$EXP[LibraryLayoutReady]"/>
+            <!-- the library's row, its glow at the top of the item like the plain row's -->
+            <itemlayout width="1368" height="60" condition="[Container.Content(movies) | Container.Content(tvshows)] + $EXP[LibraryLayoutReady]">
+                <control type="group">
+                    <top>-14</top>
+                    <include content="LibraryRow">
+                        <param name="color" value="text_dim"/>
+                        <param name="mute" value="text_mute"/>
+                        <param name="mark" value="state_text"/>
+                    </include>
+                </control>
+            </itemlayout>
+            <focusedlayout width="1368" height="60" condition="[Container.Content(movies) | Container.Content(tvshows)] + $EXP[LibraryLayoutReady]">
+                <control type="group">
+                    <top>-14</top>
+                    <control type="image">
+                        <left>14</left>
+                        <top>14</top>
+                        <width>1340</width>
+                        <height>76</height>
+                        <include>LookListFocus</include>
+                        <visible>Control.HasFocus(50)</visible>
+                    </control>
+                    <include content="LibraryRow">
+                        <param name="color" value="$VAR[LibraryFocusColor]"/>
+                        <param name="mute" value="$VAR[LibraryFocusColor]"/>
+                        <param name="mark" value="$VAR[LibraryFocusColor]"/>
+                        <param name="tag" value="$VAR[LibraryRowTag]"/>
+                        <param name="tagtext" value="$VAR[LibraryRowTagText]"/>
+                        <param name="scroll" value="Control.HasFocus(50)"/>
+                    </include>
+                </control>
+            </focusedlayout>
+            <itemlayout width="1310" height="56">
                 <!-- the item 10 px in: its glow reaches past it -->
                 <control type="group">
-                    <left>10</left>
+                    <left>80</left>
                     <top>10</top>
                     <control type="label">
                         <left>20</left>
@@ -59,10 +99,10 @@
                     </control>
                 </control>
             </itemlayout>
-            <focusedlayout width="1240" height="56">
+            <focusedlayout width="1310" height="56">
                 <!-- the item 10 px in: its glow reaches past it -->
                 <control type="group">
-                    <left>10</left>
+                    <left>80</left>
                     <top>10</top>
                     <control type="image">
                         <left>-10</left>
@@ -168,12 +208,15 @@
                 </control>
             </focusedlayout>
         </control>
-        <!-- View and sort: Kodi ids 2 view (Kodi labels it), 3 sort by (Kodi labels it), 4 descending -->
+        <!-- View and sort: Kodi ids 2 view (Kodi labels it), 3 sort by (Kodi labels it), 4 descending;
+             the details of the library's rows in a list of movies or shows. The last one at the bottom:
+             "right" is the bottom in a vertical grouplist -->
         <control type="grouplist" id="9060">
             <left>1430</left>
-            <top>870</top>
+            <top>838</top>
             <width>420</width>
-            <height>196</height>
+            <height>228</height>
+            <align>right</align>
             <itemgap>-20</itemgap>
             <onleft condition="Control.IsVisible(51)">51</onleft>
             <onleft>50</onleft>
@@ -197,6 +240,14 @@
                 <textureradiooffnofocus colordiffuse="text_mute">ui/check_off_pad.png</textureradiooffnofocus>
                 <textureradioofffocus colordiffuse="focus_text">ui/check_off_pad.png</textureradioofffocus>
             </control>
+            <!-- what a row shows (scripts/nightcity.py lib_details), for the library of the content -->
+            <include content="ListButton">
+                <param name="id" value="9061"/>
+                <param name="width" value="420"/>
+                <param name="label" value="$LOCALIZE[31602]: $VAR[LibraryDetailsLabel]"/>
+                <param name="visible" value="Control.IsVisible(50) + [Container.Content(movies) | Container.Content(tvshows)]"/>
+                <param name="onclick" value="NotifyAll(nightcity,lib_details)"/>
+            </include>
         </control>
     </controls>
 </window>
