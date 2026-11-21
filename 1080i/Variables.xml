@@ -398,6 +398,16 @@
         <value condition="!String.IsEmpty(Container(5000).ListItem.Art(poster))">$INFO[Container(5000).ListItem.Art(poster)]</value>
         <value>$INFO[Container(5000).ListItem.Art(thumb)]</value>
     </variable>
+    <!-- the header of the video window: a plugin's name of its list (JellyCon's "Movies - Show All"),
+         else the folder's, which for a plugin is the add-on's -->
+    <variable name="VideoNavTitle">
+        <value condition="!String.IsEmpty(Container.PluginCategory)">$INFO[Container.PluginCategory]</value>
+        <value>$INFO[Container.FolderName]</value>
+    </variable>
+    <variable name="VideoNavTitlePoster">
+        <value condition="!String.IsEmpty(Container(50).ListItem.Art(poster))">$INFO[Container(50).ListItem.Art(poster)]</value>
+        <value>$INFO[Container(50).ListItem.Art(thumb)]</value>
+    </variable>
     <variable name="CardArt">
         <value condition="!String.IsEmpty(ListItem.Art(tvshow.poster))">$INFO[ListItem.Art(tvshow.poster)]</value>
         <value>$INFO[ListItem.Art(poster)]</value>
@@ -825,6 +835,11 @@
         <value condition="$EXP[LibraryAsList]">$LOCALIZE[31501]</value>
         <value>$LOCALIZE[31042]</value>
     </variable>
+    <!-- the details chosen, on the details button of the library and of a plugin's list -->
+    <variable name="LibraryDetailsLabel">
+        <value condition="$EXP[LibraryShows]">$INFO[Window(Home).Property(nc.libdetails.label.tvshows)]</value>
+        <value>$INFO[Window(Home).Property(nc.libdetails.label.movies)]</value>
+    </variable>
     <variable name="LibraryRowYear">
         <value condition="$EXP[LibraryDetailYear]">$INFO[ListItem.Year]</value>
     </variable>
@@ -877,6 +892,11 @@
     </variable>
     <variable name="LibraryDirectionLabel">
         <value condition="Skin.HasSetting(nc.sortdesc)">▼ $LOCALIZE[31117]</value>
+        <value>▲ $LOCALIZE[31122]</value>
+    </variable>
+
+    <variable name="VideoNavDirectionLabel">
+        <value condition="Container.SortDirection(descending)">▼ $LOCALIZE[31117]</value>
         <value>▲ $LOCALIZE[31122]</value>
     </variable>
 

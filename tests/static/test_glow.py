@@ -71,6 +71,7 @@ BEFORE = {
     ('MusicOSD.xml', '620'): ('1056', '590', '800', '54', '12'),
     ('MyMusicNav.xml', '9060'): ('1431', '828', '360', '228', '0'),
     ('MyVideoNav.xml', '9060'): ('1440', '880', '400', '176', '0'),
+    ('MyVideoNav.xml', '9070'): ('1431', '719', '439', '334', '16'),  # the library's menu (1110 5100)
     ('Settings.xml', '9200'): ('64', '90', '520', '900', '0'),
     ('SettingsCategory.xml', '3'): ('120', '100', '400', '840', '0'),
     ('SettingsCategory.xml', '5'): ('560', '100', '1240', '800', '0'),
@@ -265,8 +266,11 @@ CONTAINERS = {
     ('Includes_Player.xml', '$PARAM[id]'): (0, 56, 600, 416),
     ('MusicOSD.xml', '701'): (64, 44, 1792, 336),
     ('MyMusicNav.xml', '50'): (120, 128, 1240, 896),
-    ('MyVideoNav.xml', '50'): (120, 128, 1240, 896),
+    ('MyVideoNav.xml', '50'): (50, 128, 1348, 896),
 }
+# a container wider than its plain rows: MyVideoNav's list is as wide as the library's for the
+# library's rows (LibraryRow, conditional layouts), its plain row 70 px further in
+PLAIN_INSET = {('MyVideoNav.xml', '50'): 70}
 
 
 def _container(name, cid):
@@ -274,11 +278,16 @@ def _container(name, cid):
                 if c.get('id') == cid and c.get('type') in ('list', 'panel'))
 
 
-def _inset(layout):
-    """The layout holds one group, GLOW px in."""
+def _inset(layout, extra=0):
+    """The layout holds one group, GLOW px in (and EXTRA px more from the left)."""
     kids = layout.findall('control')
     return len(kids) == 1 and kids[0].get('type') == 'group' and \
-        (kids[0].findtext('left'), kids[0].findtext('top')) == (str(GLOW), str(GLOW))
+        (kids[0].findtext('left'), kids[0].findtext('top')) == (str(GLOW + extra), str(GLOW))
+
+
+def _plain(container, tag):
+    """The layout a container draws its items with when no conditional one holds."""
+    return next(el for el in container.findall(tag) if el.get('condition') is None)
 
 
 def test_glowing_containers_reach_past_their_items():
@@ -287,9 +296,9 @@ def test_glowing_containers_reach_past_their_items():
         rect = tuple(c.findtext(k) for k in ('left', 'top', 'width', 'height'))
         assert rect == tuple(str(v) for v in (left - GLOW, top - GLOW, width + 2 * GLOW, height + 2 * GLOW)), (name, cid)
         for tag in ('itemlayout', 'focusedlayout'):
-            assert _inset(c.find(tag)), (name, cid, tag)
+            assert _inset(_plain(c, tag), PLAIN_INSET.get((name, cid), 0)), (name, cid, tag)
             # a grown container shows no more items than before (Kodi counts whole items)
-            size = int(c.find(tag).get('height' if (c.findtext('orientation') or 'vertical') == 'vertical' else 'width'))
+            size = int(_plain(c, tag).get('height' if (c.findtext('orientation') or 'vertical') == 'vertical' else 'width'))
             span = height if (c.findtext('orientation') or 'vertical') == 'vertical' else width
             assert (span + 2 * GLOW) // size == span // size, (name, cid)
 

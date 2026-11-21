@@ -54,11 +54,17 @@ CONTAINS = re.compile(r'String\.Contains\(Skin\.String\(([^)]+)\),([^)]+)\)')
 
 
 def holds(condition, skin):
-    """A condition of skin strings and Home properties, $EXP and String.Contains of a skin string too."""
+    """A condition of skin strings and Home properties, $EXP and String.Contains of a skin string too.
+    The window is the library's (1110) unless SKIN has 'window', the content that of 'content'."""
     expressions = _expressions()
     while '$EXP[' in condition:
         condition = re.sub(r'\$EXP\[(\w+)\]', lambda m: '[' + expressions[m.group(1)] + ']', condition)
     condition = CONTAINS.sub(lambda m: 'true' if m.group(2) in skin.get(m.group(1), '') else 'false', condition)
+    condition = re.sub(r'Window\.IsActive\((\w+)\)',
+                       lambda m: 'true' if m.group(1) == skin.get('window', '1110') else 'false', condition)
+    condition = re.sub(r'Container\.Content\((\w+)\)',
+                       lambda m: 'true' if m.group(1) == skin.get('content', '') else 'false', condition)
+    skin = {k: v for k, v in skin.items() if k not in ('window', 'content')}
     return _evaluate(condition, tuple(sorted(skin.items())))
 
 
@@ -115,7 +121,7 @@ def _details_button():
 def test_the_details_button_opens_the_dialog_in_the_list_only():
     params = _params(_details_button())
     assert params['onclick'] == 'NotifyAll(nightcity,lib_details)'
-    assert params['label'] == '$LOCALIZE[31602]: $INFO[Window(Home).Property(nc.libdetails.label)]'
+    assert params['label'] == '$LOCALIZE[31602]: $VAR[LibraryDetailsLabel]'
     assert params['visible'] == '$EXP[LibraryAsList]'
     assert params['onfocus'] == 'NotifyAll(nightcity,lib_bar:prepare)'
     assert 'SetProperty(nc.lib.menu,5105,home)' in [f.text for f in _details_button().findall('onfocus')]
@@ -185,11 +191,12 @@ def test_the_focused_row_turns_its_tags_dark():
     assert params['tag'] == '$VAR[LibraryRowTag]' and params['tagtext'] == '$VAR[LibraryRowTagText]'
     # each look its own: Nightcity the plates of its buttons, Confuse filled chips
     look = ROOT / '1080i' / 'Includes_Look.xml'
-    assert _variable('LibraryRowTag', look) == [('Control.HasFocus(5000)', 'focus_text'), (None, 'surface_alt')]
-    assert _variable('LibraryRowTagText', look) == [('Control.HasFocus(5000)', 'focus'), (None, 'text')]
+    focus = 'Control.HasFocus(5000) | Control.HasFocus(50)'  # the library's list, a plugin's
+    assert _variable('LibraryRowTag', look) == [(focus, 'focus_text'), (None, 'surface_alt')]
+    assert _variable('LibraryRowTagText', look) == [(focus, 'focus'), (None, 'text')]
     confuse = ROOT / 'skins' / 'confuse' / '1080i' / 'Includes_Look.xml'
-    assert _variable('LibraryRowTag', confuse) == [('Control.HasFocus(5000)', 'focus_text'), (None, 'state')]
-    assert _variable('LibraryRowTagText', confuse) == [('Control.HasFocus(5000)', 'focus'), (None, 'text')]
+    assert _variable('LibraryRowTag', confuse) == [(focus, 'focus_text'), (None, 'state')]
+    assert _variable('LibraryRowTagText', confuse) == [(focus, 'focus'), (None, 'text')]
     # the other rows: the colours without the focus
     for path in (look, confuse):
         assert _variable('LibraryRowTagRest', path) == [(None, _variable('LibraryRowTag', path)[1][1])]
@@ -368,3 +375,115 @@ def test_the_music_filter_is_marked_like_the_others():
     body = body[:body.index('\ndef ')]
     assert "setProperty('nc.select.ok', '1')" in body and "clearProperty('nc.select.ok')" in body
     assert 'AudioLibrary.GetGenres' in body and 'Container.Update(' in body
+
+
+# --- the same rows in a plugin's list (MyVideoNav) -------------------------------------------------
+# A plugin's list of movies or shows (JellyCon) shows in the video window, view 50: its rows are the
+# library's, with the details chosen for the movies or the shows by the content of the list.
+
+NAV = 'MyVideoNav.xml'
+NAV_ROWS = '[Container.Content(movies) | Container.Content(tvshows)]'
+
+
+def _nav():
+    return parse(ROOT / '1080i' / NAV)
+
+
+def _nav_list():
+    return next(c for c in _nav().iter('control') if c.get('id') == '50')
+
+
+def test_a_plugin_list_takes_the_choice_of_its_content():
+    for content, library in (('movies', 'movies'), ('tvshows', 'tvshows'), ('episodes', 'movies')):
+        skin = {'window': 'videos', 'content': content, 'Window(Home).Property(nc.library)': 'tvshows'}
+        assert [k for k in ROW_ORDER if holds('$EXP[LibraryDetail{}]'.format(k.capitalize()), skin)] == \
+            _nightcity().lib_details_load(library, ''), content
+    # the library window goes by the library it shows, whatever the content
+    skin = {'content': 'tvshows', 'Window(Home).Property(nc.library)': 'movies'}
+    assert [k for k in ROW_ORDER if holds('$EXP[LibraryDetail{}]'.format(k.capitalize()), skin)] == \
+        _nightcity().lib_details_load('movies', '')
+
+
+def test_a_plugin_list_of_movies_or_shows_has_the_rows_of_the_library():
+    """The library's row once the window is up (LibraryLayoutReady, as in the library), nothing
+    before; any other content keeps the plain row of the video window."""
+    layouts = {(el.tag, el.get('condition')): el for el in _nav_list() if el.tag in ('itemlayout', 'focusedlayout')}
+    for tag in ('itemlayout', 'focusedlayout'):
+        assert not list(layouts[(tag, NAV_ROWS + ' + !$EXP[LibraryLayoutReady]')])
+        row = layouts[(tag, NAV_ROWS + ' + $EXP[LibraryLayoutReady]')]
+        assert row.get('width') == '1368' and row.get('height') == '60'
+        assert [i.get('content') for i in row.iter('include') if i.get('content') == 'LibraryRow'] == ['LibraryRow']
+        assert any(t == tag and c is None for t, c in layouts), tag  # the plain row for the rest
+    focused = next(i for i in layouts[('focusedlayout', NAV_ROWS + ' + $EXP[LibraryLayoutReady]')].iter('include')
+                   if i.get('content') == 'LibraryRow')
+    params = _params(focused)
+    assert params['tag'] == '$VAR[LibraryRowTag]' and params['tagtext'] == '$VAR[LibraryRowTagText]'
+    assert params['scroll'] == 'Control.HasFocus(50)'
+    window = _nav()
+    assert 'NotifyAll(nightcity,lib_layout)' in [e.text for e in window.findall('onload')]
+    assert 'ClearProperty(nc.lib.layout,home)' in [e.text for e in window.findall('onunload')]
+
+
+def test_the_rows_of_a_plugin_list_sit_where_the_library_has_them():
+    """The list as wide as the library's grid and at its left edge, the poster beside it."""
+    nav, lib = _nav_list(), next(c for c in _root().iter('control') if c.get('id') == '5000')
+    assert (nav.findtext('left'), nav.findtext('width')) == (lib.findtext('left'), lib.findtext('width'))
+    pane = next(c for c in _nav().iter('control') if c.get('type') == 'group' and (c.findtext('visible') or '').startswith('Control.IsVisible(50)'))
+    assert int(nav.findtext('left')) + int(nav.findtext('width')) <= int(pane.findtext('left'))
+
+
+def _nav_pills():
+    menu = next(c for c in _nav().iter('control') if c.get('id') == '9070')
+    return menu, [_params(i) for i in menu.iter('include') if i.get('content') == 'PillButton']
+
+
+def test_a_plugin_list_has_the_column_of_the_library():
+    """The focused title, large, its poster below, and the pills in the place of the library's."""
+    title = next(i for i in _nav().iter('include') if i.get('content') == 'LibraryTitle')
+    assert _params(title) == {'width': '439', 'item': 'Container(50).ListItem', 'list': 'true',
+                              'poster': '$VAR[VideoNavTitlePoster]'}
+    library = next(i for i in _root().iter('include') if i.get('content') == 'LibraryTitle')
+    assert _params(library)['width'] == '439'
+    menu, _ = _nav_pills()
+    lib_menu = next(c for c in _root().iter('control') if c.get('id') == '5100')
+    for key in ('left', 'top', 'width', 'height', 'align', 'itemgap', 'orientation'):
+        assert menu.findtext(key) == lib_menu.findtext(key), key
+    assert menu.findtext('visible') == '$EXP[VideoNavLibrary]'
+    assert _expressions()['VideoNavLibrary'] == 'Control.IsVisible(50) + ' + NAV_ROWS
+
+
+def test_the_pills_of_a_plugin_list_act_through_kodi():
+    """Sort and direction as the plugin offers them, the view to the posters (Kodi's menu there,
+    on its view button), the details as in the library. No filter: it needs Kodi's library."""
+    _, pills = _nav_pills()
+    assert [(p['label'], p['onclick']) for p in pills] == [
+        ('$LOCALIZE[31116]: $INFO[Container.SortMethod]', 'Container.NextSortMethod'),
+        ('$VAR[VideoNavDirectionLabel]', 'Container.SetSortDirection'),
+        ('$LOCALIZE[31500]: $LOCALIZE[31501]', 'Container.NextViewMode'),
+        ('$LOCALIZE[31602]: $VAR[LibraryDetailsLabel]', 'NotifyAll(nightcity,lib_details)'),
+    ]
+    assert pills[2]['onclick2'] == 'SetFocus(2)'
+    view = next(i for i in _nav().iter('include') if i.get('content') == 'ListButton' and _params(i)['id'] == '2')
+    assert [(o.get('condition'), o.text) for o in view.findall('onclick')] == [
+        ('Container.Content(movies) | Container.Content(tvshows)', 'SetFocus(9073)')]
+    for library in ('movies', 'tvshows'):
+        label = _variable('LibraryDetailsLabel')
+        skin = {'window': 'videos', 'content': library}
+        assert next(t for c, t in label if c is None or holds(c, skin)) == \
+            '$INFO[Window(Home).Property(nc.libdetails.label.{})]'.format(library)
+
+
+def test_kodis_menu_and_pane_give_way_to_the_column():
+    nav = _nav()
+    menu = next(c for c in nav.iter('control') if c.get('id') == '9060')
+    assert menu.findtext('visible') == '!$EXP[VideoNavLibrary]'
+    pane = next(c for c in nav.iter('control') if c.get('type') == 'group' and (c.findtext('visible') or '').startswith('Control.IsVisible(50)'))
+    assert pane.findtext('visible').endswith(' + !$EXP[VideoNavLibrary]')
+    assert [(o.get('condition'), o.text) for o in _nav_list().findall('onright')] == [
+        ('$EXP[VideoNavLibrary]', '9070'), ('!$EXP[VideoNavLibrary]', '9060')]
+
+
+def test_the_header_names_a_plugins_list():
+    """JellyCon names its list (setPluginCategory); Kodi's folder name is the add-on's then."""
+    assert _variable('VideoNavTitle') == [('!String.IsEmpty(Container.PluginCategory)', '$INFO[Container.PluginCategory]'),
+                                          (None, '$INFO[Container.FolderName]')]

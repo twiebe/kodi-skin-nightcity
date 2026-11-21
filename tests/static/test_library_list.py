@@ -161,18 +161,22 @@ def test_the_list_shows_the_poster_where_the_grid_shows_the_plot():
     column = next(c for c in include.iter('control') if c.get('type') == 'grouplist')
     assert column.findtext('orientation') == 'vertical'
     children = column.findall('control')
-    titles = [c for c in children if 'ListItem.Label' in ET.tostring(c, encoding='unicode')]
+    # the include serves the library's grid by default, a plugin's list in MyVideoNav.xml by its params
+    defaults = {p.get('name'): p.get('default') for p in include.findall('param')}
+    assert (defaults['item'], defaults['list'], defaults['poster']) == (
+        'Container(5000).ListItem', '$EXP[LibraryAsList]', '$VAR[LibraryTitlePoster]')
+    titles = [c for c in children if '$PARAM[item].Label' in ET.tostring(c, encoding='unicode')]
     assert [c.findtext('height') for c in titles] == ['auto', 'auto']
     assert children.index(titles[-1]) < len(children) - 2  # plot and poster follow the titles
-    listed = max(int(c.find('height').get('max')) for c in titles if c.findtext('visible') == '$EXP[LibraryAsList]')
-    plot = next(c for c in include.iter('control') if 'ListItem.Plot' in (c.findtext('label') or ''))
-    assert plot.findtext('visible') == '!$EXP[LibraryAsList]'
+    listed = max(int(c.find('height').get('max')) for c in titles if c.findtext('visible') == '$PARAM[list]')
+    plot = next(c for c in include.iter('control') if '$PARAM[item].Plot' in (c.findtext('label') or ''))
+    assert plot.findtext('visible') == '!$PARAM[list]'
     group = next(c for c in include.iter('control') if c.get('type') == 'group'
                  and c.find("include[@content='CutCard']") is not None)
-    assert group.findtext('visible') == '$EXP[LibraryAsList]'
+    assert group.findtext('visible') == '$PARAM[list]'
     card = _params(group.find("include[@content='CutCard']"))
-    assert card['image'] == '$VAR[LibraryTitlePoster]'
-    assert card['item'] == 'Container(5000).ListItem'
+    assert card['image'] == '$PARAM[poster]'
+    assert card['item'] == '$PARAM[item]'
     assert group in children
     assert listed + int(column.findtext('itemgap')) + int(group.findtext('height')) <= int(column.findtext('height'))
     poster = re.search(r'<variable name="LibraryTitlePoster">(.*?)</variable>', _variables(), re.S).group(1)

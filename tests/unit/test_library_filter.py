@@ -257,7 +257,8 @@ def test_a_details_change_redraws_every_row(monkeypatch):
     import types
     calls, props = [], {'nc.library': 'movies', 'nc.lib.layout': '1'}
     xbmc = types.SimpleNamespace(getInfoLabel=lambda key: '', executebuiltin=calls.append,
-                                 getLocalizedString=lambda n: str(n))
+                                 getLocalizedString=lambda n: str(n),
+                                 getCondVisibility=lambda c: c == 'Window.IsActive(1110)')
     xbmcgui = types.SimpleNamespace(Dialog=lambda: types.SimpleNamespace(multiselect=lambda *a, **k: [0, 2]))
 
     class Home:
@@ -280,6 +281,47 @@ def test_a_details_change_redraws_every_row(monkeypatch):
     assert ('clear', 'nc.lib.layout') in calls[written:]
     assert calls.index(('set', 'nc.lib.layout', '1')) > calls.index(('clear', 'nc.lib.layout'))
     assert props['nc.lib.layout'] == '1'
+    assert props['nc.libdetails.label.movies'] == '31119, 31121'
+
+
+def _kodi(monkeypatch, props, conditions, skin=None):
+    """nightcity against a fake Kodi: Home's PROPS, the CONDITIONS that hold, skin strings SKIN."""
+    import sys
+    import types
+    xbmc = types.SimpleNamespace(getCondVisibility=lambda c: c in conditions,
+                                 getInfoLabel=lambda key: (skin or {}).get(key, ''),
+                                 getLocalizedString=lambda n: str(n))
+
+    class Home:
+        def getProperty(self, key):
+            return props.get(key, '')
+
+        def setProperty(self, key, value):
+            props[key] = value
+    monkeypatch.setitem(sys.modules, 'xbmc', xbmc)
+    monkeypatch.setattr(nightcity, '_home', lambda: Home())
+
+
+def test_the_library_window_shows_the_details_of_its_library(monkeypatch):
+    _kodi(monkeypatch, {'nc.library': 'tvshows'}, {'Window.IsActive(1110)', 'Container.Content(movies)'})
+    assert nightcity._lib_library() == 'tvshows'
+
+
+def test_a_plugin_list_shows_the_details_of_its_content(monkeypatch):
+    """JellyCon's lists in the video window: shows by the shows' choice, anything else by the movies'."""
+    _kodi(monkeypatch, {'nc.library': 'movies'}, {'Container.Content(tvshows)'})
+    assert nightcity._lib_library() == 'tvshows'
+    _kodi(monkeypatch, {'nc.library': 'tvshows'}, {'Container.Content(movies)'})
+    assert nightcity._lib_library() == 'movies'
+
+
+def test_the_details_button_names_the_choice_of_each_library(monkeypatch):
+    """A plugin's list loads after its window: the button picks its library's name by the content."""
+    props = {}
+    _kodi(monkeypatch, props, {'Window.IsActive(1110)'}, {'Skin.String(nc.libdetails.tvshows)': 'rating'})
+    nightcity._lib_details_name()
+    assert props['nc.libdetails.label.movies'] == '31600, 31504, 31507'
+    assert props['nc.libdetails.label.tvshows'] == '31121'
 
 
 def _filter_dialog(monkeypatch, props, answers):
