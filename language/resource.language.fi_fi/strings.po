@@ -1182,7 +1182,3 @@ msgstr "On Deck"
 msgctxt "#31701"
 msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
 msgstr "Aloitetut, sitten sarjat, joita katsot. OK sarjan kohdalla avaa seuraavan jakson."
-
-msgctxt "#31750"
-msgid "No trailer found"
-msgstr "Traileria ei löytynyt"
