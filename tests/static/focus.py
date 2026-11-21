@@ -74,6 +74,8 @@ class State:
             (r'Player\.HasVideo$', lambda m: False),
             # $EXP[InfoPlaying] (Includes_Info.xml): the page is not the title that plays
             (r'InfoPlaying$', lambda m: False),
+            # $EXP[ChainStepBack] (Includes_Tmdb.xml): a chain page after the first; clicks only
+            (r'ChainStepBack$', lambda m: False),
             # $EXP[PeekRow<id>], $EXP[PeekAny<page>] (Includes_Sections.xml), $EXP[SpotlightStill<page>]
             # and SpotlightStillShown (Includes_Home.xml): no spotlight stands still and shows a
             # title of the rows unless `extra` says so

@@ -1028,9 +1028,12 @@
         <value condition="String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.DBID)">videodb://tvshows/titles/?xsp={"rules":{"and":[{"field":"path","operator":"is","value":["$INFO[ListItem.Path]"]}]},"type":"tvshows"}</value>
         <value>$VAR[InfoTwinPath]</value>
     </variable>
-    <!-- where back all the way (9004 on the info page) ends: the playing video, else the page of
-         Home or the library the chain's first info page lay over (nc.chain.from) -->
+    <!-- where the way back (9004 on the info page) leads: one page back the page before (its
+         title, scripts/nightcity.py info_back); back all the way the playing video, else the
+         page of Home or the library the chain's first info page lay over (nc.chain.from) -->
     <variable name="ChainBackLabel">
+        <value condition="$EXP[ChainStepBack] + !String.IsEmpty(Window(Home).Property(nc.chain.before))">$INFO[Window(Home).Property(nc.chain.before)]</value>
+        <value condition="$EXP[ChainStepBack]">$LOCALIZE[31479]</value>
         <value condition="Player.HasVideo">$LOCALIZE[31330]</value>
         <value condition="String.IsEqual(Window(Home).Property(nc.chain.from),home) + String.IsEqual(Window(Home).Property(nc.page),movies)">$LOCALIZE[31332]</value>
         <value condition="String.IsEqual(Window(Home).Property(nc.chain.from),home) + String.IsEqual(Window(Home).Property(nc.page),shows)">$LOCALIZE[31333]</value>

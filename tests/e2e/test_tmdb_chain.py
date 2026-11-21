@@ -498,17 +498,20 @@ def test_click_right_after_leaving_a_chain_opens_the_next(matrix):
 
 
 def test_back_button_names_the_page_and_waits_at_the_left(matrix):
-    """Started from the movies page, back all the way says so. On a title page it stands left of
-    the play button and takes the focus only with Left."""
+    """Past the chain's first page the way back goes one page back and names that page; on the
+    first page it goes back all the way and names where the chain started (the movies page). On
+    a title page it stands left of the play button and takes the focus only with Left."""
     builtin('SetFocus(9102)')
     wait_for('String.IsEqual(Window(Home).Property(nc.page),movies)')
     _info_and_person(matrix)
-    assert 'back to movies' in info('Control.GetLabel(9004)')['Control.GetLabel(9004)'].lower()
+    wait_for('String.Contains(Control.GetLabel(9004),The Matrix)', timeout=5)
     wait_for('Integer.IsGreater(Container(5510).NumItems,0)', timeout=15)
+    person = info('ListItem.Label')['ListItem.Label']
     builtin('SetFocus(5510,0,absolute)')
     _click_opens(5510, 3)
     _page(3)
     wait_for('Control.IsVisible(9004)')
+    wait_for('String.Contains(Control.GetLabel(9004),{})'.format(person), timeout=5)
     focused = info('System.CurrentControlId')['System.CurrentControlId']
     assert focused and focused != '9004' and _true('ControlGroup(9000).HasFocus()'), focused
     for _ in range(4):
@@ -516,6 +519,19 @@ def test_back_button_names_the_page_and_waits_at_the_left(matrix):
             break
         action('left', delay=0.3)
     assert _true('Control.HasFocus(9004)')
+    action('select')
+    _page(2)
+    assert info('ListItem.Label')['ListItem.Label'] == person
+    builtin('SetFocus(9004)')
+    wait_for('Control.HasFocus(9004)')
+    action('select')
+    _page(1)
+    wait_for('String.Contains(Control.GetLabel(9004),back to movies)', timeout=5)
+    builtin('SetFocus(9000)')
+    for _ in range(4):
+        if _true('Control.HasFocus(9004)'):
+            break
+        action('left', delay=0.3)
     action('select')
     wait_for(IDLE, timeout=20)
     wait_for('Window.IsActive(home) + String.IsEqual(Window(Home).Property(nc.page),movies)', timeout=10)
@@ -802,3 +818,44 @@ def test_back_held_in_a_chain_from_the_player_returns_to_its_controls(matrix):
     builtin(BACK_HELD)
     wait_for(IDLE, timeout=20)
     wait_for('Window.IsActive(videoosd) + !Window.IsVisible(1141) + Integer.IsEqual(System.CurrentControlId,602)', timeout=20)
+
+
+
+def _jellyfin_folder(name):
+    """The plugin path of the folder NAME in the Jellyfin add-on's Movies library."""
+    top = rpc('Files.GetDirectory', {'directory': 'plugin://plugin.video.jellyfin/', 'media': 'video'})['files']
+    view = next((f['file'] for f in top if f['label'] == 'Movies'), '').rstrip('/').rsplit('jellyfinmovies', 1)[-1]
+    if not view:
+        return None
+    path = 'plugin://plugin.video.jellyfin/?mode=browse&type=movies&id={}'.format(view)
+    folders = rpc('Files.GetDirectory', {'directory': path, 'media': 'video'})['files']
+    return next((f['file'] for f in folders if f['label'] == name), None)
+
+
+def test_back_from_a_person_returns_to_a_movie_of_a_plugin_folder(matrix):
+    """The Matrix in a folder of the Jellyfin add-on (a playlist of a favourite: no library id,
+    no TMDb id), a person in its cast, Back: The Matrix again (its library copy), not the
+    folder (info_origin)."""
+    folder = _jellyfin_folder('Movies')
+    if not folder:
+        pytest.skip('no Movies library in the Jellyfin add-on')
+    builtin('ActivateWindow(Videos,"{}",return)'.format(folder))
+    wait_for('Window.IsActive(videos) + Integer.IsGreater(Container(50).NumItems,1)', timeout=20)
+    n = int(info('Container(50).NumItems')['Container(50).NumItems'])
+    labels = [info('Container(50).ListItemAbsolute({}).Label'.format(i))['Container(50).ListItemAbsolute({}).Label'.format(i)]
+              for i in range(n + 1)]
+    if 'The Matrix' not in labels:
+        pytest.skip('The Matrix not in the folder')
+    builtin('SetFocus(50,{},absolute)'.format(labels.index('The Matrix')))
+    wait_for('String.IsEqual(Container(50).ListItem.Label,The Matrix) + String.IsEmpty(Container(50).ListItem.DBID)')
+    action('info')
+    wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Title,The Matrix)', timeout=20)
+    wait_for('String.IsEqual(Window(Home).Property(nc.chain.origin.dbid),{})'.format(matrix))
+    _list_in('5500')
+    builtin('SetFocus(5500,0,absolute)')
+    _click_opens(5500, 2)
+    _page(2)
+    action('back')
+    _page(1)
+    assert info('ListItem.DBID')['ListItem.DBID'] == str(matrix)
+    assert _true(RUNNING)

@@ -183,9 +183,11 @@ def test_similar_row_waits_for_the_cast():
 
 
 def test_back_button_leads_the_row():
-    """Inside a chain the page offers to go back all the way: the manager closes every page and
-    returns to where the chain started. The button names that place and stands at the left end
-    of the row, the way back; Left from the first button reaches it."""
+    """Inside a chain the button left of the row goes one page back and names that page (its
+    title, kept by info_back); on the chain's first page, and over the playing video, it goes
+    back all the way: the manager closes every page and returns to where the chain started, and
+    the button names that place. It stands at the left end of the row, the way back; Left from
+    the first button reaches it."""
     row = _info_control('9000')
     calls = [c for c in row if c.tag == 'include' and c.get('content') == 'PillButton']
     first = calls[0]
@@ -193,7 +195,17 @@ def test_back_button_leads_the_row():
     assert params['id'] == '9004'
     assert params['label'] == '‹ $VAR[ChainBackLabel]'
     assert params['visible'] == RUNNING
-    assert params['onclick'] == 'SetProperty(TMDbHelper.Command,exit,home)'
+    assert 'onclick' not in params
+    clicks = [(o.get('condition'), o.text) for o in first.findall('onclick')]
+    assert clicks == [('$EXP[ChainStepBack]', 'Action(Back)'),
+                      ('!$EXP[ChainStepBack]', 'SetProperty(TMDbHelper.Command,exit,home)')]
+    tmdb = parse(ROOT / '1080i' / 'Includes_Tmdb.xml')
+    step = next(e.text for e in tmdb.iter('expression') if e.get('name') == 'ChainStepBack')
+    assert step == RUNNING + ' + Integer.IsGreater(Window(Home).Property(TMDbHelper.Position),1) + !Player.HasVideo'
+    label = _values('ChainBackLabel')
+    assert label[0] == ('$EXP[ChainStepBack] + !String.IsEmpty(Window(Home).Property(nc.chain.before))',
+                        '$INFO[Window(Home).Property(nc.chain.before)]')
+    assert label[1] == ('$EXP[ChainStepBack]', '$LOCALIZE[31479]')
     # it never takes the focus when the page opens, only from within the row; a person page
     # has no other button, nor the page of the title that plays (its play buttons hide,
     # test_trailer.py)
@@ -201,10 +213,11 @@ def test_back_button_leads_the_row():
 
 
 def test_back_button_names_the_place():
-    """The playing video, else the page of Home or the library the first info page opened over
-    (nc.chain.from, set while no chain runs), else the start."""
+    """Back all the way: the playing video, else the page of Home or the library the first info
+    page opened over (nc.chain.from, set while no chain runs), else the start. One page back
+    names the page before (test_back_button_leads_the_row)."""
     var = next(v for v in parse(SKIN / 'Variables.xml').iter('variable') if v.get('name') == 'ChainBackLabel')
-    values = [(v.get('condition'), v.text) for v in var.iter('value')]
+    values = [(v.get('condition'), v.text) for v in var.iter('value')][2:]
     page = 'Window(Home).Property(nc.page)'
     home = 'String.IsEqual(Window(Home).Property(nc.chain.from),home)'
     assert values == [
