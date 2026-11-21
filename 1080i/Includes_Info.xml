@@ -134,6 +134,8 @@
                     <font>font_small</font>
                     <textcolor>text</textcolor>
                     <label>$INFO[ListItem.Label]</label>
+                    <!-- a long name ends in ..., it scrolls on the focused card only -->
+                    <scroll>$PARAM[focused]</scroll>
                 </control>
                 <control type="label">
                     <top>262</top>
@@ -142,6 +144,7 @@
                     <font>font_tiny</font>
                     <textcolor>text_mute</textcolor>
                     <label>$INFO[ListItem.Label2]</label>
+                    <scroll>$PARAM[focused]</scroll>
                 </control>
             </control>
         </definition>
