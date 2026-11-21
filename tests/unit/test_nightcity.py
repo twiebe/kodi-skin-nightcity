@@ -2678,8 +2678,11 @@ def test_trailer_state(wanted, video, info_open, started, seconds, state):
     assert nightcity.trailer_state(wanted, video, info_open, started, seconds) == state
 
 
-IMDB_URL = 'https://imdb-video.media-imdb.com/vi1/1080.mp4?Expires=1&Signature=x'
-IMDB_MOVIE = {'ListItem.IMDBNumber': 'tt0816692'}
+def test_play_windowed_quotes_the_path():
+    """The trailer plays without the switch to the player (,1): over its page, which shows it in
+    full screen; no question to resume a trailer file."""
+    assert nightcity.play_windowed('plugin://plugin.video.youtube/play/?video_id=a,b"c') == \
+        'PlayMedia("plugin://plugin.video.youtube/play/?video_id=a,b\\"c",1,noresume)'
 
 
 class TrailerXbmc(FakeXbmc):
@@ -2688,13 +2691,6 @@ class TrailerXbmc(FakeXbmc):
     def __init__(self, labels, start=2, end=3, true=()):
         super().__init__(set(true) | {'Window.IsActive(movieinformation)', 'Control.HasFocus(9099)'}, labels)
         self.polls, self.start, self.end = 0, start, end
-        self.played = []
-        fake = self
-
-        class Player:
-            def play(self, item, listitem=None, windowed=False):
-                fake.played.append((item, listitem.path, windowed))
-        self.Player = Player
 
     def getCondVisibility(self, condition):
         if condition == 'Player.HasVideo':
@@ -2702,17 +2698,9 @@ class TrailerXbmc(FakeXbmc):
         return super().getCondVisibility(condition)
 
 
-def _trailer_env(monkeypatch, fake, props=None, imdb=IMDB_URL):
-    """IMDb answers IMDB (the URL of a trailer, None for none); notifications go to home.notes."""
-    import types
+def _trailer_env(monkeypatch, fake, props=None):
     home = FakeHome()
     home.props.update(props or {'nc.trailer': '1'})
-    home.notes = []
-    monkeypatch.setattr(nightcity, 'imdb_trailer', lambda imdb_id: imdb if imdb_id else None)
-    monkeypatch.setitem(__import__('sys').modules, 'xbmcgui', types.SimpleNamespace(
-        NOTIFICATION_INFO='info', Dialog=lambda: types.SimpleNamespace(
-            notification=lambda *a: home.notes.append(a)),
-        ListItem=lambda label='', path='': types.SimpleNamespace(label=label, path=path)))
 
     class Monitor:
         def waitForAbort(self, timeout):
@@ -2726,18 +2714,19 @@ def _trailer_env(monkeypatch, fake, props=None, imdb=IMDB_URL):
 
 
 def test_trailer_plays_over_the_page_and_hands_the_focus_back(monkeypatch):
-    fake = TrailerXbmc(IMDB_MOVIE)
+    fake = TrailerXbmc({'ListItem.Trailer': 'plugin://plugin.video.youtube/play/?video_id=x'},
+                       true={'System.HasAddon(plugin.video.youtube)', 'System.AddonIsEnabled(plugin.video.youtube)'})
     home = _trailer_env(monkeypatch, fake)
     nightcity.trailer()
-    assert fake.played == [(IMDB_URL, IMDB_URL, True)] and fake.builtins == ['SetFocus(9008)']
+    assert fake.builtins == ['PlayMedia("plugin://plugin.video.youtube/play/?video_id=x",1,noresume)', 'SetFocus(9008)']
     assert 'nc.trailer' not in home.props
     assert nightcity.COMMANDS['trailer'] is nightcity.trailer
 
 
 def test_trailer_that_comes_after_back_is_stopped(monkeypatch):
-    """Back while IMDb's file still opens: once it starts, under a page that no longer shows it,
-    it stops. A library title started meanwhile (it has a database id) plays."""
-    fake = TrailerXbmc(IMDB_MOVIE, start=3, end=50)
+    """Back while the plugin still resolves the trailer: once it starts, under a page that no
+    longer shows it, it stops. A library title started meanwhile (it has a database id) plays."""
+    fake = TrailerXbmc({'ListItem.Trailer': 'x'}, start=3, end=50)
     home = _trailer_env(monkeypatch, fake)
     original = fake.getCondVisibility
 
@@ -2753,13 +2742,41 @@ def test_trailer_that_comes_after_back_is_stopped(monkeypatch):
 
 
 def test_trailer_needs_a_trailer_and_no_video(monkeypatch):
-    fake = TrailerXbmc(IMDB_MOVIE, true={'Player.HasVideo'})
+    fake = TrailerXbmc({'ListItem.Trailer': 'x'}, true={'Player.HasVideo'})
     fake.getCondVisibility = FakeXbmc.getCondVisibility.__get__(fake)
     home = _trailer_env(monkeypatch, fake)
     nightcity.trailer()
-    assert fake.builtins == ["SetFocus(9008)"] and fake.played == []
+    fake2 = TrailerXbmc({})
+    home2 = _trailer_env(monkeypatch, fake2)
+    nightcity.trailer()
+    assert fake.builtins == fake2.builtins == ["SetFocus(9008)"]
+    assert 'nc.trailer' not in home.props and 'nc.trailer' not in home2.props
+
+
+@pytest.mark.parametrize('true, asked', [
+    (set(), 'InstallAddon(plugin.video.youtube)'),
+    ({'System.HasAddon(plugin.video.youtube)'}, 'EnableAddon(plugin.video.youtube)'),
+])
+def test_trailer_without_the_youtube_add_on_offers_it(monkeypatch, true, asked):
+    """A YouTube trailer (Jellyfin for Kodi and TMDb Helper store them so) needs the YouTube
+    add-on: without it the click offers to install it (Kodi asks first), a disabled one to
+    enable it; nothing plays."""
+    fake = TrailerXbmc({'ListItem.Trailer': 'plugin://plugin.video.youtube/play/?video_id=x'}, true=true)
+    home = _trailer_env(monkeypatch, fake)
+    nightcity.trailer()
+    assert fake.builtins == [asked, 'SetFocus(9008)']
     assert 'nc.trailer' not in home.props
-    assert home.notes == []
+
+
+@pytest.mark.parametrize('path, installed, enabled, builtin', [
+    ('plugin://plugin.video.youtube/play/?video_id=x', False, False, 'InstallAddon(plugin.video.youtube)'),
+    ('plugin://plugin.video.youtube/play/?video_id=x', True, False, 'EnableAddon(plugin.video.youtube)'),
+    ('plugin://plugin.video.youtube/play/?video_id=x', True, True, None),
+    ('plugin://plugin.video.jellyfin/trailer?id=1&mode=play', False, False, None),
+    ('/movies/Alien-trailer.mkv', False, False, None),
+])
+def test_trailer_addon_builtin(path, installed, enabled, builtin):
+    assert nightcity.trailer_addon_builtin(path, installed, enabled) == builtin
 
 
 def test_trailer_frees_the_lists_once_the_cast_list_rests(monkeypatch):
@@ -2768,7 +2785,7 @@ def test_trailer_frees_the_lists_once_the_cast_list_rests(monkeypatch):
     loaded at once, and two plugins starting at once crash Kodi. The click holds the
     recommendations (nc.trailer.lists); they come back only once the player stopped and the cast
     list's reload is over, one after the other as when the page opens."""
-    fake = TrailerXbmc(IMDB_MOVIE, true={'!Player.HasMedia', '!Container(5500).IsUpdating'})
+    fake = TrailerXbmc({'ListItem.Trailer': 'x'}, true={'!Player.HasMedia', '!Container(5500).IsUpdating'})
     home = _trailer_env(monkeypatch, fake, {'nc.trailer': '1', 'nc.trailer.lists': '1'})
     seen = []
     original = fake.getCondVisibility
@@ -2783,255 +2800,11 @@ def test_trailer_frees_the_lists_once_the_cast_list_rests(monkeypatch):
     assert waits[-2:] == ['!Player.HasMedia', '!Container(5500).IsUpdating']
 
 
-@pytest.mark.parametrize('labels', [
-    {'ListItem.IMDBNumber': 'tt0816692'},
-    {'ListItem.UniqueID(imdb)': 'tt0816692'},
-    # Kodi's IMDBNumber is the default id of the scraper: TMDb's for many
-    {'ListItem.IMDBNumber': '157336', 'ListItem.UniqueID(imdb)': 'tt0816692'},
-])
-def test_trailer_from_imdb(monkeypatch, labels):
-    """The movie's IMDb id gives the trailer from IMDb, also when the item has a YouTube link."""
-    fake = TrailerXbmc(dict(labels, **{'ListItem.Trailer': 'plugin://plugin.video.youtube/play/?video_id=x'}))
-    asked = []
-    home = _trailer_env(monkeypatch, fake)
-    monkeypatch.setattr(nightcity, 'imdb_trailer', lambda imdb_id: asked.append(imdb_id) or IMDB_URL)
+def test_trailer_offered_frees_the_lists_at_once(monkeypatch):
+    fake = TrailerXbmc({'ListItem.Trailer': 'plugin://plugin.video.youtube/play/?video_id=x'})
+    home = _trailer_env(monkeypatch, fake, {'nc.trailer': '1', 'nc.trailer.lists': '1'})
     nightcity.trailer()
-    assert asked == ['tt0816692']
-    # Python's player, without the switch to the player: PlayMedia asked IMDb's host without the
-    # URL's signature (403)
-    assert fake.played == [(IMDB_URL, IMDB_URL, True)]
-    assert fake.builtins == ['SetFocus(9008)']
-    assert home.notes == []
-
-
-@pytest.mark.parametrize('labels', [
-    {'ListItem.IMDBNumber': 'tt0000001'},
-    {'ListItem.IMDBNumber': ''},
-])
-def test_the_items_own_trailer_does_not_play(monkeypatch, labels):
-    """YouTube links (Jellyfin for Kodi and TMDb Helper store trailers so) need the YouTube
-    add-on, which fails often: the trailer is IMDb's or none. No offer of the add-on either."""
-    fake = TrailerXbmc(dict(labels, **{'ListItem.Trailer': 'plugin://plugin.video.youtube/play/?video_id=x',
-                                       '$LOCALIZE[31750]': 'No trailer found'}))
-    home = _trailer_env(monkeypatch, fake, imdb=None)
-    nightcity.trailer()
-    assert fake.builtins == ['SetFocus(9008)'] and fake.played == []
-    assert [note[1] for note in home.notes] == ['No trailer found']
-
-
-def test_no_trailer_says_so_at_once(monkeypatch):
-    """IMDb has none: a notification under the movie's title, nothing plays and nothing waits for
-    a trailer to start."""
-    fake = TrailerXbmc({'ListItem.IMDBNumber': 'tt0000001', 'ListItem.Title': 'Carmencita',
-                        '$LOCALIZE[31750]': 'No trailer found'})
-    home = _trailer_env(monkeypatch, fake, {'nc.trailer': '1', 'nc.trailer.lists': '1'}, imdb=None)
-    nightcity.trailer()
-    assert fake.builtins == ['SetFocus(9008)']
-    assert home.notes == [('Carmencita', 'No trailer found', 'info', 3000, False)]
-    assert fake.polls == 0  # no wait
-    assert 'nc.trailer' not in home.props and 'nc.trailer.lists' not in home.props
-
-
-def test_back_while_imdb_answers_plays_nothing(monkeypatch):
-    """Back clears nc.trailer while IMDb still answers: the trailer it names does not start."""
-    fake = TrailerXbmc({'ListItem.IMDBNumber': 'tt0816692'})
-    home = _trailer_env(monkeypatch, fake)
-
-    def answer(imdb_id):
-        home.clearProperty('nc.trailer')
-        return IMDB_URL
-    monkeypatch.setattr(nightcity, 'imdb_trailer', answer)
-    nightcity.trailer()
-    assert not any(b.startswith('PlayMedia') for b in fake.builtins) and fake.played == []
-    assert home.notes == []
-
-
-@pytest.mark.parametrize('labels, wanted', [
-    ({'ListItem.IMDBNumber': 'tt0816692'}, 'tt0816692'),
-    ({'ListItem.IMDBNumber': '', 'ListItem.UniqueID(imdb)': 'tt15239678'}, 'tt15239678'),
-    ({'ListItem.IMDBNumber': '157336'}, ''),
-    ({'ListItem.IMDBNumber': 'tt0816692") | x'}, ''),
-    ({'ListItem.UniqueID(imdb)': 'tt'}, ''),
-    ({}, ''),
-])
-def test_item_imdb_id(monkeypatch, labels, wanted):
-    monkeypatch.setitem(__import__('sys').modules, 'xbmc', FakeXbmc(set(), labels))
-    assert nightcity.item_imdb_id() == wanted
-
-
-# --- IMDb: the trailer of a title by its IMDb id ----------------------------------------------
-
-FIXTURES = pathlib.Path(__file__).parent / 'fixtures'
-
-
-def _answer(name):
-    """A recorded answer of IMDb's GraphQL API to IMDB_QUERY (signatures cut)."""
-    return json.loads((FIXTURES / 'imdb_{}.json'.format(name)).read_text(encoding='utf-8'))
-
-
-def _video_of(url):
-    return urllib.parse.urlsplit(url).path.split('/')[1]
-
-
-def test_imdb_picks_the_main_trailer_not_the_latest_clip():
-    """Dune Part Two's latest trailer is a 31 s spot: the longest official trailer plays, in
-    1080p."""
-    url = nightcity.imdb_pick(_answer('dune_part_two'))
-    assert _video_of(url) == 'vi1755432729'  # Official Trailer 2, 184 s
-    assert '1434659529640-260ouz' in url  # the 1080p MP4
-
-
-def test_imdb_picks_the_longest_trailer_past_the_teaser():
-    """Interstellar: no trailer is called official, the teaser is no main trailer; the longest
-    one plays."""
-    url = nightcity.imdb_pick(_answer('interstellar'))
-    assert _video_of(url) == 'vi2284039193'  # Trailer #3, 154 s
-
-
-def test_imdb_prefers_a_sharp_trailer_and_skips_odd_lengths():
-    """Avatar: Trailer #1 runs 1178 s (no trailer does), Trailer #2 exists in 480p only; the
-    93 s trailer in 1080p plays."""
-    url = nightcity.imdb_pick(_answer('avatar'))
-    assert _video_of(url) == 'vi4150313497'
-    assert '.mp4' in url
-
-
-def test_imdb_without_trailers():
-    assert nightcity.imdb_pick(_answer('carmencita')) is None
-
-
-def test_imdb_falls_back_on_the_latest_trailer():
-    answer = _answer('dune_part_two')
-    answer['data']['title']['videoStrip']['edges'] = []
-    assert _video_of(nightcity.imdb_pick(answer)) == 'vi3332425241'
-
-
-def _video(name, runtime, *formats, kind='trailer', host='imdb-video.media-imdb.com', scheme='https'):
-    return {'id': 'vi' + name, 'name': {'value': name}, 'runtime': {'value': runtime},
-            'contentType': {'id': 'amzn1.imdb.video.contenttype.' + kind},
-            'playbackURLs': [{'displayName': {'value': f}, 'videoMimeType': 'M3U8' if f == 'AUTO' else 'MP4',
-                              'url': '{}://{}/vi{}/{}.{}'.format(scheme, host, name, f, 'm3u8' if f == 'AUTO' else 'mp4')}
-                             for f in formats]}
-
-
-def _strip(*videos, latest=None):
-    return {'data': {'title': {'latestTrailer': latest, 'videoStrip': {'edges': [{'node': v} for v in videos]}}}}
-
-
-@pytest.mark.parametrize('formats, wanted', [
-    (('AUTO', 'SD', '480p', '1080p', '720p'), '1080p'),
-    (('SD', '480p', '720p'), '720p'),
-    (('SD', '480p'), '480p'),
-    (('AUTO', 'SD'), 'SD'),
-    (('AUTO',), None),
-])
-def test_imdb_takes_the_highest_mp4(formats, wanted):
-    url = nightcity.imdb_pick(_strip(_video('a', 150, *formats)))
-    assert (url and url.rsplit('/', 1)[1]) == (wanted and wanted + '.mp4')
-
-
-def test_imdb_plays_only_videos_of_imdb():
-    """An answer is data: a URL elsewhere than IMDb's video host, or not https, is not played."""
-    assert nightcity.imdb_pick(_strip(_video('a', 150, '1080p', host='evil.example'))) is None
-    assert nightcity.imdb_pick(_strip(_video('a', 150, '1080p', host='media-imdb.com.evil.example'))) is None
-    assert nightcity.imdb_pick(_strip(_video('a', 150, '1080p', scheme='http'))) is None
-    assert _video_of(nightcity.imdb_pick(_strip(_video('a', 150, '1080p', host='evil.example'),
-                                                _video('b', 120, '720p')))) == 'vib'
-
-
-def test_imdb_leaves_clips_and_teasers_behind():
-    clip = _video('clip', 160, '1080p', kind='clip')
-    teaser = _video('Official Teaser', 150, '1080p')
-    spot = _video('TV Spot', 140, '1080p')
-    main = _video('Trailer', 100, '720p')
-    assert _video_of(nightcity.imdb_pick(_strip(clip, teaser, spot, main))) == 'viTrailer'
-    # a teaser is better than nothing
-    assert _video_of(nightcity.imdb_pick(_strip(clip, teaser))) == 'viOfficial Teaser'
-
-
-@pytest.mark.parametrize('answer', [
-    None, [], 'text', 7, {}, {'errors': [{'message': 'bad id'}]}, {'data': None}, {'data': {'title': None}},
-    {'data': {'title': {'latestTrailer': 'x', 'videoStrip': {'edges': 'x'}}}},
-    {'data': {'title': {'latestTrailer': None, 'videoStrip': {'edges': [None, 1, {'node': 'x'}, {'node': {
-        'contentType': {'id': 'amzn1.imdb.video.contenttype.trailer'}, 'name': None, 'runtime': {'value': 'long'},
-        'playbackURLs': [None, {'displayName': {'value': 1080}, 'videoMimeType': 'MP4', 'url': 5},
-                         {'displayName': 'x', 'url': []}]}}]}}}},
-])
-def test_imdb_answer_of_another_shape_gives_no_trailer(answer):
-    assert nightcity.imdb_pick(answer) is None
-
-
-class FakeResponse:
-    def __init__(self, body):
-        self.body = body
-
-    def read(self, limit=-1):
-        return self.body
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, *exc):
-        return False
-
-
-def test_imdb_answer_asks_imdbs_graphql_api():
-    seen = []
-
-    def urlopen(request, timeout):
-        seen.append((request, timeout))
-        return FakeResponse(json.dumps(_answer('interstellar')).encode())
-    assert nightcity.imdb_answer('tt0816692', urlopen) == _answer('interstellar')
-    (request, timeout), = seen
-    assert request.full_url == 'https://graphql.prod.api.imdb.a2z.com/' and request.get_method() == 'POST'
-    assert timeout == nightcity.IMDB_TIMEOUT <= 5
-    headers = {k.lower(): v for k, v in request.header_items()}
-    assert headers['referer'] == 'https://www.imdb.com/' and headers['origin'] == 'https://www.imdb.com'
-    assert headers['content-type'] == 'application/json'
-    body = json.loads(request.data)
-    assert body == {'operationName': 'NcTrailer', 'query': nightcity.IMDB_QUERY, 'variables': {'id': 'tt0816692'}}
-
-
-def _failing(error):
-    def urlopen(request, timeout):
-        raise error
-    return urlopen
-
-
-@pytest.mark.parametrize('urlopen', [
-    _failing(__import__('urllib.error').error.HTTPError('https://x', 403, 'Forbidden', {}, None)),
-    _failing(__import__('urllib.error').error.URLError('no network')),
-    _failing(__import__('socket').timeout('timed out')),
-    _failing(TimeoutError()),
-    _failing(ConnectionResetError()),
-    lambda request, timeout: FakeResponse(b'<html>not json</html>'),
-    lambda request, timeout: FakeResponse(b'\xff\xfe'),
-])
-def test_imdb_answer_that_fails_is_none(urlopen):
-    assert nightcity.imdb_answer('tt0816692', urlopen) is None
-
-
-def test_imdb_trailer_is_kept_for_the_session(monkeypatch):
-    """One question per title while its URL is valid (IMDb signs it for a day); no trailer is
-    kept too. A failed question is not: the next click asks again."""
-    asked = []
-    answers = {'tt0816692': _answer('interstellar'), 'tt0000001': _answer('carmencita'), 'tt9': None}
-    monkeypatch.setattr(nightcity, 'imdb_answer', lambda imdb_id: asked.append(imdb_id) or answers[imdb_id])
-    monkeypatch.setattr(nightcity, '_imdb_cache', {})
-    expires = int(urllib.parse.parse_qs(urllib.parse.urlsplit(
-        nightcity.imdb_pick(_answer('interstellar'))).query)['Expires'][0])
-    now = [expires - 3600.0]
-    monkeypatch.setattr(nightcity, '_now', lambda: now[0])
-    first = nightcity.imdb_trailer('tt0816692')
-    assert _video_of(first) == 'vi2284039193'
-    assert nightcity.imdb_trailer('tt0816692') == first
-    assert nightcity.imdb_trailer('tt0000001') is None and nightcity.imdb_trailer('tt0000001') is None
-    assert nightcity.imdb_trailer('tt9') is None and nightcity.imdb_trailer('tt9') is None
-    assert asked == ['tt0816692', 'tt0000001', 'tt9', 'tt9']
-    # close to its expiry the URL is asked for anew
-    now[0] = expires - 60
-    nightcity.imdb_trailer('tt0816692')
-    assert asked[-1] == 'tt0816692' and len(asked) == 5
+    assert 'nc.trailer.lists' not in home.props
 
 
 @pytest.mark.parametrize('true, labels, called', [

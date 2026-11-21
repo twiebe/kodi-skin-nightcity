@@ -1182,7 +1182,3 @@ msgstr "On Deck"
 msgctxt "#31701"
 msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
 msgstr "Co jste začali, potom seriály, které sledujete. OK na seriálu otevře další epizodu."
-
-msgctxt "#31750"
-msgid "No trailer found"
-msgstr "Upoutávka nenalezena"

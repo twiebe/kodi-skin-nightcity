@@ -1,52 +1,40 @@
 """The trailer on a movie's info page (button 9008), end to end: it plays in full screen over the
 page, which stays, and Back ends it on its button.
 
-The trailer is IMDb's, by the movie's IMDb id, so these tests need the internet: The Matrix
-(test_tmdb_chain.py) keeps its IMDb id and loses its own trailer for the time of a test, or gets
-the id of a title IMDb has no trailer of.
+The Matrix (test_tmdb_chain.py) gets the clip of the track tests (tools/make_tracks_clip.py) as
+its trailer for the time of a test.
 """
-import contextlib
+import pathlib
+import subprocess
+import sys
 import time
 
 import pytest
 
-from conftest import action, builtin, cond, info, rpc, wait_for
+from conftest import _data, action, builtin, info, rpc, wait_for
 from test_tmdb_chain import _page, _settle, matrix  # noqa: F401 (fixture)
 
 pytestmark = pytest.mark.e2e
 
-MATRIX_IMDB = 'tt0133093'
-IMDB_VIDEO_HOST = '.media-imdb.com/'
+CLIP = '/home/kodi/.kodi/media/nc-tracks.mkv'
 OVER_THE_PAGE = ('Window.IsActive(movieinformation) + !Window.IsActive(fullscreenvideo) + '
                  '!String.IsEmpty(Window(Home).Property(nc.trailer)) + Control.IsVisible(9095)')
 
 
 @pytest.fixture
 def trailer(matrix):  # noqa: F811
-    """The Matrix with its IMDb id and no trailer of its own: IMDb's plays."""
-    with _details(matrix, trailer='', uniqueid={'imdb': MATRIX_IMDB}):
-        yield matrix
-
-
-@pytest.fixture
-def no_trailer(matrix):  # noqa: F811
-    """The Matrix as a title IMDb has no trailer of (Carmencita, 1894), and none of its own."""
-    with _details(matrix, trailer='', uniqueid={'imdb': 'tt0000001'}):
-        yield matrix
-
-
-@contextlib.contextmanager
-def _details(movieid, **details):
-    """The movie with DETAILS for the time of a test, its own back after it."""
-    before = rpc('VideoLibrary.GetMovieDetails', {'movieid': movieid, 'properties': ['trailer', 'uniqueid']})['moviedetails']
-    rpc('VideoLibrary.SetMovieDetails', dict(details, movieid=movieid))
-    try:
-        yield
-    finally:
-        if rpc('Player.GetActivePlayers'):
-            rpc('Player.Stop', {'playerid': 1})
-            wait_for('!Player.HasMedia', timeout=10)
-        rpc('VideoLibrary.SetMovieDetails', {'movieid': movieid, 'trailer': before['trailer'], 'uniqueid': before['uniqueid']})
+    clip = _data() / 'kodi' / 'media' / 'nc-tracks.mkv'  # this Kodi's, also on a pool worker
+    if not clip.is_file():
+        clip.parent.mkdir(parents=True, exist_ok=True)
+        subprocess.run([sys.executable, str(pathlib.Path(__file__).parents[2] / 'tools' / 'make_tracks_clip.py'),
+                        str(clip)], check=True)
+    before = rpc('VideoLibrary.GetMovieDetails', {'movieid': matrix, 'properties': ['trailer']})['moviedetails']['trailer']
+    rpc('VideoLibrary.SetMovieDetails', {'movieid': matrix, 'trailer': CLIP})
+    yield matrix
+    if rpc('Player.GetActivePlayers'):
+        rpc('Player.Stop', {'playerid': 1})
+        wait_for('!Player.HasMedia', timeout=10)
+    rpc('VideoLibrary.SetMovieDetails', {'movieid': matrix, 'trailer': before})
 
 
 def _back_on_the_button(timeout=10):
@@ -112,32 +100,3 @@ def test_trailer_in_a_chain_keeps_the_chain(trailer):
     wait_for('!Player.HasVideo', timeout=10)
     _back_on_the_button()
     assert info('Window(Home).Property(TMDbHelper.Position)')['Window(Home).Property(TMDbHelper.Position)'] == '1'
-
-
-def test_trailer_is_imdbs(trailer):
-    """IMDb's trailer of the movie, by its IMDb id: an MP4 of IMDb's video host, over the page."""
-    _open(trailer)
-    start = time.time()
-    action('select', delay=0)
-    wait_for('Player.HasVideo + ' + OVER_THE_PAGE, timeout=20)
-    print('IMDb trailer playing after {:.1f} s'.format(time.time() - start))
-    path = info('Player.FilenameAndPath')['Player.FilenameAndPath']
-    assert path.startswith('https://') and IMDB_VIDEO_HOST in path and '.mp4' in path, path
-    wait_for('Integer.IsGreater(Player.Time,0)', timeout=10)
-    action('back')
-    wait_for('!Player.HasVideo + String.IsEmpty(Window(Home).Property(nc.trailer))', timeout=10)
-    _back_on_the_button()
-    _settle()
-
-
-def test_no_trailer_says_so_and_hands_the_page_back(no_trailer):
-    """Neither IMDb nor the item has a trailer: a notification, the focus back on the button at
-    once, no 30 s wait."""
-    _open(no_trailer)
-    start = time.time()
-    action('select', delay=0)
-    wait_for('Window.IsVisible(notification)', timeout=10)
-    _back_on_the_button(timeout=5)
-    assert time.time() - start < 10
-    assert not cond('Player.HasVideo')['Player.HasVideo']
-    _settle()

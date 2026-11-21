@@ -1182,7 +1182,3 @@ msgstr "On Deck"
 msgctxt "#31701"
 msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
 msgstr "Amit elkezdtél, utána a sorozatok, amelyeket nézel. Az OK egy sorozaton megnyitja a következő epizódot."
-
-msgctxt "#31750"
-msgid "No trailer found"
-msgstr "Nem található előzetes"
