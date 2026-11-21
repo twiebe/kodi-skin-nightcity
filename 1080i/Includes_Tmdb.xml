@@ -53,6 +53,9 @@
          like a move (CGUIWindow::OnMove) and closes the page anyway unless it moves the focus:
          to the button row, which keeps its focused button. Every control of the info page that
          takes the focus carries it. -->
+    <!-- the way back of a chain page (9004 on the info page) goes one page back: a page after
+         the chain's first, not over the playing video (that way leads back to the video) -->
+    <expression name="ChainStepBack">!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + Integer.IsGreater(Window(Home).Property(TMDbHelper.Position),1) + !Player.HasVideo</expression>
     <include name="ChainBackGuard">
         <onback condition="!String.IsEmpty(Window(Home).Property(nc.chain.guard))">SetProperty(nc.chain.back,1,home)</onback>
         <onback condition="!String.IsEmpty(Window(Home).Property(nc.chain.guard))">9000</onback>

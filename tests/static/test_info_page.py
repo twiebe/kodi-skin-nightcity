@@ -114,3 +114,24 @@ def test_hero_tech_label_defaults_to_the_spotlight():
     assert params['techlabel'] == '$VAR[SpotlightResolution]$VAR[SpotlightHdr, ,]'
     labels = [p.get('value') for p in hero.iter('param') if p.get('name') == 'label']
     assert '$PARAM[techlabel]' in labels
+
+
+def _include(path, name):
+    found = next((i for i in parse(SKIN / path).iter('include') if i.get('name') == name), None)
+    assert found is not None, name
+    return found
+
+
+def test_long_names_scroll_on_the_focused_card_only():
+    """A name longer than its room ends in ...: a detail value of the info page always (it takes
+    no focus), the name and role of a cast card unless the card has the focus, then they scroll.
+    Every card scrolling at once was restless."""
+    detail = _include('Includes_Info.xml', 'InfoDetail')
+    value = [c for c in detail.iter('control') if c.get('type') == 'label'][1]
+    assert value.findtext('label') == '$INFO[$PARAM[value]]'
+    assert value.findtext('scroll') in (None, 'false')
+    card = _include('Includes_Info.xml', 'CastCard')
+    labels = [c for c in card.iter('control') if c.get('type') == 'label']
+    assert [c.findtext('label') for c in labels] == ['$INFO[ListItem.Label]', '$INFO[ListItem.Label2]']
+    assert all(c.findtext('scroll') == '$PARAM[focused]' for c in labels)
+

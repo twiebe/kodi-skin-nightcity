@@ -350,10 +350,12 @@ def test_ratings_of_a_card_without_a_library_id(trending_row):
     wait_for('Control.HasFocus(9201)')
     assert not label('ListItem.DBID')
     assert_shows_card()
-    title = label('ListItem.Label')
     wait_for('String.IsEqual(Window(Home).Property(nc.kept.follow.label),ListItem.Label) + '
              '!String.IsEmpty(Window(Home).Property(nc.kept.follow.TMDb_Rating))', timeout=20)
     wait_for('Control.IsVisible(9324)')
+    # by position: a title of TMDb Helper can carry formatting ([COLOR=...][I]), whose brackets
+    # a condition takes for its own
+    card = int(label('Container(9201).CurrentItem'))
     action('right')
-    wait_for('!String.IsEqual(ListItem.Label,{})'.format(title.replace(',', '')))
+    wait_for('Integer.IsEqual(Container(9201).CurrentItem,{})'.format(card + 1))
     assert not true('Control.IsVisible(9324)')  # not those of the card before

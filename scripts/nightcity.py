@@ -681,9 +681,22 @@ def _forget_ways_back(home, page):
         later += 1
 
 
+FORMATTING = re.compile(r'\[/?(?:COLOR[^\]]*|I|B|UPPERCASE|LOWERCASE|CAPITALIZE)\]')
+
+
+def chain_title(title, label):
+    """The name of a chain page for the way back of the page after it (ChainBackLabel): its
+    title, without the colour and italics of an unreleased TMDb title."""
+    return FORMATTING.sub('', title or label).strip()
+
+
 def info_leave(list_id, item, tab, position, tmdb_id, dbid):
+    import xbmc
     home = _home()
     page = return_key(position)[len('nc.ret.'):]
+    # the page after this one names it on its way back (info_back, nc.chain.before)
+    home.setProperty('nc.chain.title.' + page, chain_title(xbmc.getInfoLabel('ListItem.Title'),
+                                                           xbmc.getInfoLabel('ListItem.Label')))
     if page.isdigit():
         _forget_ways_back(home, int(page))
     point = return_point(list_id, item, tab, tmdb_id, dbid)
@@ -699,6 +712,69 @@ def info_forget():
     home = _home()
     _forget_ways_back(home, 0)
     home.clearProperty('nc.ret.top')
+
+
+def _imdb_numbers(item):
+    """The IMDb numbers a library item carries; a show's imdbnumber is often its TVDb id."""
+    found = {item.get('imdbnumber') or '', (item.get('uniqueid') or {}).get('imdb') or ''}
+    return {n for n in found if n.startswith('tt')}
+
+
+def library_copy(candidates, key, imdb):
+    """The library id (KEY) of the one item of CANDIDATES (same title and year) that is the
+    title with the IMDb number IMDB; without a number to tell, the only one. None else."""
+    if imdb:
+        for item in candidates:
+            if imdb in _imdb_numbers(item):
+                return str(item[key])
+        candidates = [item for item in candidates if not _imdb_numbers(item)]
+    return str(candidates[0][key]) if len(candidates) == 1 else None
+
+
+def _title_rules(title, year):
+    rules = [{'field': 'title', 'operator': 'is', 'value': title}]
+    if year:
+        rules.append({'field': 'year', 'operator': 'is', 'value': year})
+    return {'and': rules}
+
+
+def _library_copy_of_page():
+    import xbmc
+    kind = xbmc.getInfoLabel('ListItem.DBType')
+    title, year = xbmc.getInfoLabel('ListItem.Title'), xbmc.getInfoLabel('ListItem.Year')
+    imdb = xbmc.getInfoLabel('ListItem.IMDBNumber')
+    if kind == 'movie' and title:
+        found = _rpc('VideoLibrary.GetMovies', filter=_title_rules(title, year),
+                     properties=['imdbnumber', 'uniqueid']).get('movies') or []
+        return library_copy(found, 'movieid', imdb)
+    if kind == 'tvshow' and title:
+        found = _rpc('VideoLibrary.GetTVShows', filter=_title_rules(title, year),
+                     properties=['imdbnumber', 'uniqueid']).get('tvshows') or []
+        return library_copy(found, 'tvshowid', imdb)
+    show, season, episode = (xbmc.getInfoLabel('ListItem.' + label) for label in ('TVShowTitle', 'Season', 'Episode'))
+    if kind == 'episode' and show and season.isdigit() and episode.isdigit():
+        shows = _rpc('VideoLibrary.GetTVShows', filter=_title_rules(show, ''),
+                     properties=['imdbnumber', 'uniqueid']).get('tvshows') or []
+        tvshowid = library_copy(shows, 'tvshowid', '')
+        if not tvshowid:
+            return None
+        found = _rpc('VideoLibrary.GetEpisodes', tvshowid=int(tvshowid), season=int(season),
+                     filter={'field': 'episode', 'operator': 'is', 'value': episode}).get('episodes') or []
+        return library_copy(found, 'episodeid', '')
+    return None
+
+
+def info_origin():
+    """An info page of a plugin item (a movie of a Jellyfin playlist) has neither a library id
+    nor a TMDb id: a chain started from it had no page before its first (TMDb Helper's origin),
+    and Back from the first page ended the chain. Its library copy, by title and year, stands in
+    (nc.chain.origin.dbid, DialogVideoInfo.xml onload)."""
+    import xbmc
+    title = xbmc.getInfoLabel('ListItem.Title')
+    dbid = _library_copy_of_page()
+    if dbid and xbmc.getCondVisibility('Window.IsActive(movieinformation) + String.IsEmpty(ListItem.DBID)') \
+            and xbmc.getInfoLabel('ListItem.Title') == title:
+        _home().setProperty('nc.chain.origin.dbid', dbid)
 
 
 # the player's chapter row (VideoOSDBookmarks.xml) or cast row (Custom_1141_OSDCast.xml) has the
@@ -758,6 +834,7 @@ def info_back():
     point = parse_return(home.getProperty(key))
     # the page before parks at once next, if it has a way back
     before = str(int(position) - 1) if position.isdigit() else ''
+    home.setProperty('nc.chain.before', home.getProperty('nc.chain.title.' + before) if before else '')
     if before and home.getProperty(return_key(before)):
         home.setProperty('nc.ret.top', before)
     else:
@@ -3124,7 +3201,7 @@ def music_bar(action, *args):
 
 
 COMMANDS = {'lib_bar': lib_bar, 'music_bar': music_bar, 'next_episode': next_episode, 'startup': startup, 'genres': genres, 'genre_pick': genre_pick,
-            'info_select': info_select, 'info_leave': info_leave, 'info_back': info_back, 'info_forget': info_forget,
+            'info_select': info_select, 'info_leave': info_leave, 'info_back': info_back, 'info_forget': info_forget, 'info_origin': info_origin,
             'back_to_start': back_to_start, 'home_ok_held': home_ok_held, 'settings_return': settings_return, 'trailer': trailer,
             'osd_back': osd_back, 'play': play, 'info': info, 'plot': plot, 'player_info': player_info,
             'streams': streams, 'row': row, 'search': search, 'search_recent': search_recent,

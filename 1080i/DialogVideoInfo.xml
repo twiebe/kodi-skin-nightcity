@@ -51,6 +51,9 @@
     <onload>SetProperty(nc.chain.origin.type,$VAR[ChainOriginType],home)</onload>
     <onload>SetProperty(nc.chain.origin.id,$INFO[ListItem.Property(tmdb_id)],home)</onload>
     <onload>SetProperty(nc.chain.origin.dbid,$INFO[ListItem.DBID],home)</onload>
+    <!-- a plugin item without either (a Jellyfin playlist): its library copy (scripts/nightcity.py
+         info_origin), or the chain would start without this page -->
+    <onload condition="String.IsEmpty(ListItem.DBID) + String.IsEmpty(ListItem.Property(tmdb_id)) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode)]">NotifyAll(nightcity,info_origin)</onload>
     <!-- the tab chosen on this page counts from now until it closes (Variables.xml,
          InfoPeoplePath) -->
     <onload>SetProperty(nc.info.live,1,home)</onload>
@@ -366,8 +369,10 @@
             <ondown condition="!String.IsEqual(ListItem.Property(tmdb_type),person) + !Control.IsVisible(5403)">50</ondown>
             <!-- an episode has no poster: the buttons sit under its text at the left margin -->
             <animation effect="slide" end="-330,0" time="0" condition="String.IsEqual(ListItem.DBType,episode)">Conditional</animation>
-            <!-- inside a chain: back all the way, to where the chain started (ChainBackLabel names
-                 it). At the left end, the way back: Left from the first button reaches it, but
+            <!-- inside a chain: one page back, named after it (ChainStepBack, nc.chain.before);
+                 on the chain's first page, and over the playing video, back all the way, to
+                 where the chain started (ChainBackLabel names it; Back held does that on every
+                 page). At the left end, the way back: Left from the first button reaches it, but
                  it takes the focus only from within the row, never when the page opens; a
                  person page has no other button, nor the page of the title that plays: resume,
                  from start and ... would start it from the beginning, they hide, and back to the
@@ -377,7 +382,8 @@
                 <param name="label" value="‹ $VAR[ChainBackLabel]"/>
                 <param name="visible" value="!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))"/>
                 <param name="enable" value="ControlGroup(9000).HasFocus() | String.IsEqual(ListItem.Property(tmdb_type),person) | $EXP[InfoPlaying]"/>
-                <param name="onclick" value="SetProperty(TMDbHelper.Command,exit,home)"/>
+                <onclick condition="$EXP[ChainStepBack]">Action(Back)</onclick>
+                <onclick condition="!$EXP[ChainStepBack]">SetProperty(TMDbHelper.Command,exit,home)</onclick>
                 <include>ChainBackGuard</include>
             </include>
             <!-- the title that plays, outside a chain (the OSD's info button, the library while it

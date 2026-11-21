@@ -1483,6 +1483,33 @@ def test_return_point_needs_an_item():
     assert nightcity.parse_return('junk') is None
 
 
+def test_chain_title_is_the_plain_title():
+    assert nightcity.chain_title('The Matrix', 'The Matrix') == 'The Matrix'
+    # an unreleased TMDb title comes coloured and in italics
+    assert nightcity.chain_title('', '[COLOR=ffcc0000][I]Avengers: Doomsday[/I][/COLOR]') == 'Avengers: Doomsday'
+    assert nightcity.chain_title('', 'Keanu Reeves') == 'Keanu Reeves'
+    assert nightcity.chain_title('', '') == ''
+
+
+def test_library_copy_by_imdb_number_else_the_only_one():
+    a = {'movieid': 7, 'imdbnumber': 'tt0133093', 'uniqueid': {'imdb': 'tt0133093', 'tmdb': '603'}}
+    b = {'movieid': 8, 'imdbnumber': '', 'uniqueid': {'tmdb': '9999'}}
+    assert nightcity.library_copy([b, a], 'movieid', 'tt0133093') == '7'
+    assert nightcity.library_copy([a], 'movieid', '') == '7'
+    # a remake of the same title and year: only the IMDb number tells them apart
+    assert nightcity.library_copy([a, b], 'movieid', '') is None
+    # the only one, without an IMDb number to tell: it; with another one: not it
+    assert nightcity.library_copy([b], 'movieid', 'tt0133093') == '8'
+    other = {'movieid': 9, 'imdbnumber': 'tt10838180', 'uniqueid': {'imdb': 'tt10838180'}}
+    assert nightcity.library_copy([other], 'movieid', 'tt0133093') is None
+    assert nightcity.library_copy([], 'movieid', 'tt0133093') is None
+
+
+def test_library_copy_reads_the_imdb_number_from_uniqueid_too():
+    show = {'tvshowid': 3, 'imdbnumber': '73244', 'uniqueid': {'tvdb': '73244', 'imdb': 'tt0386676'}}
+    assert nightcity.library_copy([show], 'tvshowid', 'tt0386676') == '3'
+
+
 def test_return_matches_the_page_by_tmdb_id_or_library_id():
     tmdb = nightcity.parse_return(nightcity.return_point('5500', '1', '', '603', ''))
     library = nightcity.parse_return(nightcity.return_point('5500', '1', '', '', '807'))
@@ -1505,8 +1532,11 @@ class FakeHome(FakeWindow):
 def test_info_leave_keeps_the_way_back_by_chain_position(monkeypatch):
     home = FakeHome()
     monkeypatch.setattr(nightcity, '_home', lambda: home)
+    monkeypatch.setitem(sys.modules, 'xbmc', FakeXbmc(set(), {'ListItem.Title': 'The Matrix'}))
     nightcity.info_leave('5500', '4', 'crew', '', '603', '')
     assert nightcity.parse_return(home.props['nc.ret.1'])['index'] == 3
+    # the page after it names this one on its way back (info_back)
+    assert home.props['nc.chain.title.1'] == 'The Matrix'
     # the page that parks its focus at once when it opens again (DialogVideoInfo.xml onload)
     assert home.props['nc.ret.top'] == '1'
 
@@ -1517,6 +1547,7 @@ def test_info_leave_forgets_the_ways_back_past_the_page(monkeypatch):
     home = FakeHome()
     home.props.update({'nc.ret.1': 'old', 'nc.ret.2': 'old', 'nc.ret.3': 'old'})
     monkeypatch.setattr(nightcity, '_home', lambda: home)
+    monkeypatch.setitem(sys.modules, 'xbmc', FakeXbmc(set(), {}))
     nightcity.info_leave('5500', '1', '', '', '', '1003')
     assert home.props['nc.ret.1'] != 'old'
     assert 'nc.ret.2' not in home.props and 'nc.ret.3' not in home.props
