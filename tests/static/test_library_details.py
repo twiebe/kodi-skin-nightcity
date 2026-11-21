@@ -432,17 +432,58 @@ def test_the_rows_of_a_plugin_list_sit_where_the_library_has_them():
     assert int(nav.findtext('left')) + int(nav.findtext('width')) <= int(pane.findtext('left'))
 
 
-def test_a_plugin_list_has_the_details_button():
-    """In the list of movies or shows, below Kodi's view and sort: the library's dialog, for the
-    library of the content."""
-    menu = next(c for c in _nav().iter('control') if c.get('id') == '9060')
-    button = next(i for i in menu.iter('include') if i.get('content') == 'ListButton'
-                  and _params(i).get('onclick') == 'NotifyAll(nightcity,lib_details)')
-    params = _params(button)
-    assert params['label'] == '$LOCALIZE[31602]: $VAR[LibraryDetailsLabel]'
-    assert params['visible'] == 'Control.IsVisible(50) + ' + NAV_ROWS
+def _nav_pills():
+    menu = next(c for c in _nav().iter('control') if c.get('id') == '9070')
+    return menu, [_params(i) for i in menu.iter('include') if i.get('content') == 'PillButton']
+
+
+def test_a_plugin_list_has_the_column_of_the_library():
+    """The focused title, large, its poster below, and the pills in the place of the library's."""
+    title = next(i for i in _nav().iter('include') if i.get('content') == 'LibraryTitle')
+    assert _params(title) == {'width': '439', 'item': 'Container(50).ListItem', 'list': 'true',
+                              'poster': '$VAR[VideoNavTitlePoster]'}
+    library = next(i for i in _root().iter('include') if i.get('content') == 'LibraryTitle')
+    assert _params(library)['width'] == '439'
+    menu, _ = _nav_pills()
+    lib_menu = next(c for c in _root().iter('control') if c.get('id') == '5100')
+    for key in ('left', 'top', 'width', 'height', 'align', 'itemgap', 'orientation'):
+        assert menu.findtext(key) == lib_menu.findtext(key), key
+    assert menu.findtext('visible') == '$EXP[VideoNavLibrary]'
+    assert _expressions()['VideoNavLibrary'] == 'Control.IsVisible(50) + ' + NAV_ROWS
+
+
+def test_the_pills_of_a_plugin_list_act_through_kodi():
+    """Sort and direction as the plugin offers them, the view to the posters (Kodi's menu there,
+    on its view button), the details as in the library. No filter: it needs Kodi's library."""
+    _, pills = _nav_pills()
+    assert [(p['label'], p['onclick']) for p in pills] == [
+        ('$LOCALIZE[31116]: $INFO[Container.SortMethod]', 'Container.NextSortMethod'),
+        ('$VAR[VideoNavDirectionLabel]', 'Container.SetSortDirection'),
+        ('$LOCALIZE[31500]: $LOCALIZE[31501]', 'Container.NextViewMode'),
+        ('$LOCALIZE[31602]: $VAR[LibraryDetailsLabel]', 'NotifyAll(nightcity,lib_details)'),
+    ]
+    assert pills[2]['onclick2'] == 'SetFocus(2)'
+    view = next(i for i in _nav().iter('include') if i.get('content') == 'ListButton' and _params(i)['id'] == '2')
+    assert [(o.get('condition'), o.text) for o in view.findall('onclick')] == [
+        ('Container.Content(movies) | Container.Content(tvshows)', 'SetFocus(9073)')]
     for library in ('movies', 'tvshows'):
         label = _variable('LibraryDetailsLabel')
         skin = {'window': 'videos', 'content': library}
         assert next(t for c, t in label if c is None or holds(c, skin)) == \
             '$INFO[Window(Home).Property(nc.libdetails.label.{})]'.format(library)
+
+
+def test_kodis_menu_and_pane_give_way_to_the_column():
+    nav = _nav()
+    menu = next(c for c in nav.iter('control') if c.get('id') == '9060')
+    assert menu.findtext('visible') == '!$EXP[VideoNavLibrary]'
+    pane = next(c for c in nav.iter('control') if c.get('type') == 'group' and (c.findtext('visible') or '').startswith('Control.IsVisible(50)'))
+    assert pane.findtext('visible').endswith(' + !$EXP[VideoNavLibrary]')
+    assert [(o.get('condition'), o.text) for o in _nav_list().findall('onright')] == [
+        ('$EXP[VideoNavLibrary]', '9070'), ('!$EXP[VideoNavLibrary]', '9060')]
+
+
+def test_the_header_names_a_plugins_list():
+    """JellyCon names its list (setPluginCategory); Kodi's folder name is the add-on's then."""
+    assert _variable('VideoNavTitle') == [('!String.IsEmpty(Container.PluginCategory)', '$INFO[Container.PluginCategory]'),
+                                          (None, '$INFO[Container.FolderName]')]

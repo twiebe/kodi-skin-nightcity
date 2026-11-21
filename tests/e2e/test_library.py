@@ -73,14 +73,23 @@ def test_play_from_info(movies):
 
 
 def test_view_button_switches_to_wall(movies):
-    """Review I5: the poster wall is reachable from the remote via the view button (2)."""
+    """Review I5: the poster wall is reachable from the remote. A list of movies has the library's
+    menu (sort, direction, view, details); its view pill goes to the wall, on Kodi's view button
+    (2) there, which comes back to the list on the view pill."""
     builtin('Container.SetViewMode({})'.format(LIST))
     wait_for('Control.IsVisible({})'.format(LIST))
     builtin('SetFocus({},1,absolute)'.format(LIST))
     action('right')
-    assert info('System.CurrentControlId')['System.CurrentControlId'] == '2'
+    assert info('System.CurrentControlId')['System.CurrentControlId'] == '9071'
+    action('down')
+    action('down')
+    assert info('System.CurrentControlId')['System.CurrentControlId'] == '9073'
     action('select', delay=1)
-    wait_for('Control.IsVisible({})'.format(WALL))
+    wait_for('Control.IsVisible({}) + Control.HasFocus(2)'.format(WALL))
+    action('select', delay=1)
+    wait_for('Control.IsVisible({}) + Control.HasFocus(9073)'.format(LIST))
+    action('left')
+    wait_for('Control.HasFocus({})'.format(LIST))
 
 
 def test_videonav_path_line(movies):

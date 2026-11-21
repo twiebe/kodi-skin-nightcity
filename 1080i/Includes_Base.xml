@@ -14,6 +14,8 @@
          Skin strings only, so Kodi works them out once a frame, not per row -->
     <!-- whose details: the shows' in the library window showing them, in the video window (a plugin's
          list, MyVideoNav.xml) by the content of the list -->
+    <!-- a plugin's list of movies or shows as a list in the video window (MyVideoNav.xml): the library's -->
+    <expression name="VideoNavLibrary">Control.IsVisible(50) + [Container.Content(movies) | Container.Content(tvshows)]</expression>
     <expression name="LibraryShows">[Window.IsActive(1110) + String.IsEqual(Window(Home).Property(nc.library),tvshows)] | [!Window.IsActive(1110) + Container.Content(tvshows)]</expression>
     <expression name="LibraryDetailYear">[$EXP[LibraryShows] + [String.IsEmpty(Skin.String(nc.libdetails.tvshows)) | String.Contains(Skin.String(nc.libdetails.tvshows),year)]] | [!$EXP[LibraryShows] + String.Contains(Skin.String(nc.libdetails.movies),year)]</expression>
     <expression name="LibraryDetailRuntime">!$EXP[LibraryShows] + [String.IsEmpty(Skin.String(nc.libdetails.movies)) | String.Contains(Skin.String(nc.libdetails.movies),runtime)]</expression>
@@ -386,9 +388,13 @@
     <!-- The focused title beside the library grid (Custom_1110_Library.xml) -->
     <include name="LibraryTitle">
         <param name="width"/>
+        <!-- the focused title: the library's grid, or a plugin's list in the video window (MyVideoNav.xml) -->
+        <param name="item" default="Container(5000).ListItem"/>
+        <param name="list" default="$EXP[LibraryAsList]"/>
+        <param name="poster" default="$VAR[LibraryTitlePoster]"/>
         <definition>
             <include content="Kicker">
-                <param name="label" value="$INFO[Container(5000).ListItem.Year]$INFO[Container(5000).ListItem.Genre, · ,]"/>
+                <param name="label" value="$INFO[$PARAM[item].Year]$INFO[$PARAM[item].Genre, · ,]"/>
                 <param name="left" value="1431"/>
                 <param name="top" value="104"/>
                 <param name="width" value="$PARAM[width]"/>
@@ -409,9 +415,9 @@
                     <font>font_title</font>
                     <textcolor>text</textcolor>
                     <include content="LookLabelCase">
-                        <param name="text" value="$INFO[Container(5000).ListItem.Label]"/>
+                        <param name="text" value="$INFO[$PARAM[item].Label]"/>
                     </include>
-                    <visible>!$EXP[LibraryAsList]</visible>
+                    <visible>!$PARAM[list]</visible>
                 </control>
                 <!-- the list's title in two lines at most, its row has it whole: room for a large poster -->
                 <control type="textbox">
@@ -420,26 +426,26 @@
                     <font>font_title</font>
                     <textcolor>text</textcolor>
                     <include content="LookLabelCase">
-                        <param name="text" value="$INFO[Container(5000).ListItem.Label]"/>
+                        <param name="text" value="$INFO[$PARAM[item].Label]"/>
                     </include>
-                    <visible>$EXP[LibraryAsList]</visible>
+                    <visible>$PARAM[list]</visible>
                 </control>
                 <control type="textbox">
                     <width>$PARAM[width]</width>
                     <height>340</height>
                     <font>font_small</font>
                     <textcolor>text_dim</textcolor>
-                    <label>$INFO[Container(5000).ListItem.Plot]</label>
-                    <visible>!$EXP[LibraryAsList]</visible>
+                    <label>$INFO[$PARAM[item].Plot]</label>
+                    <visible>!$PARAM[list]</visible>
                 </control>
                 <!-- the list has no art in its rows: the poster takes the plot's place -->
                 <control type="group">
                     <width>270</width>
                     <height>405</height>
-                    <visible>$EXP[LibraryAsList]</visible>
+                    <visible>$PARAM[list]</visible>
                     <include content="CutCard">
-                        <param name="image" value="$VAR[LibraryTitlePoster]"/>
-                        <param name="item" value="Container(5000).ListItem"/>
+                        <param name="image" value="$PARAM[poster]"/>
+                        <param name="item" value="$PARAM[item]"/>
                         <param name="width" value="270"/>
                         <param name="height" value="405"/>
                         <param name="mask" value="ui/mask_270x405.png"/>
