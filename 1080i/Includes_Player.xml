@@ -370,8 +370,10 @@
                     <visible>String.IsEqual(Window(Home).Property(nc.$PARAM[prefix].rows),8)</visible>
                     <include>DialogFrame</include>
                 </control>
+                <!-- the head names where OK on the button leads: the full settings at once
+                     (VideoOSD.xml), Up goes into this list. The key as a glyph, as in LevelHint -->
                 <include content="Kicker">
-                    <param name="label" value="$PARAM[heading]"/>
+                    <param name="label" value="$PARAM[heading]   [COLOR state_text]⏎[/COLOR] [COLOR text_dim]$LOCALIZE[31139][/COLOR]"/>
                     <param name="left" value="24"/>
                     <param name="top" value="18"/>
                     <param name="width" value="552"/>
@@ -381,7 +383,10 @@
                     <top>46</top>
                     <width>620</width>
                     <height>436</height>
-                    <onup>noop</onup>
+                    <!-- Up on the first row wraps onto the last one, all settings: a container
+                         whose up leads to itself wraps (CGUIBaseContainer::OnUp). Down on the last
+                         row goes back to the button -->
+                    <onup>$PARAM[id]</onup>
                     <ondown>$PARAM[button]</ondown>
                     <onleft>SetFocus($PARAM[left])</onleft>
                     <onright>SetFocus($PARAM[right])</onright>

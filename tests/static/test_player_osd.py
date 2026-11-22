@@ -1,5 +1,7 @@
 """Player OSD: skip buttons, chapter marks, panels that step along the button row, the video
 panel, the seek delta and the OSD on pause."""
+import pytest
+
 from conftest import ROOT, parse
 from navigation import load
 
@@ -113,6 +115,34 @@ def test_panels_step_along_the_button_row():
     for panel, left, right in (('651', '611', '606'), ('652', '605', '607'), ('653', '606', '610')):
         assert controls[panel].findtext('onleft') == 'SetFocus({})'.format(left), panel
         assert controls[panel].findtext('onright') == 'SetFocus({})'.format(right), panel
+
+
+@pytest.mark.parametrize('button, panel, prefix, settings', [('605', '651', 'sub', 'osdsubtitlesettings'),
+                                                            ('606', '652', 'audio', 'osdaudiosettings')])
+def test_ok_on_a_track_button_opens_all_settings(button, panel, prefix, settings):
+    """Up goes into the track list on the playing track, OK opens Kodi's full settings (delays,
+    subtitle look) at once: the list's last row was hard to reach, one step too far left it."""
+    controls = _controls(OSD)
+    assert controls[button].findtext('onclick') == 'ActivateWindow({})'.format(settings)
+    assert controls[button].findtext('onup') == 'SetFocus({},$INFO[Window(Home).Property(nc.{}.pos)],absolute)'.format(panel, prefix)
+
+
+@pytest.mark.parametrize('panel', ['651', '652'])
+def test_track_panels_wrap_upward(panel):
+    """Up on the first row lands on the last one, all settings: a container whose up leads to
+    itself wraps (CGUIBaseContainer::OnUp). Down on the last row still goes back to the button."""
+    controls = _controls(OSD)
+    assert controls[panel].findtext('onup') == panel
+    assert controls[panel].findtext('ondown') in ('605', '606')
+
+
+@pytest.mark.parametrize('heading', ['$LOCALIZE[31053]', '$LOCALIZE[31054]'])
+def test_track_panel_heads_name_the_ok_key(heading):
+    """The head names where OK on the button leads, "Subtitles   ⏎ all settings": the key as a
+    glyph like the level hints (DESIGN.md), the place dim."""
+    labels = [c.findtext('label') or '' for c in load(OSD).iter('control') if c.get('type') == 'label']
+    assert any(label.startswith('[UPPERCASE]' + heading) and label.endswith('   [COLOR state_text]⏎[/COLOR] [COLOR text_dim]$LOCALIZE[31139][/COLOR][/UPPERCASE]')
+               for label in labels), heading
 
 
 def test_video_button_shows_a_panel():

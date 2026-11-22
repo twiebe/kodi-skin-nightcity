@@ -2,7 +2,8 @@
 <!-- OSD: path, clock and state on top; what plays and the seek line come from the seek bar
      dialog. "ends at" beside its times, playback buttons and stop left, track buttons right.
      Subtitles and audio show a track panel, video a panel with what the video is; left and
-     right in a panel step along the buttons. "…" swaps subtitles, audio and video for stats.
+     right in a panel step along the buttons. Up on subtitles or audio goes into the track list,
+     OK opens the full settings. "…" swaps subtitles, audio and video for stats.
      The chapter row is Down from the bar. Switched on in the skin settings (Player), the OSD and
      its rows close by themselves after a while without a key (Timers.xml nc_osd_hide). -->
 <window>
@@ -122,14 +123,16 @@
                 <param name="id" value="605"/>
                 <param name="label" value="$LOCALIZE[31053]"/>
                 <param name="visible" value="String.IsEmpty(Window(Home).Property(nc.osd.more))"/>
-                <param name="onclick" value="SetFocus(651,$INFO[Window(Home).Property(nc.sub.pos)],absolute)"/>
+                <!-- Up: the track list on the playing track; OK: the full settings at once
+                     (delays, subtitle look), which are the list's last row -->
+                <param name="onclick" value="ActivateWindow(osdsubtitlesettings)"/>
                 <onup>SetFocus(651,$INFO[Window(Home).Property(nc.sub.pos)],absolute)</onup>
             </include>
             <include content="PillButton">
                 <param name="id" value="606"/>
                 <param name="label" value="$LOCALIZE[31054]"/>
                 <param name="visible" value="String.IsEmpty(Window(Home).Property(nc.osd.more))"/>
-                <param name="onclick" value="SetFocus(652,$INFO[Window(Home).Property(nc.audio.pos)],absolute)"/>
+                <param name="onclick" value="ActivateWindow(osdaudiosettings)"/>
                 <onup>SetFocus(652,$INFO[Window(Home).Property(nc.audio.pos)],absolute)</onup>
             </include>
             <include content="PillButton">

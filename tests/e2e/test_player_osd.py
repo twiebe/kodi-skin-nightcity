@@ -53,6 +53,27 @@ def test_panels_step_along_the_button_row(tracks):
     wait_for('Control.HasFocus(610)')  # no chapters button: the chapter row is Down from the bar
 
 
+def test_ok_on_subtitles_opens_all_settings(tracks):
+    """Up goes into the track list, OK opens Kodi's subtitle settings at once."""
+    focus(605)
+    action('select')
+    wait_for('Window.IsActive(osdsubtitlesettings)')
+    action('back')
+    wait_for('!Window.IsActive(osdsubtitlesettings)')
+
+
+def test_track_list_wraps_upward_onto_all_settings(tracks):
+    """Up on the first row of the list lands on its last row, all settings."""
+    focus(605)
+    action('up')
+    wait_for('Control.HasFocus(651)')
+    builtin('SetFocus(651,0,absolute)')
+    wait_for('Integer.IsEqual(Container(651).CurrentItem,1)')
+    last = info('Window(Home).Property(nc.sub.count)')['Window(Home).Property(nc.sub.count)']
+    action('up')
+    wait_for('Integer.IsEqual(Container(651).CurrentItem,{})'.format(last))
+
+
 def test_button_rows_wrap_around(tracks):
     """Left on the far left control lands on the far right one, Right there back on the far left."""
     focus(601)
