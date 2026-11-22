@@ -151,12 +151,13 @@ def test_track_panel_heads_show_only_their_heading(heading):
 
 
 def test_video_button_shows_a_panel():
-    """Video works like audio and subtitles: focus shows a panel with what the video is, up or OK
-    goes into it, its row opens Kodi's video settings, down goes back to the button."""
+    """Video works like audio and subtitles: focus shows a panel with what the video is, Up goes
+    into it, onto its one row, all settings, which OK on the button opens at once; down goes
+    back to the button. Up on the row stays: it is the panel's first and last row at once."""
     controls = _controls(OSD)
     button = controls['607']
     assert button.findtext('onup') == 'SetFocus(653)'
-    assert button.findtext('onclick') == 'SetFocus(653)'
+    assert button.findtext('onclick') == 'ActivateWindow(osdvideosettings)'
     row = controls['653']
     assert row.findtext('onclick') == 'ActivateWindow(osdvideosettings)'
     # Kodi gives the rows of a grouplist its up and down, whatever the rows say

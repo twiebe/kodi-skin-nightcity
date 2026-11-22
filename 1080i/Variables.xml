@@ -130,11 +130,10 @@
     <variable name="HintEpisodeDown">
         <value condition="Control.IsVisible(5403) | Control.IsVisible(5401)">   [COLOR state_text]↓[/COLOR] $LOCALIZE[31124]</value>
     </variable>
-    <!-- The OSD's footer while subtitles or audio has the focus (VideoOSD.xml 691, key ⏎): OK
-         leads to the full settings; Down still leads to the cast row of a library title -->
+    <!-- The OSD's footer of a library title while subtitles, audio or video has the focus
+         (VideoOSD.xml 691, key ↓): Down to the cast row, and right of it OK to the full settings -->
     <variable name="HintTrackSettings">
-        <value condition="VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)">$LOCALIZE[31139]   [COLOR state_text]↓[/COLOR] $LOCALIZE[31124]</value>
-        <value>$LOCALIZE[31139]</value>
+        <value>$LOCALIZE[31124]   [COLOR state_text]⏎[/COLOR] $LOCALIZE[31139]</value>
     </variable>
     <!-- Skin settings: a grabbed slot is dark blue; the keys of the rows of the page categories
          (ids 211 to 428) show under the description -->

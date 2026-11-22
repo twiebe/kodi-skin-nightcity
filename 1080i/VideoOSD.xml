@@ -142,7 +142,9 @@
             <include content="PillButton">
                 <param name="id" value="607"/>
                 <param name="label" value="$LOCALIZE[31055]"/>
-                <param name="onclick" value="SetFocus(653)"/>
+                <!-- as subtitles and audio: Up goes into the panel, onto its one row, all settings;
+                     OK opens them at once -->
+                <param name="onclick" value="ActivateWindow(osdvideosettings)"/>
                 <onup>SetFocus(653)</onup>
             </include>
             <!-- the chapter panel above the row (VideoOSDBookmarks.xml). Always there and always
@@ -212,16 +214,22 @@
         <include content="LevelHint">
             <param name="id" value="690"/>
             <param name="label" value="$LOCALIZE[31124]"/>
-            <param name="visible" value="!Window.IsActive(1141) + [VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)] + !Control.HasFocus(605) + !Control.HasFocus(606)"/>
+            <param name="visible" value="!Window.IsActive(1141) + [VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)] + !Control.HasFocus(605) + !Control.HasFocus(606) + !Control.HasFocus(607)"/>
         </include>
-        <!-- in its place while subtitles or audio has the focus: OK there opens the full settings,
-             and Down still leads to the cast row (HintTrackSettings). The one hint of the controls
-             that follows the focus, as the footer of an info page's episodes does -->
+        <!-- in its place while subtitles, audio or video has the focus: OK there opens the full
+             settings. The one hint of the controls that follows the focus, as the footer of an
+             info page's episodes does; it stands right of the standing hint (DESIGN.md): with a
+             cast row "↓ cast   ⏎ all settings" (HintTrackSettings), else ⏎ all settings alone -->
         <include content="LevelHint">
             <param name="id" value="691"/>
-            <param name="key" value="⏎"/>
             <param name="label" value="$VAR[HintTrackSettings]"/>
-            <param name="visible" value="!Window.IsActive(1141) + [Control.HasFocus(605) | Control.HasFocus(606)]"/>
+            <param name="visible" value="!Window.IsActive(1141) + [VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)] + [Control.HasFocus(605) | Control.HasFocus(606) | Control.HasFocus(607)]"/>
+        </include>
+        <include content="LevelHint">
+            <param name="id" value="692"/>
+            <param name="key" value="⏎"/>
+            <param name="label" value="$LOCALIZE[31139]"/>
+            <param name="visible" value="!Window.IsActive(1141) + ![VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)] + [Control.HasFocus(605) | Control.HasFocus(606) | Control.HasFocus(607)]"/>
         </include>
     </controls>
 </window>

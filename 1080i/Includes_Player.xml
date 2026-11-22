@@ -613,7 +613,10 @@
 
     <!-- Video panel of the OSD, beside the track panels and in their look: what the video is
          (codec, resolution, SDR/HDR, frame rate, aspect, bitrate when Kodi knows it) and a last
-         row that opens Kodi's video settings. Left and right focus the neighbouring buttons. -->
+         row that opens Kodi's video settings, the panel's one focusable row: Up on the button
+         lands there, OK on the button opens the settings at once, as on subtitles and audio. Up
+         on the row stays (first and last row at once). Left and right focus the neighbouring
+         buttons. -->
     <include name="VideoPanel">
         <param name="id"/>
         <param name="button"/>
