@@ -117,18 +117,18 @@ def test_osd_button_rows_wrap_around():
 def test_osd_rows_enter_at_the_neighbour_not_at_the_last_focus():
     """A group goes back to its last focused control unless its default is always."""
     osd = {c.get('id'): c for c in parse(ROOT / '1080i' / 'VideoOSD.xml').iter('control')}
-    for row, neighbour in (('600', '611'), ('620', '612')):
+    for row, neighbour in (('600', '611'), ('620', '605')):
         default = osd[row].find('defaultcontrol')
         assert (default.text, default.get('always')) == (neighbour, 'true'), row
 
 
 def test_osd_button_rows():
-    """Play controls, stop and skip forward left; info, subtitles, audio, video and "…" right. "…"
+    """Play controls, stop and skip forward left; subtitles, audio, video and "…" right. "…"
     swaps subtitles, audio and video for stats."""
     # next episode is a prompt of its own (Custom_1151_NextEpisode.xml)
     assert list(_osd_buttons('600')) == ['601', '602', '604', '611']
     right = _osd_buttons('620')
-    assert list(right) == ['612', '605', '606', '607', '609', '610']
+    assert list(right) == ['605', '606', '607', '609', '610']
     assert _arg(right['609'], 'visible') == '!String.IsEmpty(Window(Home).Property(nc.osd.more))'
     assert _arg(right['609'], 'label') == '$LOCALIZE[31155]'
     for button in ('605', '606', '607'):

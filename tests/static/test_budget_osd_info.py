@@ -1,4 +1,4 @@
-"""Budget and box office on a movie's info page, and an info button in the player's controls."""
+"""Budget and box office on a movie's info page, and no info button in the player's controls."""
 from conftest import ROOT, parse
 
 SKIN = ROOT / '1080i'
@@ -37,19 +37,14 @@ def test_strings():
     assert 'msgctxt "#31471"\nmsgid "budget"\n' in po and 'msgctxt "#31472"\nmsgid "box office"\n' in po
 
 
-def test_info_button_in_the_player_left_of_subtitles():
-    """Info opens the page of what plays (scripts/nightcity.py player_info): a library movie or
-    episode, else TMDb Helper's page of the title it recognised. Shown when there is one."""
+def test_no_info_button_in_the_player():
+    """The player's controls start with subtitles: the plot shows on the OSD, the page of what
+    plays is one Back away. The info button (612) and its script command are gone."""
     row = next(g for g in parse(SKIN / 'VideoOSD.xml').iter('control') if g.get('id') == '620')
     pills = [i for i in row.findall('include') if i.get('content') == 'PillButton']
-    params = [{p.get('name'): p.get('value') for p in i.findall('param')} for i in pills]
-    assert [p['id'] for p in params][:2] == ['612', '605']
-    info = params[0]
-    assert info['label'] == '$LOCALIZE[31011]'
-    assert info['onclick'] == 'NotifyAll(nightcity,player_info)'
-    assert info['visible'] == ('String.IsEmpty(Window(Home).Property(nc.osd.more)) + [Integer.IsGreater(VideoPlayer.DBID,0)'
-                               ' | !String.IsEmpty(Window(Home).Property(TMDbHelper.Player.TMDb_ID))'
-                               ' | !String.IsEmpty(Window(Home).Property(TMDbHelper.Player.TVShow.TMDb_ID))]')
+    ids = [next(p.get('value') for p in i.findall('param') if p.get('name') == 'id') for i in pills]
+    assert ids[0] == '605' and '612' not in ids
+    assert 'player_info' not in (ROOT / 'scripts' / 'nightcity.py').read_text(encoding='utf-8')
 
 
 def test_service_values_only_for_the_page_they_belong_to():

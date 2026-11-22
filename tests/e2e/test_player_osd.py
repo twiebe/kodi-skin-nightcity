@@ -67,8 +67,7 @@ def test_moving_between_the_rows_lands_on_the_neighbour(tracks):
     focus(607)
     focus(611)
     action('right')
-    # info shows only for a title it has a page of; then subtitles is the first of the row
-    first = 612 if cond('Control.IsVisible(612)')['Control.IsVisible(612)'] else 605
+    first = 605
     wait_for('Control.HasFocus({})'.format(first))
     focus(602)
     focus(first)
