@@ -910,7 +910,7 @@ msgid "The plot of what plays, under its title while the player controls or the 
 msgstr ""
 
 msgctxt "#31367"
-msgid "Show the stats button"
+msgid "Show the stats for nerds button"
 msgstr ""
 
 msgctxt "#31368"

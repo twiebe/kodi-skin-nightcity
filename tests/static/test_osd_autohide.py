@@ -168,10 +168,10 @@ def test_stats_strings_in_every_language():
     """Label and help text in every language file, as for the other settings."""
     for po in (ROOT / 'language').glob('*/strings.po'):
         text = po.read_text(encoding='utf-8')
-        assert 'msgctxt "#31367"\nmsgid "Show the stats button"\n' in text, po
+        assert 'msgctxt "#31367"\nmsgid "Show the stats for nerds button"\n' in text, po
         assert 'msgctxt "#31368"\nmsgid "A stats button at the right end of the player controls.' in text, po
         if 'en_gb' not in str(po):
-            assert 'msgctxt "#31367"\nmsgid "Show the stats button"\nmsgstr ""' not in text, po
+            assert 'msgctxt "#31367"\nmsgid "Show the stats for nerds button"\nmsgstr ""' not in text, po
 
 
 def test_player_rows_in_order():

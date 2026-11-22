@@ -908,8 +908,8 @@ msgid "The plot of what plays, under its title while the player controls or the 
 msgstr "Söguþráður þess sem spilast, undir titlinum meðan stjórnhnappar spilarans eða leitarstikan eru opin."
 
 msgctxt "#31367"
-msgid "Show the stats button"
-msgstr "Sýna tölfræðihnapp"
+msgid "Show the stats for nerds button"
+msgstr "Sýna tölfræðihnapp fyrir nörda"
 
 msgctxt "#31368"
 msgid "A stats button at the right end of the player controls. It opens Kodi's playback information: codecs, bitrates, dropped frames."

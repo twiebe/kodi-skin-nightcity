@@ -908,8 +908,8 @@ msgid "The plot of what plays, under its title while the player controls or the 
 msgstr "Děj toho, co se přehrává, pod názvem, když je otevřené ovládání přehrávače nebo lišta posunu."
 
 msgctxt "#31367"
-msgid "Show the stats button"
-msgstr "Zobrazit tlačítko statistik"
+msgid "Show the stats for nerds button"
+msgstr "Zobrazit tlačítko statistik pro nerdy"
 
 msgctxt "#31368"
 msgid "A stats button at the right end of the player controls. It opens Kodi's playback information: codecs, bitrates, dropped frames."

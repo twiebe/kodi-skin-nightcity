@@ -908,8 +908,8 @@ msgid "The plot of what plays, under its title while the player controls or the 
 msgstr "Leidžiamo turinio siužetas po pavadinimu, kol atidaryti grotuvo valdikliai arba prasukimo juosta."
 
 msgctxt "#31367"
-msgid "Show the stats button"
-msgstr "Rodyti statistikos mygtuką"
+msgid "Show the stats for nerds button"
+msgstr "Rodyti statistikos moksliukams mygtuką"
 
 msgctxt "#31368"
 msgid "A stats button at the right end of the player controls. It opens Kodi's playback information: codecs, bitrates, dropped frames."

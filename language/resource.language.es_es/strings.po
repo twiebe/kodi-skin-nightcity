@@ -908,8 +908,8 @@ msgid "The plot of what plays, under its title while the player controls or the 
 msgstr "El argumento de lo que se reproduce, bajo su título, mientras los controles del reproductor o la barra de búsqueda están visibles."
 
 msgctxt "#31367"
-msgid "Show the stats button"
-msgstr "Mostrar el botón de estadísticas"
+msgid "Show the stats for nerds button"
+msgstr "Mostrar el botón de estadísticas para nerds"
 
 msgctxt "#31368"
 msgid "A stats button at the right end of the player controls. It opens Kodi's playback information: codecs, bitrates, dropped frames."
