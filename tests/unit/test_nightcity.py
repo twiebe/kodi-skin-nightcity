@@ -1278,11 +1278,11 @@ class ServiceMonitor:
         return False
 
 
-def _service_env(monkeypatch, messages, skin='skin.nightcity'):
+def _service_env(monkeypatch, messages, skin='skin.nightcity', tmdb_helper=True):
     import types
     ServiceMonitor.messages = messages
     xbmc = types.SimpleNamespace(executebuiltin=lambda _: None, Monitor=ServiceMonitor, getSkinDir=lambda: skin, log=lambda *a: None,
-                                 LOGERROR=4)
+                                 LOGERROR=4, getCondVisibility=lambda condition: tmdb_helper)
     monkeypatch.setitem(__import__('sys').modules, 'xbmc', xbmc)
     monkeypatch.setattr(nightcity, 'QUIT', __import__('threading').Event())
     window = FakeWindow()
@@ -3124,3 +3124,17 @@ def test_addon_data_follows_the_active_skin(monkeypatch):
 def test_keymap_names_stay_shared():
     assert nightcity.HOME_KEYMAP_NAME == '0_skin.nightcity.xml'
     assert nightcity.BACK_KEYMAP_NAME == '0_skin.nightcity.back.xml'
+
+
+@pytest.mark.parametrize('skin', ['skin.nightcity', 'skin.confuse'])
+def test_service_switches_jellycons_cast_loading_off_for_its_skin(monkeypatch, skin):
+    window, _ = _service_env(monkeypatch, [], skin=skin)
+    nightcity.service()
+    assert window.props['JellyCon.SkipInfoLoad'] == skin
+
+
+def test_without_tmdb_helper_jellycon_loads_the_cast(monkeypatch):
+    window, _ = _service_env(monkeypatch, [], tmdb_helper=False)
+    window.props['JellyCon.SkipInfoLoad'] = 'skin.nightcity'
+    nightcity.service()
+    assert 'JellyCon.SkipInfoLoad' not in window.props
