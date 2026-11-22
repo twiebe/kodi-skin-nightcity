@@ -17,6 +17,10 @@
     <onload>ClearProperty(nc.returning,home)</onload>
     <onload>ClearProperty(nc.info.opening,home)</onload>
     <onload>ClearProperty(nc.info.ready,home)</onload>
+    <!-- opened again after a trailer in the player window (nightcity.py _trailer_full_screen):
+         on its button, after the default focus -->
+    <onload condition="!String.IsEmpty(Window(Home).Property(nc.trailer.back))">SetFocus(9008)</onload>
+    <onload>ClearProperty(nc.trailer.back,home)</onload>
     <!-- the tab of the credits row starts on cast (films for a person) on every page -->
     <onload>ClearProperty(nc.info.tab,home)</onload>
     <!-- a move that waits for its list (nc_info_enter, Timers.xml) belongs to the page before -->
@@ -430,7 +434,9 @@
                  Kodi and TMDb Helper store YouTube links: without the YouTube add-on the click
                  offers it). It plays in full screen over this page (9095, keys on 9099,
                  scripts/nightcity.py trailer), so the page and a chain under it stay; Back ends
-                 it here. Never over a video that plays: it would end it. It stays while it has the
+                 it here. With the display refresh rate following the video it plays in the player
+                 window instead, Kodi switches the rate only there, and the page opens again after it.
+                 Never over a video that plays: it would end it. It stays while it has the
                  focus: after Back the player takes a few frames to stop, and a hidden button lost
                  the focus to play. -->
             <include content="PillButton">

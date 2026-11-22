@@ -100,3 +100,23 @@ def test_trailer_in_a_chain_keeps_the_chain(trailer):
     wait_for('!Player.HasVideo', timeout=10)
     _back_on_the_button()
     assert info('Window(Home).Property(TMDbHelper.Position)')['Window(Home).Property(TMDbHelper.Position)'] == '1'
+
+
+@pytest.fixture
+def refresh_rate_follows():
+    rpc('Settings.SetSettingValue', {'setting': 'videoplayer.adjustrefreshrate', 'value': 2})
+    yield
+    rpc('Settings.SetSettingValue', {'setting': 'videoplayer.adjustrefreshrate', 'value': 0})
+
+
+def test_trailer_plays_in_the_player_when_the_refresh_rate_follows_the_video(trailer, refresh_rate_follows):
+    """Kodi switches the display to the trailer's frame rate only in its player window: there it
+    plays, and the page opens again after it, on the trailer button."""
+    _open(trailer)
+    action('select', delay=0)
+    wait_for('Player.HasVideo + Window.IsActive(fullscreenvideo) + !Window.IsActive(movieinformation)', timeout=20)
+    action('stop')
+    wait_for('!Player.HasMedia', timeout=10)
+    _back_on_the_button(timeout=20)
+    assert info('ListItem.DBID')['ListItem.DBID'] == str(trailer)
+    _settle()

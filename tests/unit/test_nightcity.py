@@ -2685,6 +2685,76 @@ def test_play_windowed_quotes_the_path():
         'PlayMedia("plugin://plugin.video.youtube/play/?video_id=a,b\\"c",1,noresume)'
 
 
+def test_play_windowed_or_in_the_player():
+    assert nightcity.play_windowed('x', windowed=False) == 'PlayMedia("x",noresume)'
+
+
+@pytest.mark.parametrize('adjust, full', [(0, False), (None, False), (1, True), (2, True)])
+def test_trailer_full_screen_when_the_refresh_rate_follows_the_video(adjust, full):
+    """Kodi gives the display the video's refresh rate only in its player window: over the page a
+    24p trailer judders at 60 Hz."""
+    assert nightcity.trailer_full_screen(adjust) is full
+
+
+@pytest.mark.parametrize('dbid, tmdb_id, page', [
+    ('5', '603', ('movie', '5')), ('', '603', ('tmdb', '603')), ('-1', '603', ('tmdb', '603')),
+    ('', '', None), ('', 'x', None),
+])
+def test_trailer_page(dbid, tmdb_id, page):
+    assert nightcity.trailer_page(dbid, tmdb_id) == page
+
+
+class FullScreenXbmc(FakeXbmc):
+    """The trailer plays once started, for `end` polls; the page is back after it."""
+
+    def __init__(self, labels, end=3, true=()):
+        super().__init__(set(true) | {'System.HasAddon(plugin.video.youtube)', 'System.AddonIsEnabled(plugin.video.youtube)',
+                                      'Window.IsActive(movieinformation)'}, labels)
+        self.polls, self.end, self.played = 0, end, False
+
+    def executebuiltin(self, command, wait=False):
+        self.played = self.played or command.startswith('PlayMedia')
+        super().executebuiltin(command)
+
+    def getCondVisibility(self, condition):
+        if condition in ('Player.HasVideo', 'Player.HasMedia'):
+            return self.played and self.polls < self.end
+        if condition == '!Window.IsActive(fullscreenvideo) + !Window.IsActive(movieinformation)':
+            return self.played and self.polls >= self.end
+        return super().getCondVisibility(condition)
+
+
+def test_trailer_in_the_player_opens_a_library_page_again(monkeypatch):
+    """With the refresh rate following the video the trailer plays in the player window, the page
+    closes (Kodi leaves it open when another dialog is on top) and opens again afterwards, its
+    trailer button in focus."""
+    fake = FullScreenXbmc({'ListItem.Trailer': 'plugin://plugin.video.youtube/play/?video_id=x', 'ListItem.DBID': '5'})
+    home = _trailer_env(monkeypatch, fake, refresh_rate=2)
+    opened = []
+    monkeypatch.setattr(nightcity, 'info', lambda kind, dbid: opened.append((kind, dbid)))
+    nightcity.trailer()
+    assert fake.builtins == ['SetFocus(9008)', 'PlayMedia("plugin://plugin.video.youtube/play/?video_id=x",noresume)',
+                             'Dialog.Close(movieinformation,true)', 'ActivateWindow(fullscreenvideo)']
+    assert opened == [('movie', '5')]
+    assert 'nc.trailer' not in home.props and home.props['nc.trailer.back'] == '1'
+
+
+def test_trailer_in_the_player_opens_a_tmdb_page_in_a_new_chain(monkeypatch):
+    fake = FullScreenXbmc({'ListItem.Trailer': 'x', 'ListItem.UniqueID(tmdb)': '27205'}, true={nightcity.CHAIN_FREE})
+    _trailer_env(monkeypatch, fake, refresh_rate=1)
+    nightcity.trailer()
+    assert fake.builtins[-2:] == ['RunScript(plugin.video.themoviedb.helper,add_tmdb=27205,tmdb_type=movie,call_auto=1190)',
+                                  'SetProperty(nc.chain.claim,1,home)']
+
+
+def test_trailer_in_the_player_that_never_starts_leaves_the_page(monkeypatch):
+    fake = FullScreenXbmc({'ListItem.Trailer': 'x', 'ListItem.DBID': '5'}, end=0)
+    _trailer_env(monkeypatch, fake, refresh_rate=2)
+    monkeypatch.setattr(nightcity, 'info', lambda *a: pytest.fail('page opened'))
+    nightcity.trailer()
+    assert fake.builtins == ['SetFocus(9008)', 'PlayMedia("x",noresume)']
+
+
 class TrailerXbmc(FakeXbmc):
     """The trailer starts after `start` polls and ends after `end` more."""
 
@@ -2698,9 +2768,10 @@ class TrailerXbmc(FakeXbmc):
         return super().getCondVisibility(condition)
 
 
-def _trailer_env(monkeypatch, fake, props=None):
+def _trailer_env(monkeypatch, fake, props=None, refresh_rate=0):
     home = FakeHome()
     home.props.update(props or {'nc.trailer': '1'})
+    monkeypatch.setattr(nightcity, '_setting', {'videoplayer.adjustrefreshrate': refresh_rate}.get)
 
     class Monitor:
         def waitForAbort(self, timeout):
