@@ -3208,6 +3208,19 @@ def _start_next(monitor, home):
     xbmc.executebuiltin('RunScript(special://skin/scripts/nightcity.py,service,home)')
 
 
+JELLYCON_SKIP_INFO_LOAD = 'JellyCon.SkipInfoLoad'
+
+
+def jellycon_info_load(home, skin, tmdb_helper):
+    """JellyCon loads cast and crew when an information page opens and then opens the page again.
+    The pages show them from TMDb Helper, so SKIN switches that off for itself while TMDb Helper
+    is enabled; JellyCon compares the property with the active skin."""
+    if tmdb_helper:
+        home.setProperty(JELLYCON_SKIP_INFO_LOAD, skin)
+    else:
+        home.clearProperty(JELLYCON_SKIP_INFO_LOAD)
+
+
 def service(*first):
     """Listen for the skin's commands until Kodi ends or another skin takes over; FIRST is a
     command to run before (startup)."""
@@ -3248,6 +3261,7 @@ def service(*first):
     started = skin_id()
     monitor = _monitor(Listener)
     home.setProperty('nc.service', '1')
+    jellycon_info_load(home, started, xbmc.getCondVisibility('System.AddonIsEnabled(plugin.video.themoviedb.helper)'))
     if first:
         _run(first[0], list(first[1:]))
     # after a skin switch nothing runs startup, and each skin has its own Home key setting
