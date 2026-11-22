@@ -213,7 +213,7 @@
              while a panel above a button is open (per page, not per element) -->
         <include content="LevelHint">
             <param name="id" value="690"/>
-            <param name="label" value="$LOCALIZE[31124]"/>
+            <param name="label" value="$LOCALIZE[31702]"/>
             <param name="visible" value="!Window.IsActive(1141) + [VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)] + !Control.HasFocus(605) + !Control.HasFocus(606) + !Control.HasFocus(607)"/>
         </include>
         <!-- in its place while subtitles, audio or video has the focus: OK there opens the full

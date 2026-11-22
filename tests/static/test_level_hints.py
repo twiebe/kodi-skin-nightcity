@@ -289,7 +289,8 @@ def test_osd_hint():
     on the whole of the controls (a panel above a button and the chapter panel too), hidden
     while the cast row is up."""
     key, label, top, visible = _hint('VideoOSD.xml', '690')
-    assert (key, label, top) == ('↓', '$LOCALIZE[31124]', BOTTOM)
+    assert (key, label, top) == ('↓', '$LOCALIZE[31702]', BOTTOM)
+    assert _string('31702') == 'cast & crew' and _string('31702', 'de_de') == 'Besetzung & Crew'
     assert visible == '!Window.IsActive(1141) + [{}] + {}'.format(CAST, ' + '.join('!Control.HasFocus({})'.format(b) for b in TRACK_BUTTONS))
     assert '693' not in _controls('VideoOSD.xml')  # no hint of the panels' own
     controls = _controls('VideoOSD.xml')
@@ -319,7 +320,7 @@ def test_osd_hint_on_subtitles_audio_and_video():
     key, label, top, visible = _hint('VideoOSD.xml', '691')
     assert (key, label, top) == ('↓', '$VAR[HintTrackSettings]', BOTTOM)
     assert visible == '!Window.IsActive(1141) + [{}] + {}'.format(CAST, focus)
-    assert _variable('HintTrackSettings') == [(None, '$LOCALIZE[31124]   [COLOR state_text]⏎[/COLOR] $LOCALIZE[31139]')]
+    assert _variable('HintTrackSettings') == [(None, '$LOCALIZE[31702]   [COLOR state_text]⏎[/COLOR] $LOCALIZE[31139]')]
     key, label, top, visible = _hint('VideoOSD.xml', '692')
     assert (key, label, top) == ('⏎', '$LOCALIZE[31139]', BOTTOM)
     assert visible == '!Window.IsActive(1141) + ![{}] + {}'.format(CAST, focus)

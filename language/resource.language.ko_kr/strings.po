@@ -1186,3 +1186,7 @@ msgstr "On Deck"
 msgctxt "#31701"
 msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
 msgstr "시청을 시작한 작품, 그다음 보고 있는 TV 쇼. TV 쇼에서 OK를 누르면 다음 에피소드가 열립니다."
+
+msgctxt "#31702"
+msgid "cast & crew"
+msgstr "출연진 & 제작진"

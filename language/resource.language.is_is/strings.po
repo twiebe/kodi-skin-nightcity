@@ -1186,3 +1186,7 @@ msgstr "On Deck"
 msgctxt "#31701"
 msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
 msgstr "Það sem þú byrjaðir á, síðan þáttaraðirnar sem þú ert að horfa á. Í lagi á þáttaröð opnar næsta þátt."
+
+msgctxt "#31702"
+msgid "cast & crew"
+msgstr "leikarar & tökulið"

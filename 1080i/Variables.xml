@@ -133,7 +133,7 @@
     <!-- The OSD's footer of a library title while subtitles, audio or video has the focus
          (VideoOSD.xml 691, key ↓): Down to the cast row, and right of it OK to the full settings -->
     <variable name="HintTrackSettings">
-        <value>$LOCALIZE[31124]   [COLOR state_text]⏎[/COLOR] $LOCALIZE[31139]</value>
+        <value>$LOCALIZE[31702]   [COLOR state_text]⏎[/COLOR] $LOCALIZE[31139]</value>
     </variable>
     <!-- Skin settings: a grabbed slot is dark blue; the keys of the rows of the page categories
          (ids 211 to 428) show under the description -->

@@ -1186,3 +1186,7 @@ msgstr "On Deck"
 msgctxt "#31701"
 msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
 msgstr "Wat jy begin het, dan die reekse wat jy kyk. OK op 'n reeks open die volgende episode."
+
+msgctxt "#31702"
+msgid "cast & crew"
+msgstr "rolverdeling & span"

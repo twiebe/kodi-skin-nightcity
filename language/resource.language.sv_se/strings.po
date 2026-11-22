@@ -1186,3 +1186,7 @@ msgstr "På tur"
 msgctxt "#31701"
 msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
 msgstr "Det du har påbörjat, sedan serierna du tittar på. OK på en serie öppnar nästa avsnitt."
+
+msgctxt "#31702"
+msgid "cast & crew"
+msgstr "rollista & team"

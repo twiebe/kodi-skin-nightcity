@@ -1186,3 +1186,7 @@ msgstr "On Deck"
 msgctxt "#31701"
 msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
 msgstr "Начатое, затем сериалы, которые вы смотрите. OK на сериале открывает следующий эпизод."
+
+msgctxt "#31702"
+msgid "cast & crew"
+msgstr "актёры & съёмочная группа"
