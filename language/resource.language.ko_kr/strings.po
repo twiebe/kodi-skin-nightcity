@@ -907,6 +907,14 @@ msgctxt "#31366"
 msgid "The plot of what plays, under its title while the player controls or the seek line are up."
 msgstr "플레이어 컨트롤이나 탐색 막대가 열려 있는 동안 재생 중인 작품의 줄거리를 제목 아래에 표시합니다."
 
+msgctxt "#31367"
+msgid "Show the stats button"
+msgstr "통계 버튼 표시"
+
+msgctxt "#31368"
+msgid "A stats button at the right end of the player controls. It opens Kodi's playback information: codecs, bitrates, dropped frames."
+msgstr "플레이어 컨트롤 오른쪽 끝의 통계 버튼입니다. Kodi의 재생 정보(코덱, 비트레이트, 누락된 프레임)를 엽니다."
+
 msgctxt "#31400"
 msgid "New albums"
 msgstr "새 앨범"

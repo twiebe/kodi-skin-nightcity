@@ -907,6 +907,14 @@ msgctxt "#31366"
 msgid "The plot of what plays, under its title while the player controls or the seek line are up."
 msgstr "La trama di ciò che è in riproduzione, sotto il titolo, mentre i controlli del lettore o la barra di avanzamento sono visibili."
 
+msgctxt "#31367"
+msgid "Show the stats button"
+msgstr "Mostra il pulsante delle statistiche"
+
+msgctxt "#31368"
+msgid "A stats button at the right end of the player controls. It opens Kodi's playback information: codecs, bitrates, dropped frames."
+msgstr "Un pulsante delle statistiche a destra dei controlli del lettore. Apre le informazioni di riproduzione di Kodi: codec, bitrate, fotogrammi persi."
+
 msgctxt "#31400"
 msgid "New albums"
 msgstr "Nuovi album"

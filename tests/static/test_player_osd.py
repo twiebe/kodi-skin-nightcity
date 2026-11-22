@@ -3,10 +3,10 @@ panel, the seek delta and the OSD on pause."""
 import pytest
 
 from conftest import ROOT, parse
-from navigation import load
+from navigation import evaluate, load
 
 OSD = 'VideoOSD.xml'
-MORE = 'Window(Home).Property(nc.osd.more)'
+STATS = 'Skin.HasSetting(nc.osd.stats)'
 
 
 def _controls(name):
@@ -29,12 +29,18 @@ def test_skip_forward_beside_stop():
     assert controls['601'].findtext('label') == '[UPPERCASE]⏮[/UPPERCASE]'
 
 
-def test_chapters_only_on_the_first_level():
-    """"…" swaps subtitles, audio and video for stats."""
-    controls = _controls(OSD)
-    for button in ('605', '606', '607'):
-        assert controls[button].findtext('visible') == 'String.IsEmpty({})'.format(MORE), button
-    assert controls['609'].findtext('visible') == '!String.IsEmpty({})'.format(MORE)
+@pytest.mark.parametrize('skin, row', [({}, ['605', '606', '607', '608']),
+                                       ({'nc.osd.stats': '1'}, ['605', '606', '607', '608', '609'])])
+def test_stats_button_follows_its_setting(skin, row):
+    """One level of buttons: the "…" toggle that swapped the track buttons for stats is gone.
+    Stats (Kodi's playback information) shows at the far right only with its skin setting
+    (nc.osd.stats, off by default); without it chapters ends the row."""
+    controls = {c.get('id'): c for c in load(OSD, skin).iter('control') if c.get('id')}
+    shown = [c.get('id') for c in controls['620'].findall('control')
+             if all(evaluate(v.text, skin) for v in c.findall('visible'))]
+    assert shown == row
+    assert controls['609'].findtext('onclick') == 'ActivateWindow(playerprocessinfo)'
+    assert '610' not in controls
 
 
 def test_chapter_marks_have_a_colour():
@@ -218,14 +224,14 @@ def test_chapters_button_opens_the_chapter_panel():
     """Chapters is a button of the right row, between video and "…": OK or Up opens the chapter
     panel (Kodi's chapters and bookmarks dialog) above the row, which stays; without chapters it
     says bookmarks. Kodi has no condition for bookmarks, and the panel is where one is added, so
-    the button is always there; it swaps for stats with the other track buttons."""
+    the button is always there."""
     osd = _controls(OSD)
-    assert [c.get('id') for c in osd['620'].findall('control')] == ['605', '606', '607', '608', '609', '610']
+    assert [c.get('id') for c in osd['620'].findall('control')] == ['605', '606', '607', '608', '609']
     button = osd['608']
     assert button.findtext('label') == '[UPPERCASE]$VAR[PlayerChaptersLevel][/UPPERCASE]'
     assert button.findtext('onclick') == 'ActivateWindow(videobookmarks)'
     assert button.findtext('onup') == 'ActivateWindow(videobookmarks)'
-    assert 'String.IsEmpty({})'.format(MORE) in [v.text for v in button.findall('visible')]
+    assert [v.text for v in button.findall('visible')] in ([], ['true'])
     assert _variable('PlayerChaptersLevel') == [('Integer.IsGreater(Player.ChapterCount,0)', '$LOCALIZE[31140]'),
                                                 (None, '$LOCALIZE[31056]')]
     # the rows stay under the panel, the cast row replaces them
@@ -241,7 +247,8 @@ def test_chapter_panel_above_the_button():
     chapters' thumbnails and the bookmark buttons in its head. Up from the list goes to the
     buttons, Down closes the panel onto its button; Left and Right past the ends move on to the
     neighbouring buttons, as in the track panels, after the panel closed at once (SetFocus goes
-    to the topmost dialog)."""
+    to the topmost dialog): right of chapters is stats with its setting, else the row wraps to
+    the left row."""
     dialog = load('VideoOSDBookmarks.xml')
     assert not any('RunScript' in (o.text or '') for o in dialog.iter())
     assert dialog.findtext('defaultcontrol') == '93'
@@ -257,7 +264,8 @@ def test_chapter_panel_above_the_button():
     assert actions(buttons, 'onup') == [('', 'noop')]
     for control in (chapters, buttons):
         assert actions(control, 'onleft') == [('', 'Dialog.Close(videobookmarks,true)'), ('', 'SetFocus(607)')]
-        assert actions(control, 'onright') == [('', 'Dialog.Close(videobookmarks,true)'), ('', 'SetFocus(610)')]
+        assert actions(control, 'onright') == [('', 'Dialog.Close(videobookmarks,true)'), (STATS, 'SetFocus(609)'),
+                                               ('!' + STATS, 'SetFocus(601)')]
     assert actions(buttons, 'ondown') == [('Integer.IsGreater(Container(11).NumItems,0)', '11'),
                                           ('!Integer.IsGreater(Container(11).NumItems,0)', 'Dialog.Close(videobookmarks)')]
 

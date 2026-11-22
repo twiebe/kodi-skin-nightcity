@@ -907,6 +907,14 @@ msgctxt "#31366"
 msgid "The plot of what plays, under its title while the player controls or the seek line are up."
 msgstr "A lejátszott tartalom cselekménye a címe alatt, amíg a lejátszó vezérlői vagy a tekerősáv nyitva vannak."
 
+msgctxt "#31367"
+msgid "Show the stats button"
+msgstr "Statisztika gomb megjelenítése"
+
+msgctxt "#31368"
+msgid "A stats button at the right end of the player controls. It opens Kodi's playback information: codecs, bitrates, dropped frames."
+msgstr "Statisztika gomb a lejátszó vezérlőinek jobb szélén. Megnyitja a Kodi lejátszási adatait: kodekek, bitráták, eldobott képkockák."
+
 msgctxt "#31400"
 msgid "New albums"
 msgstr "Új albumok"

@@ -907,6 +907,14 @@ msgctxt "#31366"
 msgid "The plot of what plays, under its title while the player controls or the seek line are up."
 msgstr "Leidžiamo turinio siužetas po pavadinimu, kol atidaryti grotuvo valdikliai arba prasukimo juosta."
 
+msgctxt "#31367"
+msgid "Show the stats button"
+msgstr "Rodyti statistikos mygtuką"
+
+msgctxt "#31368"
+msgid "A stats button at the right end of the player controls. It opens Kodi's playback information: codecs, bitrates, dropped frames."
+msgstr "Statistikos mygtukas grotuvo valdiklių dešiniajame gale. Jis atveria Kodi atkūrimo informaciją: kodekus, bitų spartas, praleistus kadrus."
+
 msgctxt "#31400"
 msgid "New albums"
 msgstr "Nauji albumai"

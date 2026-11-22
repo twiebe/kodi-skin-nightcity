@@ -907,6 +907,14 @@ msgctxt "#31366"
 msgid "The plot of what plays, under its title while the player controls or the seek line are up."
 msgstr "Esitatava sisukokkuvõte pealkirja all, kui mängija juhtnupud või kerimisriba on avatud."
 
+msgctxt "#31367"
+msgid "Show the stats button"
+msgstr "Näita statistikanuppu"
+
+msgctxt "#31368"
+msgid "A stats button at the right end of the player controls. It opens Kodi's playback information: codecs, bitrates, dropped frames."
+msgstr "Statistikanupp mängija juhtnuppude paremas otsas. See avab Kodi taasesituse teabe: koodekid, bitikiirused, vahele jäänud kaadrid."
+
 msgctxt "#31400"
 msgid "New albums"
 msgstr "Uued albumid"

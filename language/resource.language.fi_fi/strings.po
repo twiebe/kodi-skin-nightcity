@@ -907,6 +907,14 @@ msgctxt "#31366"
 msgid "The plot of what plays, under its title while the player controls or the seek line are up."
 msgstr "Toistettavan juoni sen nimen alla, kun soittimen säätimet tai kelauspalkki ovat esillä."
 
+msgctxt "#31367"
+msgid "Show the stats button"
+msgstr "Näytä tilastopainike"
+
+msgctxt "#31368"
+msgid "A stats button at the right end of the player controls. It opens Kodi's playback information: codecs, bitrates, dropped frames."
+msgstr "Tilastopainike soittimen ohjainten oikeassa päässä. Se avaa Kodin toistotiedot: koodekit, bittinopeudet, pudonneet kuvat."
+
 msgctxt "#31400"
 msgid "New albums"
 msgstr "Uudet albumit"

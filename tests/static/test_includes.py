@@ -225,7 +225,7 @@ def test_osd_buttons():
     for action in ('PlayerControl(Previous)', 'PlayerControl(Play)', 'PlayerControl(Next)',
                    'PlayerControl(Stop)'):
         assert action in clicks, action
-    assert any(b['label'] == '…' for b in buttons)
+    assert not any(b['label'] == '…' for b in buttons)  # no second level: the toggle is gone
 
 
 def test_settings_dialog_has_no_category_template():

@@ -2,6 +2,7 @@ import pytest
 
 from conftest import ROOT, parse
 from focus import Page, State
+from navigation import evaluate
 
 REQUIRED = [
     # Tasks 1, 4, 6-8
@@ -105,13 +106,16 @@ def _arg(call, name):
     return next((p.get('value') for p in call.findall('param') if p.get('name') == name), '')
 
 
-def test_osd_button_rows_wrap_around():
-    """Left on the far left control goes to the far right one and back: ⏮ and "…" always show."""
+@pytest.mark.parametrize('skin, last', [({}, '608'), ({'nc.osd.stats': '1'}, '609')])
+def test_osd_button_rows_wrap_around(skin, last):
+    """Left on the far left control goes to the far right one and back: ⏮ always shows, far
+    right is stats when its skin setting is on, else chapters (always shown)."""
     osd = {c.get('id'): c for c in parse(ROOT / '1080i' / 'VideoOSD.xml').iter('control')}
-    assert osd['600'].findtext('onleft') == '610'
+    lefts = [o for o in osd['600'].findall('onleft') if evaluate(o.get('condition'), skin)]
+    assert lefts[0].text == last
     assert osd['620'].findtext('onright') == '601'
     assert _arg(_osd_buttons('600')['601'], 'visible') == ''
-    assert _arg(_osd_buttons('620')['610'], 'visible') == ''
+    assert _arg(_osd_buttons('620')['608'], 'visible') == ''
 
 
 def test_osd_rows_enter_at_the_neighbour_not_at_the_last_focus():
@@ -123,16 +127,18 @@ def test_osd_rows_enter_at_the_neighbour_not_at_the_last_focus():
 
 
 def test_osd_button_rows():
-    """Play controls, stop and skip forward left; subtitles, audio, video, chapters and "…"
-    right. "…" swaps subtitles, audio, video and chapters for stats."""
+    """Play controls, stop and skip forward left; subtitles, audio, video, chapters and, with
+    its skin setting, stats right. No second level: the "…" toggle is gone."""
     # next episode is a prompt of its own (Custom_1151_NextEpisode.xml)
     assert list(_osd_buttons('600')) == ['601', '602', '604', '611']
     right = _osd_buttons('620')
-    assert list(right) == ['605', '606', '607', '608', '609', '610']
-    assert _arg(right['609'], 'visible') == '!String.IsEmpty(Window(Home).Property(nc.osd.more))'
+    assert list(right) == ['605', '606', '607', '608', '609']
+    assert _arg(right['609'], 'visible') == 'Skin.HasSetting(nc.osd.stats)'
     assert _arg(right['609'], 'label') == '$LOCALIZE[31155]'
     for button in ('605', '606', '607', '608'):
-        assert _arg(right[button], 'visible') == 'String.IsEmpty(Window(Home).Property(nc.osd.more))'
+        assert _arg(right[button], 'visible') == ''
+    for path in (ROOT / '1080i').glob('*.xml'):
+        assert 'nc.osd.more' not in path.read_text(encoding='utf-8'), path.name
 
 
 def test_stats_string():

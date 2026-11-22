@@ -4,13 +4,13 @@
      Subtitles and audio show a track panel, video a panel with what the video is; left and
      right in a panel step along the buttons. Up on subtitles or audio goes into the track list,
      OK opens the full settings. Chapters (or bookmarks) opens the chapter panel above the row
-     (VideoOSDBookmarks.xml). "…" swaps subtitles, audio, video and chapters for stats.
+     (VideoOSDBookmarks.xml). Stats, switched on in the skin settings (Player), closes the row
+     on the right.
      Down from the bar is the cast and crew row (Custom_1141_OSDCast.xml). Switched on in the skin settings (Player), the OSD and
      its rows close by themselves after a while without a key (Timers.xml nc_osd_hide). -->
 <window>
     <depth>DepthOSD</depth>
     <defaultcontrol always="true">602</defaultcontrol>
-    <onload>ClearProperty(nc.osd.more,home)</onload>
     <!-- one script keeps the track panels current while the OSD is open; closing it clears the
          rows so the next file never shows the last file's tracks -->
     <onload>NotifyAll(nightcity,streams_watch)</onload>
@@ -78,8 +78,10 @@
             <ondown condition="VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)">ActivateWindow(1141)</ondown>
             <!-- the cast row replaces the controls; the chapter panel opens above them -->
             <visible>!Window.IsActive(1141)</visible>
-            <!-- the two rows wrap around: far left and far right lead to each other -->
-            <onleft>610</onleft>
+            <!-- the two rows wrap around: far left and far right lead to each other; far right is
+                 stats when it is switched on, else chapters -->
+            <onleft condition="Skin.HasSetting(nc.osd.stats)">609</onleft>
+            <onleft condition="!Skin.HasSetting(nc.osd.stats)">608</onleft>
             <onright>620</onright>
             <include content="PillButton">
                 <param name="id" value="601"/>
@@ -126,7 +128,6 @@
             <include content="PillButton">
                 <param name="id" value="605"/>
                 <param name="label" value="$LOCALIZE[31053]"/>
-                <param name="visible" value="String.IsEmpty(Window(Home).Property(nc.osd.more))"/>
                 <!-- Up: the track list on the playing track; OK: the full settings at once
                      (delays, subtitle look), which are the list's last row -->
                 <param name="onclick" value="ActivateWindow(osdsubtitlesettings)"/>
@@ -135,14 +136,12 @@
             <include content="PillButton">
                 <param name="id" value="606"/>
                 <param name="label" value="$LOCALIZE[31054]"/>
-                <param name="visible" value="String.IsEmpty(Window(Home).Property(nc.osd.more))"/>
                 <param name="onclick" value="ActivateWindow(osdaudiosettings)"/>
                 <onup>SetFocus(652,$INFO[Window(Home).Property(nc.audio.pos)],absolute)</onup>
             </include>
             <include content="PillButton">
                 <param name="id" value="607"/>
                 <param name="label" value="$LOCALIZE[31055]"/>
-                <param name="visible" value="String.IsEmpty(Window(Home).Property(nc.osd.more))"/>
                 <param name="onclick" value="SetFocus(653)"/>
                 <onup>SetFocus(653)</onup>
             </include>
@@ -152,22 +151,15 @@
             <include content="PillButton">
                 <param name="id" value="608"/>
                 <param name="label" value="$VAR[PlayerChaptersLevel]"/>
-                <param name="visible" value="String.IsEmpty(Window(Home).Property(nc.osd.more))"/>
                 <param name="onclick" value="ActivateWindow(videobookmarks)"/>
                 <onup>ActivateWindow(videobookmarks)</onup>
             </include>
+            <!-- Kodi's playback information, only with its skin setting (off by default) -->
             <include content="PillButton">
                 <param name="id" value="609"/>
                 <param name="label" value="$LOCALIZE[31155]"/>
                 <param name="onclick" value="ActivateWindow(playerprocessinfo)"/>
-                <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.osd.more))"/>
-            </include>
-            <include content="PillButton">
-                <param name="id" value="610"/>
-                <param name="label" value="…"/>
-                <!-- both conditions are checked before either action runs -->
-                <onclick condition="String.IsEmpty(Window(Home).Property(nc.osd.more))">SetProperty(nc.osd.more,1,home)</onclick>
-                <onclick condition="!String.IsEmpty(Window(Home).Property(nc.osd.more))">ClearProperty(nc.osd.more,home)</onclick>
+                <param name="visible" value="Skin.HasSetting(nc.osd.stats)"/>
             </include>
         </control>
         <!-- panels above the right buttons, shown while their button or panel has focus; left and

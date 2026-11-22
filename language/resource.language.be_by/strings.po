@@ -907,6 +907,14 @@ msgctxt "#31366"
 msgid "The plot of what plays, under its title while the player controls or the seek line are up."
 msgstr "Сюжэт таго, што прайграецца, пад назвай, пакуль адкрыта кіраванне прайгравальнікам або паласа перамотвання."
 
+msgctxt "#31367"
+msgid "Show the stats button"
+msgstr "Паказваць кнопку статыстыкі"
+
+msgctxt "#31368"
+msgid "A stats button at the right end of the player controls. It opens Kodi's playback information: codecs, bitrates, dropped frames."
+msgstr "Кнопка статыстыкі справа ў кіраванні прайгравальнікам. Яна адкрывае звесткі Kodi пра прайграванне: кодэкі, бітрэйты, прапушчаныя кадры."
+
 msgctxt "#31400"
 msgid "New albums"
 msgstr "Новыя альбомы"

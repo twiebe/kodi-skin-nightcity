@@ -907,6 +907,14 @@ msgctxt "#31366"
 msgid "The plot of what plays, under its title while the player controls or the seek line are up."
 msgstr "在播放器控制列或進度列開啟時，於標題下方顯示正在播放內容的劇情。"
 
+msgctxt "#31367"
+msgid "Show the stats button"
+msgstr "顯示統計按鈕"
+
+msgctxt "#31368"
+msgid "A stats button at the right end of the player controls. It opens Kodi's playback information: codecs, bitrates, dropped frames."
+msgstr "在播放器控制按鈕的最右側顯示統計按鈕。它開啟 Kodi 的播放資訊：編解碼器、位元率、丟格。"
+
 msgctxt "#31400"
 msgid "New albums"
 msgstr "最新專輯"

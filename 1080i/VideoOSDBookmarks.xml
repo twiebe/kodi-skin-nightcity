@@ -5,7 +5,8 @@
      once by the startup script), and preselects the playing chapter; the bookmark buttons sit in
      the panel's head. Up from the list goes to the buttons, Down or Back closes the panel back
      onto the button; Left and Right past the ends move on to the neighbouring buttons, as in the
-     track panels. Kodi ids: 11 bookmark list, 2 add, 3 clear, 4 add episode bookmark. -->
+     track panels: right of chapters is stats when switched on, else the row wraps to the left
+     row. Kodi ids: 11 bookmark list, 2 add, 3 clear, 4 add episode bookmark. -->
 <window>
     <depth>DepthOSD</depth>
     <!-- Kodi fills list 11 right after it set the focus, so the focus goes to a stand-in: its
@@ -56,7 +57,8 @@
             <onleft>Dialog.Close(videobookmarks,true)</onleft>
             <onleft>SetFocus(607)</onleft>
             <onright>Dialog.Close(videobookmarks,true)</onright>
-            <onright>SetFocus(610)</onright>
+            <onright condition="Skin.HasSetting(nc.osd.stats)">SetFocus(609)</onright>
+            <onright condition="!Skin.HasSetting(nc.osd.stats)">SetFocus(601)</onright>
             <include content="Button">
                 <param name="id" value="2"/>
                 <param name="label" value="$LOCALIZE[294]"/>
@@ -111,7 +113,8 @@
             <onleft>Dialog.Close(videobookmarks,true)</onleft>
             <onleft>SetFocus(607)</onleft>
             <onright>Dialog.Close(videobookmarks,true)</onright>
-            <onright>SetFocus(610)</onright>
+            <onright condition="Skin.HasSetting(nc.osd.stats)">SetFocus(609)</onright>
+            <onright condition="!Skin.HasSetting(nc.osd.stats)">SetFocus(601)</onright>
             <itemlayout width="352" height="300">
                 <include content="ChapterCard">
                     <param name="dim" value="Control.HasFocus(11)"/>

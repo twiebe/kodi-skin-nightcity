@@ -907,6 +907,14 @@ msgctxt "#31366"
 msgid "The plot of what plays, under its title while the player controls or the seek line are up."
 msgstr "Dej toho, čo sa prehráva, pod názvom, keď je otvorené ovládanie prehrávača alebo lišta posunu."
 
+msgctxt "#31367"
+msgid "Show the stats button"
+msgstr "Zobraziť tlačidlo štatistík"
+
+msgctxt "#31368"
+msgid "A stats button at the right end of the player controls. It opens Kodi's playback information: codecs, bitrates, dropped frames."
+msgstr "Tlačidlo štatistík na pravom konci ovládania prehrávača. Otvorí informácie Kodi o prehrávaní: kodeky, dátové toky, vynechané snímky."
+
 msgctxt "#31400"
 msgid "New albums"
 msgstr "Nové albumy"

@@ -340,7 +340,7 @@
             </include>
             <!-- the player: its controls hide by themselves after the delay of the slider below,
                  3 to 30 s (Timers.xml nc_osd_hide); the plot under the title. Both on by default,
-                 the skin bools store off. -->
+                 the skin bools store off. The stats button, off by default. -->
             <include content="SkinSettingsArea">
                 <param name="id" value="700"/>
                 <param name="tab" value="player"/>
@@ -403,6 +403,13 @@
                     <param name="id" value="713"/>
                     <param name="label" value="$LOCALIZE[31365]"/>
                     <param name="setting" value="nc.osd.plot.off"/>
+                </include>
+                <!-- a stats button at the right end of the player controls (VideoOSD.xml 609):
+                     Kodi's playback information. Off by default, the skin bool stores on. -->
+                <include content="SkinSettingsToggleOptIn">
+                    <param name="id" value="714"/>
+                    <param name="label" value="$LOCALIZE[31367]"/>
+                    <param name="setting" value="nc.osd.stats"/>
                 </include>
             </include>
             <!-- description of the focused entry -->
