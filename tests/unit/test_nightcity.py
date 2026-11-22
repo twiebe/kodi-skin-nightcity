@@ -870,7 +870,8 @@ def test_back_keymap_turns_previous_menu_into_back_on_info_pages():
     import xml.etree.ElementTree as ET
     root = ET.fromstring(nightcity.BACK_KEYMAP)
     # the library grid: test_library_bar.py; the player's chapter and cast rows: Back held only
-    assert [w.tag for w in root] == ['movieinformation', 'videobookmarks', 'window1141', 'window1110', 'home', 'music'] + SETTINGS_WINDOWS
+    assert [w.tag for w in root] == ['movieinformation', 'videobookmarks', 'window1141', 'window1110', 'home', 'music',
+                                     'fullscreenvideo'] + SETTINGS_WINDOWS
     keys = {(device.tag, key.tag, key.get('mod')): key.text for device in root.find('movieinformation') for key in device}
     assert {k: v for k, v in keys.items() if not k[2]} == {
         ('keyboard', 'escape', None): 'Back', ('gamepad', 'back', None): 'Back', ('mouse', 'rightclick', None): 'Back'}
@@ -901,6 +902,20 @@ def test_back_keymap_long_back_in_the_player_rows(window):
     keys = {(device.tag, key.tag, key.get('mod')): key.text for device in root.find(window) for key in device}
     assert keys == {('keyboard', k, 'longpress'): 'NotifyAll(nightcity,back_to_start)'
                     for k in ('backspace', 'browser_back', 'escape')}
+
+
+def test_back_keymap_back_over_the_bare_video_stops_it():
+    """Leaving the video stops it: over the bare video (no OSD or other dialog in front, Kodi's
+    FullscreenVideo section) Back stops instead of leaving the video running behind the menus
+    (Kodi: Fullscreen on keyboards, Back on remotes). Back held stops as in Kodi. Tab
+    (Fullscreen) still leaves it running, and with the OSD or a row open their own sections
+    apply."""
+    import xml.etree.ElementTree as ET
+    root = ET.fromstring(nightcity.BACK_KEYMAP)
+    keys = {(device.tag, key.tag, key.get('mod')): key.text for device in root.find('fullscreenvideo') for key in device}
+    assert keys == {('keyboard', 'backspace', None): 'Stop', ('keyboard', 'browser_back', None): 'Stop',
+                    ('keyboard', 'escape', None): 'Stop', ('keyboard', 'escape', 'longpress'): 'Stop',
+                    ('remote', 'back', None): 'Stop'}
 
 
 def test_ok_held_on_home_is_one_command():

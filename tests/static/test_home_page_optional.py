@@ -51,7 +51,8 @@ def holds(condition, skin):
 def first_focus(actions, skin):
     """The id of the first focus action whose condition holds (Kodi moves to the first)."""
     for el in actions:
-        if holds(el.get('condition'), skin) and re.fullmatch(r'\d+|SetFocus\(\d+\)', el.text.strip()):
+        # only focus actions: others may hang on the player (Player.HasVideo), not on skin settings
+        if re.fullmatch(r'\d+|SetFocus\(\d+\)', el.text.strip()) and holds(el.get('condition'), skin):
             return re.search(r'\d+', el.text).group(0)
 
 

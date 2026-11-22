@@ -72,3 +72,16 @@ def test_skin_settings_switch_off_the_home_key():
     assert '<param name="onclick" value="NotifyAll(nightcity,home_keymap)"/>' in text
     toggle = (ROOT / '1080i' / 'Includes_Settings.xml').read_text()
     assert '<onclick condition="$PARAM[changeable]">Skin.ToggleSetting($PARAM[setting])</onclick>\n                <onclick>$PARAM[onclick]</onclick>' in toggle
+
+
+def test_home_key_stops_the_video():
+    """Leaving the video stops it: the Home key stops a playing video first, music plays on. Not
+    for the quick menu's links (nc.go): Back held in the settings returns to the video playing
+    (settings_return). In a TMDb chain the second pass after the chain ended (nc_home_key in
+    Timers.xml) stops it."""
+    loads = [(o.get('condition'), o.text) for o in _window().iter('onload')]
+    stops = [c for c, t in loads if t == 'PlayerControl(Stop)']
+    assert stops == [NO_CHAIN + ' + String.IsEmpty(Window(Home).Property(nc.go)) + Player.HasVideo']
+    # before the dialogs close: the OSD goes with them
+    texts = [t for c, t in loads]
+    assert texts.index('PlayerControl(Stop)') < texts.index('Dialog.Close(all,true)')

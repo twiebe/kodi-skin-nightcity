@@ -1282,6 +1282,7 @@ def _trailer_full_screen(path):
     xbmc.executebuiltin('Dialog.Close(movieinformation,true)', True)
     xbmc.executebuiltin('ActivateWindow(fullscreenvideo)')
     monitor = _monitor()
+    # Back over the trailer stops it (BACK_KEYMAP, fullscreenvideo): it ends here, as at its end
     while xbmc.getCondVisibility('Player.HasMedia'):
         if monitor.waitForAbort(0.5):
             return
@@ -1664,11 +1665,15 @@ HOME_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
 # where the browsing started (back_to_start), in the player's chapter and cast rows to the
 # player's controls: without sections of their own Kodi took the global long press there, one
 # row up like a single Back. Kodi knows long presses only in the keyboard
-# section (CEC and MCE remotes send theirs in the remote section). Written whatever the Home key
-# setting.
+# section (CEC and MCE remotes send theirs in the remote section). Over the bare video (Kodi's
+# FullscreenVideo section: no OSD, row or info page in front, those keep their sections) Back
+# stops it: leaving the video stops it, Kodi left it running behind the menus. Tab (Fullscreen)
+# still does; chains over the video, the chapter and cast rows and the fullscreen trailer
+# (Back ends it, its page opens again) are dialogs or go by the player's stop. Written whatever
+# the Home key setting.
 BACK_KEYMAP_NAME = '0_skin.nightcity.back.xml'
 BACK_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
-<!-- Written by the Nightcity skin: on info pages and the library grid the keys of PreviousMenu are Back, Back held on an info page goes back to where the browsing started, in the player's chapter and cast rows to the player's controls; OK held on Home's movies or shows tab opens all of them. -->
+<!-- Written by the Nightcity skin: on info pages and the library grid the keys of PreviousMenu are Back, Back held on an info page goes back to where the browsing started, in the player's chapter and cast rows to the player's controls; OK held on Home's movies or shows tab opens all of them; Back over the bare video stops it. -->
 <keymap>
   <movieinformation>
     <keyboard>
@@ -1733,6 +1738,19 @@ BACK_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
       <rightclick>NotifyAll(nightcity,music_bar:escape)</rightclick>
     </mouse>
   </music>
+  <!-- over the bare video Back stops it (Kodi: Fullscreen, the video ran on behind the menus);
+       held it stops as in Kodi, escape too (Kodi: Back held, out of the video) -->
+  <fullscreenvideo>
+    <keyboard>
+      <backspace>Stop</backspace>
+      <browser_back>Stop</browser_back>
+      <escape>Stop</escape>
+      <escape mod="longpress">Stop</escape>
+    </keyboard>
+    <remote>
+      <back>Stop</back>
+    </remote>
+  </fullscreenvideo>
 @@SETTINGS@@</keymap>
 """
 
