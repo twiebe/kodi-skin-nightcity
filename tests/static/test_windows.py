@@ -148,10 +148,10 @@ def test_stats_string():
 
 
 def test_chapters_dialog_one_heading():
-    """The chapter panel has a single head, chapters or, without them, bookmarks, as its button."""
+    """The chapter panel has a single head, chapters, as its button."""
     root = parse(ROOT / '1080i' / 'VideoOSDBookmarks.xml')
     heads = [c for c in root.iter('include') if c.get('content') in ('RowHeader', 'Kicker')]
-    assert [_arg(h, 'label') for h in heads] == ['$VAR[PlayerChaptersLevel]']
+    assert [_arg(h, 'label') for h in heads] == ['$LOCALIZE[31140]']
 
 
 def test_chapters_episode_bookmark_only_when_enabled():

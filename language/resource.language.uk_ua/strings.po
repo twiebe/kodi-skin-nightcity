@@ -103,10 +103,6 @@ msgctxt "#31055"
 msgid "video"
 msgstr "відео"
 
-msgctxt "#31056"
-msgid "bookmarks"
-msgstr "закладки"
-
 msgctxt "#31057"
 msgid "buffering"
 msgstr "буферизація"

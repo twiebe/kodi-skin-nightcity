@@ -166,7 +166,9 @@ OFFSET = {('DialogVideoInfo.xml', '5190'): 619}
 DIALOG_LEFT = {'DialogSelect.xml': ('-322', str(820 // 2 - 15))}
 FOCUS = re.compile(r'HasFocus|System\.CurrentControl|Container\.HasFocus')
 # the hints that show the keys of the focused row (DESIGN.md: an exception, open for now)
-FOCUSED_ROW = {('DialogVideoInfo.xml', '5190')}
+FOCUSED_ROW = {('DialogVideoInfo.xml', '5190'),
+               # the OSD's footer names OK on subtitles and audio, the full settings
+               ('VideoOSD.xml', '690'), ('VideoOSD.xml', '691')}
 
 
 def test_a_hint_does_not_follow_the_focus():
@@ -259,12 +261,6 @@ def test_footer_strings_are_glyphs():
     assert _string('31261') == KEY.format('↑↓') + ' move   ' + KEY.format('⏎') + ' drop'
 
 
-def test_chapters_level_name():
-    """The row below the bar lists the chapters, or only the bookmark buttons without chapters."""
-    assert _variable('PlayerChaptersLevel') == [
-        ('Integer.IsGreater(Player.ChapterCount,0)', '$LOCALIZE[31140]'), (None, '$LOCALIZE[31056]')]
-
-
 def test_the_player_controls_have_one_name():
     """The OSD bar is "controls" in every hint that leads to it; "menu" is left to the menus
     beside a list (Home's top menu, the library's)."""
@@ -294,8 +290,8 @@ def test_osd_hint():
     while the cast row is up."""
     key, label, top, visible = _hint('VideoOSD.xml', '690')
     assert (key, label, top) == ('↓', '$LOCALIZE[31124]', BOTTOM)
-    assert visible == '!Window.IsActive(1141) + [{}]'.format(CAST)
-    assert '691' not in _controls('VideoOSD.xml')  # no hint of the panels' own
+    assert visible == '!Window.IsActive(1141) + [{}] + !Control.HasFocus(605) + !Control.HasFocus(606)'.format(CAST)
+    assert '692' not in _controls('VideoOSD.xml')  # no hint of the panels' own
     controls = _controls('VideoOSD.xml')
     for row in ('600', '620'):
         assert _actions(controls[row], 'ondown') == [(CAST, 'ActivateWindow(1141)')], row
@@ -309,6 +305,18 @@ def test_chapter_panel_has_no_hints_of_its_own():
     assert not [i for i in parse(ROOT / '1080i' / 'VideoOSDBookmarks.xml').iter('include') if i.get('content') == 'LevelHint']
     assert _actions(controls['11'], 'ondown') == [('', 'Dialog.Close(videobookmarks)')]
     assert _actions(controls['9000'], 'onup') == [('', 'noop')]
+
+
+def test_osd_hint_on_subtitles_and_audio():
+    """While subtitles or audio has the focus the footer names OK first, the full settings, and
+    still Down to the cast row of a library title after it: one line in the place of the Down
+    hint, which fades out for it (the controls' one hint that follows the focus, DESIGN.md)."""
+    key, label, top, visible = _hint('VideoOSD.xml', '691')
+    assert (key, label, top) == ('⏎', '$VAR[HintTrackSettings]', BOTTOM)
+    assert visible == '!Window.IsActive(1141) + [Control.HasFocus(605) | Control.HasFocus(606)]'
+    assert _variable('HintTrackSettings') == [
+        (CAST, '$LOCALIZE[31139]   [COLOR state_text]↓[/COLOR] $LOCALIZE[31124]'), (None, '$LOCALIZE[31139]')]
+    assert _string('31139') == 'all settings'
 
 
 def test_cast_row_hint():

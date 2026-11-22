@@ -103,10 +103,6 @@ msgctxt "#31055"
 msgid "video"
 msgstr "video"
 
-msgctxt "#31056"
-msgid "bookmarks"
-msgstr "järjehoidjad"
-
 msgctxt "#31057"
 msgid "buffering"
 msgstr "puhverdamine"

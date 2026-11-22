@@ -3,7 +3,7 @@
      dialog. "ends at" beside its times, playback buttons and stop left, track buttons right.
      Subtitles and audio show a track panel, video a panel with what the video is; left and
      right in a panel step along the buttons. Up on subtitles or audio goes into the track list,
-     OK opens the full settings. Chapters (or bookmarks) opens the chapter panel above the row
+     OK opens the full settings. Chapters opens the chapter panel above the row
      (VideoOSDBookmarks.xml). Stats, switched on in the skin settings (Player), closes the row
      on the right.
      Down from the bar is the cast and crew row (Custom_1141_OSDCast.xml). Switched on in the skin settings (Player), the OSD and
@@ -145,12 +145,12 @@
                 <param name="onclick" value="SetFocus(653)"/>
                 <onup>SetFocus(653)</onup>
             </include>
-            <!-- the chapter panel above the row (VideoOSDBookmarks.xml). Always there: Kodi has
-                 no condition for bookmarks, and the panel is where a bookmark is added; without
-                 chapters the button says bookmarks -->
+            <!-- the chapter panel above the row (VideoOSDBookmarks.xml). Always there and always
+                 "chapters": Kodi has no condition for bookmarks, and the panel is where a bookmark
+                 is added, also in a video without chapters -->
             <include content="PillButton">
                 <param name="id" value="608"/>
-                <param name="label" value="$VAR[PlayerChaptersLevel]"/>
+                <param name="label" value="$LOCALIZE[31140]"/>
                 <param name="onclick" value="ActivateWindow(videobookmarks)"/>
                 <onup>ActivateWindow(videobookmarks)</onup>
             </include>
@@ -212,7 +212,16 @@
         <include content="LevelHint">
             <param name="id" value="690"/>
             <param name="label" value="$LOCALIZE[31124]"/>
-            <param name="visible" value="!Window.IsActive(1141) + [VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)]"/>
+            <param name="visible" value="!Window.IsActive(1141) + [VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)] + !Control.HasFocus(605) + !Control.HasFocus(606)"/>
+        </include>
+        <!-- in its place while subtitles or audio has the focus: OK there opens the full settings,
+             and Down still leads to the cast row (HintTrackSettings). The one hint of the controls
+             that follows the focus, as the footer of an info page's episodes does -->
+        <include content="LevelHint">
+            <param name="id" value="691"/>
+            <param name="key" value="⏎"/>
+            <param name="label" value="$VAR[HintTrackSettings]"/>
+            <param name="visible" value="!Window.IsActive(1141) + [Control.HasFocus(605) | Control.HasFocus(606)]"/>
         </include>
     </controls>
 </window>

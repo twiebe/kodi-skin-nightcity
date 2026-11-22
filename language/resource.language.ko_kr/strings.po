@@ -103,10 +103,6 @@ msgctxt "#31055"
 msgid "video"
 msgstr "비디오"
 
-msgctxt "#31056"
-msgid "bookmarks"
-msgstr "북마크"
-
 msgctxt "#31057"
 msgid "buffering"
 msgstr "버퍼링"

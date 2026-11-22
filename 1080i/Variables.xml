@@ -130,10 +130,11 @@
     <variable name="HintEpisodeDown">
         <value condition="Control.IsVisible(5403) | Control.IsVisible(5401)">   [COLOR state_text]↓[/COLOR] $LOCALIZE[31124]</value>
     </variable>
-    <!-- In the head of the OSD's subtitle and audio panels: OK on their button leads to the full
-         settings (VideoOSD.xml), the place dim beside the panel's name -->
+    <!-- The OSD's footer while subtitles or audio has the focus (VideoOSD.xml 691, key ⏎): OK
+         leads to the full settings; Down still leads to the cast row of a library title -->
     <variable name="HintTrackSettings">
-        <value>   [COLOR state_text]⏎[/COLOR] [COLOR text_dim]$LOCALIZE[31139][/COLOR]</value>
+        <value condition="VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)">$LOCALIZE[31139]   [COLOR state_text]↓[/COLOR] $LOCALIZE[31124]</value>
+        <value>$LOCALIZE[31139]</value>
     </variable>
     <!-- Skin settings: a grabbed slot is dark blue; the keys of the rows of the page categories
          (ids 211 to 428) show under the description -->
@@ -692,11 +693,6 @@
         <value condition="Player.Rewinding">[COLOR state_text]◄◄[/COLOR] $INFO[Player.PlaySpeed]x</value>
         <value condition="Player.Forwarding">[COLOR state_text]▶▶[/COLOR] $INFO[Player.PlaySpeed]x</value>
         <value condition="Player.Paused">[COLOR state_text]❚❚[/COLOR] $LOCALIZE[31051]</value>
-    </variable>
-    <!-- the OSD's chapters button and its panel (VideoOSDBookmarks.xml): chapters, or only bookmarks -->
-    <variable name="PlayerChaptersLevel">
-        <value condition="Integer.IsGreater(Player.ChapterCount,0)">$LOCALIZE[31140]</value>
-        <value>$LOCALIZE[31056]</value>
     </variable>
     <variable name="PlayerSeasonNum">
         <value condition="Integer.IsLess(VideoPlayer.Season,10)">S0$INFO[VideoPlayer.Season]</value>

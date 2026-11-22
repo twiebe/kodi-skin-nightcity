@@ -103,10 +103,6 @@ msgctxt "#31055"
 msgid "video"
 msgstr "videó"
 
-msgctxt "#31056"
-msgid "bookmarks"
-msgstr "könyvjelzők"
-
 msgctxt "#31057"
 msgid "buffering"
 msgstr "pufferelés"

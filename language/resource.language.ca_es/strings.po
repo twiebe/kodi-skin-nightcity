@@ -103,10 +103,6 @@ msgctxt "#31055"
 msgid "video"
 msgstr "vídeo"
 
-msgctxt "#31056"
-msgid "bookmarks"
-msgstr "marcadors"
-
 msgctxt "#31057"
 msgid "buffering"
 msgstr "carregant memòria intermèdia"

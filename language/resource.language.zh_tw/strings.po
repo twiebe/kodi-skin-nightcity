@@ -103,10 +103,6 @@ msgctxt "#31055"
 msgid "video"
 msgstr "影片"
 
-msgctxt "#31056"
-msgid "bookmarks"
-msgstr "書籤"
-
 msgctxt "#31057"
 msgid "buffering"
 msgstr "緩衝中"

@@ -61,7 +61,9 @@ key, then the level it leads to (`LevelHint` in `Includes_Base.xml`,
 - **Exceptions, open for now:** the footer of the episodes on an info page (←→ episode,
   ↑ season, ↓ cast, ⏎ select) shows the keys of the focused row while it has the focus; the
   skin settings' slot footer (⏎ choose, → option; ↑↓ move, ⏎ drop) shows on the slot rows,
-  for its keys act on the slot. The console's footer (⏎ open) does not depend on the focus.
+  for its keys act on the slot. The player's footer names ⏎ all settings while subtitles or
+  audio has the focus, with ↓ cast after it where the cast row is. The console's footer
+  (⏎ open) does not depend on the focus.
 - **Where a hint stands follows its key**, nothing else:
   - ↑ at the top: centred on the path line of a page (top 30, the title kept left of the
     middle, `pathwidth` 780), on the player's top edge (top 140), on the top edge of the quick

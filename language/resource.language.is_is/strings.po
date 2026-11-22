@@ -103,10 +103,6 @@ msgctxt "#31055"
 msgid "video"
 msgstr "myndskeið"
 
-msgctxt "#31056"
-msgid "bookmarks"
-msgstr "bókamerki"
-
 msgctxt "#31057"
 msgid "buffering"
 msgstr "biðminni"

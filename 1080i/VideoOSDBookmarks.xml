@@ -25,7 +25,7 @@
             <include>DialogFrame</include>
         </control>
         <include content="Kicker">
-            <param name="label" value="$VAR[PlayerChaptersLevel]"/>
+            <param name="label" value="$LOCALIZE[31140]"/>
             <param name="left" value="88"/>
             <param name="top" value="458"/>
             <param name="width" value="400"/>

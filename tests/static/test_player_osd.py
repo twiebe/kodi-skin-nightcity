@@ -143,12 +143,11 @@ def test_track_panels_wrap_upward(panel):
 
 
 @pytest.mark.parametrize('heading', ['$LOCALIZE[31053]', '$LOCALIZE[31054]'])
-def test_track_panel_heads_name_the_ok_key(heading):
-    """The head names where OK on the button leads, "Subtitles   ⏎ all settings": the key as a
-    glyph like the level hints (DESIGN.md), the place dim."""
+def test_track_panel_heads_show_only_their_heading(heading):
+    """The head is the panel's name alone; where OK leads is in the footer (test_level_hints.py)."""
     labels = [c.findtext('label') or '' for c in load(OSD).iter('control') if c.get('type') == 'label']
-    assert '[UPPERCASE]{}$VAR[HintTrackSettings][/UPPERCASE]'.format(heading) in labels, heading
-    assert _variable('HintTrackSettings') == [(None, '   [COLOR state_text]⏎[/COLOR] [COLOR text_dim]$LOCALIZE[31139][/COLOR]')]
+    assert '[UPPERCASE]{}[/UPPERCASE]'.format(heading) in labels, heading
+    assert not any(label.startswith('[UPPERCASE]' + heading + '$VAR') for label in labels)
 
 
 def test_video_button_shows_a_panel():
@@ -222,18 +221,20 @@ def _actions(control, tag):
 
 def test_chapters_button_opens_the_chapter_panel():
     """Chapters is a button of the right row, between video and "…": OK or Up opens the chapter
-    panel (Kodi's chapters and bookmarks dialog) above the row, which stays; without chapters it
-    says bookmarks. Kodi has no condition for bookmarks, and the panel is where one is added, so
-    the button is always there."""
+    panel (Kodi's chapters and bookmarks dialog) above the row, which stays. It always says
+    chapters: Kodi has no condition for bookmarks, and the panel is where one is added, so the
+    button is always there, also in a video without chapters."""
     osd = _controls(OSD)
     assert [c.get('id') for c in osd['620'].findall('control')] == ['605', '606', '607', '608', '609']
     button = osd['608']
-    assert button.findtext('label') == '[UPPERCASE]$VAR[PlayerChaptersLevel][/UPPERCASE]'
+    assert button.findtext('label') == '[UPPERCASE]$LOCALIZE[31140][/UPPERCASE]'
     assert button.findtext('onclick') == 'ActivateWindow(videobookmarks)'
     assert button.findtext('onup') == 'ActivateWindow(videobookmarks)'
     assert [v.text for v in button.findall('visible')] in ([], ['true'])
-    assert _variable('PlayerChaptersLevel') == [('Integer.IsGreater(Player.ChapterCount,0)', '$LOCALIZE[31140]'),
-                                                (None, '$LOCALIZE[31056]')]
+    assert not any(v.get('name') == 'PlayerChaptersLevel' for v in parse(ROOT / '1080i' / 'Variables.xml').iter('variable'))
+    text = (ROOT / 'language' / 'resource.language.de_de' / 'strings.po').read_text(encoding='utf-8')
+    assert 'msgctxt "#31140"\nmsgid "chapters"\nmsgstr "Kapitel"' in text
+    assert '"#31056"' not in text
     # the rows stay under the panel, the cast row replaces them
     for cid in ('600', '620'):
         assert osd[cid].findtext('visible') == '!Window.IsActive(1141)', cid

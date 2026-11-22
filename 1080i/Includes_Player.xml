@@ -370,10 +370,8 @@
                     <visible>String.IsEqual(Window(Home).Property(nc.$PARAM[prefix].rows),8)</visible>
                     <include>DialogFrame</include>
                 </control>
-                <!-- the head names where OK on the button leads: the full settings at once
-                     (VideoOSD.xml), Up goes into this list -->
                 <include content="Kicker">
-                    <param name="label" value="$PARAM[heading]$VAR[HintTrackSettings]"/>
+                    <param name="label" value="$PARAM[heading]"/>
                     <param name="left" value="24"/>
                     <param name="top" value="18"/>
                     <param name="width" value="552"/>
