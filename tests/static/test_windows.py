@@ -337,6 +337,32 @@ def test_windows_over_a_playing_video_keep_it_rendering():
         assert controls[0].tag == 'include' and controls[0].text == 'Background', name
 
 
+def test_an_info_page_over_a_playing_video_shows_the_video_dimmed():
+    """An info page over a playing video (the OSD's cast and crew row, a TMDb chain over the video)
+    keeps the video in sight behind it, under a scrim, instead of its background and fanart:
+    browsing does not leave the film. The videowindow stays first, as on every page over a video.
+    A trailer the page plays itself draws its own layer and keeps the page's look."""
+    root = parse(ROOT / '1080i' / 'Includes_Base.xml')
+    over = next(e for e in root.iter('expression') if e.get('name') == 'InfoOverVideo').text
+    assert over.startswith('Player.HasVideo + ')
+    assert 'String.IsEmpty(Window(Home).Property(nc.trailer))' in over
+    background = next(i for i in root.iter('include') if i.get('name') == 'InfoBackground')
+    first = background[0]
+    assert first.get('type') == 'videowindow'
+    assert first.findtext('visible') == 'Player.HasVideo + !Window.IsVisible(fullscreenvideo)'
+    look = next(c for c in background if c.get('type') == 'group')
+    assert look.findtext('visible') == '!$EXP[InfoOverVideo]'
+    assert look.findtext('include') == 'LookBackground'
+    scrim = next(c for c in background if c.findtext('description') == 'video scrim')
+    assert scrim.find('texture').get('colordiffuse') == 'video_scrim'
+    assert scrim.findtext('visible') == '$EXP[InfoOverVideo]'
+    info = parse(ROOT / '1080i' / 'DialogVideoInfo.xml').find('controls')
+    assert info[0].tag == 'include' and info[0].text == 'InfoBackground'
+    fanart = [g for g in info.findall('control') if g.find('include[@content="FanartBackdrop"]') is not None]
+    assert len(fanart) == 2
+    assert all(g.findtext('visible').endswith(' + !$EXP[InfoOverVideo]') for g in fanart)
+
+
 def test_a_slider_lies_on_its_side():
     """Without an orientation a slider stands upright (GUIControlFactory.cpp): left and right do not
     move it, and its nib scales to the slider's width. The subtitle offset could not be changed and
