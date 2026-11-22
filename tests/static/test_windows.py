@@ -123,15 +123,15 @@ def test_osd_rows_enter_at_the_neighbour_not_at_the_last_focus():
 
 
 def test_osd_button_rows():
-    """Play controls, stop and skip forward left; subtitles, audio, video and "…" right. "…"
-    swaps subtitles, audio and video for stats."""
+    """Play controls, stop and skip forward left; subtitles, audio, video, chapters and "…"
+    right. "…" swaps subtitles, audio, video and chapters for stats."""
     # next episode is a prompt of its own (Custom_1151_NextEpisode.xml)
     assert list(_osd_buttons('600')) == ['601', '602', '604', '611']
     right = _osd_buttons('620')
-    assert list(right) == ['605', '606', '607', '609', '610']
+    assert list(right) == ['605', '606', '607', '608', '609', '610']
     assert _arg(right['609'], 'visible') == '!String.IsEmpty(Window(Home).Property(nc.osd.more))'
     assert _arg(right['609'], 'label') == '$LOCALIZE[31155]'
-    for button in ('605', '606', '607'):
+    for button in ('605', '606', '607', '608'):
         assert _arg(right[button], 'visible') == 'String.IsEmpty(Window(Home).Property(nc.osd.more))'
 
 
@@ -142,10 +142,10 @@ def test_stats_string():
 
 
 def test_chapters_dialog_one_heading():
-    """The chapters dialog has a single heading, no "bookmarks" kicker above it."""
+    """The chapter panel has a single head, chapters or, without them, bookmarks, as its button."""
     root = parse(ROOT / '1080i' / 'VideoOSDBookmarks.xml')
-    heading = next(c for c in root.iter('include') if c.get('content') == 'RowHeader')
-    assert not _arg(heading, 'kicker') and '31140' in _arg(heading, 'label')
+    heads = [c for c in root.iter('include') if c.get('content') in ('RowHeader', 'Kicker')]
+    assert [_arg(h, 'label') for h in heads] == ['$VAR[PlayerChaptersLevel]']
 
 
 def test_chapters_episode_bookmark_only_when_enabled():
@@ -187,7 +187,7 @@ def test_track_panel_slots_match_script():
 
 
 def test_chapters_dialog_focuses_chapters():
-    """The chapter row opens on the chapter list, add bookmark only without entries (focus hops
+    """The chapter panel opens on the chapter list, add bookmark only without entries (focus hops
     93 and 94, test_tmdb_navigation.py)."""
     root = parse(ROOT / '1080i' / 'VideoOSDBookmarks.xml')
     assert root.findtext('defaultcontrol') == '93'

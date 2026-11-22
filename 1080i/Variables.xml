@@ -608,7 +608,7 @@
         <value condition="!String.IsEmpty(Player.Art(poster))">$INFO[Player.Art(poster)]</value>
         <value>$INFO[Player.Art(thumb)]</value>
     </variable>
-    <!-- chapter row (VideoOSDBookmarks.xml): for Jellyfin streams the OSD script puts the
+    <!-- chapter panel (VideoOSDBookmarks.xml): for Jellyfin streams the OSD script puts the
          server's chapter images into nc.chapter.N (nightcity.py set_chapter_thumbs); without them
          Kodi's own thumbnail, which it cuts from some http streams too -->
     <variable name="ChapterThumb">
@@ -692,7 +692,7 @@
         <value condition="Player.Forwarding">[COLOR state_text]▶▶[/COLOR] $INFO[Player.PlaySpeed]x</value>
         <value condition="Player.Paused">[COLOR state_text]❚❚[/COLOR] $LOCALIZE[31051]</value>
     </variable>
-    <!-- the row below the OSD bar (VideoOSDBookmarks.xml): chapters, or only bookmarks -->
+    <!-- the OSD's chapters button and its panel (VideoOSDBookmarks.xml): chapters, or only bookmarks -->
     <variable name="PlayerChaptersLevel">
         <value condition="Integer.IsGreater(Player.ChapterCount,0)">$LOCALIZE[31140]</value>
         <value>$LOCALIZE[31056]</value>

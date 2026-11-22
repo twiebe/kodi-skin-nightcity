@@ -187,7 +187,6 @@
         <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating">SetProperty(nc.osd.ret,$INFO[Container(6501).CurrentItem],home)</onstop>
         <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating">SetProperty(nc.osd.ret.tab,$INFO[Window(Home).Property(nc.osd.credits)],home)</onstop>
         <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating">Dialog.Close(1141)</onstop>
-        <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating">Dialog.Close(videobookmarks)</onstop>
         <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating">Dialog.Close(videoosd)</onstop>
         <onstop>ClearProperty(nc.osd.click,home)</onstop>
     </timer>
@@ -221,7 +220,7 @@
     <!-- Player controls that hide by themselves (skin settings, Player; on unless
          nc.osd.autohide.off): runs while the video plays with the cursor on the OSD's controls,
          that is the OSD is the topmost dialog. So never while paused (it starts at zero when
-         playback goes on), never in the rows below the controls (chapter row, cast row with its
+         playback goes on), never in the chapter panel or the cast row below the controls (with its
          tabs and biography: dialogs over the OSD), never while a dialog opened from the OSD is
          up (track settings, subtitle search, keyboard, a select list) and never while the
          cursor is in a track panel (651 to 653: groups of VideoOSD, so the OSD stays the

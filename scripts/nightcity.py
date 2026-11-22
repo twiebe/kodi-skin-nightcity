@@ -777,7 +777,7 @@ def info_origin():
         _home().setProperty('nc.chain.origin.dbid', dbid)
 
 
-# the player's chapter row (VideoOSDBookmarks.xml) or cast row (Custom_1141_OSDCast.xml) has the
+# the player's chapter panel (VideoOSDBookmarks.xml) or cast row (Custom_1141_OSDCast.xml) has the
 # keys, no info page over them
 OSD_ROWS = '!Window.IsActive(movieinformation) + [Window.IsActive(videobookmarks) | Window.IsActive(1141)]'
 
@@ -788,9 +788,9 @@ def back_to_start():
     origin): its manager goes back to it at once (TMDbHelper.Command first, a command of the
     twiebe fork), and the page takes the focus to the item the chain went on from (nc.ret.1,
     info_back). A chain from the OSD cast row (nc.osd.ret) has no page before its first: it
-    ends, and the player's controls come back on their first button. In the player's chapter and
-    cast rows (OSD_ROWS) it goes there too: the rows close, the controls take the focus on their
-    first button. Outside a chain, and on the page it started from, it is a Back."""
+    ends, and the player's controls come back on their first button. In the player's chapter
+    panel and cast row (OSD_ROWS) it goes there too: they close, the controls take the focus on
+    their first button. Outside a chain, and on the page it started from, it is a Back."""
     import xbmc
     home = _home()
     position = xbmc.getInfoLabel('Window(Home).Property(TMDbHelper.Position)')
@@ -1436,7 +1436,7 @@ def streams_watch():
     token = str(time.time())
     home.setProperty('nc.osd.watch', token)
     shown = {}
-    # the chapter row (VideoOSDBookmarks.xml) opens from the OSD: its server images load beside
+    # the chapter panel (VideoOSDBookmarks.xml) opens from the OSD: its server images load beside
     # the panels, in this interpreter, not in one of their own
     import threading
     chapters = threading.Thread(target=chapter_images, args=(home,))
@@ -1624,7 +1624,7 @@ def home():
 
 # Kodi restarts itself only on Windows and Linux (CoreELEC, LibreELEC, Android count as Linux)
 # Kodi settings the skin sets once (skin bool that marks it done, setting, value): select opens
-# the info page; chapters get thumbnails for the OSD's chapter row
+# the info page; chapters get thumbnails for the OSD's chapter panel
 ONE_OFF = (('nc.selectaction.done', 'myvideos.selectaction', 3),
            ('nc.chapterthumbs.done', 'myvideos.extractchapterthumbs', True))
 
@@ -1662,18 +1662,18 @@ HOME_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
 # second (ChainBackGuard, Includes_Tmdb.xml), so on info pages these keys are Back too: for Kodi
 # both close the page. On the library grid likewise: Back on its position bar returns to the card
 # it came from. Back held on an info page goes back to
-# where the browsing started (back_to_start), in the player's chapter and cast rows to the
+# where the browsing started (back_to_start), in the player's chapter panel and cast row to the
 # player's controls: without sections of their own Kodi took the global long press there, one
-# row up like a single Back. Kodi knows long presses only in the keyboard
+# step back like a single Back. Kodi knows long presses only in the keyboard
 # section (CEC and MCE remotes send theirs in the remote section). Over the bare video (Kodi's
 # FullscreenVideo section: no OSD, row or info page in front, those keep their sections) Back
 # stops it: leaving the video stops it, Kodi left it running behind the menus. Tab (Fullscreen)
-# still does; chains over the video, the chapter and cast rows and the fullscreen trailer
+# still does; chains over the video, the chapter panel, the cast row and the fullscreen trailer
 # (Back ends it, its page opens again) are dialogs or go by the player's stop. Written whatever
 # the Home key setting.
 BACK_KEYMAP_NAME = '0_skin.nightcity.back.xml'
 BACK_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
-<!-- Written by the Nightcity skin: on info pages and the library grid the keys of PreviousMenu are Back, Back held on an info page goes back to where the browsing started, in the player's chapter and cast rows to the player's controls; OK held on Home's movies or shows tab opens all of them; Back over the bare video stops it. -->
+<!-- Written by the Nightcity skin: on info pages and the library grid the keys of PreviousMenu are Back, Back held on an info page goes back to where the browsing started, in the player's chapter panel and cast row to the player's controls; OK held on Home's movies or shows tab opens all of them; Back over the bare video stops it. -->
 <keymap>
   <movieinformation>
     <keyboard>
@@ -1690,7 +1690,7 @@ BACK_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
       <rightclick>Back</rightclick>
     </mouse>
   </movieinformation>
-  <!-- the player's chapter and cast rows: Back held goes to the player's controls (back_to_start) -->
+  <!-- the player's chapter panel and cast row: Back held goes to the player's controls (back_to_start) -->
   <videobookmarks>
     <keyboard>
       <backspace mod="longpress">NotifyAll(nightcity,back_to_start)</backspace>

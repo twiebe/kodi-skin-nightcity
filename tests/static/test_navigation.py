@@ -17,7 +17,7 @@ EXPECTED = {
     'FileBrowser.xml': {'451'},  # thumbs view, not used
     'DialogVideoInfo.xml': {'5901', '9006', '9098', '9099'},  # off-screen library copy, invisible TMDb menu list of a TMDb title (Timers.xml focuses 9006), stand-in on the way back in a chain, keys of the trailer (9008 focuses it)
     'Custom_1141_OSDCast.xml': {'6599'},  # off-screen biography of the focused person
-    'VideoOSD.xml': {'699'},  # off-screen stand-in that opens the chapter row after a chain
+    'VideoOSD.xml': {'699'},  # off-screen stand-in that opens the cast row after a chain
 }
 
 

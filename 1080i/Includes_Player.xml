@@ -185,7 +185,7 @@
          neighbouring buttons of the row (`left`, `right`). -->
     <!-- What plays, above the seek line: poster, kicker, title, badges, ratings and the plot.
          The text column ends left of the OSD track panels. -->
-    <!-- Card of the chapter row (VideoOSDBookmarks.xml): the chapter's thumbnail, its name and
+    <!-- Card of the chapter panel (VideoOSDBookmarks.xml): the chapter's thumbnail, its name and
          start time; a bookmark shows its own thumbnail. For Jellyfin streams the server's
          chapter images, else Kodi's own (ChapterThumb). -->
     <include name="ChapterCard">
@@ -230,7 +230,7 @@
             <control type="group">
                 <left>64</left>
                 <top>572</top>
-                <!-- the chapter and cast rows of the OSD take this space -->
+                <!-- the OSD's chapter panel and cast row take this space -->
                 <visible>!Window.IsActive(videobookmarks) + !Window.IsActive(1141)</visible>
                 <animation effect="slide" end="0,-130" time="150" condition="Window.IsVisible(videoosd)">Conditional</animation>
                 <!-- second step, after the controls and the seek line -->
@@ -318,8 +318,8 @@
                 <width>600</width>
                 <height>488</height>
                 <visible>Control.HasFocus($PARAM[button]) | Control.HasFocus($PARAM[id])</visible>
-                <!-- the chapter and cast rows open over the OSD, which keeps its focus on the
-                     button: they replace the controls, the panel goes with them -->
+                <!-- the chapter panel and the cast row open over the OSD, which keeps its focus
+                     on the button: the panel goes with them -->
                 <visible>!Window.IsActive(videobookmarks) + !Window.IsActive(1141)</visible>
                 <visible>!String.IsEmpty(Window(Home).Property(nc.$PARAM[prefix].rows))</visible>
                 <animation effect="fade" time="120">VisibleChange</animation>
@@ -628,8 +628,8 @@
                 <width>600</width>
                 <height>436</height>
                 <visible>Control.HasFocus($PARAM[button]) | Control.HasFocus($PARAM[id])</visible>
-                <!-- the chapter and cast rows open over the OSD, which keeps its focus on the
-                     button: they replace the controls, the panel goes with them -->
+                <!-- the chapter panel and the cast row open over the OSD, which keeps its focus
+                     on the button: the panel goes with them -->
                 <visible>!Window.IsActive(videobookmarks) + !Window.IsActive(1141)</visible>
                 <animation effect="fade" time="120">VisibleChange</animation>
                 <!-- without a bitrate one row less, the panel keeps its bottom edge -->

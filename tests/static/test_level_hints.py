@@ -23,7 +23,6 @@ from navigation import load
 
 BOTTOM, TOP, PATH = '1030', '140', '30'
 CAST = 'VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)'
-CHAPTERS = '$VAR[PlayerChaptersLevel]'
 CONTROLS = '$LOCALIZE[31478]'
 KEYS = ('↑', '↓', '←', '→', '⏎', '↑↓', '←→')
 GLYPHS = re.compile('[↑↓←→⏎]')
@@ -290,35 +289,32 @@ def test_visualisation_hint():
 
 
 def test_osd_hint():
-    """The controls: Down from the bar, their bottom, opens the chapter row; shown on the whole
-    of the controls (a panel above a button too), hidden while a lower level is up."""
+    """The controls: Down from the bar, their bottom, opens the cast row of a library title; shown
+    on the whole of the controls (a panel above a button and the chapter panel too), hidden
+    while the cast row is up."""
     key, label, top, visible = _hint('VideoOSD.xml', '690')
-    assert (key, label, top) == ('↓', CHAPTERS, BOTTOM)
-    assert visible == '!Window.IsActive(videobookmarks) + !Window.IsActive(1141)'
+    assert (key, label, top) == ('↓', '$LOCALIZE[31124]', BOTTOM)
+    assert visible == '!Window.IsActive(1141) + [{}]'.format(CAST)
     assert '691' not in _controls('VideoOSD.xml')  # no hint of the panels' own
     controls = _controls('VideoOSD.xml')
     for row in ('600', '620'):
-        assert controls[row].findtext('ondown') == 'ActivateWindow(videobookmarks)', row
+        assert _actions(controls[row], 'ondown') == [(CAST, 'ActivateWindow(1141)')], row
 
 
-def test_chapter_row_hints():
-    """The chapter row: Down opens the cast row (library movies and episodes only), Up goes back
-    to the controls."""
+def test_chapter_panel_has_no_hints_of_its_own():
+    """The chapter panel is a panel above a button of the controls: their hints stay, it has
+    none of its own. Down from the list closes it onto its button, Up from the buttons does
+    nothing."""
     controls = _controls('VideoOSDBookmarks.xml')
-    key, label, top, visible = _hint('VideoOSDBookmarks.xml', '91')
-    assert (key, label, top) == ('↓', '$LOCALIZE[31124]', BOTTOM)
-    assert visible == '!Window.IsActive(1141) + [{}]'.format(CAST)
-    assert (CAST, 'ActivateWindow(1141)') in _actions(controls['11'], 'ondown')
-    key, label, top, visible = _hint('VideoOSDBookmarks.xml', '92')
-    assert (key, label, top) == ('↑', CONTROLS, TOP)
-    assert visible == '!Window.IsActive(1141)'
-    assert _actions(controls['9000'], 'onup') == [('', 'Dialog.Close(videobookmarks)')]
+    assert not [i for i in parse(ROOT / '1080i' / 'VideoOSDBookmarks.xml').iter('include') if i.get('content') == 'LevelHint']
+    assert _actions(controls['11'], 'ondown') == [('', 'Dialog.Close(videobookmarks)')]
+    assert _actions(controls['9000'], 'onup') == [('', 'noop')]
 
 
 def test_cast_row_hint():
-    """The cast row: Up from the tabs goes back to the chapter row; nothing lies below."""
+    """The cast row: Up from the tabs goes back to the controls; nothing lies below."""
     key, label, top, visible = _hint('Custom_1141_OSDCast.xml', '6590')
-    assert (key, label, top, visible) == ('↑', CHAPTERS, TOP, 'true')
+    assert (key, label, top, visible) == ('↑', CONTROLS, TOP, 'true')
     controls = _controls('Custom_1141_OSDCast.xml')
     assert controls['6520'].findtext('onup') == 'Dialog.Close(1141)'
     assert controls['6501'].findtext('ondown') == 'noop'
