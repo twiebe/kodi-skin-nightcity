@@ -21,12 +21,24 @@
     <animation effect="fade" time="150">WindowOpen</animation>
     <animation effect="fade" time="150">WindowClose</animation>
     <controls>
+        <!-- the video dimmed as behind an info page over it (InfoBackground, video_scrim): the
+             names, roles and biography read over a bright picture. Down to the row's bottom,
+             then fading out above the seek line: the seek bar dialog lies under this one, its
+             line and times would be dimmed with the video -->
+        <control type="image">
+            <description>video scrim</description>
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>830</height>
+            <texture colordiffuse="video_scrim">ui/white.png</texture>
+        </control>
         <control type="image">
             <left>0</left>
-            <top>200</top>
+            <top>830</top>
             <width>1920</width>
-            <height>880</height>
-            <texture colordiffuse="scrim">ui/fade_b.png</texture>
+            <height>40</height>
+            <texture colordiffuse="video_scrim">ui/fade_t.png</texture>
         </control>
 
         <!-- the focused person -->

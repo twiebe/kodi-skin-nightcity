@@ -644,3 +644,15 @@ def test_a_page_on_its_way_back_parks_the_focus_out_of_sight():
     parks = [(o.get('condition'), o.text) for o in parse(SKIN / 'DialogVideoInfo.xml').iter('onload')]
     assert (RUNNING + ' + String.IsEqual(Window(Home).Property(TMDbHelper.Position),Window(Home).Property(nc.ret.top))',
             'SetFocus(9098)') in parks
+
+
+def test_cast_row_dims_the_video_as_an_info_page():
+    """Names, roles and the biography read over a bright picture: the video under the scrim of an
+    info page over the video (video_scrim), not a gradient from the middle down. It ends above
+    the seek line (the seek bar dialog lies under the row) with a short fade."""
+    scrim, fade = _cast().findall('controls/control')[:2]
+    assert scrim.get('type') == fade.get('type') == 'image'
+    assert [scrim.findtext(k) for k in ('left', 'top', 'width', 'height')] == ['0', '0', '1920', '830']
+    assert [fade.findtext(k) for k in ('left', 'top', 'width', 'height')] == ['0', '830', '1920', '40']
+    assert scrim.find('texture').get('colordiffuse') == fade.find('texture').get('colordiffuse') == 'video_scrim'
+    assert fade.findtext('texture') == 'ui/fade_t.png'
