@@ -130,6 +130,11 @@
     <variable name="HintEpisodeDown">
         <value condition="Control.IsVisible(5403) | Control.IsVisible(5401)">   [COLOR state_text]↓[/COLOR] $LOCALIZE[31124]</value>
     </variable>
+    <!-- In the head of the OSD's subtitle and audio panels: OK on their button leads to the full
+         settings (VideoOSD.xml), the place dim beside the panel's name -->
+    <variable name="HintTrackSettings">
+        <value>   [COLOR state_text]⏎[/COLOR] [COLOR text_dim]$LOCALIZE[31139][/COLOR]</value>
+    </variable>
     <!-- Skin settings: a grabbed slot is dark blue; the keys of the rows of the page categories
          (ids 211 to 428) show under the description -->
     <variable name="HomePagesFocusColor">

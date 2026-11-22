@@ -371,9 +371,9 @@
                     <include>DialogFrame</include>
                 </control>
                 <!-- the head names where OK on the button leads: the full settings at once
-                     (VideoOSD.xml), Up goes into this list. The key as a glyph, as in LevelHint -->
+                     (VideoOSD.xml), Up goes into this list -->
                 <include content="Kicker">
-                    <param name="label" value="$PARAM[heading]   [COLOR state_text]⏎[/COLOR] [COLOR text_dim]$LOCALIZE[31139][/COLOR]"/>
+                    <param name="label" value="$PARAM[heading]$VAR[HintTrackSettings]"/>
                     <param name="left" value="24"/>
                     <param name="top" value="18"/>
                     <param name="width" value="552"/>

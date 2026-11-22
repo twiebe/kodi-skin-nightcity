@@ -141,8 +141,8 @@ def test_track_panel_heads_name_the_ok_key(heading):
     """The head names where OK on the button leads, "Subtitles   ⏎ all settings": the key as a
     glyph like the level hints (DESIGN.md), the place dim."""
     labels = [c.findtext('label') or '' for c in load(OSD).iter('control') if c.get('type') == 'label']
-    assert any(label.startswith('[UPPERCASE]' + heading) and label.endswith('   [COLOR state_text]⏎[/COLOR] [COLOR text_dim]$LOCALIZE[31139][/COLOR][/UPPERCASE]')
-               for label in labels), heading
+    assert '[UPPERCASE]{}$VAR[HintTrackSettings][/UPPERCASE]'.format(heading) in labels, heading
+    assert _variable('HintTrackSettings') == [(None, '   [COLOR state_text]⏎[/COLOR] [COLOR text_dim]$LOCALIZE[31139][/COLOR]')]
 
 
 def test_video_button_shows_a_panel():
