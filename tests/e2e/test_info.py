@@ -11,6 +11,7 @@ import time
 import pytest
 
 from conftest import action, builtin, cond, info, kdev, rpc, screenshot, seed, wait_for
+from test_playback import playing  # noqa: F401 (fixture)
 
 pytestmark = pytest.mark.e2e
 
@@ -329,3 +330,23 @@ def test_spotlight_play_starts_movie(home):
         wait_for('Player.HasVideo', timeout=20)
     finally:
         stop()
+
+
+def test_info_page_over_the_video_shows_it_dimmed(playing):
+    """An info page over a playing video shows the video under the scrim (InfoBackground,
+    video_scrim) instead of the skin's background: the picture moves behind the page."""
+    from PIL import Image
+    from test_playback import MOVIE_ID
+    builtin('ActivateWindow(movieinformation,videodb://movies/titles/{}/,return)'.format(MOVIE_ID))
+    wait_for('Window.IsActive(movieinformation) + Player.HasVideo')
+    time.sleep(2)
+    first = screenshot('info-over-video-1')
+    time.sleep(2)
+    second = screenshot('info-over-video-2')
+    # the clip's moving band and squares show through, dimmed, on the right below the page's
+    # text: a faint change between two shots, none over the skin's still background
+    one, two = (Image.open(p).convert('L') for p in (first, second))
+    box = [int(v * one.width / 1920) for v in (1300, 400, 1900, 1000)]
+    moved = sum(1 for a, b in zip(one.crop(box).tobytes(), two.crop(box).tobytes()) if abs(a - b) > 6)
+    assert moved > 200, moved
+    action('back', delay=1)

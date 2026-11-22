@@ -56,6 +56,8 @@ def test_home_key_in_the_player(home):
         wait_for('Window.IsActive(fullscreenvideo)')
         press_home()
         wait_for(ON_HOME_PAGE, timeout=5)
+        # leaving the video stops it (Custom_1160_HomeKey.xml)
+        wait_for('!Player.HasVideo', timeout=5)
     finally:
         _stop()
 

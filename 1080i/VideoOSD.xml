@@ -192,8 +192,7 @@
         </include>
         <!-- back from a chain: its focus actions wait until the OSD is up, then the cast row
              opens (onload above, once: nc.osd.rows), whose lists wait for TMDb Helper's manager
-             to end (OSDCreditsRow). When the row closes the focus comes back here and moves on
-             to the bar. -->
+             to end (OSDCreditsRow). The bar takes the focus before, so the row closes onto it. -->
         <control type="button" id="699">
             <left>-100</left>
             <top>-100</top>
@@ -202,6 +201,9 @@
             <texturefocus/>
             <texturenofocus/>
             <onfocus condition="!String.IsEmpty(Window(Home).Property(nc.osd.rows))">ClearProperty(nc.osd.rows,home)</onfocus>
+            <!-- the bar first, while the OSD is still the topmost dialog: closing the cast row
+                 does not focus this stand-in again, the focus would stay on it out of sight -->
+            <onfocus condition="!String.IsEmpty(Window(Home).Property(nc.osd.rows))">SetFocus(602)</onfocus>
             <onfocus condition="!String.IsEmpty(Window(Home).Property(nc.osd.rows))">ActivateWindow(1141)</onfocus>
             <onfocus condition="String.IsEmpty(Window(Home).Property(nc.osd.rows))">SetFocus(602)</onfocus>
             <onup>602</onup>

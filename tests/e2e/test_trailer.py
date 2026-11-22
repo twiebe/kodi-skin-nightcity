@@ -120,3 +120,19 @@ def test_trailer_plays_in_the_player_when_the_refresh_rate_follows_the_video(tra
     _back_on_the_button(timeout=20)
     assert info('ListItem.DBID')['ListItem.DBID'] == str(trailer)
     _settle()
+
+
+def test_back_on_the_trailer_in_the_player_stops_it(trailer, refresh_rate_follows):
+    """Back over the trailer in the player stops it (BACK_KEYMAP fullscreenvideo), and the page
+    opens again on the trailer button, as at the trailer's end."""
+    builtin('NotifyAll(nightcity,home_keymap)')
+    time.sleep(1)
+    _open(trailer)
+    action('select', delay=0)
+    wait_for('Player.HasVideo + Window.IsActive(fullscreenvideo) + !Window.IsActive(movieinformation)', timeout=20)
+    time.sleep(1)
+    rpc('Input.ButtonEvent', {'button': 'backspace', 'keymap': 'KB'})
+    wait_for('!Player.HasMedia', timeout=10)
+    _back_on_the_button(timeout=20)
+    assert info('ListItem.DBID')['ListItem.DBID'] == str(trailer)
+    _settle()

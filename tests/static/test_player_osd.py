@@ -288,8 +288,8 @@ def test_down_from_the_controls_opens_the_cast_row():
 def test_back_from_a_chain_opens_the_cast_row():
     """A chain started from the player's cast row ends on the OSD with the cast row up again
     (VideoFullScreen.xml): a stand-in takes the focus and, queued after the OSD is up, opens
-    the row once (nc.osd.rows); its lists wait for TMDb Helper's manager (OSDCreditsRow). When
-    the row closes the focus comes back to the stand-in and moves on to the bar."""
+    the row once (nc.osd.rows); its lists wait for TMDb Helper's manager (OSDCreditsRow). The
+    bar takes the focus before the row opens, so the row closes onto it."""
     root = load(OSD)
     chain = '!String.IsEmpty(Window(Home).Property(nc.osd.chain))'
     onload = [(o.get('condition') or '', o.text) for o in root.findall('onload')]
@@ -299,6 +299,8 @@ def test_back_from_a_chain_opens_the_cast_row():
     stand_in = _controls(OSD)['699']
     assert [(o.get('condition'), o.text) for o in stand_in.findall('onfocus')] == [
         ('!String.IsEmpty({})'.format(rows), 'ClearProperty(nc.osd.rows,home)'),
+        # the bar first: the cast row closes onto it, not onto the stand-in out of sight
+        ('!String.IsEmpty({})'.format(rows), 'SetFocus(602)'),
         ('!String.IsEmpty({})'.format(rows), 'ActivateWindow(1141)'),
         ('String.IsEmpty({})'.format(rows), 'SetFocus(602)')]
     for move in ('onup', 'ondown', 'onleft', 'onright'):

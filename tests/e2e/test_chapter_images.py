@@ -75,7 +75,9 @@ def _play(path):
 
 
 def _chapter_row():
-    action('down')
+    builtin('SetFocus(608)')
+    wait_for('Control.HasFocus(608)')
+    action('up')
     wait_for('Window.IsActive(videobookmarks)')
     wait_for('Integer.IsEqual(Container(11).NumItems,3)')
     wait_for('Control.HasFocus(11)')
