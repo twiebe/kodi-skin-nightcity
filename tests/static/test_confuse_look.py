@@ -467,7 +467,9 @@ def test_card_art_is_round_in_both_states():
 
 def test_fullscreen_alpha_budget(confuse_root):
     """After resolving, at most two full screen images with alpha over the ground per window. All the
-    backdrops of a window count as one: they are for different pages or titles, one shows at a time."""
+    backdrops of a window count as one: they are for different pages or titles, one shows at a time. The
+    scrim over a playing video (InfoBackground) is such a backdrop too: it replaces the page's ground and
+    fanart."""
     palette = colours(confuse_root)
     for name, window in windows_expanded(confuse_root):
         layers = 0
@@ -478,7 +480,7 @@ def test_fullscreen_alpha_budget(confuse_root):
             texture = image.find('texture')
             if texture is None:
                 continue
-            if image.findtext('description') == 'fanart backdrop':
+            if image.findtext('description') in ('fanart backdrop', 'video scrim'):
                 fanart = True
                 continue
             colour = palette.get(texture.get('colordiffuse'), 'FFFFFFFF')

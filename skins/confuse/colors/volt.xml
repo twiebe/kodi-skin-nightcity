@@ -28,6 +28,7 @@
     <color name="warn">FFE8C468</color>
     <color name="error">FFF0708A</color>
     <color name="scrim">F50A0C0B</color>
+    <color name="video_scrim">D80A0C0B</color>
     <color name="text_chip">FFDDE2DA</color>
     <color name="focus_text_dim">FF3F4A1A</color>
     <color name="disabled">FF8B928A</color>
