@@ -1216,9 +1216,29 @@ def trailer_state(wanted, has_video, info_open, started, seconds):
     return 'wait'
 
 
-def play_windowed(path):
-    """PlayMedia without the switch to the player (,1), from the start."""
-    return 'PlayMedia("{}",1,noresume)'.format(path.replace('\\', '\\\\').replace('"', '\\"'))
+def play_windowed(path, windowed=True):
+    """PlayMedia without the switch to the player (,1), from the start. windowed=False plays it
+    in the player window."""
+    return 'PlayMedia("{}"{},noresume)'.format(path.replace('\\', '\\\\').replace('"', '\\"'),
+                                               ',1' if windowed else '')
+
+
+def trailer_full_screen(adjust_refresh_rate):
+    """Whether the trailer plays in the player window: Kodi gives the display the video's refresh
+    rate only there (CRenderManager::UpdateResolution), over the page a 24p trailer judders at the
+    menu's 60 Hz. So when the refresh rate follows the video (videoplayer.adjustrefreshrate not
+    off) it plays as a movie does, else over its page."""
+    return adjust_refresh_rate not in (None, 0)
+
+
+def trailer_page(dbid, tmdb_id):
+    """The page to open again after a trailer in full screen, which closed it: ('movie', DBID) of
+    a library movie, ('tmdb', id) of a TMDb title, None without either."""
+    if dbid.isdigit() and int(dbid) > 0:
+        return 'movie', dbid
+    if tmdb_id.isdigit():
+        return 'tmdb', tmdb_id
+    return None
 
 
 def trailer():
@@ -1227,13 +1247,20 @@ def trailer():
     the keys (9099), so the page and a TMDb chain under it stay. The button has set nc.trailer
     and moved the focus to 9099 already. Once the trailer is over the focus goes back to the
     button. Never over a video that plays: it would end it. Without the add-on the trailer
-    needs it offers that instead (trailer_addon_builtin)."""
+    needs it offers that instead (trailer_addon_builtin). With the refresh rate following the
+    video it plays in the player window instead (trailer_full_screen)."""
     import xbmc
     home = _home()
     path = xbmc.getInfoLabel('ListItem.Trailer')
     offer = trailer_addon_builtin(path, xbmc.getCondVisibility('System.HasAddon({})'.format(YOUTUBE)),
                                   xbmc.getCondVisibility('System.AddonIsEnabled({})'.format(YOUTUBE)))
     played = bool(path) and not offer and not xbmc.getCondVisibility('Player.HasVideo')
+    if played and trailer_full_screen(_setting('videoplayer.adjustrefreshrate')):
+        home.clearProperty('nc.trailer')
+        home.clearProperty('nc.trailer.lists')
+        _focus('SetFocus(9008)')
+        _trailer_full_screen(path)
+        return
     started, seconds = False, 0.0
     try:
         if offer:
@@ -1256,6 +1283,46 @@ def trailer():
         _trailer_lists_rest()
     finally:
         home.clearProperty('nc.trailer.lists')
+
+
+def _setting(name):
+    """A Kodi setting's value, None when Kodi does not know it."""
+    try:
+        return _rpc('Settings.GetSettingValue', setting=name)['value']
+    except RuntimeError:
+        return None
+
+
+def _trailer_full_screen(path):
+    """The trailer in the player window (trailer_full_screen), which the info page has to leave:
+    the page closes once the trailer plays and opens again once it is over, a library movie's
+    own, a TMDb title's in a new chain."""
+    import xbmc
+    page = trailer_page(xbmc.getInfoLabel('ListItem.DBID'),
+                        xbmc.getInfoLabel('ListItem.UniqueID(tmdb)') or xbmc.getInfoLabel('ListItem.Property(tmdb_id)'))
+    xbmc.executebuiltin(play_windowed(path, windowed=False))
+    if not _wait('Player.HasVideo', TRAILER_START):
+        return
+    # Kodi closes the page itself only when it is the topmost dialog, which it often is not
+    xbmc.executebuiltin('Dialog.Close(movieinformation,true)', True)
+    xbmc.executebuiltin('ActivateWindow(fullscreenvideo)')
+    monitor = _monitor()
+    while xbmc.getCondVisibility('Player.HasMedia'):
+        if monitor.waitForAbort(0.5):
+            return
+    if not page or not _wait('!Window.IsActive(fullscreenvideo) + !Window.IsActive(movieinformation)', 5.0):
+        return
+    kind, ident = page
+    if kind == 'tmdb' and not xbmc.getCondVisibility(CHAIN_FREE):
+        return
+    # the page opens on the trailer button (its onload), as after a trailer over the page; set
+    # here, as opening a library page holds this script until the page closes again
+    _home().setProperty('nc.trailer.back', '1')
+    if kind == 'movie':
+        info('movie', ident)
+    else:
+        xbmc.executebuiltin('RunScript(plugin.video.themoviedb.helper,add_tmdb={},tmdb_type=movie,call_auto=1190)'.format(ident))
+        xbmc.executebuiltin('SetProperty(nc.chain.claim,1,home)')
 
 
 TRAILER_RELOAD = 0.5  # s for Kodi to start reloading the page's lists after the stop
