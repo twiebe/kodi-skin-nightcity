@@ -583,17 +583,16 @@
         </control>
     </include>
 
-    <!-- The text of a button. tools/build.py strips [UPPERCASE]
-         from the assembled skin, so a text shows as written; it reads the tag first, to keep digits
-         passed as a label literal. [CAPITALIZE] gives a fixed label its capitals. It stays off
-         what can be a film's title, whose small words stay small. -->
+    <!-- The text of a button. Its font (font_caps_pill, Font.xml) gives each word its capital, as
+         [CAPITALIZE] did, now also to a label Kodi sets at run time (the add-on dialog's buttons). It
+         stays off what can be a film's title, whose small words stay small. -->
     <include name="LookPillText">
         <param name="label"/>
         <param name="textcolor"/>
         <param name="textoffsetx"/>
         <definition>
-            <label>[CAPITALIZE][UPPERCASE]$PARAM[label][/UPPERCASE][/CAPITALIZE]</label>
-            <font>font_caps</font>
+            <label>$PARAM[label]</label>
+            <font>font_caps_pill</font>
             <textoffsetx>$PARAM[textoffsetx]</textoffsetx>
             <align>center</align>
             <aligny>center</aligny>

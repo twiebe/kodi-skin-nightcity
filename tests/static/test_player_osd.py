@@ -24,9 +24,9 @@ def test_skip_forward_beside_stop():
     row = [c.get('id') for c in controls['600'].findall('control')]
     assert row[-2:] == ['604', '611']
     forward = controls['611']
-    assert forward.findtext('label') == '[UPPERCASE]⏭[/UPPERCASE]'
+    assert forward.findtext('label') == '⏭'
     assert forward.findtext('onclick') == 'PlayerControl(Next)'
-    assert controls['601'].findtext('label') == '[UPPERCASE]⏮[/UPPERCASE]'
+    assert controls['601'].findtext('label') == '⏮'
 
 
 @pytest.mark.parametrize('skin, row', [({}, ['605', '606', '607', '608']),
@@ -228,7 +228,7 @@ def test_chapters_button_opens_the_chapter_panel():
     osd = _controls(OSD)
     assert [c.get('id') for c in osd['620'].findall('control')] == ['605', '606', '607', '608', '609']
     button = osd['608']
-    assert button.findtext('label') == '[UPPERCASE]$LOCALIZE[31140][/UPPERCASE]'
+    assert button.findtext('label') == '$LOCALIZE[31140]'
     assert button.findtext('onclick') == 'ActivateWindow(videobookmarks)'
     assert button.findtext('onup') == 'ActivateWindow(videobookmarks)'
     assert [v.text for v in button.findall('visible')] in ([], ['true'])

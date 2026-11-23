@@ -253,6 +253,8 @@ browser.
 - A button Kodi disables (the add-on dialog's Configure, Uninstall, Dependencies where the add-on
   has none) greys its label out to `text_mute`; the focus skips it. A button that can be chosen
   never shows in `text_mute`, so the two tell apart at a glance (`PillButton`, `LookPillDisabled`).
+- A pill's text gets its case from its font (`font_caps_pill`, capitals in Nightcity, each word
+  capitalised in Confuse), so a label Kodi sets at run time matches the skin's own.
 - The static test `tests/static/test_colors.py` holds the skin to this table.
 - **A progress line says where you are** in something that plays or was watched: under an
   episode or a card. It stays on its item when the cursor moves away. The music queue has none:

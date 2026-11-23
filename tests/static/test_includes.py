@@ -982,3 +982,35 @@ def test_addon_dialog_auto_update_greys_out():
     """The add-on dialog's auto-update switch (13), which Kodi disables where it does not apply."""
     radio = next(el for el in parse(ROOT / '1080i' / 'DialogAddonInfo.xml').iter('control') if el.get('id') == '13')
     assert radio.findtext('disabledcolor') == 'text_mute'
+
+
+@pytest.mark.parametrize('font, style', [(ROOT / '1080i' / 'Font.xml', 'uppercase'),
+                                         (ROOT / 'skins' / 'confuse' / '1080i' / 'Font.xml', 'capitalize')])
+def test_pill_font_sets_the_case(font, style):
+    """Kodi gives a pill's text its case by the font, so a label Kodi sets at run time (the add-on
+    dialog's Use, Uninstall) gets it too: font_caps in each fontset, with the style."""
+    for fontset in parse(font).iter('fontset'):
+        fonts = {f.findtext('name'): f for f in fontset.iter('font')}
+        caps, pill = fonts['font_caps'], fonts['font_caps_pill']
+        assert (pill.findtext('filename'), pill.findtext('size')) == (caps.findtext('filename'), caps.findtext('size'))
+        assert pill.findtext('style') == style
+
+
+@pytest.mark.parametrize('look', [ROOT / '1080i' / 'Includes_Look.xml', ROOT / 'skins' / 'confuse' / '1080i' / 'Includes_Look.xml'])
+def test_pill_text_case_by_its_font(look):
+    """No [UPPERCASE] or [CAPITALIZE] around a pill's label: its font does it."""
+    text = next(el for el in parse(look).iter('include') if el.get('name') == 'LookPillText')
+    assert text.findtext('definition/font') == 'font_caps_pill'
+    assert text.findtext('definition/label') == '$PARAM[label]'
+
+
+def test_no_pill_label_of_bare_digits():
+    """A label of digits only is a string id to Kodi: the number pad passes $NUMBER[n]."""
+    bad = []
+    for p in layout_files():
+        for el in parse(p).iter('include'):
+            if el.get('content') in ('Button', 'PillButton'):
+                for param in el.iter('param'):
+                    if param.get('name') == 'label' and (param.get('value') or '').strip().isdigit():
+                        bad.append((p.name, param.get('value')))
+    assert bad == []

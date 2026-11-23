@@ -45,6 +45,14 @@
             <filename>ConfuseUI-SemiBold.ttf</filename>
             <size>26</size>
         </font>
+        <!-- the text of a pill: font_caps with each word capitalised by Kodi, so a label Kodi sets at
+             run time (the add-on dialog's buttons) reads like the skin's own (LookPillText) -->
+        <font>
+            <name>font_caps_pill</name>
+            <filename>ConfuseUI-SemiBold.ttf</filename>
+            <size>26</size>
+            <style>capitalize</style>
+        </font>
         <!-- Nightcity underlines a text with a font of bars; Confuse draws its lines as textures, so
              this is the text font, kept for the name -->
         <font>
@@ -148,6 +156,14 @@
             <name>font_caps</name>
             <filename>arial.ttf</filename>
             <size>25</size>
+        </font>
+        <!-- the text of a pill: font_caps with each word capitalised by Kodi, so a label Kodi sets at
+             run time (the add-on dialog's buttons) reads like the skin's own (LookPillText) -->
+        <font>
+            <name>font_caps_pill</name>
+            <filename>arial.ttf</filename>
+            <size>25</size>
+            <style>capitalize</style>
         </font>
         <font>
             <name>font_caps_line</name>

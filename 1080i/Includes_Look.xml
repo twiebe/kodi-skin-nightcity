@@ -509,14 +509,17 @@
         </control>
     </include>
 
-    <!-- The text of a button. The case lives here: tools/build.py strips [UPPERCASE] from an overlay -->
+    <!-- The text of a button. The case lives in its font (font_caps_pill, Font.xml): Kodi draws it in
+         capitals, also a label Kodi sets at run time (the add-on dialog's Use, Uninstall), which an
+         [UPPERCASE] around $PARAM[label] never reached. Without that tag a label of digits only is a
+         string id to Kodi: the number pad passes $NUMBER[n] -->
     <include name="LookPillText">
         <param name="label"/>
         <param name="textcolor"/>
         <param name="textoffsetx"/>
         <definition>
-            <label>[UPPERCASE]$PARAM[label][/UPPERCASE]</label>
-            <font>font_caps</font>
+            <label>$PARAM[label]</label>
+            <font>font_caps_pill</font>
             <textoffsetx>$PARAM[textoffsetx]</textoffsetx>
             <align>center</align>
             <aligny>center</aligny>
