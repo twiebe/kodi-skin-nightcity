@@ -977,6 +977,10 @@
         <value condition="String.IsEqual(ListItem.Property(tmdb_type),person)">$LOCALIZE[31474]</value>
         <value>$LOCALIZE[31473]</value>
     </variable>
+    <!-- Kodi 22 keeps a tag line for TV shows: in italics over the plot of a show's page -->
+    <variable name="InfoShowTagline">
+        <value condition="$EXP[KodiPiers] + String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Tagline)">[I]$INFO[ListItem.Tagline][/I][CR]</value>
+    </variable>
     <variable name="InfoPlayLabel">
         <value condition="String.IsEqual(ListItem.DBType,episode) + Container(5100).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(5100).ListItem.PercentPlayed]%</value>
         <value condition="String.IsEqual(ListItem.DBType,episode)">▶ $LOCALIZE[31010]</value>

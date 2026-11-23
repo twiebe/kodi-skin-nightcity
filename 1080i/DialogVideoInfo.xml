@@ -153,12 +153,24 @@
                 <param name="audiolabel" value="$VAR[InfoEpisodeAudio]"/>
                 <param name="ratingid" value="9043"/>
                 <param name="plotid" value="9051"/>
+                <param name="plotvisible" value="!$EXP[InfoSeasonPlot]"/>
                 <!-- up to the cast on the right -->
                 <param name="ratingswidth" value="1300"/>
                 <param name="shift" value="-330"/>
                 <param name="titlewidth" value="1250"/>
                 <param name="plotwidth" value="1176"/>
             </include>
+            <!-- Kodi 22: on the season tabs the season's plot, where the episode's stands -->
+            <control type="textbox" id="9053">
+                <left>64</left>
+                <top>367</top>
+                <width>1176</width>
+                <height>116</height>
+                <font>font_body</font>
+                <textcolor>text_dim</textcolor>
+                <label>$INFO[Container(5200).ListItem.Plot]</label>
+                <visible>$EXP[InfoSeasonPlot]</visible>
+            </control>
             <include content="ProgressLine">
                 <param name="left" value="64"/>
                 <param name="top" value="569"/>
@@ -210,6 +222,7 @@
                 <param name="audiolabel" value="$VAR[ItemAudio]"/>
                 <param name="ratingid" value="9046"/>
                 <param name="plotid" value="9050"/>
+                <param name="plotprefix" value="$VAR[InfoShowTagline]"/>
                 <!-- up to the details on the right -->
                 <param name="ratingswidth" value="990"/>
                 <param name="titlewidth" value="960"/>

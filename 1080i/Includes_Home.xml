@@ -318,6 +318,10 @@
         <param name="ratingstop" default="325"/>
         <param name="plottop" default="367"/>
         <param name="plotheight" default="116"/>
+        <!-- before the plot (the info page: a show's tag line on Kodi 22) and when it shows (the
+             info page puts a season's plot in its place) -->
+        <param name="plotprefix" default=""/>
+        <param name="plotvisible" default="true"/>
         <param name="posterlook" default="HeroPoster"/>
         <definition>
             <control type="group">
@@ -423,7 +427,8 @@
                     <height>$PARAM[plotheight]</height>
                     <font>font_body</font>
                     <textcolor>text_dim</textcolor>
-                    <label>$INFO[$PARAM[item].Plot]</label>
+                    <label>$PARAM[plotprefix]$INFO[$PARAM[item].Plot]</label>
+                    <visible>$PARAM[plotvisible]</visible>
                 </control>
             </control>
         </definition>

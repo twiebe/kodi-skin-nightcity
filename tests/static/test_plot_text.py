@@ -72,7 +72,9 @@ def test_each_head_names_its_text(info_page, kind):
     box, item, _ = PLOTS[kind]
     textbox = info_page.controls[box]
     assert textbox.get('type') == 'textbox'
-    assert textbox.findtext('label') == '$INFO[{}.Plot]'.format(item)
+    # a show's tag line (Kodi 22) opens the movie or show head's plot
+    prefix = '$VAR[InfoShowTagline]' if kind == 'movie' else ''
+    assert textbox.findtext('label') == prefix + '$INFO[{}.Plot]'.format(item)
 
 
 @pytest.mark.parametrize('text', TEXTS)
