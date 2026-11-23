@@ -62,7 +62,7 @@ python -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
 .venv/bin/python -m pytest tests/e2e -q -m e2e   # needs the kodi-dev environment, see tools/kodidev_setup.py
 ```
 
-The e2e suite runs in parallel on a kodi-dev pool (several environments, each with its own Kodi and Jellyfin, see the kodi-dev README), one pytest-xdist worker per Kodi. The pool copies kodi-dev's `data/` as its template, so run `tools/kodidev_setup.py` before the first `pool up`: it also adds the titles the TMDb tests open. Each test run restarts the pool Kodis, so the skin's startup is the working tree's. `--dist loadfile` keeps each file on one Kodi, some files rely on their test order. `-m "e2e and not slow"` leaves out the tests that take more than 20 s.
+The e2e suite runs in parallel on a kodi-dev pool (several environments, each with its own Kodi and Jellyfin, see the kodi-dev README), one pytest-xdist worker per Kodi. The pool copies kodi-dev's `data/` as its template, so run `tools/kodidev_setup.py` before the first `pool up`: it also adds the titles the TMDb tests open. Each test run restarts the pool Kodis, so the skin's startup is the working tree's. `--dist loadfile` keeps each file on one Kodi, some files rely on their test order. `-m "e2e and not slow"` leaves out the tests that take more than 20 s. A pool of its own (`KDEV_POOL=NAME`) copies the default pool's template; one made from an older kdev seed (no libraries, no music) stops the run at its start with what is missing and how to make it again.
 
 ```
 /workspaces/kodi-dev/kdev pool up --skin "$PWD"   # this checkout in every worker
