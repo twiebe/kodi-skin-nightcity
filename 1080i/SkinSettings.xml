@@ -33,7 +33,7 @@
              settings; while the focus is in that column (DESIGN.md: → names the way into the next column) -->
         <include content="LevelHintRight">
             <param name="id" value="9058"/>
-            <param name="label" value="$LOCALIZE[5]"/>
+            <param name="label" value="$LOCALIZE[31135]"/>
             <param name="visible" value="ControlGroup(9000).HasFocus() + !System.HasActiveModalDialog"/>
             <param name="animate" value="!Player.HasVideo"/>
         </include>

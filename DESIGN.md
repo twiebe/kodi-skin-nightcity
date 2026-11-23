@@ -90,12 +90,15 @@ key, then the level it leads to (`LevelHint` in `Includes_Base.xml`,
     ←→ episode, ↑ season, ↓ cast, OK select;
   - → down the screen's right edge, written top to bottom and centred on it (`LevelHintRight`,
     `LevelHintLeft` mirrored, its ↑ turned to →), in a dialog inside its frame as ←. It names the way into the
-    next column: from the categories of a settings page into their settings (→ settings), on
-    the settings rail and in the skin's select dialogs a list of choices taking the focused one
-    (→ select; not a multi-select, where Right stays). Where it leads out of one column of
-    several (the settings' categories) it shows while the focus is in that column, as the
-    hints that follow the focus do. The alternative tried for dialogs: ← and → at the screen's
-    edges, as on a page;
+    next column with one label everywhere, → select: on the settings rail (the section), from
+    the categories of a settings page, the skin settings or an add-on's settings into their
+    settings, and in the skin's select dialogs a list of choices taking the focused one (not a
+    multi-select, where Right stays). Where it leads out of one column of several (the
+    settings' categories) it shows only while the focus is in that column, as the hints that
+    follow the focus do; in the last column, where Right leads nowhere, there is none. Kodi
+    keeps the chosen category focused while its settings have the focus, so a page of Kodi's
+    rules its settings list (5) out. The alternative tried for dialogs: ← and → at the
+    screen's edges, as on a page;
   - the footers of a settings page (the console's, the skin settings' slots) stay under their
     description.
 - No hint where the level is in sight anyway: Home's top menu over the rows (Up), the queue under
