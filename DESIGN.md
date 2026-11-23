@@ -66,8 +66,9 @@ key, then the level it leads to (`LevelHint` in `Includes_Base.xml`,
   or video has the focus (↓ cast & crew   OK all settings). The console's footer (OK open) does
   not depend on the focus. Home's footer names, while the focus is in the top line, where Down
   leads into the shown page (↓ spotlight, ↓ rows where the spotlight is off, ↓ search for a
-  title, ↓ quick menu from its icon) and on the movies and shows tabs OK all movies or all
-  shows: the tabs act on the page below them.
+  title, ↓ quick menu from its icon) and on the movies, shows and music tabs OK all movies,
+  all shows or all albums, on the quick menu's icon OK settings: the tabs act on the page below
+  them.
 - **Hints that follow the focus stand right of the standing ones**, in footers and headers
   alike: what holds on the whole page first, the shortcut of the focused element after it.
 - **Where a hint stands follows its key**, nothing else:
@@ -184,7 +185,7 @@ wherever Home opens without a page: after startup, on the Home key, and right fr
 next to the clock wrapping round.
 
 The quick menu on Home follows it too: the cursor on the icon next to the clock shows the menu,
-Down or OK go into it, Up from its top comes out onto the icon with the menu still shown, Left
+Down goes into it, OK opens the settings page (Back held there returns to the icon), Up from its top comes out onto the icon with the menu still shown, Left
 or Right off the icon hide it. Back, in the menu or on the icon, closes it: the focus goes back
 to where it came onto the icon from (a settings row, a row of a page, the top menu), or to the
 shown page's own entry. The keys that open the quick menu (Home held, the S key, Kodi's power

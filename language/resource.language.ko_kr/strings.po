@@ -183,6 +183,10 @@ msgctxt "#31102"
 msgid "all shows"
 msgstr "모든 TV 쇼"
 
+msgctxt "#31481"
+msgid "all albums"
+msgstr "모든 앨범"
+
 msgctxt "#31103"
 msgid "in progress"
 msgstr "보는 중"

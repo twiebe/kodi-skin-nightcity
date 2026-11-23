@@ -173,7 +173,7 @@ def test_back_to_the_top_menu(quick, entry, way, inside):
 
 def test_icon_next_to_the_clock(quick):
     """The cursor on the icon shows the menu on Home (no dialog), Left and Right off it hide it,
-    OK goes in."""
+    OK opens the settings page; Back held there returns to the icon."""
     builtin('SetFocus(9104)')
     wait_for('Control.HasFocus(9104) + !' + PANEL)
     action('right')
@@ -190,8 +190,12 @@ def test_icon_next_to_the_clock(quick):
     action('left')
     wait_for('Control.HasFocus(9109)')
     action('select')
-    wait_for('Control.HasFocus(1210) + ' + PANEL)
+    wait_for('Window.IsActive(home) + String.IsEqual(Window(Home).Property(nc.page),system) + '
+             'Control.HasFocus(9601)', timeout=5)
     assert not is_open()
+    time.sleep(0.5)
+    builtin('NotifyAll(nightcity,settings_return:backspace)')  # Back held
+    wait_for('Control.HasFocus(9109) + ' + PANEL, timeout=5)
 
 
 def test_menu_on_home_by_focus(quick):

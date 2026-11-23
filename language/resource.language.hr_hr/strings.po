@@ -183,6 +183,10 @@ msgctxt "#31102"
 msgid "all shows"
 msgstr "sve serije"
 
+msgctxt "#31481"
+msgid "all albums"
+msgstr "svi albumi"
+
 msgctxt "#31103"
 msgid "in progress"
 msgstr "započeto"

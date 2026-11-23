@@ -89,11 +89,14 @@
         <value condition="String.IsEqual(Skin.String(SpotlightSource),off)">$LOCALIZE[31224]</value>
         <value>$LOCALIZE[31100]</value>
     </variable>
-    <!-- right of it, while the movies or shows tab has the focus: OK opens all of them (the
-         library window; DESIGN.md: the hint that follows the focus stands right) -->
+    <!-- right of it, while the movies, shows or music tab has the focus: OK opens all of them
+         (the library window, the music window's albums), on the quick menu's icon the settings
+         (DESIGN.md: the hint that follows the focus stands right) -->
     <variable name="HintHomeOk">
         <value condition="Control.HasFocus(9102)">   [COLOR state_text]OK[/COLOR] $LOCALIZE[31101]</value>
         <value condition="Control.HasFocus(9103)">   [COLOR state_text]OK[/COLOR] $LOCALIZE[31102]</value>
+        <value condition="Control.HasFocus(9107)">   [COLOR state_text]OK[/COLOR] $LOCALIZE[31481]</value>
+        <value condition="Control.HasFocus(9109)">   [COLOR state_text]OK[/COLOR] $LOCALIZE[5]</value>
     </variable>
     <!-- the titles of the library grid (Custom_1110_Library.xml), its filter and details dialogs -->
     <variable name="HintLibrary">

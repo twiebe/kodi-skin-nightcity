@@ -183,6 +183,10 @@ msgctxt "#31102"
 msgid "all shows"
 msgstr "所有影集"
 
+msgctxt "#31481"
+msgid "all albums"
+msgstr "所有專輯"
+
 msgctxt "#31103"
 msgid "in progress"
 msgstr "觀看中"

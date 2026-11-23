@@ -539,13 +539,16 @@ def test_home_footer_names_where_down_leads():
         'spotlight', 'Rows', 'search for a title', 'quick menu')
 
 
-def test_home_footer_names_ok_on_movies_and_shows():
+def test_home_footer_names_ok_on_the_tabs_and_the_icon():
     """Right of Down, while its tab has the focus (DESIGN.md: the hint that follows the focus
-    stands right): OK opens all movies or all shows."""
+    stands right): OK opens all movies, all shows or all albums, on the quick menu's icon the
+    settings."""
     assert _variable('HintHomeOk') == [
         ('Control.HasFocus(9102)', '   {} $LOCALIZE[31101]'.format(KEY.format(OK))),
-        ('Control.HasFocus(9103)', '   {} $LOCALIZE[31102]'.format(KEY.format(OK)))]
-    assert (_string('31101'), _string('31102')) == ('all movies', 'all shows')
+        ('Control.HasFocus(9103)', '   {} $LOCALIZE[31102]'.format(KEY.format(OK))),
+        ('Control.HasFocus(9107)', '   {} $LOCALIZE[31481]'.format(KEY.format(OK))),
+        ('Control.HasFocus(9109)', '   {} $LOCALIZE[5]'.format(KEY.format(OK)))]
+    assert (_string('31101'), _string('31102'), _string('31481')) == ('all movies', 'all shows', 'all albums')
 
 
 def test_ok_on_movies_and_shows_opens_all_of_them():
@@ -557,3 +560,12 @@ def test_ok_on_movies_and_shows_opens_all_of_them():
         assert [a.text for a in menu[tab].findall('onclick')] == want, tab
         assert [a.text for a in menu[tab].findall('altclick')] == want, tab
     assert [a.text for a in menu['9101'].findall('onclick')] == ['Action(Down)', 'noop']
+
+
+def test_ok_on_music_opens_all_albums():
+    """OK on the music tab opens the music window's albums, as the spotlight's albums button."""
+    menu = {c.get('id'): c for c in load('Home.xml').iter('control') if c.get('id') in ('9107', '9854')}
+    want = 'ActivateWindow(Music,musicdb://albums/,return)'
+    assert [a.text for a in menu['9107'].findall('onclick')] == [want, 'noop']
+    assert [a.text for a in menu['9107'].findall('altclick')] == [want, 'noop']
+    assert [a.text for a in menu['9854'].findall('onclick')][0] == want

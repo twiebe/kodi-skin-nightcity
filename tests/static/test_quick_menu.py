@@ -167,11 +167,10 @@ def test_leaving_the_icon_forgets_where_the_keys_came_from():
 
 def test_icon_next_to_the_clock_shows_it():
     """Focus applies, OK goes (DESIGN.md): with the cursor on the icon the menu shows on Home,
-    Down or OK go into it, Left and Right leave it. A panel of Home, not the dialog: a modal
+    Down goes into it, Left and Right leave it. A panel of Home, not the dialog: a modal
     dialog would take the focus from the icon."""
     home = controls(load('Home.xml'))
     anchor = home['9109']
-    assert actions(anchor) == [('', 'SetFocus(1210)')]
     assert anchor.findtext('ondown') == '1210'
     assert ('', '9109') in actions(home['9100'], 'onright')
     row = home['9190']
@@ -403,3 +402,17 @@ def test_power_icons_come_from_the_texture_tool():
         assert image.size == (64, 64), name
         left, top, right, bottom = image.getchannel('A').getbbox()
         assert abs((left + right) - 64) <= 3 and abs((top + bottom) - 64) <= 3, (name, left, top, right, bottom)
+
+
+def test_ok_on_the_icon_opens_the_settings():
+    """OK on the icon opens the settings as the menu's settings link does; Back held there
+    returns to the icon, or to where the menu key came from (settings_return)."""
+    home = controls(load('Home.xml'))
+    link = next(i for i in home['1230'].iter('item') if i.findtext('icon') == 'ui/qm_settings.png')
+    assert [a.text for a in link.findall('onclick')][2:] == ['SetProperty(nc.go,system,home)', 'ActivateWindow(1160)']
+    quick = 'String.IsEmpty(Window(Home).Property(nc.quick.from))'
+    assert actions(home['9109']) == [
+        ('!' + quick, 'SetProperty(nc.settings.from,"$VAR[SettingsFrom]",home)'),
+        (quick, 'SetProperty(nc.settings.from,"home|$INFO[Window(Home).Property(nc.page)]|9109",home)'),
+        ('', 'SetProperty(nc.go,system,home)'),
+        ('', 'ActivateWindow(1160)')]

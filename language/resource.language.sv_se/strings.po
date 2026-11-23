@@ -183,6 +183,10 @@ msgctxt "#31102"
 msgid "all shows"
 msgstr "alla serier"
 
+msgctxt "#31481"
+msgid "all albums"
+msgstr "alla album"
+
 msgctxt "#31103"
 msgid "in progress"
 msgstr "påbörjade"

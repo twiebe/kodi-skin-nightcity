@@ -183,6 +183,10 @@ msgctxt "#31102"
 msgid "all shows"
 msgstr "visi serialai"
 
+msgctxt "#31481"
+msgid "all albums"
+msgstr "visi albumai"
+
 msgctxt "#31103"
 msgid "in progress"
 msgstr "pradėti"

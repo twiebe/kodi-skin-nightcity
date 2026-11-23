@@ -183,6 +183,10 @@ msgctxt "#31102"
 msgid "all shows"
 msgstr "wszystkie seriale"
 
+msgctxt "#31481"
+msgid "all albums"
+msgstr "wszystkie albumy"
+
 msgctxt "#31103"
 msgid "in progress"
 msgstr "w trakcie oglądania"

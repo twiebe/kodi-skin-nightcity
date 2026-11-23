@@ -183,6 +183,10 @@ msgctxt "#31102"
 msgid "all shows"
 msgstr "všetky seriály"
 
+msgctxt "#31481"
+msgid "all albums"
+msgstr "všetky albumy"
+
 msgctxt "#31103"
 msgid "in progress"
 msgstr "rozpozerané"

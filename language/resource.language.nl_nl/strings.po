@@ -183,6 +183,10 @@ msgctxt "#31102"
 msgid "all shows"
 msgstr "alle series"
 
+msgctxt "#31481"
+msgid "all albums"
+msgstr "alle albums"
+
 msgctxt "#31103"
 msgid "in progress"
 msgstr "bezig"

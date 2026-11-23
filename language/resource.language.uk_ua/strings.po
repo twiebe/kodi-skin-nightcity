@@ -183,6 +183,10 @@ msgctxt "#31102"
 msgid "all shows"
 msgstr "усі серіали"
 
+msgctxt "#31481"
+msgid "all albums"
+msgstr "усі альбоми"
+
 msgctxt "#31103"
 msgid "in progress"
 msgstr "розпочаті"
