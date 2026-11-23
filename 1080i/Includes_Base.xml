@@ -3,6 +3,9 @@
      state, pink for the kicker over a title, cut corners instead of rounded boxes, no labels in
      frame lines. -->
 <includes>
+    <!-- Kodi 22 (Piers) or later: for what only it has, the skin runs on 21 and 22
+         (docs/kodi22.md). System.BuildVersion reads "21.2 (21.2.0) Git:..." on Omega -->
+    <expression name="KodiPiers">!String.StartsWith(System.BuildVersion,21)</expression>
     <!-- Startup.xml: online once the startup script is done, but not before a second ahead of
          the hand-over to Home (nc_startup in Timers.xml, 4 s minimum) -->
     <expression name="StartupOnline">!String.IsEmpty(Window(Home).Property(nc.startup.ready)) + Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_startup),2)</expression>
