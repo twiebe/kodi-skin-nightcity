@@ -200,7 +200,7 @@ def test_the_filter_dialog_narrows_the_grid_and_the_header_says_so(library):
     wait_for('Control.HasFocus({})'.format(FILTER))
     action('select')
     _select_dialog()
-    _group(1)  # resolution, after the genre
+    _group(2)  # resolution, after the watched state and the genre
     action('select', delay=1)
     wait_for('Window.IsActive(selectdialog) + Integer.IsEqual(Container(3).NumItems,4)')
     action('select')  # 4K
@@ -220,8 +220,8 @@ def test_the_filter_dialog_narrows_the_grid_and_the_header_says_so(library):
     builtin('SetFocus({})'.format(FILTER))
     action('select')
     _select_dialog()
-    wait_for('Integer.IsEqual(Container(6).NumItems,6) + Control.IsVisible(14)')
-    _group(5)
+    wait_for('Integer.IsEqual(Container(6).NumItems,7) + Control.IsVisible(14)')
+    _group(6)
     action('down')
     wait_for('Control.HasFocus(9)')
     action('left')
@@ -266,8 +266,8 @@ def test_shows_filter_by_genre_and_studio(library):
     wait_for('Control.HasFocus({})'.format(FILTER))
     action('select')
     _select_dialog()
-    wait_for('Integer.IsEqual(Container(6).NumItems,2) + !Control.IsVisible(14)')  # genre and studio, nothing chosen yet: no Clear
-    _group(1)
+    wait_for('Integer.IsEqual(Container(6).NumItems,3) + !Control.IsVisible(14)')  # watched state, genre and studio, nothing chosen yet: no Clear
+    _group(2)
     action('select', delay=1)
     wait_for('Window.IsActive(selectdialog) + Integer.IsEqual(Container(3).NumItems,1)')
     action('select')
@@ -312,7 +312,7 @@ def test_left_takes_the_filter_dialogs_up_a_level_with_the_choice(library):
     action('select')
     _select_dialog()
     wait_for('Control.IsVisible(9) + !Control.IsVisible(7)')  # the groups: their OK only
-    _group(1)
+    _group(2)
     action('select', delay=1)  # resolution
     wait_for('Window.IsActive(selectdialog) + Integer.IsEqual(Container(3).NumItems,4)')
     wait_for('Control.IsVisible(5) + !Control.IsVisible(7) + !Control.IsVisible(9)')  # Kodi's OK only
@@ -321,7 +321,7 @@ def test_left_takes_the_filter_dialogs_up_a_level_with_the_choice(library):
     assert true('Control.HasFocus(3)')  # Right stays in the list
     action('left', delay=1)
     _select_dialog()
-    wait_for('Integer.IsEqual(Container(6).NumItems,6) + Control.IsVisible(14)')  # the groups again, the choice taken
+    wait_for('Integer.IsEqual(Container(6).NumItems,7) + Control.IsVisible(14)')  # the groups again, the choice taken
     wait_for('!String.IsEmpty(Window(Home).Property(nc.libfilter.movies.path))')
     action('left', delay=1)
     wait_for('!Window.IsActive(selectdialog) + String.IsEmpty(Window(Home).Property(nc.select.ok))')
@@ -357,7 +357,7 @@ def test_the_genre_group_lists_the_librarys_genres(library):
     wait_for('Control.HasFocus({})'.format(FILTER))
     action('select')
     _select_dialog()
-    _group(0)
+    _group(1)  # genre, after the watched state
     action('select', delay=1)
     _select('Window.IsActive(selectdialog) + Control.IsVisible(5) + Integer.IsEqual(Container(3).NumItems,3)')
     labels = info(*['Container(3).ListItemAbsolute({}).Label'.format(i) for i in range(3)])
@@ -382,7 +382,7 @@ def test_right_enters_the_group_of_the_filters_list(library):
     wait_for('Control.HasFocus({})'.format(FILTER))
     action('select')
     _select_dialog()
-    _group(1)  # resolution
+    _group(2)  # resolution
     action('right', delay=1)
     _select('Window.IsActive(selectdialog) + Control.IsVisible(5) + Integer.IsEqual(Container(3).NumItems,4)')
     action('right')
@@ -400,7 +400,7 @@ def test_up_from_the_button_goes_back_to_the_list(library):
     wait_for('Control.HasFocus({})'.format(FILTER))
     action('select')
     _select_dialog()
-    _group(5)  # studio, the last
+    _group(6)  # studio, the last
     action('down')
     wait_for('Control.HasFocus(9)')
     action('up')
@@ -593,3 +593,82 @@ def test_ok_held_on_the_tab_is_kodis_context_menu(library):
     time.sleep(1.5)
     assert true('!Window.IsActive(1110)')
     builtin('Dialog.Close(all,true)')
+
+
+# --- the watched state ----------------------------------------------------------------------------
+
+@pytest.fixture
+def watched(library):
+    """Alpha watched, Beta started (a resume point), The Matrix neither; the first show watched to
+    its last episode. Each put back as it was."""
+    movies = {m['label']: m for m in rpc('VideoLibrary.GetMovies', {'properties': ['playcount', 'resume']})['movies']}
+    show = library['shows'][0]
+    episodes = rpc('VideoLibrary.GetEpisodes', {'tvshowid': show['tvshowid'], 'properties': ['playcount']}).get('episodes') or []
+    assert episodes
+    rpc('VideoLibrary.SetMovieDetails', {'movieid': movies[ALPHA]['movieid'], 'playcount': 1})
+    rpc('VideoLibrary.SetMovieDetails', {'movieid': movies[BETA]['movieid'], 'playcount': 0,
+                                         'resume': {'position': 600, 'total': RUNTIMES[BETA]}})
+    rpc('VideoLibrary.SetMovieDetails', {'movieid': movies[MATRIX]['movieid'], 'playcount': 0,
+                                         'resume': {'position': 0, 'total': 0}})
+    for episode in episodes:
+        rpc('VideoLibrary.SetEpisodeDetails', {'episodeid': episode['episodeid'], 'playcount': 1})
+    yield show
+    for title in (ALPHA, BETA, MATRIX):
+        movie = movies[title]
+        rpc('VideoLibrary.SetMovieDetails', {'movieid': movie['movieid'], 'playcount': movie['playcount'],
+                                             'resume': {'position': movie['resume']['position'],
+                                                        'total': movie['resume']['total']}})
+    for episode in episodes:
+        rpc('VideoLibrary.SetEpisodeDetails', {'episodeid': episode['episodeid'], 'playcount': episode['playcount']})
+
+
+@pytest.mark.parametrize('keys, titles', [
+    (['unwatched'], [BETA, MATRIX]),
+    (['inprogress'], [BETA]),
+    (['watched'], [ALPHA]),
+    (['watched', 'inprogress'], [ALPHA, BETA]),
+    (['unwatched', 'watched'], [ALPHA, BETA, MATRIX]),
+])
+def test_every_watched_state_kodi_runs(watched, keys, titles):
+    """Unwatched is Kodi's own, a started title too; watched and unwatched together every title."""
+    builtin('SetProperty(nc.libfilter.movies.path,{},home)'.format(nightcity.lib_filter_path('movies', {'watched': keys})))
+    _open(count=len(titles))
+    assert _titles() == titles
+
+
+def test_a_show_is_watched_once_every_episode_is(watched, library):
+    shows = rpc('VideoLibrary.GetTVShows', {'properties': ['episode', 'watchedepisodes']})['tvshows']
+    done = [s['label'] for s in shows if s['episode'] and s['watchedepisodes'] == s['episode']]
+    assert watched['label'] in done
+    builtin('SetProperty(nc.libfilter.tvshows.path,{},home)'.format(nightcity.lib_filter_path('tvshows', {'watched': ['watched']})))
+    _open('tvshows', len(done))
+    assert watched['label'] in _titles()
+    builtin('Dialog.Close(all,true)')
+    builtin('SetProperty(nc.libfilter.tvshows.path,{},home)'.format(nightcity.lib_filter_path('tvshows', {'watched': ['unwatched']})))
+    _open('tvshows', len(shows) - len(done))
+    assert watched['label'] not in _titles()
+
+
+def test_the_watched_group_comes_first_and_filters_the_grid(watched):
+    _open()
+    builtin('SetFocus({})'.format(FILTER))
+    wait_for('Control.HasFocus({})'.format(FILTER))
+    action('select')
+    _select_dialog()
+    _group(0)
+    action('select', delay=1)
+    _select('Window.IsActive(selectdialog) + Control.IsVisible(5) + Integer.IsEqual(Container(3).NumItems,3)')
+    labels = ['Container(3).ListItemAbsolute({}).Label'.format(i) for i in range(3)]
+    found = info(*labels)
+    assert [found[label] for label in labels] == ['Unwatched', 'In progress', 'Watched']
+    action('select')  # unwatched
+    screenshot('library-filter-watched')
+    action('left', delay=1)  # confirms, back to the groups
+    _select('Window.IsActive(selectdialog) + !Control.IsVisible(5)')
+    wait_for('!String.IsEmpty(Window(Home).Property(nc.libfilter.movies.path))')
+    action('back', delay=1)
+    wait_for('!Window.IsActive(selectdialog)')
+    _count_is(2)
+    assert _titles() == [BETA, MATRIX]
+    assert 'Unwatched' in _header() or 'UNWATCHED' in _header(), _header()
+    screenshot('library-filtered-unwatched')

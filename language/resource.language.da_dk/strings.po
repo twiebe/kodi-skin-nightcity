@@ -1151,6 +1151,10 @@ msgctxt "#31508"
 msgid "clear filter"
 msgstr "ryd filter"
 
+msgctxt "#31509"
+msgid "watched state"
+msgstr "set-status"
+
 msgctxt "#31600"
 msgid "runtime"
 msgstr "spilletid"
