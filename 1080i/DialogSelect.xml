@@ -65,15 +65,6 @@
                 <param name="rowwidth" value="1020"/>
                 <param name="inset" value="10"/>
             </include>
-            <!-- up the dialog's left edge, outside its frame, centred on it (820 high): in the skin's
-                 filter dialogs Left on the list goes one level up; shown on the whole dialog -->
-            <include content="LevelHintLeft">
-                <param name="id" value="9059"/>
-                <param name="label" value="$VAR[HintSelectBack]"/>
-                <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.select.ok))"/>
-                <param name="left" value="-322"/>
-                <param name="top" value="395"/>
-            </include>
             <control type="grouplist" id="9001">
                 <onleft condition="Control.IsVisible(6)">6</onleft>
                 <onleft>3</onleft>
@@ -124,5 +115,13 @@
                 </include>
             </control>
         </control>
+        <!-- up the screen's left edge, centred on it, as on a page (DESIGN.md: a hint stands at the
+             screen's edge of its key, not at the dialog's frame, where it stood over the grid): in
+             the skin's filter dialogs Left on the list goes one level up; shown on the whole dialog -->
+        <include content="LevelHintLeft">
+            <param name="id" value="9059"/>
+            <param name="label" value="$VAR[HintSelectBack]"/>
+            <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.select.ok))"/>
+        </include>
     </controls>
 </window>

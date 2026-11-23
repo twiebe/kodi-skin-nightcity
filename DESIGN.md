@@ -78,10 +78,10 @@ key, then the level it leads to (`LevelHint` in `Includes_Base.xml`,
   - ↑ at the top: centred on the path line of a page (top 30, the title kept left of the
     middle, `pathwidth` 780), on the player's top edge (top 140), on the top edge of the quick
     menu's panel;
-  - ← up the left edge, written bottom to top and centred on it (`LevelHintLeft`): on a page
-    the screen's edge and middle, in a dialog its own, just outside its frame. The line is
-    turned a quarter to the left, so it runs along the edge and its key, an ↑ in the text,
-    shows as ←;
+  - ← up the screen's left edge, written bottom to top and centred on it (`LevelHintLeft`), in
+    a dialog too: a hint stands at the screen's edge of its key, never at a dialog's frame,
+    where it stood over the window below. The line is turned a quarter to the left, so it runs
+    along the edge and its key, an ↑ in the text, shows as ←;
   - ↓ and OK in the footer line at the bottom, centred (top 1030), as ↑ is centred at the top; in
     the player too. The episodes' footer (an exception above) may hold several directions:
     ←→ episode, ↑ season, ↓ cast, OK select;

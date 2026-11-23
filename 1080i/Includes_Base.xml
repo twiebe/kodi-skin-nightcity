@@ -323,7 +323,7 @@
     </include>
 
     <!-- The way Left leads: written up the left edge, bottom to top, centred on it (top=525, the
-         middle of the screen; a dialog passes its own edge and middle). The line is turned a
+         middle of the screen; a dialog's too, not its frame's). The line is turned a
          quarter to the left about its centre, so its key is an Up glyph that shows as Left. The
          group needs its size: without one Kodi turns it about its corner, off the screen. -->
     <include name="LevelHintLeft">

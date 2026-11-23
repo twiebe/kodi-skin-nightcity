@@ -31,7 +31,8 @@ GLYPHS = re.compile('[↑↓←→⏎]')
 KEY = '[COLOR state_text]{}[/COLOR]'
 COLOURED_KEY = re.compile(r'\[COLOR state_text\](?:[↑↓←→]+|OK)\[/COLOR\]')
 LABEL = re.compile(r'^\[UPPERCASE\]\[COLOR state_text\](\S+)\[/COLOR\] (.+)\[/UPPERCASE\]$')
-# a Left hint: the middle of the screen's left edge, or a dialog's (just outside its frame)
+# a Left hint: the middle of the screen's left edge, in a dialog too (DESIGN.md: a hint stands at the
+# screen's edge of its key, not at the dialog's frame)
 LEFT_EDGE = ('-276', '525')
 HINTS = ('LevelHint', 'LevelHintLeft')
 
@@ -165,8 +166,6 @@ def test_every_hint_is_a_glyph():
 # where a hint's container does not start at the top of the screen: the episodes' footer lies
 # in the info page's lower grouplist (5400, top 619)
 OFFSET = {('DialogVideoInfo.xml', '5190'): 619}
-# the dialogs' Left hints: just outside the frame (centre x -22), on the dialog's middle
-DIALOG_LEFT = {'DialogSelect.xml': ('-322', str(820 // 2 - 15))}
 FOCUS = re.compile(r'HasFocus|System\.CurrentControl|Container\.HasFocus')
 # the hints that show the keys of the focused row (DESIGN.md: an exception, open for now)
 FOCUSED_ROW = {('DialogVideoInfo.xml', '5190'),
@@ -205,8 +204,7 @@ def test_where_a_hint_stands_follows_its_key():
         hid = params['id']
         key = params.get('key', '↓')
         if include == 'LevelHintLeft':
-            want = DIALOG_LEFT.get(name, LEFT_EDGE)
-            assert (params.get('left', LEFT_EDGE[0]), params.get('top', LEFT_EDGE[1])) == want, (name, hid)
+            assert (params.get('left', LEFT_EDGE[0]), params.get('top', LEFT_EDGE[1])) == LEFT_EDGE, (name, hid)
             continue
         assert key != '←', (name, hid)
         top = int(params.get('top', BOTTOM)) + OFFSET.get((name, hid), 0)
@@ -445,13 +443,14 @@ def test_the_keys_of_the_window_hints():
 
 
 def test_dialog_hints():
-    """A dialog's Left hint runs up its own left edge, just outside the frame, centred on it, on
-    the whole dialog: in the skin's select dialogs Left on the list goes one level up, in a group
-    of the library filter to its groups, else onto the library."""
-    for name, (left, top) in DIALOG_LEFT.items():
-        group = _controls(name)['9059']
-        assert _turned(group) and (group.findtext('left'), group.findtext('top')) == (left, top), name
-        assert int(left) + 300 < 0  # the line's middle lies outside the frame
+    """A dialog's Left hint runs up the screen's left edge, centred on it, as on a page, not along
+    the dialog's frame, where it stood over the window below: on the whole dialog, in the skin's
+    select dialogs Left on the list goes one level up, in a group of the library filter to its
+    groups, else onto the library."""
+    # the window's own, not inside the dialog's frame
+    assert '9059' in [c.get('id') for c in load('DialogSelect.xml').find('controls')]
+    group = _controls('DialogSelect.xml')['9059']
+    assert _turned(group) and (group.findtext('left'), group.findtext('top')) == LEFT_EDGE
     key, label, top, visible = _hint('DialogSelect.xml', '9059')
     assert (key, label) == ('←', '$VAR[HintSelectBack]')
     assert visible == '!String.IsEmpty(Window(Home).Property(nc.select.ok))'
