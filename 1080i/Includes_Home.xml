@@ -192,8 +192,9 @@
                     <textureradiooffnofocus colordiffuse="text_mute">ui/qm_menu.png</textureradiooffnofocus>
                     <!-- the quick menu shows while the icon has the focus (QuickMenuPanel): Down
                          goes into it, OK opens the settings as the menu's settings link does, Back
-                         held there returns to the icon, or to where the menu key came from
-                         (nc.quick.from, scripts/nightcity.py settings_return) -->
+                         held there returns to where the focus came onto the icon from, as Back on
+                         the icon does (nc.quick.from, scripts/nightcity.py settings_return), else
+                         to the icon -->
                     <onclick condition="!String.IsEmpty(Window(Home).Property(nc.quick.from))">SetProperty(nc.settings.from,"$VAR[SettingsFrom]",home)</onclick>
                     <onclick condition="String.IsEmpty(Window(Home).Property(nc.quick.from))">SetProperty(nc.settings.from,"home|$INFO[Window(Home).Property(nc.page)]|9109",home)</onclick>
                     <onclick>SetProperty(nc.go,system,home)</onclick>

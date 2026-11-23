@@ -44,7 +44,7 @@ def top_line(home):
 # tab: (Down leads to, OK leads to) with kodi-dev's spotlights on
 TABS = {9101: ('$LOCALIZE[31100]', None), 9102: ('$LOCALIZE[31100]', 'all movies'),
         9103: ('$LOCALIZE[31100]', 'all shows'), 9104: ('$LOCALIZE[31141]', None),
-        9109: ('$LOCALIZE[31320]', None)}
+        9109: ('$LOCALIZE[31320]', 'settings')}
 
 
 @pytest.mark.parametrize('tab', list(TABS))
@@ -57,7 +57,7 @@ def test_the_footer_names_where_down_and_ok_lead(top_line, tab):
     if ok is None:
         assert ok_hint is None
     else:
-        assert ok_hint == '   [COLOR state_text]OK[/COLOR] $LOCALIZE[{}]'.format({'all movies': 31101, 'all shows': 31102}[ok])
+        assert ok_hint == '   [COLOR state_text]OK[/COLOR] $LOCALIZE[{}]'.format({'all movies': 31101, 'all shows': 31102, 'settings': 5}[ok])
     screenshot('home-hint-{}'.format(tab))
 
 

@@ -406,7 +406,7 @@ def test_power_icons_come_from_the_texture_tool():
 
 def test_ok_on_the_icon_opens_the_settings():
     """OK on the icon opens the settings as the menu's settings link does; Back held there
-    returns to the icon, or to where the menu key came from (settings_return)."""
+    returns to where the focus came onto the icon from (settings_return), else to the icon."""
     home = controls(load('Home.xml'))
     link = next(i for i in home['1230'].iter('item') if i.findtext('icon') == 'ui/qm_settings.png')
     assert [a.text for a in link.findall('onclick')][2:] == ['SetProperty(nc.go,system,home)', 'ActivateWindow(1160)']

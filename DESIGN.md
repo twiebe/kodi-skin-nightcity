@@ -185,8 +185,9 @@ wherever Home opens without a page: after startup, on the Home key, and right fr
 next to the clock wrapping round.
 
 The quick menu on Home follows it too: the cursor on the icon next to the clock shows the menu,
-Down goes into it, OK opens the settings page (Back held there returns to the icon), Up from its top comes out onto the icon with the menu still shown, Left
-or Right off the icon hide it. Back, in the menu or on the icon, closes it: the focus goes back
+Down goes into it, OK opens the settings page (Back held there returns like Back on the icon),
+Up from its top comes out onto the icon with the menu still shown, Left or Right off the icon
+hide it. Back, in the menu or on the icon, closes it: the focus goes back
 to where it came onto the icon from (a settings row, a row of a page, the top menu), or to the
 shown page's own entry. The keys that open the quick menu (Home held, the S key, Kodi's power
 menu) go to the icon on every page of Home, which shows the menu; the same key again closes it
