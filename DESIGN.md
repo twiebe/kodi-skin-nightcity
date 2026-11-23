@@ -79,21 +79,23 @@ key, then the level it leads to (`LevelHint` in `Includes_Base.xml`,
   - ↑ at the top: centred on the path line of a page (top 30, the title kept left of the
     middle, `pathwidth` 780), on the player's top edge (top 140), on the top edge of the quick
     menu's panel;
-  - ← up the screen's left edge, written bottom to top and centred on it (`LevelHintLeft`), in
-    a dialog too: a hint stands at the screen's edge of its key, never at a dialog's frame,
-    where it stood over the window below. The line is turned a quarter to the left, so it runs
-    along the edge and its key, an ↑ in the text, shows as ←;
+  - ← up the screen's left edge, written bottom to top and centred on it (`LevelHintLeft`). The
+    line is turned a quarter to the left, so it runs along the edge and its key, an ↑ in the
+    text, shows as ←. In a dialog (an overlay over a window) ← and → belong to the dialog: they
+    stand inside its frame, along its inner edges, centred on them (24 in), the dialog wider by
+    their room and its content in by as much, so they never stand on the list nor outside the
+    frame over the window below (the select dialogs, the add-on settings);
   - ↓ and OK in the footer line at the bottom, centred (top 1030), as ↑ is centred at the top; in
     the player too. The episodes' footer (an exception above) may hold several directions:
     ←→ episode, ↑ season, ↓ cast, OK select;
   - → down the screen's right edge, written top to bottom and centred on it (`LevelHintRight`,
-    `LevelHintLeft` mirrored, its ↑ turned to →), in a dialog too. It names the way into the
+    `LevelHintLeft` mirrored, its ↑ turned to →), in a dialog inside its frame as ←. It names the way into the
     next column: from the categories of a settings page into their settings (→ settings), on
     the settings rail and in the skin's select dialogs a list of choices taking the focused one
     (→ select; not a multi-select, where Right stays). Where it leads out of one column of
     several (the settings' categories) it shows while the focus is in that column, as the
-    hints that follow the focus do. The alternative tried for dialogs: ← and → inside the
-    dialog's frame, along its inner edges, the dialog wider by their room;
+    hints that follow the focus do. The alternative tried for dialogs: ← and → at the screen's
+    edges, as on a page;
   - the footers of a settings page (the console's, the skin settings' slots) stay under their
     description.
 - No hint where the level is in sight anyway: Home's top menu over the rows (Up), the queue under

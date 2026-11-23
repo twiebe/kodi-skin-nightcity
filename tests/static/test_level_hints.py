@@ -37,6 +37,11 @@ LEFT_EDGE = ('-276', '525')
 # a Right hint: LevelHintLeft mirrored, the middle of the screen's right edge
 RIGHT_EDGE = ('1596', '525')
 HINTS = ('LevelHint', 'LevelHintLeft', 'LevelHintRight')
+# in a dialog ← and → stand inside its frame, along its inner edges, centred on them: (file, id):
+# (left, top) in the dialog's group, the frame's width and height
+FRAME_HINTS = {('DialogSelect.xml', '9059'): ('-276', '395', 1156, 820),
+               ('DialogSelect.xml', '9058'): ('832', '395', 1156, 820),
+               ('DialogAddonSettings.xml', '9058'): ('1332', '455', 1656, 940)}
 
 
 def _controls(name):
@@ -226,6 +231,14 @@ def test_where_a_hint_stands_follows_its_key():
     for name, include, params in _all_hints():
         hid = params['id']
         key = params.get('key', '↓')
+        if (name, hid) in FRAME_HINTS:
+            left, top, width, height = FRAME_HINTS[(name, hid)]
+            assert (params.get('left', LEFT_EDGE[0]), params['top']) == (left, top), (name, hid)
+            # its middle 24 inside the frame's edge, on the frame's middle
+            middle = int(left) + 300
+            assert middle == (24 if include == 'LevelHintLeft' else width - 24), (name, hid)
+            assert int(top) + 15 == height // 2, (name, hid)
+            continue
         if include == 'LevelHintLeft':
             assert (params.get('left', LEFT_EDGE[0]), params.get('top', LEFT_EDGE[1])) == LEFT_EDGE, (name, hid)
             continue
@@ -469,14 +482,18 @@ def test_the_keys_of_the_window_hints():
 
 
 def test_dialog_hints():
-    """A dialog's Left hint runs up the screen's left edge, centred on it, as on a page, not along
-    the dialog's frame, where it stood over the window below: on the whole dialog, in the skin's
-    select dialogs Left on the list goes one level up, in a group of the library filter to its
-    groups, else onto the library."""
-    # the window's own, not inside the dialog's frame
-    assert '9059' in [c.get('id') for c in load('DialogSelect.xml').find('controls')]
+    """A dialog's Left hint runs up its frame's left inner edge, centred on it, never outside the
+    frame, where it stood over the window below: on the whole dialog, in the skin's select
+    dialogs Left on the list goes one level up, in a group of the library filter to its groups,
+    else onto the library. The dialog is wider by the hints' room, its content in by as much,
+    so neither hint stands on the list."""
+    dialog = load('DialogSelect.xml').find('controls/control')
+    assert dialog.findtext('width') == '1156'
+    (inner,) = [c for c in dialog.findall('control') if c.get('type') == 'group' and c.findtext('left') == '28']
+    assert inner.findtext('width') == '1100'
+    assert {c.get('id') for c in dialog.findall('control')} >= {'9058', '9059'}
     group = _controls('DialogSelect.xml')['9059']
-    assert _turned(group) and (group.findtext('left'), group.findtext('top')) == LEFT_EDGE
+    assert _turned(group) and (group.findtext('left'), group.findtext('top')) == ('-276', '395')
     key, label, top, visible = _hint('DialogSelect.xml', '9059')
     assert (key, label) == ('←', '$VAR[HintSelectBack]')
     assert visible == '!String.IsEmpty(Window(Home).Property(nc.select.ok))'
