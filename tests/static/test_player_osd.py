@@ -329,3 +329,27 @@ def test_back_from_a_chain_opens_the_cast_row():
         ('String.IsEmpty({})'.format(rows), 'SetFocus(602)')]
     for move in ('onup', 'ondown', 'onleft', 'onright'):
         assert stand_in.findtext(move) == '602', move
+
+
+def _stats_lines():
+    tree = parse(ROOT / '1080i' / 'DialogPlayerProcessInfo.xml')
+    return {dict((p.get('name'), p.get('value')) for p in inc.iter('param'))['key']:
+            dict((p.get('name'), p.get('value')) for p in inc.iter('param'))
+            for inc in tree.iter('include') if inc.get('content') == 'FactLine'}
+
+
+def test_stats_name_the_dolby_vision_profile_on_kodi_22():
+    """Kodi 22's VideoPlayer.HdrDetail (DV profile and layer, 8.4, 7FEL) after the HDR type; only
+    there and only with HDR, Kodi 21 has no such label."""
+    hdr = _stats_lines()['hdr']
+    assert hdr['value'].startswith('$VAR[PlayerHdr]') and '$INFO[VideoPlayer.HdrDetail' in hdr['value']
+    assert hdr['visible'] == '$EXP[KodiPiers] + !String.IsEmpty(VideoPlayer.HdrType)'
+
+
+def test_the_stats_panel_grows_by_the_hdr_line_only():
+    """Kodi 21 and SDR keep the panel as it was: its back only grows with the hdr line."""
+    tree = parse(ROOT / '1080i' / 'DialogPlayerProcessInfo.xml')
+    backs = {img.findtext('visible'): img.findtext('height')
+             for img in tree.iter('control') if img.get('type') == 'image'}
+    hdr = _stats_lines()['hdr']['visible']
+    assert backs == {'![{}]'.format(hdr): '380', hdr: '432'}
