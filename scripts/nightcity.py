@@ -1040,14 +1040,20 @@ def _return_to_episode(dbid):
     import xbmc
     home = _home()
 
+    # the flag lives outside the class: Kodi 22's bindings (SWIG 4.5) make the attributes of an
+    # xbmc.Player subclass read-only, and setting one raised in every callback
+    state = {'stopped': False}
+
     class Player(xbmc.Player):
-        stopped = False
+        @property
+        def stopped(self):
+            return state['stopped']
 
         def onPlayBackStopped(self):
-            Player.stopped = True
+            state['stopped'] = True
 
         def onAVStarted(self):
-            Player.stopped = False
+            state['stopped'] = False
 
     import time
     # only the newest follower acts: an older one (another episode started meanwhile) stops
