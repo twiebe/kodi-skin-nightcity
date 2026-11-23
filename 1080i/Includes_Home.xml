@@ -1942,7 +1942,9 @@
             <width>56</width>
             <height>56</height>
             <aspectratio>keep</aspectratio>
-            <texture colordiffuse="$VAR[QuickWeatherIcon]">ui/qm_weather.png</texture>
+            <!-- the glyph of the current weather (TopWeather), the plain cloud until a service
+                 has fetched it -->
+            <texture fallback="ui/qm_weather.png" colordiffuse="$VAR[QuickWeatherIcon]">ui/weather/$INFO[Window(Weather).Property(Current.FanartCode)].png</texture>
         </control>
         <control type="group">
             <visible>Weather.IsFetched</visible>

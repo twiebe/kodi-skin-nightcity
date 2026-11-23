@@ -121,3 +121,45 @@ def test_opens_on_today(page):
     builtin('ActivateWindow(weather)')
     wait_for(PAGE + ' + Control.HasFocus(500)')
     assert cond('Integer.IsEqual(Container(500).CurrentItem,1)')['Integer.IsEqual(Container(500).CurrentItem,1)']
+
+
+
+# where the glyph stands on Home's top line at 1920 wide, between the quick menu's icon and the
+# temperature
+TOP_RIGHT_ICON = (1600, 20, 1655, 80)
+
+
+def _top_right_icon(name):
+    """The crop of the top right's weather glyph on Home (TopWeather) from a fresh screenshot."""
+    from PIL import Image
+    shot = Image.open(screenshot(name)).convert('RGB')
+    scale = shot.width / 1920
+    return shot.crop(tuple(round(v * scale) for v in TOP_RIGHT_ICON))
+
+
+def test_top_right_and_quick_menu_show_the_current_weather(weather):
+    """Kodi keeps the codes on the weather window for every window: the top right on Home and
+    the quick menu's tile show the current code's glyph without the weather page open."""
+    wait_for('!Window.IsActive(startup)', timeout=15)
+    builtin('Dialog.Close(all,true)')
+    builtin('ReplaceWindow(Home)')
+    wait_for('Window.IsActive(home) + !Window.IsActive(weather)')
+    code = 'Window(Weather).Property(Current.FanartCode)'
+    assert info(code)[code] == '30'
+    icons = {}
+    try:
+        for value, name in (('32', 'sun'), ('11', 'rain')):
+            builtin('SetProperty(Current.FanartCode,{},weather)'.format(value))
+            wait_for('String.IsEqual({},{})'.format(code, value))
+            time.sleep(0.5)
+            icons[name] = _top_right_icon('weather-top-right-' + name)
+            builtin('ActivateWindow(1170)')
+            wait_for('Control.HasFocus(1220)')
+            assert info(code)[code] == value
+            time.sleep(0.5)
+            screenshot('weather-quick-menu-' + name)
+            action('back')
+            wait_for('Window.IsActive(home) + !Window.IsActive(1170)')
+        assert icons['sun'].tobytes() != icons['rain'].tobytes()
+    finally:
+        builtin('SetProperty(Current.FanartCode,30,weather)')

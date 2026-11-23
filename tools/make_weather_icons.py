@@ -1,6 +1,8 @@
-"""Weather glyphs of the weather page (MyWeather.xml): white line icons like ui/qm_weather.png,
-tinted by the skin. Kodi gives a weather code per day (FanartCode: the file name of the add-on's
-icon, 0-47 or na), so each code gets a file media/ui/weather/<code>.png with its glyph.
+"""Weather glyphs of the weather page (MyWeather.xml), the top right and the quick menu's weather
+tile (TopWeather, Includes_Home.xml): white line icons like ui/qm_weather.png, tinted by the skin;
+their line weight is ui/qm_weather.png's, which still reads at 24 px. Kodi gives a weather code
+per day (FanartCode: the file name of the add-on's icon, 0-47 or na), so each code gets a file
+media/ui/weather/<code>.png with its glyph.
 
 python tools/make_weather_icons.py
 """

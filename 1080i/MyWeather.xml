@@ -5,7 +5,8 @@
      weather add-on gave them. Kodi converts the add-on's values to the user's units and sets
      them as properties of this window (temperatures without unit, wind as a sentence).
      The row is the only control: Up leaves the page, Back too. OK does nothing.
-     Glyphs: media/ui/weather/<code>.png per weather code (tools/make_weather_icons.py).
+     Glyphs: media/ui/weather/<code>.png per weather code (tools/make_weather_icons.py), the
+     current one also at the top right and on the quick menu's tile (TopWeather).
      Ids 2, 3, 10, 11, 21-95 and 223-228 are Kodi's (its old layout), none of them here. -->
 <window>
     <defaultcontrol always="true">500</defaultcontrol>
