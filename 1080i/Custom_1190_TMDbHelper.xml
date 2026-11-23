@@ -8,7 +8,11 @@
          row (VideoFullScreen.xml), not on the bare video, where one Up too many while walking
          back would jump a chapter; a chain over Home ends there (Home.xml clears it) -->
     <onload condition="Player.HasVideo">SetProperty(nc.chain.return,osd,home)</onload>
+    <!-- over the video it is what shows between two pages, as one closes and the next opens
+         (ChainBackground); the dim holds on the way back to the player screen (nc.osd.dim,
+         VideoFullScreen.xml 5098) -->
+    <onload condition="Player.HasVideo">SetProperty(nc.osd.dim,1,home)</onload>
     <controls>
-        <include>Background</include>
+        <include>ChainBackground</include>
     </controls>
 </window>

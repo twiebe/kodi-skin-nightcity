@@ -227,6 +227,16 @@ Kodi's own windows keep Kodi's way until it is settled how they should behave: t
 (Settings, setting categories, skin settings, add-on settings), the file manager and the add-on
 browser.
 
+### Pages over the playing video
+
+The cast and crew row and the info pages of a chain over the video show the video under one
+dim (`video_scrim`). From OK on a person to the chain's pages and back to the row the dim never
+lets go: the player screen holds it (`nc.osd.dim`, VideoFullScreen.xml 5098) while the row and
+the OSD close, TMDb Helper's window under the pages shows the video dimmed the same way
+(ChainBackground), and a page counts as over the video from its first frame. Between two pages
+only the content changes, never the brightness of the video. Every other start of the player
+screen or the OSD is over the bare video.
+
 ## What the colours say
 
 | Colour | Role | Examples |

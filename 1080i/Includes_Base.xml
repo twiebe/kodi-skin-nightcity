@@ -49,8 +49,11 @@
          background and fanart, so browsing does not leave the film. Only a page opened over the
          video (nc.info.video, DialogVideoInfo.xml): one that starts playback itself stays as it
          is until the player takes over. Not for a trailer the page plays itself (nc.trailer, or
-         one still stopping after Back): it draws its own layer. -->
-    <expression name="InfoOverVideo">!String.IsEmpty(Window(Home).Property(nc.info.video)) + Player.HasVideo + String.IsEmpty(Window(Home).Property(nc.trailer)) + !String.StartsWith(Player.FilenameAndPath,plugin://plugin.video.youtube/)</expression>
+         one still stopping after Back): it draws its own layer. In a chain over the video also
+         while the chain's dim is held (nc.osd.dim, VideoFullScreen.xml 5098): a page's first
+         frame comes before its onload sets nc.info.video, the page before cleared it as it
+         closed, and that frame showed the page background, a dark flash between two pages. -->
+    <expression name="InfoOverVideo">[!String.IsEmpty(Window(Home).Property(nc.info.video)) | !String.IsEmpty(Window(Home).Property(nc.osd.dim))] + Player.HasVideo + String.IsEmpty(Window(Home).Property(nc.trailer)) + !String.StartsWith(Player.FilenameAndPath,plugin://plugin.video.youtube/)</expression>
 
     <!-- Background of the info page: Background, or over a playing video that video under a
          scrim dark enough for every text of the page. The videowindow stays first (see
@@ -75,6 +78,34 @@
             <height>1080</height>
             <texture colordiffuse="video_scrim">ui/white.png</texture>
             <visible>$EXP[InfoOverVideo]</visible>
+        </control>
+    </include>
+
+    <!-- Background of TMDb Helper's window under the pages of a chain (Custom_1190_TMDbHelper.xml):
+         Background, or over a playing video that video dimmed as behind the pages
+         (InfoBackground, video_scrim). It shows between two pages, as one closes and the next
+         opens: the page background there flashed dark between every two pages over the video.
+         The videowindow stays first (see Background). -->
+    <include name="ChainBackground">
+        <control type="videowindow">
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>1080</height>
+            <visible>Player.HasVideo + !Window.IsVisible(fullscreenvideo)</visible>
+        </control>
+        <control type="group">
+            <visible>!Player.HasVideo</visible>
+            <include>LookBackground</include>
+        </control>
+        <control type="image" id="1199">
+            <description>video scrim</description>
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>1080</height>
+            <texture colordiffuse="video_scrim">ui/white.png</texture>
+            <visible>Player.HasVideo</visible>
         </control>
     </include>
 
