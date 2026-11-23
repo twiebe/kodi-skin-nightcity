@@ -93,6 +93,27 @@ def check_pool_seed(pool):
                         pool, path, ', '.join(missing), pool), returncode=4)
 
 
+def pytest_addoption(parser):
+    parser.addoption('--kodi', default='21', choices=('21', '22'),
+                     help="the Kodi the pool runs (kdev's KDEV_KODI): 21 by default, 22 by hand on a "
+                          "pool of its own, e.g. KDEV_POOL=k22 pytest tests/e2e --kodi 22")
+
+
+def pool_kodi(pool):
+    """The Kodi POOL was made for (kdev writes kodi.version; a pool from before that is 21)."""
+    path = KODI_DEV / 'instances' / pool / 'data' / 'kodi.version'
+    return path.read_text().strip() if path.exists() else '21'
+
+
+def check_pool_kodi(pool, kodi):
+    """Stop the run at once when POOL runs another Kodi than --kodi says: a run on a 22 pool
+    is asked for by hand, never the default."""
+    have = pool_kodi(pool)
+    if have != kodi:
+        pytest.exit('pool {} runs Kodi {}, the run expects {}: pass --kodi {} to test against it, '
+                    'or take a pool of Kodi {}'.format(pool, have, kodi, have, kodi), returncode=4)
+
+
 RPC_URL = os.environ.get('KODI_RPC_URL') or 'http://localhost:{}/jsonrpc'.format(_rpc_port())
 
 
@@ -352,8 +373,9 @@ def pytest_configure(config):
     handle.flush()
     _lock[0] = handle
     _run_start[0] = int(time.time())
-    # once, before xdist starts a worker: a stale pool fails here, not test by test
+    # once, before xdist starts a worker: a stale pool or one of another Kodi fails here, not test by test
     check_pool_seed(POOL)
+    check_pool_kodi(POOL, config.getoption('--kodi'))
 
 
 def crash_logs(listing, since):
@@ -633,8 +655,20 @@ def skip_nightcity_look(items, skin):
             item.add_marker(skip)
 
 
+def skip_other_kodi(items, kodi):
+    """A test marked kodi(N, ...) runs only on those Kodi versions: one whose behaviour is Kodi's
+    own and differs by version, not the skin's."""
+    for item in items:
+        marker = item.get_closest_marker('kodi')
+        if marker and kodi not in {str(v) for v in marker.args}:
+            item.add_marker(pytest.mark.skip(reason='Kodi {} only, this run is on {}{}'.format(
+                '/'.join(map(str, marker.args)), kodi,
+                ': ' + marker.kwargs['reason'] if marker.kwargs.get('reason') else '')))
+
+
 def pytest_collection_modifyitems(config, items):
     skip_nightcity_look(items, SKIN_ID)
+    skip_other_kodi(items, config.getoption('--kodi'))
     if _kodi_up():
         return
     if POOL:
