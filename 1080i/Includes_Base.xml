@@ -919,7 +919,8 @@
         <param name="onclick2" default="noop"/>
         <param name="onfocus" default="noop"/>
         <param name="visible" default="true"/>
-        <!-- a disabled pill looks the same, it only takes no focus -->
+        <!-- a pill Kodi or `enable` disables takes no focus and its label greys out to text_mute (Kodi's
+             add-on dialog disables Configure, Uninstall and so on where the add-on has none) -->
         <param name="enable" default="true"/>
         <param name="color" default="border_dim"/>
         <param name="textcolor" default="text"/>
@@ -939,7 +940,7 @@
                     <param name="textoffsetx" value="$PARAM[textoffsetx]"/>
                 </include>
                 <include content="LookPillDisabled">
-                    <param name="color" value="$PARAM[textcolor]"/>
+                    <param name="color" value="text_mute"/>
                 </include>
                 <include content="LookButtonTextures">
                     <param name="color" value="$PARAM[color]"/>

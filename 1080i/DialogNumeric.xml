@@ -39,17 +39,17 @@
                 <itemgap>0</itemgap>
                 <include content="Button">
                     <param name="id" value="11"/>
-                    <param name="label" value="1"/>
+                    <param name="label" value="$NUMBER[1]"/>
                     <param name="width" value="140"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="12"/>
-                    <param name="label" value="2"/>
+                    <param name="label" value="$NUMBER[2]"/>
                     <param name="width" value="140"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="13"/>
-                    <param name="label" value="3"/>
+                    <param name="label" value="$NUMBER[3]"/>
                     <param name="width" value="140"/>
                 </include>
             </control>
@@ -69,17 +69,17 @@
                 <itemgap>0</itemgap>
                 <include content="Button">
                     <param name="id" value="14"/>
-                    <param name="label" value="4"/>
+                    <param name="label" value="$NUMBER[4]"/>
                     <param name="width" value="140"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="15"/>
-                    <param name="label" value="5"/>
+                    <param name="label" value="$NUMBER[5]"/>
                     <param name="width" value="140"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="16"/>
-                    <param name="label" value="6"/>
+                    <param name="label" value="$NUMBER[6]"/>
                     <param name="width" value="140"/>
                 </include>
             </control>
@@ -99,17 +99,17 @@
                 <itemgap>0</itemgap>
                 <include content="Button">
                     <param name="id" value="17"/>
-                    <param name="label" value="7"/>
+                    <param name="label" value="$NUMBER[7]"/>
                     <param name="width" value="140"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="18"/>
-                    <param name="label" value="8"/>
+                    <param name="label" value="$NUMBER[8]"/>
                     <param name="width" value="140"/>
                 </include>
                 <include content="Button">
                     <param name="id" value="19"/>
-                    <param name="label" value="9"/>
+                    <param name="label" value="$NUMBER[9]"/>
                     <param name="width" value="140"/>
                 </include>
             </control>
@@ -131,7 +131,7 @@
                 </include>
                 <include content="Button">
                     <param name="id" value="10"/>
-                    <param name="label" value="0"/>
+                    <param name="label" value="$NUMBER[0]"/>
                     <param name="width" value="140"/>
                 </include>
                 <include content="Button">

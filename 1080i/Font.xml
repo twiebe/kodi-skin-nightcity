@@ -44,6 +44,14 @@
             <filename>RetroUIWide-SemiBold.ttf</filename>
             <size>26</size>
         </font>
+        <!-- the text of a pill: font_caps in capitals drawn by Kodi, so a label Kodi sets at run time
+             (the add-on dialog's Use, Uninstall) is in capitals as well (LookPillText) -->
+        <font>
+            <name>font_caps_pill</name>
+            <filename>RetroUIWide-SemiBold.ttf</filename>
+            <size>26</size>
+            <style>uppercase</style>
+        </font>
         <!-- underline of a text in font_caps: the same text in it is a line as long as the text
              (tools/make_fonts.py) -->
         <font>
@@ -147,6 +155,14 @@
             <name>font_caps</name>
             <filename>arial.ttf</filename>
             <size>23</size>
+        </font>
+        <!-- the text of a pill: font_caps in capitals drawn by Kodi, so a label Kodi sets at run time
+             (the add-on dialog's Use, Uninstall) is in capitals as well (LookPillText) -->
+        <font>
+            <name>font_caps_pill</name>
+            <filename>arial.ttf</filename>
+            <size>23</size>
+            <style>uppercase</style>
         </font>
         <font>
             <name>font_caps_line</name>
