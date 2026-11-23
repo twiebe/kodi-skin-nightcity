@@ -50,43 +50,71 @@ def test_panels_step_along_the_button_row(tracks):
     action('up')
     wait_for('Control.HasFocus(653)')
     action('right')
-    wait_for('Control.HasFocus(608)')  # chapters, right of video
+    # chapters, right of video: its panel shows with the focus on it
+    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(90)', timeout=5)
+    action('right')
+    wait_for('!Window.IsVisible(videobookmarks) + Control.HasFocus(601)', timeout=5)
 
 
-def test_chapters_button_opens_the_chapter_panel(tracks):
-    """OK or Up on chapters opens the chapter panel above the row on the playing chapter; Down
-    closes it onto the button, Left past the first card goes to video, Right past the last card
-    to stats with its setting, else round to the far left."""
-    focus(608)
-    action('up')
-    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(11)', timeout=5)
+def chapters():
+    """Focus the chapters button: its panel shows, the focus on the panel's stand-in for it."""
+    builtin('SetFocus(608)')
+    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(90)', timeout=5)
+    time.sleep(0.3)  # a key in the first moment after opening gets lost
+
+
+def test_chapters_button_shows_the_chapter_panel(tracks):
+    """As a track panel: the chapter panel shows as the button gets the focus, on the playing
+    chapter. Up or OK go into it, Down or Back back onto the button, Left past the first card on
+    to video, Right past the last to stats with its setting, else round to the far left."""
+    chapters()
     assert int(info('Container(11).NumItems')['Container(11).NumItems']) == 3
     screenshot('osd-chapter-panel')
+    action('up')
+    wait_for('Control.HasFocus(11)', timeout=5)
     action('down')
-    wait_for('!Window.IsVisible(videobookmarks) + Control.HasFocus(608)', timeout=5)
+    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(90)', timeout=5)
     action('select')
-    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(11)', timeout=5)
+    wait_for('Control.HasFocus(11)', timeout=5)
+    action('back')
+    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(90)', timeout=5)
+    action('up')
+    wait_for('Control.HasFocus(11)', timeout=5)
     builtin('SetFocus(11,0,absolute)')
     wait_for('Integer.IsEqual(Container(11).CurrentItem,1)')
     action('left')
     wait_for('!Window.IsVisible(videobookmarks) + Control.HasFocus(607)', timeout=5)
-    focus(608)
-    action('select')
-    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(11)', timeout=5)
+    chapters()
+    action('up')
+    wait_for('Control.HasFocus(11)', timeout=5)
     builtin('SetFocus(11,2,absolute)')
     wait_for('Integer.IsEqual(Container(11).CurrentItem,3)')
     action('right')
     wait_for('!Window.IsVisible(videobookmarks) + Control.HasFocus(601)', timeout=5)
 
 
+def test_passing_the_chapters_button(tracks):
+    """Left and Right along the row pass the chapters button: its panel opens and closes again,
+    no key gets lost on the way."""
+    focus(607)
+    for _ in range(3):
+        action('right')
+        wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(90)', timeout=5)
+        action('left')
+        wait_for('!Window.IsVisible(videobookmarks) + Control.HasFocus(607)', timeout=5)
+
+
+def test_back_on_the_chapters_button_closes_the_osd(tracks):
+    chapters()
+    action('back')
+    wait_for('!Window.IsVisible(videobookmarks) + !Window.IsVisible(videoosd)', timeout=5)
+    assert cond('Player.HasVideo')['Player.HasVideo']
+
+
 def test_chapter_panel_right_goes_to_stats_with_its_setting(tracks):
     builtin('Skin.SetBool(nc.osd.stats)')
     try:
-        focus(608)
-        action('up')
-        wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(11)', timeout=5)
-        builtin('SetFocus(11,2,absolute)')
-        wait_for('Integer.IsEqual(Container(11).CurrentItem,3)')
+        chapters()
         action('right')
         wait_for('!Window.IsVisible(videobookmarks) + Control.HasFocus(609)', timeout=5)
     finally:
@@ -117,7 +145,8 @@ def test_track_list_wraps_upward_onto_all_settings(tracks):
     wait_for('Integer.IsEqual(Container(651).CurrentItem,{})'.format(last))
 
 
-@pytest.mark.parametrize('stats, last', [(False, 608), (True, 609)], ids=['chapters', 'stats'])
+# chapters: its panel shows and holds the focus on its stand-in for the button
+@pytest.mark.parametrize('stats, last', [(False, 90), (True, 609)], ids=['chapters', 'stats'])
 def test_button_rows_wrap_around(tracks, stats, last):
     """Left on the far left control lands on the far right one, Right there back on the far left:
     stats with its skin setting, else chapters. No "…" any more."""
@@ -127,9 +156,9 @@ def test_button_rows_wrap_around(tracks, stats, last):
         wait_for('Control.IsVisible(609)' if stats else '!Control.IsVisible(609)')
         focus(601)
         action('left')
-        wait_for('Control.HasFocus({})'.format(last))
+        wait_for('Control.HasFocus({})'.format(last), timeout=5)
         action('right')
-        wait_for('Control.HasFocus(601)')
+        wait_for('!Window.IsVisible(videobookmarks) + Control.HasFocus(601)', timeout=5)
     finally:
         builtin('Skin.Reset(nc.osd.stats)')
 
@@ -226,7 +255,7 @@ def _rows(panel):
     time.sleep(1)
     focus(611)
     if panel:
-        focus(608)
+        chapters()
         action('up')
         wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(11)', timeout=5)
     else:
@@ -250,13 +279,14 @@ def test_back_held_in_the_rows_goes_to_the_controls(tracks, panel, key):
 
 
 def test_back_in_the_rows_goes_back_to_the_controls(tracks):
-    """A single Back closes the cast row or the chapter panel onto the controls."""
+    """A single Back closes the cast row onto the controls; in the chapter panel it goes back onto
+    the panel's button."""
     _rows(False)
     press('backspace')
     wait_for('Window.IsActive(videoosd) + !Window.IsVisible(1141) + Control.HasFocus(611)', timeout=5)
     _rows(True)
     press('backspace')
-    wait_for('Window.IsActive(videoosd) + !Window.IsVisible(videobookmarks) + Control.HasFocus(608)', timeout=5)
+    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(90)', timeout=5)
 
 
 def test_back_over_the_bare_video_stops_it(tracks):

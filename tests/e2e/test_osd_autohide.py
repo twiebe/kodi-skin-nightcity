@@ -161,15 +161,14 @@ def test_osd_stays_while_in_a_track_panel(autohide, tracks, button, panel):
 
 
 def test_osd_stays_in_the_chapter_panel(autohide, tracks):
-    """The chapter panel is a dialog over the OSD: the OSD stays until the user is back on the
-    controls, then the delay counts again."""
+    """The chapter panel is a dialog over the OSD, up while its button has the focus: the OSD stays
+    until the focus moves on, then the delay counts again."""
     builtin('SetFocus(608)')
-    wait_for('Control.HasFocus(608)')
-    action('up')
-    wait_for('Window.IsActive(videobookmarks)')
+    # the panel shows with the focus on the button, as a track panel
+    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(90)', timeout=5)
     time.sleep(5)
     assert osd_up() and cond('Window.IsActive(videobookmarks)')['Window.IsActive(videobookmarks)']
-    action('back')
+    action('left')  # on to video: the panel goes with the focus
     wait_for('!Window.IsVisible(videobookmarks)')
     start = time.time()
     wait_for('!Window.IsActive(videoosd)', timeout=8)

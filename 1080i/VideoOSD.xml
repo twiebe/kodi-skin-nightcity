@@ -21,6 +21,7 @@
     <onunload>ClearProperty(nc.sub.rows,home)</onunload>
     <!-- an OSD the pause opened (Custom_1150_PauseOSD.xml) and that is closed by hand stays closed -->
     <onunload>ClearProperty(nc.osd.auto,home)</onunload>
+    <onunload>ClearProperty(nc.osd.chapters,home)</onunload>
     <animation effect="fade" time="150">WindowOpen</animation>
     <!-- closing is the opening backwards: what plays (PlayerFade) fades out first, the controls
          and the seek line PlayerFadeStep later; 300 ms in all, as Kodi drops keys while the OSD
@@ -147,12 +148,14 @@
                 <param name="onclick" value="ActivateWindow(osdvideosettings)"/>
                 <onup>SetFocus(653)</onup>
             </include>
-            <!-- the chapter panel above the row (VideoOSDBookmarks.xml). Always there and always
+            <!-- the chapter panel above the row (VideoOSDBookmarks.xml), shown with the focus as
+                 a track panel; its dialog takes the keys meanwhile. Always there and always
                  "chapters": Kodi has no condition for bookmarks, and the panel is where a bookmark
                  is added, also in a video without chapters -->
             <include content="PillButton">
                 <param name="id" value="608"/>
                 <param name="label" value="$LOCALIZE[31140]"/>
+                <param name="onfocus" value="ActivateWindow(videobookmarks)"/>
                 <param name="onclick" value="ActivateWindow(videobookmarks)"/>
                 <onup>ActivateWindow(videobookmarks)</onup>
             </include>

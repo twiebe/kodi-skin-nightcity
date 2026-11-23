@@ -90,8 +90,25 @@ def test_chapter_panel_without_chapters_focuses_at_once(playing):
     key('select')
     wait_for('Window.IsActive(videoosd)')
     builtin('SetFocus(608)')
-    wait_for('Control.HasFocus(608)')
+    # the panel shows with the focus on the button, as a track panel
+    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(90)', timeout=5)
     key('up')
     wait_for('Window.IsActive(videobookmarks)')
     wait_for('Control.HasFocus(2)', timeout=0.6)
 
+
+
+def test_cast_row_from_the_chapters_button_returns_to_its_panel(playing):
+    """Down from the chapters button (its panel up) opens the cast row of a library title; Back
+    there closes it and the button's panel shows again, the focus on the button."""
+    key('select')
+    wait_for('Window.IsActive(videoosd)')
+    builtin('SetFocus(608)')
+    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(90)', timeout=5)
+    time.sleep(0.3)
+    key('down')
+    wait_for('Window.IsActive(1141) + !Window.IsVisible(videobookmarks)', timeout=5)
+    key('back')
+    wait_for('Window.IsActive(videobookmarks) + !Window.IsVisible(1141) + Control.HasFocus(90)', timeout=5)
+    action('back')
+    stop()

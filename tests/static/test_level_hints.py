@@ -300,11 +300,11 @@ def test_osd_hint():
 
 def test_chapter_panel_has_no_hints_of_its_own():
     """The chapter panel is a panel above a button of the controls: their hints stay, it has
-    none of its own. Down from the list closes it onto its button, Up from the buttons does
+    none of its own. Down from the list goes back onto its button, Up from the buttons does
     nothing."""
     controls = _controls('VideoOSDBookmarks.xml')
     assert not [i for i in parse(ROOT / '1080i' / 'VideoOSDBookmarks.xml').iter('include') if i.get('content') == 'LevelHint']
-    assert _actions(controls['11'], 'ondown') == [('', 'Dialog.Close(videobookmarks)')]
+    assert _actions(controls['11'], 'ondown') == [('', '90')]
     assert _actions(controls['9000'], 'onup') == [('', 'noop')]
 
 

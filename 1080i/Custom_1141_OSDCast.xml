@@ -18,6 +18,11 @@
     <onload>ClearProperty(nc.osd.bio.pending,home)</onload>
     <onload>ClearProperty(nc.osd.click,home)</onload>
     <onload>ClearProperty(nc.osd.ret,home)</onload>
+    <!-- opened Down from the chapters button (VideoOSDBookmarks.xml 90): closed back onto the
+         controls, the button's panel shows again. Not when a chain leaves (nc.osd.ret, set
+         before the row closes) or the OSD goes with it -->
+    <onunload condition="!String.IsEmpty(Window(Home).Property(nc.osd.chapters)) + String.IsEmpty(Window(Home).Property(nc.osd.ret)) + Window.IsActive(videoosd)">ActivateWindow(videobookmarks)</onunload>
+    <onunload>ClearProperty(nc.osd.chapters,home)</onunload>
     <animation effect="fade" time="150">WindowOpen</animation>
     <animation effect="fade" time="150">WindowClose</animation>
     <controls>

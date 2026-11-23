@@ -183,7 +183,8 @@ def test_panel_more_opens_full_settings(tracks):
 
 def test_chapters_button_opens_chapter_list(tracks):
     builtin('SetFocus(608)')
-    wait_for('Control.HasFocus(608)')
+    # the panel shows with the focus on the button, as a track panel
+    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(90)', timeout=5)
     action('up')
     try:
         wait_for('Window.IsActive(videobookmarks)')

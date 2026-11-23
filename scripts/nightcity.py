@@ -795,7 +795,9 @@ def back_to_start():
     home = _home()
     position = xbmc.getInfoLabel('Window(Home).Property(TMDbHelper.Position)')
     if xbmc.getCondVisibility(OSD_ROWS):
-        # closed at once: the SetFocus goes to the topmost dialog, the OSD only once they are gone
+        # closed at once: the SetFocus goes to the topmost dialog, the OSD only once they are gone;
+        # the cast row does not reopen the chapter panel it came from (Custom_1141_OSDCast.xml)
+        home.clearProperty('nc.osd.chapters')
         xbmc.executebuiltin('Dialog.Close(1141,true)')
         xbmc.executebuiltin('Dialog.Close(videobookmarks,true)')
         xbmc.executebuiltin('SetFocus(602)')
@@ -1690,9 +1692,12 @@ BACK_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
       <rightclick>Back</rightclick>
     </mouse>
   </movieinformation>
-  <!-- the player's chapter panel and cast row: Back held goes to the player's controls (back_to_start) -->
+  <!-- the player's chapter panel and cast row: Back held goes to the player's controls (back_to_start).
+       Esc in the chapter panel is Back: on its stand-in for the chapters button Back closes the
+       OSD, as on the other buttons (VideoOSDBookmarks.xml 90) -->
   <videobookmarks>
     <keyboard>
+      <escape>Back</escape>
       <backspace mod="longpress">NotifyAll(nightcity,back_to_start)</backspace>
       <browser_back mod="longpress">NotifyAll(nightcity,back_to_start)</browser_back>
       <escape mod="longpress">NotifyAll(nightcity,back_to_start)</escape>

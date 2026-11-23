@@ -323,25 +323,17 @@ def test_chapter_panel_of_thumbnails():
 
 
 def test_chapter_panel_starts_no_python():
-    """The panel focuses its list through two focus hops instead of a script: Kodi fills the list
-    only after it set the focus."""
+    """The panel opens with the focus on its stand-in for the button; no script, no timer."""
     assert not any('RunScript' in t for t in _onloads('VideoOSDBookmarks.xml'))
     controls = {c.get('id'): c for c in parse(ROOT / '1080i' / 'VideoOSDBookmarks.xml').iter('control')}
-    hop = lambda cid: [(o.get('condition') or '', o.text) for o in controls[cid].findall('onfocus')]
-    # focus actions wait in Kodi's queue: one hop still runs before the list is filled, the
-    # second sees it
-    assert hop('93') == [('', 'SetFocus(94)')]
-    assert hop('94')[:2] == [('Integer.IsGreater(Container(11).NumItems,0)', 'SetFocus(11)'),
-                             ('!Integer.IsGreater(Container(11).NumItems,0)', 'SetFocus(2)')]
+    assert '93' not in controls and '94' not in controls
     assert not any(t.findtext('name') == 'nc_chapters_focus' for t in parse(ROOT / '1080i' / 'Timers.xml').iter('timer'))
 
 
 def test_cast_row_after_a_chain_opens_from_the_osd():
     """Back from a chain the OSD's stand-in 699 opens the cast row (test_player_osd.py); the chapter
-    panel is no step on the way any more, its hops only pick its list."""
-    controls = {c.get('id'): c for c in parse(ROOT / '1080i' / 'VideoOSDBookmarks.xml').iter('control')}
+    panel is no step on the way."""
     assert not any('ActivateWindow' in t for t in _onloads('VideoOSDBookmarks.xml'))
-    assert [o.text for o in controls['94'].findall('onfocus')] == ['SetFocus(11)', 'SetFocus(2)']
 
 CAST_DIALOG = 'Custom_1141_OSDCast.xml'
 LISTS_IDLE = '!Container(6501).IsUpdating + !Container(6599).IsUpdating'

@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Chapter panel during playback: OK or Up on the OSD's chapters button (608, VideoOSD.xml)
-     opens it above the button row, which stays. Kodi lists the file's chapters and bookmarks in
-     list 11, chapters with a thumbnail (Kodi's setting myvideos.extractchapterthumbs, switched on
-     once by the startup script), and preselects the playing chapter; the bookmark buttons sit in
-     the panel's head. Up from the list goes to the buttons, Down or Back closes the panel back
-     onto the button; Left and Right past the ends move on to the neighbouring buttons, as in the
-     track panels: right of chapters is stats when switched on, else the row wraps to the left
-     row. Kodi ids: 11 bookmark list, 2 add, 3 clear, 4 add episode bookmark. -->
+<!-- Chapter panel during playback, above the OSD's chapters button (608, VideoOSD.xml), like the
+     track panels: it opens as the button gets the focus and closes as the focus leaves it. Kodi
+     fills its list only in this dialog, so while the panel shows the focus is here, on a stand-in
+     for the button (90): the OSD keeps its own focus on 608, which shows as focused below. Up or
+     OK go into the panel, Left and Right on to the neighbouring buttons, Down to the cast row of a
+     library title, Back closes the OSD as on any button. Kodi lists the file's chapters and
+     bookmarks in list 11, chapters with a thumbnail (Kodi's setting
+     myvideos.extractchapterthumbs, switched on once by the startup script), and preselects the
+     playing chapter; the bookmark buttons sit in the panel's head. Up from the list goes to the
+     buttons, Down or Back from them back onto the button; Left and Right past the ends move on to
+     the neighbouring buttons: right of chapters is stats when switched on, else the row wraps to
+     the left row. Kodi ids: 11 bookmark list, 2 add, 3 clear, 4 add episode bookmark. -->
 <window>
     <depth>DepthOSD</depth>
-    <!-- Kodi fills list 11 right after it set the focus, so the focus goes to a stand-in: its
-         focus actions wait in Kodi's queue, a second hop (93, then 94) sees the filled list and
-         picks it or, without chapters or bookmarks, add bookmark. Skin timers would take up to a
-         second. -->
-    <defaultcontrol always="true">93</defaultcontrol>
+    <!-- the button: the focus stays on it until a key goes into the panel -->
+    <defaultcontrol always="true">90</defaultcontrol>
     <animation effect="fade" time="120">WindowOpen</animation>
     <animation effect="fade" time="120">WindowClose</animation>
     <controls>
@@ -53,7 +54,8 @@
             <itemgap>-8</itemgap>
             <onup>noop</onup>
             <ondown condition="Integer.IsGreater(Container(11).NumItems,0)">11</ondown>
-            <ondown condition="!Integer.IsGreater(Container(11).NumItems,0)">Dialog.Close(videobookmarks)</ondown>
+            <ondown condition="!Integer.IsGreater(Container(11).NumItems,0)">90</ondown>
+            <onback>90</onback>
             <onleft>Dialog.Close(videobookmarks,true)</onleft>
             <onleft>SetFocus(607)</onleft>
             <onright>Dialog.Close(videobookmarks,true)</onright>
@@ -79,25 +81,31 @@
                 <param name="onclick" value="noop"/>
             </include>
         </control>
-        <!-- focus hops: see defaultcontrol -->
-        <control type="button" id="93">
+        <!-- the chapters button while its panel shows (see the head). Down: the cast row of a
+             library title; closed from there it opens the panel again (nc.osd.chapters,
+             Custom_1141_OSDCast.xml). Back closes the OSD, as on the other buttons. -->
+        <control type="button" id="90">
             <left>-100</left>
             <top>-100</top>
             <width>1</width>
             <height>1</height>
             <texturefocus/>
             <texturenofocus/>
-            <onfocus>SetFocus(94)</onfocus>
-        </control>
-        <control type="button" id="94">
-            <left>-100</left>
-            <top>-100</top>
-            <width>1</width>
-            <height>1</height>
-            <texturefocus/>
-            <texturenofocus/>
-            <onfocus condition="Integer.IsGreater(Container(11).NumItems,0)">SetFocus(11)</onfocus>
-            <onfocus condition="!Integer.IsGreater(Container(11).NumItems,0)">SetFocus(2)</onfocus>
+            <onup condition="Integer.IsGreater(Container(11).NumItems,0)">11</onup>
+            <onup condition="!Integer.IsGreater(Container(11).NumItems,0)">2</onup>
+            <onclick condition="Integer.IsGreater(Container(11).NumItems,0)">SetFocus(11)</onclick>
+            <onclick condition="!Integer.IsGreater(Container(11).NumItems,0)">SetFocus(2)</onclick>
+            <onleft>Dialog.Close(videobookmarks,true)</onleft>
+            <onleft>SetFocus(607)</onleft>
+            <onright>Dialog.Close(videobookmarks,true)</onright>
+            <onright condition="Skin.HasSetting(nc.osd.stats)">SetFocus(609)</onright>
+            <onright condition="!Skin.HasSetting(nc.osd.stats)">SetFocus(601)</onright>
+            <ondown condition="VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)">SetProperty(nc.osd.chapters,1,home)</ondown>
+            <ondown condition="VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)">Dialog.Close(videobookmarks,true)</ondown>
+            <ondown condition="VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)">ActivateWindow(1141)</ondown>
+            <ondown condition="!VideoPlayer.Content(movies) + !VideoPlayer.Content(episodes)">noop</ondown>
+            <onback>Dialog.Close(videobookmarks,true)</onback>
+            <onback>Dialog.Close(videoosd)</onback>
         </control>
         <!-- Left on the first card and Right on the last one: the neighbouring buttons -->
         <control type="list" id="11">
@@ -109,7 +117,8 @@
             <scrolltime tween="quadratic">200</scrolltime>
             <preloaditems>2</preloaditems>
             <onup>9000</onup>
-            <ondown>Dialog.Close(videobookmarks)</ondown>
+            <ondown>90</ondown>
+            <onback>90</onback>
             <onleft>Dialog.Close(videobookmarks,true)</onleft>
             <onleft>SetFocus(607)</onleft>
             <onright>Dialog.Close(videobookmarks,true)</onright>

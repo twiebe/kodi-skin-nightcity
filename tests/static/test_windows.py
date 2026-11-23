@@ -193,10 +193,10 @@ def test_track_panel_slots_match_script():
 
 
 def test_chapters_dialog_focuses_chapters():
-    """The chapter panel opens on the chapter list, add bookmark only without entries (focus hops
-    93 and 94, test_tmdb_navigation.py)."""
+    """The chapter panel opens with the focus on its stand-in for the chapters button (90);
+    Up or OK go into the chapter list, add bookmark only without entries."""
     root = parse(ROOT / '1080i' / 'VideoOSDBookmarks.xml')
-    assert root.findtext('defaultcontrol') == '93'
+    assert root.findtext('defaultcontrol') == '90'
 
 
 def test_osd_watches_tracks_once():

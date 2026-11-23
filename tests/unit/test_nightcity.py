@@ -900,8 +900,9 @@ def test_back_keymap_long_back_in_the_player_rows(window):
     import xml.etree.ElementTree as ET
     root = ET.fromstring(nightcity.BACK_KEYMAP)
     keys = {(device.tag, key.tag, key.get('mod')): key.text for device in root.find(window) for key in device}
-    assert keys == {('keyboard', k, 'longpress'): 'NotifyAll(nightcity,back_to_start)'
-                    for k in ('backspace', 'browser_back', 'escape')}
+    held = {('keyboard', k, 'longpress'): 'NotifyAll(nightcity,back_to_start)' for k in ('backspace', 'browser_back', 'escape')}
+    # Esc in the chapter panel is Back: on the panel's stand-in for its button Back closes the OSD
+    assert keys == ({**held, ('keyboard', 'escape', None): 'Back'} if window == 'videobookmarks' else held)
 
 
 def test_back_keymap_back_over_the_bare_video_stops_it():

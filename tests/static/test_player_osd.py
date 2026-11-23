@@ -247,29 +247,53 @@ def test_chapters_button_opens_the_chapter_panel():
 def test_chapter_panel_above_the_button():
     """The panel sits above the button row and below the seek line's top: a frame with the
     chapters' thumbnails and the bookmark buttons in its head. Up from the list goes to the
-    buttons, Down closes the panel onto its button; Left and Right past the ends move on to the
-    neighbouring buttons, as in the track panels, after the panel closed at once (SetFocus goes
-    to the topmost dialog): right of chapters is stats with its setting, else the row wraps to
-    the left row."""
+    buttons, Down or Back from either back onto the button; Left and Right past the ends move on
+    to the neighbouring buttons, as in the track panels, after the panel closed at once (SetFocus
+    goes to the topmost dialog): right of chapters is stats with its setting, else the row wraps
+    to the left row."""
     dialog = load('VideoOSDBookmarks.xml')
     assert not any('RunScript' in (o.text or '') for o in dialog.iter())
-    assert dialog.findtext('defaultcontrol') == '93'
+    assert dialog.findtext('defaultcontrol') == '90'
     controls = {c.get('id'): c for c in dialog.iter('control') if c.get('id')}
-    assert '90' not in controls
     chapters, buttons = controls['11'], controls['9000']
     assert chapters.findtext('orientation') == 'horizontal'
     assert int(chapters.findtext('top')) + int(chapters.findtext('height')) <= 840
     assert [c.get('id') for c in buttons.findall('control')] == ['2', '4', '3']
     actions = lambda c, tag: [(o.get('condition') or '', o.text) for o in c.findall(tag)]
     assert actions(chapters, 'onup') == [('', '9000')]
-    assert actions(chapters, 'ondown') == [('', 'Dialog.Close(videobookmarks)')]
+    assert actions(chapters, 'ondown') == actions(chapters, 'onback') == [('', '90')]
     assert actions(buttons, 'onup') == [('', 'noop')]
-    for control in (chapters, buttons):
+    assert actions(buttons, 'onback') == [('', '90')]
+    for control in (chapters, buttons, controls['90']):
         assert actions(control, 'onleft') == [('', 'Dialog.Close(videobookmarks,true)'), ('', 'SetFocus(607)')]
         assert actions(control, 'onright') == [('', 'Dialog.Close(videobookmarks,true)'), (STATS, 'SetFocus(609)'),
                                                ('!' + STATS, 'SetFocus(601)')]
     assert actions(buttons, 'ondown') == [('Integer.IsGreater(Container(11).NumItems,0)', '11'),
-                                          ('!Integer.IsGreater(Container(11).NumItems,0)', 'Dialog.Close(videobookmarks)')]
+                                          ('!Integer.IsGreater(Container(11).NumItems,0)', '90')]
+
+
+def test_chapter_panel_shows_with_the_focus_on_its_button():
+    """As the track panels: the chapters button shows its panel as it gets the focus. Kodi fills
+    the chapter list only in its own dialog, so that dialog opens on a stand-in for the button
+    (90), the OSD keeping its focus on 608 below. On the stand-in Up or OK go into the list (add
+    bookmark without entries), Down to the cast row of a library title, which closed opens the
+    panel again (nc.osd.chapters), Back closes the OSD as on any button."""
+    osd = _controls(OSD)
+    assert osd['608'].findtext('onfocus') == 'ActivateWindow(videobookmarks)'
+    stand_in = {c.get('id'): c for c in load('VideoOSDBookmarks.xml').iter('control') if c.get('id')}['90']
+    actions = lambda tag: [(o.get('condition') or '', o.text) for o in stand_in.findall(tag)]
+    filled, empty = 'Integer.IsGreater(Container(11).NumItems,0)', '!Integer.IsGreater(Container(11).NumItems,0)'
+    assert actions('onup') == [(filled, '11'), (empty, '2')]
+    assert actions('onclick') == [(filled, 'SetFocus(11)'), (empty, 'SetFocus(2)')]
+    cast = 'VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)'
+    assert actions('ondown')[:3] == [(cast, 'SetProperty(nc.osd.chapters,1,home)'),
+                                     (cast, 'Dialog.Close(videobookmarks,true)'), (cast, 'ActivateWindow(1141)')]
+    assert actions('onback') == [('', 'Dialog.Close(videobookmarks,true)'), ('', 'Dialog.Close(videoosd)')]
+    unloads = [(o.get('condition'), o.text) for o in load('Custom_1141_OSDCast.xml').findall('onunload')]
+    assert unloads[0] == ('!String.IsEmpty(Window(Home).Property(nc.osd.chapters)) + String.IsEmpty(Window(Home).Property(nc.osd.ret))'
+                          ' + Window.IsActive(videoosd)', 'ActivateWindow(videobookmarks)')
+    assert unloads[-1] == (None, 'ClearProperty(nc.osd.chapters,home)')
+    assert 'ClearProperty(nc.osd.chapters,home)' in [o.text for o in load(OSD).findall('onunload')]
 
 
 def test_down_from_the_controls_opens_the_cast_row():
