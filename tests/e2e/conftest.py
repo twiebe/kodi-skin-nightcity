@@ -695,6 +695,19 @@ def _wait_for_service():
     wait_for('!String.IsEmpty(Window(Home).Property(nc.service))', timeout=60)
 
 
+def kodi_major(build):
+    """The major version in System.BuildVersion: "21.2 (21.2.0) Git:..." is 21, a release
+    candidate of 22 "22.0-RC2 (21.90.902) Git:..." is 22."""
+    return int(build.split('.', 1)[0])
+
+
+@pytest.fixture(scope='session')
+def kodi_version():
+    """The major version of the Kodi under test, as it says itself (21, 22): for a test whose
+    expectation differs by version without being bound to one (marker kodi)."""
+    return kodi_major(info('System.BuildVersion')['System.BuildVersion'])
+
+
 @pytest.fixture
 def home():
     """Start each test from Home with nothing playing and no dialog open.

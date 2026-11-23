@@ -52,3 +52,8 @@ def test_a_test_bound_to_a_kodi_skips_on_the_other():
     assert both.added == [] and free.added == []
     e2e.skip_other_kodi([only21], '21')
     assert len(only21.added) == 1
+
+
+def test_the_major_version_of_a_build():
+    assert e2e.kodi_major('21.2 (21.2.0) Git:20250105-6cf6c4bf4b') == 21
+    assert e2e.kodi_major('22.0-RC2 (21.90.902) Git:20261109-d686683') == 22
