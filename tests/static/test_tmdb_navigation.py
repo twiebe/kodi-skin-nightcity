@@ -648,3 +648,26 @@ def test_cast_row_dims_the_video_as_an_info_page():
     assert [fade.findtext(k) for k in ('left', 'top', 'width', 'height')] == ['0', '830', '1920', '40']
     assert scrim.find('texture').get('colordiffuse') == fade.find('texture').get('colordiffuse') == 'video_scrim'
     assert fade.findtext('texture') == 'ui/fade_t.png'
+
+
+VIDEO_LATCH = '!String.IsEmpty(Window(Home).Property(nc.info.video))'
+
+
+def test_info_page_over_the_video_is_decided_as_it_opens():
+    """A page opened from the library that starts its title must not turn into the page over the
+    video (the dimmed video behind it, "back to video") in the moment before Kodi shows the
+    player: the page counts as over the video only when a video played as it opened
+    (nc.info.video), latched by its onload and cleared as it closes. Every page of a chain over
+    the video opens with it again."""
+    root = parse(ROOT / '1080i' / 'DialogVideoInfo.xml')
+    loads = [(o.get('condition'), o.text) for o in root.findall('onload')]
+    assert ('Player.HasVideo', 'SetProperty(nc.info.video,1,home)') in loads
+    assert ('!Player.HasVideo', 'ClearProperty(nc.info.video,home)') in loads
+    assert 'ClearProperty(nc.info.video,home)' in [o.text for o in root.findall('onunload')]
+    expressions = {e.get('name'): e.text for f in ('Includes_Base.xml', 'Includes_Info.xml')
+                   for e in parse(ROOT / '1080i' / f).iter('expression')}
+    for name in ('InfoOverVideo', 'InfoPlaying'):
+        assert expressions[name].startswith(VIDEO_LATCH + ' + '), name
+    # nothing else sets it: no page keeps the latch of another
+    sets = [f.name for f in (ROOT / '1080i').glob('*.xml') if 'nc.info.video' in f.read_text()]
+    assert sorted(sets) == ['DialogVideoInfo.xml', 'Includes_Base.xml', 'Includes_Info.xml']

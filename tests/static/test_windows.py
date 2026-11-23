@@ -350,7 +350,7 @@ def test_an_info_page_over_a_playing_video_shows_the_video_dimmed():
     A trailer the page plays itself draws its own layer and keeps the page's look."""
     root = parse(ROOT / '1080i' / 'Includes_Base.xml')
     over = next(e for e in root.iter('expression') if e.get('name') == 'InfoOverVideo').text
-    assert over.startswith('Player.HasVideo + ')
+    assert over.startswith('!String.IsEmpty(Window(Home).Property(nc.info.video)) + Player.HasVideo + ')
     assert 'String.IsEmpty(Window(Home).Property(nc.trailer))' in over
     background = next(i for i in root.iter('include') if i.get('name') == 'InfoBackground')
     first = background[0]
