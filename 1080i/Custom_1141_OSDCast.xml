@@ -26,25 +26,8 @@
     <animation effect="fade" time="150">WindowOpen</animation>
     <animation effect="fade" time="150">WindowClose</animation>
     <controls>
-        <!-- the video dimmed as behind an info page over it (InfoBackground, video_scrim): the
-             names, roles and biography read over a bright picture. Down to the row's bottom,
-             then fading out above the seek line: the seek bar dialog lies under this one, its
-             line and times would be dimmed with the video -->
-        <control type="image">
-            <description>video scrim</description>
-            <left>0</left>
-            <top>0</top>
-            <width>1920</width>
-            <height>830</height>
-            <texture colordiffuse="video_scrim">ui/white.png</texture>
-        </control>
-        <control type="image">
-            <left>0</left>
-            <top>830</top>
-            <width>1920</width>
-            <height>40</height>
-            <texture colordiffuse="video_scrim">ui/fade_t.png</texture>
-        </control>
+        <!-- no scrim of its own: the seek bar dialog dims the whole video under the row, below
+             its seek line (DialogSeekBar.xml), which a scrim here would dim with the video -->
 
         <!-- the focused person -->
         <control type="group">

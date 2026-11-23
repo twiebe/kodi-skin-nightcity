@@ -7,7 +7,7 @@
      TMDb navigation (Includes_Tmdb.xml): movies and shows list their cast or crew from TMDb
      (5500, tabs 5520), a person page (TMDb Helper item with tmdb_type person) shows photo,
      biography and the person's films, shows or crew jobs (5510). A click on any of them opens
-     that page in TMDb Helper's chain; "close all" (9004) ends the chain. Kodi's own cast list 50
+     that page in TMDb Helper's chain; Back held ends the chain. Kodi's own cast list 50
      only shows when TMDb has no cast.
      There is no control 5, so Kodi leaves the visibility of 4 and 50 to the skin. -->
 <window>
@@ -345,8 +345,8 @@
             </include>
         </control>
 
-        <!-- as wide as the text above it reaches (to x 1856): a chain's way back, resume, from
-             start, trailer, description and … fit in every language -->
+        <!-- as wide as the text above it reaches (to x 1856): play, resume, from start, trailer,
+             description and … fit in every language -->
         <control type="grouplist" id="9000">
             <left>384</left>
             <top>487</top>
@@ -380,31 +380,29 @@
             <ondown condition="!String.IsEqual(ListItem.Property(tmdb_type),person) + !Control.IsVisible(5403)">50</ondown>
             <!-- an episode has no poster: the buttons sit under its text at the left margin -->
             <animation effect="slide" end="-330,0" time="0" condition="String.IsEqual(ListItem.DBType,episode)">Conditional</animation>
-            <!-- inside a chain: one page back, named after it (ChainStepBack, nc.chain.before);
-                 on the chain's first page, and over the playing video, back all the way, to
-                 where the chain started (ChainBackLabel names it; Back held does that on every
-                 page). At the left end, the way back: Left from the first button reaches it, but
-                 it takes the focus only from within the row, never when the page opens; a
-                 person page has no other button, nor the page of the title that plays: resume,
-                 from start and ... would start it from the beginning, they hide, and back to the
-                 video is the way (InfoPlaying; 9009 outside a chain). -->
+            <!-- No way-back button: Up from this row leaves the page, and the hint in the middle
+                 of the path line names where to (9059, HintInfoBack). Only where the row would
+                 be empty is there one, so something takes the focus: a person page without a
+                 biography and the page of the title that plays (resume, from start and … would
+                 start it from the beginning, they hide) without a description. In a chain one
+                 page back, named after it (ChainStepBack, nc.chain.before), on the chain's first
+                 page and over the playing video back all the way, to where the chain started
+                 (ChainBackLabel; Back held does that on every page); outside a chain (the
+                 library while it plays) back to the video. -->
             <include content="PillButton">
                 <param name="id" value="9004"/>
                 <param name="label" value="‹ $VAR[ChainBackLabel]"/>
-                <param name="visible" value="!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))"/>
-                <param name="enable" value="ControlGroup(9000).HasFocus() | String.IsEqual(ListItem.Property(tmdb_type),person) | $EXP[InfoPlaying]"/>
+                <param name="visible" value="!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + $EXP[InfoRowEmpty]"/>
                 <onclick condition="$EXP[ChainStepBack]">Action(Back)</onclick>
                 <onclick condition="!$EXP[ChainStepBack]">SetProperty(TMDbHelper.Command,exit,home)</onclick>
                 <include>ChainBackGuard</include>
             </include>
-            <!-- the title that plays, outside a chain (the OSD's info button, the library while it
-                 plays): nothing to play, one way back to the video; in a chain 9004 is it -->
             <include content="PillButton">
                 <param name="id" value="9009"/>
                 <param name="label" value="‹ $LOCALIZE[31330]"/>
                 <param name="color" value="accent"/>
                 <param name="textcolor" value="accent"/>
-                <param name="visible" value="$EXP[InfoPlaying] + String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))"/>
+                <param name="visible" value="$EXP[InfoPlaying] + String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + $EXP[InfoRowEmpty]"/>
                 <param name="onclick" value="Dialog.Close(movieinformation)"/>
                 <param name="onclick2" value="ActivateWindow(fullscreenvideo)"/>
                 <include>ChainBackGuard</include>
@@ -632,7 +630,7 @@
                 <include content="LevelHint">
                     <param name="id" value="5190"/>
                     <param name="key" value="←→"/>
-                    <param name="label" value="$LOCALIZE[31132]   [COLOR state_text]↑[/COLOR] $LOCALIZE[31131]$VAR[HintEpisodeDown]   [COLOR state_text]⏎[/COLOR] $LOCALIZE[31135]"/>
+                    <param name="label" value="$LOCALIZE[31132]   [COLOR state_text]↑[/COLOR] $LOCALIZE[31131]$VAR[HintEpisodeDown]   [COLOR state_text]OK[/COLOR] $LOCALIZE[31135]"/>
                     <!-- 619 (the grouplist) + 411: the footer line -->
                     <param name="top" value="411"/>
                     <param name="height" value="34"/>

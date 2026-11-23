@@ -190,9 +190,15 @@
                     <textureradioonnofocus colordiffuse="accent">ui/qm_menu.png</textureradioonnofocus>
                     <textureradioofffocus colordiffuse="focus_text">ui/qm_menu.png</textureradioofffocus>
                     <textureradiooffnofocus colordiffuse="text_mute">ui/qm_menu.png</textureradiooffnofocus>
-                    <!-- the quick menu shows while the icon has the focus (QuickMenuPanel): OK
-                         and Down go into it -->
-                    <onclick>SetFocus(1210)</onclick>
+                    <!-- the quick menu shows while the icon has the focus (QuickMenuPanel): Down
+                         goes into it, OK opens the settings as the menu's settings link does, Back
+                         held there returns to where the focus came onto the icon from, as Back on
+                         the icon does (nc.quick.from, scripts/nightcity.py settings_return), else
+                         to the icon -->
+                    <onclick condition="!String.IsEmpty(Window(Home).Property(nc.quick.from))">SetProperty(nc.settings.from,"$VAR[SettingsFrom]",home)</onclick>
+                    <onclick condition="String.IsEmpty(Window(Home).Property(nc.quick.from))">SetProperty(nc.settings.from,"home|$INFO[Window(Home).Property(nc.page)]|9109",home)</onclick>
+                    <onclick>SetProperty(nc.go,system,home)</onclick>
+                    <onclick>ActivateWindow(1160)</onclick>
                     <!-- the last menu entry shown, not the one that had the focus last; right
                          wraps around to home -->
                     <onleft condition="Player.HasAudio">9108</onleft>
@@ -1209,7 +1215,9 @@
                 <param name="label" value="$LOCALIZE[31030]"/>
                 <param name="active" value="String.IsEqual(Window(Home).Property(nc.page),movies)"/>
                 <param name="onfocus" value="SetProperty(nc.page,movies,home)"/>
-                <param name="onclick" value="Action(Down)"/>
+                <!-- OK opens all of them in the library window, Down goes into the page (HintHomeDown) -->
+                <param name="onclick" value="SetProperty(nc.library,movies,home)"/>
+                <param name="onclick2" value="ActivateWindow(1110)"/>
                 <param name="visible" value="!Skin.HasSetting(nc.menu.hide.movies)"/>
             </include>
             <include content="TabGap">
@@ -1223,7 +1231,9 @@
                 <param name="label" value="$LOCALIZE[31031]"/>
                 <param name="active" value="String.IsEqual(Window(Home).Property(nc.page),shows)"/>
                 <param name="onfocus" value="SetProperty(nc.page,shows,home)"/>
-                <param name="onclick" value="Action(Down)"/>
+                <!-- OK opens all of them in the library window, Down goes into the page (HintHomeDown) -->
+                <param name="onclick" value="SetProperty(nc.library,tvshows,home)"/>
+                <param name="onclick2" value="ActivateWindow(1110)"/>
                 <param name="visible" value="!Skin.HasSetting(nc.menu.hide.shows)"/>
             </include>
             <include content="TabGap">
@@ -1238,7 +1248,9 @@
                 <param name="label" value="$LOCALIZE[31405]"/>
                 <param name="active" value="String.IsEqual(Window(Home).Property(nc.page),music)"/>
                 <param name="onfocus" value="SetProperty(nc.page,music,home)"/>
-                <param name="onclick" value="Action(Down)"/>
+                <!-- OK opens all albums, as the spotlight's albums button (Includes_Music.xml 9854),
+                     Down goes into the page (HintHomeDown) -->
+                <param name="onclick" value="ActivateWindow(Music,musicdb://albums/,return)"/>
                 <param name="visible" value="!Skin.HasSetting(nc.menu.hide.music) + Library.HasContent(music)"/>
             </include>
             <include content="TabGap">

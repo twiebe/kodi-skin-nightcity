@@ -94,8 +94,12 @@ class State:
 @functools.lru_cache(maxsize=None)
 def page_expressions():
     from conftest import ROOT, parse
-    return {e.get('name'): e.text for e in parse(ROOT / '1080i' / 'Includes_Home.xml').iter('expression')
-            if e.get('name', '').startswith('Page')}
+    found = {e.get('name'): e.text for e in parse(ROOT / '1080i' / 'Includes_Home.xml').iter('expression')
+             if e.get('name', '').startswith('Page')}
+    # the info page's button row with nothing but a way back to offer (DialogVideoInfo.xml 9004)
+    found.update({e.get('name'): e.text for e in parse(ROOT / '1080i' / 'Includes_Info.xml').iter('expression')
+                  if e.get('name') == 'InfoRowEmpty'})
+    return found
 
 
 class Page:
@@ -119,10 +123,10 @@ class Page:
     def holds(self, condition, state):
         if not condition:
             return True
-        # the pages of the menu (Includes_Home.xml PageShown*, PageFirst*) spelled out; any other
-        # expression is an atom of its own
+        # the pages of the menu (Includes_Home.xml PageShown*, PageFirst*) and InfoRowEmpty
+        # (Includes_Info.xml) spelled out; any other expression is an atom of its own
         for _ in range(3):
-            condition = re.sub(r'\$EXP\[(Page\w+)\]', lambda m: '[' + page_expressions()[m.group(1)] + ']', condition)
+            condition = re.sub(r'\$EXP\[(Page\w+|InfoRowEmpty)\]', lambda m: '[' + page_expressions()[m.group(1)] + ']', condition)
         condition = re.sub(r'\$EXP\[(\w+)\]', r'\1', condition)
         expr, pos = [], 0
         for m in ATOM.finditer(condition):

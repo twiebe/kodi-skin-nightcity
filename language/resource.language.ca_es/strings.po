@@ -183,6 +183,10 @@ msgctxt "#31102"
 msgid "all shows"
 msgstr "totes les sèries"
 
+msgctxt "#31481"
+msgid "all albums"
+msgstr "tots els àlbums"
+
 msgctxt "#31103"
 msgid "in progress"
 msgstr "en curs"
@@ -436,8 +440,8 @@ msgid "Categories"
 msgstr "Categories"
 
 msgctxt "#31178"
-msgid "[COLOR state_text]⏎[/COLOR] open"
-msgstr "[COLOR state_text]⏎[/COLOR] obre"
+msgid "[COLOR state_text]OK[/COLOR] open"
+msgstr "[COLOR state_text]OK[/COLOR] obre"
 
 msgctxt "#31181"
 msgid "refresh rate, decoding, resume"
@@ -744,12 +748,12 @@ msgid "Show or hide entries of the main menu. System and power always stay, and 
 msgstr "Mostra o amaga entrades del menú principal. Sistema i energia sempre es queden, igual que la darrera pàgina visible."
 
 msgctxt "#31260"
-msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
-msgstr "[COLOR state_text]⏎[/COLOR] tria   [COLOR state_text]→[/COLOR] opció"
+msgid "[COLOR state_text]OK[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]OK[/COLOR] tria   [COLOR state_text]→[/COLOR] opció"
 
 msgctxt "#31261"
-msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
-msgstr "[COLOR state_text]↑↓[/COLOR] mou   [COLOR state_text]⏎[/COLOR] deixa"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]OK[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] mou   [COLOR state_text]OK[/COLOR] deixa"
 
 msgctxt "#31262"
 msgid "Spotlight, rows and main menu of the home, movies and shows pages."

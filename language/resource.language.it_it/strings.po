@@ -183,6 +183,10 @@ msgctxt "#31102"
 msgid "all shows"
 msgstr "tutte le serie TV"
 
+msgctxt "#31481"
+msgid "all albums"
+msgstr "tutti gli album"
+
 msgctxt "#31103"
 msgid "in progress"
 msgstr "in corso"
@@ -436,8 +440,8 @@ msgid "Categories"
 msgstr "Categorie"
 
 msgctxt "#31178"
-msgid "[COLOR state_text]⏎[/COLOR] open"
-msgstr "[COLOR state_text]⏎[/COLOR] apri"
+msgid "[COLOR state_text]OK[/COLOR] open"
+msgstr "[COLOR state_text]OK[/COLOR] apri"
 
 msgctxt "#31181"
 msgid "refresh rate, decoding, resume"
@@ -744,12 +748,12 @@ msgid "Show or hide entries of the main menu. System and power always stay, and 
 msgstr "Mostra o nascondi le voci del menu principale. Sistema e uscita restano sempre, come l'ultima pagina visibile."
 
 msgctxt "#31260"
-msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
-msgstr "[COLOR state_text]⏎[/COLOR] scegli   [COLOR state_text]→[/COLOR] opzione"
+msgid "[COLOR state_text]OK[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]OK[/COLOR] scegli   [COLOR state_text]→[/COLOR] opzione"
 
 msgctxt "#31261"
-msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
-msgstr "[COLOR state_text]↑↓[/COLOR] sposta   [COLOR state_text]⏎[/COLOR] rilascia"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]OK[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] sposta   [COLOR state_text]OK[/COLOR] rilascia"
 
 msgctxt "#31262"
 msgid "Spotlight, rows and main menu of the home, movies and shows pages."

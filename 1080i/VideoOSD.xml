@@ -224,7 +224,7 @@
         <!-- in its place while subtitles, audio or video has the focus: OK there opens the full
              settings. The one hint of the controls that follows the focus, as the footer of an
              info page's episodes does; it stands right of the standing hint (DESIGN.md): with a
-             cast row "↓ cast   ⏎ all settings" (HintTrackSettings), else ⏎ all settings alone -->
+             cast row "↓ cast & crew   OK all settings" (HintTrackSettings), else OK all settings alone -->
         <include content="LevelHint">
             <param name="id" value="691"/>
             <param name="label" value="$VAR[HintTrackSettings]"/>
@@ -232,7 +232,7 @@
         </include>
         <include content="LevelHint">
             <param name="id" value="692"/>
-            <param name="key" value="⏎"/>
+            <param name="key" value="OK"/>
             <param name="label" value="$LOCALIZE[31139]"/>
             <param name="visible" value="!Window.IsActive(1141) + ![VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)] + [Control.HasFocus(605) | Control.HasFocus(606) | Control.HasFocus(607)]"/>
         </include>

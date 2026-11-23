@@ -45,6 +45,14 @@ def _down(cid, timeout=10):
     _focus_is(cid, timeout)
 
 
+def _person_row():
+    """A person page has no play button and no way-back button: the biography's takes the
+    focus, or without a biography the way back, the row's only button."""
+    wait_for('Integer.IsEqual(System.CurrentControlId,9063) | '
+             '[Integer.IsEqual(System.CurrentControlId,9004) + !Control.IsVisible(9063)]', timeout=10)
+    assert not _true('Control.IsVisible(9004) + Control.IsVisible(9063)')
+
+
 def _up_past_the_text():
     """Up from the button row of a person page, out of the page."""
     action('up', delay=1)
@@ -205,7 +213,7 @@ def test_episode_person_opens_in_the_chain_and_back_returns(breaking_bad):
     wait_for('Integer.IsGreater(Container(5510).NumItems,0)', timeout=15)
     screenshot('vertical-person-from-episode')
     # Up on the top of the person page: one page back, the episode
-    _focus_is(9004)  # a person page has no play button: close all is the first one
+    _person_row()
     _up_past_the_text()
     wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),1)', timeout=15)
     wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.DBType,episode)', timeout=20)
@@ -250,7 +258,7 @@ def test_tmdb_page_up_from_the_top_steps_back_in_the_chain(matrix):
     wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),person)', timeout=20)
     # TMDb Helper polls for the page every half second; Back before it saw the page stalls it
     time.sleep(1.5)
-    _focus_is(9004)
+    _person_row()
     _up_past_the_text()
     wait_for('String.IsEqual(Window(Home).Property(TMDbHelper.Position),1)', timeout=15)
     wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.DBID,{})'.format(matrix), timeout=20)

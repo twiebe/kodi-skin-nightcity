@@ -1,5 +1,5 @@
 """Key hints (DESIGN.md, Key hints): where a key leads to another level and the screen does not
-show it, one quiet line names the key, a glyph in the dimmed blue of a hint, and the level it
+show it, one quiet line names the key, an arrow or OK in the dimmed blue of a hint, and the level it
 leads to, muted. Where it stands follows its key: Up at the top (the path line, top 30; the
 player's top edge, top 140), Left up the left edge, written bottom to top (LevelHintLeft), Down
 and OK in the footer line at the bottom (centred, top 1030), where the keys of the focused row
@@ -24,10 +24,12 @@ from navigation import load
 BOTTOM, TOP, PATH = '1030', '140', '30'
 CAST = 'VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)'
 CONTROLS = '$LOCALIZE[31478]'
-KEYS = ('↑', '↓', '←', '→', '⏎', '↑↓', '←→')
+# OK is the word on the remote's key, as on Kodi's own dialogs; the arrows are glyphs
+OK = 'OK'
+KEYS = ('↑', '↓', '←', '→', OK, '↑↓', '←→')
 GLYPHS = re.compile('[↑↓←→⏎]')
 KEY = '[COLOR state_text]{}[/COLOR]'
-COLOURED_KEY = re.compile(r'\[COLOR state_text\][↑↓←→⏎]+\[/COLOR\]')
+COLOURED_KEY = re.compile(r'\[COLOR state_text\](?:[↑↓←→]+|OK)\[/COLOR\]')
 LABEL = re.compile(r'^\[UPPERCASE\]\[COLOR state_text\](\S+)\[/COLOR\] (.+)\[/UPPERCASE\]$')
 # a Left hint: the middle of the screen's left edge, or a dialog's (just outside its frame)
 LEFT_EDGE = ('-276', '525')
@@ -151,7 +153,8 @@ def _keys(params):
 
 
 def test_every_hint_is_a_glyph():
-    """Keys are glyphs, no key words."""
+    """Keys are glyphs, OK the one word: no other key words, no key outside the coloured
+    keys."""
     hints = _all_hints()
     assert len(hints) >= 18
     for name, _, params in hints:
@@ -167,6 +170,8 @@ DIALOG_LEFT = {'DialogSelect.xml': ('-322', str(820 // 2 - 15))}
 FOCUS = re.compile(r'HasFocus|System\.CurrentControl|Container\.HasFocus')
 # the hints that show the keys of the focused row (DESIGN.md: an exception, open for now)
 FOCUSED_ROW = {('DialogVideoInfo.xml', '5190'),
+               # Home's footer while the focus is in the top line, OK on the movies and shows tabs
+               ('Home.xml', '9195'),
                # the OSD's footer names OK on subtitles, audio and video, the full settings
                ('VideoOSD.xml', '690'), ('VideoOSD.xml', '691'), ('VideoOSD.xml', '692')}
 
@@ -195,7 +200,7 @@ def test_no_hint_where_the_outermost_element_does_nothing():
 def test_where_a_hint_stands_follows_its_key():
     """Up at the top, centred; Left up the left edge (LevelHintLeft), never in a line of its own
     kind; Down and OK in the footer line, left at the margin, where the keys of the focused row
-    may stand together (the episodes: ←→ episode, ↑ season, ↓ cast, ⏎ select)."""
+    may stand together (the episodes: ←→ episode, ↑ season, ↓ cast, OK select)."""
     for name, include, params in _all_hints():
         hid = params['id']
         key = params.get('key', '↓')
@@ -208,13 +213,13 @@ def test_where_a_hint_stands_follows_its_key():
         if key == '↑':
             assert top <= int(TOP) and params.get('align') == 'center', (name, hid, top)
         else:
-            assert key in ('↓', '⏎', '←→', '↑↓'), (name, hid)
+            assert key in ('↓', OK, '←→', '↑↓'), (name, hid)
             assert top == int(BOTTOM), (name, hid, top)
             assert (params.get('left', '0'), params.get('width', '1920'), params.get('align', 'center')) == ('0', '1920', 'center'), (name, hid)
 
 
 def test_glyphs_only_in_hints():
-    """An arrow or ⏎ is a key hint: the key of a LevelHint, a coloured key in its label or in a
+    """An arrow is a key hint (⏎ is no key any more): the key of a LevelHint, a coloured key in its label or in a
     Hint variable, or a footer string; never a loose label of its own."""
     for path in layout_files():
         if path.name == 'Variables.xml':
@@ -246,19 +251,19 @@ WORDS = re.compile(r'\b(OK|Back|Left|Right|Up|Down)\b')
 
 
 def test_footer_strings_are_glyphs():
-    """The footers of keys acting on the spot: each key a glyph in the dimmed blue of a hint, in
-    every language; no key word left (OK, Back, Left...)."""
+    """The footers of keys acting on the spot: each key an arrow or OK in the dimmed blue of a
+    hint, in every language; no key word outside them (OK, Back, Left...)."""
     langs = [p.name.split('.')[-1] for p in (ROOT / 'language').iterdir()]
     for num in FOOTERS:
         english = _string(num)
         keys = re.findall(r'\[COLOR state_text\](.*?)\[/COLOR\]', english)
         assert keys and all(k in KEYS for k in keys), (num, english)
-        assert not WORDS.search(re.sub(r'\[[^\]]*\]', '', english)), (num, english)
+        assert not WORDS.search(re.sub(r'\[[^\]]*\]', '', COLOURED_KEY.sub('', english))), (num, english)
         for lang in langs:
             assert re.findall(r'\[COLOR state_text\](.*?)\[/COLOR\]', _string(num, lang)) == keys, (lang, num)
-    assert _string('31178') == KEY.format('⏎') + ' open'
-    assert _string('31260') == KEY.format('⏎') + ' choose   ' + KEY.format('→') + ' option'
-    assert _string('31261') == KEY.format('↑↓') + ' move   ' + KEY.format('⏎') + ' drop'
+    assert _string('31178') == KEY.format(OK) + ' open'
+    assert _string('31260') == KEY.format(OK) + ' choose   ' + KEY.format('→') + ' option'
+    assert _string('31261') == KEY.format('↑↓') + ' move   ' + KEY.format(OK) + ' drop'
 
 
 def test_the_player_controls_have_one_name():
@@ -275,13 +280,13 @@ def test_seek_bar_hint():
     """Over the bare video Up and Down skip chapters (Kodi's keymap), OK opens the controls: the
     seek bar shows that key. The OSD and the stats dialog bring their own keys."""
     key, label, top, visible = _hint('DialogSeekBar.xml', '490')
-    assert (key, label, top) == ('⏎', CONTROLS, BOTTOM)
+    assert (key, label, top) == (OK, CONTROLS, BOTTOM)
     assert visible == '!Window.IsVisible(videoosd) + !Window.IsActive(playerprocessinfo)'
 
 
 def test_visualisation_hint():
     key, label, top, visible = _hint('MusicVisualisation.xml', '9090')
-    assert (key, label, top, visible) == ('⏎', CONTROLS, BOTTOM, '!Window.IsActive(musicosd)')
+    assert (key, label, top, visible) == (OK, CONTROLS, BOTTOM, '!Window.IsActive(musicosd)')
 
 
 def test_osd_hint():
@@ -315,14 +320,14 @@ def test_osd_hint_on_subtitles_audio_and_video():
     """While subtitles, audio or video has the focus the footer adds OK, the full settings, right
     of the standing Down to the cast row of a library title (DESIGN.md: the hint that follows
     the focus stands right): one line in the place of the Down hint, which fades out for it.
-    Without a cast row ⏎ all settings alone."""
+    Without a cast row OK all settings alone."""
     focus = '[' + ' | '.join('Control.HasFocus({})'.format(b) for b in TRACK_BUTTONS) + ']'
     key, label, top, visible = _hint('VideoOSD.xml', '691')
     assert (key, label, top) == ('↓', '$VAR[HintTrackSettings]', BOTTOM)
     assert visible == '!Window.IsActive(1141) + [{}] + {}'.format(CAST, focus)
-    assert _variable('HintTrackSettings') == [(None, '$LOCALIZE[31702]   [COLOR state_text]⏎[/COLOR] $LOCALIZE[31139]')]
+    assert _variable('HintTrackSettings') == [(None, '$LOCALIZE[31702]   [COLOR state_text]OK[/COLOR] $LOCALIZE[31139]')]
     key, label, top, visible = _hint('VideoOSD.xml', '692')
-    assert (key, label, top) == ('⏎', '$LOCALIZE[31139]', BOTTOM)
+    assert (key, label, top) == (OK, '$LOCALIZE[31139]', BOTTOM)
     assert visible == '!Window.IsActive(1141) + ![{}] + {}'.format(CAST, focus)
     assert _string('31139') == 'all settings'
 
@@ -381,7 +386,7 @@ def test_episode_keys():
     key, label, top, visible = _hint('DialogVideoInfo.xml', '5190')
     assert key == '←→'
     assert label == '$LOCALIZE[31132]   {} $LOCALIZE[31131]$VAR[HintEpisodeDown]   {} $LOCALIZE[31135]'.format(
-        KEY.format('↑'), KEY.format('⏎'))
+        KEY.format('↑'), KEY.format(OK))
     assert visible == 'Control.HasFocus(5100)'
     assert int(top) + OFFSET[('DialogVideoInfo.xml', '5190')] == int(BOTTOM)
     assert _controls('DialogVideoInfo.xml')['5100'].findtext('onup') == '5200'
@@ -493,3 +498,74 @@ def test_back_through_folders():
                                            (None, '$LOCALIZE[31480]')]
     assert _variable('HintFilesBack') == [('String.IsEqual(Control.GetLabel(101),$LOCALIZE[20108])', '$VAR[HintWindowBack]'),
                                           (None, '$LOCALIZE[31480]')]
+
+
+def test_no_return_glyph_left():
+    """OK is the word on the remote's key: no ⏎ in a window, a variable or a string."""
+    for path in layout_files():
+        assert '⏎' not in path.read_text(encoding='utf-8'), path.name
+    for po in (ROOT / 'language').glob('*/strings.po'):
+        assert '⏎' not in po.read_text(encoding='utf-8'), po.parent.name
+
+
+HOME_TOP = 'ControlGroup(9100).HasFocus() | Control.HasFocus(9108) | Control.HasFocus(9109)'
+
+
+def test_home_footer_while_in_the_top_line():
+    """While the focus is in Home's top line (the menu, what plays, the quick menu's icon) the
+    footer names where Down leads into the shown page, and right of it OK on the movies and
+    shows tabs; gone once the focus is in the page."""
+    key, label, top, visible = _hint('Home.xml', '9195')
+    assert (key, label, top) == ('↓', '$VAR[HintHomeDown]$VAR[HintHomeOk]', BOTTOM)
+    assert visible == HOME_TOP
+
+
+PAGE = 'Window(Home).Property(nc.page)'
+
+
+def test_home_footer_names_where_down_leads():
+    """The quick menu from its icon; the spotlight where the page has one (the music page's
+    album spotlight too), the rows where it is off; the search field; the settings page's
+    tiles. As HomePageDown goes."""
+    values = _variable('HintHomeDown')
+    assert values[0] == ('Control.HasFocus(9109)', '$LOCALIZE[31320]')
+    assert ('String.IsEqual({},movies) + String.IsEqual(Skin.String(nc.movies.spotlight),off)'.format(PAGE), '$LOCALIZE[31224]') in values
+    assert ('String.IsEqual({},shows) + String.IsEqual(Skin.String(nc.shows.spotlight),off)'.format(PAGE), '$LOCALIZE[31224]') in values
+    assert ('String.IsEqual({0},movies) | String.IsEqual({0},shows) | String.IsEqual({0},music)'.format(PAGE), '$LOCALIZE[31100]') in values
+    assert ('String.IsEqual({},search)'.format(PAGE), '$LOCALIZE[31141]') in values
+    assert ('String.IsEqual({},system)'.format(PAGE), '$LOCALIZE[5]') in values
+    assert values[-2:] == [('String.IsEqual(Skin.String(SpotlightSource),off)', '$LOCALIZE[31224]'), (None, '$LOCALIZE[31100]')]
+    assert (_string('31100'), _string('31224'), _string('31141'), _string('31320')) == (
+        'spotlight', 'Rows', 'search for a title', 'quick menu')
+
+
+def test_home_footer_names_ok_on_the_tabs_and_the_icon():
+    """Right of Down, while its tab has the focus (DESIGN.md: the hint that follows the focus
+    stands right): OK opens all movies, all shows or all albums, on the quick menu's icon the
+    settings."""
+    assert _variable('HintHomeOk') == [
+        ('Control.HasFocus(9102)', '   {} $LOCALIZE[31101]'.format(KEY.format(OK))),
+        ('Control.HasFocus(9103)', '   {} $LOCALIZE[31102]'.format(KEY.format(OK))),
+        ('Control.HasFocus(9107)', '   {} $LOCALIZE[31481]'.format(KEY.format(OK))),
+        ('Control.HasFocus(9109)', '   {} $LOCALIZE[5]'.format(KEY.format(OK)))]
+    assert (_string('31101'), _string('31102'), _string('31481')) == ('all movies', 'all shows', 'all albums')
+
+
+def test_ok_on_movies_and_shows_opens_all_of_them():
+    """OK on the movies or shows tab opens the library window with all of them, on the tab of
+    the shown page too (a toggle button runs its altclick then); Down goes into the page."""
+    menu = {c.get('id'): c for c in load('Home.xml').iter('control') if c.get('id') in ('9101', '9102', '9103', '9104')}
+    for tab, library in (('9102', 'movies'), ('9103', 'tvshows')):
+        want = ['SetProperty(nc.library,{},home)'.format(library), 'ActivateWindow(1110)']
+        assert [a.text for a in menu[tab].findall('onclick')] == want, tab
+        assert [a.text for a in menu[tab].findall('altclick')] == want, tab
+    assert [a.text for a in menu['9101'].findall('onclick')] == ['Action(Down)', 'noop']
+
+
+def test_ok_on_music_opens_all_albums():
+    """OK on the music tab opens the music window's albums, as the spotlight's albums button."""
+    menu = {c.get('id'): c for c in load('Home.xml').iter('control') if c.get('id') in ('9107', '9854')}
+    want = 'ActivateWindow(Music,musicdb://albums/,return)'
+    assert [a.text for a in menu['9107'].findall('onclick')] == [want, 'noop']
+    assert [a.text for a in menu['9107'].findall('altclick')] == [want, 'noop']
+    assert [a.text for a in menu['9854'].findall('onclick')][0] == want

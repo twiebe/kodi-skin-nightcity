@@ -919,31 +919,14 @@ def test_back_keymap_back_over_the_bare_video_stops_it():
                     ('remote', 'back', None): 'Stop'}
 
 
-def test_ok_held_on_home_is_one_command():
-    """OK held on Home (Enter and Return on keyboards and IR remotes) goes to the skin, which
-    opens all movies or all shows from their tab and else does what Kodi does, the context menu.
-    Only the long press: a single OK keeps Kodi's own mapping."""
+def test_ok_held_on_home_is_kodis():
+    """OK on Home's movies and shows tabs opens all of them (Includes_Home.xml): the skin takes
+    no long press of OK on Home, Kodi's own mapping (the context menu) stays."""
     import xml.etree.ElementTree as ET
     root = ET.fromstring(nightcity.BACK_KEYMAP)
-    keys = {(device.tag, key.tag, key.get('mod')): key.text for device in root.find('home') for key in device}
-    held = {k: v for k, v in keys.items() if k[1] in ('return', 'enter')}
-    assert held == {('keyboard', k, 'longpress'): 'NotifyAll(nightcity,home_ok_held)' for k in ('return', 'enter')}
-    assert nightcity.COMMANDS['home_ok_held'] is nightcity.home_ok_held
-
-
-@pytest.mark.parametrize('tab, library', [(9102, 'movies'), (9103, 'tvshows')])
-def test_ok_held_on_the_movies_or_shows_tab_opens_the_library(monkeypatch, tab, library):
-    fake = FakeXbmc({'Control.HasFocus({})'.format(tab)}, {})
-    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
-    nightcity.home_ok_held()
-    assert fake.builtins == ['SetProperty(nc.library,{},home)'.format(library), 'ActivateWindow(1110)']
-
-
-def test_ok_held_elsewhere_on_home_is_the_context_menu(monkeypatch):
-    fake = FakeXbmc(set(), {})
-    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
-    nightcity.home_ok_held()
-    assert fake.builtins == ['Action(ContextMenu)']
+    keys = {key.tag for device in root.find('home') for key in device}
+    assert not keys & {'return', 'enter'}
+    assert 'home_ok_held' not in nightcity.COMMANDS and not hasattr(nightcity, 'home_ok_held')
 
 
 SETTINGS_WINDOWS = ['settings', 'systemsettings', 'servicesettings', 'playersettings', 'mediasettings',

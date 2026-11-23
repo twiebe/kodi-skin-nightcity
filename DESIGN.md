@@ -13,9 +13,12 @@ The remote moves through levels, not through confirmations.
   element that opened it: the same item, the same tab. A TMDb chain reopens the page before as a
   new page, so the click keeps the way back (`info_leave`, `info_back`, `osd_back` in
   `scripts/nightcity.py`); a chain from the player's cast row ends on that row, on that person.
-  The way-back button of a chain page does the same and names the page before ("‹ The Matrix");
-  on the chain's first page, and over the playing video, it goes back all the way and names
-  where that is.
+  Info pages have no way-back button: Up from the button row is the way, and the hint in the
+  middle of the path line names where it leads (↑ previous page, ↑ video, ↑ movies). Only a row
+  that would be empty otherwise (a person without a biography, the page of the title that plays
+  without a description) keeps one, so something takes the focus; it names the page before
+  ("‹ The Matrix"), on the chain's first page and over the playing video where the chain
+  started.
 - **Back held goes back to where the browsing started**, past every page of a chain: to the
   page the chain started from, on the element that started it, or to the player's controls on
   their first button (play or resume) when the chain started from the player's cast row.
@@ -29,13 +32,14 @@ Where a key leads to another level and the screen does not show it, a quiet line
 key, then the level it leads to (`LevelHint` in `Includes_Base.xml`,
 `tests/static/test_level_hints.py`).
 
-- **Keys are glyphs:** ↑ ↓ ← → for the directions, ⏎ for OK, ↑↓ and ←→ for a move along a
-  list or row.
-  No key words ("Left", "Up/Down", "OK"). The Back key gets no hint: it always goes back, and
+- **Keys are glyphs, OK is OK:** ↑ ↓ ← → for the directions, ↑↓ and ←→ for a move along a
+  list or row, and for OK the word OK, as on the remote's key, in the same dimmed blue as the
+  arrows (every font of both skins has it; the return arrow read as Enter, a keyboard's key).
+  No other key words ("Left", "Up/Down"). The Back key gets no hint: it always goes back, and
   every hinted level has an arrow back. Should one ever be needed it is the word Back, not a
-  glyph (↩ looks too much like ⏎).
+  glyph.
 - **The label names where the key leads**, not what it does: ↓ cast, ← system,
-  ⏎ controls. The player's OSD bar is "controls" everywhere (⏎ from the seek bar, ↑ from the
+  OK controls. The player's OSD bar is "controls" everywhere (OK from the seek bar, ↑ from the
   cast row, ↓ from a panel); "menu" is a column or row of buttons beside a list (the
   library's, Home's top menu). Where the level depends on how the screen was opened, the
   hint names it from there (`HintInfoBack`, `HintWindowBack` in `Variables.xml`: the page of
@@ -43,8 +47,8 @@ key, then the level it leads to (`LevelHint` in `Includes_Base.xml`,
   tells. Where Left is Kodi's Back through folders (the add-on browser's list, the file
   manager's left pane) it names the folder above as "parent folder", for Kodi does not name it,
   and the window before at the top of the folders (`HintAddonsBack`, `HintFilesBack`). A footer
-  of keys acting on the spot (skin settings slots: ⏎ choose, → option,
-  ↑↓ move, ⏎ drop; the console: ⏎ open) names the action.
+  of keys acting on the spot (skin settings slots: OK choose, → option,
+  ↑↓ move, OK drop; the console: OK open) names the action.
 - **Look:** the key in the dimmed blue of a hint (`state_text`), the label muted
   (`text_mute`), small caps (`font_caps_small`, `LookLabelCase`), a shadow over video.
 - **Per page, stable:** a hint belongs to the page, not to the focused element. Each edge's hint
@@ -59,11 +63,15 @@ key, then the level it leads to (`LevelHint` in `Includes_Base.xml`,
   panel too), the cast row. A hint fades out and the next one in after it, never on top of it; a
   window's hint hides under a dialog, and like the pages it does not fade over a playing video.
 - **Exceptions, open for now:** the footer of the episodes on an info page (←→ episode,
-  ↑ season, ↓ cast, ⏎ select) shows the keys of the focused row while it has the focus; the
-  skin settings' slot footer (⏎ choose, → option; ↑↓ move, ⏎ drop) shows on the slot rows,
-  for its keys act on the slot. The player's footer adds ⏎ all settings while subtitles, audio
-  or video has the focus (↓ cast   ⏎ all settings). The console's footer (⏎ open) does not
-  depend on the focus.
+  ↑ season, ↓ cast, OK select) shows the keys of the focused row while it has the focus; the
+  skin settings' slot footer (OK choose, → option; ↑↓ move, OK drop) shows on the slot rows,
+  for its keys act on the slot. The player's footer adds OK all settings while subtitles, audio
+  or video has the focus (↓ cast & crew   OK all settings). The console's footer (OK open) does
+  not depend on the focus. Home's footer names, while the focus is in the top line, where Down
+  leads into the shown page (↓ spotlight, ↓ rows where the spotlight is off, ↓ search for a
+  title, ↓ quick menu from its icon) and on the movies, shows and music tabs OK all movies,
+  all shows or all albums, on the quick menu's icon OK settings: the tabs act on the page below
+  them.
 - **Hints that follow the focus stand right of the standing ones**, in footers and headers
   alike: what holds on the whole page first, the shortcut of the focused element after it.
 - **Where a hint stands follows its key**, nothing else:
@@ -74,13 +82,13 @@ key, then the level it leads to (`LevelHint` in `Includes_Base.xml`,
     the screen's edge and middle, in a dialog its own, just outside its frame. The line is
     turned a quarter to the left, so it runs along the edge and its key, an ↑ in the text,
     shows as ←;
-  - ↓ and ⏎ in the footer line at the bottom, centred (top 1030), as ↑ is centred at the top; in
+  - ↓ and OK in the footer line at the bottom, centred (top 1030), as ↑ is centred at the top; in
     the player too. The episodes' footer (an exception above) may hold several directions:
-    ←→ episode, ↑ season, ↓ cast, ⏎ select;
+    ←→ episode, ↑ season, ↓ cast, OK select;
   - → at the right (none so far);
   - the footers of a settings page (the console's, the skin settings' slots) stay under their
     description.
-- No hint where the level is in sight anyway: Home's top menu over the rows, the queue under
+- No hint where the level is in sight anyway: Home's top menu over the rows (Up), the queue under
   the music OSD, the tabs over their lists.
 
 ### The position bar of the library grid
@@ -180,8 +188,9 @@ wherever Home opens without a page: after startup, on the Home key, and right fr
 next to the clock wrapping round.
 
 The quick menu on Home follows it too: the cursor on the icon next to the clock shows the menu,
-Down or OK go into it, Up from its top comes out onto the icon with the menu still shown, Left
-or Right off the icon hide it. Back, in the menu or on the icon, closes it: the focus goes back
+Down goes into it, OK opens the settings page (Back held there returns like Back on the icon),
+Up from its top comes out onto the icon with the menu still shown, Left or Right off the icon
+hide it. Back, in the menu or on the icon, closes it: the focus goes back
 to where it came onto the icon from (a settings row, a row of a page, the top menu), or to the
 shown page's own entry. The keys that open the quick menu (Home held, the S key, Kodi's power
 menu) go to the icon on every page of Home, which shows the menu; the same key again closes it
@@ -226,7 +235,7 @@ browser.
   heading, like the progress toasts. The text under the heading is `text_dim`, and the skin's
   type icons (info, warning, error) are a hint in
   `state_text`. An add-on's own icon keeps its colours.
-- The keys in a hint line (⏎ open, ← system) are hints: dimmed blue, the label after them
+- The keys in a hint line (OK open, ← system) are hints: dimmed blue, the label after them
   muted (Key hints above).
 - `state` is border_dim made opaque over the page, so a thin line looks the same on any
   background; text and small marks take `state_text`, the same hue just light enough to read

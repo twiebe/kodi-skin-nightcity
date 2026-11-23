@@ -183,6 +183,10 @@ msgctxt "#31102"
 msgid "all shows"
 msgstr "kõik sarjad"
 
+msgctxt "#31481"
+msgid "all albums"
+msgstr "kõik albumid"
+
 msgctxt "#31103"
 msgid "in progress"
 msgstr "pooleli"
@@ -436,8 +440,8 @@ msgid "Categories"
 msgstr "Kategooriad"
 
 msgctxt "#31178"
-msgid "[COLOR state_text]⏎[/COLOR] open"
-msgstr "[COLOR state_text]⏎[/COLOR] ava"
+msgid "[COLOR state_text]OK[/COLOR] open"
+msgstr "[COLOR state_text]OK[/COLOR] ava"
 
 msgctxt "#31181"
 msgid "refresh rate, decoding, resume"
@@ -744,12 +748,12 @@ msgid "Show or hide entries of the main menu. System and power always stay, and 
 msgstr "Näita või peida peamenüü kirjeid. Süsteem ja toide jäävad alati, samuti viimati näidatud leht."
 
 msgctxt "#31260"
-msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
-msgstr "[COLOR state_text]⏎[/COLOR] vali   [COLOR state_text]→[/COLOR] valik"
+msgid "[COLOR state_text]OK[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]OK[/COLOR] vali   [COLOR state_text]→[/COLOR] valik"
 
 msgctxt "#31261"
-msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
-msgstr "[COLOR state_text]↑↓[/COLOR] liiguta   [COLOR state_text]⏎[/COLOR] aseta"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]OK[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] liiguta   [COLOR state_text]OK[/COLOR] aseta"
 
 msgctxt "#31262"
 msgid "Spotlight, rows and main menu of the home, movies and shows pages."

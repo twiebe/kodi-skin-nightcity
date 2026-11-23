@@ -1675,7 +1675,7 @@ HOME_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
 # the Home key setting.
 BACK_KEYMAP_NAME = '0_skin.nightcity.back.xml'
 BACK_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
-<!-- Written by the Nightcity skin: on info pages and the library grid the keys of PreviousMenu are Back, Back held on an info page goes back to where the browsing started, in the player's chapter panel and cast row to the player's controls; OK held on Home's movies or shows tab opens all of them; Back over the bare video stops it. -->
+<!-- Written by the Nightcity skin: on info pages and the library grid the keys of PreviousMenu are Back, Back held on an info page goes back to where the browsing started, in the player's chapter panel and cast row to the player's controls; Back over the bare video stops it. -->
 <keymap>
   <movieinformation>
     <keyboard>
@@ -1721,11 +1721,8 @@ BACK_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
       <rightclick>Back</rightclick>
     </mouse>
   </window1110>
-  <!-- Home: OK held on the movies or shows tab opens all movies or all shows (home_ok_held) -->
   <home>
     <keyboard>
-      <return mod="longpress">NotifyAll(nightcity,home_ok_held)</return>
-      <enter mod="longpress">NotifyAll(nightcity,home_ok_held)</enter>
       <!-- held on Home's settings page: back to where the settings were opened (settings_return) -->
       <backspace mod="longpress">NotifyAll(nightcity,settings_return:backspace)</backspace>
       <browser_back mod="longpress">NotifyAll(nightcity,settings_return:browser_back)</browser_back>
@@ -1758,22 +1755,6 @@ BACK_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
   </fullscreenvideo>
 @@SETTINGS@@</keymap>
 """
-
-
-# the tabs of Home's menu whose OK held opens the library window (BACK_KEYMAP)
-HOME_LIBRARY_TABS = {9102: 'movies', 9103: 'tvshows'}
-
-
-def home_ok_held():
-    """OK held on Home: on the movies or shows tab all movies or all shows (window 1110), else
-    what Kodi does with it, the context menu. CEC remotes send no long presses."""
-    import xbmc
-    for tab, library in HOME_LIBRARY_TABS.items():
-        if xbmc.getCondVisibility('Control.HasFocus({})'.format(tab)):
-            xbmc.executebuiltin('SetProperty(nc.library,{},home)'.format(library))
-            xbmc.executebuiltin('ActivateWindow(1110)')
-            return
-    xbmc.executebuiltin('Action(ContextMenu)')
 
 
 # Kodi's settings windows: Back held goes back to where the quick menu's settings link was chosen
@@ -3135,7 +3116,7 @@ def music_bar(action, *args):
 
 COMMANDS = {'lib_bar': lib_bar, 'music_bar': music_bar, 'next_episode': next_episode, 'startup': startup, 'genres': genres, 'genre_pick': genre_pick,
             'info_select': info_select, 'info_leave': info_leave, 'info_back': info_back, 'info_forget': info_forget, 'info_origin': info_origin,
-            'back_to_start': back_to_start, 'home_ok_held': home_ok_held, 'settings_return': settings_return, 'trailer': trailer,
+            'back_to_start': back_to_start, 'settings_return': settings_return, 'trailer': trailer,
             'osd_back': osd_back, 'play': play, 'info': info, 'plot': plot,
             'streams': streams, 'row': row, 'search': search, 'search_recent': search_recent,
             'search_init': search_init, 'search_clear': search_clear, 'search_forget': search_forget, 'colours': colours,

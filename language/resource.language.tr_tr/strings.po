@@ -183,6 +183,10 @@ msgctxt "#31102"
 msgid "all shows"
 msgstr "tüm diziler"
 
+msgctxt "#31481"
+msgid "all albums"
+msgstr "tüm albümler"
+
 msgctxt "#31103"
 msgid "in progress"
 msgstr "devam edenler"
@@ -436,8 +440,8 @@ msgid "Categories"
 msgstr "Kategoriler"
 
 msgctxt "#31178"
-msgid "[COLOR state_text]⏎[/COLOR] open"
-msgstr "[COLOR state_text]⏎[/COLOR] aç"
+msgid "[COLOR state_text]OK[/COLOR] open"
+msgstr "[COLOR state_text]OK[/COLOR] aç"
 
 msgctxt "#31181"
 msgid "refresh rate, decoding, resume"
@@ -744,12 +748,12 @@ msgid "Show or hide entries of the main menu. System and power always stay, and 
 msgstr "Ana menünün ögelerini göster veya gizle. Sistem ve güç her zaman kalır, son gösterilen sayfa da öyle."
 
 msgctxt "#31260"
-msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
-msgstr "[COLOR state_text]⏎[/COLOR] seç   [COLOR state_text]→[/COLOR] seçenek"
+msgid "[COLOR state_text]OK[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]OK[/COLOR] seç   [COLOR state_text]→[/COLOR] seçenek"
 
 msgctxt "#31261"
-msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
-msgstr "[COLOR state_text]↑↓[/COLOR] taşı   [COLOR state_text]⏎[/COLOR] bırak"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]OK[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] taşı   [COLOR state_text]OK[/COLOR] bırak"
 
 msgctxt "#31262"
 msgid "Spotlight, rows and main menu of the home, movies and shows pages."

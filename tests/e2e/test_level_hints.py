@@ -61,7 +61,8 @@ def test_hints_lead_through_the_levels(tracks):
 
 def test_cast_row_hints(playing):
     """A library movie: the bar points down to cast & crew, the cast row back up to the controls;
-    on subtitles, audio and video "↓ cast & crew   ⏎ all settings"."""
+    on subtitles, audio and video "↓ cast & crew   OK all settings"; under the row the seek bar
+    dialog dims the whole video, under its seek line."""
     key('select')
     wait_for('Window.IsActive(videoosd)')
     wait_for('Control.IsVisible(690)')
@@ -75,6 +76,8 @@ def test_cast_row_hints(playing):
     key('down')
     wait_for('Window.IsActive(1141)')
     wait_for('Control.IsVisible(6590)')
+    # the scrim lies in the seek bar dialog, without focus: its own condition and the dialog's
+    wait_for('Window.IsActive(1141) + Window.IsVisible(seekbar)')
     shot('hint-cast')
     # kodi-dev has no TMDb data for this movie: the row stays empty without focus, so Back
     key('back')
