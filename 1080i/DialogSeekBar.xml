@@ -8,7 +8,7 @@
     <zorder>0</zorder>
     <visible>Window.IsActive(fullscreenvideo)</visible>
     <visible>!Window.IsActive(sliderdialog)</visible>
-    <visible>Player.Seeking | Player.HasPerformedSeek(3) | [Player.Paused + !Player.Caching] | Player.Forwarding | Player.Rewinding | Player.ShowInfo | Player.ShowTime | Window.IsActive(fullscreeninfo) | Window.IsActive(videoosd) | Window.IsActive(playerprocessinfo) | !String.IsEmpty(Player.SeekNumeric)</visible>
+    <visible>Player.Seeking | Player.HasPerformedSeek(3) | [Player.Paused + !Player.Caching] | Player.Forwarding | Player.Rewinding | Player.ShowInfo | Player.ShowTime | Window.IsActive(fullscreeninfo) | Window.IsActive(videoosd) | Window.IsActive(1141) | Window.IsActive(playerprocessinfo) | !String.IsEmpty(Player.SeekNumeric)</visible>
     <animation effect="fade" time="150">WindowOpen</animation>
     <!-- closing is the opening backwards: what plays (PlayerFade) fades out first, the controls
          and the seek line PlayerFadeStep later; 300 ms in all, as Kodi drops keys while the OSD
@@ -23,6 +23,21 @@
             <width>1920</width>
             <height>740</height>
             <texture colordiffuse="scrim">ui/fade_b.png</texture>
+        </control>
+        <!-- the cast and crew row (Custom_1141_OSDCast.xml): the whole video dimmed as behind an
+             info page over it (InfoBackground, video_scrim), for the names, roles and biography
+             over a bright picture. Here, under the seek line and the times, not in the row's
+             dialog: that lies over this one and would dim them with the video. The row keeps
+             this dialog open (visible above). -->
+        <control type="image" id="499">
+            <description>video scrim</description>
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>1080</height>
+            <texture colordiffuse="video_scrim">ui/white.png</texture>
+            <visible>Window.IsActive(1141)</visible>
+            <animation effect="fade" time="150">VisibleChange</animation>
         </control>
         <include>PlayerDetails</include>
         <control type="group">

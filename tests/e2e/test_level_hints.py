@@ -75,6 +75,8 @@ def test_cast_row_hints(playing):
     key('down')
     wait_for('Window.IsActive(1141)')
     wait_for('Control.IsVisible(6590)')
+    # the scrim lies in the seek bar dialog, without focus: its own condition and the dialog's
+    wait_for('Window.IsActive(1141) + Window.IsVisible(seekbar)')
     shot('hint-cast')
     # kodi-dev has no TMDb data for this movie: the row stays empty without focus, so Back
     key('back')

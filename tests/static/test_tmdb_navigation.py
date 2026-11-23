@@ -639,15 +639,21 @@ def test_a_page_on_its_way_back_parks_the_focus_out_of_sight():
 
 
 def test_cast_row_dims_the_video_as_an_info_page():
-    """Names, roles and the biography read over a bright picture: the video under the scrim of an
-    info page over the video (video_scrim), not a gradient from the middle down. It ends above
-    the seek line (the seek bar dialog lies under the row) with a short fade."""
-    scrim, fade = _cast().findall('controls/control')[:2]
-    assert scrim.get('type') == fade.get('type') == 'image'
-    assert [scrim.findtext(k) for k in ('left', 'top', 'width', 'height')] == ['0', '0', '1920', '830']
-    assert [fade.findtext(k) for k in ('left', 'top', 'width', 'height')] == ['0', '830', '1920', '40']
-    assert scrim.find('texture').get('colordiffuse') == fade.find('texture').get('colordiffuse') == 'video_scrim'
-    assert fade.findtext('texture') == 'ui/fade_t.png'
+    """Names, roles and the biography read over a bright picture: the whole video under the
+    scrim of an info page over the video (video_scrim). The seek bar dialog lays it, under its
+    own seek line and times: the row's dialog lies over the seek bar's and would dim them with
+    the video, so it has no scrim of its own. The row keeps the seek bar open."""
+    assert not [c for c in _cast().iter('control') if (c.find('texture') is not None
+                                                       and 'scrim' in (c.find('texture').get('colordiffuse') or ''))]
+    seek = parse(SKIN / 'DialogSeekBar.xml')
+    controls = seek.find('controls').findall('control')
+    scrim = next(c for c in controls if c.get('id') == '499')
+    assert [scrim.findtext(k) for k in ('left', 'top', 'width', 'height')] == ['0', '0', '1920', '1080']
+    assert scrim.find('texture').get('colordiffuse') == 'video_scrim'
+    assert scrim.findtext('visible') == 'Window.IsActive(1141)'
+    # over the seek bar's gradient, under everything else it draws
+    assert controls.index(scrim) == 1 and controls[0].find('texture').text == 'ui/fade_b.png'
+    assert any('Window.IsActive(1141)' in v.text for v in seek.findall('visible'))
 
 
 VIDEO_LATCH = '!String.IsEmpty(Window(Home).Property(nc.info.video))'
