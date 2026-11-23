@@ -1151,6 +1151,10 @@ msgctxt "#31508"
 msgid "clear filter"
 msgstr "tühjenda filter"
 
+msgctxt "#31509"
+msgid "watched state"
+msgstr "vaatamise olek"
+
 msgctxt "#31600"
 msgid "runtime"
 msgstr "kestus"

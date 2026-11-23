@@ -1151,6 +1151,10 @@ msgctxt "#31508"
 msgid "clear filter"
 msgstr "zrušit filtr"
 
+msgctxt "#31509"
+msgid "watched state"
+msgstr "stav zhlédnutí"
+
 msgctxt "#31600"
 msgid "runtime"
 msgstr "délka"

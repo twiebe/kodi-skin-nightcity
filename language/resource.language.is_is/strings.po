@@ -1151,6 +1151,10 @@ msgctxt "#31508"
 msgid "clear filter"
 msgstr "hreinsa síu"
 
+msgctxt "#31509"
+msgid "watched state"
+msgstr "áhorfsstaða"
+
 msgctxt "#31600"
 msgid "runtime"
 msgstr "lengd"

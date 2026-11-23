@@ -168,8 +168,8 @@
                 <onclick condition="!String.IsEqual(Window(Home).Property(nc.library),tvshows) + !$EXP[LibraryAsList]">Skin.SetString(nc.libview.movies,list)</onclick>
                 <onclick>NotifyAll(nightcity,lib_bar:changed)</onclick>
             </include>
-            <!-- by resolution, dynamic range, audio and studio (scripts/nightcity.py lib_filter): the
-                 dialog builds the grid's path, the header names the choice -->
+            <!-- by watched state, genre, resolution, dynamic range, audio and studio (scripts/nightcity.py
+                 lib_filter): the dialog builds the grid's path, the header names the choice -->
             <include content="PillButton">
                 <param name="id" value="5104"/>
                 <onfocus>SetProperty(nc.lib.menu,5104,home)</onfocus>

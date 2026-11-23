@@ -2743,7 +2743,8 @@ _music_bar = LibBar(MUSIC_WINDOW, MUSIC_WINDOW, MUSIC_MENU_BUTTON, _music_grid, 
 # filtering: a smart playlist in the grid's path (videodb://movies/titles/?xsp=...), its rules as in
 # SmartPlayList.cpp. The values of a group or, the groups and. The choice holds for the session, per
 # library, in Home's nc.libfilter.<library> (the choice), .path (what the grid shows) and .label
-# (the header). Shows have no stream details in Kodi, only genre and studio.
+# (the header). Shows have no stream details in Kodi, only genre and studio. The watched state
+# comes first, for movies and shows: the question asked most before any other.
 
 LIB_FILTER_HDR = ['hdr10', 'hdr10plus', 'dolbyvision', 'hlg']  # Kodi 21 names three; hdr10plus from an NFO
 LIB_FILTER_OPTIONS = {
@@ -2758,11 +2759,24 @@ LIB_FILTER_OPTIONS = {
               ('mp3', 'MP3', ['mp3']),
               ('pcm', 'PCM', ['pcm', 'pcm_s16le', 'pcm_s24le', 'pcm_s32le', 'pcm_bluray', 'pcm_dvd'])],
     'channels': [('8', '7.1', ['8']), ('6', '5.1', ['6']), ('2', '2.0', ['2'])],
+    # labels by string id (unwatched and in progress the skin's, watched Kodi's); the rules are
+    # LIB_FILTER_WATCHED's
+    'watched': [('unwatched', 31104, []), ('inprogress', 31103, []), ('watched', 16102, [])],
+}
+# Kodi's smart playlist rules of the watched state (SmartPlayList.cpp). Unwatched is Kodi's own
+# unwatched, a play count of 0 (NULL too), so a started title is unwatched and in progress; in
+# progress a resume point, of a show a started episode. A show's play count is 1 only once every
+# episode is watched, so a show is watched when all of it is, unwatched while any of it is not.
+LIB_FILTER_WATCHED = {
+    'unwatched': {'field': 'playcount', 'operator': 'is', 'value': ['0']},
+    'inprogress': {'field': 'inprogress', 'operator': 'true'},
+    'watched': {'field': 'playcount', 'operator': 'greaterthan', 'value': ['0']},
 }
 LIB_FILTER_FIELDS = {'genre': 'genre', 'res': 'videoresolution', 'hdr': 'hdrtype', 'audio': 'audiocodec',
                      'channels': 'audiochannels', 'studio': 'studio'}
-LIB_FILTER_NAMES = {'genre': 31601, 'res': 31504, 'hdr': 31505, 'audio': 31506, 'channels': 31507, 'studio': 31128}
-LIB_FILTER_GROUPS = {'movies': ['genre', 'res', 'hdr', 'audio', 'channels', 'studio'], 'tvshows': ['genre', 'studio']}
+LIB_FILTER_NAMES = {'watched': 31509, 'genre': 31601, 'res': 31504, 'hdr': 31505, 'audio': 31506, 'channels': 31507, 'studio': 31128}
+LIB_FILTER_GROUPS = {'movies': ['watched', 'genre', 'res', 'hdr', 'audio', 'channels', 'studio'],
+                     'tvshows': ['watched', 'genre', 'studio']}
 LIB_FILTER_FREE = ('genre', 'studio')  # their values are the library's own, the names Kodi files them under
 
 
@@ -2779,12 +2793,25 @@ def _lib_filter_chosen(library, choice):
             options = [(k, k, [k]) for k in keys]
         else:
             options = [o for o in LIB_FILTER_OPTIONS[group] if o[0] in keys]
+        if group == 'watched' and {'unwatched', 'watched'} <= {key for key, _, _ in options}:
+            options = []  # every title is one of the two: nothing filtered
         if options:
             chosen.append((group, options))
     return chosen
 
 
+def _lib_filter_text(label):
+    """An option's label: its own, or the string of an id (the watched state's)."""
+    if not isinstance(label, int):
+        return label
+    import xbmc
+    return _capital(xbmc.getLocalizedString(label))
+
+
 def _lib_filter_rule(group, options):
+    if group == 'watched':
+        rules = [LIB_FILTER_WATCHED[key] for key, _, _ in options]
+        return rules[0] if len(rules) == 1 else {'or': rules}
     field = LIB_FILTER_FIELDS[group]
     values = []
     for _, _, vals in options:
@@ -2806,7 +2833,7 @@ def lib_filter_path(library, choice):
 
 
 def lib_filter_label(library, choice):
-    return '  ·  '.join(', '.join(label for _, label, _ in options)
+    return '  ·  '.join(', '.join(_lib_filter_text(label) for _, label, _ in options)
                         for _, options in _lib_filter_chosen(library, choice))
 
 
@@ -2893,7 +2920,7 @@ def _lib_filter_dialogs(library, choice, groups, text):
         for group in groups:
             item = xbmcgui.ListItem(text(LIB_FILTER_NAMES[group]))
             chosen = dict(_lib_filter_chosen(library, {group: choice.get(group)}))
-            item.setLabel2(', '.join(label for _, label, _ in chosen.get(group, [])) or text(31503))
+            item.setLabel2(', '.join(_lib_filter_text(label) for _, label, _ in chosen.get(group, [])) or text(31503))
             items.append(item)
         # the Clear button while a filter is set (DialogSelect.xml): it marks the click and closes
         home = _home()
@@ -2916,7 +2943,7 @@ def _lib_filter_dialogs(library, choice, groups, text):
                 free[group] = _lib_genres(library) if group == 'genre' else _lib_studios(library)
             options = [(v, v) for v in free[group]]
         else:
-            options = [(key, label) for key, label, _ in LIB_FILTER_OPTIONS[group]]
+            options = [(key, _lib_filter_text(label)) for key, label, _ in LIB_FILTER_OPTIONS[group]]
         if not options:
             continue
         keys = choice.get(group) or []
