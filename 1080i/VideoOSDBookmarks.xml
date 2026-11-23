@@ -1,136 +1,139 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Chapter row during playback: Down from the OSD bar (or its chapters button) opens it, Down
-     again the cast and crew row (Custom_1141_OSDCast.xml), Up the bookmark buttons, Up again or
-     Back returns to the bar. Kodi lists the file's chapters and bookmarks in list 11, chapters
-     with a thumbnail (Kodi's setting myvideos.extractchapterthumbs, switched on once by the
-     startup script), and preselects the playing chapter. Kodi ids: 11 bookmark list, 2 add,
-     3 clear, 4 add episode bookmark. The row hides while the cast row is up. -->
+<!-- Chapter panel during playback, above the OSD's chapters button (608, VideoOSD.xml), like the
+     track panels: it opens as the button gets the focus and closes as the focus leaves it. Kodi
+     fills its list only in this dialog, so while the panel shows the focus is here, on a stand-in
+     for the button (90): the OSD keeps its own focus on 608, which shows as focused below. Up or
+     OK go into the panel, Left and Right on to the neighbouring buttons, Down to the cast row of a
+     library title, Back closes the OSD as on any button. Kodi lists the file's chapters and
+     bookmarks in list 11, chapters with a thumbnail (Kodi's setting
+     myvideos.extractchapterthumbs, switched on once by the startup script), and preselects the
+     playing chapter; the bookmark buttons sit in the panel's head. Up from the list goes to the
+     buttons, Down or Back from them back onto the button; Left and Right past the ends move on to
+     the neighbouring buttons: right of chapters is stats when switched on, else the row wraps to
+     the left row. Kodi ids: 11 bookmark list, 2 add, 3 clear, 4 add episode bookmark. -->
 <window>
     <depth>DepthOSD</depth>
-    <!-- Kodi fills list 11 right after it set the focus, so the focus goes to a stand-in: its
-         focus actions wait in Kodi's queue, a second hop (93, then 94) sees the filled list and
-         picks it or, without chapters or bookmarks, add bookmark. Skin timers would take up to a
-         second. -->
-    <defaultcontrol always="true">93</defaultcontrol>
-    <animation effect="fade" time="150">WindowOpen</animation>
-    <animation effect="fade" time="150">WindowClose</animation>
+    <!-- the button: the focus stays on it until a key goes into the panel -->
+    <defaultcontrol always="true">90</defaultcontrol>
+    <animation effect="fade" time="120">WindowOpen</animation>
+    <animation effect="fade" time="120">WindowClose</animation>
     <controls>
         <control type="group">
-            <visible>!Window.IsActive(1141) + String.IsEmpty(Window(Home).Property(nc.osd.ret))</visible>
-            <animation effect="fade" time="150">VisibleChange</animation>
-            <include content="RowHeader">
-                <param name="label" value="$LOCALIZE[31140]"/>
-                <param name="left" value="64"/>
-                <param name="top" value="500"/>
-                <param name="width" value="600"/>
-            </include>
-            <control type="label">
-                <left>264</left>
-                <top>500</top>
-                <width>400</width>
-                <height>34</height>
-                <font>font_num</font>
-                <textcolor>state_text</textcolor>
-                <label>$INFO[Container(11).CurrentItem]/$INFO[Container(11).NumItems]</label>
-                <visible>Integer.IsGreater(Container(11).NumItems,0)</visible>
-            </control>
-            <control type="grouplist" id="9000">
-                <left>846</left>
-                <top>476</top>
-                <width>1020</width>
-                <height>74</height>
-                <orientation>horizontal</orientation>
-                <align>right</align>
-                <itemgap>-8</itemgap>
-                <onup>Dialog.Close(videobookmarks)</onup>
-                <ondown condition="Integer.IsGreater(Container(11).NumItems,0)">11</ondown>
-                <ondown condition="!Integer.IsGreater(Container(11).NumItems,0) + [VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)]">ActivateWindow(1141)</ondown>
-                <onleft>noop</onleft>
-                <onright>noop</onright>
-                <include content="Button">
-                    <param name="id" value="2"/>
-                    <param name="label" value="$LOCALIZE[294]"/>
-                    <param name="width" value="auto"/>
-                    <param name="onclick" value="noop"/>
-                </include>
-                <include content="Button">
-                    <param name="id" value="4"/>
-                    <param name="label" value="$LOCALIZE[20406]"/>
-                    <param name="width" value="auto"/>
-                    <param name="onclick" value="noop"/>
-                    <param name="visible" value="Control.IsEnabled(4)"/>
-                </include>
-                <include content="Button">
-                    <param name="id" value="3"/>
-                    <param name="label" value="$LOCALIZE[296]"/>
-                    <param name="width" value="auto"/>
-                    <param name="onclick" value="noop"/>
-                </include>
-            </control>
-            <!-- focus hops: see defaultcontrol -->
-            <control type="button" id="93">
-                <left>-100</left>
-                <top>-100</top>
-                <width>1</width>
-                <height>1</height>
-                <texturefocus/>
-                <texturenofocus/>
-                <onfocus>SetFocus(94)</onfocus>
-            </control>
-            <control type="button" id="94">
-                <left>-100</left>
-                <top>-100</top>
-                <width>1</width>
-                <height>1</height>
-                <texturefocus/>
-                <texturenofocus/>
-                <onfocus condition="Integer.IsGreater(Container(11).NumItems,0)">SetFocus(11)</onfocus>
-                <onfocus condition="!Integer.IsGreater(Container(11).NumItems,0)">SetFocus(2)</onfocus>
-                <!-- a chain from the cast row ended: back up on it at once (Custom_1141_OSDCast.xml),
-                     the chapter row hidden meanwhile. Only after the hop above: a queued SetFocus
-                     goes to the topmost dialog: with the cast row opened earlier it never reached
-                     this row, and the focus stayed on 93, out of sight. -->
-                <onfocus condition="!String.IsEmpty(Window(Home).Property(nc.osd.ret)) + !String.IsEmpty(Window(Home).Property(nc.osd.chain))">ActivateWindow(1141)</onfocus>
-            </control>
-            <control type="list" id="11">
-                <left>40</left>
-                <top>540</top>
-                <width>1880</width>
-                <height>300</height>
-                <orientation>horizontal</orientation>
-                <scrolltime tween="quadratic">200</scrolltime>
-                <preloaditems>2</preloaditems>
-                <onup>9000</onup>
-                <ondown condition="VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)">ActivateWindow(1141)</ondown>
-                <onleft>noop</onleft>
-                <onright>noop</onright>
-                <itemlayout width="352" height="300">
-                    <include content="ChapterCard">
-                        <param name="dim" value="Control.HasFocus(11)"/>
-                    </include>
-                </itemlayout>
-                <focusedlayout width="352" height="300">
-                    <include content="ChapterCard">
-                        <param name="focused" value="Control.HasFocus(11)"/>
-                    </include>
-                </focusedlayout>
-            </control>
+            <left>64</left>
+            <top>440</top>
+            <width>1792</width>
+            <height>400</height>
+            <include>DialogFrame</include>
         </control>
-        <!-- Down: the cast row of a library title; Up: back to the bar -->
-        <include content="LevelHint">
-            <param name="id" value="91"/>
-            <param name="label" value="$LOCALIZE[31124]"/>
-            <param name="visible" value="!Window.IsActive(1141) + [VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)]"/>
+        <include content="Kicker">
+            <param name="label" value="$LOCALIZE[31140]"/>
+            <param name="left" value="88"/>
+            <param name="top" value="458"/>
+            <param name="width" value="400"/>
         </include>
-        <include content="LevelHint">
-            <param name="id" value="92"/>
-            <param name="key" value="↑"/>
-            <param name="label" value="$LOCALIZE[31478]"/>
-            <param name="top" value="140"/>
-            <param name="visible" value="!Window.IsActive(1141)"/>
-            <param name="left" value="0"/>
-            <param name="width" value="1920"/>
-            <param name="align" value="center"/>
-        </include>
+        <control type="label">
+            <left>288</left>
+            <top>458</top>
+            <width>400</width>
+            <height>34</height>
+            <font>font_num</font>
+            <textcolor>state_text</textcolor>
+            <label>$INFO[Container(11).CurrentItem]/$INFO[Container(11).NumItems]</label>
+            <visible>Integer.IsGreater(Container(11).NumItems,0)</visible>
+        </control>
+        <!-- the bookmark buttons in the head; Left and Right past them: the neighbouring buttons of
+             the row below, closed at once so the focus lands on the OSD (SetFocus goes to the
+             topmost dialog) -->
+        <control type="grouplist" id="9000">
+            <left>826</left>
+            <top>444</top>
+            <width>1020</width>
+            <height>74</height>
+            <orientation>horizontal</orientation>
+            <align>right</align>
+            <itemgap>-8</itemgap>
+            <onup>noop</onup>
+            <ondown condition="Integer.IsGreater(Container(11).NumItems,0)">11</ondown>
+            <ondown condition="!Integer.IsGreater(Container(11).NumItems,0)">90</ondown>
+            <onback>90</onback>
+            <onleft>Dialog.Close(videobookmarks,true)</onleft>
+            <onleft>SetFocus(607)</onleft>
+            <onright>Dialog.Close(videobookmarks,true)</onright>
+            <onright condition="Skin.HasSetting(nc.osd.stats)">SetFocus(609)</onright>
+            <onright condition="!Skin.HasSetting(nc.osd.stats)">SetFocus(601)</onright>
+            <include content="Button">
+                <param name="id" value="2"/>
+                <param name="label" value="$LOCALIZE[294]"/>
+                <param name="width" value="auto"/>
+                <param name="onclick" value="noop"/>
+            </include>
+            <include content="Button">
+                <param name="id" value="4"/>
+                <param name="label" value="$LOCALIZE[20406]"/>
+                <param name="width" value="auto"/>
+                <param name="onclick" value="noop"/>
+                <param name="visible" value="Control.IsEnabled(4)"/>
+            </include>
+            <include content="Button">
+                <param name="id" value="3"/>
+                <param name="label" value="$LOCALIZE[296]"/>
+                <param name="width" value="auto"/>
+                <param name="onclick" value="noop"/>
+            </include>
+        </control>
+        <!-- the chapters button while its panel shows (see the head). Down: the cast row of a
+             library title; closed from there it opens the panel again (nc.osd.chapters,
+             Custom_1141_OSDCast.xml). Back closes the OSD, as on the other buttons. -->
+        <control type="button" id="90">
+            <left>-100</left>
+            <top>-100</top>
+            <width>1</width>
+            <height>1</height>
+            <texturefocus/>
+            <texturenofocus/>
+            <onup condition="Integer.IsGreater(Container(11).NumItems,0)">11</onup>
+            <onup condition="!Integer.IsGreater(Container(11).NumItems,0)">2</onup>
+            <onclick condition="Integer.IsGreater(Container(11).NumItems,0)">SetFocus(11)</onclick>
+            <onclick condition="!Integer.IsGreater(Container(11).NumItems,0)">SetFocus(2)</onclick>
+            <onleft>Dialog.Close(videobookmarks,true)</onleft>
+            <onleft>SetFocus(607)</onleft>
+            <onright>Dialog.Close(videobookmarks,true)</onright>
+            <onright condition="Skin.HasSetting(nc.osd.stats)">SetFocus(609)</onright>
+            <onright condition="!Skin.HasSetting(nc.osd.stats)">SetFocus(601)</onright>
+            <ondown condition="VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)">SetProperty(nc.osd.chapters,1,home)</ondown>
+            <ondown condition="VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)">Dialog.Close(videobookmarks,true)</ondown>
+            <ondown condition="VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)">ActivateWindow(1141)</ondown>
+            <ondown condition="!VideoPlayer.Content(movies) + !VideoPlayer.Content(episodes)">noop</ondown>
+            <onback>Dialog.Close(videobookmarks,true)</onback>
+            <onback>Dialog.Close(videoosd)</onback>
+        </control>
+        <!-- Left on the first card and Right on the last one: the neighbouring buttons -->
+        <control type="list" id="11">
+            <left>64</left>
+            <top>506</top>
+            <width>1792</width>
+            <height>300</height>
+            <orientation>horizontal</orientation>
+            <scrolltime tween="quadratic">200</scrolltime>
+            <preloaditems>2</preloaditems>
+            <onup>9000</onup>
+            <ondown>90</ondown>
+            <onback>90</onback>
+            <onleft>Dialog.Close(videobookmarks,true)</onleft>
+            <onleft>SetFocus(607)</onleft>
+            <onright>Dialog.Close(videobookmarks,true)</onright>
+            <onright condition="Skin.HasSetting(nc.osd.stats)">SetFocus(609)</onright>
+            <onright condition="!Skin.HasSetting(nc.osd.stats)">SetFocus(601)</onright>
+            <itemlayout width="352" height="300">
+                <include content="ChapterCard">
+                    <param name="dim" value="Control.HasFocus(11)"/>
+                </include>
+            </itemlayout>
+            <focusedlayout width="352" height="300">
+                <include content="ChapterCard">
+                    <param name="focused" value="Control.HasFocus(11)"/>
+                </include>
+            </focusedlayout>
+        </control>
     </controls>
 </window>

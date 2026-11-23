@@ -130,6 +130,11 @@
     <variable name="HintEpisodeDown">
         <value condition="Control.IsVisible(5403) | Control.IsVisible(5401)">   [COLOR state_text]↓[/COLOR] $LOCALIZE[31124]</value>
     </variable>
+    <!-- The OSD's footer of a library title while subtitles, audio or video has the focus
+         (VideoOSD.xml 691, key ↓): Down to the cast row, and right of it OK to the full settings -->
+    <variable name="HintTrackSettings">
+        <value>$LOCALIZE[31702]   [COLOR state_text]⏎[/COLOR] $LOCALIZE[31139]</value>
+    </variable>
     <!-- Skin settings: a grabbed slot is dark blue; the keys of the rows of the page categories
          (ids 211 to 428) show under the description -->
     <variable name="HomePagesFocusColor">
@@ -145,6 +150,7 @@
         <value condition="Control.HasFocus(712)">$LOCALIZE[31363]</value>
         <value condition="Control.HasFocus(9006)">$LOCALIZE[31364]</value>
         <value condition="Control.HasFocus(713)">$LOCALIZE[31366]</value>
+        <value condition="Control.HasFocus(714)">$LOCALIZE[31368]</value>
         <value condition="Control.HasFocus(621)">$LOCALIZE[31442]</value>
         <value condition="Control.HasFocus(622)">$LOCALIZE[31444]</value>
         <value condition="Control.HasFocus(9007)">$LOCALIZE[31447]</value>
@@ -603,7 +609,7 @@
         <value condition="!String.IsEmpty(Player.Art(poster))">$INFO[Player.Art(poster)]</value>
         <value>$INFO[Player.Art(thumb)]</value>
     </variable>
-    <!-- chapter row (VideoOSDBookmarks.xml): for Jellyfin streams the OSD script puts the
+    <!-- chapter panel (VideoOSDBookmarks.xml): for Jellyfin streams the OSD script puts the
          server's chapter images into nc.chapter.N (nightcity.py set_chapter_thumbs); without them
          Kodi's own thumbnail, which it cuts from some http streams too -->
     <variable name="ChapterThumb">
@@ -686,11 +692,6 @@
         <value condition="Player.Rewinding">[COLOR state_text]◄◄[/COLOR] $INFO[Player.PlaySpeed]x</value>
         <value condition="Player.Forwarding">[COLOR state_text]▶▶[/COLOR] $INFO[Player.PlaySpeed]x</value>
         <value condition="Player.Paused">[COLOR state_text]❚❚[/COLOR] $LOCALIZE[31051]</value>
-    </variable>
-    <!-- the row below the OSD bar (VideoOSDBookmarks.xml): chapters, or only bookmarks -->
-    <variable name="PlayerChaptersLevel">
-        <value condition="Integer.IsGreater(Player.ChapterCount,0)">$LOCALIZE[31140]</value>
-        <value>$LOCALIZE[31056]</value>
     </variable>
     <variable name="PlayerSeasonNum">
         <value condition="Integer.IsLess(VideoPlayer.Season,10)">S0$INFO[VideoPlayer.Season]</value>

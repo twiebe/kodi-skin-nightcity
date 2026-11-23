@@ -155,9 +155,28 @@ def test_switches_are_on_by_default(cid, name):
     assert [o.text for o in switch.findall('onclick')][0] == 'Skin.ToggleSetting(nc.osd.{}.off)'.format(name)
 
 
+def test_stats_switch_is_off_by_default():
+    """The stats button of the player (VideoOSD.xml 609) is opt-in: the skin bool stores on."""
+    switch = controls(page())['714']
+    assert switch.get('type') == 'radiobutton' and switch.findtext('width') == '1260'
+    assert switch.findtext('label') == '$LOCALIZE[31367]'
+    assert switch.findtext('selected') == 'Skin.HasSetting(nc.osd.stats)'
+    assert [o.text for o in switch.findall('onclick')][0] == 'Skin.ToggleSetting(nc.osd.stats)'
+
+
+def test_stats_strings_in_every_language():
+    """Label and help text in every language file, as for the other settings."""
+    for po in (ROOT / 'language').glob('*/strings.po'):
+        text = po.read_text(encoding='utf-8')
+        assert 'msgctxt "#31367"\nmsgid "Show the stats for nerds button"\n' in text, po
+        assert 'msgctxt "#31368"\nmsgid "A stats button at the right end of the player controls.' in text, po
+        if 'en_gb' not in str(po):
+            assert 'msgctxt "#31367"\nmsgid "Show the stats for nerds button"\nmsgstr ""' not in text, po
+
+
 def test_player_rows_in_order():
     area = controls(page())['700']
-    assert [k.get('id') for k in area.findall('control')] == ['711', '720', '713']
+    assert [k.get('id') for k in area.findall('control')] == ['711', '720', '713', '714']
 
 
 def test_plot_in_the_player_follows_its_switch():
@@ -234,9 +253,10 @@ def test_descriptions():
     assert values['Control.HasFocus(712)'] == '$LOCALIZE[31363]'
     assert values['Control.HasFocus(9006)'] == '$LOCALIZE[31364]'
     assert values['Control.HasFocus(713)'] == '$LOCALIZE[31366]'
+    assert values['Control.HasFocus(714)'] == '$LOCALIZE[31368]'
 
 
-@pytest.mark.parametrize('skin', [{}, {'nc.osd.autohide.off': '1'}])
+@pytest.mark.parametrize('skin', [{}, {'nc.osd.autohide.off': '1'}, {'nc.osd.stats': '1'}])
 def test_player_category_navigation(skin):
     skin = dict(skin, **{'Window.Property(nc.hp.tab)': 'player'})
     assert dead_ends('SkinSettings.xml', skin) == []

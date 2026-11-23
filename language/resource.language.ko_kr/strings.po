@@ -103,10 +103,6 @@ msgctxt "#31055"
 msgid "video"
 msgstr "비디오"
 
-msgctxt "#31056"
-msgid "bookmarks"
-msgstr "북마크"
-
 msgctxt "#31057"
 msgid "buffering"
 msgstr "버퍼링"
@@ -907,6 +903,14 @@ msgctxt "#31366"
 msgid "The plot of what plays, under its title while the player controls or the seek line are up."
 msgstr "플레이어 컨트롤이나 탐색 막대가 열려 있는 동안 재생 중인 작품의 줄거리를 제목 아래에 표시합니다."
 
+msgctxt "#31367"
+msgid "Show the stats for nerds button"
+msgstr "전문가용 통계 버튼 표시"
+
+msgctxt "#31368"
+msgid "A stats button at the right end of the player controls. It opens Kodi's playback information: codecs, bitrates, dropped frames."
+msgstr "플레이어 컨트롤 오른쪽 끝의 통계 버튼입니다. Kodi의 재생 정보(코덱, 비트레이트, 누락된 프레임)를 엽니다."
+
 msgctxt "#31400"
 msgid "New albums"
 msgstr "새 앨범"
@@ -1182,3 +1186,7 @@ msgstr "On Deck"
 msgctxt "#31701"
 msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
 msgstr "시청을 시작한 작품, 그다음 보고 있는 TV 쇼. TV 쇼에서 OK를 누르면 다음 에피소드가 열립니다."
+
+msgctxt "#31702"
+msgid "cast & crew"
+msgstr "출연진 & 제작진"

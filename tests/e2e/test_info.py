@@ -11,6 +11,7 @@ import time
 import pytest
 
 from conftest import action, builtin, cond, info, kdev, rpc, screenshot, seed, wait_for
+from test_playback import playing  # noqa: F401 (fixture)
 
 pytestmark = pytest.mark.e2e
 
@@ -329,3 +330,70 @@ def test_spotlight_play_starts_movie(home):
         wait_for('Player.HasVideo', timeout=20)
     finally:
         stop()
+
+
+def test_info_page_over_the_video_shows_it_dimmed(playing):
+    """An info page over a playing video shows the video under the scrim (InfoBackground,
+    video_scrim) instead of the skin's background: the picture moves behind the page."""
+    from PIL import Image
+    from test_playback import MOVIE_ID
+    builtin('ActivateWindow(movieinformation,videodb://movies/titles/{}/,return)'.format(MOVIE_ID))
+    wait_for('Window.IsActive(movieinformation) + Player.HasVideo')
+    time.sleep(2)
+    first = screenshot('info-over-video-1')
+    time.sleep(2)
+    second = screenshot('info-over-video-2')
+    # the clip's moving band and squares show through, dimmed, on the right below the page's
+    # text: a faint change between two shots, none over the skin's still background
+    one, two = (Image.open(p).convert('L') for p in (first, second))
+    box = [int(v * one.width / 1920) for v in (1300, 400, 1900, 1000)]
+    moved = sum(1 for a, b in zip(one.crop(box).tobytes(), two.crop(box).tobytes()) if abs(a - b) > 6)
+    assert moved > 200, moved
+    action('back', delay=1)
+
+
+def _play_never_over_the_video():
+    """Press play on the open page and sample it until the player is up: the page must not turn
+    into the page over the video, neither dimmed onto it (scrim 5099) nor with the playing
+    title's buttons ("back to video" 9009). Returns the samples with the page over a video."""
+    builtin('SetFocus(9001)')
+    wait_for('Integer.IsEqual(System.CurrentControlId,9001)')
+    over = 'Control.IsVisible(5099) | Control.IsVisible(9009)'
+    action('select', delay=0)
+    seen, end = [], time.time() + 20
+    while time.time() < end:
+        state = cond(over, 'Player.HasVideo', 'Window.IsVisible(movieinformation)')
+        seen.append(state)
+        if state['Player.HasVideo'] and not state['Window.IsVisible(movieinformation)']:
+            break
+    assert any(s['Player.HasVideo'] for s in seen)
+    behind = [s for s in seen if s['Player.HasVideo'] and s['Window.IsVisible(movieinformation)']]
+    assert not any(s[over] for s in seen), '{} of {} samples over the video'.format(
+        sum(s[over] for s in seen), len(behind))
+    return behind
+
+
+def test_play_from_a_library_page_never_shows_it_over_the_video(home):
+    """A library movie's page opened without a video (nc.info.video) stays the library page
+    until the player is up."""
+    builtin('SetFocus(9202,0,absolute)')
+    action('select')
+    try:
+        wait_for('Window.IsActive(movieinformation)')
+        wait_for('Control.IsVisible(9001)', timeout=10)
+        _play_never_over_the_video()
+    finally:
+        stop()
+        builtin('Dialog.Close(all,true)')
+
+
+def test_play_from_an_episode_page_never_shows_it_over_the_video(kdev_show):
+    """The same on an episode's page, where the playing episode is the page's focused episode:
+    it neither shows "back to video" nor the dimmed video before the player is up."""
+    tvshowid, episodes = kdev_show
+    open_episode_info(tvshowid)
+    try:
+        _play_never_over_the_video()
+    finally:
+        stop()
+        close_returned_info()

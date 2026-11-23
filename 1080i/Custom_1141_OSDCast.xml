@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Cast and crew row during playback: Down from the chapter row (VideoOSDBookmarks.xml) opens
-     it, Up from the tabs or Back returns to the chapter row. Tabs cast | crew switch on focus (CreditsTab). The
+<!-- Cast and crew row during playback: Down from the OSD's controls (VideoOSD.xml) opens it, Up
+     from the tabs or Back returns to the controls. Tabs cast | crew switch on focus (CreditsTab). The
      focused person's name, role and short biography sit above the row; the biography loads in
      the hidden list 6599 once the focus rested (nc_osd_bio, Timers.xml). OK on a person closes
      the OSD and opens the person's page in TMDb Helper's window manager over the running video;
@@ -18,15 +18,32 @@
     <onload>ClearProperty(nc.osd.bio.pending,home)</onload>
     <onload>ClearProperty(nc.osd.click,home)</onload>
     <onload>ClearProperty(nc.osd.ret,home)</onload>
+    <!-- opened Down from the chapters button (VideoOSDBookmarks.xml 90): closed back onto the
+         controls, the button's panel shows again. Not when a chain leaves (nc.osd.ret, set
+         before the row closes) or the OSD goes with it -->
+    <onunload condition="!String.IsEmpty(Window(Home).Property(nc.osd.chapters)) + String.IsEmpty(Window(Home).Property(nc.osd.ret)) + Window.IsActive(videoosd)">ActivateWindow(videobookmarks)</onunload>
+    <onunload>ClearProperty(nc.osd.chapters,home)</onunload>
     <animation effect="fade" time="150">WindowOpen</animation>
     <animation effect="fade" time="150">WindowClose</animation>
     <controls>
+        <!-- the video dimmed as behind an info page over it (InfoBackground, video_scrim): the
+             names, roles and biography read over a bright picture. Down to the row's bottom,
+             then fading out above the seek line: the seek bar dialog lies under this one, its
+             line and times would be dimmed with the video -->
+        <control type="image">
+            <description>video scrim</description>
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>830</height>
+            <texture colordiffuse="video_scrim">ui/white.png</texture>
+        </control>
         <control type="image">
             <left>0</left>
-            <top>200</top>
+            <top>830</top>
             <width>1920</width>
-            <height>880</height>
-            <texture colordiffuse="scrim">ui/fade_b.png</texture>
+            <height>40</height>
+            <texture colordiffuse="video_scrim">ui/fade_t.png</texture>
         </control>
 
         <!-- the focused person -->
@@ -127,7 +144,6 @@
                 <param name="condition" value="!Container(6501).IsUpdating + !Container(6599).IsUpdating"/>
             </include>
             <onclick condition="!Container(6501).IsUpdating + !Container(6599).IsUpdating + [!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) | String.IsEmpty(Window(Home).Property(nc.chain.claim))]">Dialog.Close(1141)</onclick>
-            <onclick condition="!Container(6501).IsUpdating + !Container(6599).IsUpdating + [!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) | String.IsEmpty(Window(Home).Property(nc.chain.claim))]">Dialog.Close(videobookmarks)</onclick>
             <onclick condition="!Container(6501).IsUpdating + !Container(6599).IsUpdating + [!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) | String.IsEmpty(Window(Home).Property(nc.chain.claim))]">Dialog.Close(videoosd)</onclick>
             <!-- a click while the biography loads waits for it (nc_osd_click, Timers.xml), as does
                  one while the row itself reloads: it does, a second or so after playback started,
@@ -147,11 +163,11 @@
             <content target="videos">$VAR[OSDCreditsRow]</content>
         </control>
 
-        <!-- Up from the tabs: back to the chapter row -->
+        <!-- Up from the tabs: back to the controls -->
         <include content="LevelHint">
             <param name="id" value="6590"/>
             <param name="key" value="↑"/>
-            <param name="label" value="$VAR[PlayerChaptersLevel]"/>
+            <param name="label" value="$LOCALIZE[31478]"/>
             <param name="top" value="140"/>
             <param name="left" value="0"/>
             <param name="width" value="1920"/>

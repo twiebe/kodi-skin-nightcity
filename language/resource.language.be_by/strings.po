@@ -103,10 +103,6 @@ msgctxt "#31055"
 msgid "video"
 msgstr "відэа"
 
-msgctxt "#31056"
-msgid "bookmarks"
-msgstr "закладкі"
-
 msgctxt "#31057"
 msgid "buffering"
 msgstr "буферызацыя"
@@ -907,6 +903,14 @@ msgctxt "#31366"
 msgid "The plot of what plays, under its title while the player controls or the seek line are up."
 msgstr "Сюжэт таго, што прайграецца, пад назвай, пакуль адкрыта кіраванне прайгравальнікам або паласа перамотвання."
 
+msgctxt "#31367"
+msgid "Show the stats for nerds button"
+msgstr "Паказваць кнопку статыстыкі для гікаў"
+
+msgctxt "#31368"
+msgid "A stats button at the right end of the player controls. It opens Kodi's playback information: codecs, bitrates, dropped frames."
+msgstr "Кнопка статыстыкі справа ў кіраванні прайгравальнікам. Яна адкрывае звесткі Kodi пра прайграванне: кодэкі, бітрэйты, прапушчаныя кадры."
+
 msgctxt "#31400"
 msgid "New albums"
 msgstr "Новыя альбомы"
@@ -1182,3 +1186,7 @@ msgstr "On Deck"
 msgctxt "#31701"
 msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
 msgstr "Пачатае, потым серыялы, якія вы глядзіце. OK на серыяле адкрывае наступны эпізод."
+
+msgctxt "#31702"
+msgid "cast & crew"
+msgstr "акцёры & здымачная група"

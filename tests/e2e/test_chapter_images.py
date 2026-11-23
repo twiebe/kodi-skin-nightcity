@@ -75,7 +75,10 @@ def _play(path):
 
 
 def _chapter_row():
-    action('down')
+    builtin('SetFocus(608)')
+    # the panel shows with the focus on the button, as a track panel
+    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(90)', timeout=5)
+    action('up')
     wait_for('Window.IsActive(videobookmarks)')
     wait_for('Integer.IsEqual(Container(11).NumItems,3)')
     wait_for('Control.HasFocus(11)')

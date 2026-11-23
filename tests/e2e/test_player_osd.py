@@ -50,16 +50,117 @@ def test_panels_step_along_the_button_row(tracks):
     action('up')
     wait_for('Control.HasFocus(653)')
     action('right')
-    wait_for('Control.HasFocus(610)')  # no chapters button: the chapter row is Down from the bar
-
-
-def test_button_rows_wrap_around(tracks):
-    """Left on the far left control lands on the far right one, Right there back on the far left."""
-    focus(601)
-    action('left')
-    wait_for('Control.HasFocus(610)')
+    # chapters, right of video: its panel shows with the focus on it
+    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(90)', timeout=5)
     action('right')
-    wait_for('Control.HasFocus(601)')
+    wait_for('!Window.IsVisible(videobookmarks) + Control.HasFocus(601)', timeout=5)
+
+
+def chapters():
+    """Focus the chapters button: its panel shows, the focus on the panel's stand-in for it."""
+    builtin('SetFocus(608)')
+    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(90)', timeout=5)
+    time.sleep(0.3)  # a key in the first moment after opening gets lost
+
+
+def test_chapters_button_shows_the_chapter_panel(tracks):
+    """As a track panel: the chapter panel shows as the button gets the focus, on the playing
+    chapter. Up or OK go into it, Down or Back back onto the button, Left past the first card on
+    to video, Right past the last to stats with its setting, else round to the far left."""
+    chapters()
+    assert int(info('Container(11).NumItems')['Container(11).NumItems']) == 3
+    screenshot('osd-chapter-panel')
+    action('up')
+    wait_for('Control.HasFocus(11)', timeout=5)
+    action('down')
+    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(90)', timeout=5)
+    action('select')
+    wait_for('Control.HasFocus(11)', timeout=5)
+    action('back')
+    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(90)', timeout=5)
+    action('up')
+    wait_for('Control.HasFocus(11)', timeout=5)
+    builtin('SetFocus(11,0,absolute)')
+    wait_for('Integer.IsEqual(Container(11).CurrentItem,1)')
+    action('left')
+    wait_for('!Window.IsVisible(videobookmarks) + Control.HasFocus(607)', timeout=5)
+    chapters()
+    action('up')
+    wait_for('Control.HasFocus(11)', timeout=5)
+    builtin('SetFocus(11,2,absolute)')
+    wait_for('Integer.IsEqual(Container(11).CurrentItem,3)')
+    action('right')
+    wait_for('!Window.IsVisible(videobookmarks) + Control.HasFocus(601)', timeout=5)
+
+
+def test_passing_the_chapters_button(tracks):
+    """Left and Right along the row pass the chapters button: its panel opens and closes again,
+    no key gets lost on the way."""
+    focus(607)
+    for _ in range(3):
+        action('right')
+        wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(90)', timeout=5)
+        action('left')
+        wait_for('!Window.IsVisible(videobookmarks) + Control.HasFocus(607)', timeout=5)
+
+
+def test_back_on_the_chapters_button_closes_the_osd(tracks):
+    chapters()
+    action('back')
+    wait_for('!Window.IsVisible(videobookmarks) + !Window.IsVisible(videoosd)', timeout=5)
+    assert cond('Player.HasVideo')['Player.HasVideo']
+
+
+def test_chapter_panel_right_goes_to_stats_with_its_setting(tracks):
+    builtin('Skin.SetBool(nc.osd.stats)')
+    try:
+        chapters()
+        action('right')
+        wait_for('!Window.IsVisible(videobookmarks) + Control.HasFocus(609)', timeout=5)
+    finally:
+        builtin('Skin.Reset(nc.osd.stats)')
+
+
+@pytest.mark.parametrize('button, window', [(605, 'osdsubtitlesettings'), (606, 'osdaudiosettings'),
+                                            (607, 'osdvideosettings')])
+def test_ok_on_a_track_button_opens_all_settings(tracks, button, window):
+    """Up goes into the panel, OK opens Kodi's settings at once; the footer says so."""
+    focus(button)
+    wait_for('Control.IsVisible(691) | Control.IsVisible(692)')
+    action('select')
+    wait_for('Window.IsActive({})'.format(window))
+    action('back')
+    wait_for('!Window.IsActive({})'.format(window))
+
+
+def test_track_list_wraps_upward_onto_all_settings(tracks):
+    """Up on the first row of the list lands on its last row, all settings."""
+    focus(605)
+    action('up')
+    wait_for('Control.HasFocus(651)')
+    builtin('SetFocus(651,0,absolute)')
+    wait_for('Integer.IsEqual(Container(651).CurrentItem,1)')
+    last = info('Window(Home).Property(nc.sub.count)')['Window(Home).Property(nc.sub.count)']
+    action('up')
+    wait_for('Integer.IsEqual(Container(651).CurrentItem,{})'.format(last))
+
+
+# chapters: its panel shows and holds the focus on its stand-in for the button
+@pytest.mark.parametrize('stats, last', [(False, 90), (True, 609)], ids=['chapters', 'stats'])
+def test_button_rows_wrap_around(tracks, stats, last):
+    """Left on the far left control lands on the far right one, Right there back on the far left:
+    stats with its skin setting, else chapters. No "…" any more."""
+    if stats:
+        builtin('Skin.SetBool(nc.osd.stats)')
+    try:
+        wait_for('Control.IsVisible(609)' if stats else '!Control.IsVisible(609)')
+        focus(601)
+        action('left')
+        wait_for('Control.HasFocus({})'.format(last), timeout=5)
+        action('right')
+        wait_for('!Window.IsVisible(videobookmarks) + Control.HasFocus(601)', timeout=5)
+    finally:
+        builtin('Skin.Reset(nc.osd.stats)')
 
 
 def test_moving_between_the_rows_lands_on_the_neighbour(tracks):
@@ -67,8 +168,7 @@ def test_moving_between_the_rows_lands_on_the_neighbour(tracks):
     focus(607)
     focus(611)
     action('right')
-    # info shows only for a title it has a page of; then subtitles is the first of the row
-    first = 612 if cond('Control.IsVisible(612)')['Control.IsVisible(612)'] else 605
+    first = 605
     wait_for('Control.HasFocus({})'.format(first))
     focus(602)
     focus(first)
@@ -84,7 +184,7 @@ def test_video_panel_opens_video_settings(tracks):
     screenshot('osd-video-panel')
     action('down')
     wait_for('Control.HasFocus(607)')
-    action('select')
+    action('up')
     wait_for('Control.HasFocus(653)')
     action('select', delay=1)
     try:
@@ -129,20 +229,17 @@ def test_pause_opens_the_osd_once(tracks):
     wait_for('!Window.IsActive(videoosd)')
 
 
-def test_chapter_row_after_a_chain_focuses_the_chapters(tracks):
-    """A chain from the cast row ends with the chapter row reopened and the cast row over it
-    (nc.osd.ret and nc.osd.chain, set as the chain leaves them). Closing the cast row shows the
-    chapters with the focus on them; it used to stay on a stand-in out of sight. The clip has no
-    cast row, so the test opens and closes it itself."""
-    focus(602)
-    builtin('SetProperty(nc.osd.ret,1,home)')
+def test_cast_row_after_a_chain_comes_back_from_the_osd(tracks):
+    """A chain from the cast row ends on the OSD, whose stand-in 699 opens the cast row again
+    (nc.osd.rows); Up there goes back to the controls. The clip has no cast row: the test sets
+    the properties the chain leaves and closes the OSD as the chain does."""
+    close_osd()
     builtin('SetProperty(nc.osd.chain,1,home)')
-    action('down')
+    action('osd')
     wait_for('Window.IsActive(1141)', timeout=5)
+    builtin('ClearProperty(nc.osd.chain,home)')
     builtin('Dialog.Close(1141)')
-    wait_for('Window.IsActive(videobookmarks) + !Window.IsVisible(1141) + Control.HasFocus(11)', timeout=5)
-    action('up')
-    wait_for('Control.HasFocus(2)')
+    wait_for('Window.IsActive(videoosd) + !Window.IsVisible(1141) + Control.HasFocus(602)', timeout=5)
 
 
 def press(button, hold=0):
@@ -150,16 +247,18 @@ def press(button, hold=0):
     rpc('Input.ButtonEvent', {'button': button, 'keymap': 'KB', 'holdtime': hold})
 
 
-def _rows(cast):
-    """From the bar's skip button (not the controls' first) Down to the chapter row and, with CAST,
-    on to the cast row. The clip has no cast, so the test opens that row itself. The back keymap
-    (scripts/nightcity.py BACK_KEYMAP) is written anew first, as the service does at startup."""
+def _rows(panel):
+    """The chapter panel (PANEL) or the cast row, opened from the bar's skip button. The clip has
+    no cast, so the test opens that row itself. The back keymap (scripts/nightcity.py
+    BACK_KEYMAP) is written anew first, as the service does at startup."""
     builtin('NotifyAll(nightcity,home_keymap)')
     time.sleep(1)
     focus(611)
-    action('down')
-    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(11)', timeout=5)
-    if cast:
+    if panel:
+        chapters()
+        action('up')
+        wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(11)', timeout=5)
+    else:
         builtin('ActivateWindow(1141)')
         wait_for('Window.IsActive(1141)', timeout=5)
     time.sleep(0.3)  # a key in the first moment after opening gets lost
@@ -169,22 +268,33 @@ CONTROLS = ('Window.IsActive(videoosd) + !Window.IsVisible(videobookmarks) + !Wi
             ' + Control.HasFocus(602)')
 
 
-@pytest.mark.parametrize('cast', [False, True], ids=['chapters', 'cast'])
+@pytest.mark.parametrize('panel', [True, False], ids=['chapters', 'cast'])
 @pytest.mark.parametrize('key', ['backspace', 'escape'])
-def test_back_held_in_the_rows_goes_to_the_controls(tracks, cast, key):
-    """Back held in the chapter or the cast row: the player's controls on their own first button
-    (play or resume), as Back held in a chain from the cast row (back_to_start). It went one row
-    up like a single Back."""
-    _rows(cast)
+def test_back_held_in_the_rows_goes_to_the_controls(tracks, panel, key):
+    """Back held in the chapter panel or the cast row: the player's controls on their own first
+    button (play or resume), as Back held in a chain from the cast row (back_to_start)."""
+    _rows(panel)
     press(key, hold=1000)
     wait_for(CONTROLS, timeout=5)
 
 
-def test_back_in_the_rows_steps_up_one_row(tracks):
-    """A single Back still goes one row up: cast row, chapter row, the bar."""
+def test_back_in_the_rows_goes_back_to_the_controls(tracks):
+    """A single Back closes the cast row onto the controls; in the chapter panel it goes back onto
+    the panel's button."""
+    _rows(False)
+    press('backspace')
+    wait_for('Window.IsActive(videoosd) + !Window.IsVisible(1141) + Control.HasFocus(611)', timeout=5)
     _rows(True)
     press('backspace')
-    wait_for('Window.IsActive(videobookmarks) + !Window.IsVisible(1141) + Control.HasFocus(11)', timeout=5)
-    time.sleep(0.3)
+    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(90)', timeout=5)
+
+
+def test_back_over_the_bare_video_stops_it(tracks):
+    """Leaving the video stops it: Back with nothing over the video (BACK_KEYMAP fullscreenvideo).
+    With the OSD open Back only closes the OSD."""
+    builtin('NotifyAll(nightcity,home_keymap)')
+    time.sleep(1)
+    close_osd()
+    assert cond('Player.HasVideo')['Player.HasVideo']
     press('backspace')
-    wait_for('Window.IsActive(videoosd) + !Window.IsVisible(videobookmarks) + Control.HasFocus(611)', timeout=5)
+    wait_for('!Player.HasVideo', timeout=10)

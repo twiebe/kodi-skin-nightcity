@@ -103,10 +103,6 @@ msgctxt "#31055"
 msgid "video"
 msgstr "视频"
 
-msgctxt "#31056"
-msgid "bookmarks"
-msgstr "书签"
-
 msgctxt "#31057"
 msgid "buffering"
 msgstr "缓冲中"
@@ -907,6 +903,14 @@ msgctxt "#31366"
 msgid "The plot of what plays, under its title while the player controls or the seek line are up."
 msgstr "在播放器控制栏或进度条打开时，于标题下方显示正在播放内容的剧情。"
 
+msgctxt "#31367"
+msgid "Show the stats for nerds button"
+msgstr "显示“极客统计”按钮"
+
+msgctxt "#31368"
+msgid "A stats button at the right end of the player controls. It opens Kodi's playback information: codecs, bitrates, dropped frames."
+msgstr "在播放器控制按钮的最右侧显示统计按钮。它打开 Kodi 的播放信息：编解码器、码率、丢帧。"
+
 msgctxt "#31400"
 msgid "New albums"
 msgstr "新专辑"
@@ -1182,3 +1186,7 @@ msgstr "On Deck"
 msgctxt "#31701"
 msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
 msgstr "已开始的内容，然后是你正在看的电视剧。在电视剧上按 OK 打开下一集。"
+
+msgctxt "#31702"
+msgid "cast & crew"
+msgstr "演员 & 职员"

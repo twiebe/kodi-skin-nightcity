@@ -211,11 +211,7 @@ def test_info_cast_opens_person_then_movie_and_back(matrix):
 def _open_cast_row():
     action('osd', delay=1.5)
     assert _true('Window.IsActive(videoosd)')
-    action('down', delay=0.3)
-    assert _true('Window.IsActive(videobookmarks)')
-    # a movie without chapters: the row focuses its buttons
-    wait_for("Control.HasFocus(11) | Control.HasFocus(2)")
-    action('down', delay=1)
+    action('down', delay=1)  # straight to cast & crew
     wait_for('Window.IsActive(1141)')
     wait_for('Integer.IsGreater(Container(6501).NumItems,0)', timeout=15)
 
@@ -539,8 +535,8 @@ def test_back_button_names_the_page_and_waits_at_the_left(matrix):
 
 def test_walking_back_out_of_an_osd_chain_never_seeks(matrix):
     """Up walks back page by page; the last one ends the chain. It used to end on the bare video,
-    where one Up too many jumped a chapter (or 10 minutes) ahead. The chain ends on the chapter
-    row it was entered from below, so extra keys only move between the player's levels."""
+    where one Up too many jumped a chapter (or 10 minutes) ahead. The chain ends on the cast row
+    it was entered from, so extra keys only move between the player's levels."""
     from test_level_hints import key
     _play(matrix)
     time.sleep(2)
@@ -555,7 +551,7 @@ def test_walking_back_out_of_an_osd_chain_never_seeks(matrix):
         key('up')
         time.sleep(0.6)
     wait_for(IDLE, timeout=20)
-    # the chain ends on the chapter row; an Up left over closes it onto the bar, where Up does nothing
+    # the chain ends on the cast row; an Up left over closes it onto the bar, where Up does nothing
     wait_for('Window.IsActive(videoosd)', timeout=5)
     time.sleep(1)
     after = rpc('Player.GetProperties', {'playerid': 1, 'properties': ['time']})['time']
@@ -667,7 +663,7 @@ def test_back_in_the_chain_returns_to_the_crew_tab(matrix):
 
 def test_up_from_an_osd_chain_returns_to_the_person_left(matrix):
     """Up at the top of the person page ends the chain back on the cast row, on that person; it
-    used to end on the chapter row."""
+    used to end on the row above."""
     _play(matrix)
     time.sleep(2)
     _open_cast_row()
@@ -699,11 +695,9 @@ def _osd_chain_from_the_second_person(matrix):
 
 
 @pytest.mark.parametrize('leave', ['up', 'back'])
-def test_after_an_osd_chain_up_from_the_cast_row_lands_on_the_chapter_row(matrix, leave):
-    """Up (or Back) from the person page lands on the cast row, Up from there on the chapter row:
-    on add bookmark, The Matrix has no chapters. The cast row used to open over the chapter row
-    before the row's focus hops ran, so the focus stayed on a stand-in out of sight, where Up did
-    nothing."""
+def test_after_an_osd_chain_up_from_the_cast_row_lands_on_the_controls(matrix, leave):
+    """Up (or Back) from the person page lands on the cast row, Up from there on the player's
+    controls, the video still playing."""
     _osd_chain_from_the_second_person(matrix)
     if leave == 'up':
         _up_past_the_text()
@@ -715,9 +709,7 @@ def test_after_an_osd_chain_up_from_the_cast_row_lands_on_the_chapter_row(matrix
     action('up')
     wait_for('Control.HasFocus(6521)')
     action('up')
-    wait_for('Window.IsActive(videobookmarks) + !Window.IsVisible(1141) + Control.HasFocus(2)', timeout=5)
-    action('up')
-    wait_for('!Window.IsActive(videobookmarks) + Window.IsActive(videoosd)', timeout=5)
+    wait_for('Window.IsActive(videoosd) + !Window.IsVisible(1141) + Player.HasVideo', timeout=5)
 
 
 def test_up_right_after_an_osd_chain_stays_on_the_tabs(matrix):
@@ -736,7 +728,7 @@ def test_up_right_after_an_osd_chain_stays_on_the_tabs(matrix):
     time.sleep(3)
     assert _true('Control.HasFocus(6521)'), info('System.CurrentControlId')
     action('up')
-    wait_for('Window.IsActive(videobookmarks) + !Window.IsActive(1141) + Control.HasFocus(2)', timeout=5)
+    wait_for('Window.IsActive(videoosd) + !Window.IsActive(1141)', timeout=5)
 
 
 def test_a_new_osd_chain_opens_the_person_on_the_buttons(matrix):

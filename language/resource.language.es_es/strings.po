@@ -103,10 +103,6 @@ msgctxt "#31055"
 msgid "video"
 msgstr "vídeo"
 
-msgctxt "#31056"
-msgid "bookmarks"
-msgstr "marcadores"
-
 msgctxt "#31057"
 msgid "buffering"
 msgstr "almacenando en búfer"
@@ -907,6 +903,14 @@ msgctxt "#31366"
 msgid "The plot of what plays, under its title while the player controls or the seek line are up."
 msgstr "El argumento de lo que se reproduce, bajo su título, mientras los controles del reproductor o la barra de búsqueda están visibles."
 
+msgctxt "#31367"
+msgid "Show the stats for nerds button"
+msgstr "Mostrar el botón de estadísticas para nerds"
+
+msgctxt "#31368"
+msgid "A stats button at the right end of the player controls. It opens Kodi's playback information: codecs, bitrates, dropped frames."
+msgstr "Un botón de estadísticas a la derecha de los controles del reproductor. Abre la información de reproducción de Kodi: códecs, tasas de bits, fotogramas perdidos."
+
 msgctxt "#31400"
 msgid "New albums"
 msgstr "Nuevos álbumes"
@@ -1182,3 +1186,7 @@ msgstr "On Deck"
 msgctxt "#31701"
 msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
 msgstr "Los títulos empezados y después las series que está viendo. OK en una serie abre el siguiente episodio."
+
+msgctxt "#31702"
+msgid "cast & crew"
+msgstr "reparto & equipo"

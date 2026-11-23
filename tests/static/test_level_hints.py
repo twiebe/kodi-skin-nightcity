@@ -23,7 +23,6 @@ from navigation import load
 
 BOTTOM, TOP, PATH = '1030', '140', '30'
 CAST = 'VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)'
-CHAPTERS = '$VAR[PlayerChaptersLevel]'
 CONTROLS = '$LOCALIZE[31478]'
 KEYS = ('↑', '↓', '←', '→', '⏎', '↑↓', '←→')
 GLYPHS = re.compile('[↑↓←→⏎]')
@@ -167,7 +166,9 @@ OFFSET = {('DialogVideoInfo.xml', '5190'): 619}
 DIALOG_LEFT = {'DialogSelect.xml': ('-322', str(820 // 2 - 15))}
 FOCUS = re.compile(r'HasFocus|System\.CurrentControl|Container\.HasFocus')
 # the hints that show the keys of the focused row (DESIGN.md: an exception, open for now)
-FOCUSED_ROW = {('DialogVideoInfo.xml', '5190')}
+FOCUSED_ROW = {('DialogVideoInfo.xml', '5190'),
+               # the OSD's footer names OK on subtitles, audio and video, the full settings
+               ('VideoOSD.xml', '690'), ('VideoOSD.xml', '691'), ('VideoOSD.xml', '692')}
 
 
 def test_a_hint_does_not_follow_the_focus():
@@ -260,12 +261,6 @@ def test_footer_strings_are_glyphs():
     assert _string('31261') == KEY.format('↑↓') + ' move   ' + KEY.format('⏎') + ' drop'
 
 
-def test_chapters_level_name():
-    """The row below the bar lists the chapters, or only the bookmark buttons without chapters."""
-    assert _variable('PlayerChaptersLevel') == [
-        ('Integer.IsGreater(Player.ChapterCount,0)', '$LOCALIZE[31140]'), (None, '$LOCALIZE[31056]')]
-
-
 def test_the_player_controls_have_one_name():
     """The OSD bar is "controls" in every hint that leads to it; "menu" is left to the menus
     beside a list (Home's top menu, the library's)."""
@@ -290,35 +285,52 @@ def test_visualisation_hint():
 
 
 def test_osd_hint():
-    """The controls: Down from the bar, their bottom, opens the chapter row; shown on the whole
-    of the controls (a panel above a button too), hidden while a lower level is up."""
+    """The controls: Down from the bar, their bottom, opens the cast row of a library title; shown
+    on the whole of the controls (a panel above a button and the chapter panel too), hidden
+    while the cast row is up."""
     key, label, top, visible = _hint('VideoOSD.xml', '690')
-    assert (key, label, top) == ('↓', CHAPTERS, BOTTOM)
-    assert visible == '!Window.IsActive(videobookmarks) + !Window.IsActive(1141)'
-    assert '691' not in _controls('VideoOSD.xml')  # no hint of the panels' own
+    assert (key, label, top) == ('↓', '$LOCALIZE[31702]', BOTTOM)
+    assert _string('31702') == 'cast & crew' and _string('31702', 'de_de') == 'Besetzung & Crew'
+    assert visible == '!Window.IsActive(1141) + [{}] + {}'.format(CAST, ' + '.join('!Control.HasFocus({})'.format(b) for b in TRACK_BUTTONS))
+    assert '693' not in _controls('VideoOSD.xml')  # no hint of the panels' own
     controls = _controls('VideoOSD.xml')
     for row in ('600', '620'):
-        assert controls[row].findtext('ondown') == 'ActivateWindow(videobookmarks)', row
+        assert _actions(controls[row], 'ondown') == [(CAST, 'ActivateWindow(1141)')], row
 
 
-def test_chapter_row_hints():
-    """The chapter row: Down opens the cast row (library movies and episodes only), Up goes back
-    to the controls."""
+def test_chapter_panel_has_no_hints_of_its_own():
+    """The chapter panel is a panel above a button of the controls: their hints stay, it has
+    none of its own. Down from the list goes back onto its button, Up from the buttons does
+    nothing."""
     controls = _controls('VideoOSDBookmarks.xml')
-    key, label, top, visible = _hint('VideoOSDBookmarks.xml', '91')
-    assert (key, label, top) == ('↓', '$LOCALIZE[31124]', BOTTOM)
-    assert visible == '!Window.IsActive(1141) + [{}]'.format(CAST)
-    assert (CAST, 'ActivateWindow(1141)') in _actions(controls['11'], 'ondown')
-    key, label, top, visible = _hint('VideoOSDBookmarks.xml', '92')
-    assert (key, label, top) == ('↑', CONTROLS, TOP)
-    assert visible == '!Window.IsActive(1141)'
-    assert _actions(controls['9000'], 'onup') == [('', 'Dialog.Close(videobookmarks)')]
+    assert not [i for i in parse(ROOT / '1080i' / 'VideoOSDBookmarks.xml').iter('include') if i.get('content') == 'LevelHint']
+    assert _actions(controls['11'], 'ondown') == [('', '90')]
+    assert _actions(controls['9000'], 'onup') == [('', 'noop')]
+
+
+TRACK_BUTTONS = ('605', '606', '607')
+
+
+def test_osd_hint_on_subtitles_audio_and_video():
+    """While subtitles, audio or video has the focus the footer adds OK, the full settings, right
+    of the standing Down to the cast row of a library title (DESIGN.md: the hint that follows
+    the focus stands right): one line in the place of the Down hint, which fades out for it.
+    Without a cast row ⏎ all settings alone."""
+    focus = '[' + ' | '.join('Control.HasFocus({})'.format(b) for b in TRACK_BUTTONS) + ']'
+    key, label, top, visible = _hint('VideoOSD.xml', '691')
+    assert (key, label, top) == ('↓', '$VAR[HintTrackSettings]', BOTTOM)
+    assert visible == '!Window.IsActive(1141) + [{}] + {}'.format(CAST, focus)
+    assert _variable('HintTrackSettings') == [(None, '$LOCALIZE[31702]   [COLOR state_text]⏎[/COLOR] $LOCALIZE[31139]')]
+    key, label, top, visible = _hint('VideoOSD.xml', '692')
+    assert (key, label, top) == ('⏎', '$LOCALIZE[31139]', BOTTOM)
+    assert visible == '!Window.IsActive(1141) + ![{}] + {}'.format(CAST, focus)
+    assert _string('31139') == 'all settings'
 
 
 def test_cast_row_hint():
-    """The cast row: Up from the tabs goes back to the chapter row; nothing lies below."""
+    """The cast row: Up from the tabs goes back to the controls; nothing lies below."""
     key, label, top, visible = _hint('Custom_1141_OSDCast.xml', '6590')
-    assert (key, label, top, visible) == ('↑', CHAPTERS, TOP, 'true')
+    assert (key, label, top, visible) == ('↑', CONTROLS, TOP, 'true')
     controls = _controls('Custom_1141_OSDCast.xml')
     assert controls['6520'].findtext('onup') == 'Dialog.Close(1141)'
     assert controls['6501'].findtext('ondown') == 'noop'

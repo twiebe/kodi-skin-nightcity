@@ -777,7 +777,7 @@ def info_origin():
         _home().setProperty('nc.chain.origin.dbid', dbid)
 
 
-# the player's chapter row (VideoOSDBookmarks.xml) or cast row (Custom_1141_OSDCast.xml) has the
+# the player's chapter panel (VideoOSDBookmarks.xml) or cast row (Custom_1141_OSDCast.xml) has the
 # keys, no info page over them
 OSD_ROWS = '!Window.IsActive(movieinformation) + [Window.IsActive(videobookmarks) | Window.IsActive(1141)]'
 
@@ -788,14 +788,16 @@ def back_to_start():
     origin): its manager goes back to it at once (TMDbHelper.Command first, a command of the
     twiebe fork), and the page takes the focus to the item the chain went on from (nc.ret.1,
     info_back). A chain from the OSD cast row (nc.osd.ret) has no page before its first: it
-    ends, and the player's controls come back on their first button. In the player's chapter and
-    cast rows (OSD_ROWS) it goes there too: the rows close, the controls take the focus on their
-    first button. Outside a chain, and on the page it started from, it is a Back."""
+    ends, and the player's controls come back on their first button. In the player's chapter
+    panel and cast row (OSD_ROWS) it goes there too: they close, the controls take the focus on
+    their first button. Outside a chain, and on the page it started from, it is a Back."""
     import xbmc
     home = _home()
     position = xbmc.getInfoLabel('Window(Home).Property(TMDbHelper.Position)')
     if xbmc.getCondVisibility(OSD_ROWS):
-        # closed at once: the SetFocus goes to the topmost dialog, the OSD only once they are gone
+        # closed at once: the SetFocus goes to the topmost dialog, the OSD only once they are gone;
+        # the cast row does not reopen the chapter panel it came from (Custom_1141_OSDCast.xml)
+        home.clearProperty('nc.osd.chapters')
         xbmc.executebuiltin('Dialog.Close(1141,true)')
         xbmc.executebuiltin('Dialog.Close(videobookmarks,true)')
         xbmc.executebuiltin('SetFocus(602)')
@@ -1152,31 +1154,6 @@ CHAIN_FREE = ('String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + '
               'String.IsEmpty(Window(Home).Property(nc.chain.claim))')
 
 
-def player_info():
-    """The player's info button (VideoOSD.xml 612): the page of what plays. A library movie or
-    episode opens its own page; anything else the page TMDb Helper recognised it as, a chain over
-    the player as from the cast row (ChainClick: never while one starts, two interpreters
-    starting at once crash Kodi)."""
-    import xbmc
-    dbid = xbmc.getInfoLabel('VideoPlayer.DBID')
-    if dbid.isdigit() and int(dbid) > 0:
-        if xbmc.getCondVisibility('VideoPlayer.Content(movies)'):
-            info('movie', dbid)
-            return
-        if xbmc.getCondVisibility('VideoPlayer.Content(episodes)'):
-            _claim_info()
-            _episode_info(int(dbid))
-            return
-    if xbmc.getCondVisibility('VideoPlayer.Content(episodes)'):
-        kind, tmdb_id = 'tv', xbmc.getInfoLabel('Window(Home).Property(TMDbHelper.Player.TVShow.TMDb_ID)')
-    else:
-        kind, tmdb_id = 'movie', xbmc.getInfoLabel('Window(Home).Property(TMDbHelper.Player.TMDb_ID)')
-    if not tmdb_id or not xbmc.getCondVisibility(CHAIN_FREE):
-        return
-    xbmc.executebuiltin('RunScript(plugin.video.themoviedb.helper,add_tmdb={},tmdb_type={},call_auto=1190)'.format(tmdb_id, kind))
-    xbmc.executebuiltin('SetProperty(nc.chain.claim,1,home)')
-
-
 def plot(item='ListItem'):
     """The whole plot of the info page in Kodi's text viewer (button 9063, DialogVideoInfo.xml), under
     the title, a person's name. ITEM is the info prefix: Container(5100).ListItem on an episode's
@@ -1307,6 +1284,7 @@ def _trailer_full_screen(path):
     xbmc.executebuiltin('Dialog.Close(movieinformation,true)', True)
     xbmc.executebuiltin('ActivateWindow(fullscreenvideo)')
     monitor = _monitor()
+    # Back over the trailer stops it (BACK_KEYMAP, fullscreenvideo): it ends here, as at its end
     while xbmc.getCondVisibility('Player.HasMedia'):
         if monitor.waitForAbort(0.5):
             return
@@ -1460,7 +1438,7 @@ def streams_watch():
     token = str(time.time())
     home.setProperty('nc.osd.watch', token)
     shown = {}
-    # the chapter row (VideoOSDBookmarks.xml) opens from the OSD: its server images load beside
+    # the chapter panel (VideoOSDBookmarks.xml) opens from the OSD: its server images load beside
     # the panels, in this interpreter, not in one of their own
     import threading
     chapters = threading.Thread(target=chapter_images, args=(home,))
@@ -1648,7 +1626,7 @@ def home():
 
 # Kodi restarts itself only on Windows and Linux (CoreELEC, LibreELEC, Android count as Linux)
 # Kodi settings the skin sets once (skin bool that marks it done, setting, value): select opens
-# the info page; chapters get thumbnails for the OSD's chapter row
+# the info page; chapters get thumbnails for the OSD's chapter panel
 ONE_OFF = (('nc.selectaction.done', 'myvideos.selectaction', 3),
            ('nc.chapterthumbs.done', 'myvideos.extractchapterthumbs', True))
 
@@ -1686,14 +1664,18 @@ HOME_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
 # second (ChainBackGuard, Includes_Tmdb.xml), so on info pages these keys are Back too: for Kodi
 # both close the page. On the library grid likewise: Back on its position bar returns to the card
 # it came from. Back held on an info page goes back to
-# where the browsing started (back_to_start), in the player's chapter and cast rows to the
+# where the browsing started (back_to_start), in the player's chapter panel and cast row to the
 # player's controls: without sections of their own Kodi took the global long press there, one
-# row up like a single Back. Kodi knows long presses only in the keyboard
-# section (CEC and MCE remotes send theirs in the remote section). Written whatever the Home key
-# setting.
+# step back like a single Back. Kodi knows long presses only in the keyboard
+# section (CEC and MCE remotes send theirs in the remote section). Over the bare video (Kodi's
+# FullscreenVideo section: no OSD, row or info page in front, those keep their sections) Back
+# stops it: leaving the video stops it, Kodi left it running behind the menus. Tab (Fullscreen)
+# still does; chains over the video, the chapter panel, the cast row and the fullscreen trailer
+# (Back ends it, its page opens again) are dialogs or go by the player's stop. Written whatever
+# the Home key setting.
 BACK_KEYMAP_NAME = '0_skin.nightcity.back.xml'
 BACK_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
-<!-- Written by the Nightcity skin: on info pages and the library grid the keys of PreviousMenu are Back, Back held on an info page goes back to where the browsing started, in the player's chapter and cast rows to the player's controls; OK held on Home's movies or shows tab opens all of them. -->
+<!-- Written by the Nightcity skin: on info pages and the library grid the keys of PreviousMenu are Back, Back held on an info page goes back to where the browsing started, in the player's chapter panel and cast row to the player's controls; OK held on Home's movies or shows tab opens all of them; Back over the bare video stops it. -->
 <keymap>
   <movieinformation>
     <keyboard>
@@ -1710,9 +1692,12 @@ BACK_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
       <rightclick>Back</rightclick>
     </mouse>
   </movieinformation>
-  <!-- the player's chapter and cast rows: Back held goes to the player's controls (back_to_start) -->
+  <!-- the player's chapter panel and cast row: Back held goes to the player's controls (back_to_start).
+       Esc in the chapter panel is Back: on its stand-in for the chapters button Back closes the
+       OSD, as on the other buttons (VideoOSDBookmarks.xml 90) -->
   <videobookmarks>
     <keyboard>
+      <escape>Back</escape>
       <backspace mod="longpress">NotifyAll(nightcity,back_to_start)</backspace>
       <browser_back mod="longpress">NotifyAll(nightcity,back_to_start)</browser_back>
       <escape mod="longpress">NotifyAll(nightcity,back_to_start)</escape>
@@ -1758,6 +1743,19 @@ BACK_KEYMAP = """<?xml version="1.0" encoding="UTF-8"?>
       <rightclick>NotifyAll(nightcity,music_bar:escape)</rightclick>
     </mouse>
   </music>
+  <!-- over the bare video Back stops it (Kodi: Fullscreen, the video ran on behind the menus);
+       held it stops as in Kodi, escape too (Kodi: Back held, out of the video) -->
+  <fullscreenvideo>
+    <keyboard>
+      <backspace>Stop</backspace>
+      <browser_back>Stop</browser_back>
+      <escape>Stop</escape>
+      <escape mod="longpress">Stop</escape>
+    </keyboard>
+    <remote>
+      <back>Stop</back>
+    </remote>
+  </fullscreenvideo>
 @@SETTINGS@@</keymap>
 """
 
@@ -3138,7 +3136,7 @@ def music_bar(action, *args):
 COMMANDS = {'lib_bar': lib_bar, 'music_bar': music_bar, 'next_episode': next_episode, 'startup': startup, 'genres': genres, 'genre_pick': genre_pick,
             'info_select': info_select, 'info_leave': info_leave, 'info_back': info_back, 'info_forget': info_forget, 'info_origin': info_origin,
             'back_to_start': back_to_start, 'home_ok_held': home_ok_held, 'settings_return': settings_return, 'trailer': trailer,
-            'osd_back': osd_back, 'play': play, 'info': info, 'plot': plot, 'player_info': player_info,
+            'osd_back': osd_back, 'play': play, 'info': info, 'plot': plot,
             'streams': streams, 'row': row, 'search': search, 'search_recent': search_recent,
             'search_init': search_init, 'search_clear': search_clear, 'search_forget': search_forget, 'colours': colours,
             'streams_watch': streams_watch, 'section_pick': section_pick,

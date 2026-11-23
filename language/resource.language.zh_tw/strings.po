@@ -103,10 +103,6 @@ msgctxt "#31055"
 msgid "video"
 msgstr "影片"
 
-msgctxt "#31056"
-msgid "bookmarks"
-msgstr "書籤"
-
 msgctxt "#31057"
 msgid "buffering"
 msgstr "緩衝中"
@@ -907,6 +903,14 @@ msgctxt "#31366"
 msgid "The plot of what plays, under its title while the player controls or the seek line are up."
 msgstr "在播放器控制列或進度列開啟時，於標題下方顯示正在播放內容的劇情。"
 
+msgctxt "#31367"
+msgid "Show the stats for nerds button"
+msgstr "顯示「詳細統計資料」按鈕"
+
+msgctxt "#31368"
+msgid "A stats button at the right end of the player controls. It opens Kodi's playback information: codecs, bitrates, dropped frames."
+msgstr "在播放器控制按鈕的最右側顯示統計按鈕。它開啟 Kodi 的播放資訊：編解碼器、位元率、丟格。"
+
 msgctxt "#31400"
 msgid "New albums"
 msgstr "最新專輯"
@@ -1182,3 +1186,7 @@ msgstr "On Deck"
 msgctxt "#31701"
 msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
 msgstr "已開始的內容，接著是你正在看的影集。在影集上按 OK 開啟下一集。"
+
+msgctxt "#31702"
+msgid "cast & crew"
+msgstr "演員 & 職員"

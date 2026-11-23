@@ -103,10 +103,6 @@ msgctxt "#31055"
 msgid "video"
 msgstr "video"
 
-msgctxt "#31056"
-msgid "bookmarks"
-msgstr "yer imleri"
-
 msgctxt "#31057"
 msgid "buffering"
 msgstr "arabelleğe alınıyor"
@@ -907,6 +903,14 @@ msgctxt "#31366"
 msgid "The plot of what plays, under its title while the player controls or the seek line are up."
 msgstr "Oynatılanın özeti, oynatıcı kontrolleri veya arama çubuğu açıkken başlığının altında."
 
+msgctxt "#31367"
+msgid "Show the stats for nerds button"
+msgstr "İnekler için istatistik düğmesini göster"
+
+msgctxt "#31368"
+msgid "A stats button at the right end of the player controls. It opens Kodi's playback information: codecs, bitrates, dropped frames."
+msgstr "Oynatıcı denetimlerinin sağ ucunda bir istatistik düğmesi. Kodi'nin oynatma bilgilerini açar: kodekler, bit hızları, atlanan kareler."
+
 msgctxt "#31400"
 msgid "New albums"
 msgstr "Yeni albümler"
@@ -1182,3 +1186,7 @@ msgstr "On Deck"
 msgctxt "#31701"
 msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
 msgstr "Başladıklarınız, ardından izlediğiniz diziler. Bir dizide OK sonraki bölümü açar."
+
+msgctxt "#31702"
+msgid "cast & crew"
+msgstr "oyuncular & ekip"

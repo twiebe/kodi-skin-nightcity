@@ -181,8 +181,11 @@ def test_panel_more_opens_full_settings(tracks):
         action('back', delay=1)
 
 
-def test_down_opens_chapter_list(tracks):
-    action('down')
+def test_chapters_button_opens_chapter_list(tracks):
+    builtin('SetFocus(608)')
+    # the panel shows with the focus on the button, as a track panel
+    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(90)', timeout=5)
+    action('up')
     try:
         wait_for('Window.IsActive(videobookmarks)')
         wait_for('Control.HasFocus(11)')  # the chapters, not add bookmark

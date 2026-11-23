@@ -44,6 +44,40 @@
         <include>LookBackground</include>
     </include>
 
+    <!-- An info page over a playing video (from the OSD's cast and crew row, a TMDb chain over
+         the video): the page keeps the video in sight behind it, dimmed, instead of its own
+         background and fanart, so browsing does not leave the film. Only a page opened over the
+         video (nc.info.video, DialogVideoInfo.xml): one that starts playback itself stays as it
+         is until the player takes over. Not for a trailer the page plays itself (nc.trailer, or
+         one still stopping after Back): it draws its own layer. -->
+    <expression name="InfoOverVideo">!String.IsEmpty(Window(Home).Property(nc.info.video)) + Player.HasVideo + String.IsEmpty(Window(Home).Property(nc.trailer)) + !String.StartsWith(Player.FilenameAndPath,plugin://plugin.video.youtube/)</expression>
+
+    <!-- Background of the info page: Background, or over a playing video that video under a
+         scrim dark enough for every text of the page. The videowindow stays first (see
+         Background); over the player screen it is hidden and the player screen shows through. -->
+    <include name="InfoBackground">
+        <control type="videowindow">
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>1080</height>
+            <visible>Player.HasVideo + !Window.IsVisible(fullscreenvideo)</visible>
+        </control>
+        <control type="group">
+            <visible>!$EXP[InfoOverVideo]</visible>
+            <include>LookBackground</include>
+        </control>
+        <control type="image" id="5099">
+            <description>video scrim</description>
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>1080</height>
+            <texture colordiffuse="video_scrim">ui/white.png</texture>
+            <visible>$EXP[InfoOverVideo]</visible>
+        </control>
+    </include>
+
     <!-- Fanart of the focused title behind the page: faint, tinted, fading out to the left.
          `art` is an infolabel such as ListItem.Art(fanart). -->
     <include name="FanartBackdrop">

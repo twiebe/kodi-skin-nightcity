@@ -160,18 +160,17 @@ def test_osd_stays_while_in_a_track_panel(autohide, tracks, button, panel):
     assert 2.5 <= time.time() - start <= 5.5
 
 
-def test_osd_stays_in_the_chapter_row(autohide, tracks):
-    """Down from the controls into the rows: the OSD stays until the user is back on the
-    controls, then the delay counts again."""
-    action('down')
-    wait_for('Window.IsActive(videobookmarks)')
+def test_osd_stays_in_the_chapter_panel(autohide, tracks):
+    """The chapter panel is a dialog over the OSD, up while its button has the focus: the OSD stays
+    until the focus moves on, then the delay counts again."""
+    builtin('SetFocus(608)')
+    # the panel shows with the focus on the button, as a track panel
+    wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(90)', timeout=5)
     time.sleep(5)
     assert osd_up() and cond('Window.IsActive(videobookmarks)')['Window.IsActive(videobookmarks)']
-    action('up')
-    wait_for('ControlGroup(9000).HasFocus()')
+    action('left')  # on to video: the panel goes with the focus
+    wait_for('!Window.IsVisible(videobookmarks)')
     start = time.time()
-    action('up')
-    wait_for('!Window.IsActive(videobookmarks)')
     wait_for('!Window.IsActive(videoosd)', timeout=8)
     assert 2.5 <= time.time() - start <= 5.5
 
@@ -180,8 +179,6 @@ def test_osd_stays_in_the_cast_row(autohide, playing):
     action('osd', delay=1)
     wait_for('Window.IsActive(videoosd)')
     action('down')
-    wait_for('Window.IsActive(videobookmarks)')
-    action('down')
     wait_for('Window.IsActive(1141)')
     time.sleep(5)
     assert osd_up() and cond('Window.IsActive(1141)')['Window.IsActive(1141)']
@@ -189,55 +186,6 @@ def test_osd_stays_in_the_cast_row(autohide, playing):
     # gone, not only closing: Kodi drops a key sent during the close animation
     wait_for('!Window.IsVisible(1141)')
     start = time.time()
-    action('back')
-    wait_for('!Window.IsActive(videobookmarks)')
     assert osd_up()
     wait_for('!Window.IsActive(videoosd)', timeout=8)
     assert 2.5 <= time.time() - start <= 5.5
-
-
-# the area of the track panels, over the right buttons (Includes_Player.xml TrackPanel)
-PANEL = (1256, 442, 1256 + 600, 442 + 488)
-
-
-def chapter_row_from(button, into_panel, fast=False):
-    """Paused (a still picture), the chapter row opened Down from BUTTON, coming from inside its
-    panel when INTO_PANEL; with FAST the last two Downs (panel to button, button to the row) come
-    back to back. The screenshot of it."""
-    builtin('SetFocus({})'.format(button))
-    wait_for('Control.HasFocus({})'.format(button))
-    if into_panel:
-        action('up', delay=0.5)
-    if fast:
-        # down to the panel's last row, then out of it and into the chapter row at once
-        panel = info('System.CurrentControlId')['System.CurrentControlId']
-        for _ in range(10):
-            action('down', delay=0.5)
-            if not cond('Control.HasFocus({})'.format(panel))['Control.HasFocus({})'.format(panel)]:
-                break
-        action('up', delay=0.5)
-        wait_for('Control.HasFocus({})'.format(panel))
-        action('down', delay=0.08)
-        action('down', delay=0.5)
-    for _ in range(10):
-        if cond('Window.IsActive(videobookmarks)')['Window.IsActive(videobookmarks)']:
-            break
-        action('down', delay=0.5)
-    wait_for('Window.IsActive(videobookmarks)')
-    time.sleep(1)
-    path = screenshot('rows-from-{}-{}'.format(button, into_panel))
-    action('back')
-    wait_for('!Window.IsVisible(videobookmarks)')  # the next builtin would be dropped while it closes
-    return path
-
-
-@pytest.mark.parametrize('fast', [False, True])
-@pytest.mark.parametrize('button, panel', [(605, 651), (606, 652), (607, 653)])
-def test_panel_hides_when_the_rows_open(tracks, button, panel, fast):
-    """Down out of a track panel to the chapter row: the row replaces the controls, the panel
-    goes with them (the OSD keeps its focus on the button under the row)."""
-    action('pause')
-    wait_for('Player.Paused')
-    plain = chapter_row_from(602, False)
-    from_panel = chapter_row_from(button, True, fast)
-    assert changed_pixels(plain, from_panel, PANEL) < 200

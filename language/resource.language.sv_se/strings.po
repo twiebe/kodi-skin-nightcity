@@ -103,10 +103,6 @@ msgctxt "#31055"
 msgid "video"
 msgstr "video"
 
-msgctxt "#31056"
-msgid "bookmarks"
-msgstr "bokmärken"
-
 msgctxt "#31057"
 msgid "buffering"
 msgstr "buffrar"
@@ -907,6 +903,14 @@ msgctxt "#31366"
 msgid "The plot of what plays, under its title while the player controls or the seek line are up."
 msgstr "Handlingen för det som spelas, under titeln medan spelarkontrollerna eller sökraden är framme."
 
+msgctxt "#31367"
+msgid "Show the stats for nerds button"
+msgstr "Visa knappen med statistik för nördar"
+
+msgctxt "#31368"
+msgid "A stats button at the right end of the player controls. It opens Kodi's playback information: codecs, bitrates, dropped frames."
+msgstr "En statistikknapp längst till höger bland spelarens knappar. Den öppnar Kodis uppspelningsinformation: kodekar, bithastigheter, tappade bildrutor."
+
 msgctxt "#31400"
 msgid "New albums"
 msgstr "Nya album"
@@ -1182,3 +1186,7 @@ msgstr "På tur"
 msgctxt "#31701"
 msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
 msgstr "Det du har påbörjat, sedan serierna du tittar på. OK på en serie öppnar nästa avsnitt."
+
+msgctxt "#31702"
+msgid "cast & crew"
+msgstr "rollista & team"

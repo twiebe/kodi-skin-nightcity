@@ -2,6 +2,7 @@ import pytest
 
 from conftest import ROOT, parse
 from focus import Page, State
+from navigation import evaluate
 
 REQUIRED = [
     # Tasks 1, 4, 6-8
@@ -105,34 +106,39 @@ def _arg(call, name):
     return next((p.get('value') for p in call.findall('param') if p.get('name') == name), '')
 
 
-def test_osd_button_rows_wrap_around():
-    """Left on the far left control goes to the far right one and back: ⏮ and "…" always show."""
+@pytest.mark.parametrize('skin, last', [({}, '608'), ({'nc.osd.stats': '1'}, '609')])
+def test_osd_button_rows_wrap_around(skin, last):
+    """Left on the far left control goes to the far right one and back: ⏮ always shows, far
+    right is stats when its skin setting is on, else chapters (always shown)."""
     osd = {c.get('id'): c for c in parse(ROOT / '1080i' / 'VideoOSD.xml').iter('control')}
-    assert osd['600'].findtext('onleft') == '610'
+    lefts = [o for o in osd['600'].findall('onleft') if evaluate(o.get('condition'), skin)]
+    assert lefts[0].text == last
     assert osd['620'].findtext('onright') == '601'
     assert _arg(_osd_buttons('600')['601'], 'visible') == ''
-    assert _arg(_osd_buttons('620')['610'], 'visible') == ''
+    assert _arg(_osd_buttons('620')['608'], 'visible') == ''
 
 
 def test_osd_rows_enter_at_the_neighbour_not_at_the_last_focus():
     """A group goes back to its last focused control unless its default is always."""
     osd = {c.get('id'): c for c in parse(ROOT / '1080i' / 'VideoOSD.xml').iter('control')}
-    for row, neighbour in (('600', '611'), ('620', '612')):
+    for row, neighbour in (('600', '611'), ('620', '605')):
         default = osd[row].find('defaultcontrol')
         assert (default.text, default.get('always')) == (neighbour, 'true'), row
 
 
 def test_osd_button_rows():
-    """Play controls, stop and skip forward left; info, subtitles, audio, video and "…" right. "…"
-    swaps subtitles, audio and video for stats."""
+    """Play controls, stop and skip forward left; subtitles, audio, video, chapters and, with
+    its skin setting, stats right. No second level: the "…" toggle is gone."""
     # next episode is a prompt of its own (Custom_1151_NextEpisode.xml)
     assert list(_osd_buttons('600')) == ['601', '602', '604', '611']
     right = _osd_buttons('620')
-    assert list(right) == ['612', '605', '606', '607', '609', '610']
-    assert _arg(right['609'], 'visible') == '!String.IsEmpty(Window(Home).Property(nc.osd.more))'
+    assert list(right) == ['605', '606', '607', '608', '609']
+    assert _arg(right['609'], 'visible') == 'Skin.HasSetting(nc.osd.stats)'
     assert _arg(right['609'], 'label') == '$LOCALIZE[31155]'
-    for button in ('605', '606', '607'):
-        assert _arg(right[button], 'visible') == 'String.IsEmpty(Window(Home).Property(nc.osd.more))'
+    for button in ('605', '606', '607', '608'):
+        assert _arg(right[button], 'visible') == ''
+    for path in (ROOT / '1080i').glob('*.xml'):
+        assert 'nc.osd.more' not in path.read_text(encoding='utf-8'), path.name
 
 
 def test_stats_string():
@@ -142,10 +148,10 @@ def test_stats_string():
 
 
 def test_chapters_dialog_one_heading():
-    """The chapters dialog has a single heading, no "bookmarks" kicker above it."""
+    """The chapter panel has a single head, chapters, as its button."""
     root = parse(ROOT / '1080i' / 'VideoOSDBookmarks.xml')
-    heading = next(c for c in root.iter('include') if c.get('content') == 'RowHeader')
-    assert not _arg(heading, 'kicker') and '31140' in _arg(heading, 'label')
+    heads = [c for c in root.iter('include') if c.get('content') in ('RowHeader', 'Kicker')]
+    assert [_arg(h, 'label') for h in heads] == ['$LOCALIZE[31140]']
 
 
 def test_chapters_episode_bookmark_only_when_enabled():
@@ -187,10 +193,10 @@ def test_track_panel_slots_match_script():
 
 
 def test_chapters_dialog_focuses_chapters():
-    """The chapter row opens on the chapter list, add bookmark only without entries (focus hops
-    93 and 94, test_tmdb_navigation.py)."""
+    """The chapter panel opens with the focus on its stand-in for the chapters button (90);
+    Up or OK go into the chapter list, add bookmark only without entries."""
     root = parse(ROOT / '1080i' / 'VideoOSDBookmarks.xml')
-    assert root.findtext('defaultcontrol') == '93'
+    assert root.findtext('defaultcontrol') == '90'
 
 
 def test_osd_watches_tracks_once():
@@ -335,6 +341,32 @@ def test_windows_over_a_playing_video_keep_it_rendering():
     for name in ('Home.xml', 'Custom_1190_TMDbHelper.xml'):
         controls = parse(ROOT / '1080i' / name).find('controls')
         assert controls[0].tag == 'include' and controls[0].text == 'Background', name
+
+
+def test_an_info_page_over_a_playing_video_shows_the_video_dimmed():
+    """An info page over a playing video (the OSD's cast and crew row, a TMDb chain over the video)
+    keeps the video in sight behind it, under a scrim, instead of its background and fanart:
+    browsing does not leave the film. The videowindow stays first, as on every page over a video.
+    A trailer the page plays itself draws its own layer and keeps the page's look."""
+    root = parse(ROOT / '1080i' / 'Includes_Base.xml')
+    over = next(e for e in root.iter('expression') if e.get('name') == 'InfoOverVideo').text
+    assert over.startswith('!String.IsEmpty(Window(Home).Property(nc.info.video)) + Player.HasVideo + ')
+    assert 'String.IsEmpty(Window(Home).Property(nc.trailer))' in over
+    background = next(i for i in root.iter('include') if i.get('name') == 'InfoBackground')
+    first = background[0]
+    assert first.get('type') == 'videowindow'
+    assert first.findtext('visible') == 'Player.HasVideo + !Window.IsVisible(fullscreenvideo)'
+    look = next(c for c in background if c.get('type') == 'group')
+    assert look.findtext('visible') == '!$EXP[InfoOverVideo]'
+    assert look.findtext('include') == 'LookBackground'
+    scrim = next(c for c in background if c.findtext('description') == 'video scrim')
+    assert scrim.find('texture').get('colordiffuse') == 'video_scrim'
+    assert scrim.findtext('visible') == '$EXP[InfoOverVideo]'
+    info = parse(ROOT / '1080i' / 'DialogVideoInfo.xml').find('controls')
+    assert info[0].tag == 'include' and info[0].text == 'InfoBackground'
+    fanart = [g for g in info.findall('control') if g.find('include[@content="FanartBackdrop"]') is not None]
+    assert len(fanart) == 2
+    assert all(g.findtext('visible').endswith(' + !$EXP[InfoOverVideo]') for g in fanart)
 
 
 def test_a_slider_lies_on_its_side():

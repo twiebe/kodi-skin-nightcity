@@ -290,21 +290,19 @@ def test_play_takes_the_focus_when_the_copy_turns_up():
 
 
 ROWS_UP = '!Window.IsActive(videobookmarks) + !Window.IsActive(1141)'
-BAR_UP = '!Window.IsActive(1141) + !Window.IsActive(videobookmarks)'
 
 
 def _osd(cid):
     return next(c for c in parse(SKIN / 'VideoOSD.xml').iter('control') if c.get('id') == cid)
 
 
-def test_osd_down_opens_the_chapter_row():
-    """OK shows the OSD bar, Down the chapter row (Kodi's chapters and bookmarks dialog), Down
-    again the cast and crew row."""
+def test_osd_down_opens_the_cast_row():
+    """OK shows the OSD bar, Down the cast and crew row of a library title; the chapters are a
+    button of the bar (VideoOSD.xml 608)."""
     for cid in ('600', '620'):
-        assert _osd(cid).findtext('ondown') == 'ActivateWindow(videobookmarks)', cid
-    # the bar and what plays make room for the rows
-    for cid in ('600', '620', '650'):
-        assert _osd(cid).findtext('visible') == BAR_UP, cid
+        assert [(d.get('condition'), d.text) for d in _osd(cid).findall('ondown')] == [
+            ('VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)', 'ActivateWindow(1141)')], cid
+    # what plays makes room for the chapter panel and the cast row
     details = _include('PlayerDetails').find('definition/control')
     assert details.findtext('visible') == ROWS_UP
 
@@ -313,43 +311,29 @@ def _bookmarks():
     return parse(SKIN / 'VideoOSDBookmarks.xml')
 
 
-def test_chapter_row_of_thumbnails():
+def test_chapter_panel_of_thumbnails():
     root = _bookmarks()
     chapters = next(c for c in root.iter('control') if c.get('id') == '11')
     assert chapters.findtext('orientation') == 'horizontal'
     assert [c.get('content') for c in chapters.iter('include')] == ['ChapterCard', 'ChapterCard']
     card = _include('ChapterCard')
     assert '$VAR[ChapterThumb]' in [p.get('value') for p in card.iter('param')]
-    assert 'ActivateWindow(1141)' in [d.text for d in chapters.findall('ondown')]
+    assert 'ActivateWindow(1141)' not in [d.text for d in chapters.findall('ondown')]
     assert chapters.findtext('onup') == '9000'
-    buttons = next(c for c in root.iter('control') if c.get('id') == '9000')
-    assert buttons.findtext('onup') == 'Dialog.Close(videobookmarks)'
 
 
-def test_chapter_row_starts_no_python():
-    """The row is one Down away from the cast row, whose list starts a plugin: the row itself
-    focuses its list through two focus hops instead of a script."""
+def test_chapter_panel_starts_no_python():
+    """The panel opens with the focus on its stand-in for the button; no script, no timer."""
     assert not any('RunScript' in t for t in _onloads('VideoOSDBookmarks.xml'))
     controls = {c.get('id'): c for c in parse(ROOT / '1080i' / 'VideoOSDBookmarks.xml').iter('control')}
-    hop = lambda cid: [(o.get('condition') or '', o.text) for o in controls[cid].findall('onfocus')]
-    # focus actions wait in Kodi's queue: one hop still runs before the list is filled, the
-    # second sees it
-    assert hop('93') == [('', 'SetFocus(94)')]
-    assert hop('94')[:2] == [('Integer.IsGreater(Container(11).NumItems,0)', 'SetFocus(11)'),
-                             ('!Integer.IsGreater(Container(11).NumItems,0)', 'SetFocus(2)')]
+    assert '93' not in controls and '94' not in controls
     assert not any(t.findtext('name') == 'nc_chapters_focus' for t in parse(ROOT / '1080i' / 'Timers.xml').iter('timer'))
 
 
-def test_cast_row_after_a_chain_opens_after_the_focus_hops():
-    """Focus actions wait in Kodi's queue and go to the topmost dialog when they run. The cast row
-    (a dialog of its own) used to open in the chapter row's onload, before the hops ran: SetFocus(94)
-    then went to the cast row, and back on the chapter row the focus stayed on stand-in 93, out of
-    sight, where Up did nothing. The last hop opens the cast row, after its own SetFocus."""
-    controls = {c.get('id'): c for c in parse(ROOT / '1080i' / 'VideoOSDBookmarks.xml').iter('control')}
+def test_cast_row_after_a_chain_opens_from_the_osd():
+    """Back from a chain the OSD's stand-in 699 opens the cast row (test_player_osd.py); the chapter
+    panel is no step on the way."""
     assert not any('ActivateWindow' in t for t in _onloads('VideoOSDBookmarks.xml'))
-    hops = [o.text for o in controls['94'].findall('onfocus')]
-    assert hops[-1] == 'ActivateWindow(1141)'
-    assert hops[:-1] == ['SetFocus(11)', 'SetFocus(2)']
 
 CAST_DIALOG = 'Custom_1141_OSDCast.xml'
 LISTS_IDLE = '!Container(6501).IsUpdating + !Container(6599).IsUpdating'
@@ -371,9 +355,8 @@ def test_cast_row_is_a_dialog_over_the_video():
     root = _cast()
     assert (root.get('type'), root.get('id')) == ('dialog', '1141')
     assert root.findtext('defaultcontrol') == '6501'
-    # Down from the chapter row opens it, for movies and episodes
-    chapters = next(c for c in _bookmarks().iter('control') if c.get('id') == '11')
-    downs = [(d.get('condition'), d.text) for d in chapters.findall('ondown')]
+    # Down from the controls opens it, for movies and episodes (test_osd_down_opens_the_cast_row)
+    downs = [(d.get('condition'), d.text) for d in _osd('620').findall('ondown')]
     assert ('VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)', 'ActivateWindow(1141)') in downs
 
 
@@ -410,7 +393,7 @@ def test_cast_row_click_opens_the_person_and_leaves_the_osd():
     params = {p.get('name'): p.get('value') for p in chain.iter('param')}
     assert params == {'type': 'person', 'id': '$INFO[ListItem.Property(tmdb_id)]', 'condition': LISTS_IDLE}
     started = '[!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) | String.IsEmpty(Window(Home).Property(nc.chain.claim))]'
-    for dialog in ('1141', 'videobookmarks', 'videoosd'):
+    for dialog in ('1141', 'videoosd'):
         assert (LISTS_IDLE + ' + ' + started, f'Dialog.Close({dialog})') in clicks, dialog
     assert clicks[-1] == ('', 'noop')
     # the chain starts before the dialogs close
@@ -473,7 +456,7 @@ def test_cast_row_click_while_the_biography_loads_waits_for_it():
     idle = ready + ' + ' + IDLE + ' + String.IsEmpty(Window(Home).Property(nc.chain.claim))'
     assert (idle, 'RunScript(plugin.video.themoviedb.helper,add_tmdb={},tmdb_type=person,call_auto=1190)'.format(CLICKED)) in onstop
     assert (idle, 'SetProperty(nc.chain.claim,1,home)') in onstop
-    for dialog in ('1141', 'videobookmarks', 'videoosd'):
+    for dialog in ('1141', 'videoosd'):
         assert any(text == 'Dialog.Close({})'.format(dialog) and cond.startswith(ready) for cond, text in onstop), dialog
     assert onstop[-1] == ('', 'ClearProperty(nc.osd.click,home)')
 
@@ -612,16 +595,16 @@ def test_season_tabs_list_the_show_of_a_reopened_episode():
 
 def test_osd_chain_ends_back_on_the_person_left():
     """A chain from the OSD cast row ends on that row, on the person it was left from: Up at the
-    top of the person page used to end on the chapter row."""
+    top of the person page used to end on the row above."""
     clicks = [o.text for o in _control('Custom_1141_OSDCast.xml', '6501').iter('onclick')]
     keep = ['SetProperty(nc.osd.ret,$INFO[Container(6501).CurrentItem],home)',
             'SetProperty(nc.osd.ret.tab,$INFO[Window(Home).Property(nc.osd.credits)],home)']
     assert all(k in clicks for k in keep)
     late = [o.text for o in _timer('nc_osd_click').iter('onstop')]
     assert all(k in late for k in keep)
-    # at once over the chapter row, which hides meanwhile; the row's lists wait for the manager
-    reopen = [(o.get('condition'), o.text) for o in _control('VideoOSDBookmarks.xml', '94').iter('onfocus')]
-    assert ('!String.IsEmpty(Window(Home).Property(nc.osd.ret)) + !String.IsEmpty(Window(Home).Property(nc.osd.chain))', 'ActivateWindow(1141)') in reopen
+    # at once from the OSD (stand-in 699); the row's lists wait for the manager
+    reopen = [(o.get('condition'), o.text) for o in _control('VideoOSD.xml', '699').iter('onfocus')]
+    assert ('!String.IsEmpty(Window(Home).Property(nc.osd.rows))', 'ActivateWindow(1141)') in reopen
     assert all(o.text != 'ActivateWindow(1141)' for o in _timer('nc_osd_chain').iter('onstop'))
     onloads = [(o.get('condition'), o.text) for o in parse(SKIN / 'Custom_1141_OSDCast.xml').iter('onload')]
     back = '!String.IsEmpty(Window(Home).Property(nc.osd.ret))'
@@ -640,8 +623,6 @@ def test_osd_cast_row_loads_nothing_while_a_chain_ends():
     assert [(v.get('condition'), v.text) for v in var] == [
         ('String.IsEmpty(Window(Home).Property(nc.osd.chain))', '$VAR[OSDCreditsPath]')]
     assert 'String.IsEmpty(Window(Home).Property(nc.osd.chain))' in _timer('nc_osd_bio').findtext('start')
-    row = parse(SKIN / 'VideoOSDBookmarks.xml').find('controls/control')
-    assert row.findtext('visible') == '!Window.IsActive(1141) + String.IsEmpty(Window(Home).Property(nc.osd.ret))'
 
 
 def test_a_page_on_its_way_back_parks_the_focus_out_of_sight():
@@ -655,3 +636,38 @@ def test_a_page_on_its_way_back_parks_the_focus_out_of_sight():
     parks = [(o.get('condition'), o.text) for o in parse(SKIN / 'DialogVideoInfo.xml').iter('onload')]
     assert (RUNNING + ' + String.IsEqual(Window(Home).Property(TMDbHelper.Position),Window(Home).Property(nc.ret.top))',
             'SetFocus(9098)') in parks
+
+
+def test_cast_row_dims_the_video_as_an_info_page():
+    """Names, roles and the biography read over a bright picture: the video under the scrim of an
+    info page over the video (video_scrim), not a gradient from the middle down. It ends above
+    the seek line (the seek bar dialog lies under the row) with a short fade."""
+    scrim, fade = _cast().findall('controls/control')[:2]
+    assert scrim.get('type') == fade.get('type') == 'image'
+    assert [scrim.findtext(k) for k in ('left', 'top', 'width', 'height')] == ['0', '0', '1920', '830']
+    assert [fade.findtext(k) for k in ('left', 'top', 'width', 'height')] == ['0', '830', '1920', '40']
+    assert scrim.find('texture').get('colordiffuse') == fade.find('texture').get('colordiffuse') == 'video_scrim'
+    assert fade.findtext('texture') == 'ui/fade_t.png'
+
+
+VIDEO_LATCH = '!String.IsEmpty(Window(Home).Property(nc.info.video))'
+
+
+def test_info_page_over_the_video_is_decided_as_it_opens():
+    """A page opened from the library that starts its title must not turn into the page over the
+    video (the dimmed video behind it, "back to video") in the moment before Kodi shows the
+    player: the page counts as over the video only when a video played as it opened
+    (nc.info.video), latched by its onload and cleared as it closes. Every page of a chain over
+    the video opens with it again."""
+    root = parse(ROOT / '1080i' / 'DialogVideoInfo.xml')
+    loads = [(o.get('condition'), o.text) for o in root.findall('onload')]
+    assert ('Player.HasVideo', 'SetProperty(nc.info.video,1,home)') in loads
+    assert ('!Player.HasVideo', 'ClearProperty(nc.info.video,home)') in loads
+    assert 'ClearProperty(nc.info.video,home)' in [o.text for o in root.findall('onunload')]
+    expressions = {e.get('name'): e.text for f in ('Includes_Base.xml', 'Includes_Info.xml')
+                   for e in parse(ROOT / '1080i' / f).iter('expression')}
+    for name in ('InfoOverVideo', 'InfoPlaying'):
+        assert expressions[name].startswith(VIDEO_LATCH + ' + '), name
+    # nothing else sets it: no page keeps the latch of another
+    sets = [f.name for f in (ROOT / '1080i').glob('*.xml') if 'nc.info.video' in f.read_text()]
+    assert sorted(sets) == ['DialogVideoInfo.xml', 'Includes_Base.xml', 'Includes_Info.xml']

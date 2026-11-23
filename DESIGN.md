@@ -19,7 +19,8 @@ The remote moves through levels, not through confirmations.
 - **Back held goes back to where the browsing started**, past every page of a chain: to the
   page the chain started from, on the element that started it, or to the player's controls on
   their first button (play or resume) when the chain started from the player's cast row.
-  In the player's chapter and cast rows it goes to those controls too, on their first button.
+  In the player's chapter panel and cast row it goes to those controls too, on their first
+  button.
   Outside a chain, and on its first page, it is a Back.
 
 ### Key hints
@@ -33,9 +34,9 @@ key, then the level it leads to (`LevelHint` in `Includes_Base.xml`,
   No key words ("Left", "Up/Down", "OK"). The Back key gets no hint: it always goes back, and
   every hinted level has an arrow back. Should one ever be needed it is the word Back, not a
   glyph (↩ looks too much like ⏎).
-- **The label names where the key leads**, not what it does: ↑ chapters, ← system,
+- **The label names where the key leads**, not what it does: ↓ cast, ← system,
   ⏎ controls. The player's OSD bar is "controls" everywhere (⏎ from the seek bar, ↑ from the
-  chapter row, ↓ from a panel); "menu" is a column or row of buttons beside a list (the
+  cast row, ↓ from a panel); "menu" is a column or row of buttons beside a list (the
   library's, Home's top menu). Where the level depends on how the screen was opened, the
   hint names it from there (`HintInfoBack`, `HintWindowBack` in `Variables.xml`: the page of
   Home, the library, the video, the page before in a TMDb chain), "back" only where nothing
@@ -54,13 +55,17 @@ key, then the level it leads to (`LevelHint` in `Includes_Base.xml`,
   library's grid, the lists of the video and music windows, the categories of add-on
   settings). The label may follow the page's own state (the folder the add-on browser or file
   manager is in), never the focus. The player's levels are pages of their own: the seek bar
-  over the bare video, the controls (also while a panel above a button is open), the chapter
-  row, the cast row. A hint fades out and the next one in after it, never on top of it; a
+  over the bare video, the controls (also while a panel above a button is open, the chapter
+  panel too), the cast row. A hint fades out and the next one in after it, never on top of it; a
   window's hint hides under a dialog, and like the pages it does not fade over a playing video.
 - **Exceptions, open for now:** the footer of the episodes on an info page (←→ episode,
   ↑ season, ↓ cast, ⏎ select) shows the keys of the focused row while it has the focus; the
   skin settings' slot footer (⏎ choose, → option; ↑↓ move, ⏎ drop) shows on the slot rows,
-  for its keys act on the slot. The console's footer (⏎ open) does not depend on the focus.
+  for its keys act on the slot. The player's footer adds ⏎ all settings while subtitles, audio
+  or video has the focus (↓ cast   ⏎ all settings). The console's footer (⏎ open) does not
+  depend on the focus.
+- **Hints that follow the focus stand right of the standing ones**, in footers and headers
+  alike: what holds on the whole page first, the shortcut of the focused element after it.
 - **Where a hint stands follows its key**, nothing else:
   - ↑ at the top: centred on the path line of a page (top 30, the title kept left of the
     middle, `pathwidth` 780), on the player's top edge (top 140), on the top edge of the quick

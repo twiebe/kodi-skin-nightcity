@@ -103,10 +103,6 @@ msgctxt "#31055"
 msgid "video"
 msgstr "video"
 
-msgctxt "#31056"
-msgid "bookmarks"
-msgstr "boekmerke"
-
 msgctxt "#31057"
 msgid "buffering"
 msgstr "buffer"
@@ -907,6 +903,14 @@ msgctxt "#31366"
 msgid "The plot of what plays, under its title while the player controls or the seek line are up."
 msgstr "Die intrige van wat speel, onder sy titel terwyl die spelerkontroles of die soeklyn oop is."
 
+msgctxt "#31367"
+msgid "Show the stats for nerds button"
+msgstr "Wys die statistiek-vir-nerds-knoppie"
+
+msgctxt "#31368"
+msgid "A stats button at the right end of the player controls. It opens Kodi's playback information: codecs, bitrates, dropped frames."
+msgstr "Statistiekknoppie aan die regterkant van die spelerkontroles. Dit maak Kodi se terugspeelinligting oop: kodeks, bitsnelhede, weggelate rame."
+
 msgctxt "#31400"
 msgid "New albums"
 msgstr "Nuwe albums"
@@ -1182,3 +1186,7 @@ msgstr "On Deck"
 msgctxt "#31701"
 msgid "What you started, then the shows you are watching. OK on a show opens the next episode."
 msgstr "Wat jy begin het, dan die reekse wat jy kyk. OK op 'n reeks open die volgende episode."
+
+msgctxt "#31702"
+msgid "cast & crew"
+msgstr "rolverdeling & span"

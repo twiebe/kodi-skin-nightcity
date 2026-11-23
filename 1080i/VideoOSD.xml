@@ -2,23 +2,26 @@
 <!-- OSD: path, clock and state on top; what plays and the seek line come from the seek bar
      dialog. "ends at" beside its times, playback buttons and stop left, track buttons right.
      Subtitles and audio show a track panel, video a panel with what the video is; left and
-     right in a panel step along the buttons. "…" swaps subtitles, audio and video for stats.
-     The chapter row is Down from the bar. Switched on in the skin settings (Player), the OSD and
+     right in a panel step along the buttons. Up on subtitles or audio goes into the track list,
+     OK opens the full settings. Chapters opens the chapter panel above the row
+     (VideoOSDBookmarks.xml). Stats, switched on in the skin settings (Player), closes the row
+     on the right.
+     Down from the bar is the cast and crew row (Custom_1141_OSDCast.xml). Switched on in the skin settings (Player), the OSD and
      its rows close by themselves after a while without a key (Timers.xml nc_osd_hide). -->
 <window>
     <depth>DepthOSD</depth>
     <defaultcontrol always="true">602</defaultcontrol>
-    <onload>ClearProperty(nc.osd.more,home)</onload>
     <!-- one script keeps the track panels current while the OSD is open; closing it clears the
          rows so the next file never shows the last file's tracks -->
     <onload>NotifyAll(nightcity,streams_watch)</onload>
-    <!-- back from a chain (VideoFullScreen.xml): the chapter row comes up (stand-in 699) -->
+    <!-- back from a chain (VideoFullScreen.xml): the cast row comes up (stand-in 699) -->
     <onload condition="!String.IsEmpty(Window(Home).Property(nc.osd.chain))">SetProperty(nc.osd.rows,1,home)</onload>
     <onload condition="!String.IsEmpty(Window(Home).Property(nc.osd.chain))">SetFocus(699)</onload>
     <onunload>ClearProperty(nc.audio.rows,home)</onunload>
     <onunload>ClearProperty(nc.sub.rows,home)</onunload>
     <!-- an OSD the pause opened (Custom_1150_PauseOSD.xml) and that is closed by hand stays closed -->
     <onunload>ClearProperty(nc.osd.auto,home)</onunload>
+    <onunload>ClearProperty(nc.osd.chapters,home)</onunload>
     <animation effect="fade" time="150">WindowOpen</animation>
     <!-- closing is the opening backwards: what plays (PlayerFade) fades out first, the controls
          and the seek line PlayerFadeStep later; 300 ms in all, as Kodi drops keys while the OSD
@@ -59,6 +62,7 @@
             <font>font_caps_small</font>
             <textcolor>text_dim</textcolor>
             <label>[UPPERCASE]$LOCALIZE[31059][/UPPERCASE] [COLOR text]$INFO[Player.FinishTime][/COLOR]</label>
+            <!-- the chapter panel covers it -->
             <visible>!Window.IsActive(1141) + !Window.IsActive(videobookmarks)</visible>
         </control>
         <control type="grouplist" id="600">
@@ -71,11 +75,14 @@
             <!-- from the other row always onto the neighbour: a group keeps its last focused child -->
             <defaultcontrol always="true">611</defaultcontrol>
             <onup>noop</onup>
-            <!-- Down: the chapter row, Down again the cast and crew row -->
-            <ondown>ActivateWindow(videobookmarks)</ondown>
-            <visible>!Window.IsActive(1141) + !Window.IsActive(videobookmarks)</visible>
-            <!-- the two rows wrap around: far left and far right lead to each other -->
-            <onleft>610</onleft>
+            <!-- Down: the cast and crew row of a library title; the chapters are a button -->
+            <ondown condition="VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)">ActivateWindow(1141)</ondown>
+            <!-- the cast row replaces the controls; the chapter panel opens above them -->
+            <visible>!Window.IsActive(1141)</visible>
+            <!-- the two rows wrap around: far left and far right lead to each other; far right is
+                 stats when it is switched on, else chapters -->
+            <onleft condition="Skin.HasSetting(nc.osd.stats)">609</onleft>
+            <onleft condition="!Skin.HasSetting(nc.osd.stats)">608</onleft>
             <onright>620</onright>
             <include content="PillButton">
                 <param name="id" value="601"/>
@@ -109,55 +116,55 @@
             <orientation>horizontal</orientation>
             <align>right</align>
             <itemgap>-8</itemgap>
-            <!-- the same; without info the first button that can take the focus -->
-            <defaultcontrol always="true">612</defaultcontrol>
+            <!-- the same: subtitles, the first button of the row -->
+            <defaultcontrol always="true">605</defaultcontrol>
             <onup>noop</onup>
-            <!-- Down: the chapter row, Down again the cast and crew row -->
-            <ondown>ActivateWindow(videobookmarks)</ondown>
-            <visible>!Window.IsActive(1141) + !Window.IsActive(videobookmarks)</visible>
+            <!-- Down: the cast and crew row of a library title; the chapters are a button -->
+            <ondown condition="VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)">ActivateWindow(1141)</ondown>
+            <!-- the cast row replaces the controls; the chapter panel opens above them -->
+            <visible>!Window.IsActive(1141)</visible>
             <onleft>600</onleft>
             <onright>601</onright>
-            <!-- the page of what plays (scripts/nightcity.py player_info): a library title, else
-                 TMDb Helper's page of the title it recognised; none without either -->
-            <include content="PillButton">
-                <param name="id" value="612"/>
-                <param name="label" value="$LOCALIZE[31011]"/>
-                <param name="visible" value="String.IsEmpty(Window(Home).Property(nc.osd.more)) + [Integer.IsGreater(VideoPlayer.DBID,0) | !String.IsEmpty(Window(Home).Property(TMDbHelper.Player.TMDb_ID)) | !String.IsEmpty(Window(Home).Property(TMDbHelper.Player.TVShow.TMDb_ID))]"/>
-                <param name="onclick" value="NotifyAll(nightcity,player_info)"/>
-            </include>
+            <!-- no info button: the plot shows on the OSD, the page of what plays is one Back away -->
             <include content="PillButton">
                 <param name="id" value="605"/>
                 <param name="label" value="$LOCALIZE[31053]"/>
-                <param name="visible" value="String.IsEmpty(Window(Home).Property(nc.osd.more))"/>
-                <param name="onclick" value="SetFocus(651,$INFO[Window(Home).Property(nc.sub.pos)],absolute)"/>
+                <!-- Up: the track list on the playing track; OK: the full settings at once
+                     (delays, subtitle look), which are the list's last row -->
+                <param name="onclick" value="ActivateWindow(osdsubtitlesettings)"/>
                 <onup>SetFocus(651,$INFO[Window(Home).Property(nc.sub.pos)],absolute)</onup>
             </include>
             <include content="PillButton">
                 <param name="id" value="606"/>
                 <param name="label" value="$LOCALIZE[31054]"/>
-                <param name="visible" value="String.IsEmpty(Window(Home).Property(nc.osd.more))"/>
-                <param name="onclick" value="SetFocus(652,$INFO[Window(Home).Property(nc.audio.pos)],absolute)"/>
+                <param name="onclick" value="ActivateWindow(osdaudiosettings)"/>
                 <onup>SetFocus(652,$INFO[Window(Home).Property(nc.audio.pos)],absolute)</onup>
             </include>
             <include content="PillButton">
                 <param name="id" value="607"/>
                 <param name="label" value="$LOCALIZE[31055]"/>
-                <param name="visible" value="String.IsEmpty(Window(Home).Property(nc.osd.more))"/>
-                <param name="onclick" value="SetFocus(653)"/>
+                <!-- as subtitles and audio: Up goes into the panel, onto its one row, all settings;
+                     OK opens them at once -->
+                <param name="onclick" value="ActivateWindow(osdvideosettings)"/>
                 <onup>SetFocus(653)</onup>
             </include>
+            <!-- the chapter panel above the row (VideoOSDBookmarks.xml), shown with the focus as
+                 a track panel; its dialog takes the keys meanwhile. Always there and always
+                 "chapters": Kodi has no condition for bookmarks, and the panel is where a bookmark
+                 is added, also in a video without chapters -->
+            <include content="PillButton">
+                <param name="id" value="608"/>
+                <param name="label" value="$LOCALIZE[31140]"/>
+                <param name="onfocus" value="ActivateWindow(videobookmarks)"/>
+                <param name="onclick" value="ActivateWindow(videobookmarks)"/>
+                <onup>ActivateWindow(videobookmarks)</onup>
+            </include>
+            <!-- Kodi's playback information, only with its skin setting (off by default) -->
             <include content="PillButton">
                 <param name="id" value="609"/>
                 <param name="label" value="$LOCALIZE[31155]"/>
                 <param name="onclick" value="ActivateWindow(playerprocessinfo)"/>
-                <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.osd.more))"/>
-            </include>
-            <include content="PillButton">
-                <param name="id" value="610"/>
-                <param name="label" value="…"/>
-                <!-- both conditions are checked before either action runs -->
-                <onclick condition="String.IsEmpty(Window(Home).Property(nc.osd.more))">SetProperty(nc.osd.more,1,home)</onclick>
-                <onclick condition="!String.IsEmpty(Window(Home).Property(nc.osd.more))">ClearProperty(nc.osd.more,home)</onclick>
+                <param name="visible" value="Skin.HasSetting(nc.osd.stats)"/>
             </include>
         </control>
         <!-- panels above the right buttons, shown while their button or panel has focus; left and
@@ -184,11 +191,11 @@
             <param name="id" value="653"/>
             <param name="button" value="607"/>
             <param name="left" value="606"/>
-            <param name="right" value="610"/>
+            <param name="right" value="608"/>
         </include>
-        <!-- back from a chain: its focus actions wait until the OSD is up, then the chapter row
-             opens (onload above, once: nc.osd.rows). When the row closes the focus comes back
-             here and moves on to the bar. -->
+        <!-- back from a chain: its focus actions wait until the OSD is up, then the cast row
+             opens (onload above, once: nc.osd.rows), whose lists wait for TMDb Helper's manager
+             to end (OSDCreditsRow). The bar takes the focus before, so the row closes onto it. -->
         <control type="button" id="699">
             <left>-100</left>
             <top>-100</top>
@@ -197,19 +204,37 @@
             <texturefocus/>
             <texturenofocus/>
             <onfocus condition="!String.IsEmpty(Window(Home).Property(nc.osd.rows))">ClearProperty(nc.osd.rows,home)</onfocus>
-            <onfocus condition="!String.IsEmpty(Window(Home).Property(nc.osd.rows))">ActivateWindow(videobookmarks)</onfocus>
+            <!-- the bar first, while the OSD is still the topmost dialog: closing the cast row
+                 does not focus this stand-in again, the focus would stay on it out of sight -->
+            <onfocus condition="!String.IsEmpty(Window(Home).Property(nc.osd.rows))">SetFocus(602)</onfocus>
+            <onfocus condition="!String.IsEmpty(Window(Home).Property(nc.osd.rows))">ActivateWindow(1141)</onfocus>
             <onfocus condition="String.IsEmpty(Window(Home).Property(nc.osd.rows))">SetFocus(602)</onfocus>
             <onup>602</onup>
             <ondown>602</ondown>
             <onleft>602</onleft>
             <onright>602</onright>
         </control>
-        <!-- Down from the bar, the bottom of the controls: the chapter row; also while a panel
-             above a button has the focus (per page, not per element) -->
+        <!-- Down from the bar, the bottom of the controls: the cast row of a library title; also
+             while a panel above a button is open (per page, not per element) -->
         <include content="LevelHint">
             <param name="id" value="690"/>
-            <param name="label" value="$VAR[PlayerChaptersLevel]"/>
-            <param name="visible" value="!Window.IsActive(videobookmarks) + !Window.IsActive(1141)"/>
+            <param name="label" value="$LOCALIZE[31702]"/>
+            <param name="visible" value="!Window.IsActive(1141) + [VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)] + !Control.HasFocus(605) + !Control.HasFocus(606) + !Control.HasFocus(607)"/>
+        </include>
+        <!-- in its place while subtitles, audio or video has the focus: OK there opens the full
+             settings. The one hint of the controls that follows the focus, as the footer of an
+             info page's episodes does; it stands right of the standing hint (DESIGN.md): with a
+             cast row "↓ cast   ⏎ all settings" (HintTrackSettings), else ⏎ all settings alone -->
+        <include content="LevelHint">
+            <param name="id" value="691"/>
+            <param name="label" value="$VAR[HintTrackSettings]"/>
+            <param name="visible" value="!Window.IsActive(1141) + [VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)] + [Control.HasFocus(605) | Control.HasFocus(606) | Control.HasFocus(607)]"/>
+        </include>
+        <include content="LevelHint">
+            <param name="id" value="692"/>
+            <param name="key" value="⏎"/>
+            <param name="label" value="$LOCALIZE[31139]"/>
+            <param name="visible" value="!Window.IsActive(1141) + ![VideoPlayer.Content(movies) | VideoPlayer.Content(episodes)] + [Control.HasFocus(605) | Control.HasFocus(606) | Control.HasFocus(607)]"/>
         </include>
     </controls>
 </window>

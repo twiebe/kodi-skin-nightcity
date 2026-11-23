@@ -85,7 +85,7 @@ BEFORE = {
     ('SmartPlaylistRule.xml', '9000'): ('40', '360', '920', '54', '24'),
     ('VideoOSD.xml', '600'): ('64', '952', '760', '54', '12'),
     ('VideoOSD.xml', '620'): ('856', '952', '1000', '54', '12'),
-    ('VideoOSDBookmarks.xml', '9000'): ('856', '486', '1000', '54', '12'),
+    ('VideoOSDBookmarks.xml', '9000'): ('836', '454', '1000', '54', '12'),
 }
 # The top line of Home only grows up and down: its entries keep their widths and gap (a glow
 # image in the icon's group, the pill of what plays moved by its own left, HomeTop)

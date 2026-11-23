@@ -126,7 +126,8 @@ def test_the_playing_title_offers_no_play():
     expressions = {e.get('name'): e.text for e in info.iter('expression')}
     movie = 'String.IsEqual(ListItem.DBType,movie) + [{}]'.format(playing.replace('$PARAM[item]', 'ListItem'))
     episode = 'String.IsEqual(ListItem.DBType,episode) + [{}]'.format(playing.replace('$PARAM[item]', 'Container(5100).ListItem'))
-    assert expressions['InfoPlaying'] == '[{}] | [{}]'.format(movie, episode)
+    # only on a page opened over the video (nc.info.video, test_tmdb_navigation.py)
+    assert expressions['InfoPlaying'] == '!String.IsEmpty(Window(Home).Property(nc.info.video)) + [[{}] | [{}]]'.format(movie, episode)
     for cid in ('9001', '9002', '9005'):
         params, _ = _pill(cid)
         assert params['visible'].endswith(' + !$EXP[InfoPlaying]'), cid
