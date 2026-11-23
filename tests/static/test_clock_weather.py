@@ -29,7 +29,8 @@ def _uses(name):
 
 def test_top_weather_is_white_icon_and_temperature_once_fetched():
     weather = _include('TopWeather')
-    assert '<texture colordiffuse="text">ui/qm_weather.png</texture>' in weather
+    # the glyph of the current weather code, the plain cloud while there is none
+    assert '<texture fallback="ui/qm_weather.png" colordiffuse="text">ui/weather/$INFO[Window(Weather).Property(Current.FanartCode)].png</texture>' in weather
     assert '<label>$INFO[Weather.Temperature]</label>' in weather
     assert '<textcolor>text</textcolor>' in weather
     assert weather.count('Weather.IsFetched') == 2
@@ -105,3 +106,17 @@ def test_every_top_right_clock_has_the_weather():
         'Includes_Base.xml',   # StatusBar, the same PathLine
         'Includes_Look.xml',   # LookStartupTrack: before the weather is fetched
     ])
+
+
+def test_quick_menu_tile_shows_the_current_weather():
+    """The quick menu's weather tile has the same glyph as the top right: the current code's,
+    the plain cloud without one, in the tile's own colour."""
+    home = (ROOT / '1080i' / 'Includes_Home.xml').read_text(encoding='utf-8')
+    assert ('<texture fallback="ui/qm_weather.png" colordiffuse="$VAR[QuickWeatherIcon]">'
+            'ui/weather/$INFO[Window(Weather).Property(Current.FanartCode)].png</texture>') in home
+
+
+def test_every_code_has_a_glyph():
+    """Codes 0-47 and na each have their file: a code without one would fall back to the cloud."""
+    glyphs = ROOT / 'media' / 'ui' / 'weather'
+    assert all((glyphs / '{}.png'.format(code)).is_file() for code in [*range(48), 'na'])

@@ -418,7 +418,9 @@
     </include>
 
     <!-- The weather left of a clock at the top right: icon and temperature, white, once a
-         weather service has fetched it. Two entries for a horizontal grouplist; font, icon (its
+         weather service has fetched it. The icon is the glyph of the current weather code, the
+         weather page's (MyWeather.xml, ui/weather/<code>.png); Kodi keeps the codes on the weather
+         window for every window to read, and without one it is the plain cloud. Two entries for a horizontal grouplist; font, icon (its
          size) and aligny follow the clock beside it, height is the line's, icontop puts the
          icon level with the digits. Fades with the Home top line while the quick menu shows
          (QuickMenuFade, which no other window triggers). -->
@@ -435,7 +437,7 @@
                 <width>$PARAM[icon]</width>
                 <height>$PARAM[icon]</height>
                 <aspectratio>keep</aspectratio>
-                <texture colordiffuse="text">ui/qm_weather.png</texture>
+                <texture fallback="ui/qm_weather.png" colordiffuse="text">ui/weather/$INFO[Window(Weather).Property(Current.FanartCode)].png</texture>
                 <visible>$PARAM[visible] + Weather.IsFetched</visible>
                 <include>QuickMenuFade</include>
             </control>

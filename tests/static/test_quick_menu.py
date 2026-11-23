@@ -319,7 +319,8 @@ def test_weather_beside_the_clock():
         ('button', 'Player.HasAudio'), ('group', None), ('image', 'true + Weather.IsFetched'),
         ('label', 'true + Weather.IsFetched'), ('label', None)]
     icon, temperature, clock = parts[2:]
-    assert icon.find('texture').text == 'ui/qm_weather.png'
+    assert icon.find('texture').text == 'ui/weather/$INFO[Window(Weather).Property(Current.FanartCode)].png'
+    assert icon.find('texture').get('fallback') == 'ui/qm_weather.png'
     assert icon.find('texture').get('colordiffuse') == clock.findtext('textcolor')
     assert temperature.findtext('label') == '$INFO[Weather.Temperature]'
     assert temperature.findtext('font') == clock.findtext('font') == 'font_num'
