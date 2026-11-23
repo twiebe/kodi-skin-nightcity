@@ -288,9 +288,10 @@ def test_play_takes_the_focus_when_the_copy_turns_up():
     assert 'Integer.IsGreater(Container(5901).NumItems,0)' in start and 'nc.info.twinfocus' in start
     onstart = [(o.get('condition') or '', o.text) for o in timer.findall('onstart')]
     assert ('', 'ClearProperty(nc.info.twinfocus,home)') in onstart
-    assert ('ControlGroup(9000).HasFocus() + !$EXP[InfoPlaying]', 'SetFocus(9001)') in onstart
+    # whether the title plays: DialogVideoInfo's 9096 ($EXP[InfoPlaying]), Timers.xml has no $EXP
+    assert ('ControlGroup(9000).HasFocus() + !Control.IsVisible(9096)', 'SetFocus(9001)') in onstart
     # the title that plays has no play button: … hid with the copy found, the row keeps the focus
-    assert ('$EXP[InfoPlaying] + [ControlGroup(9000).HasFocus() | String.IsEmpty(System.CurrentControlId)]',
+    assert ('Control.IsVisible(9096) + [ControlGroup(9000).HasFocus() | String.IsEmpty(System.CurrentControlId)]',
             'SetFocus(9000)') in onstart
 
 

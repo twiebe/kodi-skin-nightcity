@@ -94,6 +94,11 @@
             <onleft>9000</onleft>
             <onright>9000</onright>
         </control>
+        <!-- visible while the page is of the title that plays: for Timers.xml (nc_info_twin), whose
+             conditions Kodi takes as written, without the skin's expressions -->
+        <control type="group" id="9096">
+            <visible>$EXP[InfoPlaying]</visible>
+        </control>
         <control type="group">
             <!-- over a playing video the video is the backdrop (InfoBackground) -->
             <visible>String.IsEqual(ListItem.DBType,episode) + !$EXP[InfoOverVideo]</visible>

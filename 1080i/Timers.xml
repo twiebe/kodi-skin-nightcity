@@ -114,16 +114,16 @@
     <!-- The play button of a TMDb page appears once the library copy is found (DialogVideoInfo
          list 5901), after the page has put the focus on the next button: move it to play, once
          per page (nc.info.twinfocus, set on load) and only while the focus is still on the
-         buttons -->
+         buttons. Kodi resolves no $EXP here: whether the title plays is DialogVideoInfo's 9096 -->
     <timer>
         <name>nc_info_twin</name>
         <description>Focus play once the library copy of a TMDb title is found</description>
         <start reset="true">Window.IsActive(movieinformation) + !String.IsEmpty(Window(Home).Property(nc.info.twinfocus)) + Integer.IsGreater(Container(5901).NumItems,0)</start>
         <onstart>ClearProperty(nc.info.twinfocus,home)</onstart>
-        <onstart condition="ControlGroup(9000).HasFocus() + !$EXP[InfoPlaying]">SetFocus(9001)</onstart>
+        <onstart condition="ControlGroup(9000).HasFocus() + !Control.IsVisible(9096)">SetFocus(9001)</onstart>
         <!-- the title that plays: no play button, and … (9005), which had the focus, hides with
              the copy found; the focus would go nowhere. The row's remaining button takes it. -->
-        <onstart condition="$EXP[InfoPlaying] + [ControlGroup(9000).HasFocus() | String.IsEmpty(System.CurrentControlId)]">SetFocus(9000)</onstart>
+        <onstart condition="Control.IsVisible(9096) + [ControlGroup(9000).HasFocus() | String.IsEmpty(System.CurrentControlId)]">SetFocus(9000)</onstart>
         <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_info_twin),0)</stop>
     </timer>
     <!-- … of a TMDb title without library copy (DialogVideoInfo 9005): OK asks for the title's
