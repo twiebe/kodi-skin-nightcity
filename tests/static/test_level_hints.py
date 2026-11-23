@@ -507,19 +507,21 @@ def test_dialog_hints():
 # window: (label, visible, the control Right leads from, what it does there)
 RIGHT_HINTS = {
     'Settings.xml': ('$LOCALIZE[31135]', MODAL, '9200', 'Action(Select)'),
-    'SettingsCategory.xml': ('$LOCALIZE[5]', '[ControlGroup(3).HasFocus() | ControlGroup(9003).HasFocus()] + ' + MODAL, '3', '5'),
-    'SkinSettings.xml': ('$LOCALIZE[5]', 'ControlGroup(9000).HasFocus() + ' + MODAL, '9000', None),
-    'DialogAddonSettings.xml': ('$LOCALIZE[5]', 'ControlGroup(3).HasFocus()', '3', '5'),
+    'SettingsCategory.xml': ('$LOCALIZE[31135]', '[ControlGroup(3).HasFocus() | ControlGroup(9003).HasFocus()] + '
+                             '!ControlGroup(5).HasFocus() + ' + MODAL, '3', '5'),
+    'SkinSettings.xml': ('$LOCALIZE[31135]', 'ControlGroup(9000).HasFocus() + ' + MODAL, '9000', None),
+    'DialogAddonSettings.xml': ('$LOCALIZE[31135]', 'ControlGroup(3).HasFocus() + !ControlGroup(5).HasFocus()', '3', '5'),
     'DialogSelect.xml': ('$LOCALIZE[31135]', '!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)',
                          '3', 'Action(Select)'),
 }
 
 
 def test_right_hints():
-    """Right into the next column, down the screen's right edge: from the categories of a settings
-    page into their settings (while the focus is in the categories), on the settings rail and in
-    the skin's select dialogs a list of choices takes the focused one, as OK (not a multi-select,
-    where Right stays)."""
+    """Right into the next column, down the screen's right edge, one label everywhere (select):
+    from the categories of a settings page into their settings (only while the focus is in the
+    categories; Kodi keeps the chosen category focused while its settings (5) have the focus, so
+    those rule it out), on the settings rail and in the skin's select dialogs a list of choices
+    takes the focused one, as OK (not a multi-select, where Right stays)."""
     assert _string('31135') == 'select'
     for name, (label_want, visible_want, cid, action) in RIGHT_HINTS.items():
         hints = [i for i in parse(ROOT / '1080i' / name).iter('include') if i.get('content') == 'LevelHintRight']
@@ -528,6 +530,7 @@ def test_right_hints():
         assert (key, label, visible) == ('→', label_want, visible_want), name
         actions = [a for _, a in _actions(_controls(name)[cid], 'onright')]
         assert actions and (action is None or action in actions), (name, actions)
+    assert {label for label, _, _, _ in RIGHT_HINTS.values()} == {'$LOCALIZE[31135]'}
 
 
 def test_quick_menu_hint():

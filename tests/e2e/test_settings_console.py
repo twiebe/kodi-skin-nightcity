@@ -103,6 +103,39 @@ def test_right_in_left_out_on_every_entry(home, entry, window):
     builtin('ReplaceWindow(Home)')
 
 
+CATEGORY_WINDOWS = ['playersettings', 'interfacesettings', 'mediasettings', 'systemsettings', 'servicesettings',
+                    'pvrsettings', 'gamesettings']
+
+
+@pytest.mark.parametrize('window', CATEGORY_WINDOWS)
+def test_right_hint_only_in_the_categories(home, window):
+    """→ select shows while the focus is in the categories and goes once Right took it into the
+    settings, where Right leads nowhere (Kodi keeps the category focused there too)."""
+    builtin('ActivateWindow({})'.format(window))
+    wait_for('Window.IsActive({}) + ControlGroup(3).HasFocus()'.format(window))
+    wait_for('Control.IsVisible(9058)')
+    action('right', delay=1)
+    wait_for('ControlGroup(5).HasFocus()')
+    wait_for('!Control.IsVisible(9058)')
+    # back into the categories (Left on a text setting, the services' device name, moves its cursor)
+    builtin('SetFocus(3)')
+    wait_for('Control.IsVisible(9058)')
+    builtin('ReplaceWindow(Home)')
+
+
+def test_right_hint_in_add_on_settings(home):
+    """The same in an add-on's settings dialog: → select in the categories, none in the settings."""
+    builtin('Addon.OpenSettings(plugin.video.jellyfin)')
+    wait_for('Window.IsActive(addonsettings)')
+    builtin('SetFocus(3)')
+    wait_for('Control.IsVisible(9058)')
+    action('right', delay=1)
+    wait_for('ControlGroup(5).HasFocus()')
+    wait_for('!Control.IsVisible(9058)')
+    action('back', delay=1)
+    wait_for('!Window.IsActive(addonsettings)')
+
+
 def test_rail_skips_headings(home):
     builtin('SetProperty(nc.settings.group,1,home)')
     builtin('ActivateWindow(settings)')
