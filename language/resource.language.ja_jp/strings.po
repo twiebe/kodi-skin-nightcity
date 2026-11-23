@@ -436,8 +436,8 @@ msgid "Categories"
 msgstr "カテゴリー"
 
 msgctxt "#31178"
-msgid "[COLOR state_text]⏎[/COLOR] open"
-msgstr "[COLOR state_text]⏎[/COLOR] 開く"
+msgid "[COLOR state_text]OK[/COLOR] open"
+msgstr "[COLOR state_text]OK[/COLOR] 開く"
 
 msgctxt "#31181"
 msgid "refresh rate, decoding, resume"
@@ -744,12 +744,12 @@ msgid "Show or hide entries of the main menu. System and power always stay, and 
 msgstr "メインメニューの項目を表示または非表示にします。システムと電源は常に表示され、最後に表示されているページも残ります。"
 
 msgctxt "#31260"
-msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
-msgstr "[COLOR state_text]⏎[/COLOR] 選択   [COLOR state_text]→[/COLOR] オプション"
+msgid "[COLOR state_text]OK[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]OK[/COLOR] 選択   [COLOR state_text]→[/COLOR] オプション"
 
 msgctxt "#31261"
-msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
-msgstr "[COLOR state_text]↑↓[/COLOR] 移動   [COLOR state_text]⏎[/COLOR] 確定"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]OK[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] 移動   [COLOR state_text]OK[/COLOR] 確定"
 
 msgctxt "#31262"
 msgid "Spotlight, rows and main menu of the home, movies and shows pages."

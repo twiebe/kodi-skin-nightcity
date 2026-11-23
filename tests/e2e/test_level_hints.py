@@ -61,7 +61,8 @@ def test_hints_lead_through_the_levels(tracks):
 
 def test_cast_row_hints(playing):
     """A library movie: the bar points down to cast & crew, the cast row back up to the controls;
-    on subtitles, audio and video "↓ cast & crew   ⏎ all settings"."""
+    on subtitles, audio and video "↓ cast & crew   OK all settings"; under the row the seek bar
+    dialog dims the whole video, under its seek line."""
     key('select')
     wait_for('Window.IsActive(videoosd)')
     wait_for('Control.IsVisible(690)')

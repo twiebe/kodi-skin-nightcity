@@ -71,7 +71,7 @@
         <!-- over the bare video Up and Down skip chapters (Kodi's keymap), OK opens the OSD -->
         <include content="LevelHint">
             <param name="id" value="490"/>
-            <param name="key" value="⏎"/>
+            <param name="key" value="OK"/>
             <param name="label" value="$LOCALIZE[31478]"/>
             <param name="visible" value="!Window.IsVisible(videoosd) + !Window.IsActive(playerprocessinfo)"/>
         </include>

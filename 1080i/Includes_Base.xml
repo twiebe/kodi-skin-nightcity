@@ -1276,6 +1276,7 @@
         <param name="active" default="false"/>
         <param name="onfocus" default="noop"/>
         <param name="onclick" default="noop"/>
+        <param name="onclick2" default="noop"/>
         <param name="visible" default="true"/>
         <definition>
             <control type="togglebutton" id="$PARAM[id]">
@@ -1288,7 +1289,9 @@
                 <usealttexture>$PARAM[active]</usealttexture>
                 <onfocus>$PARAM[onfocus]</onfocus>
                 <onclick>$PARAM[onclick]</onclick>
+                <onclick>$PARAM[onclick2]</onclick>
                 <altclick>$PARAM[onclick]</altclick>
+                <altclick>$PARAM[onclick2]</altclick>
                 <visible>$PARAM[visible]</visible>
             </control>
         </definition>

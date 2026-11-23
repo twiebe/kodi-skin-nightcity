@@ -436,8 +436,8 @@ msgid "Categories"
 msgstr "Kategorieë"
 
 msgctxt "#31178"
-msgid "[COLOR state_text]⏎[/COLOR] open"
-msgstr "[COLOR state_text]⏎[/COLOR] open"
+msgid "[COLOR state_text]OK[/COLOR] open"
+msgstr "[COLOR state_text]OK[/COLOR] open"
 
 msgctxt "#31181"
 msgid "refresh rate, decoding, resume"
@@ -744,12 +744,12 @@ msgid "Show or hide entries of the main menu. System and power always stay, and 
 msgstr "Wys of versteek inskrywings van die hoofkieslys. Stelsel en krag bly altyd, net soos die laaste blad wat gewys is."
 
 msgctxt "#31260"
-msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
-msgstr "[COLOR state_text]⏎[/COLOR] kies   [COLOR state_text]→[/COLOR] opsie"
+msgid "[COLOR state_text]OK[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]OK[/COLOR] kies   [COLOR state_text]→[/COLOR] opsie"
 
 msgctxt "#31261"
-msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
-msgstr "[COLOR state_text]↑↓[/COLOR] skuif   [COLOR state_text]⏎[/COLOR] los"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]OK[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] skuif   [COLOR state_text]OK[/COLOR] los"
 
 msgctxt "#31262"
 msgid "Spotlight, rows and main menu of the home, movies and shows pages."

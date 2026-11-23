@@ -75,6 +75,26 @@
         <value condition="String.IsEqual(Window(Home).Property(nc.page),system)">$LOCALIZE[31033]</value>
         <value>$LOCALIZE[31006]</value>
     </variable>
+    <!-- Down from Home's top line (Home.xml 9190, key ↓): where it leads on the shown page, as
+         HomePageDown does; the quick menu from its icon, the menu's last entry. A spotlight that is
+         off leaves the rows first; the music page's album spotlight and the search field are
+         their pages' tops; the settings page (from the quick menu) starts with its tiles -->
+    <variable name="HintHomeDown">
+        <value condition="Control.HasFocus(9109)">$LOCALIZE[31320]</value>
+        <value condition="String.IsEqual(Window(Home).Property(nc.page),movies) + String.IsEqual(Skin.String(nc.movies.spotlight),off)">$LOCALIZE[31224]</value>
+        <value condition="String.IsEqual(Window(Home).Property(nc.page),shows) + String.IsEqual(Skin.String(nc.shows.spotlight),off)">$LOCALIZE[31224]</value>
+        <value condition="String.IsEqual(Window(Home).Property(nc.page),movies) | String.IsEqual(Window(Home).Property(nc.page),shows) | String.IsEqual(Window(Home).Property(nc.page),music)">$LOCALIZE[31100]</value>
+        <value condition="String.IsEqual(Window(Home).Property(nc.page),search)">$LOCALIZE[31141]</value>
+        <value condition="String.IsEqual(Window(Home).Property(nc.page),system)">$LOCALIZE[5]</value>
+        <value condition="String.IsEqual(Skin.String(SpotlightSource),off)">$LOCALIZE[31224]</value>
+        <value>$LOCALIZE[31100]</value>
+    </variable>
+    <!-- right of it, while the movies or shows tab has the focus: OK opens all of them (the
+         library window; DESIGN.md: the hint that follows the focus stands right) -->
+    <variable name="HintHomeOk">
+        <value condition="Control.HasFocus(9102)">   [COLOR state_text]OK[/COLOR] $LOCALIZE[31101]</value>
+        <value condition="Control.HasFocus(9103)">   [COLOR state_text]OK[/COLOR] $LOCALIZE[31102]</value>
+    </variable>
     <!-- the titles of the library grid (Custom_1110_Library.xml), its filter and details dialogs -->
     <variable name="HintLibrary">
         <value condition="String.IsEqual(Window(Home).Property(nc.library),tvshows)">$LOCALIZE[31031]</value>
@@ -133,7 +153,7 @@
     <!-- The OSD's footer of a library title while subtitles, audio or video has the focus
          (VideoOSD.xml 691, key ↓): Down to the cast row, and right of it OK to the full settings -->
     <variable name="HintTrackSettings">
-        <value>$LOCALIZE[31702]   [COLOR state_text]⏎[/COLOR] $LOCALIZE[31139]</value>
+        <value>$LOCALIZE[31702]   [COLOR state_text]OK[/COLOR] $LOCALIZE[31139]</value>
     </variable>
     <!-- Skin settings: a grabbed slot is dark blue; the keys of the rows of the page categories
          (ids 211 to 428) show under the description -->

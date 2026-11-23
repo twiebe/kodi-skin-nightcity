@@ -235,10 +235,10 @@ def test_state_is_not_cyan(path, text):
 
 
 def test_key_hints_are_state():
-    """The keys in a hint line (⏎ open, ← categories) are hints: dark blue, not cyan."""
+    """The keys in a hint line (OK open, ← categories) are hints: dark blue, not cyan."""
     text = (ROOT / 'language' / 'resource.language.en_gb' / 'strings.po').read_text(encoding='utf-8')
     assert '[COLOR accent]' not in text
-    assert '[COLOR state_text]⏎[/COLOR] open' in text
+    assert '[COLOR state_text]OK[/COLOR] open' in text
     hint = next(i for i in parse(ROOT / '1080i' / 'Includes_Base.xml').iter('include') if i.get('name') == 'LevelHint')
     assert '[COLOR state_text]$PARAM[key][/COLOR]' in ET.tostring(hint, encoding='unicode')
 

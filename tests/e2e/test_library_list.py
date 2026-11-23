@@ -554,7 +554,7 @@ def test_shows_have_their_own_details(library):
     screenshot('library-details-shows')
 
 
-# --- OK held on Home's movies and shows tabs ------------------------------------------------------
+# --- OK on Home's movies and shows tabs ---------------------------------------------------------
 
 def _press(button, hold=0):
     """A key through Kodi's keymaps; a hold over Kodi's threshold (500 ms) is a long press."""
@@ -572,15 +572,24 @@ def _on_tab(tab):
 
 @pytest.mark.parametrize('button', ['return', 'enter'])
 @pytest.mark.parametrize('tab, kind', [(9102, 'movies'), (9103, 'tvshows')])
-def test_ok_held_on_the_tab_opens_all_of_them(library, tab, kind, button):
+def test_ok_on_the_tab_opens_all_of_them(library, tab, kind, button):
     _on_tab(tab)
-    _press(button, hold=1000)
+    _press(button)
     wait_for('Window.IsActive(1110) + String.IsEqual(Window(Home).Property(nc.library),{})'.format(kind), timeout=10)
     _count_is(3 if kind == 'movies' else len(library['shows']))
 
 
-def test_ok_on_the_tab_still_goes_down_to_the_page(library):
+def test_down_on_the_tab_goes_into_the_page(library):
     _on_tab(9102)
-    _press('return')
+    _press('down')
     wait_for('Window.IsActive(home) + !ControlGroup(9100).HasFocus()', timeout=5)
     assert true('!Window.IsActive(1110)')
+
+
+def test_ok_held_on_the_tab_is_kodis_context_menu(library):
+    """The skin no longer takes OK held on Home: Kodi's own mapping, the context menu."""
+    _on_tab(9102)
+    _press('return', hold=1000)
+    time.sleep(1.5)
+    assert true('!Window.IsActive(1110)')
+    builtin('Dialog.Close(all,true)')

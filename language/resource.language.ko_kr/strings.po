@@ -436,8 +436,8 @@ msgid "Categories"
 msgstr "카테고리"
 
 msgctxt "#31178"
-msgid "[COLOR state_text]⏎[/COLOR] open"
-msgstr "[COLOR state_text]⏎[/COLOR] 열기"
+msgid "[COLOR state_text]OK[/COLOR] open"
+msgstr "[COLOR state_text]OK[/COLOR] 열기"
 
 msgctxt "#31181"
 msgid "refresh rate, decoding, resume"
@@ -744,12 +744,12 @@ msgid "Show or hide entries of the main menu. System and power always stay, and 
 msgstr "메인 메뉴 항목을 표시하거나 숨깁니다. 시스템과 전원은 항상 남으며, 마지막으로 표시된 페이지도 남습니다."
 
 msgctxt "#31260"
-msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
-msgstr "[COLOR state_text]⏎[/COLOR] 선택   [COLOR state_text]→[/COLOR] 옵션"
+msgid "[COLOR state_text]OK[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]OK[/COLOR] 선택   [COLOR state_text]→[/COLOR] 옵션"
 
 msgctxt "#31261"
-msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
-msgstr "[COLOR state_text]↑↓[/COLOR] 이동   [COLOR state_text]⏎[/COLOR] 놓기"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]OK[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] 이동   [COLOR state_text]OK[/COLOR] 놓기"
 
 msgctxt "#31262"
 msgid "Spotlight, rows and main menu of the home, movies and shows pages."

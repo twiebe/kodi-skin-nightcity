@@ -1209,7 +1209,9 @@
                 <param name="label" value="$LOCALIZE[31030]"/>
                 <param name="active" value="String.IsEqual(Window(Home).Property(nc.page),movies)"/>
                 <param name="onfocus" value="SetProperty(nc.page,movies,home)"/>
-                <param name="onclick" value="Action(Down)"/>
+                <!-- OK opens all of them in the library window, Down goes into the page (HintHomeDown) -->
+                <param name="onclick" value="SetProperty(nc.library,movies,home)"/>
+                <param name="onclick2" value="ActivateWindow(1110)"/>
                 <param name="visible" value="!Skin.HasSetting(nc.menu.hide.movies)"/>
             </include>
             <include content="TabGap">
@@ -1223,7 +1225,9 @@
                 <param name="label" value="$LOCALIZE[31031]"/>
                 <param name="active" value="String.IsEqual(Window(Home).Property(nc.page),shows)"/>
                 <param name="onfocus" value="SetProperty(nc.page,shows,home)"/>
-                <param name="onclick" value="Action(Down)"/>
+                <!-- OK opens all of them in the library window, Down goes into the page (HintHomeDown) -->
+                <param name="onclick" value="SetProperty(nc.library,tvshows,home)"/>
+                <param name="onclick2" value="ActivateWindow(1110)"/>
                 <param name="visible" value="!Skin.HasSetting(nc.menu.hide.shows)"/>
             </include>
             <include content="TabGap">

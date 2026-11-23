@@ -220,6 +220,15 @@
         </include>
         <include>QuickMenuDim</include>
         <include>HomeTop</include>
+        <!-- while the focus is in the top line (the menu, what plays, the quick menu's icon): Down
+             and where it leads into the page, OK on the movies and shows tabs (HintHomeDown,
+             HintHomeOk). The footer line under the page's row is free on every page. -->
+        <include content="LevelHint">
+            <param name="id" value="9195"/>
+            <param name="label" value="$VAR[HintHomeDown]$VAR[HintHomeOk]"/>
+            <param name="visible" value="ControlGroup(9100).HasFocus() | Control.HasFocus(9108) | Control.HasFocus(9109)"/>
+            <param name="animate" value="!Player.HasVideo"/>
+        </include>
         <include>QuickMenuPanel</include>
         <!-- while the script follows an episode's playback and reopens its info page: only the
              backdrop once no video plays, so Home does not show in between -->

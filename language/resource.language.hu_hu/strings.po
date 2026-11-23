@@ -436,8 +436,8 @@ msgid "Categories"
 msgstr "Kategóriák"
 
 msgctxt "#31178"
-msgid "[COLOR state_text]⏎[/COLOR] open"
-msgstr "[COLOR state_text]⏎[/COLOR] megnyitás"
+msgid "[COLOR state_text]OK[/COLOR] open"
+msgstr "[COLOR state_text]OK[/COLOR] megnyitás"
 
 msgctxt "#31181"
 msgid "refresh rate, decoding, resume"
@@ -744,12 +744,12 @@ msgid "Show or hide entries of the main menu. System and power always stay, and 
 msgstr "A főmenü elemeinek megjelenítése vagy elrejtése. A Rendszer és az Energia mindig marad, ahogy az utoljára mutatott oldal is."
 
 msgctxt "#31260"
-msgid "[COLOR state_text]⏎[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
-msgstr "[COLOR state_text]⏎[/COLOR] választás   [COLOR state_text]→[/COLOR] opció"
+msgid "[COLOR state_text]OK[/COLOR] choose   [COLOR state_text]→[/COLOR] option"
+msgstr "[COLOR state_text]OK[/COLOR] választás   [COLOR state_text]→[/COLOR] opció"
 
 msgctxt "#31261"
-msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]⏎[/COLOR] drop"
-msgstr "[COLOR state_text]↑↓[/COLOR] mozgatás   [COLOR state_text]⏎[/COLOR] lerakás"
+msgid "[COLOR state_text]↑↓[/COLOR] move   [COLOR state_text]OK[/COLOR] drop"
+msgstr "[COLOR state_text]↑↓[/COLOR] mozgatás   [COLOR state_text]OK[/COLOR] lerakás"
 
 msgctxt "#31262"
 msgid "Spotlight, rows and main menu of the home, movies and shows pages."
