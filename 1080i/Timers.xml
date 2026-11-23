@@ -120,7 +120,10 @@
         <description>Focus play once the library copy of a TMDb title is found</description>
         <start reset="true">Window.IsActive(movieinformation) + !String.IsEmpty(Window(Home).Property(nc.info.twinfocus)) + Integer.IsGreater(Container(5901).NumItems,0)</start>
         <onstart>ClearProperty(nc.info.twinfocus,home)</onstart>
-        <onstart condition="ControlGroup(9000).HasFocus()">SetFocus(9001)</onstart>
+        <onstart condition="ControlGroup(9000).HasFocus() + !$EXP[InfoPlaying]">SetFocus(9001)</onstart>
+        <!-- the title that plays: no play button, and … (9005), which had the focus, hides with
+             the copy found; the focus would go nowhere. The row's remaining button takes it. -->
+        <onstart condition="$EXP[InfoPlaying] + [ControlGroup(9000).HasFocus() | String.IsEmpty(System.CurrentControlId)]">SetFocus(9000)</onstart>
         <stop>Integer.IsGreaterOrEqual(Skin.TimerElapsedSecs(nc_info_twin),0)</stop>
     </timer>
     <!-- … of a TMDb title without library copy (DialogVideoInfo 9005): OK asks for the title's

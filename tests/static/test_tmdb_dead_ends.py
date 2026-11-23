@@ -104,18 +104,21 @@ def _playing_states():
              'tmdb movie with copy': dict(dbtype='movie', tmdb_type='movie', copy='items'),
              'tmdb movie': dict(dbtype='movie', tmdb_type='movie', copy='empty'),
              'library episode': dict(dbtype='episode', dbid=True, copy='empty')}
-    for (kind, item), cast, chain, resumable in itertools.product(
-            kinds.items(), LOADS, ('', 'True'), (False, True)):
+    for (kind, item), cast, chain, resumable, plot in itertools.product(
+            kinds.items(), LOADS, ('', 'True'), (False, True), (True, False)):
         item = dict(item)
         copy = item.pop('copy')
         episode = item['dbtype'] == 'episode'
         containers = {'5500': cast, '5510': 'empty', '50': 'empty', '5300': 'empty', '5901': copy,
                       '5100': 'items' if episode else 'empty', '5200': 'items' if episode else 'empty'}
-        extra = dict(EXTRA, **{'InfoPlaying': True, 'ListItem.IsResumable': resumable,
+        extra = dict(EXTRA, **{'InfoPlaying': True, 'Player.HasVideo': True, 'ListItem.IsResumable': resumable,
                                'Container(5901).ListItem.IsResumable': resumable,
-                               'Container(5100).ListItem.IsResumable': resumable})
-        yield '{} cast {} {} {}'.format(kind, cast, 'chain' if chain else 'no chain',
-                                        'resumable' if resumable else 'not started'), \
+                               'Container(5100).ListItem.IsResumable': resumable,
+                               'String.IsEmpty(ListItem.Plot)': not plot,
+                               'String.IsEmpty(Container(5100).ListItem.Plot)': not plot})
+        yield '{} cast {} {} {} {}'.format(kind, cast, 'chain' if chain else 'no chain',
+                                           'resumable' if resumable else 'not started',
+                                           'description' if plot else 'no description'), \
             State(containers=containers, props={'TMDbHelper.Instance': chain,
                                                 'nc.info.ep.query': 'season=1&episode=1' if episode else ''},
                   extra=extra, **item)
@@ -128,8 +131,26 @@ PLAYING_STATES = dict(_playing_states())
 def test_page_of_the_playing_movie_has_no_dead_end(info_page, label):
     state = PLAYING_STATES[label]
     assert info_page.report(state, offscreen={'5901', '9098', '9099'}) == []
-    # no way to play it again from the start, no context menu that offers it; the way back to the
-    # video takes the focus (in a chain 9004, else 9009)
-    for cid in ('9001', '9002', '9003', '9005'):
+    # no way to play it again from the start, no context menu that offers it, no trailer over
+    # it; the description takes the focus, Up leaves the page. Without a description a way-back
+    # button keeps the row (in a chain 9004, else 9009).
+    for cid in ('9001', '9002', '9003', '9005', '9008'):
         assert not info_page.can_focus(cid, state), (label, cid)
-    assert info_page.start(state) == ('9004' if state.props['TMDbHelper.Instance'] else '9009'), label
+    if state.extra['String.IsEmpty(ListItem.Plot)']:
+        assert info_page.start(state) == ('9004' if state.props['TMDbHelper.Instance'] else '9009'), label
+    else:
+        assert info_page.start(state) == '9063', label
+        assert not info_page.can_focus('9004', state) and not info_page.can_focus('9009', state), label
+
+
+def test_no_way_back_button_where_the_row_has_others(info_page):
+    """Up from the row is the way back (DESIGN.md): the way-back button shows only on a row that
+    would be empty otherwise, a person page without a biography."""
+    for label, state in INFO_STATES.items():
+        assert not info_page.can_focus('9004', state), label
+        assert not info_page.can_focus('9009', state), label
+    person = next(s for label, s in INFO_STATES.items() if label.startswith('person'))
+    bare = State(dbtype=person.dbtype, tmdb_type=person.tmdb_type, containers=person.containers,
+                 props=person.props, extra=dict(EXTRA, **{'String.IsEmpty(ListItem.Plot)': True}))
+    assert info_page.start(bare) == '9004'
+    assert info_page.report(bare, offscreen={'5901', '9098', '9099'}) == []

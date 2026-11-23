@@ -74,7 +74,8 @@ def _person_page(movieid):
     wait_for('Window.IsActive(movieinformation) + String.IsEqual(ListItem.Property(tmdb_type),person)', timeout=20)
     # TMDb Helper polls for the page every half second; Back before it saw the page stalls it
     time.sleep(1.5)
-    _focus_is(9004)
+    # no way-back button on a page with a biography: its button takes the focus
+    _focus_is(BUTTON)
     if len(_label('ListItem.Plot')) < 600:
         pytest.skip('biography too short to overflow')
     return _label('ListItem.Label')

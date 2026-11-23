@@ -222,7 +222,9 @@ def _play(movieid):
     wait_for('Window.IsActive(fullscreenvideo)')
 
 
-def test_osd_cast_row_to_person_and_close_all_returns_to_video(matrix):
+def test_osd_cast_row_to_person_and_up_returns_to_the_row(matrix):
+    """No way-back button on the person page over the video: Up from its row leaves it, back on
+    the cast row on that person, the video still playing."""
     _play(matrix)
     _open_cast_row()
     # the biography follows the focus once it rested
@@ -234,11 +236,14 @@ def test_osd_cast_row_to_person_and_close_all_returns_to_video(matrix):
     assert info('ListItem.Label')['ListItem.Label'] == person
     assert not _true('Window.IsActive(videoosd)')
     assert _true('Player.Playing')  # playback keeps running behind the chain
-    assert 'back to video' in info('Control.GetLabel(9004)')['Control.GetLabel(9004)'].lower()
-    builtin('SetFocus(9004)')
-    action('select')
+    wait_for('ControlGroup(9000).HasFocus()', timeout=10)
+    assert not _true('Control.IsVisible(9004) + Control.IsVisible(9063)')
+    time.sleep(1.5)  # TMDb Helper polls for the page every half second
+    screenshot('tmdb-osd-person')
+    action('up', delay=1)
     wait_for(IDLE, timeout=20)
-    wait_for('Window.IsActive(fullscreenvideo)', timeout=10)
+    wait_for('Window.IsActive(1141) + Control.HasFocus(6501)', timeout=10)
+    assert info('Container(6501).ListItem.Label')['Container(6501).ListItem.Label'] == person
     assert _true('Player.Playing')
 
 
@@ -493,42 +498,34 @@ def test_click_right_after_leaving_a_chain_opens_the_next(matrix):
     _page(2)
 
 
-def test_back_button_names_the_page_and_waits_at_the_left(matrix):
-    """Past the chain's first page the way back goes one page back and names that page; on the
-    first page it goes back all the way and names where the chain started (the movies page). On
-    a title page it stands left of the play button and takes the focus only with Left."""
+def test_up_steps_back_through_the_chain(matrix):
+    """No way-back button on a chain page with other buttons: Up from the row goes one page back
+    past the chain's first page, from the first one back to where the chain started (the movies
+    page)."""
     builtin('SetFocus(9102)')
     wait_for('String.IsEqual(Window(Home).Property(nc.page),movies)')
     _info_and_person(matrix)
-    wait_for('String.Contains(Control.GetLabel(9004),The Matrix)', timeout=5)
     wait_for('Integer.IsGreater(Container(5510).NumItems,0)', timeout=15)
     person = info('ListItem.Label')['ListItem.Label']
     builtin('SetFocus(5510,0,absolute)')
     _click_opens(5510, 3)
     _page(3)
-    wait_for('Control.IsVisible(9004)')
-    wait_for('String.Contains(Control.GetLabel(9004),{})'.format(person), timeout=5)
-    focused = info('System.CurrentControlId')['System.CurrentControlId']
-    assert focused and focused != '9004' and _true('ControlGroup(9000).HasFocus()'), focused
-    for _ in range(4):
-        if _true('Control.HasFocus(9004)'):
-            break
-        action('left', delay=0.3)
-    assert _true('Control.HasFocus(9004)')
-    action('select')
+    wait_for('ControlGroup(9000).HasFocus()', timeout=10)
+    assert not _true('Control.IsVisible(9004)')
+    time.sleep(1.5)  # TMDb Helper polls for the page every half second
+    action('up', delay=1)
     _page(2)
     assert info('ListItem.Label')['ListItem.Label'] == person
-    builtin('SetFocus(9004)')
-    wait_for('Control.HasFocus(9004)')
-    action('select')
-    _page(1)
-    wait_for('String.Contains(Control.GetLabel(9004),back to movies)', timeout=5)
+    # back on the title that opened the next page (DESIGN.md): up to the row first
+    time.sleep(1.5)
     builtin('SetFocus(9000)')
-    for _ in range(4):
-        if _true('Control.HasFocus(9004)'):
-            break
-        action('left', delay=0.3)
-    action('select')
+    wait_for('ControlGroup(9000).HasFocus()', timeout=10)
+    action('up', delay=1)
+    _page(1)
+    time.sleep(1.5)
+    builtin('SetFocus(9000)')
+    wait_for('ControlGroup(9000).HasFocus()', timeout=10)
+    action('up', delay=1)
     wait_for(IDLE, timeout=20)
     wait_for('Window.IsActive(home) + String.IsEqual(Window(Home).Property(nc.page),movies)', timeout=10)
 
@@ -639,7 +636,9 @@ def test_a_new_chain_opens_the_person_on_the_buttons(matrix):
     _info_and_person(matrix)
     _list_in(5510)
     time.sleep(3)  # the way back would have taken the focus into the titles by now
-    assert info('System.CurrentControlId')['System.CurrentControlId'] == '9004'
+    # the row's first button, the biography's (no way-back button beside it)
+    assert info('System.CurrentControlId')['System.CurrentControlId'] in ('9063', '9004')
+    assert _true('ControlGroup(9000).HasFocus()')
 
 
 def test_back_in_the_chain_returns_to_the_crew_tab(matrix):
@@ -751,7 +750,9 @@ def test_a_new_osd_chain_opens_the_person_on_the_buttons(matrix):
     _page(1)
     _list_in(5510)
     time.sleep(3)  # the way back would have taken the focus into the titles by now
-    assert info('System.CurrentControlId')['System.CurrentControlId'] == '9004'
+    # the row's first button, the biography's (no way-back button beside it)
+    assert info('System.CurrentControlId')['System.CurrentControlId'] in ('9063', '9004')
+    assert _true('ControlGroup(9000).HasFocus()')
 
 
 # Back held: the keymap sends this (BACK_KEYMAP in scripts/nightcity.py); JSON-RPC sends no long

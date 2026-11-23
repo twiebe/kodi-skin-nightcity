@@ -13,9 +13,12 @@ The remote moves through levels, not through confirmations.
   element that opened it: the same item, the same tab. A TMDb chain reopens the page before as a
   new page, so the click keeps the way back (`info_leave`, `info_back`, `osd_back` in
   `scripts/nightcity.py`); a chain from the player's cast row ends on that row, on that person.
-  The way-back button of a chain page does the same and names the page before ("‹ The Matrix");
-  on the chain's first page, and over the playing video, it goes back all the way and names
-  where that is.
+  Info pages have no way-back button: Up from the button row is the way, and the hint in the
+  middle of the path line names where it leads (↑ previous page, ↑ video, ↑ movies). Only a row
+  that would be empty otherwise (a person without a biography, the page of the title that plays
+  without a description) keeps one, so something takes the focus; it names the page before
+  ("‹ The Matrix"), on the chain's first page and over the playing video where the chain
+  started.
 - **Back held goes back to where the browsing started**, past every page of a chain: to the
   page the chain started from, on the element that started it, or to the player's controls on
   their first button (play or resume) when the chain started from the player's cast row.

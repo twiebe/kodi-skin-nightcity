@@ -183,18 +183,18 @@ def test_similar_row_waits_for_the_cast():
 
 
 def test_back_button_leads_the_row():
-    """Inside a chain the button left of the row goes one page back and names that page (its
+    """Up from the row is the way back; a row with nothing else to offer keeps a button for it
+    (test_tmdb_dead_ends.py). Inside a chain it goes one page back and names that page (its
     title, kept by info_back); on the chain's first page, and over the playing video, it goes
     back all the way: the manager closes every page and returns to where the chain started, and
-    the button names that place. It stands at the left end of the row, the way back; Left from
-    the first button reaches it."""
+    the button names that place."""
     row = _info_control('9000')
     calls = [c for c in row if c.tag == 'include' and c.get('content') == 'PillButton']
     first = calls[0]
     params = {p.get('name'): p.get('value') for p in first.findall('param')}
     assert params['id'] == '9004'
     assert params['label'] == '‹ $VAR[ChainBackLabel]'
-    assert params['visible'] == RUNNING
+    assert params['visible'] == RUNNING + ' + $EXP[InfoRowEmpty]'
     assert 'onclick' not in params
     clicks = [(o.get('condition'), o.text) for o in first.findall('onclick')]
     assert clicks == [('$EXP[ChainStepBack]', 'Action(Back)'),
@@ -206,10 +206,12 @@ def test_back_button_leads_the_row():
     assert label[0] == ('$EXP[ChainStepBack] + !String.IsEmpty(Window(Home).Property(nc.chain.before))',
                         '$INFO[Window(Home).Property(nc.chain.before)]')
     assert label[1] == ('$EXP[ChainStepBack]', '$LOCALIZE[31479]')
-    # it never takes the focus when the page opens, only from within the row; a person page
-    # has no other button, nor the page of the title that plays (its play buttons hide,
-    # test_trailer.py)
-    assert params['enable'] == 'ControlGroup(9000).HasFocus() | String.IsEqual(ListItem.Property(tmdb_type),person) | $EXP[InfoPlaying]'
+    # only where the row has nothing else: a person page or the page of the title that plays
+    # without a description (test_tmdb_dead_ends.py tries every state)
+    info = parse(ROOT / '1080i' / 'Includes_Info.xml')
+    empty = next(e.text for e in info.iter('expression') if e.get('name') == 'InfoRowEmpty')
+    assert 'Control.IsVisible' not in empty  # false yet when the page opens
+    assert 'enable' not in params
 
 
 def test_back_button_names_the_place():
@@ -286,7 +288,10 @@ def test_play_takes_the_focus_when_the_copy_turns_up():
     assert 'Integer.IsGreater(Container(5901).NumItems,0)' in start and 'nc.info.twinfocus' in start
     onstart = [(o.get('condition') or '', o.text) for o in timer.findall('onstart')]
     assert ('', 'ClearProperty(nc.info.twinfocus,home)') in onstart
-    assert ('ControlGroup(9000).HasFocus()', 'SetFocus(9001)') in onstart
+    assert ('ControlGroup(9000).HasFocus() + !$EXP[InfoPlaying]', 'SetFocus(9001)') in onstart
+    # the title that plays has no play button: … hid with the copy found, the row keeps the focus
+    assert ('$EXP[InfoPlaying] + [ControlGroup(9000).HasFocus() | String.IsEmpty(System.CurrentControlId)]',
+            'SetFocus(9000)') in onstart
 
 
 ROWS_UP = '!Window.IsActive(videobookmarks) + !Window.IsActive(1141)'

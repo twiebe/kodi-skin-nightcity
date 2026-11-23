@@ -118,7 +118,8 @@ def test_the_playing_title_offers_no_play():
     """The page of the title that plays: a movie, or an episode page on the episode that plays
     (a chain from the OSD's cast row reaches it, the OSD's info button opens it). Resume and from
     start would start it again from the beginning, ... (Kodi's context menu) offers the same:
-    they hide, and one button leads back to the video (9009; in a chain 9004 does). The same test
+    they hide; Up leaves the page, and without a description one button leads back to the video
+    (9009; in a chain 9004 does). The same test
     as "ends at" (EndsAtTags): the page's item, an episode page's episode in its list."""
     info = parse(SKIN / 'Includes_Info.xml')
     tags = next(i for i in info.iter('include') if i.get('name') == 'EndsAtTags')
@@ -133,11 +134,9 @@ def test_the_playing_title_offers_no_play():
         assert params['visible'].endswith(' + !$EXP[InfoPlaying]'), cid
     more = next(c for c in parse(SKIN / 'DialogVideoInfo.xml').iter('control') if c.get('id') == '9003')
     assert more.findtext('visible').endswith(' + !$EXP[InfoPlaying]')
-    params, _ = _pill('9004')
-    assert '$EXP[InfoPlaying]' in params['enable']
     params, clicks = _pill('9009')
     assert params['label'] == '‹ $LOCALIZE[31330]'
-    assert params['visible'] == '$EXP[InfoPlaying] + String.IsEmpty(Window(Home).Property(TMDbHelper.Instance))'
+    assert params['visible'] == '$EXP[InfoPlaying] + String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + $EXP[InfoRowEmpty]'
     assert (params['onclick'], params['onclick2']) == ('Dialog.Close(movieinformation)', 'ActivateWindow(fullscreenvideo)')
 
 
