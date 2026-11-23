@@ -256,9 +256,16 @@
                     <param name="key" value="$LOCALIZE[31129]"/>
                     <param name="value" value="ListItem.Country"/>
                 </include>
+                <!-- the rating: Kodi 22's icon where the item has one, else the code -->
                 <include content="InfoDetail">
                     <param name="key" value="$LOCALIZE[31136]"/>
                     <param name="value" value="ListItem.Mpaa"/>
+                    <param name="visible" value="![$EXP[KodiPiers] + !String.IsEmpty(ListItem.ParentalRatingIcon)]"/>
+                </include>
+                <include content="InfoDetailIcon">
+                    <param name="key" value="$LOCALIZE[31136]"/>
+                    <param name="icon" value="ListItem.ParentalRatingIcon"/>
+                    <param name="visible" value="$EXP[KodiPiers] + !String.IsEmpty(ListItem.ParentalRatingIcon)"/>
                 </include>
                 <!-- budget and box office from TMDb Helper ($63,000,000): a TMDb page carries them on
                      its item, for a library movie its service has them, once they belong to the

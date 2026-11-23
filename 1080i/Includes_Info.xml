@@ -32,6 +32,37 @@
         </definition>
     </include>
 
+    <!-- An InfoDetail whose value is an image: a parental rating icon (Kodi 22,
+         ListItem.ParentalRatingIcon), as high as the text of the lines around it -->
+    <include name="InfoDetailIcon">
+        <param name="key"/>
+        <param name="icon"/>
+        <param name="visible" default="true"/>
+        <definition>
+            <control type="group">
+                <width>456</width>
+                <height>40</height>
+                <visible>!String.IsEmpty($PARAM[icon]) + $PARAM[visible]</visible>
+                <control type="label">
+                    <width>150</width>
+                    <height>40</height>
+                    <font>font_caps_small</font>
+                    <textcolor>text_mute</textcolor>
+                    <label>[UPPERCASE]$PARAM[key][/UPPERCASE]</label>
+                </control>
+                <control type="image">
+                    <left>150</left>
+                    <top>4</top>
+                    <width>96</width>
+                    <height>32</height>
+                    <align>left</align>
+                    <aspectratio>keep</aspectratio>
+                    <texture>$INFO[$PARAM[icon]]</texture>
+                </control>
+            </control>
+        </definition>
+    </include>
+
     <!-- One season in the tab line: like a menu entry, the shown season in accent with a line
          under it (DialogVideoInfo.xml, 5200) -->
     <include name="SeasonTab">
