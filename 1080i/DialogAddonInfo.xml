@@ -119,6 +119,8 @@
                 <textoffsetx>30</textoffsetx>
                 <textcolor>text_dim</textcolor>
                 <focusedcolor>focus_text</focusedcolor>
+                <!-- Kodi disables auto-update where the add-on can't have it: greyed like the pills -->
+                <disabledcolor>text_mute</disabledcolor>
                 <texturefocus border="22" colordiffuse="focus">ui/cut_btn_glow.png</texturefocus>
                 <texturenofocus/>
                 <radiowidth>42</radiowidth>

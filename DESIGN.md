@@ -250,6 +250,9 @@ browser.
 - The cursor glows: a soft cyan halo around the focused card, button, pill, row or tile. Kodi
   draws a control only inside its own rect, so a glowing button is 10 px larger on each side
   than it looks (padded textures, `tests/static/test_glow.py`).
+- A button Kodi disables (the add-on dialog's Configure, Uninstall, Dependencies where the add-on
+  has none) greys its label out to `text_mute`; the focus skips it. A button that can be chosen
+  never shows in `text_mute`, so the two tell apart at a glance (`PillButton`, `LookPillDisabled`).
 - The static test `tests/static/test_colors.py` holds the skin to this table.
 - **A progress line says where you are** in something that plays or was watched: under an
   episode or a card. It stays on its item when the cursor moves away. The music queue has none:

@@ -964,3 +964,21 @@ def test_skin_name_variables_exist():
     for look in (ROOT / '1080i' / 'Includes_Look.xml', ROOT / 'skins' / 'confuse' / '1080i' / 'Includes_Look.xml'):
         names = {v.get('name') for v in parse(look).iter('variable')}
         assert {'SkinTitle', 'SkinVersion'} <= names, look
+
+
+@pytest.mark.parametrize('look', [ROOT / '1080i' / 'Includes_Look.xml', ROOT / 'skins' / 'confuse' / '1080i' / 'Includes_Look.xml'])
+def test_disabled_pill_greys_out(look):
+    """A pill Kodi disables (the add-on dialog's Configure, Uninstall and so on where the add-on has
+    none) shows its label in text_mute, not in the colour of a pill that can be chosen."""
+    pill = next(el for el in parse(ROOT / '1080i' / 'Includes_Base.xml').iter('include')
+                if el.get('name') == 'PillButton')
+    disabled = next(el for el in pill.iter('include') if el.get('content') == 'LookPillDisabled')
+    assert {p.get('name'): p.get('value') for p in disabled.iter('param')} == {'color': 'text_mute'}
+    look_def = next(el for el in parse(look).iter('include') if el.get('name') == 'LookPillDisabled')
+    assert look_def.find('definition/disabledcolor').text == '$PARAM[color]'
+
+
+def test_addon_dialog_auto_update_greys_out():
+    """The add-on dialog's auto-update switch (13), which Kodi disables where it does not apply."""
+    radio = next(el for el in parse(ROOT / '1080i' / 'DialogAddonInfo.xml').iter('control') if el.get('id') == '13')
+    assert radio.findtext('disabledcolor') == 'text_mute'
