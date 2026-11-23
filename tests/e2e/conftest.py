@@ -58,6 +58,41 @@ def seed():
     return data
 
 
+# What the tests read from seed(): a pool made from an older kdev seed lacks some of it (the
+# libraries, the music), and its run failed file by file with KeyError after minutes
+SEED_NEEDS = ('admin.token', 'admin.api_key', 'users', 'libraries.Movies', 'items.Kdev Alpha',
+              'items.Blue Satellite')
+
+
+def seed_missing(data):
+    """The entries of SEED_NEEDS that DATA (a seed.json) lacks."""
+    missing = []
+    for need in SEED_NEEDS:
+        value = data
+        for key in need.split('.', 1):
+            value = value.get(key) if isinstance(value, dict) else None
+        if value is None:
+            missing.append(need)
+    return missing
+
+
+def check_pool_seed(pool):
+    """Stop the run at once when POOL's workers hold a seed the tests can't use. The first
+    worker's seed.json, else the template's (the workers copy it)."""
+    instances = KODI_DEV / 'instances'
+    for path in (instances / '{}-0'.format(pool) / 'data' / 'seed.json', instances / pool / 'data' / 'seed.json'):
+        if path.exists():
+            break
+    else:
+        return
+    missing = seed_missing(json.loads(path.read_text()))
+    if missing:
+        pytest.exit('pool {} has an old kdev seed ({} lacks {}): make it again, '
+                    'KDEV_POOL={} kdev pool remove --yes and pool up (it copies the default '
+                    "pool's template), or pool up --from a current data folder".format(
+                        pool, path, ', '.join(missing), pool), returncode=4)
+
+
 RPC_URL = os.environ.get('KODI_RPC_URL') or 'http://localhost:{}/jsonrpc'.format(_rpc_port())
 
 
@@ -292,6 +327,8 @@ def pytest_configure(config):
     handle.flush()
     _lock[0] = handle
     _run_start[0] = int(time.time())
+    # once, before xdist starts a worker: a stale pool fails here, not test by test
+    check_pool_seed(POOL)
 
 
 def crash_logs(listing, since):
