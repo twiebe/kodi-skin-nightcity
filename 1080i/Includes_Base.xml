@@ -357,6 +357,41 @@
         </definition>
     </include>
 
+    <!-- The way Right leads: LevelHintLeft mirrored, written down the right edge, top to bottom,
+         centred on it (its middle at x 1896, y 540). The line is turned a quarter to the right,
+         so its Up glyph shows as Right. Where Right leads into the next column (a list of
+         groups or categories), shown while the focus is in the column it leads from. -->
+    <include name="LevelHintRight">
+        <param name="id"/>
+        <param name="label"/>
+        <param name="left" default="1596"/>
+        <param name="top" default="525"/>
+        <param name="visible" default="true"/>
+        <param name="animate" default="true"/>
+        <definition>
+            <control type="group" id="$PARAM[id]">
+                <left>$PARAM[left]</left>
+                <top>$PARAM[top]</top>
+                <width>600</width>
+                <height>30</height>
+                <visible>$PARAM[visible]</visible>
+                <animation effect="rotate" end="-90" center="auto" time="0" condition="true">Conditional</animation>
+                <include content="LevelHintFade">
+                    <param name="animate" value="$PARAM[animate]"/>
+                </include>
+                <control type="label">
+                    <width>600</width>
+                    <height>30</height>
+                    <align>center</align>
+                    <include>LevelHintText</include>
+                    <include content="LookLabelCase">
+                        <param name="text" value="[COLOR state_text]↑[/COLOR] $PARAM[label]"/>
+                    </include>
+                </control>
+            </control>
+        </definition>
+    </include>
+
     <!-- in after out: where one hint takes over from another in the same place (the focus moved
          to the other side) the two never stand on each other. A still effect starts the
          animation at once (test_page_fades, as in SharedPageFade); the delayed fade holds its

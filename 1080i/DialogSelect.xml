@@ -123,5 +123,13 @@
             <param name="label" value="$VAR[HintSelectBack]"/>
             <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.select.ok))"/>
         </include>
+        <!-- down the screen's right edge: in the skin's filter dialogs Right on a list of
+             choices takes the focused one, as OK (a list of groups opens the group); none in a
+             multi-select, where Right stays -->
+        <include content="LevelHintRight">
+            <param name="id" value="9058"/>
+            <param name="label" value="$LOCALIZE[31135]"/>
+            <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)"/>
+        </include>
     </controls>
 </window>

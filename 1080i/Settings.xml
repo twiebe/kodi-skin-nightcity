@@ -24,6 +24,14 @@
             <param name="visible" value="!System.HasActiveModalDialog"/>
             <param name="animate" value="!Player.HasVideo"/>
         </include>
+        <!-- down the screen's right edge: Right on the rail opens the entry, as OK; the rail is the
+             page's only column -->
+        <include content="LevelHintRight">
+            <param name="id" value="9058"/>
+            <param name="label" value="$LOCALIZE[31135]"/>
+            <param name="visible" value="!System.HasActiveModalDialog"/>
+            <param name="animate" value="!Player.HasVideo"/>
+        </include>
         <!-- the content fades in on open; background and status line stay -->
         <control type="group">
             <include>WindowFade</include>
