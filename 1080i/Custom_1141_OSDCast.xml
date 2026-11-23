@@ -17,6 +17,8 @@
     <onload>ClearProperty(nc.osd.bio.id,home)</onload>
     <onload>ClearProperty(nc.osd.bio.pending,home)</onload>
     <onload>ClearProperty(nc.osd.click,home)</onload>
+    <!-- back from a chain: the row's own dim takes over from the chain's (VideoFullScreen.xml 5098) -->
+    <onload>ClearProperty(nc.osd.dim,home)</onload>
     <onload>ClearProperty(nc.osd.ret,home)</onload>
     <!-- opened Down from the chapters button (VideoOSDBookmarks.xml 90): closed back onto the
          controls, the button's panel shows again. Not when a chain leaves (nc.osd.ret, set
@@ -26,8 +28,9 @@
     <animation effect="fade" time="150">WindowOpen</animation>
     <animation effect="fade" time="150">WindowClose</animation>
     <controls>
-        <!-- no scrim of its own: the seek bar dialog dims the whole video under the row, below
-             its seek line (DialogSeekBar.xml), which a scrim here would dim with the video -->
+        <!-- no scrim of its own: the player screen dims the whole video under the row, below the
+             seek bar dialog's line (VideoFullScreen.xml 5098), which a scrim here would dim with
+             the video -->
 
         <!-- the focused person -->
         <control type="group">
@@ -126,6 +129,8 @@
                 <param name="id" value="$INFO[ListItem.Property(tmdb_id)]"/>
                 <param name="condition" value="!Container(6501).IsUpdating + !Container(6599).IsUpdating"/>
             </include>
+            <!-- the video stays dimmed from here to the chain's pages (VideoFullScreen.xml 5098) -->
+            <onclick condition="!Container(6501).IsUpdating + !Container(6599).IsUpdating + [!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) | String.IsEmpty(Window(Home).Property(nc.chain.claim))]">SetProperty(nc.osd.dim,1,home)</onclick>
             <onclick condition="!Container(6501).IsUpdating + !Container(6599).IsUpdating + [!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) | String.IsEmpty(Window(Home).Property(nc.chain.claim))]">Dialog.Close(1141)</onclick>
             <onclick condition="!Container(6501).IsUpdating + !Container(6599).IsUpdating + [!String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) | String.IsEmpty(Window(Home).Property(nc.chain.claim))]">Dialog.Close(videoosd)</onclick>
             <!-- a click while the biography loads waits for it (nc_osd_click, Timers.xml), as does

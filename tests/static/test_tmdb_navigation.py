@@ -645,20 +645,56 @@ def test_a_page_on_its_way_back_parks_the_focus_out_of_sight():
 
 def test_cast_row_dims_the_video_as_an_info_page():
     """Names, roles and the biography read over a bright picture: the whole video under the
-    scrim of an info page over the video (video_scrim). The seek bar dialog lays it, under its
-    own seek line and times: the row's dialog lies over the seek bar's and would dim them with
-    the video, so it has no scrim of its own. The row keeps the seek bar open."""
+    scrim of an info page over the video (video_scrim). The player screen lays it, under the
+    seek bar dialog's line and times: the row's dialog lies over the seek bar's and would dim
+    them with the video, so it has no scrim of its own; nor the seek bar dialog, which fades out
+    as the row closes for a chain. The row keeps the seek bar open."""
     assert not [c for c in _cast().iter('control') if (c.find('texture') is not None
                                                        and 'scrim' in (c.find('texture').get('colordiffuse') or ''))]
     seek = parse(SKIN / 'DialogSeekBar.xml')
-    controls = seek.find('controls').findall('control')
-    scrim = next(c for c in controls if c.get('id') == '499')
+    assert not [c for c in seek.iter('control') if (c.find('texture') is not None
+                                                    and c.find('texture').get('colordiffuse') == 'video_scrim')]
+    assert any('Window.IsActive(1141)' in v.text for v in seek.findall('visible'))
+    controls = parse(SKIN / 'VideoFullScreen.xml').find('controls').findall('control')
+    scrim = controls[0]
+    assert scrim.get('id') == '5098'
     assert [scrim.findtext(k) for k in ('left', 'top', 'width', 'height')] == ['0', '0', '1920', '1080']
     assert scrim.find('texture').get('colordiffuse') == 'video_scrim'
-    assert scrim.findtext('visible') == 'Window.IsActive(1141)'
-    # over the seek bar's gradient, under everything else it draws
-    assert controls.index(scrim) == 1 and controls[0].find('texture').text == 'ui/fade_b.png'
-    assert any('Window.IsActive(1141)' in v.text for v in seek.findall('visible'))
+    assert scrim.findtext('visible') == 'Window.IsActive(1141) | ' + DIM
+
+
+DIM = '!String.IsEmpty(Window(Home).Property(nc.osd.dim))'
+
+
+def test_a_chain_over_the_video_never_shows_it_bright_or_dark_between_pages():
+    """From the OK on a person in the cast row to the chain's pages and back to the row, the
+    video stays dimmed as behind the pages: the row's scrim faded out with the seek bar as the
+    row closed (the bright video for about a quarter second), TMDb Helper's window showed the
+    page background between two pages (a dark flash), and the way back showed the bright video
+    until the row opened. The dim is held (nc.osd.dim) from the click to the row's next open."""
+    clicks = [(o.get('condition'), o.text) for o in _control('Custom_1141_OSDCast.xml', '6501').iter('onclick')]
+    texts = [t for _, t in clicks]
+    assert texts.index('SetProperty(nc.osd.dim,1,home)') < texts.index('Dialog.Close(1141)')
+    cond = dict((t, c) for c, t in clicks)
+    assert cond['SetProperty(nc.osd.dim,1,home)'] == cond['Dialog.Close(1141)']
+    late = [o.text for o in _timer('nc_osd_click').iter('onstop')]
+    assert late.index('SetProperty(nc.osd.dim,1,home)') < late.index('Dialog.Close(1141)')
+    chain = parse(SKIN / 'Custom_1190_TMDbHelper.xml')
+    assert ('Player.HasVideo', 'SetProperty(nc.osd.dim,1,home)') in [(o.get('condition'), o.text) for o in chain.iter('onload')]
+    assert chain.find('controls')[0].text == 'ChainBackground'
+    base = parse(SKIN / 'Includes_Base.xml')
+    background = next(i for i in base.iter('include') if i.get('name') == 'ChainBackground')
+    scrim = background.find("control[@id='1199']")
+    assert scrim.find('texture').get('colordiffuse') == 'video_scrim'
+    assert scrim.findtext('visible') == 'Player.HasVideo'
+    assert background.find("control[@type='group']").findtext('visible') == '!Player.HasVideo'
+    # held until the row is back, cleared on any other start of the player screen or the OSD
+    assert 'ClearProperty(nc.osd.dim,home)' in [o.text for o in parse(SKIN / 'Custom_1141_OSDCast.xml').iter('onload')]
+    full = [(o.get('condition'), o.text) for o in parse(SKIN / 'VideoFullScreen.xml').iter('onload')]
+    clear = ('String.IsEmpty(Window(Home).Property(nc.chain.return))', 'ClearProperty(nc.osd.dim,home)')
+    assert full.index(clear) == 0  # before the way back clears nc.chain.return
+    osd = [(o.get('condition'), o.text) for o in parse(SKIN / 'VideoOSD.xml').iter('onload')]
+    assert ('String.IsEmpty(Window(Home).Property(nc.osd.chain))', 'ClearProperty(nc.osd.dim,home)') in osd
 
 
 VIDEO_LATCH = '!String.IsEmpty(Window(Home).Property(nc.info.video))'
@@ -677,8 +713,9 @@ def test_info_page_over_the_video_is_decided_as_it_opens():
     assert 'ClearProperty(nc.info.video,home)' in [o.text for o in root.findall('onunload')]
     expressions = {e.get('name'): e.text for f in ('Includes_Base.xml', 'Includes_Info.xml')
                    for e in parse(ROOT / '1080i' / f).iter('expression')}
-    for name in ('InfoOverVideo', 'InfoPlaying'):
-        assert expressions[name].startswith(VIDEO_LATCH + ' + '), name
+    assert expressions['InfoPlaying'].startswith(VIDEO_LATCH + ' + ')
+    # or, in a chain over the video, its held dim: a page's first frame comes before its onload
+    assert expressions['InfoOverVideo'].startswith('[' + VIDEO_LATCH + ' | ' + DIM + '] + ')
     # nothing else sets it: no page keeps the latch of another
     sets = [f.name for f in (ROOT / '1080i').glob('*.xml') if 'nc.info.video' in f.read_text()]
     assert sorted(sets) == ['DialogVideoInfo.xml', 'Includes_Base.xml', 'Includes_Info.xml']

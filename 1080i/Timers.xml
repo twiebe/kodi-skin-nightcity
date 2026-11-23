@@ -189,6 +189,7 @@
         <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating + String.IsEmpty(Window(Home).Property(TMDbHelper.Instance)) + String.IsEmpty(Window(Home).Property(nc.chain.claim))">SetProperty(nc.chain.claim,1,home)</onstop>
         <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating">SetProperty(nc.osd.ret,$INFO[Container(6501).CurrentItem],home)</onstop>
         <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating">SetProperty(nc.osd.ret.tab,$INFO[Window(Home).Property(nc.osd.credits)],home)</onstop>
+        <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating">SetProperty(nc.osd.dim,1,home)</onstop>
         <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating">Dialog.Close(1141)</onstop>
         <onstop condition="Window.IsActive(1141) + !Container(6501).IsUpdating + !Container(6599).IsUpdating">Dialog.Close(videoosd)</onstop>
         <onstop>ClearProperty(nc.osd.click,home)</onstop>

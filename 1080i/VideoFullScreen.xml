@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Fullscreen video. Only a buffering note; the seek bar dialog shows the seek line. -->
+<!-- Fullscreen video. Only a buffering note and the dim under the cast and crew row; the seek
+     bar dialog shows the seek line. -->
 <window>
     <!-- back from a chain over the video (Custom_1190_TMDbHelper.xml): the OSD, whose stand-in
          699 opens the cast row again, the level the chain was entered from (nc.osd.chain,
          VideoOSD.xml); its lists wait until TMDb Helper's manager has ended, a plugin started
          meanwhile would crash Kodi -->
+    <!-- the dim of a chain over the video (nc.osd.dim, 5098 below) stays only on the way back
+         from one; any other start of the player screen is the bare video -->
+    <onload condition="String.IsEmpty(Window(Home).Property(nc.chain.return))">ClearProperty(nc.osd.dim,home)</onload>
     <onload condition="String.IsEqual(Window(Home).Property(nc.chain.return),osd)">ClearProperty(nc.chain.return,home)</onload>
     <onload condition="String.IsEqual(Window(Home).Property(nc.chain.return),osd)">SetProperty(nc.osd.chain,1,home)</onload>
     <onload condition="String.IsEqual(Window(Home).Property(nc.chain.return),osd)">ActivateWindow(videoosd)</onload>
@@ -13,6 +17,25 @@
     <onload condition="String.IsEqual(Window(Home).Property(nc.chain.return),controls)">ClearProperty(nc.chain.return,home)</onload>
     <onload condition="String.IsEqual(Window(Home).Property(nc.chain.return),controls)">ActivateWindow(videoosd)</onload>
     <controls>
+        <!-- The whole video dimmed as behind an info page over it (InfoBackground, video_scrim):
+             under the cast and crew row (Custom_1141_OSDCast.xml), for the names, roles and
+             biography over a bright picture, and from the OK on a person until the chain is back
+             on that row (nc.osd.dim). Here, under the seek bar dialog's line and times, which
+             stay bright; not in the row's dialog, which lies over them, nor in the seek bar
+             dialog, which fades out as the row closes for a chain. With the dim held across
+             the step, the row, the player screen without the OSD, TMDb Helper's window under the
+             pages (Custom_1190_TMDbHelper.xml) and the pages show the same dimmed video: no
+             bright frame between them. -->
+        <control type="image" id="5098">
+            <description>video scrim</description>
+            <left>0</left>
+            <top>0</top>
+            <width>1920</width>
+            <height>1080</height>
+            <texture colordiffuse="video_scrim">ui/white.png</texture>
+            <visible>Window.IsActive(1141) | !String.IsEmpty(Window(Home).Property(nc.osd.dim))</visible>
+            <animation effect="fade" time="150">VisibleChange</animation>
+        </control>
         <control type="group">
             <left>64</left>
             <top>40</top>

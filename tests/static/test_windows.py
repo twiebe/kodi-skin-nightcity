@@ -338,9 +338,12 @@ def test_windows_over_a_playing_video_keep_it_rendering():
     assert (first.findtext('left'), first.findtext('top'), first.findtext('width'),
             first.findtext('height')) == ('0', '0', '1920', '1080')
     assert first.findtext('visible') == 'Player.HasVideo + !Window.IsVisible(fullscreenvideo)'
-    for name in ('Home.xml', 'Custom_1190_TMDbHelper.xml'):
+    chain = next(i for i in root.iter('include') if i.get('name') == 'ChainBackground')
+    assert chain[0].get('type') == 'videowindow'
+    assert chain[0].findtext('visible') == first.findtext('visible')
+    for name, include in (('Home.xml', 'Background'), ('Custom_1190_TMDbHelper.xml', 'ChainBackground')):
         controls = parse(ROOT / '1080i' / name).find('controls')
-        assert controls[0].tag == 'include' and controls[0].text == 'Background', name
+        assert controls[0].tag == 'include' and controls[0].text == include, name
 
 
 def test_an_info_page_over_a_playing_video_shows_the_video_dimmed():
@@ -350,7 +353,7 @@ def test_an_info_page_over_a_playing_video_shows_the_video_dimmed():
     A trailer the page plays itself draws its own layer and keeps the page's look."""
     root = parse(ROOT / '1080i' / 'Includes_Base.xml')
     over = next(e for e in root.iter('expression') if e.get('name') == 'InfoOverVideo').text
-    assert over.startswith('!String.IsEmpty(Window(Home).Property(nc.info.video)) + Player.HasVideo + ')
+    assert over.startswith('[!String.IsEmpty(Window(Home).Property(nc.info.video)) | !String.IsEmpty(Window(Home).Property(nc.osd.dim))] + Player.HasVideo + ')
     assert 'String.IsEmpty(Window(Home).Property(nc.trailer))' in over
     background = next(i for i in root.iter('include') if i.get('name') == 'InfoBackground')
     first = background[0]

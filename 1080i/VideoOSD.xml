@@ -15,6 +15,10 @@
          rows so the next file never shows the last file's tracks -->
     <onload>NotifyAll(nightcity,streams_watch)</onload>
     <!-- back from a chain (VideoFullScreen.xml): the cast row comes up (stand-in 699) -->
+    <!-- the OSD on its own (Back held out of a chain: its first button) is over the bare video;
+         on the way back to the cast row the dim stays until the row opens (VideoFullScreen.xml
+         5098) -->
+    <onload condition="String.IsEmpty(Window(Home).Property(nc.osd.chain))">ClearProperty(nc.osd.dim,home)</onload>
     <onload condition="!String.IsEmpty(Window(Home).Property(nc.osd.chain))">SetProperty(nc.osd.rows,1,home)</onload>
     <onload condition="!String.IsEmpty(Window(Home).Property(nc.osd.chain))">SetFocus(699)</onload>
     <onunload>ClearProperty(nc.audio.rows,home)</onunload>
