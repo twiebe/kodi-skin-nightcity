@@ -1151,6 +1151,10 @@ msgctxt "#31508"
 msgid "clear filter"
 msgstr "esborra el filtre"
 
+msgctxt "#31509"
+msgid "watched state"
+msgstr "estat de visualització"
+
 msgctxt "#31600"
 msgid "runtime"
 msgstr "durada"

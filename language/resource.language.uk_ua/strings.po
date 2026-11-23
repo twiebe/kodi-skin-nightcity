@@ -1151,6 +1151,10 @@ msgctxt "#31508"
 msgid "clear filter"
 msgstr "скинути фільтр"
 
+msgctxt "#31509"
+msgid "watched state"
+msgstr "стан перегляду"
+
 msgctxt "#31600"
 msgid "runtime"
 msgstr "час"

@@ -31,9 +31,17 @@ GLYPHS = re.compile('[↑↓←→⏎]')
 KEY = '[COLOR state_text]{}[/COLOR]'
 COLOURED_KEY = re.compile(r'\[COLOR state_text\](?:[↑↓←→]+|OK)\[/COLOR\]')
 LABEL = re.compile(r'^\[UPPERCASE\]\[COLOR state_text\](\S+)\[/COLOR\] (.+)\[/UPPERCASE\]$')
-# a Left hint: the middle of the screen's left edge, or a dialog's (just outside its frame)
+# a Left hint: the middle of the screen's left edge, in a dialog too (DESIGN.md: a hint stands at the
+# screen's edge of its key, not at the dialog's frame)
 LEFT_EDGE = ('-276', '525')
-HINTS = ('LevelHint', 'LevelHintLeft')
+# a Right hint: LevelHintLeft mirrored, the middle of the screen's right edge
+RIGHT_EDGE = ('1596', '525')
+HINTS = ('LevelHint', 'LevelHintLeft', 'LevelHintRight')
+# in a dialog ← and → stand inside its frame, along its inner edges, centred on them: (file, id):
+# (left, top) in the dialog's group, the frame's width and height
+FRAME_HINTS = {('DialogSelect.xml', '9059'): ('-276', '395', 1156, 820),
+               ('DialogSelect.xml', '9058'): ('832', '395', 1156, 820),
+               ('DialogAddonSettings.xml', '9058'): ('1332', '455', 1656, 940)}
 
 
 def _controls(name):
@@ -42,6 +50,10 @@ def _controls(name):
 
 def _turned(group):
     return any(a.get('effect') == 'rotate' for a in group.findall('animation'))
+
+
+def _turn(group):
+    return next(a.get('end') for a in group.findall('animation') if a.get('effect') == 'rotate')
 
 
 def _hint(name, cid):
@@ -53,7 +65,7 @@ def _hint(name, cid):
     key, label = LABEL.match(line.findtext('label')).groups()
     if _turned(group):
         assert key == '↑', (name, cid)
-        key = '←'
+        key = '→' if _turn(group) == '-90' else '←'
     return key, label, group.findtext('top'), group.findtext('visible')
 
 
@@ -85,6 +97,8 @@ def _all_hints():
                 params = {p.get('name'): p.get('value') for p in inc.findall('param')}
                 if inc.get('content') == 'LevelHintLeft':
                     params['key'] = '←'
+                if inc.get('content') == 'LevelHintRight':
+                    params['key'] = '→'
                 found.append((path.name, inc.get('content'), params))
     return found
 
@@ -143,6 +157,19 @@ def test_left_hint_runs_up_the_edge():
     assert label.find("include[@content='LookLabelCase']/param").get('value') == KEY.format('↑') + ' $PARAM[label]'
 
 
+def test_right_hint_runs_down_the_edge():
+    """Right: LevelHintLeft mirrored, the line turned a quarter to the right, so it reads top to
+    bottom along the right edge and its ↑ shows as →; its middle at x 1896, y 540."""
+    left, right = _include('LevelHintLeft'), _include('LevelHintRight')
+    defaults = {p.get('name'): p.get('default') for p in right.findall('param')}
+    assert (defaults['left'], defaults['top']) == RIGHT_EDGE
+    assert int(defaults['left']) + 300 == 1920 - 24 and int(defaults['top']) + 15 == 540
+    group = right.find('definition/control')
+    assert _turn(group) == '-90'
+    mirrored = ET.tostring(left.find('definition'), encoding='unicode').replace('end="90"', 'end="-90"')
+    assert ET.tostring(right.find('definition'), encoding='unicode') == mirrored
+
+
 def _keys(params):
     """The keys of a hint: its key, and the coloured keys in its label and in the Hint variables
     it names."""
@@ -165,15 +192,15 @@ def test_every_hint_is_a_glyph():
 # where a hint's container does not start at the top of the screen: the episodes' footer lies
 # in the info page's lower grouplist (5400, top 619)
 OFFSET = {('DialogVideoInfo.xml', '5190'): 619}
-# the dialogs' Left hints: just outside the frame (centre x -22), on the dialog's middle
-DIALOG_LEFT = {'DialogSelect.xml': ('-322', str(820 // 2 - 15))}
 FOCUS = re.compile(r'HasFocus|System\.CurrentControl|Container\.HasFocus')
 # the hints that show the keys of the focused row (DESIGN.md: an exception, open for now)
 FOCUSED_ROW = {('DialogVideoInfo.xml', '5190'),
                # Home's footer while the focus is in the top line, OK on the movies and shows tabs
                ('Home.xml', '9195'),
                # the OSD's footer names OK on subtitles, audio and video, the full settings
-               ('VideoOSD.xml', '690'), ('VideoOSD.xml', '691'), ('VideoOSD.xml', '692')}
+               ('VideoOSD.xml', '690'), ('VideoOSD.xml', '691'), ('VideoOSD.xml', '692'),
+               # Right into the next column, while the focus is in the column it leads from
+               ('SettingsCategory.xml', '9058'), ('SkinSettings.xml', '9058'), ('DialogAddonSettings.xml', '9058')}
 
 
 def test_a_hint_does_not_follow_the_focus():
@@ -191,7 +218,7 @@ def test_no_hint_where_the_outermost_element_does_nothing():
     """Left on the library's grid and on the lists of the video and music windows does nothing,
     nor on the categories of an add-on's settings: no Left hint there."""
     for name in ('Custom_1110_Library.xml', 'MyVideoNav.xml', 'MyMusicNav.xml', 'DialogAddonSettings.xml'):
-        assert not [i for i in parse(ROOT / '1080i' / name).iter('include') if i.get('content') in HINTS], name
+        assert not [i for i in parse(ROOT / '1080i' / name).iter('include') if i.get('content') in HINTS[:2]], name
     for name, cid in (('Custom_1110_Library.xml', '5000'), ('MyVideoNav.xml', '50'), ('MyVideoNav.xml', '51'),
                       ('MyMusicNav.xml', '50'), ('MyMusicNav.xml', '51'), ('DialogAddonSettings.xml', '3')):
         assert _controls(name)[cid].find('onleft') is None, (name, cid)
@@ -204,11 +231,21 @@ def test_where_a_hint_stands_follows_its_key():
     for name, include, params in _all_hints():
         hid = params['id']
         key = params.get('key', '↓')
-        if include == 'LevelHintLeft':
-            want = DIALOG_LEFT.get(name, LEFT_EDGE)
-            assert (params.get('left', LEFT_EDGE[0]), params.get('top', LEFT_EDGE[1])) == want, (name, hid)
+        if (name, hid) in FRAME_HINTS:
+            left, top, width, height = FRAME_HINTS[(name, hid)]
+            assert (params.get('left', LEFT_EDGE[0]), params['top']) == (left, top), (name, hid)
+            # its middle 24 inside the frame's edge, on the frame's middle
+            middle = int(left) + 300
+            assert middle == (24 if include == 'LevelHintLeft' else width - 24), (name, hid)
+            assert int(top) + 15 == height // 2, (name, hid)
             continue
-        assert key != '←', (name, hid)
+        if include == 'LevelHintLeft':
+            assert (params.get('left', LEFT_EDGE[0]), params.get('top', LEFT_EDGE[1])) == LEFT_EDGE, (name, hid)
+            continue
+        if include == 'LevelHintRight':
+            assert (params.get('left', RIGHT_EDGE[0]), params.get('top', RIGHT_EDGE[1])) == RIGHT_EDGE, (name, hid)
+            continue
+        assert key not in ('←', '→'), (name, hid)
         top = int(params.get('top', BOTTOM)) + OFFSET.get((name, hid), 0)
         if key == '↑':
             assert top <= int(TOP) and params.get('align') == 'center', (name, hid, top)
@@ -414,7 +451,7 @@ def test_window_hints():
     the file manager's left pane; one hint, the same wherever the focus is."""
     for name, (cid, key_want, label_want) in WINDOW_HINTS.items():
         controls = _controls(name)
-        hints = [i for i in parse(ROOT / '1080i' / name).iter('include') if i.get('content') in HINTS]
+        hints = [i for i in parse(ROOT / '1080i' / name).iter('include') if i.get('content') in HINTS[:2]]
         assert len(hints) == 1, name
         key, label, top, visible = _hint(name, cid)
         # not under a dialog on top: the window keeps its focus under it
@@ -445,13 +482,18 @@ def test_the_keys_of_the_window_hints():
 
 
 def test_dialog_hints():
-    """A dialog's Left hint runs up its own left edge, just outside the frame, centred on it, on
-    the whole dialog: in the skin's select dialogs Left on the list goes one level up, in a group
-    of the library filter to its groups, else onto the library."""
-    for name, (left, top) in DIALOG_LEFT.items():
-        group = _controls(name)['9059']
-        assert _turned(group) and (group.findtext('left'), group.findtext('top')) == (left, top), name
-        assert int(left) + 300 < 0  # the line's middle lies outside the frame
+    """A dialog's Left hint runs up its frame's left inner edge, centred on it, never outside the
+    frame, where it stood over the window below: on the whole dialog, in the skin's select
+    dialogs Left on the list goes one level up, in a group of the library filter to its groups,
+    else onto the library. The dialog is wider by the hints' room, its content in by as much,
+    so neither hint stands on the list."""
+    dialog = load('DialogSelect.xml').find('controls/control')
+    assert dialog.findtext('width') == '1156'
+    (inner,) = [c for c in dialog.findall('control') if c.get('type') == 'group' and c.findtext('left') == '28']
+    assert inner.findtext('width') == '1100'
+    assert {c.get('id') for c in dialog.findall('control')} >= {'9058', '9059'}
+    group = _controls('DialogSelect.xml')['9059']
+    assert _turned(group) and (group.findtext('left'), group.findtext('top')) == ('-276', '395')
     key, label, top, visible = _hint('DialogSelect.xml', '9059')
     assert (key, label) == ('←', '$VAR[HintSelectBack]')
     assert visible == '!String.IsEmpty(Window(Home).Property(nc.select.ok))'
@@ -460,6 +502,32 @@ def test_dialog_hints():
     assert ('Window.IsActive(1110)', '$VAR[HintLibrary]') in values
     script = (ROOT / 'scripts' / 'nightcity.py').read_text(encoding='utf-8')
     assert "_home().setProperty('nc.select.groups', '1')" in script
+
+
+# window: (label, visible, the control Right leads from, what it does there)
+RIGHT_HINTS = {
+    'Settings.xml': ('$LOCALIZE[31135]', MODAL, '9200', 'Action(Select)'),
+    'SettingsCategory.xml': ('$LOCALIZE[5]', '[ControlGroup(3).HasFocus() | ControlGroup(9003).HasFocus()] + ' + MODAL, '3', '5'),
+    'SkinSettings.xml': ('$LOCALIZE[5]', 'ControlGroup(9000).HasFocus() + ' + MODAL, '9000', None),
+    'DialogAddonSettings.xml': ('$LOCALIZE[5]', 'ControlGroup(3).HasFocus()', '3', '5'),
+    'DialogSelect.xml': ('$LOCALIZE[31135]', '!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)',
+                         '3', 'Action(Select)'),
+}
+
+
+def test_right_hints():
+    """Right into the next column, down the screen's right edge: from the categories of a settings
+    page into their settings (while the focus is in the categories), on the settings rail and in
+    the skin's select dialogs a list of choices takes the focused one, as OK (not a multi-select,
+    where Right stays)."""
+    assert _string('31135') == 'select'
+    for name, (label_want, visible_want, cid, action) in RIGHT_HINTS.items():
+        hints = [i for i in parse(ROOT / '1080i' / name).iter('include') if i.get('content') == 'LevelHintRight']
+        assert len(hints) == 1, name
+        key, label, top, visible = _hint(name, '9058')
+        assert (key, label, visible) == ('→', label_want, visible_want), name
+        actions = [a for _, a in _actions(_controls(name)[cid], 'onright')]
+        assert actions and (action is None or action in actions), (name, actions)
 
 
 def test_quick_menu_hint():

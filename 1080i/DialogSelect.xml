@@ -10,119 +10,135 @@
         <control type="group">
             <centerleft>50%</centerleft>
             <centertop>50%</centertop>
-            <width>1100</width>
+            <!-- the room of the key hints inside the frame, 28 each side (DESIGN.md: in a dialog ←
+                 and → stand inside its frame, along its inner edges) -->
+            <width>1156</width>
             <height>820</height>
             <include>DialogFrame</include>
-            <include content="DialogHeading">
-                <param name="id" value="1"/>
-                <param name="width" value="760"/>
-            </include>
-            <control type="label" id="2">
-                <left>800</left>
-                <top>16</top>
-                <width>260</width>
-                <height>48</height>
-                <font>font_small</font>
-                <textcolor>text_mute</textcolor>
-                <aligny>center</aligny>
-                <align>right</align>
-                <label></label>
+            <control type="group">
+                <left>28</left>
+                <width>1100</width>
+                <height>820</height>
+                <include content="DialogHeading">
+                    <param name="id" value="1"/>
+                    <param name="width" value="760"/>
+                </include>
+                <control type="label" id="2">
+                    <left>800</left>
+                    <top>16</top>
+                    <width>260</width>
+                    <height>48</height>
+                    <font>font_small</font>
+                    <textcolor>text_mute</textcolor>
+                    <aligny>center</aligny>
+                    <align>right</align>
+                    <label></label>
+                </control>
+                <include content="DialogList">
+                    <param name="id" value="3"/>
+                    <!-- the skin's filter dialogs (Window(Home).Property(nc.select.ok)): Left one level up, Right one
+                         down (a list of groups opens the group, a multi-select stays), Down past the end to their
+                         one OK below (not Clear left of it); other dialogs keep Right to the buttons -->
+                    <onright condition="String.IsEmpty(Window(Home).Property(nc.select.ok))">9001</onright>
+                    <onright condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)">Action(Select)</onright>
+                    <onleft condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + Control.IsVisible(5)">SendClick(12000,5)</onleft>
+                    <onleft condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)">Action(Back)</onleft>
+                    <ondown condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + Control.IsVisible(5)">5</ondown>
+                    <ondown condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)">9</ondown>
+                    <param name="width" value="1040"/>
+                    <param name="height" value="644"/>
+                    <param name="left" value="30"/>
+                    <param name="top" value="74"/>
+                    <param name="rowwidth" value="1020"/>
+                    <param name="inset" value="10"/>
+                </include>
+                <include content="DialogList">
+                    <param name="id" value="6"/>
+                    <!-- the skin's filter dialogs (Window(Home).Property(nc.select.ok)): Left one level up, Right one
+                         down (a list of groups opens the group, a multi-select stays), Down past the end to their
+                         one OK below (not Clear left of it); other dialogs keep Right to the buttons -->
+                    <onright condition="String.IsEmpty(Window(Home).Property(nc.select.ok))">9001</onright>
+                    <onright condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)">Action(Select)</onright>
+                    <onleft condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + Control.IsVisible(5)">SendClick(12000,5)</onleft>
+                    <onleft condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)">Action(Back)</onleft>
+                    <ondown condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + Control.IsVisible(5)">5</ondown>
+                    <ondown condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)">9</ondown>
+                    <param name="width" value="1040"/>
+                    <param name="height" value="644"/>
+                    <param name="label2" value="$INFO[ListItem.Label2]"/>
+                    <param name="left" value="30"/>
+                    <param name="top" value="74"/>
+                    <param name="rowwidth" value="1020"/>
+                    <param name="inset" value="10"/>
+                </include>
+                <control type="grouplist" id="9001">
+                    <onleft condition="Control.IsVisible(6)">6</onleft>
+                    <onleft>3</onleft>
+                    <!-- every select dialog: Up goes back to the list shown -->
+                    <onup condition="Control.IsVisible(6)">6</onup>
+                    <onup condition="!Control.IsVisible(6)">3</onup>
+                    <left>30</left>
+                    <top>730</top>
+                    <width>1040</width>
+                    <height>74</height>
+                    <orientation>horizontal</orientation>
+                    <itemgap>4</itemgap>
+                    <align>right</align>
+                    <include content="Button">
+                        <param name="id" value="5"/>
+                        <param name="label" value=""/>
+                        <param name="width" value="260"/>
+                    </include>
+                    <include content="Button">
+                        <param name="id" value="8"/>
+                        <param name="label" value=""/>
+                        <param name="width" value="260"/>
+                    </include>
+                    <!-- the library filter's list of groups while a filter is set (nc.select.clear, scripts/
+                         nightcity.py lib_filter): marks the click and closes the list, the script clears the
+                         filter and opens the list again; not 10 to 12, Kodi blanks their labels with its
+                         yes/no choices (GUIDialogBoxBase) -->
+                    <include content="Button">
+                        <param name="id" value="14"/>
+                        <param name="label" value="$LOCALIZE[31508]"/>
+                        <param name="width" value="360"/>
+                        <param name="onclick" value="SetProperty(nc.select.cleared,1,home)"/>
+                        <param name="onclick2" value="Action(Back)"/>
+                        <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.select.clear)) + !Control.IsVisible(5)"/>
+                    </include>
+                    <include content="Button">
+                        <param name="id" value="9"/>
+                        <param name="label" value="$LOCALIZE[186]"/>
+                        <param name="width" value="260"/>
+                        <param name="onclick" value="Action(Back)"/>
+                        <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)"/>
+                    </include>
+                    <include content="Button">
+                        <param name="id" value="7"/>
+                        <param name="label" value="$LOCALIZE[222]"/>
+                        <param name="width" value="260"/>
+                        <param name="visible" value="String.IsEmpty(Window(Home).Property(nc.select.ok))"/>
+                    </include>
+                </control>
             </control>
-            <include content="DialogList">
-                <param name="id" value="3"/>
-                <!-- the skin's filter dialogs (Window(Home).Property(nc.select.ok)): Left one level up, Right one
-                     down (a list of groups opens the group, a multi-select stays), Down past the end to their
-                     one OK below (not Clear left of it); other dialogs keep Right to the buttons -->
-                <onright condition="String.IsEmpty(Window(Home).Property(nc.select.ok))">9001</onright>
-                <onright condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)">Action(Select)</onright>
-                <onleft condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + Control.IsVisible(5)">SendClick(12000,5)</onleft>
-                <onleft condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)">Action(Back)</onleft>
-                <ondown condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + Control.IsVisible(5)">5</ondown>
-                <ondown condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)">9</ondown>
-                <param name="width" value="1040"/>
-                <param name="height" value="644"/>
-                <param name="left" value="30"/>
-                <param name="top" value="74"/>
-                <param name="rowwidth" value="1020"/>
-                <param name="inset" value="10"/>
-            </include>
-            <include content="DialogList">
-                <param name="id" value="6"/>
-                <!-- the skin's filter dialogs (Window(Home).Property(nc.select.ok)): Left one level up, Right one
-                     down (a list of groups opens the group, a multi-select stays), Down past the end to their
-                     one OK below (not Clear left of it); other dialogs keep Right to the buttons -->
-                <onright condition="String.IsEmpty(Window(Home).Property(nc.select.ok))">9001</onright>
-                <onright condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)">Action(Select)</onright>
-                <onleft condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + Control.IsVisible(5)">SendClick(12000,5)</onleft>
-                <onleft condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)">Action(Back)</onleft>
-                <ondown condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + Control.IsVisible(5)">5</ondown>
-                <ondown condition="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)">9</ondown>
-                <param name="width" value="1040"/>
-                <param name="height" value="644"/>
-                <param name="label2" value="$INFO[ListItem.Label2]"/>
-                <param name="left" value="30"/>
-                <param name="top" value="74"/>
-                <param name="rowwidth" value="1020"/>
-                <param name="inset" value="10"/>
-            </include>
-            <!-- up the dialog's left edge, outside its frame, centred on it (820 high): in the skin's
-                 filter dialogs Left on the list goes one level up; shown on the whole dialog -->
+            <!-- up the frame's left inner edge, centred on it: in the skin's filter dialogs Left on
+                 the list goes one level up; shown on the whole dialog -->
             <include content="LevelHintLeft">
                 <param name="id" value="9059"/>
                 <param name="label" value="$VAR[HintSelectBack]"/>
                 <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.select.ok))"/>
-                <param name="left" value="-322"/>
                 <param name="top" value="395"/>
             </include>
-            <control type="grouplist" id="9001">
-                <onleft condition="Control.IsVisible(6)">6</onleft>
-                <onleft>3</onleft>
-                <!-- every select dialog: Up goes back to the list shown -->
-                <onup condition="Control.IsVisible(6)">6</onup>
-                <onup condition="!Control.IsVisible(6)">3</onup>
-                <left>30</left>
-                <top>730</top>
-                <width>1040</width>
-                <height>74</height>
-                <orientation>horizontal</orientation>
-                <itemgap>4</itemgap>
-                <align>right</align>
-                <include content="Button">
-                    <param name="id" value="5"/>
-                    <param name="label" value=""/>
-                    <param name="width" value="260"/>
-                </include>
-                <include content="Button">
-                    <param name="id" value="8"/>
-                    <param name="label" value=""/>
-                    <param name="width" value="260"/>
-                </include>
-                <!-- the library filter's list of groups while a filter is set (nc.select.clear, scripts/
-                     nightcity.py lib_filter): marks the click and closes the list, the script clears the
-                     filter and opens the list again; not 10 to 12, Kodi blanks their labels with its
-                     yes/no choices (GUIDialogBoxBase) -->
-                <include content="Button">
-                    <param name="id" value="14"/>
-                    <param name="label" value="$LOCALIZE[31508]"/>
-                    <param name="width" value="360"/>
-                    <param name="onclick" value="SetProperty(nc.select.cleared,1,home)"/>
-                    <param name="onclick2" value="Action(Back)"/>
-                    <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.select.clear)) + !Control.IsVisible(5)"/>
-                </include>
-                <include content="Button">
-                    <param name="id" value="9"/>
-                    <param name="label" value="$LOCALIZE[186]"/>
-                    <param name="width" value="260"/>
-                    <param name="onclick" value="Action(Back)"/>
-                    <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)"/>
-                </include>
-                <include content="Button">
-                    <param name="id" value="7"/>
-                    <param name="label" value="$LOCALIZE[222]"/>
-                    <param name="width" value="260"/>
-                    <param name="visible" value="String.IsEmpty(Window(Home).Property(nc.select.ok))"/>
-                </include>
-            </control>
+            <!-- down the frame's right inner edge: in the skin's filter dialogs Right on a list of
+                 choices takes the focused one, as OK (a list of groups opens the group); none in a
+                 multi-select, where Right stays -->
+            <include content="LevelHintRight">
+                <param name="id" value="9058"/>
+                <param name="label" value="$LOCALIZE[31135]"/>
+                <param name="visible" value="!String.IsEmpty(Window(Home).Property(nc.select.ok)) + !Control.IsVisible(5)"/>
+                <param name="left" value="832"/>
+                <param name="top" value="395"/>
+            </include>
         </control>
     </controls>
 </window>

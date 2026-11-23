@@ -1,5 +1,5 @@
-"""All movies and all shows as posters or as a list, remembered per library, with a filter by format
-and studio (scripts/nightcity.py lib_filter). The grid stays the grid: one panel, two pairs of
+"""All movies and all shows as posters or as a list, remembered per library, with a filter by watched
+state, genre, format and studio (scripts/nightcity.py lib_filter). The grid stays the grid: one panel, two pairs of
 layouts, so the bar, the click and the counter work in both."""
 import importlib.util
 import re

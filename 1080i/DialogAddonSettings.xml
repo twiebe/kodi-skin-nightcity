@@ -8,7 +8,8 @@
         <control type="group">
             <centerleft>50%</centerleft>
             <centertop>50%</centertop>
-            <width>1600</width>
+            <!-- 56 wider than its content on the right: the room of the → hint inside the frame -->
+            <width>1656</width>
             <height>940</height>
             <include>DialogFrame</include>
             <include content="DialogHeading">
@@ -78,6 +79,16 @@
                 </include>
                 <include>SettingsCategoryTemplate</include>
             </control>
+            <!-- down the frame's right inner edge: Right from the categories, the left column, into
+                 their settings; while the focus is in that column (no Left hint: Left does nothing
+                 there) -->
+            <include content="LevelHintRight">
+                <param name="id" value="9058"/>
+                <param name="label" value="$LOCALIZE[5]"/>
+                <param name="visible" value="ControlGroup(3).HasFocus()"/>
+                <param name="left" value="1332"/>
+                <param name="top" value="455"/>
+            </include>
         </control>
     </controls>
 </window>

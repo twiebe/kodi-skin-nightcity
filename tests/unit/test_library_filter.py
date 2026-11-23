@@ -22,9 +22,10 @@ def _xsp(path):
 
 def test_movies_have_every_group_shows_genre_and_studio():
     """Kodi keeps stream details per file: a show has none, and a stream rule on tvshows is an SQL
-    error (tvshow_view has no idFile). The genre comes first, the most asked for."""
-    assert nightcity.lib_filter_groups('movies') == ['genre', 'res', 'hdr', 'audio', 'channels', 'studio']
-    assert nightcity.lib_filter_groups('tvshows') == ['genre', 'studio']
+    error (tvshow_view has no idFile). The watched state comes first, then the genre: the most
+    asked for."""
+    assert nightcity.lib_filter_groups('movies') == ['watched', 'genre', 'res', 'hdr', 'audio', 'channels', 'studio']
+    assert nightcity.lib_filter_groups('tvshows') == ['watched', 'genre', 'studio']
 
 
 def test_nothing_chosen_is_the_plain_library():
@@ -128,7 +129,64 @@ def test_the_choice_survives_its_property():
 def test_no_dashes_in_the_labels():
     for options in nightcity.LIB_FILTER_OPTIONS.values():
         for _, label, _ in options:
-            assert '\u2013' not in label and '\u2014' not in label
+            assert isinstance(label, int) or ('\u2013' not in label and '\u2014' not in label)
+
+
+# --- the watched state ----------------------------------------------------------------------------
+
+def _localized(monkeypatch):
+    import sys
+    import types
+    monkeypatch.setitem(sys.modules, 'xbmc', types.SimpleNamespace(getLocalizedString=lambda n: 's{}'.format(n)))
+
+
+def test_the_watched_state_is_kodis_play_count_and_resume_point():
+    """Kodi's own rules (SmartPlayList.cpp): a play count of 0 is unwatched (Kodi counts a NULL as
+    0), a resume point in progress; inprogress is a boolean field, its operator takes no value.
+    The path needs no Kodi: the e2e tests build it outside."""
+    for library in ('movies', 'tvshows'):
+        expected = {'unwatched': {'field': 'playcount', 'operator': 'is', 'value': ['0']},
+                    'inprogress': {'field': 'inprogress', 'operator': 'true'},
+                    'watched': {'field': 'playcount', 'operator': 'greaterthan', 'value': ['0']}}
+        for key, rule in expected.items():
+            base, xsp = _xsp(nightcity.lib_filter_path(library, {'watched': [key]}))
+            assert base == 'videodb://{}/titles/'.format(library)
+            assert xsp == {'type': library, 'rules': {'and': [rule]}}
+
+
+def test_two_watched_states_or():
+    _, xsp = _xsp(nightcity.lib_filter_path('movies', {'watched': ['unwatched', 'inprogress']}))
+    assert xsp['rules']['and'] == [{'or': [
+        {'field': 'playcount', 'operator': 'is', 'value': ['0']},
+        {'field': 'inprogress', 'operator': 'true'}]}]
+
+
+def test_watched_and_unwatched_is_every_title(monkeypatch):
+    """Every title is one of the two: no rule, no word in the header, the group says all."""
+    _localized(monkeypatch)
+    for keys in (['unwatched', 'watched'], ['unwatched', 'inprogress', 'watched']):
+        assert nightcity.lib_filter_path('movies', {'watched': keys}) == ''
+        assert nightcity.lib_filter_label('movies', {'watched': keys}) == ''
+    _, xsp = _xsp(nightcity.lib_filter_path('movies', {'watched': ['unwatched', 'watched'], 'res': ['2160']}))
+    assert xsp['rules']['and'] == [{'field': 'videoresolution', 'operator': 'is', 'value': ['2160']}]
+
+
+def test_the_watched_state_ands_with_the_other_groups_and_names_itself_first(monkeypatch):
+    _localized(monkeypatch)
+    choice = {'genre': ['Drama'], 'watched': ['unwatched']}
+    _, xsp = _xsp(nightcity.lib_filter_path('tvshows', choice))
+    assert xsp['rules']['and'] == [{'field': 'playcount', 'operator': 'is', 'value': ['0']},
+                                   {'field': 'genre', 'operator': 'is', 'value': ['Drama']}]
+    assert nightcity.lib_filter_label('tvshows', choice) == 'S31104  ·  Drama'
+
+
+def test_the_watched_labels_are_kodis_and_the_skins_strings():
+    """Unwatched and in progress as the rows' options say them, watched Kodi's own; the group's
+    name the skin's."""
+    assert [label for _, label, _ in nightcity.LIB_FILTER_OPTIONS['watched']] == [31104, 31103, 16102]
+    assert nightcity.LIB_FILTER_NAMES['watched'] == 31509
+    po = (ROOT / 'language' / 'resource.language.en_gb' / 'strings.po').read_text(encoding='utf-8')
+    assert 'msgctxt "#31509"\nmsgid "watched state"' in po
 
 
 # --- the genre ------------------------------------------------------------------------------------
