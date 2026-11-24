@@ -103,6 +103,9 @@ def episode_in_progress(home):
 
 def test_follows_an_episode_with_show_and_number_in_the_kicker(episode_in_progress, back_to_home):
     """Continue watching on home, the user's own example."""
+    # the row loads its parts one by one: next up (the show) can be in before the started
+    # episode that goes in front of it
+    wait_for('String.IsEqual(Container(9201).ListItem(0).DBType,episode)', timeout=20)
     focus_row(9201)
     assert label('ListItem.DBType') == 'episode'
     assert_shows_card()
