@@ -254,9 +254,16 @@ def jellyfin_showcase(kdev, kodi):
         return kdev.jf_ok(method, path, body, token=token)
 
     folders = {f['Name']: f for f in jf('GET', '/Library/VirtualFolders')}
+    # jellyfin-kodi drops a removelib that comes before its library thread runs, and Kodi keeps
+    # the bulk titles then
+    kodi.wait('!String.IsEmpty(Window(10000).Property(jellyfin_startup))', timeout=180)
     for name in ('Bulk', 'BulkShows'):
         if name in folders:
             kodi.builtin('RunPlugin(plugin://plugin.video.jellyfin/?mode=removelib&id={})'.format(folders[name]['ItemId']))
+    wait_until(lambda: not bulk_titles(kodi), 300, 'Kodi to remove the bulk libraries',
+               state=lambda: '{} bulk titles left'.format(bulk_titles(kodi)))
+    for name in ('Bulk', 'BulkShows'):
+        if name in folders:
             jf('DELETE', '/Library/VirtualFolders?name={}&refreshLibrary=false'.format(name))
     for name in ('Movies', 'Shows'):
         options = folders[name]['LibraryOptions']
@@ -287,6 +294,15 @@ def jellyfin_showcase(kdev, kodi):
     # then it works through the updates of the sync for a while, with a progress bar and a
     # notification per new title
     kodi.steady(QUIET, seconds=10, timeout=600)
+
+
+def bulk_titles(kodi):
+    """How many titles of the bulk libraries Kodi still has."""
+    def count(method, name):
+        return kodi.rpc(method, {'filter': {'field': 'title', 'operator': 'startswith', 'value': name},
+                                 'limits': {'end': 1}}).get('limits', {}).get('total', 0)
+    return (count('VideoLibrary.GetMovies', 'Bulk ')
+            + count('VideoLibrary.GetTVShows', 'BulkShow '))
 
 
 def scan_idle(jf):
