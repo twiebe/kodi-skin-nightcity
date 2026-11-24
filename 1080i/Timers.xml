@@ -221,6 +221,16 @@
         <onstop condition="String.IsEqual(System.CurrentControlId,Window(Home).Property(nc.tab.want.id)) + ![[!String.IsEqual(ListItem.Property(tmdb_type),person) + Container(5500).IsUpdating] | [String.IsEqual(ListItem.Property(tmdb_type),person) + Container(5510).IsUpdating] | [Control.IsVisible(5402) + Container(5300).IsUpdating] | Container(6501).IsUpdating | Container(6599).IsUpdating]">SetProperty($INFO[Window(Home).Property(nc.tab.want.prop)],$INFO[Window(Home).Property(nc.tab.want.value)],home)</onstop>
         <onstop>ClearProperty(nc.tab.want.id,home)</onstop>
     </timer>
+    <!-- The OSD cast row back after a chain: the person it was left from (scripts/nightcity.py
+         osd_back sets the index), only while the focus is still on the row. -->
+    <timer>
+        <name>nc_osd_back</name>
+        <description>Put the OSD cast row on the person a chain was left from</description>
+        <start>!String.IsEmpty(Window(Home).Property(nc.osd.back))</start>
+        <stop>true</stop>
+        <onstop condition="Window.IsActive(1141) + Control.HasFocus(6501)">SetFocus(6501,$INFO[Window(Home).Property(nc.osd.back)],absolute)</onstop>
+        <onstop>ClearProperty(nc.osd.back,home)</onstop>
+    </timer>
     <!-- Player controls that hide by themselves (skin settings, Player; on unless
          nc.osd.autohide.off): runs while the video plays with the cursor on the OSD's controls,
          that is the OSD is the topmost dialog. So never while paused (it starts at zero when

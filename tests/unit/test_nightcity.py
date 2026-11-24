@@ -1638,8 +1638,11 @@ def test_osd_back_selects_the_person_left(monkeypatch):
                      'Window.IsActive(1141) + Control.HasFocus(6501)'}, {})
     monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
     monkeypatch.setattr(nightcity, '_monitor', lambda *a: FakeXbmc.Monitor())
+    home = FakeHome()
+    monkeypatch.setattr(nightcity, '_home', lambda: home)
     nightcity.osd_back('3', '')
-    assert fake.builtins == ['SetFocus(6501,2,absolute)']
+    # the skin moves the focus (nc_osd_back): it looks at the focus in the same go
+    assert fake.builtins == [] and home.props['nc.osd.back'] == '2'
 
 
 def test_osd_back_leaves_a_focus_moved_off_the_list_alone(monkeypatch):
@@ -1648,8 +1651,10 @@ def test_osd_back_leaves_a_focus_moved_off_the_list_alone(monkeypatch):
                      ' + String.IsEqual(Container(6501).ListItem(0).Property(param.info),cast)', 'Window.IsActive(1141)'}, {})
     monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
     monkeypatch.setattr(nightcity, '_monitor', lambda *a: FakeXbmc.Monitor())
+    home = FakeHome()
+    monkeypatch.setattr(nightcity, '_home', lambda: home)
     nightcity.osd_back('3', '')
-    assert fake.builtins == []
+    assert fake.builtins == [] and 'nc.osd.back' not in home.props
 
 
 def test_info_show_fills_in_the_show_of_a_reopened_episode(monkeypatch):

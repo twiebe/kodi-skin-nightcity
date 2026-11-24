@@ -620,6 +620,17 @@ def test_osd_chain_ends_back_on_the_person_left():
     assert 'ClearProperty(nc.osd.ret,home)' in _onloads('Home.xml')
 
 
+def test_osd_back_moves_the_focus_in_the_skin():
+    """osd_back's look at the focus and its SetFocus came a moment apart: an Up in between went
+    to the tabs and was pulled back to the row. The timer looks and moves in the same go."""
+    timer = _timer('nc_osd_back')
+    assert timer.findtext('start') == '!String.IsEmpty(Window(Home).Property(nc.osd.back))'
+    stops = [(o.get('condition'), o.text) for o in timer.iter('onstop')]
+    assert stops == [('Window.IsActive(1141) + Control.HasFocus(6501)',
+                      'SetFocus(6501,$INFO[Window(Home).Property(nc.osd.back)],absolute)'),
+                     (None, 'ClearProperty(nc.osd.back,home)')]
+
+
 def test_osd_cast_row_loads_nothing_while_a_chain_ends():
     """The cast row opens at once after a chain; its plugin lists wait until TMDb Helper's
     manager is gone (nc.osd.chain): two interpreters starting at once crash Kodi."""
