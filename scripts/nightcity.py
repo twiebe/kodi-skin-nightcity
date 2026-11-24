@@ -878,7 +878,11 @@ def _info_back(home, point):
 
 def osd_back(item, tab):
     """The OSD cast row reopened after a chain: the person it was left from (ITEM counts from 1).
-    Only while the focus is still on the row: an Up while it reloaded went on to the tabs."""
+    Only while the focus is still on the row: an Up while it reloaded went on to the tabs.
+
+    The focus moves in the skin (nc_osd_back, Timers.xml), which looks at it in the same go: a
+    SetFocus from here runs a moment after the look, and an Up in between went to the tabs and
+    was pulled back to the row."""
     import xbmc
     if not item.isdigit() or int(item) < 1:
         return
@@ -886,7 +890,7 @@ def osd_back(item, tab):
     if _wait('Window.IsActive(1141) + !Container(6501).IsUpdating + Integer.IsGreater(Container(6501).NumItems,{})'
              ' + String.IsEqual(Container(6501).ListItem(0).Property(param.info),{})'.format(index, tab or 'cast'), 20.0):
         if xbmc.getCondVisibility('Window.IsActive(1141) + Control.HasFocus(6501)'):
-            xbmc.executebuiltin('SetFocus(6501,{},absolute)'.format(index))
+            _home().setProperty('nc.osd.back', str(index))
 
 
 def _focus(command):

@@ -9,7 +9,7 @@ import time
 import pytest
 from PIL import Image
 
-from conftest import BULK_FROM, _data, action, builtin, cond, info, movie_rating, rpc, screenshot, wait_for
+from conftest import BULK_FROM, _data, action, builtin, cond, info, movie_rating, remove_bulk_movies, rpc, screenshot, wait_for
 
 pytestmark = pytest.mark.e2e
 
@@ -61,14 +61,9 @@ def _bulk(change):
     connection.close()
 
 
-def _remove_bulk(connection):
-    for table, key in (('videoversion', 'idFile'), ('movie', 'idMovie'), ('files', 'idFile')):
-        connection.execute('DELETE FROM {} WHERE {} >= ?'.format(table, key), (BULK_FROM,))
-
-
 @pytest.fixture
 def library(home):
-    _bulk(_remove_bulk)  # a run stopped halfway leaves them behind
+    remove_bulk_movies()  # a run stopped halfway leaves them behind
     before = rpc('VideoLibrary.GetMovies', {'properties': FIELDS})['movies']
     assert len(before) == 3
     _details([{'movieid': m['movieid'], 'sorttitle': t[0], 'year': t[1], 'rating': t[2], 'dateadded': t[3]}
@@ -143,12 +138,16 @@ def big_library(library):
                 copy(connection, 'videoversion', 'idFile = {}'.format(first), {'idFile': number, 'idMedia': number})
                 number += 1
     _bulk(add)
-    _open_any()
-    _reload(3 + sum(BULK.values()))
-    builtin('SetFocus({},0,absolute)'.format(GRID))
-    _focus_is(GRID)
+    try:
+        _open_any()
+        _reload(3 + sum(BULK.values()))
+        builtin('SetFocus({},0,absolute)'.format(GRID))
+        _focus_is(GRID)
+    except BaseException:
+        remove_bulk_movies()  # a setup that fails runs no teardown: the rows would stay for the next file
+        raise
     yield
-    _bulk(_remove_bulk)
+    remove_bulk_movies()
     builtin('Dialog.Close(all,true)')
     _reload(3)
 

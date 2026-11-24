@@ -123,19 +123,44 @@ def movie_rating(movieid, rating):
 BULK_FROM = 1000000
 
 
+def remove_bulk_movies():
+    """The movie and show rows tests add (ids from BULK_FROM; 'Bulk %' and 'BulkShow %', the
+    performance data of a former kodi-dev seed a template may still hold), through Kodi first.
+
+    VideoLibrary.RemoveMovie and RemoveTVShow announce the removal, and every list that shows
+    one loads anew. Rows deleted only in the database stay in the lists Kodi has loaded: Home's
+    spotlight then holds titles that are gone, its buttons (9010, a list of the one title) are
+    empty and take no focus, and the home fixture of every following test on that Kodi fails
+    ("timed out waiting for Control.HasFocus(9010)", 30 setup errors on one Kodi in a run).
+    The rows Kodi leaves behind (files, video versions) go in the database after."""
+    database = sorted((_data() / 'kodi' / 'userdata' / 'Database').glob('MyVideos*.db'))
+    if not database:
+        return
+    with sqlite3.connect(str(database[-1]), timeout=30) as connection:
+        movies = [row[0] for row in connection.execute(
+            "SELECT idMovie FROM movie WHERE idMovie >= ? OR c00 LIKE 'Bulk %'", (BULK_FROM,))]
+        shows = [row[0] for row in connection.execute("SELECT idShow FROM tvshow WHERE c00 LIKE 'BulkShow %'")]
+    connection.close()
+    for method, key, ids in (('VideoLibrary.RemoveMovie', 'movieid', movies),
+                             ('VideoLibrary.RemoveTVShow', 'tvshowid', shows)):
+        for item in ids:
+            try:
+                rpc(method, {key: item})
+            except (RuntimeError, OSError, ValueError):
+                pass  # its database rows go below all the same
+    with sqlite3.connect(str(database[-1]), timeout=30) as connection:
+        for table, key in (('videoversion', 'idFile'), ('movie', 'idMovie'), ('files', 'idFile')):
+            connection.execute('DELETE FROM {} WHERE {} >= ?'.format(table, key), (BULK_FROM,))
+        connection.execute("DELETE FROM movie WHERE c00 LIKE 'Bulk %'")
+        connection.execute("DELETE FROM episode WHERE idShow IN (SELECT idShow FROM tvshow WHERE c00 LIKE 'BulkShow %')")
+        connection.execute("DELETE FROM tvshow WHERE c00 LIKE 'BulkShow %'")
+    connection.close()
+
+
 def reset_library():
     """What tests change in this Kodi's video library and a stopped run leaves behind: added
     movie rows, ratings and genres. Fast (a few RPCs), run once per worker at session start."""
-    database = sorted((_data() / 'kodi' / 'userdata' / 'Database').glob('MyVideos*.db'))
-    if database:
-        with sqlite3.connect(str(database[-1]), timeout=30) as connection:
-            for table, key in (('videoversion', 'idFile'), ('movie', 'idMovie'), ('files', 'idFile')):
-                connection.execute('DELETE FROM {} WHERE {} >= ?'.format(table, key), (BULK_FROM,))
-            # the performance data of a former kodi-dev seed, which a template may still hold
-            connection.execute("DELETE FROM movie WHERE c00 LIKE 'Bulk %'")
-            connection.execute("DELETE FROM episode WHERE idShow IN (SELECT idShow FROM tvshow WHERE c00 LIKE 'BulkShow %')")
-            connection.execute("DELETE FROM tvshow WHERE c00 LIKE 'BulkShow %'")
-        connection.close()
+    remove_bulk_movies()
     for movie in rpc('VideoLibrary.GetMovies', {'properties': ['rating', 'genre']}).get('movies', []):
         if movie['rating']:
             movie_rating(movie['movieid'], None)
@@ -370,7 +395,7 @@ def pytest_terminal_summary(terminalreporter):
     workers = terminalreporter.config.getoption('numprocesses', None) or 1
     crashes = {name: _worker_crashes(name, _run_start[0]) for name in names[:workers]}
     terminalreporter.write_sep('-', 'Kodi')
-    for line in crash_summary(crashes):
+    for line in crash_summary(crashes) + run_report_lines(_run_report):
         terminalreporter.write_line(line)
 
 
@@ -444,10 +469,18 @@ def _kodi_log_lines(start, limit=120):
 # What Kodi stands on when a test fails: a timeout alone says nothing of who has the focus.
 KODI_STATE = ['System.CurrentWindow', 'System.CurrentControl', 'System.CurrentControlId', 'Container.FolderPath',
               'Window(Home).Property(nc.library)', 'Window(Home).Property(nc.lib.bar)', 'Skin.String(nc.sort)']
+KODI_STATE += ['Container(9000).ListItem.DBID', 'Container(9010).NumItems', 'Window(Home).Property(nc.page)']
 KODI_CONDITIONS = ['System.HasActiveModalDialog', 'System.HasModalDialog', 'Window.IsActive(1110)', 'Window.IsVisible(1110)',
                    'Window.IsActive(home)', 'Control.IsVisible(5100)', 'Control.IsVisible(5101)', 'Control.IsEnabled(5101)',
-                   'Control.HasFocus(5101)', 'Control.HasFocus(5000)', 'Container(5000).IsUpdating', 'Player.HasMedia']
+                   'Control.HasFocus(5101)', 'Control.HasFocus(5000)', 'Container(5000).IsUpdating', 'Player.HasMedia',
+                   'Control.HasFocus(9010)', 'Control.IsVisible(9010)']
+# the windows and dialogs a test can leave open, by the names Window.IsActive takes
+KODI_WINDOWS = ['fullscreenvideo', 'videoosd', 'videobookmarks', 'movieinformation', 'musicinformation', '1141', '1160',
+                '1170', '1190', 'selectdialog', 'yesnodialog', 'okdialog', 'contextmenu', 'busydialog',
+                'busydialognocancel', 'progressdialog', 'extendedprogressdialog', 'notification', 'numericinput',
+                'virtualkeyboard', 'seekbar', 'visualisation', 'musicosd', 'settings', 'skinsettings']
 KEEP_LOG_AT = 3  # failures in a file: from here on it is not one test's fault
+RESET_AFTER = 2  # setup errors in a row on one Kodi: from here on it is stuck, start it anew
 
 
 def keep_log_now(seen, name):
@@ -458,9 +491,34 @@ def keep_log_now(seen, name):
 
 def _kodi_state():
     try:
-        return '\n'.join('{} = {!r}'.format(k, v) for result in (info(*KODI_STATE), cond(*KODI_CONDITIONS)) for k, v in result.items())
+        lines = ['{} = {!r}'.format(k, v) for result in (info(*KODI_STATE), cond(*KODI_CONDITIONS)) for k, v in result.items()]
+        windows = cond(*('Window.IsActive({})'.format(name) for name in KODI_WINDOWS))
+        lines.append('active windows and dialogs: {}'.format(
+            ', '.join(name for name in KODI_WINDOWS if windows['Window.IsActive({})'.format(name)]) or 'none of the listed'))
+        return '\n'.join(lines)
     except (OSError, RuntimeError, ValueError) as e:
         return 'Kodi does not answer: {}'.format(e)
+
+
+def started_scripts(text):
+    """The Python scripts kodi.log TEXT shows Kodi starting, in order, once each: Kodi logs no end
+    of a script at this level, so the last ones are the candidates for one still running."""
+    seen = []
+    for match in re.finditer(r'CPythonInvoker\(\d+, ([^)]+)\): start processing', text):
+        if match.group(1) not in seen:
+            seen.append(match.group(1))
+    return seen
+
+
+def _scripts_since(start):
+    log = _data() / 'kodi' / 'temp' / 'kodi.log'
+    try:
+        with open(log, 'rb') as f:
+            if log.stat().st_size >= start:
+                f.seek(start)
+            return started_scripts(f.read().decode(errors='replace'))
+    except OSError:
+        return []
 
 
 def _keep_log(name):
@@ -481,22 +539,88 @@ def _keep_log(name):
 
 
 _failed_in_file = {}
+_setup_errors = [0]  # in a row on this worker's Kodi
+
+
+def setup_streak(streak, failed):
+    """The count of setup errors in a row after one more setup, and whether to start Kodi anew."""
+    streak = streak + 1 if failed else 0
+    return (0, True) if streak >= RESET_AFTER else (streak, False)
+
+
+def _reset_kodi():
+    """Start this worker's Kodi anew, as at the start of the run: a Kodi left in a state no test's
+    setup gets out of (a stale list, a dialog that does not close) fails every test after it."""
+    kdev('restart')
+    _wait_for_service()
+    reset_library()
 
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     outcome = yield
     report = outcome.get_result()
+    instance = os.environ.get('KDEV_INSTANCE', 'kodi-dev')
     if report.failed and getattr(item, '_kodi_log_start', None) is not None:
         try:
             text = _kodi_log_lines(item._kodi_log_start)
         except OSError as e:
             text = 'kodi.log not readable: {}'.format(e)
         if text:
-            report.sections.append(('kodi.log of {} ({})'.format(os.environ.get('KDEV_INSTANCE', 'kodi-dev'), call.when), text))
-        report.sections.append(('Kodi at the failure ({})'.format(call.when), _kodi_state()))
-        if keep_log_now(_failed_in_file, item.path.name):
-            report.sections.append(('kept', 'the whole kodi.log is in {}'.format(_keep_log(item.path.stem))))
+            report.sections.append(('kodi.log of {} ({})'.format(instance, call.when), text))
+        state = _kodi_state()
+        scripts = _scripts_since(item._kodi_log_start)
+        if scripts:
+            state += '\nscripts started during the test: {}'.format(', '.join(scripts))
+        report.sections.append(('Kodi at the failure ({})'.format(call.when), state))
+        # the first setup error keeps everything at once: the next ones may come from the state it left
+        if (call.when == 'setup' and _setup_errors[0] == 0) or keep_log_now(_failed_in_file, item.path.name):
+            folder = _keep_log(item.path.stem)
+            (folder / 'state.txt').write_text('{}\n{}\n'.format(item.nodeid, state))
+            report.sections.append(('kept', 'the whole kodi.log, a picture and the state are in {}'.format(folder)))
+            report.user_properties.append(('kept', str(folder)))
+    if call.when == 'setup' and POOL:
+        _setup_errors[0], reset = setup_streak(_setup_errors[0], report.failed)
+        if reset:
+            try:
+                _reset_kodi()
+                done = 'Kodi of {} started anew after {} setup errors in a row'.format(instance, RESET_AFTER)
+            except Exception as e:  # noqa: BLE001 (any trouble: say so, the next test fails on its own)
+                done = 'Kodi of {} could not be started anew: {}'.format(instance, e)
+            report.sections.append(('reset', done))
+            report.user_properties.append(('reset', done))
+
+
+_run_report = {'setup': [], 'reset': []}
+
+
+def pytest_runtest_logreport(report):
+    """In the controller: every setup error with its whole message, and every Kodi reset, for the
+    summary. The short summary cuts a message at the terminal's width, and a run's output is often
+    kept only by its last lines."""
+    if os.environ.get('PYTEST_XDIST_WORKER'):
+        return
+    properties = dict(report.user_properties)
+    if report.when == 'setup' and report.failed:
+        crash = getattr(report.longrepr, 'reprcrash', None)
+        message = crash.message if crash is not None else (str(report.longrepr).strip().splitlines() or [''])[-1]
+        worker = getattr(getattr(report, 'node', None), 'gateway', None)
+        _run_report['setup'].append((report.nodeid, getattr(worker, 'id', ''), message, properties.get('kept', '')))
+    if 'reset' in properties:
+        _run_report['reset'].append((report.nodeid, properties['reset']))
+
+
+def run_report_lines(run):
+    lines = []
+    if run['setup']:
+        lines.append('setup errors: {}'.format(len(run['setup'])))
+        for nodeid, worker, message, kept in run['setup']:
+            lines.append('  {} [{}]: {}'.format(nodeid, worker, message))
+            if kept:
+                lines.append('    kept: {}'.format(kept))
+    for nodeid, done in run['reset']:
+        lines.append('reset before the test after {}: {}'.format(nodeid, done))
+    return lines
 
 
 def skip_nightcity_look(items, skin):

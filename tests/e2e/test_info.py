@@ -183,7 +183,9 @@ def play_with(button, tvshowid, episodes):
 def test_resume_button(kdev_show):
     tvshowid, episodes = kdev_show
     try:
-        assert play_with(9001, tvshowid, episodes) > 110
+        # jellyfin-kodi starts 10 s before the resume point (resumeJumpBack): 110, and the
+        # clock may not have moved on yet 3 s after the player has media
+        assert play_with(9001, tvshowid, episodes) >= 105
     finally:
         stop()
         close_returned_info()
