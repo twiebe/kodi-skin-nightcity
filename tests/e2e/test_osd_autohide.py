@@ -168,9 +168,11 @@ def test_osd_stays_in_the_chapter_panel(autohide, tracks):
     wait_for('Window.IsActive(videobookmarks) + Control.HasFocus(90)', timeout=5)
     time.sleep(5)
     assert osd_up() and cond('Window.IsActive(videobookmarks)')['Window.IsActive(videobookmarks)']
+    # the delay counts from the key (System.IdleTime), not from the end of the panel's close
+    # animation: timed from there it was 0.4 s short now and then (2.43 s)
+    start = time.time()
     action('left')  # on to video: the panel goes with the focus
     wait_for('!Window.IsVisible(videobookmarks)')
-    start = time.time()
     wait_for('!Window.IsActive(videoosd)', timeout=8)
     assert 2.5 <= time.time() - start <= 5.5
 
@@ -182,10 +184,10 @@ def test_osd_stays_in_the_cast_row(autohide, playing):
     wait_for('Window.IsActive(1141)')
     time.sleep(5)
     assert osd_up() and cond('Window.IsActive(1141)')['Window.IsActive(1141)']
+    start = time.time()  # from the key, as in the chapter panel
     action('back')
     # gone, not only closing: Kodi drops a key sent during the close animation
     wait_for('!Window.IsVisible(1141)')
-    start = time.time()
     assert osd_up()
     wait_for('!Window.IsActive(videoosd)', timeout=8)
     assert 2.5 <= time.time() - start <= 5.5
