@@ -77,3 +77,8 @@ def test_the_season_tabs_show_the_seasons_plot_on_kodi_22():
     assert box.get('type') == 'textbox' and box.findtext('visible') == '$EXP[InfoSeasonPlot]'
     assert box.findtext('label') == '$INFO[Container(5200).ListItem.Plot]'
     assert [box.findtext(k) for k in ('left', 'top', 'width', 'height')] == ['64', '367', '1176', '116']
+    # the episode's "no description" and its more mark give way too
+    hints = next(dict((p.get('name'), p.get('value')) for p in inc.iter('param'))
+                 for inc in group.findall("include[@content='PlotHints']"))
+    assert hints['visible'].endswith(' + !$EXP[InfoSeasonPlot]')
+    assert hints['more'].endswith(' + !$EXP[InfoSeasonPlot]')

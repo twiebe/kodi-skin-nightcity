@@ -179,8 +179,8 @@
                 <param name="visible" value="Container(5100).ListItem.IsResumable"/>
             </include>
             <include content="PlotHints">
-                <param name="visible" value="String.IsEqual(ListItem.DBType,episode)"/>
-                <param name="more" value="String.IsEqual(ListItem.DBType,episode) + Container(9051).HasNext"/>
+                <param name="visible" value="String.IsEqual(ListItem.DBType,episode) + !$EXP[InfoSeasonPlot]"/>
+                <param name="more" value="String.IsEqual(ListItem.DBType,episode) + Container(9051).HasNext + !$EXP[InfoSeasonPlot]"/>
                 <param name="item" value="Container(5100).ListItem"/>
                 <param name="hintleft" value="64"/>
                 <param name="hintwidth" value="1200"/>
