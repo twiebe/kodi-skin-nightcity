@@ -123,19 +123,44 @@ def movie_rating(movieid, rating):
 BULK_FROM = 1000000
 
 
+def remove_bulk_movies():
+    """The movie and show rows tests add (ids from BULK_FROM; 'Bulk %' and 'BulkShow %', the
+    performance data of a former kodi-dev seed a template may still hold), through Kodi first.
+
+    VideoLibrary.RemoveMovie and RemoveTVShow announce the removal, and every list that shows
+    one loads anew. Rows deleted only in the database stay in the lists Kodi has loaded: Home's
+    spotlight then holds titles that are gone, its buttons (9010, a list of the one title) are
+    empty and take no focus, and the home fixture of every following test on that Kodi fails
+    ("timed out waiting for Control.HasFocus(9010)", 30 setup errors on one Kodi in a run).
+    The rows Kodi leaves behind (files, video versions) go in the database after."""
+    database = sorted((_data() / 'kodi' / 'userdata' / 'Database').glob('MyVideos*.db'))
+    if not database:
+        return
+    with sqlite3.connect(str(database[-1]), timeout=30) as connection:
+        movies = [row[0] for row in connection.execute(
+            "SELECT idMovie FROM movie WHERE idMovie >= ? OR c00 LIKE 'Bulk %'", (BULK_FROM,))]
+        shows = [row[0] for row in connection.execute("SELECT idShow FROM tvshow WHERE c00 LIKE 'BulkShow %'")]
+    connection.close()
+    for method, key, ids in (('VideoLibrary.RemoveMovie', 'movieid', movies),
+                             ('VideoLibrary.RemoveTVShow', 'tvshowid', shows)):
+        for item in ids:
+            try:
+                rpc(method, {key: item})
+            except (RuntimeError, OSError, ValueError):
+                pass  # its database rows go below all the same
+    with sqlite3.connect(str(database[-1]), timeout=30) as connection:
+        for table, key in (('videoversion', 'idFile'), ('movie', 'idMovie'), ('files', 'idFile')):
+            connection.execute('DELETE FROM {} WHERE {} >= ?'.format(table, key), (BULK_FROM,))
+        connection.execute("DELETE FROM movie WHERE c00 LIKE 'Bulk %'")
+        connection.execute("DELETE FROM episode WHERE idShow IN (SELECT idShow FROM tvshow WHERE c00 LIKE 'BulkShow %')")
+        connection.execute("DELETE FROM tvshow WHERE c00 LIKE 'BulkShow %'")
+    connection.close()
+
+
 def reset_library():
     """What tests change in this Kodi's video library and a stopped run leaves behind: added
     movie rows, ratings and genres. Fast (a few RPCs), run once per worker at session start."""
-    database = sorted((_data() / 'kodi' / 'userdata' / 'Database').glob('MyVideos*.db'))
-    if database:
-        with sqlite3.connect(str(database[-1]), timeout=30) as connection:
-            for table, key in (('videoversion', 'idFile'), ('movie', 'idMovie'), ('files', 'idFile')):
-                connection.execute('DELETE FROM {} WHERE {} >= ?'.format(table, key), (BULK_FROM,))
-            # the performance data of a former kodi-dev seed, which a template may still hold
-            connection.execute("DELETE FROM movie WHERE c00 LIKE 'Bulk %'")
-            connection.execute("DELETE FROM episode WHERE idShow IN (SELECT idShow FROM tvshow WHERE c00 LIKE 'BulkShow %')")
-            connection.execute("DELETE FROM tvshow WHERE c00 LIKE 'BulkShow %'")
-        connection.close()
+    remove_bulk_movies()
     for movie in rpc('VideoLibrary.GetMovies', {'properties': ['rating', 'genre']}).get('movies', []):
         if movie['rating']:
             movie_rating(movie['movieid'], None)

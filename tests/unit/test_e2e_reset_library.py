@@ -70,3 +70,24 @@ def test_every_bulk_row_of_the_video_library_is_above_real_ids():
         source = (ROOT / 'tests' / 'e2e' / name).read_text(encoding='utf-8')
         assert 'BULK_FROM' in source and 'BULK_FROM = ' not in source, name
         assert '>= 2000' not in source and 'range(2000' not in source, name
+
+
+def test_rows_of_tests_go_through_kodi_first(tmp_path, monkeypatch):
+    """Rows deleted only in the database stay in the lists Kodi has loaded: Home's spotlight kept
+    titles that were gone, its buttons (9010) took no focus and every following test's setup failed.
+    RemoveMovie and RemoveTVShow announce the removal, and those lists load anew."""
+    _library(tmp_path, monkeypatch)
+    calls = []
+    monkeypatch.setattr(e2e, 'rpc', lambda method, params=None: calls.append((method, params)) or {})
+    e2e.reset_library()
+    assert ('VideoLibrary.RemoveMovie', {'movieid': 3}) in calls
+    assert ('VideoLibrary.RemoveMovie', {'movieid': e2e.BULK_FROM}) in calls
+    assert ('VideoLibrary.RemoveTVShow', {'tvshowid': 2}) in calls
+    assert not any(params in ({'movieid': 1}, {'movieid': MATRIX[0]}, {'tvshowid': 1}) for _, params in calls)
+
+
+def test_the_bulk_tests_remove_their_rows_through_kodi():
+    for name in ('test_library_bar.py', 'test_widgets.py'):
+        source = (ROOT / 'tests' / 'e2e' / name).read_text(encoding='utf-8')
+        assert 'remove_bulk_movies()' in source, name
+        assert "'DELETE FROM {} WHERE {} >= ?'" not in source, name

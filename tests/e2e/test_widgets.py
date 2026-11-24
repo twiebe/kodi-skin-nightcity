@@ -3,7 +3,7 @@ import time
 
 import pytest
 
-from conftest import BULK_FROM, _data, action, builtin, cond, info, rpc, screenshot, wait_for
+from conftest import BULK_FROM, _data, action, builtin, cond, info, remove_bulk_movies, rpc, screenshot, wait_for
 
 pytestmark = pytest.mark.e2e
 
@@ -84,16 +84,12 @@ def big_library(home):
             copy(connection, 'movie', 'idMovie = 1', {'idMovie': number, 'idFile': number, 'c00': 'Bulk {}'.format(number)})
             copy(connection, 'videoversion', 'idFile = {}'.format(first), {'idFile': number, 'idMedia': number})
 
-    def remove(connection):
-        for table, key in (('videoversion', 'idFile'), ('movie', 'idMovie'), ('files', 'idFile')):
-            connection.execute('DELETE FROM {} WHERE {} >= ?'.format(table, key), (BULK_FROM,))
-
-    change(remove)  # a stopped run may have left its rows
+    remove_bulk_movies()  # a stopped run may have left its rows
     change(add)
     try:
         yield
     finally:
-        change(remove)
+        remove_bulk_movies()
         reload_home()
 
 
