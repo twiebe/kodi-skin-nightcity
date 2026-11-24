@@ -78,6 +78,13 @@ The e2e suite runs in parallel on a kodi-dev pool (several environments, each wi
 KDEV_POOL=1 .venv/bin/python -m pytest tests/e2e -q -m e2e -n auto --dist loadfile
 ```
 
+The suite runs against Kodi 21 by default. Kodi 22 is tested by hand, on a pool of its own that kodi-dev builds from source (`KDEV_KODI=22`): `--kodi 22` tells the run which Kodi it expects, and a run stops when the pool runs another. The skin imports `xbmc.gui` 5.17.0, which Kodi 22 still accepts (5.18.0, abi 5.17.0), so one release serves both; what only 22 has sits behind the `KodiPiers` expression (`1080i/Includes_Base.xml`).
+
+```
+KDEV_POOL=k22 KDEV_KODI=22 /workspaces/kodi-dev/kdev pool up 4 --skin "$PWD"
+KDEV_POOL=k22 .venv/bin/python -m pytest tests/e2e -q -m e2e -n auto --dist loadfile --kodi 22
+```
+
 `make screenshots` takes the screenshots in `resources/screenshots/` (listed in `addon.xml`, four of them above). It runs `tools/screenshots.py` in a container, so it needs only Docker and a kodi-dev checkout next to this one (`KODI_DEV`, default `../kodi-dev`) with its pool template (`tools/kodidev_setup.py`, then `kdev pool up` once). The script starts a kodi-dev instance of its own at 1920x1080 from the pool template, gives its library films and shows with their artwork from TMDb (internet access needed), opens each view and removes the instance again; about ten minutes. TMDb Helper fetches IMDb, Rotten Tomatoes and Metacritic ratings only with an API key: export yours as `MDBLIST_API_KEY` or `OMDB_API_KEY` for the run, the container gets them from the environment. Without them the pages show TMDb's rating.
 
 ```

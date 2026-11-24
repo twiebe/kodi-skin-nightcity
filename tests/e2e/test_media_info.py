@@ -133,6 +133,8 @@ def test_ends_at_of_the_playing_movie_is_the_players(alpha):
     rpc('Player.Open', {'item': {'movieid': alpha}, 'options': {'resume': False}})
     wait_for('Player.HasVideo', timeout=20)
     wait_for('Integer.IsGreater(Player.TimeRemaining(secs),0)', timeout=10)
+    # Kodi 22 switches to the player only once the streams are ready: a page opened before goes
+    wait_for('Window.IsActive(fullscreenvideo)', timeout=10)
     _open_info(alpha)
     wait_for(tags['finish'])
     assert not _shown(tags['ends'])

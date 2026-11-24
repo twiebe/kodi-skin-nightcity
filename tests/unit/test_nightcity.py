@@ -1106,6 +1106,34 @@ def test_return_to_episode_claims_the_follow(monkeypatch):
     assert seen and seen[0][0] == seen[0][1] != 'older'
 
 
+def test_the_follower_hears_the_stop_with_read_only_player_attributes(monkeypatch):
+    """Kodi 22's bindings refuse to set an attribute of an xbmc.Player subclass: the stop still
+    reaches the follower."""
+    class ReadOnly(type):
+        def __setattr__(cls, name, value):
+            raise AttributeError("cannot modify read-only attribute '{}.{}'".format(cls.__qualname__, name))
+
+    class Player(metaclass=ReadOnly):
+        def __init__(self):
+            pass
+    fake = FakeXbmc(set(), {})
+    fake.Player = Player
+    fake.Monitor = type('Monitor', (), {})
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', fake)
+    monkeypatch.setattr(nightcity, '_home', lambda: PropWindow({}))
+    seen = []
+
+    def follow(dbid, monitor, player, home, token=None):
+        seen.append(player.stopped)
+        player.onPlayBackStopped()
+        seen.append(player.stopped)
+        player.onAVStarted()
+        seen.append(player.stopped)
+    monkeypatch.setattr(nightcity, '_follow', follow)
+    nightcity._return_to_episode(5)
+    assert seen == [False, True, False]
+
+
 def test_follower_steps_aside_after_the_wait_for_dialogs(monkeypatch):
     """A newer playback that starts while the old follower waits for dialogs after its stop
     takes over there too: the old one does not open the info page."""

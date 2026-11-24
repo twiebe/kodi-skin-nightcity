@@ -1040,14 +1040,20 @@ def _return_to_episode(dbid):
     import xbmc
     home = _home()
 
+    # the flag lives outside the class: Kodi 22's bindings (SWIG 4.5) make the attributes of an
+    # xbmc.Player subclass read-only, and setting one raised in every callback
+    state = {'stopped': False}
+
     class Player(xbmc.Player):
-        stopped = False
+        @property
+        def stopped(self):
+            return state['stopped']
 
         def onPlayBackStopped(self):
-            Player.stopped = True
+            state['stopped'] = True
 
         def onAVStarted(self):
-            Player.stopped = False
+            state['stopped'] = False
 
     import time
     # only the newest follower acts: an older one (another episode started meanwhile) stops
@@ -2757,10 +2763,14 @@ LIB_FILTER_OPTIONS = {
     'hdr': [('sdr', 'SDR', []), ('hdr', 'HDR', LIB_FILTER_HDR), ('hdr10', 'HDR10', ['hdr10']),
             ('hdr10plus', 'HDR10+', ['hdr10plus']), ('dolbyvision', 'Dolby Vision', ['dolbyvision']),
             ('hlg', 'HLG', ['hlg'])],
-    'audio': [('truehd', 'TrueHD', ['truehd']), ('dtshd', 'DTS-HD', ['dtshd_ma', 'dtshd_hra']),
-              ('dts', 'DTS', ['dca', 'dts']), ('eac3', 'DD+', ['eac3']), ('ac3', 'DD', ['ac3']),
-              ('aac', 'AAC', ['aac']), ('flac', 'FLAC', ['flac']), ('opus', 'Opus', ['opus']),
-              ('mp3', 'MP3', ['mp3']),
+    # Kodi 22 files a codec under its profile (truehd_atmos, dtshd_ma_x, dts_es, aac_lc, ...): an
+    # option takes those too, Kodi 21's library never has them
+    'audio': [('truehd', 'TrueHD', ['truehd', 'truehd_atmos']),
+              ('dtshd', 'DTS-HD', ['dtshd_ma', 'dtshd_hra', 'dtshd_ma_x', 'dtshd_ma_x_imax']),
+              ('dts', 'DTS', ['dca', 'dts', 'dts_es', 'dts_96_24', 'dts_express']),
+              ('eac3', 'DD+', ['eac3', 'eac3_ddp_atmos']), ('ac3', 'DD', ['ac3']),
+              ('aac', 'AAC', ['aac', 'aac_lc', 'he_aac', 'he_aac_v2', 'aac_ssr', 'aac_ltp']),
+              ('flac', 'FLAC', ['flac']), ('opus', 'Opus', ['opus']), ('mp3', 'MP3', ['mp3']),
               ('pcm', 'PCM', ['pcm', 'pcm_s16le', 'pcm_s24le', 'pcm_s32le', 'pcm_bluray', 'pcm_dvd'])],
     'channels': [('8', '7.1', ['8']), ('6', '5.1', ['6']), ('2', '2.0', ['2'])],
     # labels by string id (unwatched and in progress the skin's, watched Kodi's); the rules are

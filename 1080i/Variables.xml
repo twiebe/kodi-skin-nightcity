@@ -488,7 +488,15 @@
         <value condition="!String.IsEmpty(VideoPlayer.HdrType)">$INFO[VideoPlayer.HdrType]</value>
         <value condition="!String.IsEmpty(VideoPlayer.VideoResolution)">SDR</value>
     </variable>
-    <!-- audio badge: codec as people know it, then the channel layout -->
+    <!-- the file of the chosen version or extra in its manager (DialogVideoManager.xml): Kodi 22's
+         decoded path, Kodi 21's raw one -->
+    <variable name="VideoManagerPath">
+        <value condition="$EXP[KodiPiers]">$INFO[Container(50).ListItem.DecodedFileNameAndPath]</value>
+        <value>$INFO[Container(50).ListItem.FileNameAndPath]</value>
+    </variable>
+    <!-- audio badge: codec as people know it, then the channel layout. Kodi 22 names the profile
+         of a codec too (truehd_atmos, eac3_ddp_atmos, dtshd_ma_x, dts_es, aac_lc, he_aac, ...);
+         Kodi 21 never returns these, so the same lists serve both -->
     <variable name="PlayerAudioCodec">
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd)">TrueHD</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3)">DD+</value>
@@ -497,6 +505,14 @@
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,dts)">DTS</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,truehd_atmos)">TrueHD Atmos</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(VideoPlayer.AudioCodec,dtshd_ma_x)">DTS:X</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dts_es)">DTS-ES</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dts_96_24)">DTS 96/24</value>
+        <value condition="String.IsEqual(VideoPlayer.AudioCodec,dts_express)">DTS Express</value>
+        <value condition="String.StartsWith(VideoPlayer.AudioCodec,he_aac)">HE-AAC</value>
+        <value condition="String.StartsWith(VideoPlayer.AudioCodec,aac_)">AAC</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,aac)">AAC</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,flac)">FLAC</value>
         <value condition="String.IsEqual(VideoPlayer.AudioCodec,opus)">Opus</value>
@@ -526,6 +542,14 @@
         <value condition="String.IsEqual(ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
         <value condition="String.IsEqual(ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(ListItem.AudioCodec,dts)">DTS</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,truehd_atmos)">TrueHD Atmos</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,dts_es)">DTS-ES</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,dts_96_24)">DTS 96/24</value>
+        <value condition="String.IsEqual(ListItem.AudioCodec,dts_express)">DTS Express</value>
+        <value condition="String.StartsWith(ListItem.AudioCodec,he_aac)">HE-AAC</value>
+        <value condition="String.StartsWith(ListItem.AudioCodec,aac_)">AAC</value>
         <value condition="String.IsEqual(ListItem.AudioCodec,aac)">AAC</value>
         <value condition="String.IsEqual(ListItem.AudioCodec,flac)">FLAC</value>
         <value condition="String.IsEqual(ListItem.AudioCodec,opus)">Opus</value>
@@ -553,6 +577,14 @@
         <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
         <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,dts)">DTS</value>
+        <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,truehd_atmos)">TrueHD Atmos</value>
+        <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(5100).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
+        <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,dts_es)">DTS-ES</value>
+        <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,dts_96_24)">DTS 96/24</value>
+        <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,dts_express)">DTS Express</value>
+        <value condition="String.StartsWith(Container(5100).ListItem.AudioCodec,he_aac)">HE-AAC</value>
+        <value condition="String.StartsWith(Container(5100).ListItem.AudioCodec,aac_)">AAC</value>
         <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,aac)">AAC</value>
         <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,flac)">FLAC</value>
         <value condition="String.IsEqual(Container(5100).ListItem.AudioCodec,opus)">Opus</value>
@@ -580,6 +612,14 @@
         <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
         <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,dts)">DTS</value>
+        <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,truehd_atmos)">TrueHD Atmos</value>
+        <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9000).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
+        <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,dts_es)">DTS-ES</value>
+        <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,dts_96_24)">DTS 96/24</value>
+        <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,dts_express)">DTS Express</value>
+        <value condition="String.StartsWith(Container(9000).ListItem.AudioCodec,he_aac)">HE-AAC</value>
+        <value condition="String.StartsWith(Container(9000).ListItem.AudioCodec,aac_)">AAC</value>
         <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,aac)">AAC</value>
         <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,flac)">FLAC</value>
         <value condition="String.IsEqual(Container(9000).ListItem.AudioCodec,opus)">Opus</value>
@@ -608,6 +648,14 @@
         <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,dtshd_hra)">DTS-HD HRA</value>
         <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,dca)">DTS</value>
         <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,dts)">DTS</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,truehd_atmos)">TrueHD Atmos</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,eac3_ddp_atmos)">DD+ Atmos</value>
+        <value condition="String.StartsWith(Container(9003).ListItem.AudioCodec,dtshd_ma_x)">DTS:X</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,dts_es)">DTS-ES</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,dts_96_24)">DTS 96/24</value>
+        <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,dts_express)">DTS Express</value>
+        <value condition="String.StartsWith(Container(9003).ListItem.AudioCodec,he_aac)">HE-AAC</value>
+        <value condition="String.StartsWith(Container(9003).ListItem.AudioCodec,aac_)">AAC</value>
         <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,aac)">AAC</value>
         <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,flac)">FLAC</value>
         <value condition="String.IsEqual(Container(9003).ListItem.AudioCodec,opus)">Opus</value>
@@ -928,6 +976,10 @@
     <variable name="InfoPlotLabel">
         <value condition="String.IsEqual(ListItem.Property(tmdb_type),person)">$LOCALIZE[31474]</value>
         <value>$LOCALIZE[31473]</value>
+    </variable>
+    <!-- Kodi 22 keeps a tag line for TV shows: in italics over the plot of a show's page -->
+    <variable name="InfoShowTagline">
+        <value condition="$EXP[KodiPiers] + String.IsEqual(ListItem.DBType,tvshow) + !String.IsEmpty(ListItem.Tagline)">[I]$INFO[ListItem.Tagline][/I][CR]</value>
     </variable>
     <variable name="InfoPlayLabel">
         <value condition="String.IsEqual(ListItem.DBType,episode) + Container(5100).ListItem.IsResumable">▶ $LOCALIZE[31043] $INFO[Container(5100).ListItem.PercentPlayed]%</value>

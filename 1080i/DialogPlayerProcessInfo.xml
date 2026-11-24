@@ -6,16 +6,26 @@
         <control type="group">
             <left>80</left>
             <top>440</top>
+            <!-- the back of the lines; one line more with Kodi 22's hdr line -->
             <control type="image">
                 <left>-24</left>
                 <top>-24</top>
                 <width>1000</width>
                 <height>380</height>
                 <texture colordiffuse="bg_alt">ui/white.png</texture>
+                <visible>![$EXP[KodiPiers] + !String.IsEmpty(VideoPlayer.HdrType)]</visible>
+            </control>
+            <control type="image">
+                <left>-24</left>
+                <top>-24</top>
+                <width>1000</width>
+                <height>432</height>
+                <texture colordiffuse="bg_alt">ui/white.png</texture>
+                <visible>$EXP[KodiPiers] + !String.IsEmpty(VideoPlayer.HdrType)</visible>
             </control>
             <control type="grouplist">
                 <width>952</width>
-                <height>340</height>
+                <height>392</height>
                 <orientation>vertical</orientation>
                 <itemgap>0</itemgap>
                 <include content="FactLine">
@@ -35,6 +45,17 @@
                     <param name="height" value="52"/>
                     <param name="font" value="font_small"/>
                     <param name="color" value="text"/>
+                </include>
+                <!-- Kodi 22: the HDR type with its detail (Dolby Vision profile and layer, 8.4, 7FEL) -->
+                <include content="FactLine">
+                    <param name="key" value="hdr"/>
+                    <param name="value" value="$VAR[PlayerHdr]$INFO[VideoPlayer.HdrDetail,  profile ,]"/>
+                    <param name="width" value="952"/>
+                    <param name="keywidth" value="120"/>
+                    <param name="height" value="52"/>
+                    <param name="font" value="font_small"/>
+                    <param name="color" value="text"/>
+                    <param name="visible" value="$EXP[KodiPiers] + !String.IsEmpty(VideoPlayer.HdrType)"/>
                 </include>
                 <include content="FactLine">
                     <param name="key" value="audio"/>

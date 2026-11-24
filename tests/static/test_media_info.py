@@ -86,6 +86,26 @@ def test_audio_codec_names_cover_jellyfin():
     assert 'String.IsEqual(VideoPlayer.AudioCodec,opus)' in conditions
 
 
+def test_audio_codec_names_cover_kodi_22s_profiles():
+    """Kodi 22 adds the codec's profile to the name (truehd_atmos, eac3_ddp_atmos, dtshd_ma_x and
+    dtshd_ma_x_imax, dts_es, aac_lc, he_aac_v2, ...): each gets a name, not the raw value."""
+    names = {}
+    for condition, text in _variable('PlayerAudioCodec'):
+        if condition:
+            op, value = condition.split('(VideoPlayer.AudioCodec,')[0], condition.rsplit(',', 1)[1][:-1]
+            names[(op.endswith('StartsWith'), value)] = text
+
+    def name(codec):
+        for (prefix, value), text in names.items():
+            if codec == value or (prefix and codec.startswith(value)):
+                return text
+    assert name('truehd_atmos') == 'TrueHD Atmos' and name('eac3_ddp_atmos') == 'DD+ Atmos'
+    assert name('dtshd_ma_x') == name('dtshd_ma_x_imax') == 'DTS:X'
+    assert name('dts_es') == 'DTS-ES' and name('dts_96_24') == 'DTS 96/24' and name('dts_express') == 'DTS Express'
+    assert name('he_aac') == name('he_aac_v2') == 'HE-AAC'
+    assert name('aac_lc') == name('aac_ssr') == name('aac_ltp') == name('aac') == 'AAC'
+
+
 @pytest.mark.parametrize('name', ['ItemResolution', 'InfoEpisodeResolution', 'SpotlightResolution'])
 def test_resolutions_name_8k(name):
     """Kodi says 8K, not 8000: without a value of its own it read 8Kp."""

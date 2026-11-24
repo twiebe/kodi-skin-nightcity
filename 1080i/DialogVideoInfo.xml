@@ -94,6 +94,11 @@
             <onleft>9000</onleft>
             <onright>9000</onright>
         </control>
+        <!-- visible while the page is of the title that plays: for Timers.xml (nc_info_twin), whose
+             conditions Kodi takes as written, without the skin's expressions -->
+        <control type="group" id="9096">
+            <visible>$EXP[InfoPlaying]</visible>
+        </control>
         <control type="group">
             <!-- over a playing video the video is the backdrop (InfoBackground) -->
             <visible>String.IsEqual(ListItem.DBType,episode) + !$EXP[InfoOverVideo]</visible>
@@ -148,12 +153,24 @@
                 <param name="audiolabel" value="$VAR[InfoEpisodeAudio]"/>
                 <param name="ratingid" value="9043"/>
                 <param name="plotid" value="9051"/>
+                <param name="plotvisible" value="!$EXP[InfoSeasonPlot]"/>
                 <!-- up to the cast on the right -->
                 <param name="ratingswidth" value="1300"/>
                 <param name="shift" value="-330"/>
                 <param name="titlewidth" value="1250"/>
                 <param name="plotwidth" value="1176"/>
             </include>
+            <!-- Kodi 22: on the season tabs the season's plot, where the episode's stands -->
+            <control type="textbox" id="9053">
+                <left>64</left>
+                <top>367</top>
+                <width>1176</width>
+                <height>116</height>
+                <font>font_body</font>
+                <textcolor>text_dim</textcolor>
+                <label>$INFO[Container(5200).ListItem.Plot]</label>
+                <visible>$EXP[InfoSeasonPlot]</visible>
+            </control>
             <include content="ProgressLine">
                 <param name="left" value="64"/>
                 <param name="top" value="569"/>
@@ -162,8 +179,8 @@
                 <param name="visible" value="Container(5100).ListItem.IsResumable"/>
             </include>
             <include content="PlotHints">
-                <param name="visible" value="String.IsEqual(ListItem.DBType,episode)"/>
-                <param name="more" value="String.IsEqual(ListItem.DBType,episode) + Container(9051).HasNext"/>
+                <param name="visible" value="String.IsEqual(ListItem.DBType,episode) + !$EXP[InfoSeasonPlot]"/>
+                <param name="more" value="String.IsEqual(ListItem.DBType,episode) + Container(9051).HasNext + !$EXP[InfoSeasonPlot]"/>
                 <param name="item" value="Container(5100).ListItem"/>
                 <param name="hintleft" value="64"/>
                 <param name="hintwidth" value="1200"/>
@@ -205,6 +222,7 @@
                 <param name="audiolabel" value="$VAR[ItemAudio]"/>
                 <param name="ratingid" value="9046"/>
                 <param name="plotid" value="9050"/>
+                <param name="plotprefix" value="$VAR[InfoShowTagline]"/>
                 <!-- up to the details on the right -->
                 <param name="ratingswidth" value="990"/>
                 <param name="titlewidth" value="960"/>
@@ -251,9 +269,16 @@
                     <param name="key" value="$LOCALIZE[31129]"/>
                     <param name="value" value="ListItem.Country"/>
                 </include>
+                <!-- the rating: Kodi 22's icon where the item has one, else the code -->
                 <include content="InfoDetail">
                     <param name="key" value="$LOCALIZE[31136]"/>
                     <param name="value" value="ListItem.Mpaa"/>
+                    <param name="visible" value="![$EXP[KodiPiers] + !String.IsEmpty(ListItem.ParentalRatingIcon)]"/>
+                </include>
+                <include content="InfoDetailIcon">
+                    <param name="key" value="$LOCALIZE[31136]"/>
+                    <param name="icon" value="ListItem.ParentalRatingIcon"/>
+                    <param name="visible" value="$EXP[KodiPiers] + !String.IsEmpty(ListItem.ParentalRatingIcon)"/>
                 </include>
                 <!-- budget and box office from TMDb Helper ($63,000,000): a TMDb page carries them on
                      its item, for a library movie its service has them, once they belong to the

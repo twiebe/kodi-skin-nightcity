@@ -45,7 +45,7 @@ def test_groups_and():
     _, xsp = _xsp(nightcity.lib_filter_path('movies', {'res': ['2160'], 'audio': ['truehd'], 'channels': ['8']}))
     assert xsp['rules']['and'] == [
         {'field': 'videoresolution', 'operator': 'is', 'value': ['2160']},
-        {'field': 'audiocodec', 'operator': 'is', 'value': ['truehd']},
+        {'field': 'audiocodec', 'operator': 'is', 'value': ['truehd', 'truehd_atmos']},
         {'field': 'audiochannels', 'operator': 'is', 'value': ['8']}]
 
 
@@ -72,7 +72,16 @@ def test_sdr_and_an_hdr_type_or():
 def test_an_audio_format_names_every_codec_kodi_files_it_under():
     _, xsp = _xsp(nightcity.lib_filter_path('movies', {'audio': ['dtshd', 'dts']}))
     assert xsp['rules']['and'] == [
-        {'field': 'audiocodec', 'operator': 'is', 'value': ['dtshd_ma', 'dtshd_hra', 'dca', 'dts']}]
+        {'field': 'audiocodec', 'operator': 'is', 'value': ['dtshd_ma', 'dtshd_hra', 'dtshd_ma_x', 'dtshd_ma_x_imax',
+                                                            'dca', 'dts', 'dts_es', 'dts_96_24', 'dts_express']}]
+
+
+def test_an_audio_format_takes_kodi_22s_profiles():
+    """Kodi 22 files a codec under its profile; the format covers them all."""
+    values = {key: vals for key, _, vals in nightcity.LIB_FILTER_OPTIONS['audio']}
+    assert 'truehd_atmos' in values['truehd'] and 'eac3_ddp_atmos' in values['eac3']
+    assert {'aac_lc', 'he_aac', 'he_aac_v2'} <= set(values['aac'])
+    assert {'dtshd_ma_x', 'dtshd_ma_x_imax'} <= set(values['dtshd'])
 
 
 def test_the_audio_names_match_the_info_page():

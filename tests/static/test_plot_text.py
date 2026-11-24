@@ -72,7 +72,9 @@ def test_each_head_names_its_text(info_page, kind):
     box, item, _ = PLOTS[kind]
     textbox = info_page.controls[box]
     assert textbox.get('type') == 'textbox'
-    assert textbox.findtext('label') == '$INFO[{}.Plot]'.format(item)
+    # a show's tag line (Kodi 22) opens the movie or show head's plot
+    prefix = '$VAR[InfoShowTagline]' if kind == 'movie' else ''
+    assert textbox.findtext('label') == prefix + '$INFO[{}.Plot]'.format(item)
 
 
 @pytest.mark.parametrize('text', TEXTS)
@@ -184,6 +186,8 @@ def test_dots_say_the_text_goes_on():
 @pytest.mark.parametrize('kind', sorted(PLOTS))
 def test_no_plot_shows_a_placeholder(info_page, kind):
     box, item, head = PLOTS[kind]
+    # an episode's gives way to its season's plot on the season tabs (Kodi 22)
+    head = head + ' + !$EXP[InfoSeasonPlot]' if kind == 'episode' else head
     expected = '{} + String.IsEmpty({}.Plot)'.format(head, item)
     [empty] = [c for c in info_page.window.iter('control') if c.get('type') == 'label'
                and c.findtext('label') == '$LOCALIZE[31469]' and c.findtext('visible') == expected]
