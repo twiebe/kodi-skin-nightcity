@@ -2,7 +2,7 @@
 
 A Kodi 21 skin with a calm cyberpunk look ("Netrunner"): dark backgrounds, cyan with pink accents, cut corners instead of framed boxes, and the artwork of your movies and shows in front.
 
-Movies, shows and music: home with a spotlight and widget rows, the video and music libraries, info pages, playback and the dialogs Kodi needs. Ratings come from [TMDb Helper](https://github.com/jurialmunkey/plugin.video.themoviedb.helper), which is a required dependency.
+Movies, shows and music: home with a spotlight and widget rows, the video and music libraries, info pages, playback and the dialogs Kodi needs. Ratings, cast and crew come from [TMDb Helper](https://github.com/jurialmunkey/plugin.video.themoviedb.helper), in a fork from the twiebe repository that Nightcity requires.
 
 The look is only half of it. The other half is easy use with a remote: few key presses to everything, pages and tabs that switch as the cursor moves, Back that returns to where you came from, and the same key doing the same thing on every page.
 
@@ -45,11 +45,18 @@ More in Kodi's add-on browser: movies, music, settings and the quick menu. `tool
 
 ## Install
 
-Nightcity comes from the twiebe repository (https://github.com/twiebe/kodi-repo), which also keeps it up to date. It needs the TMDb Helper fork from the same repository (1:6.20.2-1 or newer): its window manager can go back to the first page of a chain, which Back held needs. That fork in turn needs modules that only jurialmunkey's repository carries in recent enough versions (the official Kodi repository has older ones), so that one goes in first.
+Nightcity comes from the twiebe repository, which also keeps it up to date. It needs two repositories:
 
-1. Settings > File manager > Add source: `https://jurialmunkey.github.io/repository.jurialmunkey/`, and another one: `https://twiebe.github.io/kodi-repo/`
-2. Settings > Add-ons > Install from zip file: `repository.jurialmunkey-<version>.zip` from the first source, then `repository.twiebe-<version>.zip` from the second
-3. Add-ons > Install from repository > twiebe Repository > Look and feel > Skin > Nightcity > Install. Kodi installs the TMDb Helper fork with it (if jurialmunkey's TMDb Helper is installed, it asks to replace it: Yes, and keep its data) and offers to switch to the skin; later under Settings > Interface > Skin.
+- twiebe (`https://twiebe.github.io/kodi-repo/`): Nightcity and the TMDb Helper fork it requires (1:6.20.2-1 or newer). The fork's window manager can go back to the first page of a cast and crew chain and tells the skin which page of the chain it shows: Back held and the way back on a chain's pages need both.
+- jurialmunkey (`https://jurialmunkey.github.io/repository.jurialmunkey/`): the modules the fork needs (`script.module.jurialmunkey`, `script.module.infotagger`). The official Kodi repository has older versions only.
+
+1. Settings > File manager > Add source: both addresses above.
+2. Settings > Add-ons > Install from zip file: first `repository.jurialmunkey-<version>.zip` from the jurialmunkey source, then `repository.twiebe-<version>.zip` from the twiebe source.
+3. Add-ons > Install from repository > twiebe Repository > Look and feel > Skin > Nightcity > Install. Kodi installs the TMDb Helper fork with it and offers to switch to the skin; later under Settings > Interface > Skin.
+
+The fork replaces jurialmunkey's TMDb Helper: if that is installed, Kodi asks to replace it (Yes, its settings and data stay). Its version always ranks above jurialmunkey's, so with the twiebe repository installed Kodi keeps the fork on updates.
+
+Ratings from IMDb, Rotten Tomatoes and Metacritic are optional. For OMDb, enter its API key in TMDb Helper's settings. MDbList is an add-on of its own in current TMDb Helper versions: install it from jurialmunkey's repository (TMDb Helper's settings link to it) and enter the key there.
 
 To try a build of your own, install its zip (`python tools/build.py`, see Development) with Install from zip file instead of step 3. Kodi updates an add-on only from where it was installed from: to get updates again, install Nightcity from the repository once more.
 
