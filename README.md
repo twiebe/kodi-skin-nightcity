@@ -56,6 +56,8 @@ Nightcity comes from the twiebe repository, which also keeps it up to date. It n
 
 The fork replaces jurialmunkey's TMDb Helper: if that is installed, Kodi asks to replace it (Yes, its settings and data stay). Its version always ranks above jurialmunkey's, so with the twiebe repository installed Kodi keeps the fork on updates.
 
+To go back to jurialmunkey's TMDb Helper, switch to another skin first: Nightcity needs the fork and does not load without it. Then Add-ons > My add-ons > TMDb Helper > Versions: pick a version from jurialmunkey's repository, and switch off its Auto-update there (or remove the twiebe repository), otherwise Kodi installs the fork again. Its settings and cache stay. Only coming from fork 1:6.22.6-2, clear TMDb Helper's cache once after the switch.
+
 Ratings from IMDb, Rotten Tomatoes and Metacritic are optional. For OMDb, enter its API key in TMDb Helper's settings. MDbList is an add-on of its own in current TMDb Helper versions: install it from jurialmunkey's repository (TMDb Helper's settings link to it) and enter the key there.
 
 To try a build of your own, install its zip (`python tools/build.py`, see Development) with Install from zip file instead of step 3. Kodi updates an add-on only from where it was installed from: to get updates again, install Nightcity from the repository once more.
