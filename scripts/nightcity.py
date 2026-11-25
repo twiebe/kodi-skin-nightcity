@@ -1869,6 +1869,20 @@ def home_keymap():
         xbmc.executebuiltin('Action(reloadkeymaps)')
 
 
+def remove_keymaps():
+    """Remove the skin's keymaps, for a skin without this script: its Home key would open a window
+    that skin lacks (1160), and Back over the video would stop it."""
+    import os
+    import xbmc
+    import xbmcvfs
+    folder = xbmcvfs.translatePath('special://profile/keymaps/')
+    changed = False
+    for name in (HOME_KEYMAP_NAME, BACK_KEYMAP_NAME):
+        changed = write_keymap(os.path.join(folder, name), None) or changed
+    if changed:
+        xbmc.executebuiltin('Action(reloadkeymaps)')
+
+
 # The skin was skin.retrowave before 0.4.45: Kodi keeps skin settings per add-on id
 OLD_SETTINGS = 'special://profile/addon_data/skin.retrowave/settings.xml'
 
@@ -3221,9 +3235,12 @@ def _skin_script_exists():
 def _start_next(monitor, home):
     """After a skin switch: wait a second so that Home of the new skin has had its chance (two
     interpreters starting at once can crash Kodi), then start the service if nobody did and the
-    new skin has the script."""
+    new skin has the script. A skin without it gets Kodi's keys back."""
     import xbmc
-    if monitor.waitForAbort(1) or home.getProperty('nc.service') or not _skin_script_exists():
+    if monitor.waitForAbort(1) or home.getProperty('nc.service'):
+        return
+    if not _skin_script_exists():
+        remove_keymaps()
         return
     xbmc.executebuiltin('RunScript(special://skin/scripts/nightcity.py,service,home)')
 

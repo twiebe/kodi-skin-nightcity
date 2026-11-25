@@ -3109,8 +3109,11 @@ def test_ending_service_leaves_a_started_one_alone(monkeypatch):
 
 def test_ending_service_starts_nothing_for_a_skin_without_the_script(monkeypatch):
     _, _, started = _switching_env(monkeypatch, script_exists=False)
+    removed = []
+    monkeypatch.setattr(nightcity, 'remove_keymaps', lambda: removed.append(1))
     nightcity.service()
     assert started == []
+    assert removed == [1]
 
 
 def test_addon_data_follows_the_active_skin(monkeypatch):
@@ -3140,3 +3143,36 @@ def test_without_tmdb_helper_jellycon_loads_the_cast(monkeypatch):
     window.props['JellyCon.SkipInfoLoad'] = 'skin.nightcity'
     nightcity.service()
     assert 'JellyCon.SkipInfoLoad' not in window.props
+
+
+def test_remove_keymaps_leaves_the_users_own(monkeypatch, tmp_path):
+    """Another skin has no window 1160 for the Home key: the skin's keymaps go, the user's stay."""
+    import types
+    ran = []
+    xbmc = types.SimpleNamespace(executebuiltin=ran.append)
+    xbmcvfs = types.SimpleNamespace(translatePath=lambda p: str(tmp_path / p.split('//')[1]))
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', xbmc)
+    monkeypatch.setitem(__import__('sys').modules, 'xbmcvfs', xbmcvfs)
+    keymaps = tmp_path / 'profile' / 'keymaps'
+    keymaps.mkdir(parents=True)
+    for name in (nightcity.HOME_KEYMAP_NAME, nightcity.BACK_KEYMAP_NAME, 'keyboard.xml'):
+        (keymaps / name).write_text('x')
+    nightcity.remove_keymaps()
+    assert sorted(p.name for p in keymaps.iterdir()) == ['keyboard.xml']
+    assert ran == ['Action(reloadkeymaps)']
+    nightcity.remove_keymaps()
+    assert ran == ['Action(reloadkeymaps)']
+
+
+@pytest.mark.parametrize('script, removed, started', [(False, True, False), (True, False, True)])
+def test_start_next_after_a_skin_switch(monkeypatch, script, removed, started):
+    import types
+    ran, gone = [], []
+    monkeypatch.setitem(__import__('sys').modules, 'xbmc', types.SimpleNamespace(executebuiltin=ran.append))
+    monkeypatch.setattr(nightcity, '_skin_script_exists', lambda: script)
+    monkeypatch.setattr(nightcity, 'remove_keymaps', lambda: gone.append(1))
+    monitor = types.SimpleNamespace(waitForAbort=lambda seconds: False)
+    home = types.SimpleNamespace(getProperty=lambda name: '')
+    nightcity._start_next(monitor, home)
+    assert bool(gone) == removed
+    assert bool(ran) == started
