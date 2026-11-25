@@ -1,6 +1,6 @@
 # Nightcity
 
-A Kodi 21 skin with a calm cyberpunk look ("Netrunner"): dark backgrounds, cyan with pink accents, cut corners instead of framed boxes, and the artwork of your movies and shows in front.
+A Kodi 21 and 22 skin with a calm cyberpunk look ("Netrunner"): dark backgrounds, cyan with pink accents, cut corners instead of framed boxes, and the artwork of your movies and shows in front.
 
 Movies, shows and music: home with a spotlight and widget rows, the video and music libraries, info pages, playback and the dialogs Kodi needs. Ratings, cast and crew come from [TMDb Helper](https://github.com/jurialmunkey/plugin.video.themoviedb.helper), in a fork from the twiebe repository that Nightcity requires.
 
@@ -54,6 +54,12 @@ Nightcity is made for a remote: the arrows, OK and Back reach everything. Where 
 Long presses come only from keyboards and remotes that send keyboard keys (most IR and Bluetooth remotes). CEC and MCE remotes send none, so Back held and Home held do nothing there.
 
 The skin keeps these keys in two keymaps in `userdata/keymaps/`, `0_skin.nightcity.xml` (Home key) and `0_skin.nightcity.back.xml` (Back). It writes them at each start and removes them when you switch to a skin without them. Put your own keys into keymaps of your own: they load after the skin's and win where both map a key.
+
+## Confuse
+
+This repository also holds Confuse, an experiment: the same skin in a quieter look, with a centred spotlight, calm poster rows, a soft focus glow, colour themes and rounded buttons, inspired by media players on the Apple TV. Confuse is far less mature than Nightcity, and it is not decided yet whether it goes on.
+
+Under the look it is Nightcity: `skins/confuse/` holds only what differs (windows, colours, fonts, images, texts), and the build lays it over Nightcity (`python tools/build.py --skin confuse`). Keys, pages and add-ons work the same, and a test compares what every window does in both skins; `skins/confuse/DEVIATIONS.md` lists where Confuse behaves differently, with the reason. Confuse comes from the twiebe repository too (Look and feel > Skin > Confuse) and needs the same TMDb Helper fork.
 
 ## Install
 
