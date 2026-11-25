@@ -18,9 +18,10 @@ resources/screenshots/, and removes the instance again. Needs ffmpeg and interne
   --png DIR         also save the 1920x1080 PNGs there
 
 Ratings: TMDb Helper fetches IMDb, Rotten Tomatoes, Metacritic and the like only with an API
-key. MDBLIST_API_KEY and OMDB_API_KEY from the environment go into TMDb Helper's settings
-mdblist_apikey and omdb_apikey of the instance for the run (a kept instance gets its old values
-back at the end). Without them the pages show TMDb's own rating. The keys are never printed,
+key. OMDB_API_KEY from the environment goes into TMDb Helper's setting omdb_apikey of the
+instance for the run. MDbList is an add-on of its own: with MDBLIST_API_KEY the run installs
+script.module.tmdbhelper.sync.mdblist from jurialmunkey's repository and sets its apikey. A kept
+instance gets its old values back at the end. Without them the pages show TMDb's own rating. The keys are never printed,
 logged or written to this checkout.
 """
 import argparse
@@ -37,6 +38,7 @@ import time
 import urllib.error
 import urllib.request
 import xml.etree.ElementTree as ET
+import zipfile
 
 from build import assemble
 from kodidev_setup import select_skin
@@ -333,32 +335,62 @@ def wait_until(check, timeout, what, state=None):
 
 # --- ratings keys -----------------------------------------------------------------------------
 
-KEYS = {'MDBLIST_API_KEY': 'mdblist_apikey', 'OMDB_API_KEY': 'omdb_apikey'}  # env: TMDb Helper setting
-# Runs in Kodi: sets TMDb Helper's settings from a file the host wrote and removes the file at once.
+MDBLIST = 'script.module.tmdbhelper.sync.mdblist'
+KEYS = {  # env: add-on and setting
+    'MDBLIST_API_KEY': (MDBLIST, 'apikey'),
+    'OMDB_API_KEY': ('plugin.video.themoviedb.helper', 'omdb_apikey'),
+}
+JURIALMUNKEY = 'https://raw.githubusercontent.com/jurialmunkey/repository.jurialmunkey/master/omega/zips/'
+# Runs in Kodi: sets add-on settings from a file the host wrote and removes the file at once.
 # The values never pass through a builtin, so they do not end up in kodi.log.
 SET_KEYS = '''import json, os, xbmcaddon, xbmcgui, xbmcvfs
 path = xbmcvfs.translatePath('special://home/nc-shots-keys.json')
 with open(path) as f:
     keys = json.load(f)
 os.remove(path)
-addon = xbmcaddon.Addon('plugin.video.themoviedb.helper')
-for setting, value in keys.items():
-    addon.setSetting(setting, value)
+for addon_id, setting, value in keys:
+    xbmcaddon.Addon(addon_id).setSetting(setting, value)
 xbmcgui.Window(10000).setProperty('nc.shots.keys', '{}'.format(len(keys)))
 '''
 
 
+def install_mdblist(kodi):
+    """TMDb Helper's MDbList module from jurialmunkey's repository, enabled in the instance. TMDb
+    Helper takes ratings from an installed supplier without further settings."""
+    def installed():
+        return any(a['addonid'] == MDBLIST for a in kodi.rpc('Addons.GetAddons').get('addons', []))
+
+    if installed():
+        kodi.rpc('Addons.SetAddonEnabled', {'addonid': MDBLIST, 'enabled': True})
+        return
+    with urllib.request.urlopen(JURIALMUNKEY + 'addons.xml', timeout=30) as response:
+        version = ET.fromstring(response.read()).find("addon[@id='{}']".format(MDBLIST)).get('version')
+    url = '{0}{1}/{1}-{2}.zip'.format(JURIALMUNKEY, MDBLIST, version)
+    with urllib.request.urlopen(url, timeout=60) as response, tempfile.TemporaryFile() as zipped:
+        shutil.copyfileobj(response, zipped)
+        with zipfile.ZipFile(zipped) as archive:
+            archive.extractall(kodi.data / 'kodi' / 'addons')
+    print('screenshots: installed {} {}'.format(MDBLIST, version))
+    kodi.builtin('UpdateLocalAddons')
+    wait_until(installed, 30, 'Kodi to find ' + MDBLIST)
+    kodi.rpc('Addons.SetAddonEnabled', {'addonid': MDBLIST, 'enabled': True})
+    kodi.wait('System.AddonIsEnabled({})'.format(MDBLIST), timeout=30)
+
+
 def set_keys(kodi, keys):
-    """Put KEYS ({setting id: value}) into TMDb Helper's settings of the instance; returns the
-    values they had. TMDb Helper reads its keys once when its service starts: restart Kodi after."""
+    """Put KEYS ({(add-on id, setting id): value}) into the add-ons' settings of the instance;
+    returns the values they had. TMDb Helper reads its keys once when its service starts: restart
+    Kodi after."""
     home = kodi.data / 'kodi'
-    settings = kodi.data / 'kodi' / 'userdata' / 'addon_data' / 'plugin.video.themoviedb.helper' / 'settings.xml'
-    values = {s.get('id'): s.text or '' for s in ET.parse(settings).getroot().iter('setting')} if settings.exists() else {}
-    before = {setting: values.get(setting, '') for setting in keys}
+    before = {}
+    for addon_id, setting in keys:
+        settings = home / 'userdata' / 'addon_data' / addon_id / 'settings.xml'
+        values = {s.get('id'): s.text or '' for s in ET.parse(settings).getroot().iter('setting')} if settings.exists() else {}
+        before[addon_id, setting] = values.get(setting, '')
     (home / 'nc-shots-keys.py').write_text(SET_KEYS)
     fd = os.open(home / 'nc-shots-keys.json', os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
     with os.fdopen(fd, 'w') as f:
-        json.dump(keys, f)
+        json.dump([[addon_id, setting, value] for (addon_id, setting), value in keys.items()], f)
     kodi.builtin('ClearProperty(nc.shots.keys,home)')
     kodi.builtin('RunScript(special://home/nc-shots-keys.py)')
     kodi.wait('String.IsEqual(Window(Home).Property(nc.shots.keys),{})'.format(len(keys)))
@@ -640,12 +672,14 @@ def main():
         raise SystemExit('instance {} has no showcase library: run without --instance'.format(name))
     if not kodi.info('System.ScreenResolution').startswith(SIZE):
         print('screenshots: instance {} runs at {}, not {}'.format(name, kodi.info('System.ScreenResolution'), SIZE))
-    keys = {setting: os.environ[env] for env, setting in KEYS.items() if os.environ.get(env)}
+    keys = {target: os.environ[env] for env, target in KEYS.items() if os.environ.get(env)}
     print('screenshots: ratings keys from the environment: {}'.format(
         ', '.join(env for env in KEYS if os.environ.get(env)) or 'none, TMDb ratings only'))
     before = None
     try:
         if keys:
+            if (MDBLIST, 'apikey') in keys:
+                install_mdblist(kodi)
             before = set_keys(kodi, keys)
             restart(kodi)
         prepare(kodi)
@@ -659,7 +693,7 @@ def main():
             remove_instance(name)
         elif before is not None:
             set_keys(kodi, before)
-            print('screenshots: TMDb Helper keys of {} set back; Kodi reads them on its next start'.format(name))
+            print('screenshots: ratings keys of {} set back; Kodi reads them on its next start'.format(name))
 
 
 if __name__ == '__main__':
