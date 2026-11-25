@@ -43,6 +43,18 @@ More in Kodi's add-on browser: movies, music, settings and the quick menu. `tool
 - On first start the skin sets Kodi's "Settings > Media > Videos > Default select action" to "Show information" once, so a click in the library opens the info page too. Change it back there if you prefer; the skin does not set it again.
 - A click on a show opens the info page of its next episode: the started one, else the first unwatched, else the first.
 
+### Keys
+
+Nightcity is made for a remote: the arrows, OK and Back reach everything. Where it differs from Kodi:
+
+- Back over the playing video stops it; Tab (Kodi's fullscreen toggle) leaves it playing behind the menus.
+- Back held on an info page goes back to where the browsing started; in the player's chapter panel and cast row to the player's controls; in the settings to where you opened them.
+- The Home key opens the first page of Home from anywhere, also over an info page, and stops a playing video (music plays on). Held, it opens the quick menu. The skin settings (Home key) switch this off and leave Kodi's own Home key.
+
+Long presses come only from keyboards and remotes that send keyboard keys (most IR and Bluetooth remotes). CEC and MCE remotes send none, so Back held and Home held do nothing there.
+
+The skin keeps these keys in two keymaps in `userdata/keymaps/`, `0_skin.nightcity.xml` (Home key) and `0_skin.nightcity.back.xml` (Back). It writes them at each start and removes them when you switch to a skin without them. Put your own keys into keymaps of your own: they load after the skin's and win where both map a key.
+
 ## Install
 
 Nightcity comes from the twiebe repository, which also keeps it up to date. It needs two repositories:
