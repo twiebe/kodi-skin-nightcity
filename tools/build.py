@@ -18,7 +18,7 @@ import xml.etree.ElementTree as ET
 import zipfile
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-EXCLUDE = {'.git', '.gitignore', '.superpowers', 'CLAUDE.md', 'Makefile', 'docs', 'tests', 'tools', 'requirements-dev.txt', 'pytest.ini',
+EXCLUDE = {'.git', '.github', '.gitignore', '.superpowers', 'CLAUDE.md', 'Makefile', 'docs', 'tests', 'tools', 'requirements-dev.txt', 'pytest.ini',
            '__pycache__', '.venv', '.pytest_cache', 'skins', '_build', '.assembled'}
 LOWERCASE_STRINGS = {'31012'}  # min: a unit, after the number
 BRAND_WORDS = {'kodi': 'Kodi', 'tmdb': 'TMDb'}
